@@ -1,0 +1,31 @@
+/*
+ * Decompiled with CFR 0.148.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.inventory.IInventory
+ *  net.minecraft.inventory.Slot
+ *  net.minecraft.item.Item
+ *  net.minecraft.item.ItemStack
+ */
+package lotr.common.inventory;
+
+import lotr.common.item.LOTRItemPouch;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.Slot;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+
+public class LOTRSlotDaleCracker
+extends Slot {
+    public LOTRSlotDaleCracker(IInventory inv, int i, int j, int k) {
+        super(inv, i, j, k);
+    }
+
+    public boolean isItemValid(ItemStack itemstack) {
+        if (itemstack.getItem() instanceof LOTRItemPouch) {
+            return false;
+        }
+        return super.isItemValid(itemstack);
+    }
+}
+

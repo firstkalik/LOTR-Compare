@@ -1,0 +1,174 @@
+/*
+ * Decompiled with CFR 0.148.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.block.Block
+ *  net.minecraft.block.BlockGrass
+ *  net.minecraft.block.BlockLeaves
+ *  net.minecraft.entity.EntityCreature
+ *  net.minecraft.entity.passive.EntityAnimal
+ *  net.minecraft.entity.passive.EntityChicken
+ *  net.minecraft.entity.passive.EntityCow
+ *  net.minecraft.entity.passive.EntityPig
+ *  net.minecraft.entity.passive.EntitySheep
+ *  net.minecraft.init.Blocks
+ *  net.minecraft.world.World
+ */
+package lotr.common.world.structure2;
+
+import java.util.Random;
+import lotr.common.LOTRMod;
+import lotr.common.entity.npc.LOTREntityBreeFarmer;
+import lotr.common.world.structure.LOTRChestContents;
+import lotr.common.world.structure2.LOTRWorldGenBreeStructure;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockGrass;
+import net.minecraft.block.BlockLeaves;
+import net.minecraft.entity.EntityCreature;
+import net.minecraft.entity.passive.EntityAnimal;
+import net.minecraft.entity.passive.EntityChicken;
+import net.minecraft.entity.passive.EntityCow;
+import net.minecraft.entity.passive.EntityPig;
+import net.minecraft.entity.passive.EntitySheep;
+import net.minecraft.init.Blocks;
+import net.minecraft.world.World;
+
+public class LOTRWorldGenBreeBarn
+extends LOTRWorldGenBreeStructure {
+    public LOTRWorldGenBreeBarn(boolean flag) {
+        super(flag);
+    }
+
+    @Override
+    public boolean generateWithSetRotation(World world, Random random, int i, int j, int k, int rotation) {
+        int k1;
+        int i1;
+        int j1;
+        int step;
+        int i12;
+        int k122;
+        int j2;
+        int j12;
+        this.setOriginAndRotation(world, i, j, k, rotation, 8);
+        this.setupRandomBlocks(random);
+        if (this.restrictions) {
+            for (i1 = -6; i1 <= 6; ++i1) {
+                for (k1 = -9; k1 <= 9; ++k1) {
+                    j12 = this.getTopBlock(world, i1, k1) - 1;
+                    if (this.isSurface(world, i1, j12, k1)) continue;
+                    return false;
+                }
+            }
+        }
+        for (i1 = -5; i1 <= 5; ++i1) {
+            for (k1 = -7; k1 <= 7; ++k1) {
+                for (j12 = 1; j12 <= 4; ++j12) {
+                    this.setAir(world, i1, j12, k1);
+                }
+            }
+        }
+        for (i1 = -6; i1 <= 6; ++i1) {
+            for (k1 = -9; k1 <= 9; ++k1) {
+                for (j12 = 5; j12 <= 10; ++j12) {
+                    this.setAir(world, i1, j12, k1);
+                }
+            }
+        }
+        for (i1 = -1; i1 <= 1; ++i1) {
+            for (int k122 : new int[]{-8, 8}) {
+                for (int j13 = 1; j13 <= 3; ++j13) {
+                    this.setAir(world, i1, j13, k122);
+                }
+            }
+        }
+        this.loadStrScan("bree_barn");
+        this.associateBlockMetaAlias("BRICK", this.brickBlock, this.brickMeta);
+        this.associateBlockMetaAlias("STONE_WALL", this.stoneWallBlock, this.stoneWallMeta);
+        this.associateBlockMetaAlias("PLANK", this.plankBlock, this.plankMeta);
+        this.associateBlockMetaAlias("PLANK_SLAB", this.plankSlabBlock, this.plankSlabMeta);
+        this.associateBlockMetaAlias("PLANK_SLAB_INV", this.plankSlabBlock, this.plankSlabMeta | 8);
+        this.associateBlockMetaAlias("FENCE", this.fenceBlock, this.fenceMeta);
+        this.associateBlockAlias("FENCE_GATE", this.fenceGateBlock);
+        this.associateBlockAlias("TRAPDOOR", this.trapdoorBlock);
+        this.associateBlockMetaAlias("BEAM", this.beamBlock, this.beamMeta);
+        this.associateBlockMetaAlias("BEAM|4", this.beamBlock, this.beamMeta | 4);
+        this.associateBlockMetaAlias("BEAM|8", this.beamBlock, this.beamMeta | 8);
+        this.associateBlockMetaAlias("ROOF", this.roofBlock, this.roofMeta);
+        this.associateBlockMetaAlias("ROOF_SLAB", this.roofSlabBlock, this.roofSlabMeta);
+        this.associateBlockMetaAlias("ROOF_SLAB_INV", this.roofSlabBlock, this.roofSlabMeta | 8);
+        this.associateBlockAlias("ROOF_STAIR", this.roofStairBlock);
+        this.addBlockMetaAliasOption("THATCH_FLOOR", 1, LOTRMod.thatchFloor, 0);
+        this.setBlockAliasChance("THATCH_FLOOR", 0.2f);
+        this.addBlockMetaAliasOption("GROUND", 13, (Block)Blocks.grass, 0);
+        this.addBlockMetaAliasOption("GROUND", 7, Blocks.cobblestone, 0);
+        this.associateBlockMetaAlias("LEAF", (Block)Blocks.leaves, 4);
+        this.generateStrScan(world, random, 0, 0, 0);
+        int maxSteps = 12;
+        for (i12 = -1; i12 <= 1; ++i12) {
+            for (step = 0; step < 12 && !this.isOpaque(world, i12, j1 = 0 - step, k122 = -8 - step); ++step) {
+                this.setBlockAndMetadata(world, i12, j1, k122, (Block)Blocks.grass, 0);
+                this.setGrassToDirt(world, i12, j1 - 1, k122);
+                j2 = j1 - 1;
+                while (!this.isOpaque(world, i12, j2, k122) && this.getY(j2) >= 0) {
+                    this.setBlockAndMetadata(world, i12, j2, k122, Blocks.dirt, 0);
+                    this.setGrassToDirt(world, i12, j2 - 1, k122);
+                    --j2;
+                }
+            }
+        }
+        for (i12 = -1; i12 <= 1; ++i12) {
+            for (step = 0; step < 12 && !this.isOpaque(world, i12, j1 = 0 - step, k122 = 8 + step); ++step) {
+                this.setBlockAndMetadata(world, i12, j1, k122, (Block)Blocks.grass, 0);
+                this.setGrassToDirt(world, i12, j1 - 1, k122);
+                j2 = j1 - 1;
+                while (!this.isOpaque(world, i12, j2, k122) && this.getY(j2) >= 0) {
+                    this.setBlockAndMetadata(world, i12, j2, k122, Blocks.dirt, 0);
+                    this.setGrassToDirt(world, i12, j2 - 1, k122);
+                    --j2;
+                }
+            }
+        }
+        this.placeChest(world, random, -4, 1, -6, 4, LOTRChestContents.BREE_HOUSE, 1 + random.nextInt(2));
+        this.placeChest(world, random, -4, 1, -5, 4, LOTRChestContents.BREE_HOUSE, 1 + random.nextInt(2));
+        this.placeChest(world, random, 4, 1, 5, 5, LOTRChestContents.BREE_HOUSE, 1 + random.nextInt(2));
+        this.placeChest(world, random, 4, 1, 6, 5, LOTRChestContents.BREE_HOUSE, 1 + random.nextInt(2));
+        this.placeChest(world, random, -4, 0, -1, 4, LOTRChestContents.BREE_TREASURE);
+        this.placeChest(world, random, 4, 5, -5, 5, LOTRChestContents.BREE_HOUSE, 1 + random.nextInt(2));
+        this.placeChest(world, random, -4, 5, 0, 4, LOTRChestContents.BREE_TREASURE, 1 + random.nextInt(2));
+        this.placeChest(world, random, -4, 5, 6, 4, LOTRChestContents.BREE_TREASURE);
+        LOTREntityBreeFarmer farmer = new LOTREntityBreeFarmer(world);
+        this.spawnNPCAndSetHome(farmer, world, 0, 1, 0, 16);
+        this.spawnAnimal(world, random, -3, 1, -2);
+        this.spawnAnimal(world, random, 3, 1, -2);
+        this.spawnAnimal(world, random, -3, 1, 2);
+        this.spawnAnimal(world, random, 3, 1, 2);
+        return true;
+    }
+
+    private void spawnAnimal(World world, Random random, int i, int j, int k) {
+        int animals = 2;
+        for (int l = 0; l < animals; ++l) {
+            EntityAnimal animal = LOTRWorldGenBreeBarn.getRandomAnimal(world, random);
+            this.spawnNPCAndSetHome((EntityCreature)animal, world, i, j, k, 0);
+            animal.detachHome();
+        }
+    }
+
+    public static EntityAnimal getRandomAnimal(World world, Random random) {
+        int animal = random.nextInt(4);
+        if (animal == 0) {
+            return new EntityCow(world);
+        }
+        if (animal == 1) {
+            return new EntityPig(world);
+        }
+        if (animal == 2) {
+            return new EntitySheep(world);
+        }
+        if (animal == 3) {
+            return new EntityChicken(world);
+        }
+        return null;
+    }
+}
+

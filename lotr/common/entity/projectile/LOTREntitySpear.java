@@ -1,0 +1,48 @@
+/*
+ * Decompiled with CFR 0.148.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.EntityLivingBase
+ *  net.minecraft.item.Item
+ *  net.minecraft.item.ItemStack
+ *  net.minecraft.util.MathHelper
+ *  net.minecraft.world.World
+ */
+package lotr.common.entity.projectile;
+
+import lotr.common.entity.projectile.LOTREntityProjectileBase;
+import lotr.common.item.LOTRItemSpear;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.MathHelper;
+import net.minecraft.world.World;
+
+public class LOTREntitySpear
+extends LOTREntityProjectileBase {
+    public LOTREntitySpear(World world) {
+        super(world);
+    }
+
+    public LOTREntitySpear(World world, ItemStack item, double d, double d1, double d2) {
+        super(world, item, d, d1, d2);
+    }
+
+    public LOTREntitySpear(World world, EntityLivingBase entityliving, ItemStack item, float charge) {
+        super(world, entityliving, item, charge);
+    }
+
+    public LOTREntitySpear(World world, EntityLivingBase entityliving, EntityLivingBase target, ItemStack item, float charge, float inaccuracy) {
+        super(world, entityliving, target, item, charge, inaccuracy);
+    }
+
+    @Override
+    public float getBaseImpactDamage(Entity entity, ItemStack itemstack) {
+        float speed = MathHelper.sqrt_double((double)(this.motionX * this.motionX + this.motionY * this.motionY + this.motionZ * this.motionZ));
+        float damage = ((LOTRItemSpear)itemstack.getItem()).getRangedDamageMultiplier(itemstack, this.shootingEntity, entity);
+        return speed * damage;
+    }
+}
+

@@ -1,0 +1,61 @@
+/*
+ * Decompiled with CFR 0.148.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.item.ItemStack
+ *  net.minecraft.world.World
+ */
+package lotr.common.item;
+
+import lotr.common.entity.item.LOTREntityLionRug;
+import lotr.common.entity.item.LOTREntityRugBase;
+import lotr.common.item.LOTRItemRugBase;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
+
+public class LOTRItemLionRug
+extends LOTRItemRugBase {
+    public LOTRItemLionRug() {
+        super(LionRugType.lionRugNames());
+    }
+
+    @Override
+    protected LOTREntityRugBase createRug(World world, ItemStack itemstack) {
+        LOTREntityLionRug rug = new LOTREntityLionRug(world);
+        rug.setRugType(LionRugType.forID(itemstack.getItemDamage()));
+        return rug;
+    }
+
+    public static enum LionRugType {
+        LION(0),
+        LIONESS(1);
+
+        public final int lionID;
+
+        private LionRugType(int i) {
+            this.lionID = i;
+        }
+
+        public String textureName() {
+            return this.name().toLowerCase();
+        }
+
+        public static LionRugType forID(int ID) {
+            for (LionRugType t : LionRugType.values()) {
+                if (t.lionID != ID) continue;
+                return t;
+            }
+            return LION;
+        }
+
+        public static String[] lionRugNames() {
+            String[] names = new String[LionRugType.values().length];
+            for (int i = 0; i < names.length; ++i) {
+                names[i] = LionRugType.values()[i].textureName();
+            }
+            return names;
+        }
+    }
+
+}
+

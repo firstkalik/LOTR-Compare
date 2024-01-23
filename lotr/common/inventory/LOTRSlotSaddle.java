@@ -1,0 +1,29 @@
+/*
+ * Decompiled with CFR 0.148.
+ * 
+ * Could not load the following classes:
+ *  net.minecraft.init.Items
+ *  net.minecraft.inventory.IInventory
+ *  net.minecraft.inventory.Slot
+ *  net.minecraft.item.Item
+ *  net.minecraft.item.ItemStack
+ */
+package lotr.common.inventory;
+
+import net.minecraft.init.Items;
+import net.minecraft.inventory.IInventory;
+import net.minecraft.inventory.Slot;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+
+public class LOTRSlotSaddle
+extends Slot {
+    public LOTRSlotSaddle(IInventory inv, int i, int j, int k) {
+        super(inv, i, j, k);
+    }
+
+    public boolean isItemValid(ItemStack itemstack) {
+        return super.isItemValid(itemstack) && itemstack.getItem() == Items.saddle && !this.getHasStack();
+    }
+}
+
