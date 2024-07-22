@@ -19,8 +19,6 @@
  *  net.minecraft.client.resources.IResource
  *  net.minecraft.client.resources.IResourceManager
  *  net.minecraft.client.resources.IResourceManagerReloadListener
- *  net.minecraft.client.resources.IResourcePack
- *  net.minecraft.client.resources.ResourcePackRepository
  *  net.minecraft.entity.player.EntityPlayer
  *  net.minecraft.util.IIcon
  *  net.minecraft.util.ResourceLocation
@@ -70,8 +68,6 @@ import net.minecraft.client.resources.IReloadableResourceManager;
 import net.minecraft.client.resources.IResource;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.client.resources.IResourceManagerReloadListener;
-import net.minecraft.client.resources.IResourcePack;
-import net.minecraft.client.resources.ResourcePackRepository;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
@@ -86,6 +82,12 @@ implements IResourceManagerReloadListener {
     public static ResourceLocation missingTexture = mc.getTextureManager().getDynamicTextureLocation("lotr.missingSkin", TextureUtil.missingTexture);
     private static ResourceLocation mapTexture;
     private static ResourceLocation sepiaMapTexture;
+    private static ResourceLocation MapTexture;
+    private static ResourceLocation AltMapTexture;
+    private static ResourceLocation SepiaMapTexture;
+    private static ResourceLocation altSepiaMapTexture;
+    private static ResourceLocation bMapTexture;
+    private static ResourceLocation bSepiaMapTexture;
     public static ResourceLocation overlayTexture;
     public static ResourceLocation mapTerrain;
     public static final ResourceLocation osrsTexture;
@@ -150,7 +152,6 @@ implements IResourceManagerReloadListener {
     }
 
     public static void drawMap(EntityPlayer entityplayer, boolean sepia, double x0, double x1, double y0, double y1, double z, double minU, double maxU, double minV, double maxV, float alpha) {
-        boolean meneltarma;
         Tessellator tessellator = Tessellator.instance;
         mc.getTextureManager().bindTexture(LOTRTextures.getMapTexture(entityplayer, sepia));
         GL11.glColor4f((float)1.0f, (float)1.0f, (float)1.0f, (float)alpha);
@@ -160,15 +161,16 @@ implements IResourceManagerReloadListener {
         tessellator.addVertexWithUV(x1, y0, z, maxU, minV);
         tessellator.addVertexWithUV(x0, y0, z, minU, minV);
         tessellator.draw();
-        boolean bl = meneltarma = entityplayer != null && LOTRLevelData.getData(entityplayer).hasAchievement(LOTRAchievement.enterMeneltarma);
+        boolean meneltarma = entityplayer != null && LOTRLevelData.getData(entityplayer).hasAchievement(LOTRAchievement.enterMeneltarma);
+        boolean bl = meneltarma;
         if (!meneltarma) {
-            int mtX = LOTRWaypoint.MENELTARMA_SUMMIT.getX();
-            int mtY = LOTRWaypoint.MENELTARMA_SUMMIT.getY();
+            double mtX = LOTRWaypoint.MENELTARMA_SUMMIT.getX();
+            double mtY = LOTRWaypoint.MENELTARMA_SUMMIT.getY();
             int mtW = 20;
-            double mtMinU = (double)(mtX - mtW) / (double)LOTRGenLayerWorld.imageWidth;
-            double mtMaxU = (double)(mtX + mtW) / (double)LOTRGenLayerWorld.imageWidth;
-            double mtMinV = (double)(mtY - mtW) / (double)LOTRGenLayerWorld.imageHeight;
-            double mtMaxV = (double)(mtY + mtW) / (double)LOTRGenLayerWorld.imageHeight;
+            double mtMinU = (mtX - (double)mtW) / (double)LOTRGenLayerWorld.imageWidth;
+            double mtMaxU = (mtX + (double)mtW) / (double)LOTRGenLayerWorld.imageWidth;
+            double mtMinV = (mtY - (double)mtW) / (double)LOTRGenLayerWorld.imageHeight;
+            double mtMaxV = (mtY + (double)mtW) / (double)LOTRGenLayerWorld.imageHeight;
             if (minU <= mtMaxU && maxU >= mtMinU && minV <= mtMaxV && maxV >= mtMinV) {
                 GL11.glDisable((int)3553);
                 int oceanColor = LOTRTextures.getMapOceanColor(sepia);
@@ -190,6 +192,39 @@ implements IResourceManagerReloadListener {
                 tessellator.addVertexWithUV(mtX0, mtY0, z, mtMinU, mtMinV);
                 tessellator.draw();
                 GL11.glEnable((int)3553);
+            }
+            meneltarma = entityplayer != null && LOTRLevelData.getData(entityplayer).hasAchievement(LOTRAchievement.enterSun);
+            boolean bl1 = meneltarma;
+            if (!meneltarma) {
+                double mtX1 = LOTRWaypoint.SUNLANDS_SUMMIT.getX();
+                double mtY1 = LOTRWaypoint.SUNLANDS_SUMMIT.getY();
+                int mtW1 = 270;
+                double mtMinU1 = (mtX1 - (double)mtW1) / (double)LOTRGenLayerWorld.imageWidth;
+                double mtMaxU1 = (mtX1 + (double)mtW1) / (double)LOTRGenLayerWorld.imageWidth;
+                double mtMinV1 = (mtY1 - (double)mtW1) / (double)LOTRGenLayerWorld.imageHeight;
+                double mtMaxV1 = (mtY1 + (double)mtW1) / (double)LOTRGenLayerWorld.imageHeight;
+                if (minU <= mtMaxU1 && maxU >= mtMinU1 && minV <= mtMaxV1 && maxV >= mtMinV1) {
+                    GL11.glDisable((int)3553);
+                    int oceanColor = LOTRTextures.getMapOceanColor(sepia);
+                    mtMinU1 = Math.max(mtMinU1, minU);
+                    mtMaxU1 = Math.min(mtMaxU1, maxU);
+                    mtMinV1 = Math.max(mtMinV1, minV);
+                    mtMaxV1 = Math.min(mtMaxV1, maxV);
+                    double ratioX = (x1 - x0) / (maxU - minU);
+                    double ratioY = (y1 - y0) / (maxV - minV);
+                    double mtX0 = x0 + (mtMinU1 - minU) * ratioX;
+                    double mtX11 = x0 + (mtMaxU1 - minU) * ratioX;
+                    double mtY0 = y0 + (mtMinV1 - minV) * ratioY;
+                    double mtY11 = y0 + (mtMaxV1 - minV) * ratioY;
+                    tessellator.startDrawingQuads();
+                    tessellator.setColorOpaque_I(oceanColor);
+                    tessellator.addVertexWithUV(mtX0, mtY11, z, mtMinU1, mtMaxV1);
+                    tessellator.addVertexWithUV(mtX11, mtY11, z, mtMaxU1, mtMaxV1);
+                    tessellator.addVertexWithUV(mtX11, mtY0, z, mtMaxU1, mtMinV1);
+                    tessellator.addVertexWithUV(mtX0, mtY0, z, mtMinU1, mtMinV1);
+                    tessellator.draw();
+                    GL11.glEnable((int)3553);
+                }
             }
         }
     }
@@ -250,19 +285,42 @@ implements IResourceManagerReloadListener {
     }
 
     public static void loadMapTextures() {
-        mapTexture = new ResourceLocation("lotr:map/map.png");
+        MapTexture = new ResourceLocation("lotr:map/map.png");
+        AltMapTexture = new ResourceLocation("lotr:map/map1.png");
+        bMapTexture = new ResourceLocation("lotr:map/map2.png");
         try {
-            BufferedImage mapImage = ImageIO.read(mc.getResourceManager().getResource(mapTexture).getInputStream());
-            sepiaMapTexture = LOTRTextures.convertToSepia(mapImage, "lotr:map_sepia");
+            BufferedImage mapImage = ImageIO.read(mc.getResourceManager().getResource(MapTexture).getInputStream());
+            SepiaMapTexture = LOTRTextures.convertToSepia(mapImage, new ResourceLocation("lotr:map_sepia"));
+            mapImage = ImageIO.read(mc.getResourceManager().getResource(AltMapTexture).getInputStream());
+            altSepiaMapTexture = LOTRTextures.convertToSepia(mapImage, new ResourceLocation("lotr:alt_map_sepia"));
+            mapImage = ImageIO.read(mc.getResourceManager().getResource(bMapTexture).getInputStream());
+            bSepiaMapTexture = LOTRTextures.convertToSepia(mapImage, new ResourceLocation("lotr:special_map_sepia"));
         }
         catch (IOException e) {
             FMLLog.severe((String)"Failed to generate LOTR sepia map", (Object[])new Object[0]);
             e.printStackTrace();
-            sepiaMapTexture = mapTexture;
+            SepiaMapTexture = mapTexture;
+            bSepiaMapTexture = bMapTexture;
+            SepiaMapTexture = mapTexture;
+            altSepiaMapTexture = AltMapTexture;
+        }
+        LOTRTextures.updateMapTextures();
+    }
+
+    public static void updateMapTextures() {
+        if (LOTRConfig.changeMap) {
+            mapTexture = AltMapTexture;
+            sepiaMapTexture = altSepiaMapTexture;
+        } else if (LOTRConfig.bMap) {
+            mapTexture = bMapTexture;
+            sepiaMapTexture = bSepiaMapTexture;
+        } else {
+            mapTexture = MapTexture;
+            sepiaMapTexture = SepiaMapTexture;
         }
     }
 
-    private static ResourceLocation convertToSepia(BufferedImage srcImage, String name) {
+    private static ResourceLocation convertToSepia(BufferedImage srcImage, ResourceLocation resourceLocation) {
         int mapWidth = srcImage.getWidth();
         int mapHeight = srcImage.getHeight();
         int[] colors = srcImage.getRGB(0, 0, mapWidth, mapHeight, null, 0, mapWidth);
@@ -286,24 +344,24 @@ implements IResourceManagerReloadListener {
         if (LOTRConfig.osrsMap) {
             BufferedImage temp = newMapImage;
             newMapImage = new BufferedImage(mapWidth, mapHeight, 2);
-            for (int i = 0; i < mapWidth; ++i) {
-                for (int j = 0; j < mapHeight; ++j) {
-                    int y1;
-                    int x1;
-                    int y;
-                    int x;
+            for (int j = 0; j < mapWidth; ++j) {
+                for (int k = 0; k < mapHeight; ++k) {
                     int range;
                     int total;
+                    int x1;
                     int rgb1;
-                    int rgb = temp.getRGB(i, j);
+                    int x;
+                    int y;
+                    int y1;
+                    int rgb = temp.getRGB(j, k);
                     if (rgb == 5468426) {
                         range = 8;
                         int water = 0;
                         total = 0;
                         for (x = -range; x < range; ++x) {
                             for (y = -range; y < range; ++y) {
-                                x1 = i + x;
-                                y1 = y + j;
+                                x1 = j + x;
+                                y1 = y + k;
                                 if (x1 < 0 || x1 >= mapWidth || y1 < 0 || y1 >= mapHeight) continue;
                                 rgb1 = temp.getRGB(x1, y1);
                                 if (rgb1 == 6453158) {
@@ -313,7 +371,7 @@ implements IResourceManagerReloadListener {
                             }
                         }
                         if (water > 0) {
-                            float ratio = (float)water / (float)total;
+                            float ratio = water / total;
                             rgb = LOTRColorUtil.lerpColors_I(5468426, 9279778, ratio * 2.0f);
                         }
                     } else if (rgb == 14736861) {
@@ -322,8 +380,8 @@ implements IResourceManagerReloadListener {
                         total = 0;
                         for (x = -range; x < range; ++x) {
                             for (y = -range; y < range; ++y) {
-                                x1 = i + x;
-                                y1 = y + j;
+                                x1 = j + x;
+                                y1 = y + k;
                                 if (x1 < 0 || x1 >= mapWidth || y1 < 0 || y1 >= mapHeight) continue;
                                 rgb1 = temp.getRGB(x1, y1);
                                 if (rgb1 != 14736861) {
@@ -333,16 +391,16 @@ implements IResourceManagerReloadListener {
                             }
                         }
                         if (edge > 0) {
-                            float ratio = (float)edge / (float)total;
+                            float ratio = edge / total;
                             rgb = LOTRColorUtil.lerpColors_I(14736861, 9005125, ratio * 1.5f);
                         }
                     }
-                    newMapImage.setRGB(i, j, rgb | 0xFF000000);
+                    newMapImage.setRGB(j, k, rgb | 0xFF000000);
                 }
             }
         }
-        ResourceLocation sepiaTexture = LOTRTextures.mc.renderEngine.getDynamicTextureLocation(name, new DynamicTexture(newMapImage));
-        return sepiaTexture;
+        LOTRTextures.mc.renderEngine.loadTexture(resourceLocation, (ITextureObject)new DynamicTexture(newMapImage));
+        return resourceLocation;
     }
 
     private static int getSepia(int rgb) {
@@ -364,8 +422,10 @@ implements IResourceManagerReloadListener {
 
     public static void replaceWaterParticles() {
         try {
-            BufferedImage particles = ImageIO.read(LOTRTextures.mc.getResourcePackRepository().rprDefaultResourcePack.getInputStream(particleTextures));
-            BufferedImage waterParticles = ImageIO.read(mc.getResourceManager().getResource(newWaterParticles).getInputStream());
+            IResourceManager resMgr = mc.getResourceManager();
+            IResource loadedParticles = resMgr.getResource(particleTextures);
+            BufferedImage particles = ImageIO.read(loadedParticles.getInputStream());
+            BufferedImage waterParticles = ImageIO.read(resMgr.getResource(newWaterParticles).getInputStream());
             int[] rgb = waterParticles.getRGB(0, 0, waterParticles.getWidth(), waterParticles.getHeight(), null, 0, waterParticles.getWidth());
             particles.setRGB(newWaterU, newWaterV, newWaterWidth, newWaterHeight, rgb, 0, newWaterWidth);
             TextureManager textureManager = mc.getTextureManager();

@@ -34,7 +34,7 @@ extends LOTREntityNearHaradrimWarrior {
     public LOTREntitySouthronChampion(World world) {
         super(world);
         this.spawnRidingHorse = true;
-        this.npcCape = LOTRCapes.SOUTHRON_CHAMPION;
+        this.npcCape = LOTRCapes.SOUTHRON_CHAMPION.capeTexture;
     }
 
     @Override

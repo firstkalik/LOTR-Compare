@@ -35,11 +35,12 @@ extends LOTRWorldGenHarnedorStructure {
 
     @Override
     public boolean generateWithSetRotation(World world, Random random, int i, int j, int k, int rotation) {
-        int j1;
-        int j12;
-        int step;
-        int k1;
         int i1;
+        int j12;
+        int j1;
+        int j2;
+        int k1;
+        int step;
         this.setOriginAndRotation(world, i, j, k, rotation, 7, -3);
         this.setupRandomBlocks(random);
         if (this.restrictions) {
@@ -47,15 +48,15 @@ extends LOTRWorldGenHarnedorStructure {
             int maxHeight = 0;
             for (int i12 = -15; i12 <= 15; ++i12) {
                 for (int k12 = -8; k12 <= 8; ++k12) {
-                    j1 = this.getTopBlock(world, i12, k12) - 1;
-                    if (!this.isSurface(world, i12, j1, k12)) {
+                    j12 = this.getTopBlock(world, i12, k12) - 1;
+                    if (!this.isSurface(world, i12, j12, k12)) {
                         return false;
                     }
-                    if (j1 < minHeight) {
-                        minHeight = j1;
+                    if (j12 < minHeight) {
+                        minHeight = j12;
                     }
-                    if (j1 > maxHeight) {
-                        maxHeight = j1;
+                    if (j12 > maxHeight) {
+                        maxHeight = j12;
                     }
                     if (maxHeight - minHeight <= 12) continue;
                     return false;
@@ -66,15 +67,15 @@ extends LOTRWorldGenHarnedorStructure {
             for (int k13 = -6; k13 <= 6; ++k13) {
                 int i2 = Math.abs(i13);
                 int k2 = Math.abs(k13);
-                if (!(i2 <= 8 && k2 == 6 || i2 <= 11 && k2 <= 5) && (i2 > 13 || k2 > 4)) continue;
-                for (j1 = 1; j1 <= 8; ++j1) {
-                    this.setAir(world, i13, j1, k13);
+                if (!(i2 <= 8 && k2 == 6 || i2 <= 11 && k2 <= 5 || i2 <= 13 && k2 <= 4)) continue;
+                for (j12 = 1; j12 <= 8; ++j12) {
+                    this.setAir(world, i13, j12, k13);
                 }
-                j1 = -1;
-                while (!this.isOpaque(world, i13, j1, k13) && this.getY(j1) >= 0) {
-                    this.setBlockAndMetadata(world, i13, j1, k13, this.plank2Block, this.plank2Meta);
-                    this.setGrassToDirt(world, i13, j1 - 1, k13);
-                    --j1;
+                j12 = -1;
+                while (!this.isOpaque(world, i13, j12, k13) && this.getY(j12) >= 0) {
+                    this.setBlockAndMetadata(world, i13, j12, k13, this.plank2Block, this.plank2Meta);
+                    this.setGrassToDirt(world, i13, j12 - 1, k13);
+                    --j12;
                 }
             }
         }
@@ -169,12 +170,11 @@ extends LOTRWorldGenHarnedorStructure {
                 this.spawnNPCAndSetHome(haradrim, world, 0, 1, 0, 16);
             }
         }
-        int maxSteps = 12;
         for (i1 = -5; i1 <= -1; ++i1) {
-            for (step = 0; step < 12 && !this.isOpaque(world, i1, j12 = 0 - step, k1 = -7 - step); ++step) {
-                this.setBlockAndMetadata(world, i1, j12, k1, this.plank2StairBlock, 2);
-                this.setGrassToDirt(world, i1, j12 - 1, k1);
-                int j2 = j12 - 1;
+            for (step = 0; step < 12 && !this.isOpaque(world, i1, j1 = 0 - step, k1 = -7 - step); ++step) {
+                this.setBlockAndMetadata(world, i1, j1, k1, this.plank2StairBlock, 2);
+                this.setGrassToDirt(world, i1, j1 - 1, k1);
+                j2 = j1 - 1;
                 while (!this.isOpaque(world, i1, j2, k1) && this.getY(j2) >= 0) {
                     this.setBlockAndMetadata(world, i1, j2, k1, this.plank2Block, this.plank2Meta);
                     this.setGrassToDirt(world, i1, j2 - 1, k1);
@@ -183,10 +183,10 @@ extends LOTRWorldGenHarnedorStructure {
             }
         }
         for (i1 = 1; i1 <= 5; ++i1) {
-            for (step = 0; step < 12 && !this.isOpaque(world, i1, j12 = 0 - step, k1 = -7 - step); ++step) {
-                this.setBlockAndMetadata(world, i1, j12, k1, this.plank2StairBlock, 2);
-                this.setGrassToDirt(world, i1, j12 - 1, k1);
-                int j2 = j12 - 1;
+            for (step = 0; step < 12 && !this.isOpaque(world, i1, j1 = 0 - step, k1 = -7 - step); ++step) {
+                this.setBlockAndMetadata(world, i1, j1, k1, this.plank2StairBlock, 2);
+                this.setGrassToDirt(world, i1, j1 - 1, k1);
+                j2 = j1 - 1;
                 while (!this.isOpaque(world, i1, j2, k1) && this.getY(j2) >= 0) {
                     this.setBlockAndMetadata(world, i1, j2, k1, this.plank2Block, this.plank2Meta);
                     this.setGrassToDirt(world, i1, j2 - 1, k1);
@@ -195,10 +195,10 @@ extends LOTRWorldGenHarnedorStructure {
             }
         }
         for (i1 = -5; i1 <= -1; ++i1) {
-            for (step = 0; step < 12 && !this.isOpaque(world, i1, j12 = 0 - step, k1 = 7 + step); ++step) {
-                this.setBlockAndMetadata(world, i1, j12, k1, this.plank2StairBlock, 3);
-                this.setGrassToDirt(world, i1, j12 - 1, k1);
-                int j2 = j12 - 1;
+            for (step = 0; step < 12 && !this.isOpaque(world, i1, j1 = 0 - step, k1 = 7 + step); ++step) {
+                this.setBlockAndMetadata(world, i1, j1, k1, this.plank2StairBlock, 3);
+                this.setGrassToDirt(world, i1, j1 - 1, k1);
+                j2 = j1 - 1;
                 while (!this.isOpaque(world, i1, j2, k1) && this.getY(j2) >= 0) {
                     this.setBlockAndMetadata(world, i1, j2, k1, this.plank2Block, this.plank2Meta);
                     this.setGrassToDirt(world, i1, j2 - 1, k1);
@@ -207,10 +207,10 @@ extends LOTRWorldGenHarnedorStructure {
             }
         }
         for (i1 = 1; i1 <= 5; ++i1) {
-            for (step = 0; step < 12 && !this.isOpaque(world, i1, j12 = 0 - step, k1 = 7 + step); ++step) {
-                this.setBlockAndMetadata(world, i1, j12, k1, this.plank2StairBlock, 3);
-                this.setGrassToDirt(world, i1, j12 - 1, k1);
-                int j2 = j12 - 1;
+            for (step = 0; step < 12 && !this.isOpaque(world, i1, j1 = 0 - step, k1 = 7 + step); ++step) {
+                this.setBlockAndMetadata(world, i1, j1, k1, this.plank2StairBlock, 3);
+                this.setGrassToDirt(world, i1, j1 - 1, k1);
+                j2 = j1 - 1;
                 while (!this.isOpaque(world, i1, j2, k1) && this.getY(j2) >= 0) {
                     this.setBlockAndMetadata(world, i1, j2, k1, this.plank2Block, this.plank2Meta);
                     this.setGrassToDirt(world, i1, j2 - 1, k1);

@@ -14,12 +14,10 @@ import lotr.common.world.biome.LOTRMusicRegion;
 
 public class LOTRRegionTrackPool {
     private final LOTRMusicRegion region;
-    private final String subregion;
     private List<LOTRMusicTrack> trackList = new ArrayList<LOTRMusicTrack>();
 
     public LOTRRegionTrackPool(LOTRMusicRegion r, String s) {
         this.region = r;
-        this.subregion = s;
     }
 
     public void addTrack(LOTRMusicTrack track) {
@@ -31,7 +29,6 @@ public class LOTRRegionTrackPool {
     }
 
     public LOTRMusicTrack getRandomTrack(Random rand, LOTRTrackSorter.Filter filter) {
-        double weight;
         List<LOTRMusicTrack> sortedTracks = LOTRTrackSorter.sortTracks(this.trackList, filter);
         double totalWeight = 0.0;
         for (LOTRMusicTrack track : sortedTracks) {
@@ -45,7 +42,7 @@ public class LOTRRegionTrackPool {
         do {
             if (it.hasNext()) continue;
             return track;
-        } while ((randWeight -= (weight = (track = it.next()).getRegionInfo(this.region).getWeight())) >= 0.0);
+        } while ((randWeight -= (track = it.next()).getRegionInfo(this.region).getWeight()) >= 0.0);
         return track;
     }
 }

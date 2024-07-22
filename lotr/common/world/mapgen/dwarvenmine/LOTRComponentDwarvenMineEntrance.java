@@ -86,11 +86,10 @@ extends StructureComponent {
     }
 
     public boolean addComponentParts(World world, Random random, StructureBoundingBox structureBoundingBox) {
-        Block block;
         if (this.posY == -1) {
             this.posY = world.getTopSolidOrLiquidBlock(this.posX, this.posZ);
         }
-        if ((block = world.getBlock(this.posX, this.posY - 1, this.posZ)) != Blocks.grass) {
+        if (world.getBlock(this.posX, this.posY - 1, this.posZ) != Blocks.grass) {
             return false;
         }
         LOTRComponentDwarvenMineEntrance.entranceGen.isRuined = this.ruined;

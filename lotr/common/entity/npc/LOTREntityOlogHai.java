@@ -124,11 +124,13 @@ extends LOTREntityTroll {
             entity.addVelocity((double)(-MathHelper.sin((float)(this.rotationYaw * 3.1415927f / 180.0f)) * knockbackModifier * 0.5f), 0.0, (double)(MathHelper.cos((float)(this.rotationYaw * 3.1415927f / 180.0f)) * knockbackModifier * 0.5f));
             this.worldObj.playSoundAtEntity(entity, "lotr:troll.ologHai_hammer", 1.0f, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2f + 1.0f);
             if (!this.worldObj.isRemote && !(entities = this.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, entity.boundingBox.expand(4.0, 4.0, 4.0))).isEmpty()) {
-                for (int i = 0; i < entities.size(); ++i) {
-                    EntityLivingBase hitEntity = (EntityLivingBase)entities.get(i);
+                for (Object entitie : entities) {
+                    float f;
+                    EntityLivingBase hitEntity = (EntityLivingBase)entitie;
                     if (hitEntity == this || hitEntity == entity || !LOTRMod.canNPCAttackEntity(this, hitEntity, false)) continue;
                     float strength = 4.0f - entity.getDistanceToEntity((Entity)hitEntity);
-                    if ((strength += 1.0f) > 4.0f) {
+                    strength += 1.0f;
+                    if (f > 4.0f) {
                         strength = 4.0f;
                     }
                     if (!hitEntity.attackEntityFrom(DamageSource.causeMobDamage((EntityLivingBase)this), strength / 4.0f * attackDamage)) continue;

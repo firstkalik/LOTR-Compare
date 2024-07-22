@@ -29,12 +29,12 @@ import net.minecraft.util.IChatComponent;
 import org.apache.logging.log4j.Logger;
 
 public class LOTRVersionChecker {
-    private static String versionURL = "https://dl.dropboxusercontent.com/s/sidxw1dicl2nsev/version.txt";
+    private static String versionURL = "https://raw.githubusercontent.com/firstkalik/first/master/update.txt";
     private static boolean checkedUpdate = false;
 
     public static void checkForUpdates() {
         if (!checkedUpdate) {
-            Thread checkThread = new Thread("LOTR Update Checker"){
+            Thread checkThread = new Thread("LOTR+ Update Checker"){
 
                 @Override
                 public void run() {
@@ -48,10 +48,10 @@ public class LOTRVersionChecker {
                         }
                         updateReader.close();
                         updateVersion = updateVersion.trim();
-                        String currentVersion = "Update v36.0 for Minecraft 1.7.10";
+                        String currentVersion = "Update v38.0 for Minecraft 1.7.10";
                         if (!updateVersion.equals(currentVersion)) {
-                            ChatComponentText component = new ChatComponentText("The Lord of the Rings Mod:");
-                            component.getChatStyle().setColor(EnumChatFormatting.YELLOW);
+                            ChatComponentText component = new ChatComponentText("LOTR+ v.Rogue:");
+                            component.getChatStyle().setColor(EnumChatFormatting.GOLD);
                             EntityClientPlayerMP entityplayer = Minecraft.getMinecraft().thePlayer;
                             if (entityplayer != null) {
                                 entityplayer.addChatMessage((IChatComponent)new ChatComponentTranslation("chat.lotr.update", new Object[]{component, updateVersion}));
@@ -59,7 +59,7 @@ public class LOTRVersionChecker {
                         }
                     }
                     catch (Exception e) {
-                        LOTRLog.logger.warn("LOTR: Version check failed");
+                        LOTRLog.logger.warn("LOTR+: Version check failed");
                         e.printStackTrace();
                     }
                 }

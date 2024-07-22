@@ -59,7 +59,7 @@ extends CommandBase {
     }
 
     public void processCommand(ICommandSender sender, String[] args) {
-        EntityPlayerMP entityplayer = LOTRCommandFellowshipMessage.getCommandSenderAsPlayer((ICommandSender)sender);
+        EntityPlayerMP entityplayer = CommandBase.getCommandSenderAsPlayer((ICommandSender)sender);
         LOTRPlayerData playerData = LOTRLevelData.getData((EntityPlayer)entityplayer);
         if (args.length >= 1) {
             if (args[0].equals("bind") && args.length >= 2) {
@@ -78,9 +78,6 @@ extends CommandBase {
             if (args[0].equals("unbind")) {
                 LOTRFellowship preBoundFellowship = playerData.getChatBoundFellowship();
                 playerData.setChatBoundFellowshipID(null);
-                if (preBoundFellowship == null || preBoundFellowship.containsPlayer(entityplayer.getUniqueID())) {
-                    // empty if block
-                }
                 ChatComponentTranslation notif = new ChatComponentTranslation("commands.lotr.fmsg.unbind", new Object[]{preBoundFellowship.getName()});
                 notif.getChatStyle().setColor(EnumChatFormatting.GRAY);
                 notif.getChatStyle().setItalic(Boolean.valueOf(true));
@@ -107,7 +104,7 @@ extends CommandBase {
                 }
             }
             if (fellowship != null) {
-                IChatComponent message = LOTRCommandFellowshipMessage.func_147176_a((ICommandSender)sender, (String[])args, (int)msgStartIndex, (boolean)false);
+                IChatComponent message = CommandBase.func_147176_a((ICommandSender)sender, (String[])args, (int)msgStartIndex, (boolean)false);
                 fellowship.sendFellowshipMessage(entityplayer, message.getUnformattedText());
                 return;
             }
@@ -116,7 +113,7 @@ extends CommandBase {
     }
 
     public List addTabCompletionOptions(ICommandSender sender, String[] args) {
-        LOTRPlayerData playerData = LOTRLevelData.getData((EntityPlayer)LOTRCommandFellowshipMessage.getCommandSenderAsPlayer((ICommandSender)sender));
+        LOTRPlayerData playerData = LOTRLevelData.getData((EntityPlayer)CommandBase.getCommandSenderAsPlayer((ICommandSender)sender));
         String[] argsOriginal = Arrays.copyOf(args, args.length);
         if (args.length >= 2 && args[0].equals("bind")) {
             args = LOTRCommandFellowship.fixArgsForFellowship(args, 1, true);
@@ -126,7 +123,7 @@ extends CommandBase {
             args = LOTRCommandFellowship.fixArgsForFellowship(args, 0, true);
             ArrayList<String> matches = new ArrayList<String>();
             if (args.length == 1 && !argsOriginal[0].startsWith("\"")) {
-                matches.addAll(LOTRCommandFellowshipMessage.getListOfStringsMatchingLastWord((String[])args, (String[])new String[]{"bind", "unbind"}));
+                matches.addAll(CommandBase.getListOfStringsMatchingLastWord((String[])args, (String[])new String[]{"bind", "unbind"}));
             }
             matches.addAll(LOTRCommandFellowship.listFellowshipsMatchingLastWord(args, argsOriginal, 0, playerData, false));
             return matches;

@@ -56,7 +56,6 @@ extends LOTRGuiScreenBase {
     private GuiButton buttonDone;
     private GuiTextField squadronNameField;
     private ItemStack theItem;
-    private boolean sendSquadronUpdate = false;
 
     public void initGui() {
         this.guiLeft = (this.width - this.xSize) / 2;

@@ -41,8 +41,9 @@ extends LOTRBiomeVariant {
 
     @Override
     public void generateVariantTerrain(World world, Random random, Block[] blocks, byte[] meta, int i, int k, int height, LOTRBiome biome) {
-        double d2;
         int index;
+        double d;
+        double d2;
         double d3;
         int j;
         int chunkX = i & 0xF;
@@ -50,10 +51,11 @@ extends LOTRBiomeVariant {
         int xzIndex = chunkX * 16 + chunkZ;
         int ySize = blocks.length / 256;
         double d1 = LOTRBiome.biomeTerrainNoise.func_151601_a((double)i * 0.005, (double)k * 0.005);
-        if (d1 + (d2 = LOTRBiome.biomeTerrainNoise.func_151601_a((double)i * 0.07, (double)k * 0.07)) + (d3 = LOTRBiome.biomeTerrainNoise.func_151601_a((double)i * 0.3, (double)k * 0.3)) > 0.6) {
+        double d22 = LOTRBiome.biomeTerrainNoise.func_151601_a((double)i * 0.07, (double)k * 0.07);
+        if (d1 + d + LOTRBiome.biomeTerrainNoise.func_151601_a((double)i * 0.3, (double)k * 0.3) > 0.6) {
             j = height;
             index = xzIndex * ySize + j;
-            if (d1 + d2 > 0.7 && random.nextInt(3) != 0) {
+            if (d1 + d22 > 0.7 && random.nextInt(3) != 0) {
                 blocks[index] = Blocks.sand;
                 meta[index] = 0;
             } else if (random.nextInt(5) == 0) {
@@ -73,7 +75,9 @@ extends LOTRBiomeVariant {
                 }
             }
         }
-        if ((d1 = LOTRBiome.biomeTerrainNoise.func_151601_a((double)i * 0.008, (double)k * 0.008)) + (d2 = LOTRBiome.biomeTerrainNoise.func_151601_a((double)i * 0.05, (double)k * 0.05)) + (d3 = LOTRBiome.biomeTerrainNoise.func_151601_a((double)i * 0.6, (double)k * 0.6)) > 0.8 && random.nextInt(3) == 0) {
+        d1 = LOTRBiome.biomeTerrainNoise.func_151601_a((double)i * 0.008, (double)k * 0.008);
+        d22 = LOTRBiome.biomeTerrainNoise.func_151601_a((double)i * 0.05, (double)k * 0.05);
+        if (d2 + d3 + LOTRBiome.biomeTerrainNoise.func_151601_a((double)i * 0.6, (double)k * 0.6) > 0.8 && random.nextInt(3) == 0) {
             j = height;
             index = xzIndex * ySize + j;
             Block above = blocks[index + 1];

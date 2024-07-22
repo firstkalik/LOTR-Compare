@@ -13,7 +13,6 @@
 package lotr.client.render.tileentity;
 
 import lotr.client.LOTRTickHandlerClient;
-import lotr.common.tileentity.LOTRTileEntityMorgulPortal;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -27,7 +26,6 @@ extends TileEntitySpecialRenderer {
     private static ResourceLocation portalTexture = new ResourceLocation("lotr:misc/gulduril_glow.png");
 
     public void renderTileEntityAt(TileEntity tileentity, double d, double d1, double d2, float f) {
-        LOTRTileEntityMorgulPortal portal = (LOTRTileEntityMorgulPortal)tileentity;
         float f1 = (float)LOTRTickHandlerClient.clientTick + f;
         OpenGlHelper.setLightmapTextureCoords((int)OpenGlHelper.lightmapTexUnit, (float)240.0f, (float)240.0f);
         GL11.glPushMatrix();

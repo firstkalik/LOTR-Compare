@@ -41,7 +41,7 @@ implements IMessage {
     public static class Handler
     implements IMessageHandler<LOTRPacketFTCooldown, IMessage> {
         public IMessage onMessage(LOTRPacketFTCooldown packet, MessageContext context) {
-            LOTRLevelData.setFTCooldown(packet.cooldownMax, packet.cooldownMin);
+            LOTRLevelData.setWaypointCooldown(packet.cooldownMax, packet.cooldownMin);
             return null;
         }
     }

@@ -120,7 +120,6 @@ extends ItemBow {
     }
 
     public static void applyCrossbowModifiers(LOTREntityCrossbowBolt bolt, ItemStack itemstack) {
-        int fireAspect;
         int power = EnchantmentHelper.getEnchantmentLevel((int)Enchantment.power.effectId, (ItemStack)itemstack);
         if (power > 0) {
             bolt.boltDamageFactor += (double)power * 0.5 + 0.5;
@@ -129,7 +128,7 @@ extends ItemBow {
         if ((punch += LOTREnchantmentHelper.calcRangedKnockback(itemstack)) > 0) {
             bolt.knockbackStrength = punch;
         }
-        if ((fireAspect = EnchantmentHelper.getEnchantmentLevel((int)Enchantment.flame.effectId, (ItemStack)itemstack) + LOTREnchantmentHelper.calcFireAspect(itemstack)) > 0) {
+        if (EnchantmentHelper.getEnchantmentLevel((int)Enchantment.flame.effectId, (ItemStack)itemstack) + LOTREnchantmentHelper.calcFireAspect(itemstack) > 0) {
             bolt.setFire(100);
         }
         for (LOTREnchantment ench : LOTREnchantment.allEnchantments) {

@@ -57,20 +57,20 @@ extends LOTRWorldGenStructureBase2 {
     @Override
     public boolean generateWithSetRotation(World world, Random random, int i, int j, int k, int rotation) {
         int k1;
-        int k12;
-        int i1;
-        LOTREntityElf elf;
-        int j1;
-        int i2;
         int k2;
+        int i2;
+        LOTREntityElf elf;
+        int i1;
+        int j1;
+        int k12;
         this.setOriginAndRotation(world, i, j, k, rotation, 7);
         if (this.restrictions) {
             int minHeight = 0;
             int maxHeight = 0;
             for (int i12 = -6; i12 <= 6; ++i12) {
-                for (k12 = -6; k12 <= 6; ++k12) {
-                    j1 = this.getTopBlock(world, i12, k12);
-                    Block block = this.getBlock(world, i12, j1 - 1, k12);
+                for (k1 = -6; k1 <= 6; ++k1) {
+                    j1 = this.getTopBlock(world, i12, k1);
+                    Block block = this.getBlock(world, i12, j1 - 1, k1);
                     if (block != Blocks.grass) {
                         return false;
                     }
@@ -86,8 +86,8 @@ extends LOTRWorldGenStructureBase2 {
             }
         }
         for (i1 = -4; i1 <= 4; ++i1) {
-            for (k1 = -4; k1 <= 4; ++k1) {
-                this.layFoundation(world, i1, k1, random);
+            for (k12 = -4; k12 <= 4; ++k12) {
+                this.layFoundation(world, i1, k12, random);
             }
         }
         for (i1 = -2; i1 <= 2; ++i1) {
@@ -113,11 +113,11 @@ extends LOTRWorldGenStructureBase2 {
                 this.placeRoofStairs(world, i13, j12 - 1, -width, 7, random);
                 this.placeRoofStairs(world, i13, j12 - 1, width, 6, random);
             }
-            for (k12 = -width + 1; k12 <= width - 1; ++k12) {
-                this.placeRoofStairs(world, -width, j12, k12, 1, random);
-                this.placeRoofStairs(world, width, j12, k12, 0, random);
-                this.placeRoofStairs(world, -width, j12 - 1, k12, 4, random);
-                this.placeRoofStairs(world, width, j12 - 1, k12, 5, random);
+            for (k1 = -width + 1; k1 <= width - 1; ++k1) {
+                this.placeRoofStairs(world, -width, j12, k1, 1, random);
+                this.placeRoofStairs(world, width, j12, k1, 0, random);
+                this.placeRoofStairs(world, -width, j12 - 1, k1, 4, random);
+                this.placeRoofStairs(world, width, j12 - 1, k1, 5, random);
             }
             if (l >= 3) continue;
             int width2 = 2 - l;
@@ -225,11 +225,11 @@ extends LOTRWorldGenStructureBase2 {
             this.placePillar(world, i1, 6, -5, random);
         }
         for (i1 = -5; i1 <= 5; ++i1) {
-            for (k1 = -5; k1 <= 5; ++k1) {
+            for (k12 = -5; k12 <= 5; ++k12) {
                 i2 = Math.abs(i1);
-                k2 = Math.abs(k1);
+                k2 = Math.abs(k12);
                 if ((i2 > 2 || k2 > 2) && i2 != 0 && k2 != 0) continue;
-                this.placePillar(world, i1, 1, k1, random);
+                this.placePillar(world, i1, 1, k12, random);
             }
         }
         if (!this.ruined) {
@@ -250,17 +250,17 @@ extends LOTRWorldGenStructureBase2 {
         this.setBlockAndMetadata(world, -2, 1, 0, this.carvedBrickBlock, this.carvedBrickMeta);
         this.setBlockAndMetadata(world, 2, 1, 0, this.carvedBrickBlock, this.carvedBrickMeta);
         for (i1 = -1; i1 <= 1; ++i1) {
-            for (k1 = -1; k1 <= 1; ++k1) {
+            for (k12 = -1; k12 <= 1; ++k12) {
                 i2 = Math.abs(i1);
-                k2 = Math.abs(k1);
+                k2 = Math.abs(k12);
                 if (i2 == 1 && k2 == 1) {
-                    this.placePillar(world, i1, 2, k1, random);
-                    this.placePillar(world, i1, 3, k1, random);
-                    this.placeSlab(world, i1, 4, k1, false, random);
+                    this.placePillar(world, i1, 2, k12, random);
+                    this.placePillar(world, i1, 3, k12, random);
+                    this.placeSlab(world, i1, 4, k12, false, random);
                 }
                 if (i2 + k2 != 1) continue;
                 for (j1 = 2; j1 <= 9; ++j1) {
-                    this.placeBrick(world, i1, j1, k1, random);
+                    this.placeBrick(world, i1, j1, k12, random);
                 }
             }
         }

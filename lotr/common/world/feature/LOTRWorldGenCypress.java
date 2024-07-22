@@ -46,8 +46,8 @@ extends WorldGenAbstractTree {
         }
         boolean flag = true;
         if (j >= 1 && j + height + 1 <= 256) {
-            int k1;
             int i1;
+            int k1;
             for (int j1 = j; j1 <= j + 1 + height; ++j1) {
                 int range = 1;
                 if (j1 == j) {
@@ -82,9 +82,9 @@ extends WorldGenAbstractTree {
                 }
             }
             if (canGrow) {
-                int j1;
                 int k13;
                 int i13;
+                int j1;
                 for (i1 = i; i1 <= i + this.extraTrunkWidth; ++i1) {
                     for (k1 = k; k1 <= k + this.extraTrunkWidth; ++k1) {
                         world.getBlock(i1, j - 1, k1).onPlantGrow(world, i1, j - 1, k1, i1, j, k1);
@@ -131,7 +131,7 @@ extends WorldGenAbstractTree {
                 for (j1 = 0; j1 < height; ++j1) {
                     for (i13 = 0; i13 <= this.extraTrunkWidth; ++i13) {
                         for (k13 = 0; k13 <= this.extraTrunkWidth; ++k13) {
-                            Block block = world.getBlock(i + i13, j + j1, k + k13);
+                            world.getBlock(i + i13, j + j1, k + k13);
                             if (!this.isReplaceable(world, i + i13, j + j1, k + k13)) continue;
                             this.setBlockAndNotifyAdequately(world, i + i13, j + j1, k + k13, this.woodBlock, this.woodMeta);
                         }

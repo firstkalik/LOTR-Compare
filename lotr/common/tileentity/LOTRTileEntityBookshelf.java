@@ -147,9 +147,8 @@ implements IInventory {
             float range = 16.0f;
             List players = this.worldObj.getEntitiesWithinAABB(EntityPlayer.class, AxisAlignedBB.getBoundingBox((double)((float)this.xCoord - range), (double)((float)this.yCoord - range), (double)((float)this.zCoord - range), (double)((float)(this.xCoord + 1) + range), (double)((float)(this.yCoord + 1) + range), (double)((float)(this.zCoord + 1) + range)));
             for (Object obj : players) {
-                LOTRTileEntityBookshelf playerShelfInv;
                 EntityPlayer entityplayer = (EntityPlayer)obj;
-                if (!(entityplayer.openContainer instanceof LOTRContainerBookshelf) || (playerShelfInv = ((LOTRContainerBookshelf)entityplayer.openContainer).shelfInv) != this) continue;
+                if (!(entityplayer.openContainer instanceof LOTRContainerBookshelf) || ((LOTRContainerBookshelf)entityplayer.openContainer).shelfInv != this) continue;
                 ++this.numPlayersUsing;
             }
         }
@@ -184,6 +183,12 @@ implements IInventory {
                 return true;
             }
             if (item instanceof LOTRItemRedBook || item == LOTRMod.mithrilBook) {
+                return true;
+            }
+            if (item instanceof LOTRItemRedBook || item == LOTRMod.mithrilBook2) {
+                return true;
+            }
+            if (item instanceof LOTRItemRedBook || item == LOTRMod.eru) {
                 return true;
             }
             if (item instanceof ItemEnchantedBook) {

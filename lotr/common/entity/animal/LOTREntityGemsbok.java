@@ -92,12 +92,17 @@ extends EntityAnimal {
     }
 
     protected void dropFewItems(boolean flag, int i) {
+        int k;
         int j = 1 + this.rand.nextInt(4) + this.rand.nextInt(1 + i);
-        for (int k = 0; k < j; ++k) {
+        for (k = 0; k < j; ++k) {
             this.dropItem(LOTRMod.gemsbokHide, 1);
         }
         if (this.rand.nextBoolean()) {
             this.dropItem(LOTRMod.gemsbokHorn, 1);
+        }
+        k = 1 + this.rand.nextInt(2) + this.rand.nextInt(i + 1);
+        for (int j1 = 0; j1 < k; ++j1) {
+            this.dropItem(Items.bone, 1);
         }
     }
 

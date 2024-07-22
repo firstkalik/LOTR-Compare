@@ -16,7 +16,6 @@ import net.minecraft.world.World;
 
 public class LOTRDwarvenGlowLogic {
     private static final float[] lightValueSqrts = new float[16];
-    private static final float minSunBrightness = 0.2f;
     private boolean playersNearby;
     private int glowTick;
     private int prevGlowTick;
@@ -52,12 +51,14 @@ public class LOTRDwarvenGlowLogic {
     }
 
     public float getGlowBrightness(World world, int i, int j, int k, float tick) {
+        float f;
         float glow = ((float)this.prevGlowTick + (float)(this.glowTick - this.prevGlowTick) * tick) / (float)this.maxGlowTick;
         glow *= this.fullGlow;
         float sun = world.getSunBrightness(tick);
         float sunNorml = (sun - 0.2f) / 0.8f;
         float night = 1.0f - sunNorml;
-        if ((night -= 0.5f) < 0.0f) {
+        night -= 0.5f;
+        if (f < 0.0f) {
             night = 0.0f;
         }
         float skylight = lightValueSqrts[world.getSkyBlockTypeBrightness(EnumSkyBlock.Sky, i, j, k)];

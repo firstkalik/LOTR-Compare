@@ -11,6 +11,7 @@
  */
 package lotr.common.entity.projectile;
 
+import lotr.common.entity.animal.LOTREntityTermite;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.projectile.EntityThrowable;
@@ -34,7 +35,7 @@ extends EntityThrowable {
 
     protected void onImpact(MovingObjectPosition movingobjectposition) {
         if (!this.worldObj.isRemote) {
-            this.worldObj.createExplosion((Entity)this, this.posX, this.posY, this.posZ, 2.0f, true);
+            this.worldObj.createExplosion((Entity)this, this.posX, this.posY, this.posZ, LOTREntityTermite.explosionSize, true);
             this.setDead();
         }
     }

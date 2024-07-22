@@ -91,7 +91,6 @@ extends ModelBase {
     }
 
     public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
-        LOTREntityAurochs aurochs = (LOTREntityAurochs)entity;
         this.horns.showModel = !this.isChild;
         this.setRotationAngles(f, f1, f2, f3, f4, f5, entity);
         if (this.isChild) {

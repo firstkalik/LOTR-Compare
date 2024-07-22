@@ -97,10 +97,9 @@ extends LOTREntityAIAttackOnCollide {
         float angleRad = (float)Math.atan2(this.theBalrog.motionZ, this.theBalrog.motionX);
         targetBB = targetBB.getOffsetBoundingBox((double)MathHelper.cos((float)angleRad) * motionExtent, 0.0, (double)MathHelper.sin((float)angleRad) * motionExtent);
         List hitTargets = this.worldObj.getEntitiesWithinAABBExcludingEntity((Entity)this.theBalrog, targetBB);
-        boolean hitAnyEntities = false;
-        for (int i = 0; i < hitTargets.size(); ++i) {
+        for (Object hitTarget : hitTargets) {
             EntityLivingBase hitEntity;
-            Entity obj = (Entity)hitTargets.get(i);
+            Entity obj = (Entity)hitTarget;
             if (!(obj instanceof EntityLivingBase) || (hitEntity = (EntityLivingBase)obj) == this.theBalrog.riddenByEntity) continue;
             float attackStr = (float)this.theBalrog.getEntityAttribute(LOTREntityBalrog.balrogChargeDamage).getAttributeValue();
             boolean flag = hitEntity.attackEntityFrom(DamageSource.causeMobDamage((EntityLivingBase)this.theBalrog), attackStr);
@@ -109,12 +108,8 @@ extends LOTREntityAIAttackOnCollide {
             float knockY = 0.5f;
             hitEntity.addVelocity((double)(-MathHelper.sin((float)((float)Math.toRadians(this.theBalrog.rotationYaw))) * knock), (double)knockY, (double)(MathHelper.cos((float)((float)Math.toRadians(this.theBalrog.rotationYaw))) * knock));
             hitEntity.setFire(6);
-            hitAnyEntities = true;
             if (hitEntity != this.attackTarget) continue;
             this.hitChargeTarget = true;
-        }
-        if (hitAnyEntities) {
-            // empty if block
         }
     }
 }

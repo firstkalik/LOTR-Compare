@@ -18,6 +18,9 @@ package lotr.client.gui;
 
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 import lotr.client.gui.LOTRGuiScreenBase;
 import lotr.common.entity.npc.LOTREntityNPC;
 import lotr.common.entity.npc.LOTRHiredNPCInfo;
@@ -66,18 +69,25 @@ extends LOTRGuiScreenBase {
         this.fontRendererObj.drawString(s, this.guiLeft + this.xSize / 2 - this.fontRendererObj.getStringWidth(s) / 2, this.guiTop + 26, 3618615);
         if (this.page == 0 && this.theNPC.hiredNPCInfo.hasHiringRequirements()) {
             int x = this.guiLeft + 6;
-            int y = this.guiTop + 186;
+            int y = this.guiTop + 170;
             s = StatCollector.translateToLocal((String)"lotr.hiredNPC.commandReq");
             this.fontRendererObj.drawString(s, x, y, 3618615);
-            LOTRFaction fac = this.theNPC.getHiringFaction();
-            s = LOTRAlignmentValues.formatAlignForDisplay(this.theNPC.hiredNPCInfo.alignmentRequiredToCommand);
-            s = StatCollector.translateToLocalFormatted((String)"lotr.hiredNPC.commandReq.align", (Object[])new Object[]{s, fac.factionName()});
-            this.fontRendererObj.drawString(s, x += 4, y += this.fontRendererObj.FONT_HEIGHT, 3618615);
             y += this.fontRendererObj.FONT_HEIGHT;
+            x += 4;
+            ArrayList requirementLines = new ArrayList();
+            int maxWidth = this.xSize - 12 - 4;
+            LOTRFaction fac = this.theNPC.getHiringFaction();
+            String alignS = LOTRAlignmentValues.formatAlignForDisplay(this.theNPC.hiredNPCInfo.alignmentRequiredToCommand);
+            String alignReq = StatCollector.translateToLocalFormatted((String)"lotr.hiredNPC.commandReq.align", (Object[])new Object[]{alignS, fac.factionName()});
+            requirementLines.addAll(this.fontRendererObj.listFormattedStringToWidth(alignReq, maxWidth));
             LOTRUnitTradeEntry.PledgeType pledge = this.theNPC.hiredNPCInfo.pledgeType;
             String pledgeReq = pledge.getCommandReqText(fac);
             if (pledgeReq != null) {
-                this.fontRendererObj.drawString(pledgeReq, x, y, 3618615);
+                requirementLines.addAll(this.fontRendererObj.listFormattedStringToWidth(pledgeReq, maxWidth));
+            }
+            for (Object obj : requirementLines) {
+                String line = (String)obj;
+                this.fontRendererObj.drawString(line, x, y, 3618615);
                 y += this.fontRendererObj.FONT_HEIGHT;
             }
         }

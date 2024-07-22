@@ -11,6 +11,8 @@ package lotr.common.entity.npc;
 import lotr.common.LOTRAchievement;
 import lotr.common.LOTRLevelData;
 import lotr.common.entity.npc.LOTREntityGondorMan;
+import lotr.common.entity.npc.LOTREntityNPC;
+import lotr.common.entity.npc.LOTRInventoryNPCItems;
 import lotr.common.entity.npc.LOTRTradeEntries;
 import lotr.common.entity.npc.LOTRTradeable;
 import lotr.common.fac.LOTRFaction;
@@ -24,6 +26,15 @@ implements LOTRTradeable {
     public LOTREntityGondorMarketTrader(World world) {
         super(world);
         this.addTargetTasks(false);
+    }
+
+    @Override
+    public void onAttackModeChange(LOTREntityNPC.AttackMode mode, boolean mounted) {
+        if (mode == LOTREntityNPC.AttackMode.IDLE) {
+            this.setCurrentItemOrArmor(0, this.npcItemsInv.getIdleItem());
+        } else {
+            this.setCurrentItemOrArmor(0, this.npcItemsInv.getMeleeWeapon());
+        }
     }
 
     @Override

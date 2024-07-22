@@ -40,8 +40,8 @@ extends GuiContainer {
     private int pouchRows;
     private GuiTextField theGuiTextField;
 
-    public LOTRGuiPouch(EntityPlayer entityplayer) {
-        super((Container)new LOTRContainerPouch(entityplayer));
+    public LOTRGuiPouch(EntityPlayer entityplayer, int slot) {
+        super((Container)new LOTRContainerPouch(entityplayer, slot));
         this.thePouch = (LOTRContainerPouch)this.inventorySlots;
         this.pouchRows = this.thePouch.capacity / 9;
         this.ySize = 180;
@@ -85,10 +85,6 @@ extends GuiContainer {
     protected void mouseClicked(int i, int j, int k) {
         super.mouseClicked(i, j, k);
         this.theGuiTextField.mouseClicked(i, j, k);
-    }
-
-    protected boolean checkHotbarKeys(int i) {
-        return false;
     }
 
     private void renamePouch() {

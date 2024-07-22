@@ -75,7 +75,7 @@ extends LOTREnchantment {
     public boolean canApply(ItemStack itemstack, boolean considering) {
         if (super.canApply(itemstack, considering)) {
             Item item = itemstack.getItem();
-            return !(item instanceof LOTRItemBalrogWhip) || this != LOTREnchantment.fire && this != LOTREnchantment.chill;
+            return !(item instanceof LOTRItemBalrogWhip) || this != LOTREnchantment.fire && this != LOTREnchantment.chill && this != LOTREnchantment.wither;
         }
         return false;
     }
@@ -90,6 +90,14 @@ extends LOTREnchantment {
 
     public static int getFireAmount() {
         return 2;
+    }
+
+    public static void doPoisonAttack(EntityLivingBase entity) {
+        if (entity instanceof EntityPlayerMP) {
+            LOTRDamage.doFrostDamage((EntityPlayerMP)entity);
+        }
+        int duration = 2;
+        entity.addPotionEffect(new PotionEffect(Potion.wither.id, duration * 20, 1));
     }
 
     public static void doChillAttack(EntityLivingBase entity) {

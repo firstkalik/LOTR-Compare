@@ -48,11 +48,13 @@ public class LOTRFishing {
         junkChance = MathHelper.clamp_float((float)junkChance, (float)0.0f, (float)1.0f);
         treasureChance = MathHelper.clamp_float((float)treasureChance, (float)0.0f, (float)1.0f);
         if (allowJunkTreasure) {
+            float f;
             if (chance < junkChance) {
                 ItemStack result = ((FishingItem)WeightedRandom.getRandomItem((Random)rand, junk)).getRandomResult(rand);
                 return new FishResult(FishingHooks.FishableCategory.JUNK, result);
             }
-            if ((chance -= junkChance) < treasureChance) {
+            chance -= junkChance;
+            if (f < treasureChance) {
                 ItemStack result = ((FishingItem)WeightedRandom.getRandomItem((Random)rand, treasure)).getRandomResult(rand);
                 return new FishResult(FishingHooks.FishableCategory.TREASURE, result);
             }
@@ -108,6 +110,7 @@ public class LOTRFishing {
         treasure.add(new FishingItem(new ItemStack(LOTRMod.pouch, 1, 0), 20));
         treasure.add(new FishingItem(new ItemStack(LOTRMod.pouch, 1, 1), 10));
         treasure.add(new FishingItem(new ItemStack(LOTRMod.pouch, 1, 2), 5));
+        treasure.add(new FishingItem(new ItemStack(LOTRMod.pouch, 3, 2), 1));
         treasure.add(new FishingItem(new ItemStack(Items.iron_ingot), 20));
         treasure.add(new FishingItem(new ItemStack(LOTRMod.bronze), 10));
         treasure.add(new FishingItem(new ItemStack(LOTRMod.copper), 10));
@@ -119,17 +122,9 @@ public class LOTRFishing {
         treasure.add(new FishingItem(new ItemStack(LOTRMod.mithrilNugget), 5));
         treasure.add(new FishingItem(new ItemStack(LOTRMod.silverRing), 10));
         treasure.add(new FishingItem(new ItemStack(LOTRMod.goldRing), 5));
+        treasure.add(new FishingItem(new ItemStack(LOTRMod.ringValarUlmo), 1).setMaxDurability(0.75f));
+        treasure.add(new FishingItem(new ItemStack(LOTRMod.steelbow), 1).setMaxDurability(0.75f));
         treasure.add(new FishingItem(new ItemStack(LOTRMod.mithrilRing), 1));
-    }
-
-    public static class FishResult {
-        public final FishingHooks.FishableCategory category;
-        public final ItemStack fishedItem;
-
-        public FishResult(FishingHooks.FishableCategory c, ItemStack item) {
-            this.category = c;
-            this.fishedItem = item;
-        }
     }
 
     private static class FishingItem
@@ -157,6 +152,16 @@ public class LOTRFishing {
                 result.setItemDamage(damage);
             }
             return result;
+        }
+    }
+
+    public static class FishResult {
+        public final FishingHooks.FishableCategory category;
+        public final ItemStack fishedItem;
+
+        public FishResult(FishingHooks.FishableCategory c, ItemStack item) {
+            this.category = c;
+            this.fishedItem = item;
         }
     }
 

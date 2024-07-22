@@ -70,7 +70,7 @@ public class LOTRModChecker {
         if (hasShaders == -1) {
             try {
                 if (Class.forName("shadersmodcore.client.Shaders") != null) {
-                    LOTRLog.logger.info("LOTR: Found shaders installed");
+                    LOTRLog.logger.info("LOTR+: Found shaders installed");
                     hasShaders = 1;
                 } else {
                     hasShaders = 0;

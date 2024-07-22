@@ -106,7 +106,7 @@ public class LOTRBiomeSpawnList {
                 if (cont.isEmpty() || !cachedFacWeights.containsKey(cont) || (w -= (facWeight = ((Integer)cachedFacWeights.get(cont)).intValue())) >= 0) continue;
                 chosenFacContainer = cont;
                 if (facWeight <= cont.baseWeight) break;
-                isConquestSpawn = rand.nextFloat() < (float)(facWeight - cont.baseWeight) / (float)facWeight;
+                boolean bl = isConquestSpawn = rand.nextFloat() < (float)(facWeight - cont.baseWeight) / (float)facWeight;
                 break;
             }
             if (chosenFacContainer != null) {
@@ -152,40 +152,6 @@ public class LOTRBiomeSpawnList {
             }
         }
         return false;
-    }
-
-    public static class SpawnListContainer {
-        private final LOTRSpawnList spawnList;
-        private final int weight;
-        private int spawnChance = 0;
-        private float conquestThreshold = -1.0f;
-
-        public SpawnListContainer(LOTRSpawnList list, int w) {
-            this.spawnList = list;
-            this.weight = w;
-        }
-
-        public SpawnListContainer setSpawnChance(int i) {
-            this.spawnChance = i;
-            return this;
-        }
-
-        public SpawnListContainer setConquestOnly() {
-            return this.setConquestThreshold(0.0f);
-        }
-
-        public SpawnListContainer setConquestThreshold(float f) {
-            this.conquestThreshold = f;
-            return this;
-        }
-
-        public boolean canSpawnAtConquestLevel(float conq) {
-            return conq > this.conquestThreshold;
-        }
-
-        public boolean isConquestOnly() {
-            return this.conquestThreshold >= 0.0f;
-        }
     }
 
     public static class FactionContainer {
@@ -266,6 +232,40 @@ public class LOTRBiomeSpawnList {
                 return chosenList;
             }
             return null;
+        }
+    }
+
+    public static class SpawnListContainer {
+        private final LOTRSpawnList spawnList;
+        private final int weight;
+        private int spawnChance = 0;
+        private float conquestThreshold = -1.0f;
+
+        public SpawnListContainer(LOTRSpawnList list, int w) {
+            this.spawnList = list;
+            this.weight = w;
+        }
+
+        public SpawnListContainer setSpawnChance(int i) {
+            this.spawnChance = i;
+            return this;
+        }
+
+        public SpawnListContainer setConquestOnly() {
+            return this.setConquestThreshold(0.0f);
+        }
+
+        public SpawnListContainer setConquestThreshold(float f) {
+            this.conquestThreshold = f;
+            return this;
+        }
+
+        public boolean canSpawnAtConquestLevel(float conq) {
+            return conq > this.conquestThreshold;
+        }
+
+        public boolean isConquestOnly() {
+            return this.conquestThreshold >= 0.0f;
         }
     }
 

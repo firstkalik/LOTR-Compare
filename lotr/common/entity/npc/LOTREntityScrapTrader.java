@@ -41,10 +41,12 @@ import lotr.common.LOTRMod;
 import lotr.common.entity.ai.LOTREntityAIAttackOnCollide;
 import lotr.common.entity.ai.LOTREntityAIDrink;
 import lotr.common.entity.ai.LOTREntityAIEat;
+import lotr.common.entity.animal.LOTREntityHorse;
 import lotr.common.entity.npc.LOTREntityMan;
 import lotr.common.entity.npc.LOTREntityNPC;
 import lotr.common.entity.npc.LOTRFamilyInfo;
 import lotr.common.entity.npc.LOTRInventoryNPCItems;
+import lotr.common.entity.npc.LOTRNPCMount;
 import lotr.common.entity.npc.LOTRNames;
 import lotr.common.entity.npc.LOTRTradeEntries;
 import lotr.common.entity.npc.LOTRTradeable;
@@ -101,6 +103,14 @@ LOTRTradeable.Smith {
         this.tasks.addTask(6, (EntityAIBase)new EntityAIWatchClosest((EntityLiving)this, EntityLiving.class, 8.0f, 0.02f));
         this.tasks.addTask(7, (EntityAIBase)new EntityAILookIdle((EntityLiving)this));
         this.addTargetTasks(false);
+        this.spawnRidingHorse = this.rand.nextInt(4) == 0;
+    }
+
+    @Override
+    public LOTRNPCMount createMountToRide() {
+        LOTREntityHorse horse = (LOTREntityHorse)super.createMountToRide();
+        horse.setMountArmor(null);
+        return horse;
     }
 
     @Override
@@ -142,14 +152,12 @@ LOTRTradeable.Smith {
 
     @Override
     public void setupNPCName() {
-        int i = this.rand.nextInt(4);
+        int i = this.rand.nextInt(3);
         if (i == 0) {
-            this.familyInfo.setName(LOTRNames.getBreeName(this.rand, this.familyInfo.isMale()));
-        } else if (i == 1) {
             this.familyInfo.setName(LOTRNames.getDunlendingName(this.rand, this.familyInfo.isMale()));
-        } else if (i == 2) {
+        } else if (i == 1) {
             this.familyInfo.setName(LOTRNames.getRohirricName(this.rand, this.familyInfo.isMale()));
-        } else if (i == 3) {
+        } else if (i == 2) {
             this.familyInfo.setName(LOTRNames.getGondorName(this.rand, this.familyInfo.isMale()));
         }
     }
@@ -228,7 +236,7 @@ LOTRTradeable.Smith {
     @Override
     public boolean interact(EntityPlayer entityplayer) {
         boolean flag = super.interact(entityplayer);
-        if (flag && !this.worldObj.isRemote && LOTRDimension.getCurrentDimensionWithFallback(this.worldObj) == LOTRDimension.UTUMNO && this.timeUntilFadeOut <= 0) {
+        if (flag && !this.worldObj.isRemote && LOTRDimension.getCurrentDimension(this.worldObj) == LOTRDimension.UTUMNO && this.timeUntilFadeOut <= 0) {
             this.timeUntilFadeOut = 100;
         }
         return flag;
@@ -236,7 +244,7 @@ LOTRTradeable.Smith {
 
     @Override
     public boolean canBeFreelyTargetedBy(EntityLiving attacker) {
-        if (LOTRDimension.getCurrentDimensionWithFallback(this.worldObj) == LOTRDimension.UTUMNO) {
+        if (LOTRDimension.getCurrentDimension(this.worldObj) == LOTRDimension.UTUMNO) {
             return false;
         }
         return super.canBeFreelyTargetedBy(attacker);
@@ -244,7 +252,7 @@ LOTRTradeable.Smith {
 
     @Override
     public boolean attackEntityFrom(DamageSource damagesource, float f) {
-        if (damagesource.getEntity() != null && LOTRDimension.getCurrentDimensionWithFallback(this.worldObj) == LOTRDimension.UTUMNO) {
+        if (damagesource.getEntity() != null && LOTRDimension.getCurrentDimension(this.worldObj) == LOTRDimension.UTUMNO) {
             if (!this.worldObj.isRemote && this.getFadeoutTick() < 0) {
                 this.setFadeoutTick(60);
             }
@@ -256,7 +264,7 @@ LOTRTradeable.Smith {
     @Override
     public void onLivingUpdate() {
         super.onLivingUpdate();
-        if (!this.worldObj.isRemote && LOTRDimension.getCurrentDimensionWithFallback(this.worldObj) == LOTRDimension.UTUMNO) {
+        if (!this.worldObj.isRemote && LOTRDimension.getCurrentDimension(this.worldObj) == LOTRDimension.UTUMNO) {
             if (this.timeUntilFadeOut > 0) {
                 --this.timeUntilFadeOut;
                 if (this.timeUntilFadeOut <= 0) {
@@ -288,7 +296,7 @@ LOTRTradeable.Smith {
 
     @Override
     public boolean canTradeWith(EntityPlayer entityplayer) {
-        return this.isFriendly(entityplayer) && LOTRDimension.getCurrentDimensionWithFallback(this.worldObj) != LOTRDimension.UTUMNO;
+        return this.isFriendly(entityplayer) && LOTRDimension.getCurrentDimension(this.worldObj) != LOTRDimension.UTUMNO;
     }
 
     @Override
@@ -304,7 +312,7 @@ LOTRTradeable.Smith {
     @Override
     public String getSpeechBank(EntityPlayer entityplayer) {
         if (this.isFriendly(entityplayer)) {
-            if (LOTRDimension.getCurrentDimensionWithFallback(this.worldObj) == LOTRDimension.UTUMNO) {
+            if (LOTRDimension.getCurrentDimension(this.worldObj) == LOTRDimension.UTUMNO) {
                 return "misc/scrapTrader/utumno";
             }
             return "misc/scrapTrader/friendly";

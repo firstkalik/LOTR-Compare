@@ -8,6 +8,7 @@
  *  net.minecraft.client.audio.SoundHandler
  *  net.minecraft.client.entity.EntityClientPlayerMP
  *  net.minecraft.client.gui.FontRenderer
+ *  net.minecraft.client.gui.Gui
  *  net.minecraft.client.gui.GuiButton
  *  net.minecraft.client.gui.GuiPlayerInfo
  *  net.minecraft.client.gui.GuiTextField
@@ -33,6 +34,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Iterator;
 import java.util.List;
 import lotr.client.gui.LOTRGuiButtonFsInvites;
 import lotr.client.gui.LOTRGuiButtonFsOption;
@@ -55,6 +57,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiPlayerInfo;
 import net.minecraft.client.gui.GuiTextField;
@@ -116,7 +119,6 @@ extends LOTRGuiMenuBase {
     private GuiTextField textFieldName;
     private GuiTextField textFieldPlayer;
     private GuiTextField textFieldRename;
-    private static final int MAX_NAME_LENGTH = 40;
     public static final int entrySplit = 5;
     public static final int entryBorder = 10;
     public static final int selectBorder = 2;
@@ -127,12 +129,9 @@ extends LOTRGuiMenuBase {
     private LOTRGuiScrollPane scrollPaneOther;
     private LOTRGuiScrollPane scrollPaneMembers;
     private LOTRGuiScrollPane scrollPaneInvites;
-    private static final int maxDisplayedFellowships = 12;
     private int displayedFellowshipsLeading;
     private int displayedFellowshipsOther;
-    private static final int maxDisplayedMembers = 11;
     private int displayedMembers;
-    private static final int maxDisplayedInvites = 15;
     private int displayedInvites;
 
     public LOTRGuiFellowships() {
@@ -255,17 +254,19 @@ extends LOTRGuiMenuBase {
         if (numActive > 0) {
             int gap = 8;
             int allWidth = 0;
-            for (GuiButton button : activeOptionButtons) {
+            for (GuiButton button2 : activeOptionButtons) {
                 if (allWidth > 0) {
                     allWidth += gap;
                 }
-                allWidth += button.width;
+                allWidth += button2.width;
             }
             int x = midX - allWidth / 2;
-            for (int i = 0; i < activeOptionButtons.size(); ++i) {
-                GuiButton button = (GuiButton)activeOptionButtons.get(i);
-                button.xPosition = x;
-                x += button.width;
+            Iterator button2 = activeOptionButtons.iterator();
+            while (button2.hasNext()) {
+                GuiButton activeOptionButton;
+                GuiButton button3 = activeOptionButton = (GuiButton)button2.next();
+                button3.xPosition = x;
+                x += button3.width;
                 x += gap;
             }
         }
@@ -301,53 +302,37 @@ extends LOTRGuiMenuBase {
         this.buttonCreateThis.visible = this.page == Page.CREATE;
         String checkValidName = this.checkValidFellowshipName(this.textFieldName.getText());
         this.buttonCreateThis.enabled = this.buttonCreateThis.visible && checkValidName == null;
-        this.buttonInvitePlayer.enabled = this.page == Page.FELLOWSHIP && (viewingOwned || viewingAdminned);
-        this.buttonInvitePlayer.visible = this.buttonInvitePlayer.enabled;
+        this.buttonInvitePlayer.visible = this.buttonInvitePlayer.enabled = this.page == Page.FELLOWSHIP && (viewingOwned || viewingAdminned);
         this.buttonInviteThis.visible = this.page == Page.INVITE;
         String checkValidPlayer = this.checkValidPlayerName(this.textFieldPlayer.getText());
         this.buttonInviteThis.enabled = this.buttonInviteThis.visible && checkValidPlayer == null;
-        this.buttonDisband.enabled = this.page == Page.FELLOWSHIP && viewingOwned;
-        this.buttonDisband.visible = this.buttonDisband.enabled;
-        this.buttonDisbandThis.enabled = this.page == Page.DISBAND;
-        this.buttonDisbandThis.visible = this.buttonDisbandThis.enabled;
-        this.buttonLeave.enabled = this.page == Page.FELLOWSHIP && !viewingOwned;
-        this.buttonLeave.visible = this.buttonLeave.enabled;
-        this.buttonLeaveThis.enabled = this.page == Page.LEAVE;
-        this.buttonLeaveThis.visible = this.buttonLeaveThis.enabled;
-        this.buttonSetIcon.enabled = this.page == Page.FELLOWSHIP && (viewingOwned || viewingAdminned);
-        this.buttonSetIcon.visible = this.buttonSetIcon.enabled;
-        this.buttonRemove.enabled = this.page == Page.REMOVE;
-        this.buttonRemove.visible = this.buttonRemove.enabled;
-        this.buttonTransfer.enabled = this.page == Page.TRANSFER;
-        this.buttonTransfer.visible = this.buttonTransfer.enabled;
-        this.buttonRename.enabled = this.page == Page.FELLOWSHIP && viewingOwned;
-        this.buttonRename.visible = this.buttonRename.enabled;
+        this.buttonDisband.visible = this.buttonDisband.enabled = this.page == Page.FELLOWSHIP && viewingOwned;
+        this.buttonDisbandThis.visible = this.buttonDisbandThis.enabled = this.page == Page.DISBAND;
+        this.buttonLeave.visible = this.buttonLeave.enabled = this.page == Page.FELLOWSHIP && !viewingOwned;
+        this.buttonLeaveThis.visible = this.buttonLeaveThis.enabled = this.page == Page.LEAVE;
+        this.buttonSetIcon.visible = this.buttonSetIcon.enabled = this.page == Page.FELLOWSHIP && (viewingOwned || viewingAdminned);
+        this.buttonRemove.visible = this.buttonRemove.enabled = this.page == Page.REMOVE;
+        this.buttonTransfer.visible = this.buttonTransfer.enabled = this.page == Page.TRANSFER;
+        this.buttonRename.visible = this.buttonRename.enabled = this.page == Page.FELLOWSHIP && viewingOwned;
         this.buttonRenameThis.visible = this.page == Page.RENAME;
         String checkValidRename = this.checkValidFellowshipName(this.textFieldRename.getText());
         this.buttonRenameThis.enabled = this.buttonRenameThis.visible && checkValidRename == null;
-        this.buttonBack.enabled = this.page != Page.LIST;
-        this.buttonBack.visible = this.buttonBack.enabled;
-        this.buttonInvites.enabled = this.page == Page.LIST;
-        this.buttonInvites.visible = this.buttonInvites.enabled;
-        this.buttonPVP.enabled = this.page == Page.FELLOWSHIP && (viewingOwned || viewingAdminned);
-        this.buttonPVP.visible = this.buttonPVP.enabled;
+        this.buttonBack.visible = this.buttonBack.enabled = this.page != Page.LIST;
+        this.buttonInvites.visible = this.buttonInvites.enabled = this.page == Page.LIST;
+        this.buttonPVP.visible = this.buttonPVP.enabled = this.page == Page.FELLOWSHIP && (viewingOwned || viewingAdminned);
         if (this.buttonPVP.enabled) {
             this.buttonPVP.setIconUV(64, this.viewingFellowship.getPreventPVP() ? 80 : 48);
         }
-        this.buttonHiredFF.enabled = this.page == Page.FELLOWSHIP && (viewingOwned || viewingAdminned);
-        this.buttonHiredFF.visible = this.buttonHiredFF.enabled;
+        this.buttonHiredFF.visible = this.buttonHiredFF.enabled = this.page == Page.FELLOWSHIP && (viewingOwned || viewingAdminned);
         if (this.buttonHiredFF.enabled) {
             this.buttonHiredFF.setIconUV(80, this.viewingFellowship.getPreventHiredFriendlyFire() ? 80 : 48);
         }
-        this.buttonMapShow.enabled = this.page == Page.FELLOWSHIP && viewingOwned;
-        this.buttonMapShow.visible = this.buttonMapShow.enabled;
+        this.buttonMapShow.visible = this.buttonMapShow.enabled = this.page == Page.FELLOWSHIP && viewingOwned;
         if (this.buttonMapShow.enabled) {
             this.buttonMapShow.setIconUV(96, this.viewingFellowship.getShowMapLocations() ? 48 : 80);
         }
-        this.buttonOp.enabled = this.page == Page.OP;
-        this.buttonOp.visible = this.buttonOp.enabled;
-        this.buttonDeop.enabled = this.page == Page.DEOP;
-        this.buttonDeop.visible = this.buttonDeop.enabled;
+        this.buttonOp.visible = this.buttonOp.enabled = this.page == Page.OP;
+        this.buttonDeop.visible = this.buttonDeop.enabled = this.page == Page.DEOP;
         this.alignOptionButtons();
         this.setupScrollBars(i, j);
         this.drawDefaultBackground();
@@ -441,7 +426,7 @@ extends LOTRGuiMenuBase {
             for (String name : this.viewingFellowship.getAllPlayerNames()) {
                 LOTRTitle.PlayerTitle title = this.viewingFellowship.getTitleFor(name);
                 if (title == null) continue;
-                String titleName = title.getFormattedTitle();
+                String titleName = title.getFormattedTitle((EntityPlayer)this.mc.thePlayer);
                 int thisTitleWidth = this.fontRendererObj.getStringWidth(titleName + " ");
                 titleOffset = Math.max(titleOffset, thisTitleWidth);
             }
@@ -574,7 +559,7 @@ extends LOTRGuiMenuBase {
         int selectY0 = y - 2;
         int selectY1 = y + this.fontRendererObj.FONT_HEIGHT + 2;
         if (mouseX >= selectX0 && mouseX <= selectX1 && mouseY >= selectY0 && mouseY <= selectY1) {
-            LOTRGuiFellowships.drawRect((int)selectX0, (int)selectY0, (int)selectX1, (int)selectY1, (int)1442840575);
+            Gui.drawRect((int)selectX0, (int)selectY0, (int)selectX1, (int)selectY1, (int)1442840575);
             this.mouseOverFellowship = fs;
         }
         boolean isMouseOver = this.mouseOverFellowship == fs;
@@ -599,8 +584,10 @@ extends LOTRGuiMenuBase {
             boolean accept = false;
             boolean reject = false;
             if (isMouseOver) {
-                accept = this.mouseOverInviteAccept = mouseX >= iconAcceptX && mouseX <= iconAcceptX + iconWidth && mouseY >= y && mouseY <= y + iconWidth;
-                reject = this.mouseOverInviteReject = mouseX >= iconRejectX && mouseX <= iconRejectX + iconWidth && mouseY >= y && mouseY <= y + iconWidth;
+                this.mouseOverInviteAccept = mouseX >= iconAcceptX && mouseX <= iconAcceptX + iconWidth && mouseY >= y && mouseY <= y + iconWidth;
+                accept = this.mouseOverInviteAccept;
+                this.mouseOverInviteReject = mouseX >= iconRejectX && mouseX <= iconRejectX + iconWidth && mouseY >= y && mouseY <= y + iconWidth;
+                reject = this.mouseOverInviteReject;
             }
             this.mc.getTextureManager().bindTexture(iconsTextures);
             GL11.glColor4f((float)1.0f, (float)1.0f, (float)1.0f, (float)1.0f);
@@ -615,25 +602,24 @@ extends LOTRGuiMenuBase {
     }
 
     private void drawPlayerEntry(String player, int x, int y, int titleOffset, int mouseX, int mouseY) {
-        boolean online;
         int selectX0 = x - 2;
         int selectX1 = x + this.xSize + 2;
         int selectY0 = y - 2;
         int selectY1 = y + this.fontRendererObj.FONT_HEIGHT + 2;
         if (mouseX >= selectX0 && mouseX <= selectX1 && mouseY >= selectY0 && mouseY <= selectY1) {
-            LOTRGuiFellowships.drawRect((int)selectX0, (int)selectY0, (int)selectX1, (int)selectY1, (int)1442840575);
+            Gui.drawRect((int)selectX0, (int)selectY0, (int)selectX1, (int)selectY1, (int)1442840575);
             this.mouseOverPlayer = player;
         }
         boolean isMouseOver = this.mouseOverPlayer == player;
         String titleName = null;
         LOTRTitle.PlayerTitle title = this.viewingFellowship.getTitleFor(player);
         if (title != null) {
-            titleName = title.getFormattedTitle();
+            titleName = title.getFormattedTitle((EntityPlayer)this.mc.thePlayer);
         }
         if (titleName != null) {
             this.fontRendererObj.drawString(titleName, x, y, 16777215);
         }
-        this.fontRendererObj.drawString(player, x + titleOffset, y, (online = LOTRGuiFellowships.isPlayerOnline(player)) ? 16777215 : (isMouseOver ? 12303291 : 7829367));
+        this.fontRendererObj.drawString(player, x + titleOffset, y, LOTRGuiFellowships.isPlayerOnline(player) ? 16777215 : (isMouseOver ? 12303291 : 7829367));
         boolean isOwner = this.viewingFellowship.getOwnerName().equals(player);
         boolean isAdmin = this.viewingFellowship.isAdmin(player);
         if (isOwner) {
@@ -659,10 +645,12 @@ extends LOTRGuiMenuBase {
             boolean opDeop = false;
             boolean transfer = false;
             if (isMouseOver) {
-                remove = this.mouseOverPlayerRemove = mouseX >= iconRemoveX && mouseX <= iconRemoveX + iconWidth && mouseY >= y && mouseY <= y + iconWidth;
+                this.mouseOverPlayerRemove = mouseX >= iconRemoveX && mouseX <= iconRemoveX + iconWidth && mouseY >= y && mouseY <= y + iconWidth;
+                remove = this.mouseOverPlayerRemove;
                 if (owned) {
                     opDeop = isAdmin ? (this.mouseOverPlayerDeop = mouseX >= iconOpDeopX && mouseX <= iconOpDeopX + iconWidth && mouseY >= y && mouseY <= y + iconWidth) : (this.mouseOverPlayerOp = mouseX >= iconOpDeopX && mouseX <= iconOpDeopX + iconWidth && mouseY >= y && mouseY <= y + iconWidth);
-                    transfer = this.mouseOverPlayerTransfer = mouseX >= iconTransferX && mouseX <= iconTransferX + iconWidth && mouseY >= y && mouseY <= y + iconWidth;
+                    this.mouseOverPlayerTransfer = mouseX >= iconTransferX && mouseX <= iconTransferX + iconWidth && mouseY >= y && mouseY <= y + iconWidth;
+                    transfer = this.mouseOverPlayerTransfer;
                 }
             }
             this.mc.getTextureManager().bindTexture(iconsTextures);

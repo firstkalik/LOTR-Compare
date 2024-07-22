@@ -104,7 +104,7 @@ extends EntityAIBase {
             if (!(obj instanceof LOTRTileEntityCorruptMallorn)) continue;
             LOTRTileEntityCorruptMallorn te = (LOTRTileEntityCorruptMallorn)((Object)obj);
             double distSq = this.theEnt.getDistanceSq((double)te.xCoord + 0.5, (double)te.yCoord, (double)te.zCoord + 0.5);
-            if (!(distSq < leastDistSq)) continue;
+            if (distSq >= leastDistSq) continue;
             mallorn = te;
             leastDistSq = distSq;
         }

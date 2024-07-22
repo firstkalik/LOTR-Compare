@@ -27,10 +27,10 @@ import net.minecraft.world.gen.feature.WorldGenerator;
 public class LOTRWorldGenTrollHoard
 extends WorldGenerator {
     public boolean generate(World world, Random random, int i, int j, int k) {
+        int j1;
         int k1;
         int i1;
         int l;
-        int j1;
         int height = world.getTopSolidOrLiquidBlock(i, k);
         int maxCaveHeight = height - 4;
         int chests = 2 + random.nextInt(5);

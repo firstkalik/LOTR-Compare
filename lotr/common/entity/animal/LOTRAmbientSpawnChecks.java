@@ -30,16 +30,15 @@ public class LOTRAmbientSpawnChecks {
         int i = MathHelper.floor_double((double)entity.posX);
         Block below = world.getBlock(i, (j = MathHelper.floor_double((double)entity.posY)) - 1, k = MathHelper.floor_double((double)entity.posZ));
         if (below == world.getBiomeGenForCoords((int)i, (int)k).topBlock) {
-            int light = world.getBlockLightValue(i, j, k);
-            if (j >= 62 && light >= rand.nextInt(8) || light >= 8) {
+            int light2 = world.getBlockLightValue(i, j, k);
+            if (j >= 62 && light2 >= rand.nextInt(8) || light2 >= 8) {
                 List<Material> validMaterials = Arrays.asList(materials);
                 int counted = 0;
                 for (int l = 0; l < attempts; ++l) {
-                    Block block;
                     int i1 = i + rand.nextInt(xzRange) - rand.nextInt(xzRange);
                     int k1 = k + rand.nextInt(xzRange) - rand.nextInt(xzRange);
                     int j1 = j + rand.nextInt(yRange) - rand.nextInt(yRange);
-                    if (!world.blockExists(i1, j1, k1) || !validMaterials.contains((Object)(block = world.getBlock(i1, j1, k1)).getMaterial()) || ++counted <= required) continue;
+                    if (!world.blockExists(i1, j1, k1) || !validMaterials.contains((Object)world.getBlock(i1, j1, k1).getMaterial()) || ++counted <= required) continue;
                     return true;
                 }
             }

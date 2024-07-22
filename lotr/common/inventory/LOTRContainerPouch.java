@@ -25,15 +25,17 @@ import org.apache.commons.lang3.StringUtils;
 
 public class LOTRContainerPouch
 extends Container {
+    private final int thePouchSlot;
     private ItemStack thePouchItem;
     public LOTRInventoryPouch pouchInventory;
     public int capacity;
 
-    public LOTRContainerPouch(EntityPlayer entityplayer) {
-        int i;
+    public LOTRContainerPouch(EntityPlayer entityplayer, int slot) {
         int j;
-        this.thePouchItem = entityplayer.inventory.getCurrentItem();
-        this.pouchInventory = new LOTRInventoryPouch(entityplayer, this);
+        int i;
+        this.thePouchSlot = slot;
+        this.thePouchItem = entityplayer.inventory.getStackInSlot(this.thePouchSlot);
+        this.pouchInventory = new LOTRInventoryPouch(entityplayer, this, slot);
         this.capacity = this.pouchInventory.getSizeInventory();
         int rows = this.capacity / 9;
         for (i = 0; i < rows; ++i) {
@@ -72,17 +74,20 @@ extends Container {
         return ItemStack.areItemStacksEqual((ItemStack)this.thePouchItem, (ItemStack)this.pouchInventory.getPouchItem());
     }
 
-    public ItemStack slotClick(int slotNo, int j, int k, EntityPlayer entityplayer) {
-        if (LOTRContainerPouch.isHeldItemSlot(this, slotNo, entityplayer)) {
+    public ItemStack slotClick(int slotNo, int subActionNo, int actionNo, EntityPlayer entityplayer) {
+        if (LOTRContainerPouch.isPouchSlot(this, slotNo, entityplayer, this.thePouchSlot)) {
             return null;
         }
-        return super.slotClick(slotNo, j, k, entityplayer);
+        if (actionNo == 2 && subActionNo == this.thePouchSlot) {
+            return null;
+        }
+        return super.slotClick(slotNo, subActionNo, actionNo, entityplayer);
     }
 
-    public static boolean isHeldItemSlot(Container container, int slotNo, EntityPlayer entityplayer) {
+    public static boolean isPouchSlot(Container container, int slotNo, EntityPlayer entityplayer, int pouchSlotNo) {
         if (slotNo >= 0 && slotNo < container.inventorySlots.size()) {
             Slot slot = (Slot)container.inventorySlots.get(slotNo);
-            if (slot.inventory == entityplayer.inventory && slot.getSlotIndex() == entityplayer.inventory.currentItem) {
+            if (slot.inventory == entityplayer.inventory && slot.getSlotIndex() == pouchSlotNo) {
                 return true;
             }
         }

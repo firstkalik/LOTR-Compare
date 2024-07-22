@@ -124,11 +124,10 @@ IGrowable {
         float growth;
         Block below = world.getBlock(i, j - 1, k);
         if (below.canSustainPlant((IBlockAccess)world, i, j - 1, k, ForgeDirection.UP, (IPlantable)this) && world.getBlockLightValue(i, j + 1, k) >= 9) {
-            int k1;
             int i1;
+            int k1;
             growth = 1.0f;
             boolean bushAdjacent = false;
-            boolean bushAdjacentCorner = false;
             block0: for (i1 = i - 1; i1 <= i + 1; ++i1) {
                 for (k1 = k - 1; k1 <= k + 1; ++k1) {
                     if (i1 == i && k1 == k || !(world.getBlock(i1, j, k1) instanceof LOTRBlockBerryBush)) continue;

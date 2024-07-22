@@ -39,6 +39,7 @@ import lotr.common.LOTRLevelData;
 import lotr.common.LOTRMod;
 import lotr.common.LOTRPlayerData;
 import lotr.common.entity.npc.LOTREntityNPC;
+import lotr.common.entity.npc.LOTRHiredNPCInfo;
 import lotr.common.fac.LOTRAlignmentBonusMap;
 import lotr.common.fac.LOTRAlignmentValues;
 import lotr.common.fac.LOTRFaction;
@@ -145,12 +146,11 @@ extends LOTRMiniQuestCollectBase {
     }
 
     @Override
-    public boolean onInteractOther(EntityPlayer entityplayer, final LOTREntityNPC npc) {
+    public boolean onInteractOther(final EntityPlayer entityplayer, final LOTREntityNPC npc) {
         if (entityplayer.isSneaking() && entityplayer.getHeldItem() == null && npc.getFaction() == this.pickpocketFaction && npc instanceof IPickpocketable) {
             IPickpocketable ppable = (IPickpocketable)((Object)npc);
             UUID id = npc.getPersistentID();
             if (ppable.canPickpocket() && !this.pickpocketedEntityIDs.contains(id)) {
-                boolean noticed;
                 boolean success;
                 if (npc.getAttackTarget() != null) {
                     entityplayer.addChatMessage((IChatComponent)new ChatComponentTranslation("chat.lotr.pickpocket.inCombat", new Object[0]));
@@ -162,7 +162,8 @@ extends LOTRMiniQuestCollectBase {
                 }
                 Random rand = npc.getRNG();
                 boolean bl = success = rand.nextInt(3) == 0;
-                boolean anyoneNoticed = noticed = success ? rand.nextInt(3) == 0 : rand.nextInt(4) == 0;
+                boolean noticed = success ? rand.nextInt(3) == 0 : rand.nextInt(4) == 0;
+                boolean anyoneNoticed = noticed;
                 if (success) {
                     ItemStack picked = ppable.createPickpocketItem();
                     IPickpocketable.Helper.setPickpocketData(picked, npc.getNPCName(), this.entityNameFull, this.entityUUID);
@@ -186,31 +187,30 @@ extends LOTRMiniQuestCollectBase {
                     this.spawnAngryFX((EntityLivingBase)npc);
                 }
                 if (!noticed || rand.nextFloat() < 0.5f) {
-                    double civilianRange = 8.0;
-                    double guardRange = 16.0;
-                    double fullAlertRange = 4.0;
                     List nearbyFriends = npc.worldObj.selectEntitiesWithinAABB(LOTREntityNPC.class, npc.boundingBox.expand(16.0, 16.0, 16.0), new IEntitySelector(){
 
                         public boolean isEntityApplicable(Entity entity) {
                             LOTREntityNPC otherNPC = (LOTREntityNPC)entity;
-                            return otherNPC.isEntityAlive() && otherNPC.getFaction().isGoodRelation(npc.getFaction());
+                            if (otherNPC.isEntityAlive() && otherNPC.getFaction().isGoodRelation(npc.getFaction())) {
+                                return otherNPC.hiredNPCInfo.getHiringPlayer() != entityplayer;
+                            }
+                            return false;
                         }
                     });
                     for (Object o : nearbyFriends) {
                         double maxRange;
-                        boolean otherNoticed;
                         LOTREntityNPC otherNPC = (LOTREntityNPC)o;
                         if (otherNPC == npc) continue;
                         boolean civilian = otherNPC.isCivilianNPC();
                         double d = maxRange = civilian ? 8.0 : 16.0;
                         double dist = otherNPC.getDistanceToEntity((Entity)npc);
-                        if (!(dist <= maxRange) || otherNPC.getAttackTarget() != null || !this.isEntityWatching((EntityLiving)otherNPC, (EntityLivingBase)entityplayer)) continue;
+                        if (dist > maxRange || otherNPC.getAttackTarget() != null || !this.isEntityWatching((EntityLiving)otherNPC, (EntityLivingBase)entityplayer)) continue;
                         float distFactor = 1.0f - (float)((dist - 4.0) / (maxRange - 4.0));
                         float chance = 0.5f + distFactor * 0.5f;
                         if (civilian) {
                             chance *= 0.25f;
                         }
-                        if (!(otherNoticed = rand.nextFloat() < chance)) continue;
+                        if (!(rand.nextFloat() < chance)) continue;
                         entityplayer.addChatMessage((IChatComponent)new ChatComponentTranslation("chat.lotr.pickpocket.otherNoticed", new Object[]{otherNPC.getEntityClassName()}));
                         otherNPC.setAttackTarget((EntityLivingBase)entityplayer, true);
                         otherNPC.setRevengeTarget((EntityLivingBase)entityplayer);
@@ -228,14 +228,12 @@ extends LOTRMiniQuestCollectBase {
     }
 
     private boolean isEntityWatching(EntityLiving watcher, EntityLivingBase target) {
-        float fov;
-        float fovCos;
         Vec3 look = watcher.getLookVec();
         Vec3 watcherEyes = Vec3.createVectorHelper((double)watcher.posX, (double)(watcher.boundingBox.minY + (double)watcher.getEyeHeight()), (double)watcher.posZ);
         Vec3 targetEyes = Vec3.createVectorHelper((double)target.posX, (double)(target.boundingBox.minY + (double)target.getEyeHeight()), (double)target.posZ);
         Vec3 disp = Vec3.createVectorHelper((double)(targetEyes.xCoord - watcherEyes.xCoord), (double)(targetEyes.yCoord - watcherEyes.yCoord), (double)(targetEyes.zCoord - watcherEyes.zCoord));
         double dot = disp.normalize().dotProduct(look.normalize());
-        if (dot >= (double)(fovCos = MathHelper.cos((float)((fov = (float)Math.toRadians(130.0)) / 2.0f)))) {
+        if (dot >= (double)MathHelper.cos((float)((float)Math.toRadians(130.0) / 2.0f))) {
             return watcher.getEntitySenses().canSee((Entity)target);
         }
         return false;

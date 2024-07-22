@@ -42,16 +42,14 @@ public class LOTRBiomeGenNearHaradSemiDesert
 extends LOTRBiomeGenNearHarad {
     public LOTRBiomeGenNearHaradSemiDesert(int i, boolean major) {
         super(i, major);
-        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer = new LOTRBiomeSpawnList.SpawnListContainer[2];
-        arrspawnListContainer[0] = LOTRBiomeSpawnList.entry(LOTRSpawnList.NOMADS, 20).setSpawnChance(500);
-        arrspawnListContainer[1] = LOTRBiomeSpawnList.entry(LOTRSpawnList.NOMAD_WARRIORS, 15).setSpawnChance(500);
+        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer = new LOTRBiomeSpawnList.SpawnListContainer[]{LOTRBiomeSpawnList.entry(LOTRSpawnList.NOMADS, 20).setSpawnChance(500), LOTRBiomeSpawnList.entry(LOTRSpawnList.NOMAD_WARRIORS, 15).setSpawnChance(500)};
         this.npcSpawnList.newFactionList(100, 0.0f).add(arrspawnListContainer);
-        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer2 = new LOTRBiomeSpawnList.SpawnListContainer[1];
-        arrspawnListContainer2[0] = LOTRBiomeSpawnList.entry(LOTRSpawnList.NOMAD_WARRIORS, 10);
+        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer2 = new LOTRBiomeSpawnList.SpawnListContainer[]{LOTRBiomeSpawnList.entry(LOTRSpawnList.NOMAD_WARRIORS, 10)};
         this.npcSpawnList.newFactionList(0).add(arrspawnListContainer2);
-        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer3 = new LOTRBiomeSpawnList.SpawnListContainer[1];
-        arrspawnListContainer3[0] = LOTRBiomeSpawnList.entry(LOTRSpawnList.GONDOR_SOLDIERS);
+        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer3 = new LOTRBiomeSpawnList.SpawnListContainer[]{LOTRBiomeSpawnList.entry(LOTRSpawnList.GONDOR_SOLDIERS)};
         this.npcSpawnList.newFactionList(0).add(arrspawnListContainer3);
+        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer4 = new LOTRBiomeSpawnList.SpawnListContainer[]{LOTRBiomeSpawnList.entry(LOTRSpawnList.DESERT_SPIDERS, 10).setSpawnChance(1000)};
+        this.npcSpawnList.newFactionList(33).add(arrspawnListContainer4);
         this.clearBiomeVariants();
         this.addBiomeVariant(LOTRBiomeVariant.FOREST_LIGHT);
         this.addBiomeVariant(LOTRBiomeVariant.STEPPE);
@@ -81,13 +79,12 @@ extends LOTRBiomeGenNearHarad {
 
     @Override
     public void generateBiomeTerrain(World world, Random random, Block[] blocks, byte[] meta, int i, int k, double stoneNoise, int height, LOTRBiomeVariant variant) {
-        double d2;
         Block topBlock_pre = this.topBlock;
         int topBlockMeta_pre = this.topBlockMeta;
         Block fillerBlock_pre = this.fillerBlock;
         int fillerBlockMeta_pre = this.fillerBlockMeta;
         double d1 = biomeTerrainNoise.func_151601_a((double)i * 0.08, (double)k * 0.08);
-        if (d1 + (d2 = biomeTerrainNoise.func_151601_a((double)i * 0.3, (double)k * 0.3)) > 0.3) {
+        if (d1 + biomeTerrainNoise.func_151601_a((double)i * 0.3, (double)k * 0.3) > 0.3) {
             this.topBlock = Blocks.dirt;
             this.topBlockMeta = 1;
             this.fillerBlock = this.topBlock;
@@ -102,9 +99,9 @@ extends LOTRBiomeGenNearHarad {
 
     @Override
     public void decorate(World world, Random random, int i, int k) {
-        int k1;
-        int i1;
         int j1;
+        int i1;
+        int k1;
         super.decorate(world, random, i, k);
         if (random.nextInt(20) == 0 && world.getBlock(i1 = i + random.nextInt(16) + 8, j1 = world.getHeightValue(i1, k1 = k + random.nextInt(16) + 8) - 1, k1) == Blocks.sand) {
             world.setBlock(i1, j1, k1, Blocks.dirt);

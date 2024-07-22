@@ -48,6 +48,7 @@ extends TileEntitySpecialRenderer {
     private static ResourceLocation mugClayTexture = new ResourceLocation("lotr:item/mugClay.png");
     private static ResourceLocation gobletGoldTexture = new ResourceLocation("lotr:item/gobletGold.png");
     private static ResourceLocation gobletSilverTexture = new ResourceLocation("lotr:item/gobletSilver.png");
+    private static ResourceLocation gobletMithrilTexture = new ResourceLocation("lotr:item/gobletMithril.png");
     private static ResourceLocation gobletCopperTexture = new ResourceLocation("lotr:item/gobletCopper.png");
     private static ResourceLocation gobletWoodTexture = new ResourceLocation("lotr:item/gobletWood.png");
     private static ResourceLocation skullTexture = new ResourceLocation("lotr:item/skullCup.png");
@@ -63,117 +64,104 @@ extends TileEntitySpecialRenderer {
     private static LOTRModelAleHorn hornModel = new LOTRModelAleHorn();
     private static RenderBlocks renderBlocks = new RenderBlocks();
 
-    /*
-     * Unable to fully structure code
-     * Enabled aggressive block sorting
-     * Lifted jumps to return sites
-     */
     public void renderTileEntityAt(TileEntity tileentity, double d, double d1, double d2, float f) {
-        block38: {
-            block40: {
-                block39: {
-                    mug = (LOTRTileEntityMug)tileentity;
-                    mugItemstack = mug.getMugItemForRender();
-                    mugItem = mugItemstack.getItem();
-                    full = mug.isEmpty() == false;
-                    vessel = mug.getVessel();
-                    GL11.glEnable((int)32826);
-                    GL11.glDisable((int)2884);
-                    GL11.glEnable((int)3042);
-                    GL11.glBlendFunc((int)770, (int)771);
-                    GL11.glPushMatrix();
-                    GL11.glTranslatef((float)((float)d + 0.5f), (float)((float)d1), (float)((float)d2 + 0.5f));
-                    GL11.glScalef((float)-1.0f, (float)-1.0f, (float)1.0f);
-                    mugScale = 0.75f;
-                    GL11.glScalef((float)mugScale, (float)mugScale, (float)mugScale);
-                    scale = 0.0625f;
-                    switch (mug.getBlockMetadata()) {
-                        case 0: {
-                            GL11.glRotatef((float)90.0f, (float)0.0f, (float)1.0f, (float)0.0f);
-                            break;
-                        }
-                        case 1: {
-                            GL11.glRotatef((float)180.0f, (float)0.0f, (float)1.0f, (float)0.0f);
-                            break;
-                        }
-                        case 2: {
-                            GL11.glRotatef((float)270.0f, (float)0.0f, (float)1.0f, (float)0.0f);
-                            break;
-                        }
-                        case 3: {
-                            GL11.glRotatef((float)0.0f, (float)0.0f, (float)1.0f, (float)0.0f);
-                            break;
-                        }
-                    }
-                    if (vessel == LOTRItemMug.Vessel.SKULL || vessel == LOTRItemMug.Vessel.HORN || vessel == LOTRItemMug.Vessel.HORN_GOLD) {
-                        GL11.glRotatef((float)-90.0f, (float)0.0f, (float)1.0f, (float)0.0f);
-                    }
-                    if (!full) break block38;
-                    GL11.glDisable((int)2896);
-                    GL11.glPushMatrix();
-                    this.bindTexture(TextureMap.locationItemsTexture);
-                    liquidIcon = mugItem.getIconFromDamage(-1);
-                    if (vessel != LOTRItemMug.Vessel.MUG && vessel != LOTRItemMug.Vessel.MUG_CLAY) break block39;
-                    this.renderMeniscus(liquidIcon, 6, 10, 2.0, 7.0, scale);
-                    break block40;
-                }
-                if (vessel == LOTRItemMug.Vessel.GOBLET_GOLD || vessel == LOTRItemMug.Vessel.GOBLET_SILVER) ** GOTO lbl-1000
-                if (vessel == LOTRItemMug.Vessel.GOBLET_COPPER) ** GOTO lbl-1000
-                if (vessel == LOTRItemMug.Vessel.GOBLET_WOOD) lbl-1000:
-                // 3 sources
-                {
-                    this.renderMeniscus(liquidIcon, 6, 9, 1.5, 8.0, scale);
-                } else if (vessel == LOTRItemMug.Vessel.SKULL) {
-                    this.renderMeniscus(liquidIcon, 5, 11, 3.0, 9.0, scale);
-                } else if (vessel == LOTRItemMug.Vessel.GLASS) {
-                    this.renderLiquid(liquidIcon, 6, 9, 6.0, 9.0, scale);
-                } else if (vessel == LOTRItemMug.Vessel.BOTTLE) {
-                    this.renderLiquid(liquidIcon, 6, 10, 1.0, 5.0, scale);
-                } else if (vessel == LOTRItemMug.Vessel.HORN || vessel == LOTRItemMug.Vessel.HORN_GOLD) {
-                    LOTRRenderMug.hornModel.prepareLiquid(scale);
-                    this.renderMeniscus(liquidIcon, 6, 9, -1.5, 5.0, scale);
-                }
+        LOTRTileEntityMug mug = (LOTRTileEntityMug)tileentity;
+        ItemStack mugItemstack = mug.getMugItemForRender();
+        Item mugItem = mugItemstack.getItem();
+        boolean full = !mug.isEmpty();
+        LOTRItemMug.Vessel vessel = mug.getVessel();
+        GL11.glEnable((int)32826);
+        GL11.glDisable((int)2884);
+        GL11.glEnable((int)3042);
+        GL11.glBlendFunc((int)770, (int)771);
+        GL11.glPushMatrix();
+        GL11.glTranslatef((float)((float)d + 0.5f), (float)((float)d1), (float)((float)d2 + 0.5f));
+        GL11.glScalef((float)-1.0f, (float)-1.0f, (float)1.0f);
+        float mugScale = 0.75f;
+        GL11.glScalef((float)mugScale, (float)mugScale, (float)mugScale);
+        float scale = 0.0625f;
+        switch (mug.getBlockMetadata()) {
+            case 0: {
+                GL11.glRotatef((float)90.0f, (float)0.0f, (float)1.0f, (float)0.0f);
+                break;
+            }
+            case 1: {
+                GL11.glRotatef((float)180.0f, (float)0.0f, (float)1.0f, (float)0.0f);
+                break;
+            }
+            case 2: {
+                GL11.glRotatef((float)270.0f, (float)0.0f, (float)1.0f, (float)0.0f);
+                break;
+            }
+            case 3: {
+                GL11.glRotatef((float)0.0f, (float)0.0f, (float)1.0f, (float)0.0f);
+            }
+        }
+        if (vessel == LOTRItemMug.Vessel.SKULL || vessel == LOTRItemMug.Vessel.HORN || vessel == LOTRItemMug.Vessel.HORN_GOLD) {
+            GL11.glRotatef((float)-90.0f, (float)0.0f, (float)1.0f, (float)0.0f);
+        }
+        if (full) {
+            GL11.glDisable((int)2896);
+            GL11.glPushMatrix();
+            this.bindTexture(TextureMap.locationItemsTexture);
+            IIcon liquidIcon = mugItem.getIconFromDamage(-1);
+            if (vessel == LOTRItemMug.Vessel.MUG || vessel == LOTRItemMug.Vessel.MUG_CLAY) {
+                this.renderMeniscus(liquidIcon, 6, 10, 2.0, 7.0, scale);
+            } else if (vessel == LOTRItemMug.Vessel.GOBLET_GOLD || vessel == LOTRItemMug.Vessel.GOBLET_SILVER || vessel == LOTRItemMug.Vessel.GOBLET_MITHRIL || vessel == LOTRItemMug.Vessel.GOBLET_COPPER || vessel == LOTRItemMug.Vessel.GOBLET_WOOD) {
+                this.renderMeniscus(liquidIcon, 6, 9, 1.5, 8.0, scale);
+            } else if (vessel == LOTRItemMug.Vessel.SKULL) {
+                this.renderMeniscus(liquidIcon, 5, 11, 3.0, 9.0, scale);
+            } else if (vessel == LOTRItemMug.Vessel.GLASS) {
+                this.renderLiquid(liquidIcon, 6, 9, 6.0, 9.0, scale);
+            } else if (vessel == LOTRItemMug.Vessel.BOTTLE) {
+                this.renderLiquid(liquidIcon, 6, 10, 1.0, 5.0, scale);
+            } else if (vessel == LOTRItemMug.Vessel.HORN || vessel == LOTRItemMug.Vessel.HORN_GOLD) {
+                hornModel.prepareLiquid(scale);
+                this.renderMeniscus(liquidIcon, 6, 9, -1.5, 5.0, scale);
             }
             GL11.glPopMatrix();
             GL11.glEnable((int)2896);
         }
         GL11.glPushMatrix();
-        model = null;
+        ModelBase model = null;
         if (vessel == LOTRItemMug.Vessel.MUG) {
-            this.bindTexture(LOTRRenderMug.mugTexture);
-            model = LOTRRenderMug.mugModel;
+            this.bindTexture(mugTexture);
+            model = mugModel;
         } else if (vessel == LOTRItemMug.Vessel.MUG_CLAY) {
-            this.bindTexture(LOTRRenderMug.mugClayTexture);
-            model = LOTRRenderMug.mugModel;
+            this.bindTexture(mugClayTexture);
+            model = mugModel;
         } else if (vessel == LOTRItemMug.Vessel.GOBLET_GOLD) {
-            this.bindTexture(LOTRRenderMug.gobletGoldTexture);
-            model = LOTRRenderMug.gobletModel;
+            this.bindTexture(gobletGoldTexture);
+            model = gobletModel;
         } else if (vessel == LOTRItemMug.Vessel.GOBLET_SILVER) {
-            this.bindTexture(LOTRRenderMug.gobletSilverTexture);
-            model = LOTRRenderMug.gobletModel;
+            this.bindTexture(gobletSilverTexture);
+            model = gobletModel;
+        } else if (vessel == LOTRItemMug.Vessel.GOBLET_MITHRIL) {
+            this.bindTexture(gobletMithrilTexture);
+            model = gobletModel;
         } else if (vessel == LOTRItemMug.Vessel.GOBLET_COPPER) {
-            this.bindTexture(LOTRRenderMug.gobletCopperTexture);
-            model = LOTRRenderMug.gobletModel;
+            this.bindTexture(gobletCopperTexture);
+            model = gobletModel;
         } else if (vessel == LOTRItemMug.Vessel.GOBLET_WOOD) {
-            this.bindTexture(LOTRRenderMug.gobletWoodTexture);
-            model = LOTRRenderMug.gobletModel;
+            this.bindTexture(gobletWoodTexture);
+            model = gobletModel;
         } else if (vessel == LOTRItemMug.Vessel.SKULL) {
-            this.bindTexture(LOTRRenderMug.skullTexture);
-            model = LOTRRenderMug.skullModel;
+            this.bindTexture(skullTexture);
+            model = skullModel;
         } else if (vessel == LOTRItemMug.Vessel.GLASS) {
-            this.bindTexture(LOTRRenderMug.glassTexture);
-            model = LOTRRenderMug.glassModel;
+            this.bindTexture(glassTexture);
+            model = glassModel;
             GL11.glEnable((int)2884);
         } else if (vessel == LOTRItemMug.Vessel.BOTTLE) {
-            this.bindTexture(LOTRRenderMug.bottleTexture);
-            model = LOTRRenderMug.bottleModel;
+            this.bindTexture(bottleTexture);
+            model = bottleModel;
             GL11.glEnable((int)2884);
         } else if (vessel == LOTRItemMug.Vessel.HORN) {
-            this.bindTexture(LOTRRenderMug.hornTexture);
-            model = LOTRRenderMug.hornModel;
+            this.bindTexture(hornTexture);
+            model = hornModel;
         } else if (vessel == LOTRItemMug.Vessel.HORN_GOLD) {
-            this.bindTexture(LOTRRenderMug.hornGoldTexture);
-            model = LOTRRenderMug.hornModel;
+            this.bindTexture(hornGoldTexture);
+            model = hornModel;
         }
         if (model != null) {
             model.render(null, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, scale);

@@ -59,7 +59,7 @@ public enum LOTRFaction {
     BLUE_MOUNTAINS(6132172, LOTRDimension.DimensionRegion.WEST, new LOTRMapRegion(650, 600, 125), EnumSet.of(FactionType.TYPE_FREE, FactionType.TYPE_DWARF)),
     HIGH_ELF(13035007, LOTRDimension.DimensionRegion.WEST, new LOTRMapRegion(570, 770, 200), EnumSet.of(FactionType.TYPE_FREE, FactionType.TYPE_ELF)),
     GUNDABAD(9858132, LOTRDimension.DimensionRegion.WEST, new LOTRMapRegion(1160, 670, 150), EnumSet.of(FactionType.TYPE_ORC)),
-    ANGMAR(7836023, LOTRDimension.DimensionRegion.WEST, new LOTRMapRegion(1080, 600, 125), EnumSet.of(FactionType.TYPE_ORC, FactionType.TYPE_TROLL)),
+    ANGMAR(0, null, null, true, true, -1, null, null),
     WOOD_ELF(3774030, LOTRDimension.DimensionRegion.WEST, new LOTRMapRegion(1400, 640, 75), EnumSet.of(FactionType.TYPE_FREE, FactionType.TYPE_ELF)),
     DOL_GULDUR(3488580, LOTRDimension.DimensionRegion.WEST, new LOTRMapRegion(1380, 870, 100), EnumSet.of(FactionType.TYPE_ORC)),
     DALE(13535071, LOTRDimension.DimensionRegion.WEST, new LOTRMapRegion(1530, 670, 100), EnumSet.of(FactionType.TYPE_FREE, FactionType.TYPE_MAN)),
@@ -78,15 +78,19 @@ public enum LOTRFaction {
     TAURETHRIM(3040066, LOTRDimension.DimensionRegion.SOUTH, new LOTRMapRegion(1250, 2870, 400), EnumSet.of(FactionType.TYPE_FREE, FactionType.TYPE_MAN)),
     HALF_TROLL(10388339, LOTRDimension.DimensionRegion.SOUTH, new LOTRMapRegion(1900, 2500, 200), EnumSet.of(FactionType.TYPE_MAN, FactionType.TYPE_TROLL)),
     DARK_HUORN(0, null, null, true, true, -1, null, null),
-    UTUMNO(3343616, LOTRDimension.UTUMNO, -66666, EnumSet.of(FactionType.TYPE_ORC)),
+    UTUMNO1(3343616, LOTRDimension.UTUMNO, -666666, EnumSet.of(FactionType.TYPE_ORC)),
+    UTUMNO(3343616, LOTRDimension.DimensionRegion.NORTH, new LOTRMapRegion(1138, 398, 80), EnumSet.of(FactionType.TYPE_ORC)),
+    RED_MOUNTAINS(8135707, LOTRDimension.DimensionRegion.EAST, new LOTRMapRegion(2394, 887, 490), EnumSet.of(FactionType.TYPE_FREE, FactionType.TYPE_DWARF)),
+    WIND(5922135, LOTRDimension.DimensionRegion.EAST, new LOTRMapRegion(2529, 1555, 200), EnumSet.of(FactionType.TYPE_FREE, FactionType.TYPE_DWARF)),
+    AVARI(1079304, LOTRDimension.DimensionRegion.EAST, new LOTRMapRegion(2445, 992, 300), EnumSet.of(FactionType.TYPE_FREE, FactionType.TYPE_ELF)),
     HOSTILE(true, -1),
     UNALIGNED(false, 0);
 
     private static Random factionRand;
     public LOTRDimension factionDimension;
     public LOTRDimension.DimensionRegion factionRegion;
-    private String factionName;
     private Color factionColor;
+    public int eggColor;
     private Map<Float, float[]> facRGBCache = new HashMap<Float, float[]>();
     private Set<FactionType> factionTypes = new HashSet<FactionType>();
     public List<LOTRItemBanner.BannerType> factionBanners = new ArrayList<LOTRItemBanner.BannerType>();
@@ -124,6 +128,7 @@ public enum LOTRFaction {
         this.allowPlayer = player;
         this.allowEntityRegistry = registry;
         this.factionColor = new Color(color);
+        this.eggColor = color;
         this.factionDimension = dim;
         if (this.factionDimension != null) {
             this.factionDimension.factionList.add(this);
@@ -368,9 +373,97 @@ public enum LOTRFaction {
         LOTRFactionRelations.setDefaultRelations(NEAR_HARAD, TAURETHRIM, LOTRFactionRelations.Relation.ENEMY);
         LOTRFactionRelations.setDefaultRelations(MORWAITH, TAURETHRIM, LOTRFactionRelations.Relation.MORTAL_ENEMY);
         LOTRFactionRelations.setDefaultRelations(TAURETHRIM, HALF_TROLL, LOTRFactionRelations.Relation.MORTAL_ENEMY);
+        LOTRFactionRelations.setDefaultRelations(RED_MOUNTAINS, GUNDABAD, LOTRFactionRelations.Relation.MORTAL_ENEMY);
+        LOTRFactionRelations.setDefaultRelations(RED_MOUNTAINS, MORDOR, LOTRFactionRelations.Relation.MORTAL_ENEMY);
+        LOTRFactionRelations.setDefaultRelations(RED_MOUNTAINS, RHUDEL, LOTRFactionRelations.Relation.NEUTRAL);
+        LOTRFactionRelations.setDefaultRelations(RED_MOUNTAINS, RANGER_NORTH, LOTRFactionRelations.Relation.NEUTRAL);
+        LOTRFactionRelations.setDefaultRelations(RED_MOUNTAINS, HOBBIT, LOTRFactionRelations.Relation.NEUTRAL);
+        LOTRFactionRelations.setDefaultRelations(RED_MOUNTAINS, HIGH_ELF, LOTRFactionRelations.Relation.ALLY);
+        LOTRFactionRelations.setDefaultRelations(RED_MOUNTAINS, ANGMAR, LOTRFactionRelations.Relation.NEUTRAL);
+        LOTRFactionRelations.setDefaultRelations(RED_MOUNTAINS, WOOD_ELF, LOTRFactionRelations.Relation.NEUTRAL);
+        LOTRFactionRelations.setDefaultRelations(RED_MOUNTAINS, LOTHLORIEN, LOTRFactionRelations.Relation.FRIEND);
+        LOTRFactionRelations.setDefaultRelations(RED_MOUNTAINS, DUNLAND, LOTRFactionRelations.Relation.NEUTRAL);
+        LOTRFactionRelations.setDefaultRelations(RED_MOUNTAINS, ISENGARD, LOTRFactionRelations.Relation.NEUTRAL);
+        LOTRFactionRelations.setDefaultRelations(RED_MOUNTAINS, FANGORN, LOTRFactionRelations.Relation.NEUTRAL);
+        LOTRFactionRelations.setDefaultRelations(RED_MOUNTAINS, DOL_GULDUR, LOTRFactionRelations.Relation.MORTAL_ENEMY);
+        LOTRFactionRelations.setDefaultRelations(RED_MOUNTAINS, DORWINION, LOTRFactionRelations.Relation.FRIEND);
+        LOTRFactionRelations.setDefaultRelations(RED_MOUNTAINS, NEAR_HARAD, LOTRFactionRelations.Relation.NEUTRAL);
+        LOTRFactionRelations.setDefaultRelations(RED_MOUNTAINS, MORWAITH, LOTRFactionRelations.Relation.NEUTRAL);
+        LOTRFactionRelations.setDefaultRelations(RED_MOUNTAINS, TAURETHRIM, LOTRFactionRelations.Relation.NEUTRAL);
+        LOTRFactionRelations.setDefaultRelations(RED_MOUNTAINS, HALF_TROLL, LOTRFactionRelations.Relation.MORTAL_ENEMY);
+        LOTRFactionRelations.setDefaultRelations(RED_MOUNTAINS, GONDOR, LOTRFactionRelations.Relation.NEUTRAL);
+        LOTRFactionRelations.setDefaultRelations(RED_MOUNTAINS, ROHAN, LOTRFactionRelations.Relation.NEUTRAL);
+        LOTRFactionRelations.setDefaultRelations(RED_MOUNTAINS, DALE, LOTRFactionRelations.Relation.NEUTRAL);
+        LOTRFactionRelations.setDefaultRelations(RED_MOUNTAINS, BLUE_MOUNTAINS, LOTRFactionRelations.Relation.ALLY);
+        LOTRFactionRelations.setDefaultRelations(RED_MOUNTAINS, DURINS_FOLK, LOTRFactionRelations.Relation.ALLY);
+        LOTRFactionRelations.setDefaultRelations(RED_MOUNTAINS, AVARI, LOTRFactionRelations.Relation.ALLY);
+        LOTRFactionRelations.setDefaultRelations(UTUMNO, GUNDABAD, LOTRFactionRelations.Relation.NEUTRAL);
+        LOTRFactionRelations.setDefaultRelations(UTUMNO, ANGMAR, LOTRFactionRelations.Relation.NEUTRAL);
+        LOTRFactionRelations.setDefaultRelations(UTUMNO, UTUMNO1, LOTRFactionRelations.Relation.NEUTRAL);
+        LOTRFactionRelations.setDefaultRelations(UTUMNO, DURINS_FOLK, LOTRFactionRelations.Relation.MORTAL_ENEMY);
+        LOTRFactionRelations.setDefaultRelations(UTUMNO, RHUDEL, LOTRFactionRelations.Relation.NEUTRAL);
+        LOTRFactionRelations.setDefaultRelations(UTUMNO, RANGER_NORTH, LOTRFactionRelations.Relation.MORTAL_ENEMY);
+        LOTRFactionRelations.setDefaultRelations(UTUMNO, HOBBIT, LOTRFactionRelations.Relation.MORTAL_ENEMY);
+        LOTRFactionRelations.setDefaultRelations(UTUMNO, HIGH_ELF, LOTRFactionRelations.Relation.MORTAL_ENEMY);
+        LOTRFactionRelations.setDefaultRelations(UTUMNO, WOOD_ELF, LOTRFactionRelations.Relation.MORTAL_ENEMY);
+        LOTRFactionRelations.setDefaultRelations(UTUMNO, LOTHLORIEN, LOTRFactionRelations.Relation.MORTAL_ENEMY);
+        LOTRFactionRelations.setDefaultRelations(UTUMNO, DUNLAND, LOTRFactionRelations.Relation.NEUTRAL);
+        LOTRFactionRelations.setDefaultRelations(UTUMNO, ISENGARD, LOTRFactionRelations.Relation.NEUTRAL);
+        LOTRFactionRelations.setDefaultRelations(UTUMNO, FANGORN, LOTRFactionRelations.Relation.MORTAL_ENEMY);
+        LOTRFactionRelations.setDefaultRelations(UTUMNO, DOL_GULDUR, LOTRFactionRelations.Relation.NEUTRAL);
+        LOTRFactionRelations.setDefaultRelations(UTUMNO, DORWINION, LOTRFactionRelations.Relation.MORTAL_ENEMY);
+        LOTRFactionRelations.setDefaultRelations(UTUMNO, NEAR_HARAD, LOTRFactionRelations.Relation.NEUTRAL);
+        LOTRFactionRelations.setDefaultRelations(UTUMNO, MORWAITH, LOTRFactionRelations.Relation.NEUTRAL);
+        LOTRFactionRelations.setDefaultRelations(UTUMNO, TAURETHRIM, LOTRFactionRelations.Relation.MORTAL_ENEMY);
+        LOTRFactionRelations.setDefaultRelations(UTUMNO, HALF_TROLL, LOTRFactionRelations.Relation.NEUTRAL);
+        LOTRFactionRelations.setDefaultRelations(UTUMNO, GONDOR, LOTRFactionRelations.Relation.MORTAL_ENEMY);
+        LOTRFactionRelations.setDefaultRelations(UTUMNO, ROHAN, LOTRFactionRelations.Relation.MORTAL_ENEMY);
+        LOTRFactionRelations.setDefaultRelations(UTUMNO, DALE, LOTRFactionRelations.Relation.MORTAL_ENEMY);
+        LOTRFactionRelations.setDefaultRelations(UTUMNO, MORDOR, LOTRFactionRelations.Relation.NEUTRAL);
+        LOTRFactionRelations.setDefaultRelations(UTUMNO, RED_MOUNTAINS, LOTRFactionRelations.Relation.MORTAL_ENEMY);
+        LOTRFactionRelations.setDefaultRelations(UTUMNO, WOOD_ELF, LOTRFactionRelations.Relation.MORTAL_ENEMY);
+        LOTRFactionRelations.setDefaultRelations(UTUMNO, AVARI, LOTRFactionRelations.Relation.MORTAL_ENEMY);
+        LOTRFactionRelations.setDefaultRelations(WIND, MORDOR, LOTRFactionRelations.Relation.MORTAL_ENEMY);
+        LOTRFactionRelations.setDefaultRelations(WIND, RHUDEL, LOTRFactionRelations.Relation.NEUTRAL);
+        LOTRFactionRelations.setDefaultRelations(WIND, RANGER_NORTH, LOTRFactionRelations.Relation.NEUTRAL);
+        LOTRFactionRelations.setDefaultRelations(WIND, HOBBIT, LOTRFactionRelations.Relation.NEUTRAL);
+        LOTRFactionRelations.setDefaultRelations(WIND, HIGH_ELF, LOTRFactionRelations.Relation.ALLY);
+        LOTRFactionRelations.setDefaultRelations(WIND, WOOD_ELF, LOTRFactionRelations.Relation.NEUTRAL);
+        LOTRFactionRelations.setDefaultRelations(WIND, GUNDABAD, LOTRFactionRelations.Relation.MORTAL_ENEMY);
+        LOTRFactionRelations.setDefaultRelations(WIND, LOTHLORIEN, LOTRFactionRelations.Relation.FRIEND);
+        LOTRFactionRelations.setDefaultRelations(WIND, DUNLAND, LOTRFactionRelations.Relation.NEUTRAL);
+        LOTRFactionRelations.setDefaultRelations(WIND, ISENGARD, LOTRFactionRelations.Relation.NEUTRAL);
+        LOTRFactionRelations.setDefaultRelations(WIND, FANGORN, LOTRFactionRelations.Relation.NEUTRAL);
+        LOTRFactionRelations.setDefaultRelations(WIND, DOL_GULDUR, LOTRFactionRelations.Relation.MORTAL_ENEMY);
+        LOTRFactionRelations.setDefaultRelations(WIND, DORWINION, LOTRFactionRelations.Relation.FRIEND);
+        LOTRFactionRelations.setDefaultRelations(WIND, NEAR_HARAD, LOTRFactionRelations.Relation.NEUTRAL);
+        LOTRFactionRelations.setDefaultRelations(WIND, MORWAITH, LOTRFactionRelations.Relation.NEUTRAL);
+        LOTRFactionRelations.setDefaultRelations(WIND, TAURETHRIM, LOTRFactionRelations.Relation.NEUTRAL);
+        LOTRFactionRelations.setDefaultRelations(WIND, HALF_TROLL, LOTRFactionRelations.Relation.MORTAL_ENEMY);
+        LOTRFactionRelations.setDefaultRelations(WIND, GONDOR, LOTRFactionRelations.Relation.NEUTRAL);
+        LOTRFactionRelations.setDefaultRelations(WIND, ROHAN, LOTRFactionRelations.Relation.NEUTRAL);
+        LOTRFactionRelations.setDefaultRelations(WIND, DALE, LOTRFactionRelations.Relation.NEUTRAL);
+        LOTRFactionRelations.setDefaultRelations(WIND, BLUE_MOUNTAINS, LOTRFactionRelations.Relation.ALLY);
+        LOTRFactionRelations.setDefaultRelations(WIND, DURINS_FOLK, LOTRFactionRelations.Relation.ALLY);
+        LOTRFactionRelations.setDefaultRelations(WIND, RED_MOUNTAINS, LOTRFactionRelations.Relation.ALLY);
+        LOTRFactionRelations.setDefaultRelations(WIND, UTUMNO, LOTRFactionRelations.Relation.MORTAL_ENEMY);
+        LOTRFactionRelations.setDefaultRelations(WIND, AVARI, LOTRFactionRelations.Relation.ALLY);
+        LOTRFactionRelations.setDefaultRelations(WIND, HIGH_ELF, LOTRFactionRelations.Relation.ALLY);
+        LOTRFactionRelations.setDefaultRelations(AVARI, WOOD_ELF, LOTRFactionRelations.Relation.FRIEND);
+        LOTRFactionRelations.setDefaultRelations(AVARI, LOTHLORIEN, LOTRFactionRelations.Relation.FRIEND);
+        LOTRFactionRelations.setDefaultRelations(AVARI, FANGORN, LOTRFactionRelations.Relation.ALLY);
+        LOTRFactionRelations.setDefaultRelations(AVARI, DORWINION, LOTRFactionRelations.Relation.FRIEND);
+        LOTRFactionRelations.setDefaultRelations(AVARI, TAURETHRIM, LOTRFactionRelations.Relation.NEUTRAL);
+        LOTRFactionRelations.setDefaultRelations(AVARI, DOL_GULDUR, LOTRFactionRelations.Relation.MORTAL_ENEMY);
+        LOTRFactionRelations.setDefaultRelations(AVARI, GUNDABAD, LOTRFactionRelations.Relation.MORTAL_ENEMY);
+        LOTRFactionRelations.setDefaultRelations(AVARI, ISENGARD, LOTRFactionRelations.Relation.MORTAL_ENEMY);
+        LOTRFactionRelations.setDefaultRelations(AVARI, MORDOR, LOTRFactionRelations.Relation.MORTAL_ENEMY);
+        LOTRFactionRelations.setDefaultRelations(AVARI, RHUDEL, LOTRFactionRelations.Relation.ENEMY);
+        LOTRFactionRelations.setDefaultRelations(AVARI, NEAR_HARAD, LOTRFactionRelations.Relation.ENEMY);
+        LOTRFactionRelations.setDefaultRelations(AVARI, HALF_TROLL, LOTRFactionRelations.Relation.MORTAL_ENEMY);
         for (LOTRFaction f : LOTRFaction.values()) {
-            if (!f.allowPlayer || f == UTUMNO) continue;
-            LOTRFactionRelations.setDefaultRelations(f, UTUMNO, LOTRFactionRelations.Relation.MORTAL_ENEMY);
+            if (!f.allowPlayer || f == UTUMNO1) continue;
+            LOTRFactionRelations.setDefaultRelations(f, UTUMNO1, LOTRFactionRelations.Relation.MORTAL_ENEMY);
         }
         LOTRFaction.HOBBIT.approvesWarCrimes = false;
         LOTRFaction.HOBBIT.isolationist = true;
@@ -400,7 +493,7 @@ public enum LOTRFaction {
         BLUE_MOUNTAINS.addControlZone(new LOTRControlZone(LOTRWaypoint.BELEGOST, 40));
         BLUE_MOUNTAINS.addControlZone(new LOTRControlZone(LOTRWaypoint.NOGROD, 40));
         BLUE_MOUNTAINS.addControlZone(new LOTRControlZone(LOTRWaypoint.THORIN_HALLS, 50));
-        BLUE_MOUNTAINS.addControlZone(new LOTRControlZone(695, 820, 80));
+        BLUE_MOUNTAINS.addControlZone(new LOTRControlZone(695.0, 820.0, 80));
         LOTRFaction.HIGH_ELF.approvesWarCrimes = false;
         HIGH_ELF.addControlZone(new LOTRControlZone(LOTRWaypoint.MITHLOND_SOUTH, 60));
         HIGH_ELF.addControlZone(new LOTRControlZone(LOTRWaypoint.FORLOND, 80));
@@ -411,6 +504,8 @@ public enum LOTRFaction {
         GUNDABAD.addControlZone(new LOTRControlZone(LOTRWaypoint.MOUNT_GRAM, 200));
         GUNDABAD.addControlZone(new LOTRControlZone(LOTRWaypoint.GOBLIN_TOWN, 150));
         GUNDABAD.addControlZone(new LOTRControlZone(LOTRWaypoint.MOUNT_CARADHRAS, 100));
+        GUNDABAD.addControlZone(new LOTRControlZone(LOTRWaypoint.RED_NORTH, 200));
+        GUNDABAD.addControlZone(new LOTRControlZone(LOTRWaypoint.SNOW_BAD, 120));
         LOTRFaction.ANGMAR.approvesWarCrimes = true;
         ANGMAR.addControlZone(new LOTRControlZone(LOTRWaypoint.CARN_DUM, 75));
         ANGMAR.addControlZone(new LOTRControlZone(LOTRWaypoint.MOUNT_GRAM, 125));
@@ -441,7 +536,7 @@ public enum LOTRFaction {
         ISENGARD.addControlZone(new LOTRControlZone(LOTRWaypoint.EDORAS, 50));
         LOTRFaction.FANGORN.approvesWarCrimes = false;
         LOTRFaction.FANGORN.isolationist = true;
-        FANGORN.addControlZone(new LOTRControlZone(1180, 1005, 70));
+        FANGORN.addControlZone(new LOTRControlZone(1180.0, 1005.0, 70));
         LOTRFaction.ROHAN.approvesWarCrimes = false;
         ROHAN.addControlZone(new LOTRControlZone(LOTRWaypoint.ENTWADE, 150));
         ROHAN.addControlZone(new LOTRControlZone(LOTRWaypoint.ISENGARD, 100));
@@ -472,7 +567,7 @@ public enum LOTRFaction {
         NEAR_HARAD.addControlZone(new LOTRControlZone(LOTRWaypoint.CROSSINGS_OF_HARAD, 75));
         NEAR_HARAD.addControlZone(new LOTRControlZone(LOTRWaypoint.CROSSINGS_OF_POROS, 50));
         NEAR_HARAD.addControlZone(new LOTRControlZone(LOTRWaypoint.MINAS_TIRITH, 50));
-        NEAR_HARAD.addControlZone(new LOTRControlZone(1210, 1340, 75));
+        NEAR_HARAD.addControlZone(new LOTRControlZone(1210.0, 1340.0, 75));
         NEAR_HARAD.addControlZone(new LOTRControlZone(LOTRWaypoint.PELARGIR, 75));
         NEAR_HARAD.addControlZone(new LOTRControlZone(LOTRWaypoint.LINHIR, 75));
         LOTRFaction.MORWAITH.approvesWarCrimes = true;
@@ -489,6 +584,37 @@ public enum LOTRFaction {
         HALF_TROLL.addControlZone(new LOTRControlZone(LOTRWaypoint.SHADOW_POINT, 100));
         HALF_TROLL.addControlZone(new LOTRControlZone(LOTRWaypoint.CROSSINGS_OF_POROS, 40));
         HALF_TROLL.addControlZone(new LOTRControlZone(LOTRWaypoint.HARADUIN_BRIDGE, 100));
+        LOTRFaction.RED_MOUNTAINS.approvesWarCrimes = false;
+        RED_MOUNTAINS.addControlZone(new LOTRControlZone(LOTRWaypoint.RED_NORTH, 250));
+        RED_MOUNTAINS.addControlZone(new LOTRControlZone(LOTRWaypoint.RED_SOUTH, 250));
+        RED_MOUNTAINS.addControlZone(new LOTRControlZone(LOTRWaypoint.RED_MIDDLE, 250));
+        RED_MOUNTAINS.addControlZone(new LOTRControlZone(LOTRWaypoint.BARAZ_DUM, 250));
+        RED_MOUNTAINS.addControlZone(new LOTRControlZone(LOTRWaypoint.EREBOR, 75));
+        RED_MOUNTAINS.addControlZone(new LOTRControlZone(LOTRWaypoint.WEST_PEAK, 100));
+        RED_MOUNTAINS.addControlZone(new LOTRControlZone(LOTRWaypoint.EAST_PEAK, 75));
+        RED_MOUNTAINS.addControlZone(new LOTRControlZone(LOTRWaypoint.REDWATER_FORD, 75));
+        RED_MOUNTAINS.addControlZone(new LOTRControlZone(LOTRWaypoint.MOUNT_CARADHRAS, 100));
+        RED_MOUNTAINS.addControlZone(new LOTRControlZone(LOTRWaypoint.MOUNT_GUNDABAD, 100));
+        RED_MOUNTAINS.addControlZone(new LOTRControlZone(LOTRWaypoint.DAINS_HALLS, 50));
+        LOTRFaction.AVARI.approvesWarCrimes = false;
+        AVARI.addControlZone(new LOTRControlZone(LOTRWaypoint.RED_SOUTH, 250));
+        AVARI.addControlZone(new LOTRControlZone(LOTRWaypoint.RED_MIDDLE, 250));
+        AVARI.addControlZone(new LOTRControlZone(LOTRWaypoint.BARAZ_DUM, 250));
+        LOTRFaction.UTUMNO.approvesWarCrimes = true;
+        UTUMNO.addControlZone(new LOTRControlZone(LOTRWaypoint.CAPE_OF_FOROCHEL, 150));
+        UTUMNO.addControlZone(new LOTRControlZone(LOTRWaypoint.EREBOR, 150));
+        UTUMNO.addControlZone(new LOTRControlZone(LOTRWaypoint.CARN_DUM, 100));
+        UTUMNO.addControlZone(new LOTRControlZone(LOTRWaypoint.MOUNT_GRAM, 155));
+        UTUMNO.addControlZone(new LOTRControlZone(LOTRWaypoint.THE_TROLLSHAWS, 60));
+        UTUMNO.addControlZone(new LOTRControlZone(LOTRWaypoint.SNOW_PICK, 280));
+        LOTRFaction.WIND.approvesWarCrimes = false;
+        WIND.addControlZone(new LOTRControlZone(LOTRWaypoint.RED_SOUTH, 250));
+        WIND.addControlZone(new LOTRControlZone(LOTRWaypoint.EREBOR, 100));
+        WIND.addControlZone(new LOTRControlZone(LOTRWaypoint.RED_ROAD1, 100));
+        WIND.addControlZone(new LOTRControlZone(LOTRWaypoint.RED_DESERT, 100));
+        WIND.addControlZone(new LOTRControlZone(LOTRWaypoint.MOUNT_GUNDABAD, 100));
+        WIND.addControlZone(new LOTRControlZone(LOTRWaypoint.WIND_POINT, 150));
+        LOTRFaction.UTUMNO1.approvesWarCrimes = true;
         LOTRFaction.UTUMNO.approvesWarCrimes = true;
         HOBBIT.setAchieveCategory(LOTRAchievement.Category.SHIRE);
         HOBBIT.addRank(10.0f, "guest").makeAchievement().makeTitle();
@@ -586,7 +712,7 @@ public enum LOTRFaction {
         LOTHLORIEN.addRank(50.0f, "friend").makeAchievement().makeTitle();
         LOTHLORIEN.addRank(100.0f, "warden").makeAchievement().makeTitle().setPledgeRank();
         LOTHLORIEN.addRank(200.0f, "warrior").makeAchievement().makeTitle();
-        LOTHLORIEN.addRank(500.0f, "herald").makeAchievement().makeTitle();
+        LOTHLORIEN.addRank(500.0f, "herald", true).makeAchievement().makeTitle();
         LOTHLORIEN.addRank(1000.0f, "captain").makeAchievement().makeTitle();
         LOTHLORIEN.addRank(2000.0f, "noble").makeAchievement().makeTitle();
         LOTHLORIEN.addRank(3000.0f, "lord", true).makeAchievement().makeTitle();
@@ -630,6 +756,14 @@ public enum LOTRFaction {
         GONDOR.addRank(1000.0f, "champion").makeAchievement().makeTitle();
         GONDOR.addRank(1500.0f, "captain").makeAchievement().makeTitle();
         GONDOR.addRank(3000.0f, "lord", true).makeAchievement().makeTitle();
+        AVARI.setAchieveCategory(LOTRAchievement.Category.OROCARNI);
+        AVARI.addRank(50.0f, "guest").makeAchievement().makeTitle();
+        AVARI.addRank(100.0f, "friend").makeAchievement().makeTitle().setPledgeRank();
+        AVARI.addRank(200.0f, "guard").makeAchievement().makeTitle();
+        AVARI.addRank(500.0f, "herald").makeAchievement().makeTitle();
+        AVARI.addRank(1000.0f, "captain").makeAchievement().makeTitle();
+        AVARI.addRank(2000.0f, "noble").makeAchievement().makeTitle();
+        AVARI.addRank(3000.0f, "lord", true).makeAchievement().makeTitle();
         MORDOR.setAchieveCategory(LOTRAchievement.Category.MORDOR);
         MORDOR.addRank(10.0f, "thrall").makeAchievement().makeTitle();
         MORDOR.addRank(50.0f, "snaga").makeAchievement().makeTitle();
@@ -690,6 +824,38 @@ public enum LOTRFaction {
         HALF_TROLL.addRank(500.0f, "raider").makeAchievement().makeTitle();
         HALF_TROLL.addRank(1000.0f, "warlord").makeAchievement().makeTitle();
         HALF_TROLL.addRank(2000.0f, "chieftain").makeAchievement().makeTitle();
+        UTUMNO.setAchieveCategory(LOTRAchievement.Category.FORODWAITH);
+        UTUMNO.addRank(10.0f, "guest").makeAchievement().makeTitle();
+        UTUMNO.addRank(50.0f, "friend").makeAchievement().makeTitle();
+        UTUMNO.addRank(100.0f, "brigand").makeAchievement().makeTitle();
+        UTUMNO.addRank(200.0f, "kingsguard").makeAchievement().makeTitle();
+        UTUMNO.addRank(500.0f, "leutenant").makeAchievement().makeTitle().setPledgeRank();
+        UTUMNO.addRank(1000.0f, "commander").makeAchievement().makeTitle();
+        UTUMNO.addRank(2000.0f, "general").makeAchievement().makeTitle();
+        UTUMNO.addRank(4000.0f, "general-mayor").makeAchievement().makeTitle();
+        UTUMNO.addRank(6000.0f, "general-leutenant").makeAchievement().makeTitle();
+        UTUMNO.addRank(8000.0f, "general-armies").makeAchievement().makeTitle();
+        UTUMNO.addRank(10000.0f, "darklord").makeAchievement().makeTitle();
+        UTUMNO.addRank(15000.0f, "darkvopl").makeAchievement().makeTitle();
+        UTUMNO.addRank(20000.0f, "morgoth").makeAchievement().makeTitle();
+        RED_MOUNTAINS.setAchieveCategory(LOTRAchievement.Category.OROCARNI);
+        RED_MOUNTAINS.addRank(10.0f, "guest").makeAchievement().makeTitle();
+        RED_MOUNTAINS.addRank(50.0f, "friend").makeAchievement().makeTitle();
+        RED_MOUNTAINS.addRank(100.0f, "oathfriend").makeAchievement().makeTitle().setPledgeRank();
+        RED_MOUNTAINS.addRank(200.0f, "axebearer").makeAchievement().makeTitle();
+        RED_MOUNTAINS.addRank(500.0f, "champion").makeAchievement().makeTitle();
+        RED_MOUNTAINS.addRank(1000.0f, "commander").makeAchievement().makeTitle();
+        RED_MOUNTAINS.addRank(1500.0f, "lord", true).makeAchievement().makeTitle();
+        RED_MOUNTAINS.addRank(3000.0f, "uzbad", true).makeAchievement().makeTitle();
+        WIND.setAchieveCategory(LOTRAchievement.Category.OROCARNI);
+        WIND.addRank(10.0f, "guest").makeAchievement().makeTitle();
+        WIND.addRank(50.0f, "friend").makeAchievement().makeTitle();
+        WIND.addRank(100.0f, "oathfriend").makeAchievement().makeTitle().setPledgeRank();
+        WIND.addRank(200.0f, "axebearer").makeAchievement().makeTitle();
+        WIND.addRank(500.0f, "champion").makeAchievement().makeTitle();
+        WIND.addRank(1000.0f, "commander").makeAchievement().makeTitle();
+        WIND.addRank(1500.0f, "lord", true).makeAchievement().makeTitle();
+        WIND.addRank(3000.0f, "uzbad", true).makeAchievement().makeTitle();
         DURINS_FOLK.addLegacyAlias("DWARF");
         LOTHLORIEN.addLegacyAlias("GALADHRIM");
         ISENGARD.addLegacyAlias("URUK_HAI");
@@ -773,7 +939,7 @@ public enum LOTRFaction {
 
     public LOTRFactionRank getRank(float alignment) {
         for (LOTRFactionRank rank : this.ranksSortedDescending) {
-            if (rank.isDummyRank() || !(alignment >= rank.alignment)) continue;
+            if (rank.isDummyRank() || alignment < rank.alignment) continue;
             return rank;
         }
         if (alignment >= 0.0f) {
@@ -975,7 +1141,7 @@ public enum LOTRFaction {
             double dz = d2 - (double)zone.zCoord;
             double dSq = dx * dx + dz * dz;
             double dToEdge = Math.sqrt(dSq) - (double)zone.radiusCoord;
-            if (!(dToEdge <= (double)coordRange) || !(closestDist < 0.0) && !(dToEdge < closestDist)) continue;
+            if (dToEdge > (double)coordRange || closestDist >= 0.0 && dToEdge >= closestDist) continue;
             closestDist = dToEdge;
         }
         return closestDist;

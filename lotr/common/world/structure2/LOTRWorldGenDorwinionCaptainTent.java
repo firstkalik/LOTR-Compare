@@ -37,11 +37,11 @@ extends LOTRWorldGenDorwinionTent {
 
     @Override
     public boolean generateWithSetRotation(World world, Random random, int i, int j, int k, int rotation) {
-        int k1;
-        int j1;
         int i1;
         int k2;
+        int j1;
         int i2;
+        int k1;
         this.setOriginAndRotation(world, i, j, k, rotation, 7);
         this.setupRandomBlocks(random);
         if (this.restrictions) {
@@ -176,7 +176,7 @@ extends LOTRWorldGenDorwinionTent {
                 if (i2 == 2 && k2 <= 1 || k2 == 2 && i2 <= 1 || i2 <= 1 && k2 <= 1) {
                     this.setBlockAndMetadata(world, i1, 0, k1, this.plankBlock, this.plankMeta);
                 }
-                if ((i2 != 2 || k2 != 0) && (k2 != 2 || i2 != 0)) continue;
+                if (!(i2 == 2 && k2 == 0 || k2 == 2 && i2 == 0)) continue;
                 for (j1 = 1; j1 <= 4; ++j1) {
                     this.setBlockAndMetadata(world, i1, j1, k1, this.woodBeamBlock, this.woodBeamMeta);
                 }

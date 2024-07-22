@@ -24,6 +24,7 @@ package lotr.client.render;
 import java.util.Random;
 import lotr.client.LOTRTickHandlerClient;
 import lotr.common.LOTRConfig;
+import lotr.common.LOTRMod;
 import lotr.common.world.biome.LOTRBiomeGenDagorlad;
 import lotr.common.world.biome.LOTRBiomeGenFarHaradVolcano;
 import lotr.common.world.biome.LOTRBiomeGenMordor;
@@ -100,15 +101,16 @@ extends IRenderHandler {
             float f5 = (float)rendererUpdateCount + partialTicks;
             GL11.glColor4f((float)1.0f, (float)1.0f, (float)1.0f, (float)1.0f);
             flag = false;
+            boolean isChristmas = LOTRMod.isChristmas();
             for (int l = i3 - b0; l <= i3 + b0; ++l) {
                 for (int i1 = k2 - b0; i1 <= k2 + b0; ++i1) {
-                    double d4;
-                    double d5;
-                    float f16;
-                    float f14;
-                    float f10;
                     float f15;
                     float f11;
+                    double d4;
+                    float f10;
+                    float f16;
+                    float f14;
+                    double d5;
                     int j1 = (l - i3 + 16) * 32 + i1 - k2 + 16;
                     float f6 = this.rainXCoords[j1] * 0.5f;
                     float f7 = this.rainYCoords[j1] * 0.5f;
@@ -117,6 +119,10 @@ extends IRenderHandler {
                     boolean snowy = biomegenbase.getEnableSnow();
                     boolean ashy = biomegenbase instanceof LOTRBiomeGenMordor && !(biomegenbase instanceof LOTRBiomeGenNurn) && !(biomegenbase instanceof LOTRBiomeGenMorgulVale) || biomegenbase instanceof LOTRBiomeGenFarHaradVolcano || biomegenbase instanceof LOTRBiomeGenDagorlad;
                     boolean sandy = LOTRWeatherRenderer.isSandstormBiome(biomegenbase);
+                    if (isChristmas) {
+                        ashy = false;
+                        sandy = false;
+                    }
                     if (!rainy && !snowy && !ashy && !sandy) continue;
                     int k1 = world.getPrecipitationHeight(i1, l);
                     int l1 = l2 - b0;

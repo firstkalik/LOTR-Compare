@@ -188,11 +188,12 @@ implements LOTRAmbientCreature {
         if (this.timeUntilHiss <= 0) {
             List nearbyPlayers;
             double range;
-            if (this.getAttackTarget() == null && this.rand.nextInt(3) == 0 && !(nearbyPlayers = this.worldObj.selectEntitiesWithinAABB(EntityPlayer.class, this.boundingBox.expand(range = 8.0, range, range), LOTRMod.selectNonCreativePlayers())).isEmpty()) {
+            if (this.getAttackTarget() == null && this.rand.nextInt(3) == 0 && !(nearbyPlayers = this.worldObj.selectEntitiesWithinAABB(EntityPlayer.class, this.boundingBox.expand(8.0, range = 8.0, range), LOTRMod.selectNonCreativePlayers())).isEmpty()) {
                 EntityPlayer entityplayer = (EntityPlayer)nearbyPlayers.get(this.rand.nextInt(nearbyPlayers.size()));
                 this.getNavigator().clearPathEntity();
                 float hissLook = (float)Math.toDegrees(Math.atan2(entityplayer.posZ - this.posZ, entityplayer.posX - this.posX));
-                this.rotationYaw = this.rotationYawHead = (hissLook -= 90.0f);
+                this.rotationYawHead = hissLook -= 90.0f;
+                this.rotationYaw = hissLook;
                 this.worldObj.setEntityState((Entity)this, (byte)21);
                 this.playSound("lotr:swan.hiss", this.getSoundVolume(), this.getSoundPitch());
                 this.timeUntilHiss = 80 + this.rand.nextInt(80);
@@ -229,12 +230,11 @@ implements LOTRAmbientCreature {
     }
 
     public boolean attackEntityAsMob(Entity entity) {
-        boolean flag;
         float f = (float)this.getEntityAttribute(SharedMonsterAttributes.attackDamage).getAttributeValue();
         if (wreckBalrogs && entity instanceof LOTREntityBalrog) {
             f *= 50.0f;
         }
-        if (flag = entity.attackEntityFrom(DamageSource.causeMobDamage((EntityLivingBase)this), f)) {
+        if (entity.attackEntityFrom(DamageSource.causeMobDamage((EntityLivingBase)this), f)) {
             this.worldObj.setEntityState((Entity)this, (byte)20);
             if (wreckBalrogs && entity instanceof LOTREntityBalrog) {
                 entity.addVelocity((double)(-MathHelper.sin((float)(this.rotationYaw * 3.1415927f / 180.0f)) * 2.0f), 0.2, (double)(MathHelper.cos((float)(this.rotationYaw * 3.1415927f / 180.0f)) * 2.0f));
@@ -246,12 +246,11 @@ implements LOTRAmbientCreature {
     }
 
     public boolean attackEntityFrom(DamageSource damagesource, float f) {
-        boolean flag;
         Entity entity = damagesource.getEntity();
         if (wreckBalrogs && entity instanceof LOTREntityBalrog) {
             f /= 20.0f;
         }
-        if (flag = super.attackEntityFrom(damagesource, f)) {
+        if (super.attackEntityFrom(damagesource, f)) {
             if (wreckBalrogs && entity instanceof LOTREntityBalrog) {
                 this.setFire(0);
             }

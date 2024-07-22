@@ -59,7 +59,6 @@ extends LOTRModelHuman {
     @Override
     public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
         ItemStack heldItem;
-        EntityLivingBase living;
         float tick = LOTRTickHandlerClient.renderTick;
         this.setRotationAngles(f, f1, f2, f3, f4, f5, entity);
         float headRotateY = f3;
@@ -74,7 +73,7 @@ extends LOTRModelHuman {
         Minecraft.getMinecraft().getTextureManager().bindTexture(TextureMap.locationBlocksTexture);
         World world = entity == null ? LOTRMod.proxy.getClientWorld() : entity.worldObj;
         LOTRRenderBlocks.renderEntityPlate((IBlockAccess)world, 0, 0, 0, this.plateBlock, this.blockRenderer);
-        if (entity instanceof EntityLivingBase && (heldItem = (living = (EntityLivingBase)entity).getHeldItem()) != null && LOTRTileEntityPlate.isValidFoodItem(heldItem)) {
+        if (entity instanceof EntityLivingBase && (heldItem = ((EntityLivingBase)entity).getHeldItem()) != null && LOTRTileEntityPlate.isValidFoodItem(heldItem)) {
             ItemStack heldItemMinusOne = heldItem.copy();
             --heldItemMinusOne.stackSize;
             if (heldItemMinusOne.stackSize > 0) {

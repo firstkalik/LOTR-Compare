@@ -38,7 +38,7 @@ public class LOTREntityRangerIthilien
 extends LOTREntityRanger {
     public LOTREntityRangerIthilien(World world) {
         super(world);
-        this.npcCape = LOTRCapes.RANGER_ITHILIEN;
+        this.npcCape = LOTRCapes.RANGER_ITHILIEN.capeTexture;
     }
 
     @Override

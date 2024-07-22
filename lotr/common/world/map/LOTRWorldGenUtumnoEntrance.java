@@ -21,8 +21,8 @@ extends LOTRWorldGenStructureBase2 {
 
     @Override
     public boolean generateWithSetRotation(World world, Random random, int i, int j, int k, int rotation) {
-        int j2;
         int j1;
+        int j2;
         rotation = 2;
         this.setOriginAndRotation(world, i, j, k, rotation, 0);
         this.originY = 0;
@@ -76,7 +76,7 @@ extends LOTRWorldGenStructureBase2 {
                     j2 = j1 - entranceY;
                     int k2 = k1 - entranceZ;
                     float dist = i2 * i2 + j2 * j2 + k2 * k2;
-                    if (!(dist < (float)(entranceSize * entranceSize)) && (!(dist < (float)(entranceSizeExtra * entranceSizeExtra)) || random.nextInt(6) != 0)) continue;
+                    if (dist >= (float)(entranceSize * entranceSize) && (dist >= (float)(entranceSizeExtra * entranceSizeExtra) || random.nextInt(6) != 0)) continue;
                     this.setAir(world, i1, j1, k1);
                 }
             }

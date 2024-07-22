@@ -60,8 +60,8 @@ extends LOTRBiomeGenShire {
     @Override
     public void decorate(World world, Random random, int i, int k) {
         int k1;
-        int i1;
         int l;
+        int i1;
         super.decorate(world, random, i, k);
         if (random.nextInt(8) == 0) {
             for (l = 0; l < 4; ++l) {

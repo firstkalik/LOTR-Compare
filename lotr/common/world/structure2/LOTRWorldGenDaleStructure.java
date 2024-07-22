@@ -41,7 +41,6 @@ extends LOTRWorldGenStructureBase2 {
     protected Block woodBeamBlock;
     protected int woodBeamMeta;
     protected Block doorBlock;
-    protected Block trapdoorBlock;
     protected Block roofBlock;
     protected int roofMeta;
     protected Block roofSlabBlock;
@@ -82,7 +81,6 @@ extends LOTRWorldGenStructureBase2 {
             this.woodBeamBlock = LOTRMod.woodBeamV1;
             this.woodBeamMeta = 0;
             this.doorBlock = LOTRMod.doorSpruce;
-            this.trapdoorBlock = LOTRMod.trapdoorSpruce;
         } else if (randomWood == 1) {
             this.plankBlock = LOTRMod.planks2;
             this.plankMeta = 4;
@@ -97,7 +95,6 @@ extends LOTRWorldGenStructureBase2 {
             this.woodBeamBlock = LOTRMod.woodBeam5;
             this.woodBeamMeta = 0;
             this.doorBlock = LOTRMod.doorPine;
-            this.trapdoorBlock = LOTRMod.trapdoorPine;
         } else if (randomWood == 2) {
             this.plankBlock = LOTRMod.planks2;
             this.plankMeta = 3;
@@ -112,7 +109,6 @@ extends LOTRWorldGenStructureBase2 {
             this.woodBeamBlock = LOTRMod.woodBeam4;
             this.woodBeamMeta = 3;
             this.doorBlock = LOTRMod.doorFir;
-            this.trapdoorBlock = LOTRMod.trapdoorFir;
         }
         int randomClay = random.nextInt(4);
         if (randomClay == 0) {
@@ -140,7 +136,7 @@ extends LOTRWorldGenStructureBase2 {
             this.roofSlabMeta = 3;
             this.roofStairBlock = LOTRMod.stairsClayTileDyedBlue;
         }
-        this.barsBlock = random.nextInt(3) == 0 ? Blocks.iron_bars : LOTRMod.bronzeBars;
+        Block block = this.barsBlock = random.nextInt(3) == 0 ? Blocks.iron_bars : LOTRMod.bronzeBars;
         this.plateBlock = random.nextBoolean() ? (random.nextBoolean() ? LOTRMod.plateBlock : LOTRMod.ceramicPlateBlock) : LOTRMod.woodPlateBlock;
     }
 }

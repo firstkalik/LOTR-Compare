@@ -48,11 +48,7 @@ extends LOTRGenLayer {
                     boolean adjRiver = false;
                     for (int i2 = -2; i2 <= 1; ++i2) {
                         for (int k2 = -2; k2 <= 1; ++k2) {
-                            int adjRiverCode;
-                            if (i2 == -2 || k2 == -2 || i2 == 1 || k2 == 1) {
-                                // empty if block
-                            }
-                            if ((adjRiverCode = mapRivers[i1 + 2 + i2 + (k1 + 2 + k2) * (xSize + 3)]) != 2) continue;
+                            if (mapRivers[i1 + 2 + i2 + (k1 + 2 + k2) * (xSize + 3)] != 2) continue;
                             adjRiver = true;
                         }
                     }

@@ -89,10 +89,8 @@ extends LOTREntityNPC {
     private float soloSpinSpeed;
     private float soloSpin;
     private float prevSoloSpin;
-    private static final int bowTickMax = 40;
     private float bowAmount;
     private float prevBowAmount;
-    private static final float bowStep = 0.2f;
 
     public LOTREntityElf(World world) {
         super(world);
@@ -176,9 +174,8 @@ extends LOTREntityNPC {
     }
 
     private boolean getJazzFlag(int i) {
-        int pow2;
         byte b = this.dataWatcher.getWatchableObjectByte(22);
-        return (b & (pow2 = 1 << i)) != 0;
+        return (b & 1 << i) != 0;
     }
 
     private void setJazzFlag(int i, boolean flag) {
@@ -274,7 +271,8 @@ extends LOTREntityNPC {
                     this.getNavigator().clearPathEntity();
                     bowingPlayer = (EntityPlayer)players.get(0);
                     float bowLook = (float)Math.toDegrees(Math.atan2(bowingPlayer.posZ - this.posZ, bowingPlayer.posX - this.posX));
-                    this.rotationYaw = this.rotationYawHead = (bowLook -= 90.0f);
+                    this.rotationYawHead = bowLook -= 90.0f;
+                    this.rotationYaw = bowLook;
                 }
             }
         } else {

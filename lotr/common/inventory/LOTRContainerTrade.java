@@ -75,8 +75,8 @@ extends Container {
     }
 
     public void updateAllTradeSlots() {
-        int i;
         LOTRTradeEntry trade;
+        int i;
         LOTRTradeEntry[] buyTrades = this.theTraderNPC.traderNPCInfo.getBuyTrades();
         LOTRTradeEntry[] sellTrades = this.theTraderNPC.traderNPCInfo.getSellTrades();
         if (buyTrades != null) {

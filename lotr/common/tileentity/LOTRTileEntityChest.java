@@ -151,9 +151,8 @@ implements IInventory {
             float range = 5.0f;
             List players = this.worldObj.getEntitiesWithinAABB(EntityPlayer.class, AxisAlignedBB.getBoundingBox((double)((float)this.xCoord - range), (double)((float)this.yCoord - range), (double)((float)this.zCoord - range), (double)((float)(this.xCoord + 1) + range), (double)((float)(this.yCoord + 1) + range), (double)((float)(this.zCoord + 1) + range)));
             for (Object obj : players) {
-                IInventory iinventory;
                 EntityPlayer entityplayer = (EntityPlayer)obj;
-                if (!(entityplayer.openContainer instanceof ContainerChest) || (iinventory = ((ContainerChest)entityplayer.openContainer).getLowerChestInventory()) != this) continue;
+                if (!(entityplayer.openContainer instanceof ContainerChest) || ((ContainerChest)entityplayer.openContainer).getLowerChestInventory() != this) continue;
                 ++this.numPlayersUsing;
             }
         }
@@ -163,7 +162,7 @@ implements IInventory {
         if (this.numPlayersUsing == 0 && this.lidAngle > 0.0f || this.numPlayersUsing > 0 && this.lidAngle < 1.0f) {
             float pre = this.lidAngle;
             float incr = 0.1f;
-            this.lidAngle = this.numPlayersUsing > 0 ? (this.lidAngle += incr) : (this.lidAngle -= incr);
+            this.lidAngle = this.numPlayersUsing > 0 ? (this.lidAngle = this.lidAngle + incr) : (this.lidAngle = this.lidAngle - incr);
             this.lidAngle = Math.min(this.lidAngle, 1.0f);
             this.lidAngle = Math.max(this.lidAngle, 0.0f);
             float thr = 0.5f;

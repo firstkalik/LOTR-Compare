@@ -21,10 +21,10 @@ extends LOTRWorldGenEasterlingStructure {
 
     @Override
     public boolean generateWithSetRotation(World world, Random random, int i, int j, int k, int rotation) {
-        int k1;
-        int k12;
         int i1;
         int j1;
+        int k12;
+        int k1;
         this.setOriginAndRotation(world, i, j, k, rotation, 6);
         this.setupRandomBlocks(random);
         if (this.restrictions) {
@@ -39,8 +39,8 @@ extends LOTRWorldGenEasterlingStructure {
         for (i1 = -6; i1 <= 6; ++i1) {
             for (k12 = -5; k12 <= 5; ++k12) {
                 int j13;
-                int i2 = Math.abs(i1);
-                int k2 = Math.abs(k12);
+                Math.abs(i1);
+                Math.abs(k12);
                 for (j13 = 1; !(j13 < 0 && this.isOpaque(world, i1, j13, k12) || this.getY(j13) < 0); --j13) {
                     this.setBlockAndMetadata(world, i1, j13, k12, LOTRMod.rock, 4);
                     this.setGrassToDirt(world, i1, j13 - 1, k12);

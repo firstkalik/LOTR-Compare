@@ -51,8 +51,8 @@ extends Teleporter {
 
     public void placeInPortal(Entity entity, double d, double d1, double d2, float f) {
         int j;
-        int i;
         int k;
+        int i;
         block4: {
             i = 0;
             j = 256;

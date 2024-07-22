@@ -15,7 +15,6 @@ import lotr.common.entity.npc.LOTREntityHobbit;
 import lotr.common.entity.npc.LOTRNames;
 import lotr.common.world.structure.LOTRChestContents;
 import lotr.common.world.structure2.LOTRWorldGenBreeHouse;
-import lotr.common.world.structure2.LOTRWorldGenBreeStructure;
 import lotr.common.world.structure2.LOTRWorldGenHobbitBurrow;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;

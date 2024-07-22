@@ -21,11 +21,8 @@ public class LOTRAlignmentTicker {
     private float newAlign;
     private int moveTick = 0;
     private int prevMoveTick = 0;
-    private static final int moveTime = 20;
     public int flashTick;
-    private static final int flashTime = 30;
     public int numericalTick;
-    private static final int numericalTime = 200;
 
     public static LOTRAlignmentTicker forFaction(LOTRFaction fac) {
         LOTRAlignmentTicker ticker = allFactionTickers.get((Object)fac);

@@ -6,7 +6,6 @@
  */
 package lotr.common.entity;
 
-import lotr.common.LOTRMod;
 import lotr.common.entity.LOTRNPCSelectByFaction;
 import lotr.common.entity.npc.LOTREntityNPC;
 import lotr.common.fac.LOTRFaction;
@@ -20,17 +19,11 @@ extends LOTRNPCSelectByFaction {
 
     @Override
     public boolean isEntityApplicable(Entity entity) {
-        LOTREntityNPC npc;
         boolean flag = super.isEntityApplicable(entity);
-        if (flag && entity instanceof LOTREntityNPC && !(npc = (LOTREntityNPC)entity).generatesControlZone()) {
+        if (flag && entity instanceof LOTREntityNPC && !((LOTREntityNPC)entity).generatesControlZone()) {
             return false;
         }
         return flag;
-    }
-
-    @Override
-    protected boolean matchFaction(Entity entity) {
-        return LOTRMod.getNPCFaction(entity, true) == this.faction;
     }
 }
 

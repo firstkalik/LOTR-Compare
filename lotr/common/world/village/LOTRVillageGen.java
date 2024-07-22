@@ -19,6 +19,8 @@ package lotr.common.world.village;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import lotr.common.LOTRConfig;
+import lotr.common.LOTRMod;
 import lotr.common.util.CentredSquareArray;
 import lotr.common.world.LOTRWorldChunkManager;
 import lotr.common.world.biome.LOTRBiome;
@@ -95,15 +97,17 @@ public abstract class LOTRVillageGen {
         if (cacheLocation != null) {
             return cacheLocation;
         }
-        for (LocationInfo loc : this.fixedLocations) {
-            int locChunkX = loc.posX >> 4;
-            int locChunkZ = loc.posZ >> 4;
-            if (chunkX == locChunkX && chunkZ == locChunkZ) {
-                return cache.markResult(chunkX, chunkZ, loc);
+        if (LOTRVillageGen.hasFixedSettlements(world)) {
+            for (LocationInfo loc : this.fixedLocations) {
+                int locChunkX = loc.posX >> 4;
+                int locChunkZ = loc.posZ >> 4;
+                if (chunkX == locChunkX && chunkZ == locChunkZ) {
+                    return cache.markResult(chunkX, chunkZ, loc);
+                }
+                int locCheckSize = Math.max(this.villageChunkRadius, this.fixedVillageChunkRadius);
+                if (Math.abs(chunkX - locChunkX) > locCheckSize || Math.abs(chunkZ - locChunkZ) > locCheckSize) continue;
+                return cache.markResult(chunkX, chunkZ, LocationInfo.NONE_HERE);
             }
-            int locCheckSize = Math.max(this.villageChunkRadius, this.fixedVillageChunkRadius);
-            if (Math.abs(chunkX - locChunkX) > locCheckSize || Math.abs(chunkZ - locChunkZ) > locCheckSize) continue;
-            return cache.markResult(chunkX, chunkZ, LocationInfo.NONE_HERE);
         }
         int i2 = MathHelper.floor_double((double)((double)chunkX / (double)this.gridScale));
         int k2 = MathHelper.floor_double((double)((double)chunkZ / (double)this.gridScale));
@@ -140,8 +144,8 @@ public abstract class LOTRVillageGen {
         int checkRange = Math.max(this.villageChunkRadius, this.fixedVillageChunkRadius);
         for (int i = chunkX - checkRange; i <= chunkX + checkRange; ++i) {
             for (int k = chunkZ - checkRange; k <= chunkZ + checkRange; ++k) {
-                int centreZ;
                 int centreX;
+                int centreZ;
                 LocationInfo loc = this.isVillageCentre(world, i, k);
                 if (!loc.isPresent()) continue;
                 if (loc.isFixedLocation()) {
@@ -166,6 +170,9 @@ public abstract class LOTRVillageGen {
     }
 
     public boolean anyFixedVillagesAt(World world, int i, int k) {
+        if (!LOTRVillageGen.hasFixedSettlements(world)) {
+            return false;
+        }
         int checkRange = this.fixedVillageChunkRadius + 2;
         checkRange <<= 4;
         for (LocationInfo loc : this.fixedLocations) {
@@ -275,7 +282,6 @@ public abstract class LOTRVillageGen {
                 return j;
             }
             if (--j > 62) continue;
-            break;
         }
         return -1;
     }
@@ -289,6 +295,27 @@ public abstract class LOTRVillageGen {
                 int k2 = k - 8 + k1 * 16;
                 this.generateInstanceInChunk(instance, world, i2, k2);
             }
+        }
+    }
+
+    private static boolean hasFixedSettlements(World world) {
+        if (!LOTRConfig.generateFixedSettlements) {
+            return false;
+        }
+        return world.getWorldInfo().getTerrainType() != LOTRMod.worldTypeMiddleEarthClassic;
+    }
+
+    private static class StructureInfo {
+        public final LOTRWorldGenStructureBase2 structure;
+        public final int posX;
+        public final int posZ;
+        public final int rotation;
+
+        public StructureInfo(LOTRWorldGenStructureBase2 s, int x, int z, int r) {
+            this.structure = s;
+            this.posX = x;
+            this.posZ = z;
+            this.rotation = r;
         }
     }
 
@@ -424,20 +451,6 @@ public abstract class LOTRVillageGen {
 
         private int getStructureRotation(int r) {
             return (r + (this.rotationMode + 2)) % 4;
-        }
-    }
-
-    private static class StructureInfo {
-        public final LOTRWorldGenStructureBase2 structure;
-        public final int posX;
-        public final int posZ;
-        public final int rotation;
-
-        public StructureInfo(LOTRWorldGenStructureBase2 s, int x, int z, int r) {
-            this.structure = s;
-            this.posX = x;
-            this.posZ = z;
-            this.rotation = r;
         }
     }
 

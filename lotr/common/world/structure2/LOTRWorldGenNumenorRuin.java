@@ -27,8 +27,8 @@ extends LOTRWorldGenStructureBase2 {
 
     @Override
     public boolean generateWithSetRotation(World world, Random random, int i, int j, int k, int rotation) {
-        int k1;
         int i1;
+        int k1;
         int width = 3 + random.nextInt(3);
         this.setOriginAndRotation(world, i, j, k, rotation, width + 1);
         for (i1 = -width; i1 <= width; ++i1) {

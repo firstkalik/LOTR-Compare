@@ -70,7 +70,7 @@ extends EntityAIBase {
                 }
                 this.theMount.increaseNPCTemper(5);
             }
-            this.theMount.riddenByEntity.mountEntity((Entity)null);
+            this.theMount.riddenByEntity.mountEntity(null);
             this.theMount.riddenByEntity = null;
             this.theMount.angerNPC();
             this.theMount.spawnSmokes();

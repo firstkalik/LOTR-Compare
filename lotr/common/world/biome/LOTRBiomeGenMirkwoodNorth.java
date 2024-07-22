@@ -54,6 +54,7 @@ extends LOTRBiomeGenMirkwood {
         this.setBanditChance(LOTREventSpawner.EventChance.BANDIT_RARE);
         this.invasionSpawns.addInvasion(LOTRInvasions.WOOD_ELF, LOTREventSpawner.EventChance.UNCOMMON);
         this.invasionSpawns.addInvasion(LOTRInvasions.DOL_GULDUR, LOTREventSpawner.EventChance.UNCOMMON);
+        this.invasionSpawns.addInvasion(LOTRInvasions.DOL_GULDUR_URUK, LOTREventSpawner.EventChance.COMMON);
     }
 
     @Override

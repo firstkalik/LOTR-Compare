@@ -142,8 +142,8 @@ extends Item {
             }
             if (!world.isRemote) {
                 List effects = this.getDraughtInfo((ItemStack)itemstack).effects;
-                for (int i = 0; i < effects.size(); ++i) {
-                    PotionEffect effect = (PotionEffect)effects.get(i);
+                for (Object effect2 : effects) {
+                    PotionEffect effect = (PotionEffect)effect2;
                     entityplayer.addPotionEffect(new PotionEffect(effect.getPotionID(), effect.getDuration()));
                 }
             }

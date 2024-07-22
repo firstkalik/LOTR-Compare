@@ -53,7 +53,6 @@ public class LOTRKeyHandler {
     public static KeyBinding keyBindingAlignmentGroupNext = new KeyBinding("Alignment Group Next", 208, "LOTR");
     private static Minecraft mc = Minecraft.getMinecraft();
     private static int alignmentChangeTick;
-    private static final int alignmentChangeTime = 2;
 
     public LOTRKeyHandler() {
         FMLCommonHandler.instance().bus().register((Object)this);

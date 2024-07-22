@@ -116,8 +116,8 @@ extends LOTREntityGaladhrimElf {
     }
 
     @Override
-    public void setAttackTarget(EntityLivingBase target, boolean speak) {
-        super.setAttackTarget(target, speak);
+    public void setAttackTarget(EntityLivingBase target) {
+        super.setAttackTarget(target);
         if (target != null && target != this.prevElfTarget) {
             this.prevElfTarget = target;
             if (!this.worldObj.isRemote && !this.isElfSneaking()) {

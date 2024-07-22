@@ -20,9 +20,6 @@ public class LOTRPlateFallingInfo
 implements IExtendedEntityProperties {
     private static final String propID = "lotr_plateFall";
     private Entity theEntity;
-    private static final int tickDelayFactor = 1;
-    private static final int stackSize = 64;
-    private static final int numFallers = 65;
     private int updateTick;
     private float[] posXTicksAgo = new float[65];
     private boolean[] isFalling = new boolean[65];

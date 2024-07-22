@@ -112,12 +112,11 @@ extends Item {
     }
 
     public static void applyBlowgunModifiers(LOTREntityDart dart, ItemStack itemstack) {
-        int fireAspect;
         int punch = LOTREnchantmentHelper.calcRangedKnockback(itemstack);
         if (punch > 0) {
             dart.knockbackStrength = punch;
         }
-        if ((fireAspect = EnchantmentHelper.getEnchantmentLevel((int)Enchantment.flame.effectId, (ItemStack)itemstack) + LOTREnchantmentHelper.calcFireAspect(itemstack)) > 0) {
+        if (EnchantmentHelper.getEnchantmentLevel((int)Enchantment.flame.effectId, (ItemStack)itemstack) + LOTREnchantmentHelper.calcFireAspect(itemstack) > 0) {
             dart.setFire(100);
         }
         for (LOTREnchantment ench : LOTREnchantment.allEnchantments) {

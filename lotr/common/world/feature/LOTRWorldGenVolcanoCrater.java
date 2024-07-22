@@ -28,7 +28,7 @@ extends WorldGenerator {
     private int heightCheck = 8;
 
     public boolean generate(World world, Random random, int i, int j, int k) {
-        BiomeGenBase biome = world.getBiomeGenForCoords(i, k);
+        world.getBiomeGenForCoords(i, k);
         if (!LOTRWorldGenStructureBase2.isSurfaceStatic(world, i, j - 1, k) && world.getBlock(i, j - 1, k) != Blocks.stone) {
             return false;
         }
@@ -60,13 +60,12 @@ extends WorldGenerator {
             int sphereWidth = MathHelper.getRandomIntegerInRange((Random)random, (int)this.minWidth, (int)this.maxWidth);
             for (int i1 = posX - sphereWidth; i1 <= posX + sphereWidth; ++i1) {
                 for (int k1 = posZ - sphereWidth; k1 <= posZ + sphereWidth; ++k1) {
-                    int jTop;
                     int j1;
                     int i2 = i1 - posX;
                     int k2 = k1 - posZ;
                     int xzDistSq = i2 * i2 + k2 * k2;
                     if (xzDistSq >= sphereWidth * sphereWidth && (xzDistSq >= (sphereWidth + 1) * (sphereWidth + 1) || random.nextInt(3) != 0)) continue;
-                    for (int j2 = jTop = world.getTopSolidOrLiquidBlock(i1, k1); j2 > posY; --j2) {
+                    for (int j2 = world.getTopSolidOrLiquidBlock(i1, k1); j2 > posY; --j2) {
                         this.setBlockAndNotifyAdequately(world, i1, j2, k1, Blocks.air, 0);
                     }
                     int depthHere = (int)(((double)sphereWidth - Math.sqrt(xzDistSq)) * 0.7) + random.nextInt(2);

@@ -33,6 +33,7 @@
  *  net.minecraft.block.BlockEnderChest
  *  net.minecraft.block.BlockFenceGate
  *  net.minecraft.block.BlockFire
+ *  net.minecraft.block.BlockJukebox
  *  net.minecraft.block.BlockLever
  *  net.minecraft.block.BlockLog
  *  net.minecraft.block.BlockTallGrass
@@ -41,6 +42,7 @@
  *  net.minecraft.block.BlockWorkbench
  *  net.minecraft.block.IGrowable
  *  net.minecraft.block.material.Material
+ *  net.minecraft.command.ICommandSender
  *  net.minecraft.command.IEntitySelector
  *  net.minecraft.entity.Entity
  *  net.minecraft.entity.EntityCreature
@@ -60,7 +62,9 @@
  *  net.minecraft.entity.item.EntityTNTPrimed
  *  net.minecraft.entity.item.EntityXPOrb
  *  net.minecraft.entity.monster.EntityMob
+ *  net.minecraft.entity.passive.EntityChicken
  *  net.minecraft.entity.passive.EntityCow
+ *  net.minecraft.entity.passive.EntityPig
  *  net.minecraft.entity.passive.EntitySheep
  *  net.minecraft.entity.passive.EntityVillager
  *  net.minecraft.entity.passive.EntityWaterMob
@@ -111,6 +115,7 @@
  *  net.minecraft.util.MathHelper
  *  net.minecraft.util.MovingObjectPosition
  *  net.minecraft.util.MovingObjectPosition$MovingObjectType
+ *  net.minecraft.util.RegistryNamespaced
  *  net.minecraft.world.ChunkCoordIntPair
  *  net.minecraft.world.ChunkPosition
  *  net.minecraft.world.EnumSkyBlock
@@ -148,6 +153,7 @@
  *  net.minecraftforge.event.entity.player.EntityInteractEvent
  *  net.minecraftforge.event.entity.player.EntityItemPickupEvent
  *  net.minecraftforge.event.entity.player.FillBucketEvent
+ *  net.minecraftforge.event.entity.player.ItemTooltipEvent
  *  net.minecraftforge.event.entity.player.PlayerEvent
  *  net.minecraftforge.event.entity.player.PlayerEvent$BreakSpeed
  *  net.minecraftforge.event.entity.player.PlayerEvent$HarvestCheck
@@ -175,6 +181,7 @@
  *  net.minecraftforge.event.world.WorldEvent$Save
  *  net.minecraftforge.event.world.WorldEvent$Unload
  *  org.apache.commons.lang3.StringUtils
+ *  org.lwjgl.input.Keyboard
  */
 package lotr.common;
 
@@ -208,10 +215,13 @@ import lotr.common.LOTRGuiMessageTypes;
 import lotr.common.LOTRLevelData;
 import lotr.common.LOTRMod;
 import lotr.common.LOTRPlayerData;
+import lotr.common.LOTRPotions;
 import lotr.common.LOTRTime;
 import lotr.common.LOTRTitle;
+import lotr.common.block.LOTRBlockArmorStand;
 import lotr.common.block.LOTRBlockBarrel;
 import lotr.common.block.LOTRBlockBookshelfStorage;
+import lotr.common.block.LOTRBlockCommandTable;
 import lotr.common.block.LOTRBlockCraftingTable;
 import lotr.common.block.LOTRBlockEntJar;
 import lotr.common.block.LOTRBlockFlowerPot;
@@ -238,10 +248,18 @@ import lotr.common.entity.ai.LOTREntityAINearestAttackableTargetBasic;
 import lotr.common.entity.animal.LOTREntityButterfly;
 import lotr.common.entity.animal.LOTREntityHorse;
 import lotr.common.entity.animal.LOTREntityZebra;
+import lotr.common.entity.item.LOTREntityArrowAvari;
+import lotr.common.entity.item.LOTREntityArrowExplosion;
+import lotr.common.entity.item.LOTREntityArrowHunger;
+import lotr.common.entity.item.LOTREntityArrowMorgul;
 import lotr.common.entity.item.LOTREntityArrowPoisoned;
+import lotr.common.entity.item.LOTREntityArrowSlow;
+import lotr.common.entity.item.LOTREntityArrowWeak;
 import lotr.common.entity.item.LOTREntityBanner;
+import lotr.common.entity.npc.INotBleeding;
 import lotr.common.entity.npc.LOTREntityDorwinionGuard;
 import lotr.common.entity.npc.LOTREntityEnt;
+import lotr.common.entity.npc.LOTREntityEreborDwarfBerserk;
 import lotr.common.entity.npc.LOTREntityGaladhrimWarden;
 import lotr.common.entity.npc.LOTREntityHobbitBounder;
 import lotr.common.entity.npc.LOTREntityHuornBase;
@@ -273,6 +291,7 @@ import lotr.common.fac.LOTRFactionBounties;
 import lotr.common.fac.LOTRFactionData;
 import lotr.common.fac.LOTRFactionRelations;
 import lotr.common.inventory.LOTRContainerCraftingTable;
+import lotr.common.item.LOTREntityArrowFire;
 import lotr.common.item.LOTRItemBow;
 import lotr.common.item.LOTRItemBrandingIron;
 import lotr.common.item.LOTRItemCrossbow;
@@ -304,13 +323,20 @@ import lotr.common.world.LOTRWorldProvider;
 import lotr.common.world.LOTRWorldProviderUtumno;
 import lotr.common.world.LOTRWorldTypeMiddleEarth;
 import lotr.common.world.biome.LOTRBiome;
+import lotr.common.world.biome.LOTRBiomeGenAngband;
 import lotr.common.world.biome.LOTRBiomeGenDeadMarshes;
+import lotr.common.world.biome.LOTRBiomeGenFallForodwaith;
 import lotr.common.world.biome.LOTRBiomeGenFangorn;
 import lotr.common.world.biome.LOTRBiomeGenForodwaith;
+import lotr.common.world.biome.LOTRBiomeGenHarhudorForest;
 import lotr.common.world.biome.LOTRBiomeGenMirkwoodCorrupted;
 import lotr.common.world.biome.LOTRBiomeGenMorgulVale;
 import lotr.common.world.biome.LOTRBiomeGenNearHarad;
+import lotr.common.world.biome.LOTRBiomeGenRedMountainsIronfist;
 import lotr.common.world.biome.LOTRBiomeGenShire;
+import lotr.common.world.biome.LOTRBiomeGenTundra3;
+import lotr.common.world.biome.LOTRBiomeGenTundra4;
+import lotr.common.world.biome.LOTRBiomeSunLands;
 import lotr.common.world.biome.variant.LOTRBiomeVariantStorage;
 import lotr.common.world.structure2.LOTRStructureTimelapse;
 import net.minecraft.block.Block;
@@ -323,6 +349,7 @@ import net.minecraft.block.BlockDoor;
 import net.minecraft.block.BlockEnderChest;
 import net.minecraft.block.BlockFenceGate;
 import net.minecraft.block.BlockFire;
+import net.minecraft.block.BlockJukebox;
 import net.minecraft.block.BlockLever;
 import net.minecraft.block.BlockLog;
 import net.minecraft.block.BlockTallGrass;
@@ -331,6 +358,7 @@ import net.minecraft.block.BlockWeb;
 import net.minecraft.block.BlockWorkbench;
 import net.minecraft.block.IGrowable;
 import net.minecraft.block.material.Material;
+import net.minecraft.command.ICommandSender;
 import net.minecraft.command.IEntitySelector;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
@@ -350,7 +378,9 @@ import net.minecraft.entity.item.EntityMinecartTNT;
 import net.minecraft.entity.item.EntityTNTPrimed;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.monster.EntityMob;
+import net.minecraft.entity.passive.EntityChicken;
 import net.minecraft.entity.passive.EntityCow;
+import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.passive.EntityWaterMob;
@@ -398,6 +428,7 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.RegistryNamespaced;
 import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.EnumSkyBlock;
@@ -433,6 +464,7 @@ import net.minecraftforge.event.entity.player.BonemealEvent;
 import net.minecraftforge.event.entity.player.EntityInteractEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.event.entity.player.FillBucketEvent;
+import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.entity.player.PlayerUseItemEvent;
@@ -444,6 +476,7 @@ import net.minecraftforge.event.world.ChunkWatchEvent;
 import net.minecraftforge.event.world.ExplosionEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import org.apache.commons.lang3.StringUtils;
+import org.lwjgl.input.Keyboard;
 
 public class LOTREventHandler
 implements IFuelHandler {
@@ -469,7 +502,6 @@ implements IFuelHandler {
     public void onCrafting(PlayerEvent.ItemCraftedEvent event) {
         EntityPlayer entityplayer = event.player;
         ItemStack itemstack = event.crafting;
-        IInventory craftingInventory = event.craftMatrix;
         if (!entityplayer.worldObj.isRemote) {
             if (entityplayer.openContainer instanceof LOTRContainerCraftingTable.Elven) {
                 LOTRLevelData.getData(entityplayer).addAchievement(LOTRAchievement.useElvenTable);
@@ -552,6 +584,27 @@ implements IFuelHandler {
             if (entityplayer.openContainer instanceof LOTRContainerCraftingTable.Bree) {
                 LOTRLevelData.getData(entityplayer).addAchievement(LOTRAchievement.useBreeTable);
             }
+            if (entityplayer.openContainer instanceof LOTRContainerCraftingTable.Angband) {
+                LOTRLevelData.getData(entityplayer).addAchievement(LOTRAchievement.useAngbandTable);
+            }
+            if (entityplayer.openContainer instanceof LOTRContainerCraftingTable.Erebor) {
+                LOTRLevelData.getData(entityplayer).addAchievement(LOTRAchievement.useEreborTable);
+            }
+            if (entityplayer.openContainer instanceof LOTRContainerCraftingTable.WickedDwarf) {
+                LOTRLevelData.getData(entityplayer).addAchievement(LOTRAchievement.useWickedDwarfTable);
+            }
+            if (entityplayer.openContainer instanceof LOTRContainerCraftingTable.Wind) {
+                LOTRLevelData.getData(entityplayer).addAchievement(LOTRAchievement.useWindTable);
+            }
+            if (entityplayer.openContainer instanceof LOTRContainerCraftingTable.Red) {
+                LOTRLevelData.getData(entityplayer).addAchievement(LOTRAchievement.useRedDwarfTable);
+            }
+            if (entityplayer.openContainer instanceof LOTRContainerCraftingTable.Avari) {
+                LOTRLevelData.getData(entityplayer).addAchievement(LOTRAchievement.useAvariTable);
+            }
+            if (entityplayer.openContainer instanceof LOTRContainerCraftingTable.DarkElf) {
+                LOTRLevelData.getData(entityplayer).addAchievement(LOTRAchievement.useWickedElfTable);
+            }
             if (itemstack.getItem() == Items.saddle) {
                 LOTRLevelData.getData(entityplayer).addAchievement(LOTRAchievement.craftSaddle);
             }
@@ -575,6 +628,21 @@ implements IFuelHandler {
             }
             if (itemstack.getItem() == LOTRMod.utumnoKey) {
                 LOTRLevelData.getData(entityplayer).addAchievement(LOTRAchievement.craftUtumnoKey);
+            }
+            if (itemstack.getItem() == LOTRMod.goldRing) {
+                LOTRLevelData.getData(entityplayer).addAchievement(LOTRAchievement.craftgoldRing);
+            }
+            if (itemstack.getItem() == LOTRMod.ironPan) {
+                LOTRLevelData.getData(entityplayer).addAchievement(LOTRAchievement.craftironPan);
+            }
+            if (itemstack.getItem() == LOTRMod.mithrilPan) {
+                LOTRLevelData.getData(entityplayer).addAchievement(LOTRAchievement.craftironPan);
+            }
+            if (itemstack.getItem() == LOTRMod.ironPan) {
+                LOTRLevelData.getData(entityplayer).addAchievement(LOTRAchievement.craftironPan);
+            }
+            if (itemstack.getItem() == LOTRMod.mithril) {
+                LOTRLevelData.getData(entityplayer).addAchievement(LOTRAchievement.craftMithril);
             }
         }
     }
@@ -608,6 +676,12 @@ implements IFuelHandler {
             if (itemstack.getItem() == LOTRMod.blackUrukSteel) {
                 LOTRLevelData.getData(entityplayer).addAchievement(LOTRAchievement.smeltBlackUrukSteel);
             }
+            if (itemstack.getItem() == LOTRMod.mithrilNugget) {
+                LOTRLevelData.getData(entityplayer).addAchievement(LOTRAchievement.smeltMithril);
+            }
+            if (itemstack.getItem() == LOTRMod.mithril) {
+                LOTRLevelData.getData(entityplayer).addAchievement(LOTRAchievement.smeltMithril);
+            }
         }
     }
 
@@ -617,13 +691,19 @@ implements IFuelHandler {
             return 100;
         }
         if (item == LOTRMod.nauriteGem) {
-            return 600;
+            return 700;
+        }
+        if (item == LOTRMod.lavaCoal) {
+            return 4000;
         }
         if (item == Item.getItemFromBlock((Block)LOTRMod.blockOreStorage) && itemstack.getItemDamage() == 10) {
             return 6000;
         }
         if (item == LOTRMod.mallornStick) {
             return 100;
+        }
+        if (item == Items.lava_bucket) {
+            return 40000;
         }
         if (item instanceof ItemTool && ((ItemTool)item).func_150913_i() == LOTRMaterial.MALLORN.toToolMaterial()) {
             return 200;
@@ -661,6 +741,9 @@ implements IFuelHandler {
             LOTRDate.sendUpdatePacket(entityplayermp, false);
             LOTRFactionRelations.sendAllRelationsTo(entityplayermp);
             LOTRLevelData.getData((EntityPlayer)entityplayermp).send35AlignmentChoice(entityplayermp, world);
+            LOTRPlayerData pd = LOTRLevelData.getData((EntityPlayer)entityplayermp);
+            pd.send35AlignmentChoice(entityplayermp, world);
+            pd.updateFastTravelClockFromLastOnlineTime((ICommandSender)entityplayermp, world);
         }
     }
 
@@ -678,7 +761,11 @@ implements IFuelHandler {
     @SubscribeEvent
     public void onPlayerRespawn(PlayerEvent.PlayerRespawnEvent event) {
         EntityPlayer entityplayer = event.player;
+        entityplayer.addPotionEffect(new PotionEffect(6, 120, 0));
+        entityplayer.addPotionEffect(new PotionEffect(23, 120, 10));
+        LOTRLevelData.getData(entityplayer).addAchievement(LOTRAchievement.playerRespawn);
         World world = entityplayer.worldObj;
+        world.playSoundAtEntity((Entity)entityplayer, "lotr:item.pooff", 10.0f, 1.0f);
         if (!world.isRemote && entityplayer instanceof EntityPlayerMP && world instanceof WorldServer) {
             EntityPlayerMP entityplayermp = (EntityPlayerMP)entityplayer;
             WorldServer worldserver = (WorldServer)world;
@@ -686,12 +773,12 @@ implements IFuelHandler {
             int deathDimension = LOTRLevelData.getData((EntityPlayer)entityplayermp).getDeathDimension();
             if (deathDimension == LOTRDimension.MIDDLE_EARTH.dimensionID) {
                 if (LOTRConfig.middleEarthRespawning) {
-                    boolean hasBed;
                     double respawnThreshold;
+                    boolean hasBed;
                     ChunkCoordinates bedLocation = entityplayermp.getBedLocation(entityplayermp.dimension);
                     boolean bl = hasBed = bedLocation != null;
                     if (hasBed) {
-                        hasBed = EntityPlayerMP.verifyRespawnCoordinates((World)worldserver, (ChunkCoordinates)bedLocation, (boolean)entityplayermp.isSpawnForced(entityplayermp.dimension)) != null;
+                        hasBed = EntityPlayer.verifyRespawnCoordinates((World)worldserver, (ChunkCoordinates)bedLocation, (boolean)entityplayermp.isSpawnForced(entityplayermp.dimension)) != null;
                     }
                     ChunkCoordinates spawnLocation = hasBed ? bedLocation : worldserver.getSpawnPoint();
                     double d = respawnThreshold = hasBed ? (double)LOTRConfig.MERBedRespawnThreshold : (double)LOTRConfig.MERWorldRespawnThreshold;
@@ -718,8 +805,8 @@ implements IFuelHandler {
 
     @SubscribeEvent
     public void onBlockInteract(PlayerInteractEvent event) {
-        Block block;
         int meta;
+        Block block;
         EntityPlayer entityplayer = event.entityPlayer;
         World world = entityplayer.worldObj;
         ItemStack itemstack = entityplayer.inventory.getCurrentItem();
@@ -734,28 +821,38 @@ implements IFuelHandler {
             return;
         }
         if (event.action == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK) {
-            ItemStack plateItem;
             TileEntity tileentity;
-            int cauldronMeta;
             int logFacing;
             LOTRTileEntityPlate plate;
+            boolean mightBeAbleToAlterWorld;
+            ItemStack plateItem;
+            int cauldronMeta;
             block = world.getBlock(i, j, k);
             meta = world.getBlockMetadata(i, j, k);
             LOTRBannerProtection.Permission perm = LOTRBannerProtection.Permission.FULL;
-            if (block instanceof BlockDoor || block instanceof BlockTrapDoor || block instanceof BlockFenceGate || block instanceof LOTRBlockGate) {
-                perm = LOTRBannerProtection.Permission.DOORS;
-            } else if (block instanceof BlockWorkbench || block instanceof LOTRBlockCraftingTable || block instanceof BlockAnvil) {
-                perm = LOTRBannerProtection.Permission.TABLES;
-            } else if (world.getTileEntity(i, j, k) instanceof IInventory) {
-                perm = block instanceof LOTRBlockBarrel || block instanceof LOTRBlockKebabStand ? LOTRBannerProtection.Permission.FOOD : LOTRBannerProtection.Permission.CONTAINERS;
-            } else if (block instanceof BlockEnderChest || block instanceof LOTRBlockWeaponRack || block == Blocks.bookshelf) {
-                perm = LOTRBannerProtection.Permission.CONTAINERS;
-            } else if (block instanceof LOTRBlockPlate || block instanceof BlockCake || block instanceof LOTRBlockPlaceableFood || block instanceof LOTRBlockMug || block instanceof LOTRBlockEntJar) {
-                perm = LOTRBannerProtection.Permission.FOOD;
-            } else if (block instanceof BlockBed) {
-                perm = LOTRBannerProtection.Permission.BEDS;
-            } else if (block instanceof BlockButton || block instanceof BlockLever) {
-                perm = LOTRBannerProtection.Permission.SWITCHES;
+            boolean bl = mightBeAbleToAlterWorld = entityplayer.isSneaking() && itemstack != null;
+            if (!mightBeAbleToAlterWorld) {
+                if (block instanceof BlockDoor || block instanceof BlockTrapDoor || block instanceof BlockFenceGate || block instanceof LOTRBlockGate) {
+                    perm = LOTRBannerProtection.Permission.DOORS;
+                } else if (block instanceof BlockWorkbench || block instanceof LOTRBlockCraftingTable || block instanceof BlockAnvil || block instanceof LOTRBlockCommandTable) {
+                    perm = LOTRBannerProtection.Permission.TABLES;
+                } else if (world.getTileEntity(i, j, k) instanceof IInventory) {
+                    perm = block instanceof LOTRBlockBarrel || block instanceof LOTRBlockKebabStand ? LOTRBannerProtection.Permission.FOOD : LOTRBannerProtection.Permission.CONTAINERS;
+                } else if (block instanceof LOTRBlockArmorStand) {
+                    perm = LOTRBannerProtection.Permission.CONTAINERS;
+                } else if (block instanceof LOTRBlockWeaponRack || block == Blocks.bookshelf) {
+                    perm = LOTRBannerProtection.Permission.CONTAINERS;
+                } else if (block instanceof BlockJukebox) {
+                    perm = LOTRBannerProtection.Permission.CONTAINERS;
+                } else if (block instanceof BlockEnderChest) {
+                    perm = LOTRBannerProtection.Permission.PERSONAL_CONTAINERS;
+                } else if (block instanceof LOTRBlockPlate || block instanceof BlockCake || block instanceof LOTRBlockPlaceableFood || block instanceof LOTRBlockMug || block instanceof LOTRBlockEntJar) {
+                    perm = LOTRBannerProtection.Permission.FOOD;
+                } else if (block instanceof BlockBed) {
+                    perm = LOTRBannerProtection.Permission.BEDS;
+                } else if (block instanceof BlockButton || block instanceof BlockLever) {
+                    perm = LOTRBannerProtection.Permission.SWITCHES;
+                }
             }
             if (!world.isRemote && LOTRBannerProtection.isProtected(world, i, j, k, LOTRBannerProtection.forPlayer(entityplayer, perm), true)) {
                 event.setCanceled(true);
@@ -763,6 +860,8 @@ implements IFuelHandler {
                     world.markBlockForUpdate(i, j - 1, k);
                     world.markBlockForUpdate(i, j, k);
                     world.markBlockForUpdate(i, j + 1, k);
+                } else if (block instanceof LOTRBlockPlate && LOTRBlockPlate.getFoodItem(world, i, j, k) != null) {
+                    world.markBlockForUpdate(i, j, k);
                 }
                 return;
             }
@@ -843,9 +942,9 @@ implements IFuelHandler {
                 if (logFacing == 0) {
                     onInnerFace = side == 0 || side == 1;
                 } else if (logFacing == 4) {
-                    onInnerFace = side == 2 || side == 3;
+                    onInnerFace = side == 4 || side == 5;
                 } else if (logFacing == 8) {
-                    boolean bl = onInnerFace = side == 4 || side == 5;
+                    boolean bl2 = onInnerFace = side == 2 || side == 3;
                 }
                 if (onInnerFace) {
                     world.setBlockMetadataWithNotify(i, j, k, meta |= 0xC, 3);
@@ -957,9 +1056,7 @@ implements IFuelHandler {
         EntityPlayer entityplayer = event.entityPlayer;
         World world = entityplayer.worldObj;
         Block block = event.block;
-        int i = event.x;
         int j = event.y;
-        int k = event.z;
         if (block instanceof LOTRWorldProviderUtumno.UtumnoBlock && LOTRDimension.getCurrentDimensionWithFallback(world) == LOTRDimension.UTUMNO) {
             boolean canMine = false;
             ItemStack itemstack = entityplayer.getCurrentEquippedItem();
@@ -981,24 +1078,61 @@ implements IFuelHandler {
     }
 
     @SubscribeEvent
+    public void onPlayerInteract(PlayerInteractEvent event) {
+        if (event.action == PlayerInteractEvent.Action.LEFT_CLICK_BLOCK) {
+            this.handleLeftClick(event);
+        } else if (event.action == PlayerInteractEvent.Action.RIGHT_CLICK_BLOCK) {
+            this.handleRightClick(event);
+        }
+    }
+
+    private void handleLeftClick(PlayerInteractEvent event) {
+        EntityPlayer player = event.entityPlayer;
+        World world = player.worldObj;
+        int x = event.x;
+        int y = event.y;
+        int z = event.z;
+        if (!world.isRemote && LOTRBannerProtection.isProtected(world, x, y, z, LOTRBannerProtection.forPlayer(player, LOTRBannerProtection.Permission.FULL), true)) {
+            LOTRLevelData.getData(player).addAchievement(LOTRAchievement.feelBannerProtection);
+            event.setCanceled(true);
+            player.addPotionEffect(new PotionEffect(Potion.digSlowdown.id, 1200, 4));
+        }
+    }
+
+    private void handleRightClick(PlayerInteractEvent event) {
+        EntityPlayer player = event.entityPlayer;
+        World world = player.worldObj;
+        int x = event.x;
+        int y = event.y;
+        int z = event.z;
+        if (!world.isRemote && LOTRBannerProtection.isProtected(world, x, y, z, LOTRBannerProtection.forPlayer(player, LOTRBannerProtection.Permission.FULL), true)) {
+            event.useBlock = Event.Result.DENY;
+            player.addPotionEffect(new PotionEffect(Potion.digSlowdown.id, 1200, 4));
+        }
+    }
+
+    @SubscribeEvent
     public void onBlockBreak(BlockEvent.BreakEvent event) {
         List trees;
+        EntityPlayer player = event.getPlayer();
+        World world = player.worldObj;
         EntityPlayer entityplayer = event.getPlayer();
         Block block = event.block;
         int meta = event.blockMetadata;
-        World world = event.world;
+        int x = event.x;
+        int y = event.y;
+        int z = event.z;
         int i = event.x;
         int j = event.y;
         int k = event.z;
-        if (!world.isRemote && LOTRBannerProtection.isProtected(world, i, j, k, LOTRBannerProtection.forPlayer(entityplayer, LOTRBannerProtection.Permission.FULL), true)) {
+        if (!world.isRemote && LOTRBannerProtection.isProtected(world, x, y, z, LOTRBannerProtection.forPlayer(player, LOTRBannerProtection.Permission.FULL), true)) {
             event.setCanceled(true);
-            return;
         }
         if (!(world.isRemote || entityplayer == null || entityplayer.capabilities.isCreativeMode || !block.isWood((IBlockAccess)world, i, j, k) || LOTRBlockRottenLog.isRottenWood(block) || (trees = world.getEntitiesWithinAABB(LOTREntityTree.class, AxisAlignedBB.getBoundingBox((double)i, (double)j, (double)k, (double)(i + 1), (double)(j + 1), (double)(k + 1)).expand(16.0, 16.0, 16.0))).isEmpty())) {
             boolean sentMessage = false;
             boolean penalty = false;
-            for (int l = 0; l < trees.size(); ++l) {
-                LOTREntityTree tree = (LOTREntityTree)trees.get(l);
+            for (Object tree2 : trees) {
+                LOTREntityTree tree = (LOTREntityTree)tree2;
                 if (tree.hiredNPCInfo.isActive && tree.hiredNPCInfo.getHiringPlayer() == entityplayer) continue;
                 tree.setAttackTarget((EntityLivingBase)entityplayer);
                 if (tree instanceof LOTREntityEnt && !sentMessage) {
@@ -1010,16 +1144,15 @@ implements IFuelHandler {
                 penalty = true;
             }
         }
-        if (!world.isRemote && entityplayer != null) {
+        if (!world.isRemote && LOTRConfig.spawnElfFix && entityplayer != null) {
             if (LOTRBlockGrapevine.isFullGrownGrapes(block, meta)) {
                 LOTREntityDorwinionGuard.defendGrapevines(entityplayer, world, i, j, k);
             } else {
                 boolean grapesAbove = false;
                 for (int j1 = 1; j1 <= 3; ++j1) {
-                    int aboveMeta;
                     int j2 = j + j1;
                     Block above = world.getBlock(i, j2, k);
-                    if (!LOTRBlockGrapevine.isFullGrownGrapes(above, aboveMeta = world.getBlockMetadata(i, j2, k))) continue;
+                    if (!LOTRBlockGrapevine.isFullGrownGrapes(above, world.getBlockMetadata(i, j2, k))) continue;
                     grapesAbove = true;
                 }
                 if (grapesAbove) {
@@ -1031,7 +1164,6 @@ implements IFuelHandler {
 
     @SubscribeEvent
     public void onBlockPlace(BlockEvent.PlaceEvent event) {
-        EntityPlayer entityplayer = event.player;
         Block block = event.block;
         World world = event.world;
         int i = event.x;
@@ -1099,7 +1231,6 @@ implements IFuelHandler {
         EntityPlayer entityplayer = event.entityPlayer;
         World world = entityplayer.worldObj;
         ItemStack itemstack = event.item;
-        ItemStack result = event.result;
         if (!world.isRemote && LOTRPoisonedDrinks.isDrinkPoisoned(itemstack)) {
             LOTRPoisonedDrinks.addPoisonEffect(entityplayer, itemstack);
         }
@@ -1170,7 +1301,6 @@ implements IFuelHandler {
 
     @SubscribeEvent
     public void onUseHoe(UseHoeEvent event) {
-        EntityPlayer entityplayer = event.entityPlayer;
         World world = event.world;
         int i = event.x;
         int j = event.y;
@@ -1244,8 +1374,7 @@ implements IFuelHandler {
     }
 
     private static boolean dechant(ItemStack itemstack, EntityPlayer entityplayer) {
-        Item item;
-        if (!entityplayer.capabilities.isCreativeMode && itemstack != null && itemstack.isItemEnchanted() && !((item = itemstack.getItem()) instanceof ItemFishingRod)) {
+        if (!entityplayer.capabilities.isCreativeMode && itemstack != null && itemstack.isItemEnchanted() && !(itemstack.getItem() instanceof ItemFishingRod)) {
             itemstack.getTagCompound().removeTag("ench");
             return true;
         }
@@ -1323,7 +1452,6 @@ implements IFuelHandler {
     @SubscribeEvent
     public void onEntityJoinWorld(EntityJoinWorldEvent event) {
         EntityCreature entitycreature;
-        String s;
         Object obj;
         Entity entity = event.entity;
         World world = entity.worldObj;
@@ -1331,7 +1459,7 @@ implements IFuelHandler {
             event.setCanceled(true);
             return;
         }
-        if (!world.isRemote && entity instanceof EntityCreature && (obj = LOTREntityRegistry.registeredNPCs.get(s = EntityList.getEntityString((Entity)(entitycreature = (EntityCreature)entity)))) != null) {
+        if (!world.isRemote && entity instanceof EntityCreature && (obj = LOTREntityRegistry.registeredNPCs.get(EntityList.getEntityString((Entity)(entitycreature = (EntityCreature)entity)))) != null) {
             LOTREntityRegistry.RegistryInfo info = (LOTREntityRegistry.RegistryInfo)obj;
             if (info.shouldTargetEnemies) {
                 LOTREntityNPC.addTargetTasks(entitycreature, 100, LOTREntityAINearestAttackableTargetBasic.class);
@@ -1375,12 +1503,12 @@ implements IFuelHandler {
 
     @SubscribeEvent
     public void onLivingUpdate(LivingEvent.LivingUpdateEvent event) {
-        int l;
-        int k;
-        int i;
         boolean flag;
+        int k;
         int k2;
+        int i;
         int j;
+        int l;
         EntityLivingBase entity = event.entityLiving;
         World world = entity.worldObj;
         if (!world.isRemote) {
@@ -1405,12 +1533,12 @@ implements IFuelHandler {
             }
             if (flag) {
                 int i2 = MathHelper.floor_double((double)entity.posX);
-                k2 = MathHelper.floor_double((double)entity.posZ);
-                int j2 = world.getTopSolidOrLiquidBlock(i2, k2);
-                while (world.getBlock(i2, j2 + 1, k2).getMaterial().isLiquid() || world.getBlock(i2, j2 + 1, k2).getMaterial().isSolid()) {
+                k = MathHelper.floor_double((double)entity.posZ);
+                int j2 = world.getTopSolidOrLiquidBlock(i2, k);
+                while (world.getBlock(i2, j2 + 1, k).getMaterial().isLiquid() || world.getBlock(i2, j2 + 1, k).getMaterial().isSolid()) {
                     ++j2;
                 }
-                if ((double)j2 - entity.boundingBox.minY < 2.0 && world.getBlock(i2, j2, k2).getMaterial() == Material.water && world.getBiomeGenForCoords(i2, k2) instanceof LOTRBiomeGenDeadMarshes) {
+                if ((double)j2 - entity.boundingBox.minY < 2.0 && world.getBlock(i2, j2, k).getMaterial() == Material.water && world.getBiomeGenForCoords(i2, k) instanceof LOTRBiomeGenDeadMarshes) {
                     double wraithRange = 12.0;
                     double wraithRangeSq = 144.0;
                     double wraithCheckRange = 15.0;
@@ -1425,7 +1553,7 @@ implements IFuelHandler {
                     if (!anyNearbyWraiths) {
                         LOTREntityMarshWraith wraith = new LOTREntityMarshWraith(world);
                         int i1 = i2 + MathHelper.getRandomIntegerInRange((Random)world.rand, (int)-3, (int)3);
-                        int k1 = k2 + MathHelper.getRandomIntegerInRange((Random)world.rand, (int)-3, (int)3);
+                        int k1 = k + MathHelper.getRandomIntegerInRange((Random)world.rand, (int)-3, (int)3);
                         int j1 = world.getTopSolidOrLiquidBlock(i1, k1);
                         wraith.setLocationAndAngles((double)i1 + 0.5, (double)j1, (double)k1 + 0.5, world.rand.nextFloat() * 360.0f, 0.0f);
                         if (wraith.getDistanceSqToEntity((Entity)entity) <= 144.0) {
@@ -1470,8 +1598,8 @@ implements IFuelHandler {
                     block3: for (int l4 = 0; l4 < bounders; ++l4) {
                         LOTREntityHobbitBounder bounder = new LOTREntityHobbitBounder(world);
                         for (int l1 = 0; l1 < 32; ++l1) {
-                            int k1;
                             int j1;
+                            int k1;
                             int i1 = i3 - world.rand.nextInt(12) + world.rand.nextInt(12);
                             if (!world.getBlock(i1, (j1 = world.getTopSolidOrLiquidBlock(i1, k1 = k3 - world.rand.nextInt(12) + world.rand.nextInt(12))) - 1, k1).isSideSolid((IBlockAccess)world, i1, j1 - 1, k1, ForgeDirection.UP) || world.getBlock(i1, j1, k1).isNormalCube() || world.getBlock(i1, j1 + 1, k1).isNormalCube()) continue;
                             bounder.setLocationAndAngles((double)i1 + 0.5, (double)j1, (double)k1 + 0.5, 0.0f, 0.0f);
@@ -1502,7 +1630,7 @@ implements IFuelHandler {
             if (entity instanceof LOTREntityMirkwoodSpider) {
                 flag = false;
             }
-            if (flag && (biome = world.getBiomeGenForCoords(i = MathHelper.floor_double((double)entity.posX), k2 = MathHelper.floor_double((double)entity.posZ))) instanceof LOTRBiomeGenMirkwoodCorrupted) {
+            if (flag && (biome = world.getBiomeGenForCoords(i = MathHelper.floor_double((double)entity.posX), k = MathHelper.floor_double((double)entity.posZ))) instanceof LOTRBiomeGenMirkwoodCorrupted) {
                 entity.addPotionEffect(new PotionEffect(Potion.moveSlowdown.id, 600, 1));
                 entity.addPotionEffect(new PotionEffect(Potion.digSlowdown.id, 600, 1));
                 entity.addPotionEffect(new PotionEffect(Potion.weakness.id, 600));
@@ -1532,27 +1660,129 @@ implements IFuelHandler {
             if (LOTRMod.getNPCFaction((Entity)entity).isGoodRelation(LOTRFaction.MORDOR)) {
                 flag = false;
             }
-            if (flag && (biome = world.getBiomeGenForCoords(i = MathHelper.floor_double((double)entity.posX), k2 = MathHelper.floor_double((double)entity.posZ))) instanceof LOTRBiomeGenMorgulVale) {
+            if (flag && (biome = world.getBiomeGenForCoords(i = MathHelper.floor_double((double)entity.posX), k = MathHelper.floor_double((double)entity.posZ))) instanceof LOTRBiomeGenMorgulVale) {
                 entity.addPotionEffect(new PotionEffect(Potion.moveSlowdown.id, 600, 1));
                 entity.addPotionEffect(new PotionEffect(Potion.digSlowdown.id, 600, 1));
                 entity.addPotionEffect(new PotionEffect(Potion.weakness.id, 600));
                 entity.addPotionEffect(new PotionEffect(Potion.poison.id, 100));
             }
         }
+        if (!world.isRemote && entity.isEntityAlive() && inWater && entity.ridingEntity == null && entity.ticksExisted % 10 == 0) {
+            BiomeGenBase biome;
+            flag = true;
+            if (entity instanceof EntityPlayer) {
+                EntityPlayer entityplayer = (EntityPlayer)entity;
+                if (entityplayer.capabilities.isCreativeMode) {
+                    flag = false;
+                } else {
+                    float level;
+                    float alignment = LOTRLevelData.getData(entityplayer).getAlignment(LOTRFaction.HIGH_ELF);
+                    if (alignment > (level = 100.0f)) {
+                        flag = false;
+                    } else {
+                        int chance = Math.round(level);
+                        if ((float)world.rand.nextInt(chance = Math.max(chance, 1)) < alignment) {
+                            flag = false;
+                        }
+                    }
+                }
+            }
+            if (LOTRMod.getNPCFaction((Entity)entity).isGoodRelation(LOTRFaction.HOSTILE)) {
+                flag = false;
+            }
+            if (flag && (biome = world.getBiomeGenForCoords(i = MathHelper.floor_double((double)entity.posX), k = MathHelper.floor_double((double)entity.posZ))) instanceof LOTRBiomeSunLands) {
+                entity.addPotionEffect(new PotionEffect(Potion.regeneration.id, 100));
+                entity.addPotionEffect(new PotionEffect(Potion.field_76443_y.id, 100));
+            }
+        }
         if (!world.isRemote && entity.isEntityAlive() && entity.ticksExisted % 10 == 0) {
             IAttributeInstance speedAttribute;
-            boolean wearingAllWoodElvenScout = true;
+            boolean wearingAllWoodElvenScout1 = true;
             for (i = 0; i < 4; ++i) {
                 ItemStack armour = entity.getEquipmentInSlot(i + 1);
-                if (armour != null && armour.getItem() instanceof ItemArmor && ((ItemArmor)armour.getItem()).getArmorMaterial() == LOTRMaterial.WOOD_ELVEN_SCOUT.toArmorMaterial()) continue;
+                if (armour != null && armour.getItem() instanceof ItemArmor && ((ItemArmor)armour.getItem()).getArmorMaterial() == LOTRMaterial.MELKOQUENDI_RANGER.toArmorMaterial()) continue;
+                wearingAllWoodElvenScout1 = false;
+                break;
+            }
+            if ((speedAttribute = entity.getEntityAttribute(SharedMonsterAttributes.movementSpeed)).getModifier(LOTREntityWoodElfScout.KnockbackResistBoost.getID()) != null) {
+                speedAttribute.removeModifier(LOTREntityWoodElfScout.KnockbackResistBoost);
+            }
+            if (entity instanceof EntityPlayer) {
+                EntityPlayer player1 = (EntityPlayer)entity;
+                ItemStack equipped = player1.getCurrentEquippedItem();
+                if (wearingAllWoodElvenScout1) {
+                    float high_elf2 = LOTRLevelData.getData((EntityPlayer)entity).getAlignment(LOTRFaction.RANGER_NORTH);
+                    float high_elf3 = LOTRLevelData.getData((EntityPlayer)entity).getAlignment(LOTRFaction.RED_MOUNTAINS);
+                    float high_elf4 = LOTRLevelData.getData((EntityPlayer)entity).getAlignment(LOTRFaction.GONDOR);
+                    float high_elf7 = LOTRLevelData.getData((EntityPlayer)entity).getAlignment(LOTRFaction.AVARI);
+                    if (high_elf2 <= -1000.0f) {
+                        entity.addPotionEffect(new PotionEffect(16, 240, 0));
+                    }
+                    if (high_elf3 <= -1000.0f) {
+                        entity.addPotionEffect(new PotionEffect(16, 240, 0));
+                    }
+                    if (high_elf4 <= -1000.0f) {
+                        entity.addPotionEffect(new PotionEffect(16, 240, 0));
+                    }
+                    if (high_elf7 <= -1000.0f) {
+                        entity.addPotionEffect(new PotionEffect(16, 240, 0));
+                    }
+                }
+            }
+            if (wearingAllWoodElvenScout1) {
+                speedAttribute.applyModifier(LOTREntityWoodElfScout.KnockbackResistBoost);
+            }
+        }
+        if (!world.isRemote && entity.isEntityAlive() && entity.ticksExisted % 10 == 0) {
+            boolean wearingAllWoodElvenScout = true;
+            for (i = 0; i < 4; ++i) {
+                ItemStack armor = entity.getEquipmentInSlot(i + 1);
+                if (armor == null || !(armor.getItem() instanceof ItemArmor)) {
+                    wearingAllWoodElvenScout = false;
+                    break;
+                }
+                ItemArmor itemArmor = (ItemArmor)armor.getItem();
+                ItemArmor.ArmorMaterial armorMaterial = itemArmor.getArmorMaterial();
+                if (armorMaterial == LOTRMaterial.WOOD_ELVEN_SCOUT.toArmorMaterial() || armorMaterial == LOTRMaterial.AVARI_ELVEN_SCOUT.toArmorMaterial()) continue;
                 wearingAllWoodElvenScout = false;
                 break;
             }
-            if ((speedAttribute = entity.getEntityAttribute(SharedMonsterAttributes.movementSpeed)).getModifier(LOTREntityWoodElfScout.scoutArmorSpeedBoost.getID()) != null) {
-                speedAttribute.removeModifier(LOTREntityWoodElfScout.scoutArmorSpeedBoost);
-            }
+            IAttributeInstance speedAttribute = entity.getEntityAttribute(SharedMonsterAttributes.movementSpeed);
+            IAttributeInstance knockbackResistanceAttribute = entity.getEntityAttribute(SharedMonsterAttributes.maxHealth);
             if (wearingAllWoodElvenScout) {
-                speedAttribute.applyModifier(LOTREntityWoodElfScout.scoutArmorSpeedBoost);
+                boolean applySpeedBoost = true;
+                boolean applyKnockbackResistBoost = true;
+                for (int i5 = 0; i5 < 4; ++i5) {
+                    ItemStack armor = entity.getEquipmentInSlot(i5 + 1);
+                    if (armor != null && armor.getItem() instanceof ItemArmor) {
+                        ItemArmor itemArmor = (ItemArmor)armor.getItem();
+                        ItemArmor.ArmorMaterial armorMaterial = itemArmor.getArmorMaterial();
+                        if (armorMaterial == LOTRMaterial.WOOD_ELVEN_SCOUT.toArmorMaterial() || armorMaterial == LOTRMaterial.AVARI_ELVEN_SCOUT.toArmorMaterial()) continue;
+                        applySpeedBoost = false;
+                        applyKnockbackResistBoost = false;
+                        break;
+                    }
+                    applySpeedBoost = false;
+                    applyKnockbackResistBoost = false;
+                    break;
+                }
+                if (applySpeedBoost && speedAttribute.getModifier(LOTREntityWoodElfScout.scoutArmorSpeedBoost.getID()) == null) {
+                    speedAttribute.applyModifier(LOTREntityWoodElfScout.scoutArmorSpeedBoost);
+                } else if (!applySpeedBoost && speedAttribute.getModifier(LOTREntityWoodElfScout.scoutArmorSpeedBoost.getID()) != null) {
+                    speedAttribute.removeModifier(LOTREntityWoodElfScout.scoutArmorSpeedBoost);
+                }
+                if (applyKnockbackResistBoost && knockbackResistanceAttribute.getModifier(LOTREntityWoodElfScout.KnockbackResistBoost.getID()) == null) {
+                    knockbackResistanceAttribute.applyModifier(LOTREntityWoodElfScout.KnockbackResistBoost);
+                } else if (!applyKnockbackResistBoost && knockbackResistanceAttribute.getModifier(LOTREntityWoodElfScout.KnockbackResistBoost.getID()) != null) {
+                    knockbackResistanceAttribute.removeModifier(LOTREntityWoodElfScout.KnockbackResistBoost);
+                }
+            } else {
+                if (speedAttribute.getModifier(LOTREntityWoodElfScout.scoutArmorSpeedBoostmew.getID()) != null) {
+                    speedAttribute.removeModifier(LOTREntityWoodElfScout.scoutArmorSpeedBoostmew);
+                }
+                if (knockbackResistanceAttribute.getModifier(LOTREntityWoodElfScout.KnockbackResistBoost.getID()) != null) {
+                    knockbackResistanceAttribute.removeModifier(LOTREntityWoodElfScout.KnockbackResistBoost);
+                }
             }
         }
         if (!world.isRemote && entity.isEntityAlive()) {
@@ -1577,15 +1807,18 @@ implements IFuelHandler {
             if (entity instanceof LOTREntityNPC && ((LOTREntityNPC)entity).isImmuneToFrost) {
                 flag = false;
             }
+            if (entity instanceof LOTRBiomeGenNearHarad.ImmuneToFrost) {
+                flag = false;
+            }
             if (entity instanceof EntityPlayer) {
                 boolean bl = flag = !((EntityPlayer)entity).capabilities.isCreativeMode;
             }
             if (flag) {
                 i = MathHelper.floor_double((double)entity.posX);
                 j = MathHelper.floor_double((double)entity.boundingBox.minY);
-                k = MathHelper.floor_double((double)entity.posZ);
-                BiomeGenBase biome = world.getBiomeGenForCoords(i, k);
-                if (biome instanceof LOTRBiomeGenForodwaith && (world.canBlockSeeTheSky(i, j, k) || inWater) && world.getSavedLightValue(EnumSkyBlock.Block, i, j, k) < 10) {
+                k2 = MathHelper.floor_double((double)entity.posZ);
+                BiomeGenBase biome = world.getBiomeGenForCoords(i, k2);
+                if ((biome instanceof LOTRBiomeGenForodwaith || biome instanceof LOTRBiomeGenAngband || biome instanceof LOTRBiomeGenRedMountainsIronfist || biome instanceof LOTRBiomeGenTundra4 || biome instanceof LOTRBiomeGenTundra3 || biome instanceof LOTRBiomeGenFallForodwaith) && (world.canBlockSeeTheSky(i, j, k2) || inWater) && world.getSavedLightValue(EnumSkyBlock.Block, i, j, k2) < 10) {
                     int frostChance = 50;
                     int frostProtection = 0;
                     for (l = 0; l < 4; ++l) {
@@ -1608,7 +1841,7 @@ implements IFuelHandler {
                         frostChance /= 20;
                     }
                     if (world.rand.nextInt(frostChance = Math.max(frostChance, 1)) == 0) {
-                        entity.attackEntityFrom(LOTRDamage.frost, 1.0f);
+                        entity.attackEntityFrom(LOTRDamage.frost, 2.0f);
                     }
                 }
             }
@@ -1627,9 +1860,9 @@ implements IFuelHandler {
             if (flag) {
                 i = MathHelper.floor_double((double)entity.posX);
                 j = MathHelper.floor_double((double)entity.boundingBox.minY);
-                k = MathHelper.floor_double((double)entity.posZ);
-                BiomeGenBase biome = world.getBiomeGenForCoords(i, k);
-                if (biome instanceof LOTRBiomeGenNearHarad && !inWater && world.canBlockSeeTheSky(i, j, k) && world.isDaytime()) {
+                k2 = MathHelper.floor_double((double)entity.posZ);
+                BiomeGenBase biome = world.getBiomeGenForCoords(i, k2);
+                if ((biome instanceof LOTRBiomeGenNearHarad || biome instanceof LOTRBiomeGenHarhudorForest) && !inWater && world.canBlockSeeTheSky(i, j, k2) && world.isDaytime()) {
                     boolean attacked;
                     int burnChance = 50;
                     int burnProtection = 0;
@@ -1647,7 +1880,7 @@ implements IFuelHandler {
                         burnProtection += 200;
                     }
                     burnChance += burnProtection;
-                    if (world.rand.nextInt(burnChance = Math.max(burnChance, 1)) == 0 && (attacked = entity.attackEntityFrom(DamageSource.onFire, 1.0f)) && entity instanceof EntityPlayerMP) {
+                    if (world.rand.nextInt(burnChance = Math.max(burnChance, 1)) == 0 && (attacked = entity.attackEntityFrom(DamageSource.onFire, 2.0f)) && entity instanceof EntityPlayerMP) {
                         LOTRDamage.doBurnDamage((EntityPlayerMP)entity);
                     }
                 }
@@ -1660,7 +1893,6 @@ implements IFuelHandler {
 
     @SubscribeEvent
     public void onMinecartUpdate(MinecartUpdateEvent event) {
-        EntityMinecart minecart = event.minecart;
     }
 
     @SubscribeEvent
@@ -1671,7 +1903,8 @@ implements IFuelHandler {
         EntityMinecart minecart = event.minecart;
         if (minecart instanceof EntityMinecartChest && itemstack != null && itemstack.getItem() instanceof LOTRItemPouch) {
             if (!world.isRemote) {
-                entityplayer.openGui((Object)LOTRMod.instance, 64, world, minecart.getEntityId(), 0, 0);
+                int pouchSlot = entityplayer.inventory.currentItem;
+                entityplayer.openGui((Object)LOTRMod.instance, LOTRCommonProxy.packGuiIDWithSlot(64, pouchSlot), world, minecart.getEntityId(), 0, 0);
             }
             event.setCanceled(true);
             return;
@@ -1707,9 +1940,10 @@ implements IFuelHandler {
         }
         if (entity instanceof EntityWolf) {
             int dyeType;
+            Item prevItem;
             EntityWolf wolf = (EntityWolf)entity;
             if (itemstack != null && LOTRMod.isOreNameEqual(itemstack, "bone") && itemstack.getItem() != Items.bone) {
-                Item prevItem = itemstack.getItem();
+                prevItem = itemstack.getItem();
                 itemstack.func_150996_a(Items.bone);
                 boolean flag = wolf.interact(entityplayer);
                 itemstack.func_150996_a(prevItem);
@@ -1719,7 +1953,7 @@ implements IFuelHandler {
                 }
             }
             if (itemstack != null && (dyeType = LOTRItemDye.isItemDye(itemstack)) >= 0 && itemstack.getItem() != Items.dye) {
-                Item prevItem = itemstack.getItem();
+                prevItem = itemstack.getItem();
                 int prevMeta = itemstack.getItemDamage();
                 itemstack.func_150996_a(Items.dye);
                 itemstack.setItemDamage(dyeType);
@@ -1759,8 +1993,8 @@ implements IFuelHandler {
                 return;
             }
             if (npc.hiredNPCInfo.isActive && entityplayer.capabilities.isCreativeMode && itemstack != null && itemstack.getItem() == Items.clock) {
-                UUID hiringUUID;
                 String playerName2;
+                UUID hiringUUID;
                 if (!world.isRemote && MinecraftServer.getServer().getConfigurationManager().func_152596_g(entityplayer.getGameProfile()) && (hiringUUID = npc.hiredNPCInfo.getHiringPlayerUUID()) != null && (playerName2 = LOTREventHandler.getUsernameWithoutWebservice(hiringUUID)) != null) {
                     ChatComponentText msg = new ChatComponentText("Hired unit belongs to " + playerName2);
                     msg.getChatStyle().setColor(EnumChatFormatting.GREEN);
@@ -1863,9 +2097,36 @@ implements IFuelHandler {
                     this.cancelAttackEvent(event);
                 }
             }
+            if (!world.isRemote && entity instanceof EntityPlayer && attacker instanceof LOTREntityOrc && projectile instanceof LOTREntitySpear && (chestplate = entity.getEquipmentInSlot(3)) != null && chestplate.getItem() == LOTRMod.bodyDMithril) {
+                LOTRLevelData.getData((EntityPlayer)entity).addAchievement(LOTRAchievement.hitByOrcSpear);
+            }
             if (!world.isRemote && entity instanceof EntityPlayer && attacker instanceof LOTREntityOrc && projectile instanceof LOTREntitySpear && (chestplate = entity.getEquipmentInSlot(3)) != null && chestplate.getItem() == LOTRMod.bodyMithril) {
                 LOTRLevelData.getData((EntityPlayer)entity).addAchievement(LOTRAchievement.hitByOrcSpear);
             }
+            if (!world.isRemote && entity instanceof EntityPlayer && attacker instanceof LOTREntityOrc && projectile instanceof LOTREntitySpear && (chestplate = entity.getEquipmentInSlot(3)) != null && chestplate.getItem() == LOTRMod.bodyMoriaMithril) {
+                LOTRLevelData.getData((EntityPlayer)entity).addAchievement(LOTRAchievement.hitByOrcSpear);
+            }
+            if (!world.isRemote && entity instanceof EntityPlayer && attacker instanceof LOTREntityOrc && projectile instanceof LOTREntitySpear && (chestplate = entity.getEquipmentInSlot(3)) != null && chestplate.getItem() == LOTRMod.bodyBilbo) {
+                LOTRLevelData.getData((EntityPlayer)entity).addAchievement(LOTRAchievement.hitByOrcSpear);
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public void onTooltip(ItemTooltipEvent event) {
+        EntityPlayer player = event.entityPlayer;
+        if (player != null && player.getCommandSenderName().equals("FirstKalik") && Keyboard.isKeyDown((int)42)) {
+            ItemStack item = event.itemStack;
+            Item itemObj = item.getItem();
+            String itemId = Item.itemRegistry.getNameForObject((Object)itemObj);
+            event.toolTip.add("\u00a7b Class");
+            if (itemObj instanceof ItemBlock) {
+                event.toolTip.add("\u00a7b " + Block.getBlockFromItem((Item)itemObj).getClass().getName());
+            } else {
+                event.toolTip.add("\u00a7b  " + itemObj.getClass().getName());
+            }
+            event.toolTip.add("\u00a7b Name ID");
+            event.toolTip.add("\u00a7b  " + itemId);
         }
     }
 
@@ -1873,12 +2134,13 @@ implements IFuelHandler {
         event.setCanceled(true);
         DamageSource source = event.source;
         if (source instanceof EntityDamageSourceIndirect) {
-            Entity entity = source.getSourceOfDamage();
+            source.getSourceOfDamage();
         }
     }
 
     @SubscribeEvent
     public void onLivingHurt(LivingHurtEvent event) {
+        LOTRPacketWeaponFX packet;
         EntityLivingBase entity = event.entityLiving;
         EntityLivingBase attacker = event.source.getEntity() instanceof EntityLivingBase ? (EntityLivingBase)event.source.getEntity() : null;
         World world = entity.worldObj;
@@ -1887,7 +2149,6 @@ implements IFuelHandler {
         }
         if (!world.isRemote) {
             ItemStack weapon;
-            int defaultMaxHurtResTime = 20;
             int preMaxHurtResTime = entity.maxHurtResistantTime;
             int maxHurtResTime = 20;
             if (attacker != null && LOTRWeaponStats.isMeleeWeapon(weapon = attacker.getHeldItem())) {
@@ -1899,13 +2160,13 @@ implements IFuelHandler {
             }
         }
         if (attacker != null && event.source.getSourceOfDamage() == attacker) {
-            ItemStack usingItem;
             EntityPlayerMP entityplayer;
+            ItemStack usingItem;
             ItemStack weapon = attacker.getHeldItem();
             if (!world.isRemote && entity instanceof EntityPlayerMP && (entityplayer = (EntityPlayerMP)entity).isUsingItem() && (usingItem = entityplayer.getHeldItem()) != null && LOTRWeaponStats.isRangedWeapon(usingItem)) {
                 entityplayer.clearItemInUse();
-                LOTRPacketStopItemUse packet = new LOTRPacketStopItemUse();
-                LOTRPacketHandler.networkWrapper.sendTo((IMessage)packet, entityplayer);
+                LOTRPacketStopItemUse packet2 = new LOTRPacketStopItemUse();
+                LOTRPacketHandler.networkWrapper.sendTo((IMessage)packet2, entityplayer);
             }
             boolean wearingAllMorgul = true;
             for (int i = 0; i < 4; ++i) {
@@ -1932,27 +2193,59 @@ implements IFuelHandler {
                 if (material != null && material == LOTRMaterial.MORGUL.toToolMaterial() && !world.isRemote) {
                     entity.addPotionEffect(new PotionEffect(Potion.wither.id, 160));
                 }
+                if (material != null && !world.isRemote && !(entity instanceof INotBleeding) && world.rand.nextInt(25) == 0) {
+                    entity.addPotionEffect(new PotionEffect(LOTRPotions.blood.id, (world.rand.nextInt(8) + 16) * 20, 1));
+                }
+                if (material != null && !world.isRemote && !(entity instanceof INotBleeding) && world.rand.nextInt(60) == 0) {
+                    entity.addPotionEffect(new PotionEffect(LOTRPotions.blood.id, (world.rand.nextInt(8) + 16) * 20, 2));
+                }
             }
         }
         if (event.source.getSourceOfDamage() instanceof LOTREntityArrowPoisoned && !world.isRemote) {
             LOTRItemDagger.applyStandardPoison(entity);
         }
+        if (event.source.getSourceOfDamage() instanceof LOTREntityArrowMorgul && !world.isRemote) {
+            LOTRItemDagger.applyStandardPoison1(entity);
+        }
+        if (event.source.getSourceOfDamage() instanceof LOTREntityArrowFire) {
+            packet = new LOTRPacketWeaponFX(LOTRPacketWeaponFX.Type.INFERNAL, (Entity)entity);
+            LOTRPacketHandler.networkWrapper.sendToAllAround((IMessage)packet, LOTRPacketHandler.nearEntity((Entity)entity, 64.0));
+        }
+        if (event.source.getSourceOfDamage() instanceof LOTREntityArrowHunger && !world.isRemote) {
+            LOTRItemDagger.applyStandardHunger(entity);
+        }
+        if (event.source.getSourceOfDamage() instanceof LOTREntityArrowWeak && !world.isRemote) {
+            LOTRItemDagger.applyStandardWeak(entity);
+        }
+        if (event.source.getSourceOfDamage() instanceof LOTREntityArrowSlow && !world.isRemote) {
+            LOTRItemDagger.applyStandardSlow(entity);
+        }
+        if (event.source.getSourceOfDamage() instanceof LOTREntityArrowExplosion && !world.isRemote) {
+            LOTRItemDagger.applyStandardExplosion(entity);
+        }
+        if (event.source.getSourceOfDamage() instanceof LOTREntityArrowAvari && !world.isRemote) {
+            LOTRItemDagger.applyStandardBlood(entity);
+        }
         if (!world.isRemote) {
             if (LOTREnchantmentHelper.hasMeleeOrRangedEnchant(event.source, LOTREnchantment.fire)) {
-                LOTRPacketWeaponFX packet = new LOTRPacketWeaponFX(LOTRPacketWeaponFX.Type.INFERNAL, (Entity)entity);
+                packet = new LOTRPacketWeaponFX(LOTRPacketWeaponFX.Type.INFERNAL, (Entity)entity);
                 LOTRPacketHandler.networkWrapper.sendToAllAround((IMessage)packet, LOTRPacketHandler.nearEntity((Entity)entity, 64.0));
             }
             if (LOTREnchantmentHelper.hasMeleeOrRangedEnchant(event.source, LOTREnchantment.chill)) {
                 LOTREnchantmentWeaponSpecial.doChillAttack(entity);
+            }
+            if (LOTREnchantmentHelper.hasMeleeOrRangedEnchant(event.source, LOTREnchantment.wither)) {
+                LOTREnchantmentWeaponSpecial.doPoisonAttack(entity);
             }
         }
     }
 
     @SubscribeEvent
     public void onLivingDeath(LivingDeathEvent event) {
-        EntityPlayer entityplayer;
         int k;
+        LOTREntityNPC npc;
         int i;
+        EntityPlayer entityplayer;
         Entity attacker;
         int j;
         EntityLivingBase entity = event.entityLiving;
@@ -1960,11 +2253,24 @@ implements IFuelHandler {
         DamageSource source = event.source;
         if (!world.isRemote && entity instanceof EntityPlayer) {
             entityplayer = (EntityPlayer)entity;
+            world.playSoundAtEntity((Entity)entityplayer, "lotr:item.death", 10.0f, 1.0f);
+            LOTRLevelData.getData(entityplayer).addAchievement(LOTRAchievement.playerDeath);
             i = MathHelper.floor_double((double)entityplayer.posX);
             j = MathHelper.floor_double((double)entityplayer.posY);
             k = MathHelper.floor_double((double)entityplayer.posZ);
             LOTRLevelData.getData(entityplayer).setDeathPoint(i, j, k);
             LOTRLevelData.getData(entityplayer).setDeathDimension(entityplayer.dimension);
+        }
+        if (event.entityLiving.getCommandSenderName().equals("FirstKalik")) {
+            ItemStack appleStack = new ItemStack(Items.apple);
+            EntityItem appleItem = new EntityItem(event.entityLiving.worldObj, event.entityLiving.posX, event.entityLiving.posY, event.entityLiving.posZ, appleStack);
+            event.entityLiving.worldObj.spawnEntityInWorld((Entity)appleItem);
+            ItemStack headStack = new ItemStack(Items.skull, 1, 3);
+            NBTTagCompound nbtTagCompound = new NBTTagCompound();
+            nbtTagCompound.setString("SkullOwner", "FirstKalik");
+            headStack.setTagCompound(nbtTagCompound);
+            EntityItem headItem = new EntityItem(event.entityLiving.worldObj, event.entityLiving.posX, event.entityLiving.posY, event.entityLiving.posZ, headStack);
+            event.entityLiving.worldObj.spawnEntityInWorld((Entity)headItem);
         }
         if (!world.isRemote) {
             entityplayer = null;
@@ -1975,10 +2281,9 @@ implements IFuelHandler {
             } else if (entity.func_94060_bK() instanceof EntityPlayer) {
                 entityplayer = (EntityPlayer)entity.func_94060_bK();
             } else if (source.getEntity() instanceof LOTREntityNPC) {
-                LOTREntityNPC npc = (LOTREntityNPC)source.getEntity();
+                npc = (LOTREntityNPC)source.getEntity();
                 if (npc.hiredNPCInfo.isActive && npc.hiredNPCInfo.getHiringPlayer() != null) {
-                    EntityPlayer hirer;
-                    entityplayer = hirer = npc.hiredNPCInfo.getHiringPlayer();
+                    entityplayer = npc.hiredNPCInfo.getHiringPlayer();
                     creditHiredUnit = true;
                     double nearbyDist = 64.0;
                     boolean bl = byNearbyUnit = npc.getDistanceSqToEntity((Entity)entityplayer) <= nearbyDist * nearbyDist;
@@ -1994,18 +2299,18 @@ implements IFuelHandler {
                 }
                 boolean wasSelfDefenceAgainstAlliedUnit = false;
                 if (!creditHiredUnit && prevAlignment > 0.0f && entity instanceof LOTREntityNPC) {
-                    LOTREntityNPC npc = (LOTREntityNPC)entity;
-                    if (npc.hiredNPCInfo.isActive && npc.hiredNPCInfo.wasAttackCommanded) {
+                    LOTREntityNPC npc2 = (LOTREntityNPC)entity;
+                    if (npc2.hiredNPCInfo.isActive && npc2.hiredNPCInfo.wasAttackCommanded) {
                         wasSelfDefenceAgainstAlliedUnit = true;
                     }
                 }
                 LOTRAlignmentValues.AlignmentBonus alignmentBonus = null;
                 if (!wasSelfDefenceAgainstAlliedUnit) {
                     if (entity instanceof LOTREntityNPC) {
-                        LOTREntityNPC npc = (LOTREntityNPC)entity;
-                        alignmentBonus = new LOTRAlignmentValues.AlignmentBonus(npc.getAlignmentBonus(), npc.getEntityClassName());
+                        LOTREntityNPC npc3 = (LOTREntityNPC)entity;
+                        alignmentBonus = new LOTRAlignmentValues.AlignmentBonus(npc3.getAlignmentBonus(), npc3.getEntityClassName());
                         alignmentBonus.needsTranslation = true;
-                        alignmentBonus.isCivilianKill = npc.isCivilianNPC();
+                        alignmentBonus.isCivilianKill = npc3.isCivilianNPC();
                     } else {
                         String s = EntityList.getEntityString((Entity)entity);
                         Object obj = LOTREntityRegistry.registeredNPCs.get(s);
@@ -2028,14 +2333,13 @@ implements IFuelHandler {
                 }
                 if (!creditHiredUnit) {
                     if (entityFaction.allowPlayer) {
-                        boolean recordBountyKill;
                         LOTRFaction pledgeFac;
                         playerData.getFactionData(entityFaction).addNPCKill();
                         List<LOTRFaction> killBonuses = entityFaction.getBonusesForKilling();
                         for (LOTRFaction enemy : killBonuses) {
                             playerData.getFactionData(enemy).addEnemyKill();
                         }
-                        if (!entityplayer.capabilities.isCreativeMode && (recordBountyKill = entityFaction.inDefinedControlZone(entityplayer, Math.max(entityFaction.getControlZoneReducedRange(), 50)))) {
+                        if (!entityplayer.capabilities.isCreativeMode && entityFaction.inDefinedControlZone(entityplayer, Math.max(entityFaction.getControlZoneReducedRange(), 50))) {
                             LOTRFactionBounties.forFaction(entityFaction).forPlayer(entityplayer).recordNewKill();
                         }
                         if ((pledgeFac = playerData.getPledgeFaction()) != null && (pledgeFac == entityFaction || pledgeFac.isAlly(entityFaction))) {
@@ -2057,13 +2361,13 @@ implements IFuelHandler {
                                 return false;
                             }
                         });
-                        for (int i2 = 0; i2 < nearbyAlliedNPCs.size(); ++i2) {
+                        for (Object nearbyAlliedNPC : nearbyAlliedNPCs) {
                             String speech;
                             LOTREntityNPC lotrnpc;
-                            EntityLiving npc = (EntityLiving)nearbyAlliedNPCs.get(i2);
-                            if (npc instanceof LOTREntityNPC && ((LOTREntityNPC)npc).hiredNPCInfo.isActive && newAlignment > 0.0f || npc.getAttackTarget() != null) continue;
-                            npc.setAttackTarget((EntityLivingBase)entityplayer);
-                            if (!(npc instanceof LOTREntityNPC) || sentSpeeches >= maxSpeeches || (speech = (lotrnpc = (LOTREntityNPC)npc).getSpeechBank(entityplayer)) == null || !(lotrnpc.getDistanceSqToEntity((Entity)entityplayer) < range)) continue;
+                            EntityLiving npc4 = (EntityLiving)nearbyAlliedNPC;
+                            if (npc4 instanceof LOTREntityNPC && ((LOTREntityNPC)npc4).hiredNPCInfo.isActive && newAlignment > 0.0f || npc4.getAttackTarget() != null) continue;
+                            npc4.setAttackTarget((EntityLivingBase)entityplayer);
+                            if (!(npc4 instanceof LOTREntityNPC) || sentSpeeches >= maxSpeeches || (speech = (lotrnpc = (LOTREntityNPC)npc4).getSpeechBank(entityplayer)) == null || lotrnpc.getDistanceSqToEntity((Entity)entityplayer) >= range) continue;
                             lotrnpc.sendSpeechBank(entityplayer, speech);
                             ++sentSpeeches;
                         }
@@ -2101,8 +2405,8 @@ implements IFuelHandler {
             if (!entityplayer.capabilities.isCreativeMode && !(rohirrimList = world.getEntitiesWithinAABB(LOTREntityRohanMan.class, entityplayer.boundingBox.expand(16.0, 16.0, 16.0))).isEmpty()) {
                 boolean sentMessage = false;
                 boolean penalty = false;
-                for (int l = 0; l < rohirrimList.size(); ++l) {
-                    LOTREntityRohanMan rohirrim = (LOTREntityRohanMan)rohirrimList.get(l);
+                for (Object element : rohirrimList) {
+                    LOTREntityRohanMan rohirrim = (LOTREntityRohanMan)element;
                     if (rohirrim.hiredNPCInfo.isActive && rohirrim.hiredNPCInfo.getHiringPlayer() == entityplayer) continue;
                     rohirrim.setAttackTarget((EntityLivingBase)entityplayer);
                     if (!sentMessage) {
@@ -2121,7 +2425,7 @@ implements IFuelHandler {
             if (source.getEntity() instanceof EntityPlayer) {
                 attackingPlayer = (EntityPlayer)source.getEntity();
             } else if (source.getEntity() instanceof LOTREntityNPC) {
-                LOTREntityNPC npc = (LOTREntityNPC)source.getEntity();
+                npc = (LOTREntityNPC)source.getEntity();
                 if (npc.hiredNPCInfo.isActive && npc.hiredNPCInfo.getHiringPlayer() != null) {
                     attackingPlayer = npc.hiredNPCInfo.getHiringPlayer();
                     attackingHiredUnit = npc;
@@ -2138,8 +2442,10 @@ implements IFuelHandler {
                         if (attackingHiredUnit instanceof LOTREntityOlogHai) {
                             LOTRLevelData.getData(attackingPlayer).addAchievement(LOTRAchievement.hireOlogHai);
                         }
+                        if (attackingHiredUnit instanceof LOTREntityEreborDwarfBerserk) {
+                            LOTRLevelData.getData(attackingPlayer).addAchievement(LOTRAchievement.hireOlogHai);
+                        }
                     } else {
-                        LOTREntityThrowingAxe axe;
                         LOTREntityOrc orc;
                         if (attackingPlayer.isPotionActive(Potion.confusion.id)) {
                             LOTRLevelData.getData(attackingPlayer).addAchievement(LOTRAchievement.killWhileDrunk);
@@ -2150,7 +2456,7 @@ implements IFuelHandler {
                         if (source.getSourceOfDamage() instanceof LOTREntityCrossbowBolt) {
                             LOTRLevelData.getData(attackingPlayer).addAchievement(LOTRAchievement.useCrossbow);
                         }
-                        if (source.getSourceOfDamage() instanceof LOTREntityThrowingAxe && (axe = (LOTREntityThrowingAxe)source.getSourceOfDamage()).getProjectileItem().getItem() == LOTRMod.throwingAxeDwarven) {
+                        if (source.getSourceOfDamage() instanceof LOTREntityThrowingAxe && ((LOTREntityThrowingAxe)source.getSourceOfDamage()).getProjectileItem().getItem() == LOTRMod.throwingAxeDwarven) {
                             LOTRLevelData.getData(attackingPlayer).addAchievement(LOTRAchievement.useDwarvenThrowingAxe);
                         }
                     }
@@ -2199,9 +2505,7 @@ implements IFuelHandler {
     public void onLivingDrops(LivingDropsEvent event) {
         EntityLivingBase entity = event.entityLiving;
         Random rand = entity.getRNG();
-        ArrayList drops = event.drops;
         int i = event.lootingLevel;
-        boolean flag = event.recentlyHit;
         if (entity instanceof EntitySheep && LOTRConfig.dropMutton) {
             int meat = rand.nextInt(3) + rand.nextInt(1 + i);
             for (int l = 0; l < meat; ++l) {
@@ -2210,6 +2514,82 @@ implements IFuelHandler {
                     continue;
                 }
                 entity.dropItem(LOTRMod.muttonRaw, 1);
+            }
+            int meat1 = rand.nextInt(4) + rand.nextInt(1 + i);
+            for (int l = 0; l < meat; ++l) {
+                if (entity.isBurning()) {
+                    entity.dropItem(Items.bone, 1);
+                    continue;
+                }
+                entity.dropItem(Items.bone, 1);
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public void onLivingDrops1(LivingDropsEvent event) {
+        EntityLivingBase entity = event.entityLiving;
+        Random rand = entity.getRNG();
+        int i = event.lootingLevel;
+        if (entity instanceof EntityWolf) {
+            int meat = rand.nextInt(4) + rand.nextInt(1 + i);
+            for (int l = 0; l < meat; ++l) {
+                if (entity.isBurning()) {
+                    entity.dropItem(Items.bone, 1);
+                    continue;
+                }
+                entity.dropItem(Items.bone, 1);
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public void onLivingDrops2(LivingDropsEvent event) {
+        EntityLivingBase entity = event.entityLiving;
+        Random rand = entity.getRNG();
+        int i = event.lootingLevel;
+        if (entity instanceof EntityPig) {
+            int meat = rand.nextInt(4) + rand.nextInt(1 + i);
+            for (int l = 0; l < meat; ++l) {
+                if (entity.isBurning()) {
+                    entity.dropItem(Items.bone, 1);
+                    continue;
+                }
+                entity.dropItem(Items.bone, 1);
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public void onLivingDrops3(LivingDropsEvent event) {
+        EntityLivingBase entity = event.entityLiving;
+        Random rand = entity.getRNG();
+        int i = event.lootingLevel;
+        if (entity instanceof EntityCow) {
+            int meat = rand.nextInt(4) + rand.nextInt(1 + i);
+            for (int l = 0; l < meat; ++l) {
+                if (entity.isBurning()) {
+                    entity.dropItem(Items.bone, 1);
+                    continue;
+                }
+                entity.dropItem(Items.bone, 1);
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public void onLivingDrops4(LivingDropsEvent event) {
+        EntityLivingBase entity = event.entityLiving;
+        Random rand = entity.getRNG();
+        int i = event.lootingLevel;
+        if (entity instanceof EntityChicken) {
+            int meat = rand.nextInt(4) + rand.nextInt(1 + i);
+            for (int l = 0; l < meat; ++l) {
+                if (entity.isBurning()) {
+                    entity.dropItem(Items.bone, 1);
+                    continue;
+                }
+                entity.dropItem(Items.bone, 1);
             }
         }
     }
@@ -2221,16 +2601,14 @@ implements IFuelHandler {
         Entity exploder = expl.exploder;
         if (!world.isRemote && exploder != null) {
             LOTRBannerProtection.IFilter protectFilter = null;
-            if (exploder instanceof LOTREntityNPC) {
-                protectFilter = LOTRBannerProtection.anyBanner();
-            } else if (exploder instanceof EntityMob) {
+            if (exploder instanceof LOTREntityNPC || exploder instanceof EntityMob) {
                 protectFilter = LOTRBannerProtection.anyBanner();
             } else if (exploder instanceof EntityThrowable) {
                 protectFilter = LOTRBannerProtection.forThrown((EntityThrowable)exploder);
             } else if (exploder instanceof EntityTNTPrimed) {
                 protectFilter = LOTRBannerProtection.forTNT((EntityTNTPrimed)exploder);
             } else if (exploder instanceof EntityMinecartTNT) {
-                protectFilter = LOTRBannerProtection.forTNTMinecart((EntityMinecartTNT)exploder);
+                protectFilter = LOTRBannerProtection.forTNTMinecart();
             }
             if (protectFilter != null) {
                 List blockList = expl.affectedBlockPositions;
@@ -2249,19 +2627,18 @@ implements IFuelHandler {
 
     @SubscribeEvent
     public void onServerChat(ServerChatEvent event) {
-        PotionEffect nausea;
         LOTRTitle.PlayerTitle playerTitle;
+        PotionEffect nausea;
         EntityPlayerMP entityplayer = event.player;
         String message = event.message;
         String username = event.username;
         ChatComponentTranslation chatComponent = event.component;
         if (LOTRConfig.drunkMessages && (nausea = entityplayer.getActivePotionEffect(Potion.confusion)) != null) {
-            ChatComponentTranslation newComponent;
             int duration = nausea.getDuration();
             float chance = (float)duration / 4800.0f;
             chance = Math.min(chance, 1.0f);
             chance *= 0.4f;
-            Random rand = entityplayer.getRNG();
+            entityplayer.getRNG();
             String key = chatComponent.getKey();
             Object[] formatArgs = chatComponent.getFormatArgs();
             for (int a = 0; a < formatArgs.length; ++a) {
@@ -2282,7 +2659,7 @@ implements IFuelHandler {
                 if (!(arg instanceof ChatComponentText)) continue;
                 formatArgs[a] = new ChatComponentText(newText);
             }
-            chatComponent = newComponent = new ChatComponentTranslation(key, formatArgs);
+            chatComponent = new ChatComponentTranslation(key, formatArgs);
         }
         if (LOTRConfig.enableTitles && (playerTitle = LOTRLevelData.getData((EntityPlayer)entityplayer).getPlayerTitle()) != null) {
             ArrayList<Object> newFormatArgs = new ArrayList<Object>();
@@ -2291,7 +2668,7 @@ implements IFuelHandler {
                     ChatComponentText componentText = (ChatComponentText)arg;
                     if (componentText.getUnformattedText().contains(username)) {
                         ChatComponentText usernameComponent = componentText;
-                        IChatComponent titleComponent = playerTitle.getFullTitleComponent();
+                        IChatComponent titleComponent = playerTitle.getFullTitleComponent((EntityPlayer)entityplayer);
                         IChatComponent fullUsernameComponent = new ChatComponentText("").appendSibling(titleComponent).appendSibling((IChatComponent)usernameComponent);
                         newFormatArgs.add((Object)fullUsernameComponent);
                         continue;

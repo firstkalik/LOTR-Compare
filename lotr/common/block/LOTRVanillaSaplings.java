@@ -25,7 +25,7 @@ public class LOTRVanillaSaplings {
         Block block = world.getBlock(i, j, k);
         int meta = world.getBlockMetadata(i, j, k) & 7;
         WorldGenAbstractTree treeGen = null;
-        int trunkNeg = 0;
+        boolean trunkNeg = false;
         int trunkPos = 0;
         int xOffset = 0;
         int zOffset = 0;
@@ -34,14 +34,14 @@ public class LOTRVanillaSaplings {
             if (partyTree != null) {
                 treeGen = LOTRTreeType.OAK_PARTY.create(true, random);
                 trunkPos = 1;
-                trunkNeg = 1;
+                trunkNeg = true;
                 xOffset = partyTree[0];
                 zOffset = partyTree[1];
             }
             if (treeGen == null) {
                 treeGen = random.nextInt(10) == 0 ? LOTRTreeType.OAK_LARGE.create(true, random) : LOTRTreeType.OAK.create(true, random);
                 trunkPos = 0;
-                trunkNeg = 0;
+                trunkNeg = false;
                 xOffset = 0;
                 zOffset = 0;
             }
@@ -51,7 +51,7 @@ public class LOTRVanillaSaplings {
                 for (k1 = 0; k1 >= -1; --k1) {
                     if (!LOTRVanillaSaplings.isSameSapling(world, i + i12, j, k + k1, meta) || !LOTRVanillaSaplings.isSameSapling(world, i + i12 + 1, j, k + k1, meta) || !LOTRVanillaSaplings.isSameSapling(world, i + i12, j, k + k1 + 1, meta) || !LOTRVanillaSaplings.isSameSapling(world, i + i12 + 1, j, k + k1 + 1, meta)) continue;
                     treeGen = random.nextBoolean() ? LOTRTreeType.SPRUCE_MEGA.create(true, random) : LOTRTreeType.SPRUCE_MEGA_THIN.create(true, random);
-                    trunkNeg = 0;
+                    trunkNeg = false;
                     trunkPos = 1;
                     xOffset = i12;
                     zOffset = k1;
@@ -61,7 +61,7 @@ public class LOTRVanillaSaplings {
             }
             if (treeGen == null) {
                 trunkPos = 0;
-                trunkNeg = 0;
+                trunkNeg = false;
                 xOffset = 0;
                 zOffset = 0;
                 treeGen = LOTRTreeType.SPRUCE.create(true, random);
@@ -72,14 +72,14 @@ public class LOTRVanillaSaplings {
             if (partyTree != null) {
                 treeGen = LOTRTreeType.BIRCH_PARTY.create(true, random);
                 trunkPos = 1;
-                trunkNeg = 1;
+                trunkNeg = true;
                 xOffset = partyTree[0];
                 zOffset = partyTree[1];
             }
             if (treeGen == null) {
                 treeGen = random.nextInt(10) == 0 ? LOTRTreeType.BIRCH_LARGE.create(true, random) : LOTRTreeType.BIRCH.create(true, random);
                 trunkPos = 0;
-                trunkNeg = 0;
+                trunkNeg = false;
                 xOffset = 0;
                 zOffset = 0;
             }
@@ -89,7 +89,7 @@ public class LOTRVanillaSaplings {
                 for (k1 = 0; k1 >= -1; --k1) {
                     if (!LOTRVanillaSaplings.isSameSapling(world, i + i13, j, k + k1, meta) || !LOTRVanillaSaplings.isSameSapling(world, i + i13 + 1, j, k + k1, meta) || !LOTRVanillaSaplings.isSameSapling(world, i + i13, j, k + k1 + 1, meta) || !LOTRVanillaSaplings.isSameSapling(world, i + i13 + 1, j, k + k1 + 1, meta)) continue;
                     treeGen = LOTRTreeType.JUNGLE_LARGE.create(true, random);
-                    trunkNeg = 0;
+                    trunkNeg = false;
                     trunkPos = 1;
                     xOffset = i13;
                     zOffset = k1;
@@ -99,7 +99,7 @@ public class LOTRVanillaSaplings {
             }
             if (treeGen == null) {
                 trunkPos = 0;
-                trunkNeg = 0;
+                trunkNeg = false;
                 xOffset = 0;
                 zOffset = 0;
                 treeGen = LOTRTreeType.JUNGLE.create(true, random);
@@ -113,7 +113,7 @@ public class LOTRVanillaSaplings {
             if (partyTree != null) {
                 treeGen = LOTRTreeType.DARK_OAK_PARTY.create(true, random);
                 trunkPos = 1;
-                trunkNeg = 1;
+                trunkNeg = true;
                 xOffset = partyTree[0];
                 zOffset = partyTree[1];
             }
@@ -122,7 +122,7 @@ public class LOTRVanillaSaplings {
                     for (int k12 = 0; k12 >= -1; --k12) {
                         if (!LOTRVanillaSaplings.isSameSapling(world, i + i14, j, k + k12, meta) || !LOTRVanillaSaplings.isSameSapling(world, i + i14 + 1, j, k + k12, meta) || !LOTRVanillaSaplings.isSameSapling(world, i + i14, j, k + k12 + 1, meta) || !LOTRVanillaSaplings.isSameSapling(world, i + i14 + 1, j, k + k12 + 1, meta)) continue;
                         treeGen = LOTRTreeType.DARK_OAK.create(true, random);
-                        trunkNeg = 0;
+                        trunkNeg = false;
                         trunkPos = 1;
                         xOffset = i14;
                         zOffset = k12;

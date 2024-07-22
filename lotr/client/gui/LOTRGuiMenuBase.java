@@ -36,7 +36,6 @@ extends LOTRGuiScreenBase {
         super.initGui();
         this.guiLeft = (this.width - this.xSize) / 2;
         this.guiTop = (this.height - this.ySize) / 2;
-        int buttonW = 120;
         int buttonH = 20;
         int buttonGap = 35;
         int minGap = 10;

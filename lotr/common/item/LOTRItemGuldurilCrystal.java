@@ -37,7 +37,7 @@ extends Item {
             return false;
         }
         int guldurilBrickMeta = LOTRBlockGuldurilBrick.guldurilMetaForBlock(world.getBlock(i, j, k), world.getBlockMetadata(i, j, k));
-        boolean bl = hasAlignment = LOTRLevelData.getData(entityplayer).getAlignment(LOTRFaction.MORDOR) >= 1.0f || LOTRLevelData.getData(entityplayer).getAlignment(LOTRFaction.ANGMAR) >= 1.0f || LOTRLevelData.getData(entityplayer).getAlignment(LOTRFaction.DOL_GULDUR) >= 1.0f;
+        boolean bl = hasAlignment = LOTRLevelData.getData(entityplayer).getAlignment(LOTRFaction.MORDOR) >= 1.0f || LOTRLevelData.getData(entityplayer).getAlignment(LOTRFaction.GUNDABAD) >= 1.0f || LOTRLevelData.getData(entityplayer).getAlignment(LOTRFaction.DOL_GULDUR) >= 1.0f;
         if (guldurilBrickMeta >= 0) {
             if (hasAlignment) {
                 world.setBlock(i, j, k, LOTRMod.guldurilBrick, guldurilBrickMeta, 3);
@@ -51,7 +51,7 @@ extends Item {
                     world.spawnParticle("smoke", d, d1, d2, 0.0, 0.0, 0.0);
                 }
                 if (!world.isRemote) {
-                    LOTRAlignmentValues.notifyAlignmentNotHighEnough(entityplayer, 1.0f, LOTRFaction.MORDOR, LOTRFaction.ANGMAR, LOTRFaction.DOL_GULDUR);
+                    LOTRAlignmentValues.notifyAlignmentNotHighEnough(entityplayer, 1.0f, LOTRFaction.MORDOR, LOTRFaction.GUNDABAD, LOTRFaction.DOL_GULDUR);
                 }
             }
             return true;

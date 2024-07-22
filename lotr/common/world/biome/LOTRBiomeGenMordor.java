@@ -62,33 +62,27 @@ extends LOTRBiome {
         this.spawnableCreatureList.clear();
         this.spawnableWaterCreatureList.clear();
         this.spawnableLOTRAmbientList.clear();
-        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer = new LOTRBiomeSpawnList.SpawnListContainer[5];
-        arrspawnListContainer[0] = LOTRBiomeSpawnList.entry(LOTRSpawnList.MORDOR_ORCS, 30);
-        arrspawnListContainer[1] = LOTRBiomeSpawnList.entry(LOTRSpawnList.MORDOR_BOMBARDIERS, 5);
-        arrspawnListContainer[2] = LOTRBiomeSpawnList.entry(LOTRSpawnList.MORDOR_WARGS, 30);
-        arrspawnListContainer[3] = LOTRBiomeSpawnList.entry(LOTRSpawnList.OLOG_HAI, 10);
-        arrspawnListContainer[4] = LOTRBiomeSpawnList.entry(LOTRSpawnList.BLACK_URUKS, 7);
+        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer = new LOTRBiomeSpawnList.SpawnListContainer[]{LOTRBiomeSpawnList.entry(LOTRSpawnList.MORDOR_ORCS, 30), LOTRBiomeSpawnList.entry(LOTRSpawnList.MORDOR_BOMBARDIERS, 5), LOTRBiomeSpawnList.entry(LOTRSpawnList.MORDOR_WARGS, 30), LOTRBiomeSpawnList.entry(LOTRSpawnList.OLOG_HAI, 10), LOTRBiomeSpawnList.entry(LOTRSpawnList.BLACK_URUKS, 7)};
         this.npcSpawnList.newFactionList(100).add(arrspawnListContainer);
-        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer2 = new LOTRBiomeSpawnList.SpawnListContainer[1];
-        arrspawnListContainer2[0] = LOTRBiomeSpawnList.entry(LOTRSpawnList.WICKED_DWARVES, 10);
+        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer2 = new LOTRBiomeSpawnList.SpawnListContainer[]{LOTRBiomeSpawnList.entry(LOTRSpawnList.WICKED_DWARVES, 10)};
         this.npcSpawnList.newFactionList(1).add(arrspawnListContainer2);
-        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer3 = new LOTRBiomeSpawnList.SpawnListContainer[1];
-        arrspawnListContainer3[0] = LOTRBiomeSpawnList.entry(LOTRSpawnList.ROHIRRIM_WARRIORS, 10);
+        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer3 = new LOTRBiomeSpawnList.SpawnListContainer[]{LOTRBiomeSpawnList.entry(LOTRSpawnList.ROHIRRIM_WARRIORS, 10)};
         this.npcSpawnList.newFactionList(0).add(arrspawnListContainer3);
-        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer4 = new LOTRBiomeSpawnList.SpawnListContainer[2];
-        arrspawnListContainer4[0] = LOTRBiomeSpawnList.entry(LOTRSpawnList.GONDOR_SOLDIERS, 10);
-        arrspawnListContainer4[1] = LOTRBiomeSpawnList.entry(LOTRSpawnList.RANGERS_ITHILIEN, 3);
+        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer4 = new LOTRBiomeSpawnList.SpawnListContainer[]{LOTRBiomeSpawnList.entry(LOTRSpawnList.GONDOR_SOLDIERS, 10), LOTRBiomeSpawnList.entry(LOTRSpawnList.RANGERS_ITHILIEN, 3)};
         this.npcSpawnList.newFactionList(0).add(arrspawnListContainer4);
         this.npcSpawnList.conquestGainRate = 0.5f;
         this.decorator.clearOres();
+        this.decorator.addSoil((WorldGenerator)new WorldGenMinable(LOTRMod.magmaBlock, 0, 32, LOTRMod.rock), 10.0f, 0, 32);
         this.decorator.addSoil((WorldGenerator)new WorldGenMinable(LOTRMod.mordorDirt, 0, 60, LOTRMod.rock), 10.0f, 0, 60);
         this.decorator.addSoil((WorldGenerator)new WorldGenMinable(LOTRMod.mordorGravel, 0, 32, LOTRMod.rock), 10.0f, 0, 60);
         this.decorator.addOre((WorldGenerator)new WorldGenMinable(LOTRMod.oreNaurite, 12, LOTRMod.rock), 20.0f, 0, 64);
+        this.decorator.addOre((WorldGenerator)new WorldGenMinable(LOTRMod.oreMordorLavaCoal, 12, LOTRMod.rock), 4.0f, 0, 16);
         this.decorator.addOre((WorldGenerator)new WorldGenMinable(LOTRMod.oreMorgulIron, 1, 8, LOTRMod.rock), 20.0f, 0, 64);
         this.decorator.addOre((WorldGenerator)new WorldGenMinable(LOTRMod.oreGulduril, 1, 8, LOTRMod.rock), 6.0f, 0, 32);
         this.decorator.flowersPerChunk = 0;
         this.decorator.grassPerChunk = 1;
         this.decorator.generateWater = false;
+        this.decorator.generateLava = false;
         if (this.isGorgoroth()) {
             this.decorator.sandPerChunk = 0;
             this.decorator.clayPerChunk = 0;
@@ -154,11 +148,10 @@ extends LOTRBiome {
         Block fillerBlock_pre = this.fillerBlock;
         int fillerBlockMeta_pre = this.fillerBlockMeta;
         if (this.isGorgoroth() && this.hasMordorSoils()) {
-            double d4;
             double d1 = noiseDirt.func_151601_a((double)i * 0.08, (double)k * 0.08);
             double d2 = noiseDirt.func_151601_a((double)i * 0.4, (double)k * 0.4);
             double d3 = noiseGravel.func_151601_a((double)i * 0.08, (double)k * 0.08);
-            if (d3 + (d4 = noiseGravel.func_151601_a((double)i * 0.4, (double)k * 0.4)) > 0.8) {
+            if (d3 + noiseGravel.func_151601_a((double)i * 0.4, (double)k * 0.4) > 0.8) {
                 this.topBlock = LOTRMod.mordorGravel;
                 this.topBlockMeta = 0;
                 this.fillerBlock = this.topBlock;
@@ -190,15 +183,15 @@ extends LOTRBiome {
 
     @Override
     public void decorate(World world, Random random, int i, int k) {
-        int k1;
-        int i1;
         int j1;
+        int i1;
+        int k1;
         super.decorate(world, random, i, k);
         if (this.isGorgoroth()) {
-            int k12;
-            int i12;
-            int l;
             int j12;
+            int l;
+            int i12;
+            int k12;
             if (this.enableMordorBoulders && random.nextInt(24) == 0) {
                 for (l = 0; l < 6; ++l) {
                     i12 = i + random.nextInt(16) + 8;
@@ -227,7 +220,7 @@ extends LOTRBiome {
                 }
             }
         }
-        if (LOTRFixedStructures.MORDOR_CHERRY_TREE.isAt(i, k)) {
+        if (LOTRFixedStructures.MORDOR_CHERRY_TREE.isAt(world, i, k)) {
             i1 = i + 8;
             k1 = k + 8;
             j1 = world.getHeightValue(i1, k1);

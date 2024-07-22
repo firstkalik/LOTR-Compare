@@ -27,7 +27,7 @@ import net.minecraft.world.World;
 public class LOTRItemBottlePoison
 extends Item {
     public LOTRItemBottlePoison() {
-        this.setMaxStackSize(1);
+        this.setMaxStackSize(4);
         this.setCreativeTab((CreativeTabs)LOTRCreativeTabs.tabMisc);
         this.setContainerItem(Items.glass_bottle);
     }

@@ -45,9 +45,9 @@ extends CommandBase {
         if (args.length >= 2) {
             int newDate = LOTRDate.ShireReckoning.currentDay;
             if (args[0].equals("set")) {
-                newDate = LOTRCommandDate.parseInt((ICommandSender)sender, (String)args[1]);
+                newDate = CommandBase.parseInt((ICommandSender)sender, (String)args[1]);
             } else if (args[0].equals("add")) {
-                int date = LOTRCommandDate.parseInt((ICommandSender)sender, (String)args[1]);
+                int date = CommandBase.parseInt((ICommandSender)sender, (String)args[1]);
                 newDate += date;
             }
             if (Math.abs(newDate) > 1000000) {
@@ -55,7 +55,7 @@ extends CommandBase {
             }
             LOTRDate.setDate(newDate);
             String dateName = LOTRDate.ShireReckoning.getShireDate().getDateName(false);
-            LOTRCommandDate.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.lotrDate.set", (Object[])new Object[]{newDate, dateName});
+            CommandBase.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.lotrDate.set", (Object[])new Object[]{newDate, dateName});
             return;
         }
         throw new WrongUsageException(this.getCommandUsage(sender), new Object[0]);
@@ -63,7 +63,7 @@ extends CommandBase {
 
     public List addTabCompletionOptions(ICommandSender sender, String[] args) {
         if (args.length == 1) {
-            return LOTRCommandDate.getListOfStringsMatchingLastWord((String[])args, (String[])new String[]{"get", "set", "add"});
+            return CommandBase.getListOfStringsMatchingLastWord((String[])args, (String[])new String[]{"get", "set", "add"});
         }
         return null;
     }

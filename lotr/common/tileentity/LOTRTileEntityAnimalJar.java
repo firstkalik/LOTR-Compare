@@ -24,7 +24,6 @@ package lotr.common.tileentity;
 import java.util.List;
 import java.util.Random;
 import lotr.common.block.LOTRBlockAnimalJar;
-import lotr.common.entity.AnimalJarUpdater;
 import lotr.common.entity.LOTREntities;
 import lotr.common.entity.animal.LOTREntityButterfly;
 import net.minecraft.block.Block;
@@ -46,8 +45,6 @@ import net.minecraft.world.WorldServer;
 
 public class LOTRTileEntityAnimalJar
 extends TileEntity {
-    private static final int PACKET_ALL = 0;
-    private static final int PACKET_ROTATE = 1;
     private NBTTagCompound jarEntityData;
     private Entity jarEntity;
     public int ticksExisted = -1;
@@ -68,9 +65,6 @@ extends TileEntity {
             this.jarEntity.lastTickPosY = this.jarEntity.prevPosY = this.jarEntity.posY;
             this.jarEntity.lastTickPosZ = this.jarEntity.prevPosZ = this.jarEntity.posZ;
             this.jarEntity.prevRotationYaw = this.jarEntity.rotationYaw;
-            if (this.jarEntity instanceof AnimalJarUpdater) {
-                ((AnimalJarUpdater)this.jarEntity).updateInAnimalJar();
-            }
             if (!this.worldObj.isRemote) {
                 if (this.jarEntity instanceof EntityLiving) {
                     EntityLiving jarLiving = (EntityLiving)this.jarEntity;
@@ -147,9 +141,8 @@ extends TileEntity {
     }
 
     public int getLightValue() {
-        LOTREntityButterfly butterfly;
         this.getOrCreateJarEntity();
-        if (this.jarEntity instanceof LOTREntityButterfly && (butterfly = (LOTREntityButterfly)this.jarEntity).getButterflyType() == LOTREntityButterfly.ButterflyType.LORIEN) {
+        if (this.jarEntity instanceof LOTREntityButterfly && ((LOTREntityButterfly)this.jarEntity).getButterflyType() == LOTREntityButterfly.ButterflyType.LORIEN) {
             return 7;
         }
         return -1;

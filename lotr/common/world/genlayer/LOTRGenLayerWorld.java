@@ -3,17 +3,14 @@
  * 
  * Could not load the following classes:
  *  com.google.common.math.IntMath
- *  cpw.mods.fml.common.FMLLog
  *  cpw.mods.fml.common.ModContainer
  *  net.minecraft.world.World
  *  net.minecraft.world.WorldType
  *  net.minecraft.world.biome.BiomeGenBase
- *  org.apache.logging.log4j.Level
  */
 package lotr.common.world.genlayer;
 
 import com.google.common.math.IntMath;
-import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.ModContainer;
 import java.awt.image.BufferedImage;
 import java.awt.image.RenderedImage;
@@ -28,6 +25,7 @@ import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import javax.imageio.ImageIO;
+import lotr.common.LOTRConfig;
 import lotr.common.LOTRDimension;
 import lotr.common.LOTRMod;
 import lotr.common.world.biome.LOTRBiome;
@@ -57,7 +55,6 @@ import lotr.common.world.genlayer.LOTRIntCache;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldType;
 import net.minecraft.world.biome.BiomeGenBase;
-import org.apache.logging.log4j.Level;
 
 public class LOTRGenLayerWorld
 extends LOTRGenLayer {
@@ -98,13 +95,8 @@ extends LOTRGenLayer {
                 biomeImageData = new byte[imageWidth * imageHeight];
                 for (int i = 0; i < colors.length; ++i) {
                     int color = colors[i];
-                    Integer biomeID = LOTRDimension.MIDDLE_EARTH.colorsToBiomeIDs.get(color);
-                    if (biomeID != null) {
-                        LOTRGenLayerWorld.biomeImageData[i] = (byte)biomeID.intValue();
-                        continue;
-                    }
-                    FMLLog.log((Level)Level.ERROR, (String)("Found unknown biome on map " + Integer.toHexString(color)), (Object[])new Object[0]);
-                    LOTRGenLayerWorld.biomeImageData[i] = (byte)LOTRBiome.ocean.biomeID;
+                    int biomeID = LOTRDimension.MIDDLE_EARTH.colorsToBiomeIDs.get(color);
+                    LOTRGenLayerWorld.biomeImageData[i] = (byte)biomeID;
                 }
             }
             catch (Exception e) {
@@ -165,8 +157,10 @@ extends LOTRGenLayer {
         LOTRGenLayer mapRivers = new LOTRGenLayerExtractMapRivers(5000L, biomes);
         biomes = new LOTRGenLayerRemoveMapRivers(1000L, biomes, dim);
         biomes = new LOTRGenLayerBiomeSubtypes(1000L, biomes, biomeSubtypes);
-        biomes = new LOTRGenLayerNearHaradRiverbanks(200L, biomes, mapRivers, dim);
-        biomes = new LOTRGenLayerNearHaradOasis(500L, biomes, dim);
+        if (LOTRConfig.spawnDwarvenMine) {
+            biomes = new LOTRGenLayerNearHaradRiverbanks(200L, biomes, mapRivers, dim);
+            biomes = new LOTRGenLayerNearHaradOasis(500L, biomes, dim);
+        }
         biomes = LOTRGenLayerZoom.magnify(1000L, biomes, 1);
         biomes = new LOTRGenLayerBeach(1000L, biomes, dim, LOTRBiome.ocean);
         biomes = LOTRGenLayerZoom.magnify(1000L, biomes, 2);

@@ -39,6 +39,7 @@ import lotr.common.entity.npc.LOTREntityMountainTroll;
 import lotr.common.entity.npc.LOTREntityNPC;
 import lotr.common.entity.npc.LOTREntityTroll;
 import lotr.common.entity.projectile.LOTREntityThrownRock;
+import lotr.common.item.LOTRItemBanner;
 import lotr.common.item.LOTRItemBossTrophy;
 import lotr.common.world.structure.LOTRChestContents;
 import net.minecraft.entity.DataWatcher;
@@ -139,7 +140,7 @@ implements LOTRBoss {
     @Override
     protected void applyEntityAttributes() {
         super.applyEntityAttributes();
-        this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(50.0);
+        this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue((double)MathHelper.getRandomIntegerInRange((Random)this.rand, (int)50, (int)120));
         this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.2);
         this.getEntityAttribute(npcAttackDamage).setBaseValue(8.0);
         this.getEntityAttribute(thrownRockDamage).setBaseValue(8.0);
@@ -153,9 +154,9 @@ implements LOTRBoss {
 
     @Override
     public void onLivingUpdate() {
+        double d2;
         double d1;
         LOTREntityThrownRock rock;
-        double d2;
         super.onLivingUpdate();
         if (this.getTrollSpawnTick() < SPAWN_TIME) {
             if (!this.worldObj.isRemote) {
@@ -378,6 +379,24 @@ implements LOTRBoss {
         }
         if (this.rand.nextFloat() < armorChance) {
             this.dropItem(LOTRMod.bootsGondolin, 1);
+        }
+        if (this.rand.nextFloat() < armorChance) {
+            this.dropItem(LOTRMod.ring_haldir, 1);
+        }
+        if (this.rand.nextFloat() < armorChance) {
+            this.dropItem(LOTRMod.ring_linhir, 1);
+        }
+        if (this.rand.nextFloat() < armorChance) {
+            this.entityDropItem(new ItemStack(LOTRMod.banner, 1, LOTRItemBanner.BannerType.ARNOR.bannerID), 0.0f);
+        }
+        if (this.rand.nextFloat() < armorChance) {
+            this.entityDropItem(new ItemStack(LOTRMod.banner, 1, LOTRItemBanner.BannerType.ARNOR2.bannerID), 0.0f);
+        }
+        if (this.rand.nextFloat() < armorChance) {
+            this.entityDropItem(new ItemStack(LOTRMod.banner, 1, LOTRItemBanner.BannerType.GONDOLIN.bannerID), 0.0f);
+        }
+        if (this.rand.nextFloat() < armorChance) {
+            this.entityDropItem(new ItemStack(LOTRMod.banner, 1, LOTRItemBanner.BannerType.CARDOLAN.bannerID), 0.0f);
         }
     }
 

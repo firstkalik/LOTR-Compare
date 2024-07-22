@@ -248,9 +248,7 @@ extends LOTRGuiScreenBase {
                     part = (ModelRenderer)modelParts.get(l);
                     prevShowModels[l] = part.showModel;
                     boolean isHeadPart = false;
-                    if (this.recursiveCheckForModel(model.bipedHead, part)) {
-                        isHeadPart = true;
-                    } else if (this.recursiveCheckForModel(model.bipedHeadwear, part)) {
+                    if (this.recursiveCheckForModel(model.bipedHead, part) || this.recursiveCheckForModel(model.bipedHeadwear, part)) {
                         isHeadPart = true;
                     }
                     if (isHeadPart) continue;
@@ -340,7 +338,9 @@ extends LOTRGuiScreenBase {
             f *= totalWeight;
             NPCAction chosen = null;
             for (NPCAction action : NPCAction.values()) {
-                if (!((f -= action.weight) <= 0.0f)) continue;
+                float f2;
+                f -= action.weight;
+                if (f2 > 0.0f) continue;
                 chosen = action;
                 break;
             }

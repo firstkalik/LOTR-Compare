@@ -5,6 +5,7 @@
  *  net.minecraft.block.Block
  *  net.minecraft.block.BlockFire
  *  net.minecraft.block.BlockLeavesBase
+ *  net.minecraft.creativetab.CreativeTabs
  *  net.minecraft.entity.Entity
  *  net.minecraft.entity.EntityLiving
  *  net.minecraft.entity.EntityLivingBase
@@ -27,6 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import lotr.common.LOTRBannerProtection;
+import lotr.common.LOTRCreativeTabs;
 import lotr.common.LOTRMod;
 import lotr.common.enchant.LOTREnchantment;
 import lotr.common.enchant.LOTREnchantmentHelper;
@@ -35,6 +37,7 @@ import lotr.common.item.LOTRMaterial;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFire;
 import net.minecraft.block.BlockLeavesBase;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
@@ -56,9 +59,11 @@ extends LOTRItemSword {
     public LOTRItemBalrogWhip() {
         super(LOTRMaterial.UTUMNO);
         this.lotrWeaponDamage = 7.0f;
-        this.setMaxDamage(1000);
+        this.setMaxDamage(1500);
+        this.setCreativeTab((CreativeTabs)LOTRCreativeTabs.tabStory);
     }
 
+    @Override
     public boolean hitEntity(ItemStack itemstack, EntityLivingBase hitEntity, EntityLivingBase user) {
         if (super.hitEntity(itemstack, hitEntity, user)) {
             this.checkIncompatibleModifiers(itemstack);
@@ -104,9 +109,9 @@ extends LOTRItemSword {
         float sightWidth = 1.0f;
         List list = world.getEntitiesWithinAABBExcludingEntity((Entity)user, user.boundingBox.addCoord(look.xCoord * range, look.yCoord * range, look.zCoord * range).expand((double)sightWidth, (double)sightWidth, (double)sightWidth));
         ArrayList<EntityLivingBase> whipTargets = new ArrayList<EntityLivingBase>();
-        for (int i = 0; i < list.size(); ++i) {
+        for (Object element : list) {
             EntityLivingBase entity;
-            Entity obj = (Entity)list.get(i);
+            Entity obj = (Entity)element;
             if (!(obj instanceof EntityLivingBase) || (entity = (EntityLivingBase)obj) == user.ridingEntity && !entity.canRiderInteract() || !entity.canBeCollidedWith()) continue;
             float width = 1.0f;
             AxisAlignedBB axisalignedbb = entity.boundingBox.expand((double)width, (double)width, (double)width);

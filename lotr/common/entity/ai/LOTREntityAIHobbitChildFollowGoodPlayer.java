@@ -46,8 +46,10 @@ extends EntityAIBase {
         double distanceSq = Double.MAX_VALUE;
         for (EntityPlayer playerCandidate : list) {
             double d;
-            if (!(LOTRLevelData.getData(playerCandidate).getAlignment(this.theHobbit.getFaction()) >= 200.0f) || !((d = this.theHobbit.getDistanceSqToEntity((Entity)playerCandidate)) <= distanceSq)) continue;
-            distanceSq = d;
+            if (LOTRLevelData.getData(playerCandidate).getAlignment(this.theHobbit.getFaction()) < 200.0f) continue;
+            double d2 = this.theHobbit.getDistanceSqToEntity((Entity)playerCandidate);
+            if (d > distanceSq) continue;
+            distanceSq = d2;
             entityplayer = playerCandidate;
         }
         if (entityplayer == null) {

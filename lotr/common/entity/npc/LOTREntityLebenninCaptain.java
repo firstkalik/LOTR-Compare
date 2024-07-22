@@ -46,7 +46,7 @@ implements LOTRUnitTradeable {
     public LOTREntityLebenninCaptain(World world) {
         super(world);
         this.addTargetTasks(false);
-        this.npcCape = LOTRCapes.GONDOR;
+        this.npcCape = LOTRCapes.ALIGNMENT_GONDOR.capeTexture;
         this.npcShield = LOTRShields.ALIGNMENT_LEBENNIN;
     }
 
@@ -86,7 +86,7 @@ implements LOTRUnitTradeable {
     }
 
     @Override
-    public LOTRInvasions getWarhorn() {
+    public LOTRInvasions getConquestHorn() {
         return LOTRInvasions.GONDOR_LEBENNIN;
     }
 

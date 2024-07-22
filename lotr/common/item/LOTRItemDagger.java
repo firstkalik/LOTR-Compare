@@ -14,6 +14,7 @@
 package lotr.common.item;
 
 import java.util.Random;
+import lotr.common.LOTRPotions;
 import lotr.common.item.LOTRItemSword;
 import lotr.common.item.LOTRMaterial;
 import net.minecraft.entity.EntityLivingBase;
@@ -50,6 +51,7 @@ extends LOTRItemSword {
         return this.effect;
     }
 
+    @Override
     public boolean hitEntity(ItemStack itemstack, EntityLivingBase hitEntity, EntityLivingBase user) {
         itemstack.damageItem(1, user);
         if (this.effect == DaggerEffect.NONE) {
@@ -57,6 +59,24 @@ extends LOTRItemSword {
         }
         if (this.effect == DaggerEffect.POISON) {
             LOTRItemDagger.applyStandardPoison(hitEntity);
+        }
+        if (this.effect == DaggerEffect.WITHER) {
+            LOTRItemDagger.applyStandardPoison1(hitEntity);
+        }
+        if (this.effect == DaggerEffect.WEAK) {
+            LOTRItemDagger.applyStandardWeak(hitEntity);
+        }
+        if (this.effect == DaggerEffect.SLOWNESS) {
+            LOTRItemDagger.applyStandardSlow(hitEntity);
+        }
+        if (this.effect == DaggerEffect.SLOWNESSM) {
+            LOTRItemDagger.applyStandardSlow1(hitEntity);
+        }
+        if (this.effect == DaggerEffect.HUNGER) {
+            LOTRItemDagger.applyStandardHunger(hitEntity);
+        }
+        if (this.effect == DaggerEffect.EXPLOSION) {
+            LOTRItemDagger.applyStandardExplosion(hitEntity);
         }
         return true;
     }
@@ -68,9 +88,68 @@ extends LOTRItemSword {
         entity.addPotionEffect(poison);
     }
 
+    public static void applyStandardPoison1(EntityLivingBase entity) {
+        EnumDifficulty difficulty = entity.worldObj.difficultySetting;
+        int duration = 1 + difficulty.getDifficultyId() * 2;
+        PotionEffect poison = new PotionEffect(Potion.wither.id, (duration + itemRand.nextInt(duration)) * 20);
+        entity.addPotionEffect(poison);
+    }
+
+    public static void applyStandardSlow(EntityLivingBase entity) {
+        EnumDifficulty difficulty = entity.worldObj.difficultySetting;
+        int duration = 1 + difficulty.getDifficultyId() * 2;
+        PotionEffect poison1 = new PotionEffect(Potion.moveSlowdown.id, (duration + itemRand.nextInt(duration)) * 20);
+        entity.addPotionEffect(poison1);
+    }
+
+    public static void applyStandardSlow1(EntityLivingBase entity) {
+        EnumDifficulty difficulty = entity.worldObj.difficultySetting;
+        int duration = 1 + difficulty.getDifficultyId() * 2;
+        PotionEffect poison1 = new PotionEffect(Potion.moveSlowdown.id, (duration + itemRand.nextInt(duration)) * 20);
+        PotionEffect poison2 = new PotionEffect(Potion.poison.id, (duration + itemRand.nextInt(duration)) * 20);
+        entity.addPotionEffect(poison1);
+        entity.addPotionEffect(poison2);
+    }
+
+    public static void applyStandardWeak(EntityLivingBase entity) {
+        EnumDifficulty difficulty = entity.worldObj.difficultySetting;
+        int duration = 1 + difficulty.getDifficultyId() * 2;
+        PotionEffect poison2 = new PotionEffect(Potion.weakness.id, (duration + itemRand.nextInt(duration)) * 20);
+        entity.addPotionEffect(poison2);
+    }
+
+    public static void applyStandardHunger(EntityLivingBase entity) {
+        EnumDifficulty difficulty = entity.worldObj.difficultySetting;
+        int duration = 8 + difficulty.getDifficultyId() * 2;
+        PotionEffect hungerEffect = new PotionEffect(Potion.hunger.id, (duration + itemRand.nextInt(duration)) * 20, 26);
+        entity.addPotionEffect(hungerEffect);
+    }
+
+    public static void applyStandardBlood(EntityLivingBase entity) {
+        EnumDifficulty difficulty = entity.worldObj.difficultySetting;
+        int duration = 4 + difficulty.getDifficultyId() * 2;
+        PotionEffect hungerEffect = new PotionEffect(LOTRPotions.blood.id, (duration + itemRand.nextInt(duration)) * 20, 1);
+        entity.addPotionEffect(hungerEffect);
+    }
+
+    public static void applyStandardExplosion(EntityLivingBase entity) {
+        EnumDifficulty difficulty = entity.worldObj.difficultySetting;
+        int duration = 1 + difficulty.getDifficultyId() * 2;
+        PotionEffect poison4 = new PotionEffect(LOTRPotions.explode.id, 0, 0);
+        int ticks = 1;
+        poison4.combine(new PotionEffect(LOTRPotions.explode.id, ticks));
+        entity.addPotionEffect(poison4);
+    }
+
     public static enum DaggerEffect {
         NONE,
-        POISON;
+        POISON,
+        WITHER,
+        SLOWNESS,
+        SLOWNESSM,
+        WEAK,
+        HUNGER,
+        EXPLOSION;
 
     }
 

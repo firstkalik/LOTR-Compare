@@ -35,8 +35,6 @@ implements LOTRConnectedBlock {
     @SideOnly(value=Side.CLIENT)
     private IIcon orcSteelSideIcon;
     @SideOnly(value=Side.CLIENT)
-    private IIcon urukSteelSideIcon;
-    @SideOnly(value=Side.CLIENT)
     private IIcon morgulSteelSideIcon;
 
     public LOTRBlockOreStorage() {
@@ -55,7 +53,6 @@ implements LOTRConnectedBlock {
             this.oreStorageIcons[i] = iconregister.registerIcon(this.getTextureName() + "_" + this.oreStorageNames[i]);
         }
         this.orcSteelSideIcon = iconregister.registerIcon(this.getTextureName() + "_orcSteel_side");
-        this.urukSteelSideIcon = iconregister.registerIcon(this.getTextureName() + "_urukSteel_side");
         this.morgulSteelSideIcon = iconregister.registerIcon(this.getTextureName() + "_morgulSteel_side");
     }
 
@@ -70,20 +67,17 @@ implements LOTRConnectedBlock {
 
     @SideOnly(value=Side.CLIENT)
     @Override
-    public IIcon getIcon(int side, int meta) {
-        if (meta == 4) {
-            return LOTRConnectedTextures.getConnectedIconItem(this, meta);
+    public IIcon getIcon(int i, int j) {
+        if (j == 4) {
+            return LOTRConnectedTextures.getConnectedIconItem(this, j);
         }
-        if (meta == 5 && side > 1) {
+        if (j == 5 && i > 1) {
             return this.orcSteelSideIcon;
         }
-        if (meta == 9 && side > 1) {
-            return this.urukSteelSideIcon;
-        }
-        if (meta == 12 && side > 1) {
+        if (j == 12 && i > 1) {
             return this.morgulSteelSideIcon;
         }
-        return super.getIcon(side, meta);
+        return super.getIcon(i, j);
     }
 
     @Override

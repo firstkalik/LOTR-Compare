@@ -37,14 +37,14 @@ extends CommandBase {
         int cooldown = -1;
         if (args.length == 1) {
             function = "max";
-            cooldown = LOTRCommandWaypointCooldown.parseIntBounded((ICommandSender)sender, (String)args[0], (int)0, (int)MAX_COOLDOWN);
+            cooldown = CommandBase.parseIntBounded((ICommandSender)sender, (String)args[0], (int)0, (int)MAX_COOLDOWN);
         } else if (args.length >= 2) {
             function = args[0];
-            cooldown = LOTRCommandWaypointCooldown.parseIntBounded((ICommandSender)sender, (String)args[1], (int)0, (int)MAX_COOLDOWN);
+            cooldown = CommandBase.parseIntBounded((ICommandSender)sender, (String)args[1], (int)0, (int)MAX_COOLDOWN);
         }
         if (function != null && cooldown >= 0) {
-            int max = LOTRLevelData.getWaypointCooldownMin();
-            int min = LOTRLevelData.getWaypointCooldownMax();
+            int max = LOTRLevelData.getWaypointCooldownMax();
+            int min = LOTRLevelData.getWaypointCooldownMin();
             if (function.equals("max")) {
                 boolean updatedMin = false;
                 max = cooldown;
@@ -52,10 +52,10 @@ extends CommandBase {
                     min = max;
                     updatedMin = true;
                 }
-                LOTRLevelData.setFTCooldown(max, min);
-                LOTRCommandWaypointCooldown.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.fastTravelCooldown.setMax", (Object[])new Object[]{max, LOTRLevelData.getHMSTime_Seconds(max)});
+                LOTRLevelData.setWaypointCooldown(max, min);
+                CommandBase.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.wpCooldown.setMax", (Object[])new Object[]{max, LOTRLevelData.getHMSTime_Seconds(max)});
                 if (updatedMin) {
-                    LOTRCommandWaypointCooldown.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.fastTravelCooldown.updateMin", (Object[])new Object[]{min});
+                    CommandBase.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.wpCooldown.updateMin", (Object[])new Object[]{min});
                 }
                 return;
             }
@@ -66,10 +66,10 @@ extends CommandBase {
                     max = min;
                     updatedMax = true;
                 }
-                LOTRLevelData.setFTCooldown(max, min);
-                LOTRCommandWaypointCooldown.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.fastTravelCooldown.setMin", (Object[])new Object[]{min, LOTRLevelData.getHMSTime_Seconds(min)});
+                LOTRLevelData.setWaypointCooldown(max, min);
+                CommandBase.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.wpCooldown.setMin", (Object[])new Object[]{min, LOTRLevelData.getHMSTime_Seconds(min)});
                 if (updatedMax) {
-                    LOTRCommandWaypointCooldown.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.fastTravelCooldown.updateMax", (Object[])new Object[]{max});
+                    CommandBase.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.wpCooldown.updateMax", (Object[])new Object[]{max});
                 }
                 return;
             }
@@ -79,7 +79,7 @@ extends CommandBase {
 
     public List addTabCompletionOptions(ICommandSender sender, String[] args) {
         if (args.length == 1) {
-            return LOTRCommandWaypointCooldown.getListOfStringsMatchingLastWord((String[])args, (String[])new String[]{"max", "min"});
+            return CommandBase.getListOfStringsMatchingLastWord((String[])args, (String[])new String[]{"max", "min"});
         }
         return null;
     }

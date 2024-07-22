@@ -19,8 +19,12 @@
  *  net.minecraft.entity.ai.EntityAIWatchClosest
  *  net.minecraft.entity.ai.attributes.IAttribute
  *  net.minecraft.entity.ai.attributes.IAttributeInstance
+ *  net.minecraft.entity.item.EntityItem
  *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.entity.player.InventoryPlayer
+ *  net.minecraft.entity.player.PlayerCapabilities
  *  net.minecraft.init.Blocks
+ *  net.minecraft.init.Items
  *  net.minecraft.item.Item
  *  net.minecraft.item.ItemStack
  *  net.minecraft.pathfinding.PathNavigate
@@ -29,6 +33,7 @@
  */
 package lotr.common.entity.animal;
 
+import java.util.Random;
 import java.util.UUID;
 import lotr.common.LOTRMod;
 import lotr.common.entity.LOTREntities;
@@ -54,8 +59,12 @@ import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.entity.player.PlayerCapabilities;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.pathfinding.PathNavigate;
@@ -94,6 +103,13 @@ LOTRRandomSkinEntity {
         return true;
     }
 
+    protected void dropFewItems(boolean flag, int i) {
+        int k = 1 + this.rand.nextInt(2) + this.rand.nextInt(i + 1);
+        for (int j = 0; j < k; ++j) {
+            this.dropItem(Items.leather, 1);
+        }
+    }
+
     protected boolean canDespawn() {
         return true;
     }
@@ -103,6 +119,20 @@ LOTRRandomSkinEntity {
             return LOTRAmbientSpawnChecks.canSpawn((EntityLiving)this, 8, 4, 32, 4, Material.plants, Material.vine);
         }
         return false;
+    }
+
+    public boolean interact(EntityPlayer entityplayer) {
+        ItemStack itemstack = entityplayer.inventory.getCurrentItem();
+        if (itemstack != null && itemstack.getItem() == Items.bucket && !entityplayer.capabilities.isCreativeMode) {
+            --itemstack.stackSize;
+            if (itemstack.stackSize <= 0) {
+                entityplayer.inventory.setInventorySlotContents(entityplayer.inventory.currentItem, new ItemStack(Items.milk_bucket));
+            } else if (!entityplayer.inventory.addItemStackToInventory(new ItemStack(Items.milk_bucket))) {
+                entityplayer.dropPlayerItemWithRandomChoice(new ItemStack(Items.milk_bucket, 1, 0), false);
+            }
+            return true;
+        }
+        return super.interact(entityplayer);
     }
 
     public float getBlockPathWeight(int i, int j, int k) {

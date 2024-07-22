@@ -123,18 +123,17 @@ extends LOTREntityHorse {
                 }
                 if (momentum >= 0.32f) {
                     float strength = momentum * 15.0f;
-                    Vec3 position = Vec3.createVectorHelper((double)this.posX, (double)this.posY, (double)this.posZ);
+                    Vec3.createVectorHelper((double)this.posX, (double)this.posY, (double)this.posZ);
                     Vec3 look = this.getLookVec();
                     float sightWidth = 1.0f;
                     double range = 0.5;
                     List list = this.worldObj.getEntitiesWithinAABBExcludingEntity((Entity)this, this.boundingBox.contract(1.0, 1.0, 1.0).addCoord(look.xCoord * range, look.yCoord * range, look.zCoord * range).expand((double)sightWidth, (double)sightWidth, (double)sightWidth));
                     boolean hitAnyEntities = false;
-                    for (int i = 0; i < list.size(); ++i) {
-                        boolean flag;
+                    for (Object element : list) {
                         EntityLiving entityliving;
                         EntityLivingBase entity;
-                        Entity obj = (Entity)list.get(i);
-                        if (!(obj instanceof EntityLivingBase) || (entity = (EntityLivingBase)obj) == rhinoRider || rhinoRider instanceof EntityPlayer && !LOTRMod.canPlayerAttackEntity((EntityPlayer)rhinoRider, entity, false) || rhinoRider instanceof EntityCreature && !LOTRMod.canNPCAttackEntity((EntityCreature)rhinoRider, entity, false) || !(flag = entity.attackEntityFrom(DamageSource.causeMobDamage((EntityLivingBase)this), strength))) continue;
+                        Entity obj = (Entity)element;
+                        if (!(obj instanceof EntityLivingBase) || (entity = (EntityLivingBase)obj) == rhinoRider || rhinoRider instanceof EntityPlayer && !LOTRMod.canPlayerAttackEntity((EntityPlayer)rhinoRider, entity, false) || rhinoRider instanceof EntityCreature && !LOTRMod.canNPCAttackEntity((EntityCreature)rhinoRider, entity, false) || !entity.attackEntityFrom(DamageSource.causeMobDamage((EntityLivingBase)this), strength)) continue;
                         float knockback = strength * 0.05f;
                         entity.addVelocity((double)(-MathHelper.sin((float)(this.rotationYaw * 3.1415927f / 180.0f)) * knockback), (double)knockback, (double)(MathHelper.cos((float)(this.rotationYaw * 3.1415927f / 180.0f)) * knockback));
                         hitAnyEntities = true;
@@ -159,10 +158,20 @@ extends LOTREntityHorse {
         }
     }
 
+    @Override
     protected void dropFewItems(boolean flag, int i) {
+        int k;
         int j = this.rand.nextInt(2) + this.rand.nextInt(1 + i);
-        for (int k = 0; k < j; ++k) {
+        for (int k2 = 0; k2 < j; ++k2) {
             this.dropItem(LOTRMod.rhinoHorn, 1);
+        }
+        int j3 = this.rand.nextInt(2) + this.rand.nextInt(1 + i);
+        for (k = 0; k < j3; ++k) {
+            this.dropItem(Items.bone, 1);
+        }
+        k = 1 + this.rand.nextInt(3) + this.rand.nextInt(i + 1);
+        for (int j1 = 0; j1 < k; ++j1) {
+            this.dropItem(Items.leather, 1);
         }
         int meat = this.rand.nextInt(3) + this.rand.nextInt(1 + i);
         for (int l = 0; l < meat; ++l) {

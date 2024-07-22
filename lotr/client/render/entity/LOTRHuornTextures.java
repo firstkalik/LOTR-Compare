@@ -115,7 +115,7 @@ implements IResourceManagerReloadListener {
     private ResourceLocation getDynamicHuornTexture(Block block, int meta) {
         try {
             boolean aF = Minecraft.getMinecraft().gameSettings.anisotropicFiltering > 1;
-            TextureMap terrainAtlas = (TextureMap)Minecraft.getMinecraft().getTextureManager().getTexture(TextureMap.locationBlocksTexture);
+            Minecraft.getMinecraft().getTextureManager().getTexture(TextureMap.locationBlocksTexture);
             BufferedImage[] icons = new BufferedImage[6];
             int width = block.getIcon(0, meta).getIconWidth();
             if (aF) {

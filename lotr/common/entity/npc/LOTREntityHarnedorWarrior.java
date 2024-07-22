@@ -86,11 +86,11 @@ extends LOTREntityHarnedhrim {
     public String getSpeechBank(EntityPlayer entityplayer) {
         if (this.isFriendly(entityplayer)) {
             if (this.hiredNPCInfo.getHiringPlayer() == entityplayer) {
-                return "nearHarad/harnennor/warrior/hired";
+                return "nearHarad/harnedor/warrior/hired";
             }
-            return "nearHarad/harnennor/warrior/friendly";
+            return "nearHarad/harnedor/warrior/friendly";
         }
-        return "nearHarad/harnennor/warrior/hostile";
+        return "nearHarad/harnedor/warrior/hostile";
     }
 }
 

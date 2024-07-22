@@ -140,8 +140,8 @@ public abstract class LOTRMiniQuest {
     }
 
     public void writeToNBT(NBTTagCompound nbt) {
-        NBTTagList itemTags;
         NBTTagCompound itemData;
+        NBTTagList itemTags;
         nbt.setString("QuestType", questToNameMapping.get(this.getClass()));
         if (this.questGroup != null) {
             nbt.setString("QuestGroup", this.questGroup.getBaseName());
@@ -207,14 +207,14 @@ public abstract class LOTRMiniQuest {
     }
 
     public void readFromNBT(NBTTagCompound nbt) {
-        NBTTagCompound itemData;
-        UUID u;
-        String groupName;
+        int l;
         ItemStack item;
-        LOTRMiniQuestFactory factory;
-        NBTTagList itemTags;
         String recovery;
-        if (nbt.hasKey("QuestGroup") && (factory = LOTRMiniQuestFactory.forName(groupName = nbt.getString("QuestGroup"))) != null) {
+        NBTTagList itemTags;
+        UUID u;
+        NBTTagCompound itemData;
+        LOTRMiniQuestFactory factory;
+        if (nbt.hasKey("QuestGroup") && (factory = LOTRMiniQuestFactory.forName(nbt.getString("QuestGroup"))) != null) {
             this.questGroup = factory;
         }
         if (nbt.hasKey("QuestUUID") && (u = UUID.fromString(nbt.getString("QuestUUID"))) != null) {
@@ -240,7 +240,7 @@ public abstract class LOTRMiniQuest {
         this.rewardItemTable.clear();
         if (nbt.hasKey("RewardItemTable")) {
             itemTags = nbt.getTagList("RewardItemTable", 10);
-            for (int l = 0; l < itemTags.tagCount(); ++l) {
+            for (l = 0; l < itemTags.tagCount(); ++l) {
                 itemData = itemTags.getCompoundTagAt(l);
                 item = ItemStack.loadItemStackFromNBT((NBTTagCompound)itemData);
                 if (item == null) continue;
@@ -255,7 +255,7 @@ public abstract class LOTRMiniQuest {
         this.itemsRewarded.clear();
         if (nbt.hasKey("ItemRewards")) {
             itemTags = nbt.getTagList("ItemRewards", 10);
-            for (int l = 0; l < itemTags.tagCount(); ++l) {
+            for (l = 0; l < itemTags.tagCount(); ++l) {
                 itemData = itemTags.getCompoundTagAt(l);
                 item = ItemStack.loadItemStackFromNBT((NBTTagCompound)itemData);
                 if (item == null) continue;
@@ -277,8 +277,8 @@ public abstract class LOTRMiniQuest {
         this.quotesStages.clear();
         if (nbt.hasKey("QuotesStages")) {
             NBTTagList stageTags = nbt.getTagList("QuotesStages", 8);
-            for (int l = 0; l < stageTags.tagCount(); ++l) {
-                String s = stageTags.getStringTagAt(l);
+            for (int l2 = 0; l2 < stageTags.tagCount(); ++l2) {
+                String s = stageTags.getStringTagAt(l2);
                 this.quotesStages.add(s);
             }
         }
@@ -428,8 +428,8 @@ public abstract class LOTRMiniQuest {
     }
 
     protected void complete(EntityPlayer entityplayer, LOTREntityNPC npc) {
-        int coins;
         LOTRAchievement achievement;
+        int coins;
         this.completed = true;
         this.dateCompleted = LOTRDate.ShireReckoning.currentDay;
         Random rand = npc.getRNG();
@@ -440,8 +440,10 @@ public abstract class LOTRMiniQuest {
             alignment = Math.max(alignment, 1.0f);
             LOTRAlignmentValues.AlignmentBonus bonus = LOTRAlignmentValues.createMiniquestBonus(alignment);
             LOTRFaction rewardFaction = this.getAlignmentRewardFaction();
-            LOTRAlignmentBonusMap alignmentMap = this.playerData.addAlignment(entityplayer, bonus, rewardFaction, (Entity)npc);
-            this.alignmentRewarded = ((Float)alignmentMap.get((Object)((Object)rewardFaction))).floatValue();
+            if (!this.questGroup.isNoAlignRewardForEnemy() || this.playerData.getAlignment(rewardFaction) >= 0.0f) {
+                LOTRAlignmentBonusMap alignmentMap = this.playerData.addAlignment(entityplayer, bonus, rewardFaction, (Entity)npc);
+                this.alignmentRewarded = ((Float)alignmentMap.get((Object)((Object)rewardFaction))).floatValue();
+            }
         }
         if ((coins = this.getCoinBonus()) != 0) {
             if (this.shouldRandomiseCoinReward()) {
@@ -470,6 +472,7 @@ public abstract class LOTRMiniQuest {
             this.itemsRewarded.add(item.copy());
         }
         if (this.canRewardVariousExtraItems()) {
+            ItemStack mithrilBook;
             LOTRLore lore;
             if (rand.nextInt(10) == 0 && this.questGroup != null && !this.questGroup.getLoreCategories().isEmpty() && (lore = LOTRLore.getMultiRandomLore(this.questGroup.getLoreCategories(), rand, true)) != null) {
                 ItemStack loreBook = lore.createLoreBook(rand);
@@ -482,7 +485,22 @@ public abstract class LOTRMiniQuest {
                 this.itemsRewarded.add(modItem.copy());
             }
             if (npc instanceof LOTREntityDwarf && rand.nextInt(10) == 0) {
-                ItemStack mithrilBook = new ItemStack(LOTRMod.mithrilBook);
+                mithrilBook = new ItemStack(LOTRMod.mithrilBook);
+                dropItems.add(mithrilBook.copy());
+                this.itemsRewarded.add(mithrilBook.copy());
+            }
+            if (npc instanceof LOTREntityDwarf && rand.nextInt(45) == 0) {
+                mithrilBook = new ItemStack(LOTRMod.ring_khain);
+                dropItems.add(mithrilBook.copy());
+                this.itemsRewarded.add(mithrilBook.copy());
+            }
+            if (npc instanceof LOTREntityDwarf && rand.nextInt(45) == 0) {
+                mithrilBook = new ItemStack(LOTRMod.ring_farin);
+                dropItems.add(mithrilBook.copy());
+                this.itemsRewarded.add(mithrilBook.copy());
+            }
+            if (npc instanceof LOTREntityDwarf && rand.nextInt(100) == 0) {
+                mithrilBook = new ItemStack(LOTRMod.mithrilBook2);
                 dropItems.add(mithrilBook.copy());
                 this.itemsRewarded.add(mithrilBook.copy());
             }
@@ -572,24 +590,7 @@ public abstract class LOTRMiniQuest {
         LOTRMiniQuest.registerQuestType("Welcome", LOTRMiniQuestWelcome.class);
         LOTRMiniQuest.registerQuestType("Pickpocket", LOTRMiniQuestPickpocket.class);
         MAX_MINIQUESTS_PER_FACTION = 5;
-        RENDER_HEAD_DISTANCE = 12.0;
-    }
-
-    public static class SorterAlphabetical
-    implements Comparator<LOTRMiniQuest> {
-        @Override
-        public int compare(LOTRMiniQuest q1, LOTRMiniQuest q2) {
-            if (!q2.isActive() && q1.isActive()) {
-                return 1;
-            }
-            if (!q1.isActive() && q2.isActive()) {
-                return -1;
-            }
-            if (q1.entityFaction == q2.entityFaction) {
-                return q1.entityName.compareTo(q2.entityName);
-            }
-            return Integer.valueOf(q1.entityFaction.ordinal()).compareTo(q2.entityFaction.ordinal());
-        }
+        RENDER_HEAD_DISTANCE = 15.0;
     }
 
     public static abstract class QuestFactoryBase<Q extends LOTRMiniQuest> {
@@ -650,6 +651,23 @@ public abstract class LOTRMiniQuest {
                 quest.rewardItemTable.addAll(this.rewardItems);
             }
             return (Q)quest;
+        }
+    }
+
+    public static class SorterAlphabetical
+    implements Comparator<LOTRMiniQuest> {
+        @Override
+        public int compare(LOTRMiniQuest q1, LOTRMiniQuest q2) {
+            if (!q2.isActive() && q1.isActive()) {
+                return 1;
+            }
+            if (!q1.isActive() && q2.isActive()) {
+                return -1;
+            }
+            if (q1.entityFaction == q2.entityFaction) {
+                return q1.entityName.compareTo(q2.entityName);
+            }
+            return Integer.valueOf(q1.entityFaction.ordinal()).compareTo(q2.entityFaction.ordinal());
         }
     }
 

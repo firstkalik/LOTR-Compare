@@ -44,6 +44,7 @@ extends LOTRWorldGenTauredainHouse {
     @Override
     public boolean generateWithSetRotation(World world, Random random, int i, int j, int k, int rotation) {
         int i1;
+        int k1;
         if (!super.generateWithSetRotation(world, random, i, j, k, rotation)) {
             return false;
         }
@@ -75,7 +76,7 @@ extends LOTRWorldGenTauredainHouse {
             this.melon = true;
         }
         for (i1 = -4; i1 <= 4; ++i1) {
-            for (int k1 = -3; k1 <= 3; ++k1) {
+            for (k1 = -3; k1 <= 3; ++k1) {
                 for (int j1 = 1; j1 <= 4; ++j1) {
                     this.setAir(world, i1, j1, k1);
                 }
@@ -89,7 +90,7 @@ extends LOTRWorldGenTauredainHouse {
         this.associateBlockMetaAlias("CROP", this.cropBlock, this.cropMeta);
         this.generateStrScan(world, random, 0, 0, 0);
         if (this.melon) {
-            for (int k1 = -2; k1 <= 2; ++k1) {
+            for (k1 = -2; k1 <= 2; ++k1) {
                 this.setBlockAndMetadata(world, 0, 1, k1, this.brickBlock, this.brickMeta);
             }
             for (i1 = -1; i1 <= 1; ++i1) {
@@ -97,11 +98,11 @@ extends LOTRWorldGenTauredainHouse {
                 this.setBlockAndMetadata(world, i1, 1, 0, Blocks.water, 0);
                 this.setAir(world, i1, 2, 0);
             }
-            for (int k1 : new int[]{-1, 1}) {
+            for (int k12 : new int[]{-1, 1}) {
                 for (int i12 = -3; i12 <= 3; ++i12) {
                     if (i12 == 0) continue;
-                    this.setBlockAndMetadata(world, i12, 0, k1, (Block)Blocks.sand, 0);
-                    this.setBlockAndMetadata(world, i12, 1, k1, LOTRMod.mudGrass, 0);
+                    this.setBlockAndMetadata(world, i12, 0, k12, (Block)Blocks.sand, 0);
+                    this.setBlockAndMetadata(world, i12, 1, k12, LOTRMod.mudGrass, 0);
                 }
             }
         }

@@ -43,7 +43,21 @@ implements LOTRConnectedBlock {
     @SideOnly(value=Side.CLIENT)
     @Override
     public IIcon getIcon(int i, int j) {
-        boolean[][] adjacentFlags = i == 0 || i == 1 ? new boolean[][]{{false, false, false}, {false, true, false}, {false, false, false}} : new boolean[][]{{false, true, false}, {false, true, false}, {false, true, false}};
+        boolean[][] arrarrbl;
+        if (i == 0 || i == 1) {
+            boolean[][] arrarrbl2 = new boolean[3][];
+            arrarrbl2[0] = new boolean[]{false, false, false};
+            arrarrbl2[1] = new boolean[]{false, true, false};
+            arrarrbl = arrarrbl2;
+            arrarrbl2[2] = new boolean[]{false, false, false};
+        } else {
+            boolean[][] arrarrbl3 = new boolean[3][];
+            arrarrbl3[0] = new boolean[]{false, true, false};
+            arrarrbl3[1] = new boolean[]{false, true, false};
+            arrarrbl = arrarrbl3;
+            arrarrbl3[2] = new boolean[]{false, true, false};
+        }
+        boolean[][] adjacentFlags = arrarrbl;
         return LOTRConnectedTextures.getConnectedIconItem(this, j, adjacentFlags);
     }
 

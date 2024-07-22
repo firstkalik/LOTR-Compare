@@ -4,6 +4,8 @@
  * Could not load the following classes:
  *  com.mojang.authlib.GameProfile
  *  cpw.mods.fml.common.network.IGuiHandler
+ *  cpw.mods.fml.common.network.simpleimpl.IMessage
+ *  cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper
  *  net.minecraft.block.Block
  *  net.minecraft.client.Minecraft
  *  net.minecraft.client.gui.inventory.GuiChest
@@ -11,6 +13,7 @@
  *  net.minecraft.entity.Entity
  *  net.minecraft.entity.item.EntityMinecartContainer
  *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.entity.player.EntityPlayerMP
  *  net.minecraft.entity.player.InventoryPlayer
  *  net.minecraft.init.Blocks
  *  net.minecraft.inventory.AnimalChest
@@ -30,6 +33,12 @@ package lotr.common;
 
 import com.mojang.authlib.GameProfile;
 import cpw.mods.fml.common.network.IGuiHandler;
+import cpw.mods.fml.common.network.simpleimpl.IMessage;
+import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
+import cubex2.mods.multipagechest.ContainerMultiPageChest;
+import cubex2.mods.multipagechest.InventoryMPCPage;
+import cubex2.mods.multipagechest.TileEntityMultiPageChest;
+import cubex2.mods.multipagechest.client.GuiMultiPageChest;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -110,6 +119,8 @@ import lotr.common.inventory.LOTRContainerUnitTrade;
 import lotr.common.inventory.LOTRContainerUnsmeltery;
 import lotr.common.item.LOTRItemDaleCracker;
 import lotr.common.item.LOTRItemPouch;
+import lotr.common.network.LOTRPacketClientsideGUI;
+import lotr.common.network.LOTRPacketHandler;
 import lotr.common.quest.LOTRMiniQuest;
 import lotr.common.tileentity.LOTRTileEntityAlloyForgeBase;
 import lotr.common.tileentity.LOTRTileEntityArmorStand;
@@ -122,6 +133,7 @@ import lotr.common.tileentity.LOTRTileEntityHobbitOven;
 import lotr.common.tileentity.LOTRTileEntityMillstone;
 import lotr.common.tileentity.LOTRTileEntitySign;
 import lotr.common.tileentity.LOTRTileEntityUnsmeltery;
+import lotr.common.util.LOTRGuiBank;
 import lotr.common.world.map.LOTRAbstractWaypoint;
 import lotr.common.world.map.LOTRConquestZone;
 import net.minecraft.block.Block;
@@ -131,6 +143,7 @@ import net.minecraft.client.gui.inventory.GuiDispenser;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityMinecartContainer;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.AnimalChest;
@@ -148,71 +161,16 @@ import net.minecraft.world.World;
 
 public class LOTRCommonProxy
 implements IGuiHandler {
-    public static final int GUI_ID_HOBBIT_OVEN = 0;
-    public static final int GUI_ID_MORGUL_TABLE = 1;
-    public static final int GUI_ID_ELVEN_TABLE = 2;
-    public static final int GUI_ID_TRADE = 3;
-    public static final int GUI_ID_DWARVEN_TABLE = 4;
-    public static final int GUI_ID_ALLOY_FORGE = 5;
-    public static final int GUI_ID_MOB_SPAWNER = 6;
-    public static final int GUI_ID_UNIT_TRADE = 7;
-    public static final int GUI_ID_URUK_TABLE = 8;
-    public static final int GUI_ID_HORN_SELECT = 9;
-    public static final int GUI_ID_GOLLUM = 10;
-    public static final int GUI_ID_LOTR = 11;
-    public static final int GUI_ID_WOOD_ELVEN_TABLE = 12;
-    public static final int GUI_ID_GONDORIAN_TABLE = 13;
-    public static final int GUI_ID_ROHIRRIC_TABLE = 14;
-    public static final int GUI_ID_POUCH = 15;
-    public static final int GUI_ID_BARREL = 16;
-    public static final int GUI_ID_ARMOR_STAND = 17;
-    public static final int GUI_ID_DUNLENDING_TABLE = 18;
-    public static final int GUI_ID_TRADE_INTERACT = 19;
-    public static final int GUI_ID_UNIT_TRADE_INTERACT = 20;
-    public static final int GUI_ID_HIRED_INTERACT = 21;
-    public static final int GUI_ID_HIRED_FARMER_INVENTORY = 22;
-    public static final int GUI_ID_ANGMAR_TABLE = 23;
-    public static final int GUI_ID_TRADE_UNIT_TRADE_INTERACT = 24;
-    public static final int GUI_ID_NEAR_HARAD_TABLE = 25;
-    public static final int GUI_ID_HIGH_ELVEN_TABLE = 26;
-    public static final int GUI_ID_BLUE_DWARVEN_TABLE = 27;
-    public static final int GUI_ID_RANGER_TABLE = 28;
-    public static final int GUI_ID_MOUNT_INV = 29;
-    public static final int GUI_ID_DOL_GULDUR_TABLE = 30;
-    public static final int GUI_ID_GUNDABAD_TABLE = 31;
-    public static final int GUI_ID_RED_BOOK = 32;
-    public static final int GUI_ID_SQUADRON_ITEM = 33;
-    public static final int GUI_ID_HALF_TROLL_TABLE = 34;
-    public static final int GUI_ID_COIN_EXCHANGE = 35;
-    public static final int GUI_ID_DOL_AMROTH_TABLE = 36;
-    public static final int GUI_ID_MOREDAIN_TABLE = 37;
-    public static final int GUI_ID_UNSMELTERY = 38;
-    public static final int GUI_ID_TAUREDAIN_TABLE = 39;
-    public static final int GUI_ID_DART_TRAP = 40;
-    public static final int GUI_ID_CHEST = 41;
-    public static final int GUI_ID_DALE_TABLE = 42;
-    public static final int GUI_ID_DORWINION_TABLE = 43;
-    public static final int GUI_ID_HOBBIT_TABLE = 44;
-    public static final int GUI_ID_RESPAWNER = 45;
-    public static final int GUI_ID_HIRED_WARRIOR_INVENTORY = 46;
-    public static final int GUI_ID_EDIT_SIGN = 47;
-    public static final int GUI_ID_DALE_CRACKER = 48;
-    public static final int GUI_ID_RHUN_TABLE = 49;
-    public static final int GUI_ID_BEACON = 50;
-    public static final int GUI_ID_RIVENDELL_TABLE = 51;
-    public static final int GUI_ID_MILLSTONE = 52;
-    public static final int GUI_ID_ANVIL = 53;
-    public static final int GUI_ID_ANVIL_TRADER = 54;
-    public static final int GUI_ID_BOOKSHELF = 55;
-    public static final int GUI_ID_UMBAR_TABLE = 56;
-    public static final int GUI_ID_GULF_TABLE = 57;
-    public static final int GUI_ID_MERCENARY_INTERACT = 58;
-    public static final int GUI_ID_MERCENARY_TRADE = 59;
-    public static final int GUI_ID_CONQUEST_GRID = 60;
-    public static final int GUI_ID_BRANDING_IRON = 61;
-    public static final int GUI_ID_BREE_TABLE = 62;
-    public static final int GUI_ID_CHEST_WITH_POUCH = 63;
-    public static final int GUI_ID_MINECART_CHEST_WITH_POUCH = 64;
+    public static void sendClientsideGUI(EntityPlayerMP entityplayer, int guiID, int x, int y, int z) {
+        LOTRPacketClientsideGUI packet = new LOTRPacketClientsideGUI(guiID, x, y, z);
+        LOTRPacketHandler.networkWrapper.sendTo((IMessage)packet, entityplayer);
+    }
+
+    public void registerRenderInformation() {
+    }
+
+    public void registerTileEntitySpecialRenderer() {
+    }
 
     public void onPreload() {
     }
@@ -227,20 +185,41 @@ implements IGuiHandler {
         LOTRReflection.testAll(world);
     }
 
+    public static int packGuiIDWithSlot(int guiID, int slotNo) {
+        return guiID | slotNo << 16;
+    }
+
+    public static boolean testForSlotPackedGuiID(int fullID, int guiID) {
+        return (fullID & 0xFFFF) == guiID;
+    }
+
+    public static int unpackSlot(int fullID) {
+        return fullID >> 16;
+    }
+
     public Object getServerGuiElement(int ID, EntityPlayer entityplayer, World world, int i, int j, int k) {
-        TileEntity beacon;
-        TileEntity stand;
         TileEntity unsmeltery;
-        LOTREntityNPC npc;
-        TileEntity forge;
-        TileEntity chest;
-        TileEntity oven;
-        Entity entity;
         Entity minecart;
-        TileEntity trap;
+        Entity entity;
         TileEntity millstone;
         TileEntity barrel;
+        IInventory chest2;
+        TileEntity forge;
+        LOTREntityNPC npc;
+        TileEntity stand;
         TileEntity bookshelf;
+        int slot;
+        TileEntity trap;
+        TileEntity beacon;
+        TileEntity chest;
+        TileEntity oven;
+        TileEntity te = world.getTileEntity(i, j, k);
+        if (te instanceof TileEntityMultiPageChest) {
+            return new ContainerMultiPageChest((IInventory)entityplayer.inventory, new InventoryMPCPage((TileEntityMultiPageChest)te, ID));
+        }
+        if (ID == 94) {
+            return new LOTRGuiBank(entityplayer);
+        }
         if (ID == 0 && (oven = world.getTileEntity(i, j, k)) instanceof LOTRTileEntityHobbitOven) {
             return new LOTRContainerHobbitOven(entityplayer.inventory, (LOTRTileEntityHobbitOven)oven);
         }
@@ -277,8 +256,8 @@ implements IGuiHandler {
         if (ID == 14) {
             return new LOTRContainerCraftingTable.Rohirric(entityplayer.inventory, world, i, j, k);
         }
-        if (ID == 15 && LOTRItemPouch.isHoldingPouch(entityplayer)) {
-            return new LOTRContainerPouch(entityplayer);
+        if (ID == 15 && LOTRItemPouch.isHoldingPouch(entityplayer, i)) {
+            return new LOTRContainerPouch(entityplayer, i);
         }
         if (ID == 16 && (barrel = world.getTileEntity(i, j, k)) instanceof LOTRTileEntityBarrel) {
             return new LOTRContainerBarrel(entityplayer.inventory, (LOTRTileEntityBarrel)barrel);
@@ -402,28 +381,58 @@ implements IGuiHandler {
         if (ID == 62) {
             return new LOTRContainerCraftingTable.Bree(entityplayer.inventory, world, i, j, k);
         }
-        if (ID == 63 && LOTRItemPouch.isHoldingPouch(entityplayer) && (chest = LOTRItemPouch.getChestInvAt(entityplayer, world, i, j, k)) != null) {
-            return new LOTRContainerChestWithPouch(entityplayer, (IInventory)chest);
+        if (LOTRCommonProxy.testForSlotPackedGuiID(ID, 63) && LOTRItemPouch.isHoldingPouch(entityplayer, slot = LOTRCommonProxy.unpackSlot(ID)) && (chest2 = LOTRItemPouch.getChestInvAt(entityplayer, world, i, j, k)) != null) {
+            return new LOTRContainerChestWithPouch(entityplayer, slot, chest2);
         }
-        if (ID == 64 && LOTRItemPouch.isHoldingPouch(entityplayer) && (minecart = world.getEntityByID(i)) instanceof EntityMinecartContainer) {
-            return new LOTRContainerChestWithPouch(entityplayer, (IInventory)((EntityMinecartContainer)minecart));
+        if (LOTRCommonProxy.testForSlotPackedGuiID(ID, 64) && LOTRItemPouch.isHoldingPouch(entityplayer, slot = LOTRCommonProxy.unpackSlot(ID)) && (minecart = world.getEntityByID(i)) instanceof EntityMinecartContainer) {
+            return new LOTRContainerChestWithPouch(entityplayer, slot, (IInventory)((EntityMinecartContainer)minecart));
+        }
+        if (ID == 65) {
+            return new LOTRContainerCraftingTable.Red(entityplayer.inventory, world, i, j, k);
+        }
+        if (ID == 66) {
+            return new LOTRContainerCraftingTable.Angband(entityplayer.inventory, world, i, j, k);
+        }
+        if (ID == 67) {
+            return new LOTRContainerCraftingTable.Erebor(entityplayer.inventory, world, i, j, k);
+        }
+        if (ID == 68) {
+            return new LOTRContainerCraftingTable.Wind(entityplayer.inventory, world, i, j, k);
+        }
+        if (ID == 69) {
+            return new LOTRContainerCraftingTable.WickedDwarf(entityplayer.inventory, world, i, j, k);
+        }
+        if (ID == 70) {
+            return new LOTRContainerCraftingTable.Avari(entityplayer.inventory, world, i, j, k);
+        }
+        if (ID == 71) {
+            return new LOTRContainerCraftingTable.DarkElf(entityplayer.inventory, world, i, j, k);
+        }
+        if (ID == 94) {
+            return new LOTRGuiBank(entityplayer);
         }
         return null;
     }
 
     public Object getClientGuiElement(int ID, EntityPlayer entityplayer, World world, int i, int j, int k) {
-        TileEntity beacon;
-        TileEntity stand;
-        TileEntity unsmeltery;
         LOTREntityNPC npc;
-        TileEntity forge;
-        TileEntity chest;
+        TileEntity trap;
         TileEntity oven;
         Entity entity;
-        Entity minecart;
-        TileEntity trap;
-        TileEntity millstone;
         TileEntity barrel;
+        TileEntity forge;
+        TileEntity stand;
+        TileEntity beacon;
+        TileEntity chest;
+        TileEntity unsmeltery;
+        TileEntity millstone;
+        TileEntity te = world.getTileEntity(i, j, k);
+        if (te instanceof TileEntityMultiPageChest) {
+            return new GuiMultiPageChest(entityplayer.inventory, (TileEntityMultiPageChest)te, ID);
+        }
+        if (ID == 94) {
+            return new LOTRGuiBank(entityplayer);
+        }
         if (ID == 0 && (oven = world.getTileEntity(i, j, k)) instanceof LOTRTileEntityHobbitOven) {
             return new LOTRGuiHobbitOven(entityplayer.inventory, (LOTRTileEntityHobbitOven)oven);
         }
@@ -469,8 +478,8 @@ implements IGuiHandler {
         if (ID == 14) {
             return new LOTRGuiCraftingTable.Rohirric(entityplayer.inventory, world, i, j, k);
         }
-        if (ID == 15 && LOTRItemPouch.isHoldingPouch(entityplayer)) {
-            return new LOTRGuiPouch(entityplayer);
+        if (ID == 15) {
+            return new LOTRGuiPouch(entityplayer, i);
         }
         if (ID == 16 && (barrel = world.getTileEntity(i, j, k)) instanceof LOTRTileEntityBarrel) {
             return new LOTRGuiBarrel(entityplayer.inventory, (LOTRTileEntityBarrel)barrel);
@@ -643,11 +652,43 @@ implements IGuiHandler {
         if (ID == 62) {
             return new LOTRGuiCraftingTable.Bree(entityplayer.inventory, world, i, j, k);
         }
-        if (ID == 63 && LOTRItemPouch.isHoldingPouch(entityplayer) && (chest = LOTRItemPouch.getChestInvAt(entityplayer, world, i, j, k)) != null) {
-            return new LOTRGuiChestWithPouch(entityplayer, (IInventory)chest);
+        if (LOTRCommonProxy.testForSlotPackedGuiID(ID, 63)) {
+            int slot = LOTRCommonProxy.unpackSlot(ID);
+            IInventory chest2 = LOTRItemPouch.getChestInvAt(entityplayer, world, i, j, k);
+            if (chest2 != null) {
+                return new LOTRGuiChestWithPouch(entityplayer, slot, chest2);
+            }
         }
-        if (ID == 64 && LOTRItemPouch.isHoldingPouch(entityplayer) && (minecart = world.getEntityByID(i)) instanceof EntityMinecartContainer) {
-            return new LOTRGuiChestWithPouch(entityplayer, (IInventory)((EntityMinecartContainer)minecart));
+        if (LOTRCommonProxy.testForSlotPackedGuiID(ID, 64)) {
+            int slot = LOTRCommonProxy.unpackSlot(ID);
+            Entity minecart = world.getEntityByID(i);
+            if (minecart instanceof EntityMinecartContainer) {
+                return new LOTRGuiChestWithPouch(entityplayer, slot, (IInventory)((EntityMinecartContainer)minecart));
+            }
+        }
+        if (ID == 65) {
+            return new LOTRGuiCraftingTable.Red(entityplayer.inventory, world, i, j, k);
+        }
+        if (ID == 66) {
+            return new LOTRGuiCraftingTable.Angband(entityplayer.inventory, world, i, j, k);
+        }
+        if (ID == 67) {
+            return new LOTRGuiCraftingTable.Erebor(entityplayer.inventory, world, i, j, k);
+        }
+        if (ID == 68) {
+            return new LOTRGuiCraftingTable.Wind(entityplayer.inventory, world, i, j, k);
+        }
+        if (ID == 69) {
+            return new LOTRGuiCraftingTable.WickedDwarfs(entityplayer.inventory, world, i, j, k);
+        }
+        if (ID == 70) {
+            return new LOTRGuiCraftingTable.Avari(entityplayer.inventory, world, i, j, k);
+        }
+        if (ID == 71) {
+            return new LOTRGuiCraftingTable.DarkElf(entityplayer.inventory, world, i, j, k);
+        }
+        if (ID == 94) {
+            return new LOTRGuiBank(entityplayer);
         }
         return null;
     }
@@ -789,8 +830,8 @@ implements IGuiHandler {
         world.setBlockMetadataWithNotify(i, j, k, world.getBlockMetadata(i, j, k) - 1, 3);
     }
 
-    public void usePouchOnChest(EntityPlayer entityplayer, World world, int i, int j, int k, int side, ItemStack itemstack) {
-        entityplayer.openGui((Object)LOTRMod.instance, 63, world, i, j, k);
+    public void usePouchOnChest(EntityPlayer entityplayer, World world, int i, int j, int k, int side, ItemStack itemstack, int pouchSlot) {
+        entityplayer.openGui((Object)LOTRMod.instance, LOTRCommonProxy.packGuiIDWithSlot(63, pouchSlot), world, i, j, k);
     }
 
     public void renderCustomPotionEffect(int x, int y, PotionEffect effect, Minecraft mc) {
@@ -933,6 +974,14 @@ implements IGuiHandler {
     }
 
     public int getOrcPlatingRenderID() {
+        return 0;
+    }
+
+    public int getTrapdoorRenderID() {
+        return 0;
+    }
+
+    public int getCampfireRenderID() {
         return 0;
     }
 }

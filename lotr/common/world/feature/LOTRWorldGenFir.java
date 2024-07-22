@@ -44,7 +44,6 @@ extends WorldGenAbstractTree {
     }
 
     public boolean generate(World world, Random random, int i, int j, int k) {
-        boolean isSoil;
         Block below;
         int height = MathHelper.getRandomIntegerInRange((Random)random, (int)this.minHeight, (int)this.maxHeight);
         boolean flag = true;
@@ -71,7 +70,7 @@ extends WorldGenAbstractTree {
         } else {
             flag = false;
         }
-        if (!(isSoil = (below = world.getBlock(i, j - 1, k)).canSustainPlant((IBlockAccess)world, i, j - 1, k, ForgeDirection.UP, (IPlantable)Blocks.sapling))) {
+        if (!(below = world.getBlock(i, j - 1, k)).canSustainPlant((IBlockAccess)world, i, j - 1, k, ForgeDirection.UP, (IPlantable)Blocks.sapling)) {
             flag = false;
         }
         if (!flag) {
@@ -84,10 +83,9 @@ extends WorldGenAbstractTree {
             int leafRange = l / 2;
             for (int i1 = i - leafRange; i1 <= i + leafRange; ++i1) {
                 for (int k1 = k - leafRange; k1 <= k + leafRange; ++k1) {
-                    int k2;
                     Block block = world.getBlock(i1, leafLevel, k1);
                     int i2 = Math.abs(i1 - i);
-                    if (i2 + (k2 = Math.abs(k1 - k)) > leafRange || !block.isReplaceable((IBlockAccess)world, i1, leafLevel, k1) && !block.isLeaves((IBlockAccess)world, i1, leafLevel, k1)) continue;
+                    if (i2 + Math.abs(k1 - k) > leafRange || !block.isReplaceable((IBlockAccess)world, i1, leafLevel, k1) && !block.isLeaves((IBlockAccess)world, i1, leafLevel, k1)) continue;
                     this.setBlockAndNotifyAdequately(world, i1, leafLevel, k1, this.leafBlock, this.leafMeta);
                 }
             }

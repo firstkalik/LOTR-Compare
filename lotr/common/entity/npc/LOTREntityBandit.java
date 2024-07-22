@@ -27,6 +27,7 @@
  *  net.minecraft.util.ChatComponentTranslation
  *  net.minecraft.util.DamageSource
  *  net.minecraft.util.IChatComponent
+ *  net.minecraft.util.MathHelper
  *  net.minecraft.world.World
  */
 package lotr.common.entity.npc;
@@ -74,6 +75,7 @@ import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.IChatComponent;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
 public class LOTREntityBandit
@@ -107,7 +109,7 @@ implements IBandit {
 
     @Override
     public int getMaxThefts() {
-        return 3;
+        return 4;
     }
 
     @Override
@@ -128,9 +130,9 @@ implements IBandit {
     @Override
     protected void applyEntityAttributes() {
         super.applyEntityAttributes();
-        this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(20.0);
+        this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue((double)MathHelper.getRandomIntegerInRange((Random)this.rand, (int)20, (int)25));
         this.getEntityAttribute(SharedMonsterAttributes.followRange).setBaseValue(40.0);
-        this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.2);
+        this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.21);
     }
 
     @Override
@@ -158,7 +160,7 @@ implements IBandit {
     }
 
     public int getTotalArmorValue() {
-        return 10;
+        return 12;
     }
 
     @Override

@@ -150,8 +150,8 @@ extends LOTREntityNPC {
     }
 
     @Override
-    public void setAttackTarget(EntityLivingBase target, boolean speak) {
-        super.setAttackTarget(target, speak);
+    public void setAttackTarget(EntityLivingBase target) {
+        super.setAttackTarget(target);
         if (!this.worldObj.isRemote) {
             this.setTargetEntityID((Entity)target);
         }

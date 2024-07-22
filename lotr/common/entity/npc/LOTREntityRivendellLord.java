@@ -34,7 +34,7 @@ implements LOTRUnitTradeable {
     public LOTREntityRivendellLord(World world) {
         super(world);
         this.addTargetTasks(false);
-        this.npcCape = LOTRCapes.RIVENDELL;
+        this.npcCape = LOTRCapes.RIVENDELL.capeTexture;
     }
 
     @Override
@@ -60,7 +60,7 @@ implements LOTRUnitTradeable {
     }
 
     @Override
-    public LOTRInvasions getWarhorn() {
+    public LOTRInvasions getConquestHorn() {
         return LOTRInvasions.HIGH_ELF_RIVENDELL;
     }
 

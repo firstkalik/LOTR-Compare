@@ -40,7 +40,7 @@ implements LOTRUnitTradeable {
     public LOTREntityBlackrootCaptain(World world) {
         super(world);
         this.addTargetTasks(false);
-        this.npcCape = LOTRCapes.BLACKROOT;
+        this.npcCape = LOTRCapes.BLACKROOT.capeTexture;
     }
 
     @Override
@@ -72,7 +72,7 @@ implements LOTRUnitTradeable {
     }
 
     @Override
-    public LOTRInvasions getWarhorn() {
+    public LOTRInvasions getConquestHorn() {
         return LOTRInvasions.GONDOR_BLACKROOT;
     }
 

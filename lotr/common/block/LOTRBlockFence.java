@@ -75,8 +75,8 @@ extends BlockFence {
     public void getSubBlocks(Item item, CreativeTabs tab, List list) {
         ArrayList plankTypes = new ArrayList();
         this.plankBlock.getSubBlocks(Item.getItemFromBlock((Block)this.plankBlock), this.plankBlock.getCreativeTabToDisplayOn(), plankTypes);
-        for (int j = 0; j < plankTypes.size(); ++j) {
-            Object obj = plankTypes.get(j);
+        for (Object plankType : plankTypes) {
+            Object obj = plankType;
             if (!(obj instanceof ItemStack)) continue;
             int meta = ((ItemStack)obj).getItemDamage();
             list.add(new ItemStack((Block)this, 1, meta));

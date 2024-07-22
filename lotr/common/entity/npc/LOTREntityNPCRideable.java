@@ -152,6 +152,11 @@ implements LOTRNPCMount {
         this.npcTemper = i;
     }
 
+    @Override
+    public float getStepHeightWhileRiddenByPlayer() {
+        return 1.0f;
+    }
+
     public int increaseNPCTemper(int i) {
         int temper = MathHelper.clamp_int((int)(this.getNPCTemper() + i), (int)0, (int)this.getMaxNPCTemper());
         this.setNPCTemper(temper);

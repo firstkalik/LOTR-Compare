@@ -50,7 +50,7 @@ extends CommandBase {
             if (MinecraftServer.getServer().getConfigurationManager().func_152596_g(player.getGameProfile())) {
                 if (player.capabilities.isCreativeMode) {
                     LOTRLevelData.getData(player).setAdminHideMap(true);
-                    LOTRCommandAdminHideMap.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.opHideMap.hiding", (Object[])new Object[0]);
+                    CommandBase.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.opHideMap.hiding", (Object[])new Object[0]);
                     return;
                 }
                 throw new WrongUsageException("commands.lotr.opHideMap.notCreative", new Object[0]);

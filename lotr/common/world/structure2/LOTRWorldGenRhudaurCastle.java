@@ -144,7 +144,7 @@ extends LOTRWorldGenStructureBase2 {
         if (this.isSurface(world, chestX, (chestY = this.getTopBlock(world, chestX, chestZ)) - 1, chestZ)) {
             int chestMeta = Direction.directionToFacing[random.nextInt(4)];
             this.setBlockAndMetadata(world, chestX, chestY, chestZ, LOTRMod.chestStone, chestMeta);
-            this.fillChest(world, random, chestX, chestY, chestZ, LOTRChestContents.RUINED_HOUSE, 5);
+            this.fillChest(world, random, chestX, chestY, chestZ, LOTRChestContents.LOTRChestContents2.RUINED_HOUSE, 5);
             this.fillChest(world, random, chestX, chestY, chestZ, LOTRChestContents.ORC_DUNGEON, 4);
             this.fillChest(world, random, chestX, chestY, chestZ, LOTRChestContents.DUNEDAIN_TOWER, 4);
         }

@@ -28,8 +28,8 @@ extends Container {
     public LOTREntityGollum theGollum;
 
     public LOTRContainerGollum(InventoryPlayer inv, LOTREntityGollum gollum) {
-        int i;
         int j;
+        int i;
         this.theGollum = gollum;
         for (i = 0; i < LOTREntityGollum.INV_ROWS; ++i) {
             for (j = 0; j < 9; ++j) {

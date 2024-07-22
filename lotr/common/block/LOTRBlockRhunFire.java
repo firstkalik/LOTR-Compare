@@ -55,7 +55,7 @@ extends BlockFire {
                     for (ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) {
                         Block block = world.getBlock(i + dir.offsetX, j + dir.offsetY, k + dir.offsetZ);
                         Material material = block.getMaterial();
-                        if (material != Material.rock && material != Material.clay && !(block instanceof LOTRBlockGate) || !(block.getExplosionResistance(null) < 100.0f)) continue;
+                        if (material != Material.rock && material != Material.clay && !(block instanceof LOTRBlockGate) || block.getExplosionResistance(null) >= 100.0f) continue;
                         int enco = this.getEncouragement(block);
                         int flam = this.getFlammability(block);
                         infos.put(block, Pair.of((Object)enco, (Object)flam));

@@ -59,6 +59,10 @@ implements LOTRRandomSkinEntity {
         for (int l = 0; l < hide; ++l) {
             this.dropItem(Items.leather, 1);
         }
+        int j3 = this.rand.nextInt(2) + this.rand.nextInt(1 + i);
+        for (int k = 0; k < j3; ++k) {
+            this.dropItem(Items.bone, 1);
+        }
         int meat = this.rand.nextInt(3) + this.rand.nextInt(1 + i);
         for (int l = 0; l < meat; ++l) {
             if (this.isBurning()) {

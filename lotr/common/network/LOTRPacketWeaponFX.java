@@ -49,15 +49,24 @@ implements IMessage {
         this.entityID = data.readInt();
     }
 
+    public static enum Type {
+        MACE_SAURON,
+        STAFF_GANDALF_WHITE,
+        FIREBALL_GANDALF_WHITE,
+        INFERNAL,
+        CHILLING;
+
+    }
+
     public static class Handler
     implements IMessageHandler<LOTRPacketWeaponFX, IMessage> {
         public IMessage onMessage(LOTRPacketWeaponFX packet, MessageContext context) {
             block4: {
-                Random rand;
-                double y;
                 Entity entity;
-                double z;
                 double x;
+                Random rand;
+                double z;
+                double y;
                 block8: {
                     World world;
                     block7: {
@@ -126,15 +135,6 @@ implements IMessage {
             }
             return null;
         }
-    }
-
-    public static enum Type {
-        MACE_SAURON,
-        STAFF_GANDALF_WHITE,
-        FIREBALL_GANDALF_WHITE,
-        INFERNAL,
-        CHILLING;
-
     }
 
 }

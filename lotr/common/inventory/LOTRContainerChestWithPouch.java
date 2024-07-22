@@ -27,17 +27,19 @@ public class LOTRContainerChestWithPouch
 extends ContainerChest {
     public IInventory chestInv;
     public LOTRContainerPouch pouchContainer;
+    private final int thePouchSlot;
     private int numChestRows;
     private int numPouchRows;
 
-    public LOTRContainerChestWithPouch(EntityPlayer entityplayer, IInventory chest) {
+    public LOTRContainerChestWithPouch(EntityPlayer entityplayer, int pouchSlot, IInventory chest) {
         super((IInventory)entityplayer.inventory, chest);
         int i;
         this.inventorySlots.clear();
         this.inventoryItemStacks.clear();
         this.chestInv = chest;
         this.numChestRows = chest.getSizeInventory() / 9;
-        this.pouchContainer = new LOTRContainerPouch(entityplayer);
+        this.thePouchSlot = pouchSlot;
+        this.pouchContainer = new LOTRContainerPouch(entityplayer, this.thePouchSlot);
         this.numPouchRows = this.pouchContainer.capacity / 9;
         for (int j = 0; j < this.numChestRows; ++j) {
             for (int i2 = 0; i2 < 9; ++i2) {
@@ -69,11 +71,14 @@ extends ContainerChest {
         return this.chestInv.isUseableByPlayer(entityplayer) && this.pouchContainer.canInteractWith(entityplayer);
     }
 
-    public ItemStack slotClick(int slotNo, int j, int k, EntityPlayer entityplayer) {
-        if (LOTRContainerPouch.isHeldItemSlot((Container)this, slotNo, entityplayer)) {
+    public ItemStack slotClick(int slotNo, int subActionNo, int actionNo, EntityPlayer entityplayer) {
+        if (LOTRContainerPouch.isPouchSlot((Container)this, slotNo, entityplayer, this.thePouchSlot)) {
             return null;
         }
-        return super.slotClick(slotNo, j, k, entityplayer);
+        if (actionNo == 2 && subActionNo == this.thePouchSlot) {
+            return null;
+        }
+        return super.slotClick(slotNo, subActionNo, actionNo, entityplayer);
     }
 
     public ItemStack transferStackInSlot(EntityPlayer entityplayer, int i) {

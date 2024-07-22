@@ -122,7 +122,7 @@ extends MapGenRavine {
                                 double d13 = ((double)(k1 + chunkZ * 16) + 0.5 - d2) / d6;
                                 int blockIndex = (i1 * 16 + k1) * 256 + yMax;
                                 boolean topBlock = false;
-                                if (!(d12 * d12 + d13 * d13 < 1.0)) continue;
+                                if (d12 * d12 + d13 * d13 >= 1.0) continue;
                                 for (int j1 = yMax - 1; j1 >= yMin; --j1) {
                                     double d14 = ((double)j1 + 0.5 - d1) / d7;
                                     if ((d12 * d12 + d13 * d13) * (double)this.ravineNoise[j1] + d14 * d14 / 6.0 < 1.0) {
@@ -154,9 +154,7 @@ extends MapGenRavine {
         Block filler = biome.fillerBlock;
         Block block = data[index];
         if (LOTRMapGenCaves.isTerrainBlock(block, biome)) {
-            if (j < 10) {
-                data[index] = Blocks.flowing_lava;
-            } else if (biome instanceof LOTRBiomeGenMordor && ((LOTRBiomeGenMordor)biome).isGorgoroth() && j < 60) {
+            if (j < 10 || biome instanceof LOTRBiomeGenMordor && ((LOTRBiomeGenMordor)biome).isGorgoroth() && j < 60) {
                 data[index] = Blocks.flowing_lava;
             } else {
                 data[index] = Blocks.air;

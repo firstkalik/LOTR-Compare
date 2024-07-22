@@ -20,7 +20,6 @@ import org.lwjgl.opengl.GL11;
 
 public class LOTRModelPortal
 extends ModelBase {
-    private static final int NUM_PARTS = 60;
     private boolean isScript;
     private ModelRenderer[] ringParts = new ModelRenderer[60];
     private Vec3[][] scriptParts = new Vec3[60][4];
@@ -54,8 +53,8 @@ extends ModelBase {
 
     public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
         if (!this.isScript) {
-            for (int i = 0; i < this.ringParts.length; ++i) {
-                this.ringParts[i].render(f5);
+            for (ModelRenderer ringPart : this.ringParts) {
+                ringPart.render(f5);
             }
         } else {
             GL11.glPushMatrix();

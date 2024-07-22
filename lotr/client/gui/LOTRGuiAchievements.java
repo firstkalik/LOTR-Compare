@@ -6,6 +6,7 @@
  *  net.minecraft.client.Minecraft
  *  net.minecraft.client.entity.EntityClientPlayerMP
  *  net.minecraft.client.gui.FontRenderer
+ *  net.minecraft.client.gui.Gui
  *  net.minecraft.client.gui.GuiButton
  *  net.minecraft.client.multiplayer.WorldClient
  *  net.minecraft.client.renderer.RenderHelper
@@ -34,6 +35,7 @@ import lotr.common.LOTRLevelData;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.renderer.RenderHelper;
@@ -235,7 +237,7 @@ extends LOTRGuiMenuBase {
             if (!hasAchievement) {
                 GL11.glPushMatrix();
                 GL11.glTranslatef((float)0.0f, (float)0.0f, (float)300.0f);
-                LOTRGuiAchievements.drawRect((int)iconLeft, (int)iconTop, (int)(iconLeft + 16), (int)(iconTop + 16), (int)-2013265920);
+                Gui.drawRect((int)iconLeft, (int)iconTop, (int)(iconLeft + 16), (int)(iconTop + 16), (int)-2013265920);
                 GL11.glPopMatrix();
             }
             GL11.glColor4f((float)1.0f, (float)1.0f, (float)1.0f, (float)1.0f);

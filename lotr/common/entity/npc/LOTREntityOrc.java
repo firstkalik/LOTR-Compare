@@ -98,6 +98,8 @@ import net.minecraft.world.biome.BiomeGenBase;
 public abstract class LOTREntityOrc
 extends LOTREntityNPC {
     public boolean isWeakOrc = true;
+    public boolean isStrongOrc = false;
+    public boolean isStrongOrc1 = false;
     private int orcSkirmishTick;
     public EntityLivingBase currentRevengeTarget;
 
@@ -148,8 +150,8 @@ extends LOTREntityNPC {
     @Override
     protected void applyEntityAttributes() {
         super.applyEntityAttributes();
-        this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(18.0);
-        this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.2);
+        this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue((double)MathHelper.getRandomIntegerInRange((Random)this.rand, (int)18, (int)20));
+        this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(MathHelper.getRandomDoubleInRange((Random)this.rand, (double)0.2, (double)0.21));
     }
 
     @Override
@@ -190,16 +192,20 @@ extends LOTREntityNPC {
 
     @Override
     public void onLivingUpdate() {
+        int j;
+        BiomeGenBase biome;
+        int k;
+        boolean flag;
+        int i;
         super.onLivingUpdate();
         if (!this.worldObj.isRemote && this.getAttackTarget() == null) {
             this.currentRevengeTarget = null;
         }
         if (!this.worldObj.isRemote && this.isWeakOrc) {
-            boolean flag;
-            int i = MathHelper.floor_double((double)this.posX);
-            int j = MathHelper.floor_double((double)this.boundingBox.minY);
-            int k = MathHelper.floor_double((double)this.posZ);
-            BiomeGenBase biome = this.worldObj.getBiomeGenForCoords(i, k);
+            i = MathHelper.floor_double((double)this.posX);
+            j = MathHelper.floor_double((double)this.boundingBox.minY);
+            k = MathHelper.floor_double((double)this.posZ);
+            biome = this.worldObj.getBiomeGenForCoords(i, k);
             boolean bl = flag = this.worldObj.isDaytime() && this.worldObj.canBlockSeeTheSky(i, j, k);
             if (biome instanceof LOTRBiome && ((LOTRBiome)biome).canSpawnHostilesInDay()) {
                 flag = false;
@@ -207,6 +213,36 @@ extends LOTREntityNPC {
             if (flag && this.ticksExisted % 20 == 0) {
                 this.addPotionEffect(new PotionEffect(Potion.resistance.id, 200, -1));
                 this.addPotionEffect(new PotionEffect(Potion.moveSlowdown.id, 200));
+                this.addPotionEffect(new PotionEffect(Potion.weakness.id, 200));
+            }
+        }
+        if (!this.worldObj.isRemote && this.isStrongOrc) {
+            i = MathHelper.floor_double((double)this.posX);
+            j = MathHelper.floor_double((double)this.boundingBox.minY);
+            k = MathHelper.floor_double((double)this.posZ);
+            biome = this.worldObj.getBiomeGenForCoords(i, k);
+            boolean bl = flag = this.worldObj.isDaytime() && this.worldObj.canBlockSeeTheSky(i, j, k);
+            if (biome instanceof LOTRBiome && ((LOTRBiome)biome).canSpawnHostilesInDay()) {
+                flag = true;
+            }
+            if (flag && this.ticksExisted % 20 == 0) {
+                this.addPotionEffect(new PotionEffect(Potion.resistance.id, 200, 0));
+                this.addPotionEffect(new PotionEffect(Potion.invisibility.id, 200, 0));
+                this.addPotionEffect(new PotionEffect(Potion.damageBoost.id, 200, 0));
+            }
+        }
+        if (!this.worldObj.isRemote && this.isStrongOrc1) {
+            i = MathHelper.floor_double((double)this.posX);
+            j = MathHelper.floor_double((double)this.boundingBox.minY);
+            k = MathHelper.floor_double((double)this.posZ);
+            biome = this.worldObj.getBiomeGenForCoords(i, k);
+            boolean bl = flag = this.worldObj.isDaytime() && this.worldObj.canBlockSeeTheSky(i, j, k);
+            if (biome instanceof LOTRBiome && ((LOTRBiome)biome).canSpawnHostilesInDay()) {
+                flag = true;
+            }
+            if (flag && this.ticksExisted % 20 == 0) {
+                this.addPotionEffect(new PotionEffect(Potion.resistance.id, 200, 0));
+                this.addPotionEffect(new PotionEffect(Potion.damageBoost.id, 200, 0));
             }
         }
         if (!this.worldObj.isRemote && this.isOrcSkirmishing()) {
@@ -248,8 +284,8 @@ extends LOTREntityNPC {
         this.orcSkirmishTick = 160;
         if (!this.worldObj.isRemote && prevSkirmishTick == 0) {
             List nearbyPlayers = this.worldObj.getEntitiesWithinAABB(EntityPlayer.class, this.boundingBox.expand(24.0, 24.0, 24.0));
-            for (int i = 0; i < nearbyPlayers.size(); ++i) {
-                EntityPlayer entityplayer = (EntityPlayer)nearbyPlayers.get(i);
+            for (E nearbyPlayer : nearbyPlayers) {
+                EntityPlayer entityplayer = (EntityPlayer)nearbyPlayer;
                 LOTRSpeech.sendSpeech(entityplayer, this, LOTRSpeech.getRandomSpeechForPlayer(this, this.getOrcSkirmishSpeech(), entityplayer));
             }
         }

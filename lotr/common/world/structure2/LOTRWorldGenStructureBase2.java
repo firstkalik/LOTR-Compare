@@ -14,7 +14,6 @@
  *  net.minecraft.block.BlockGrass
  *  net.minecraft.block.BlockLadder
  *  net.minecraft.block.BlockLever
- *  net.minecraft.block.BlockOre
  *  net.minecraft.block.BlockPumpkin
  *  net.minecraft.block.BlockRotatedPillar
  *  net.minecraft.block.BlockSand
@@ -113,7 +112,6 @@ import net.minecraft.block.BlockFurnace;
 import net.minecraft.block.BlockGrass;
 import net.minecraft.block.BlockLadder;
 import net.minecraft.block.BlockLever;
-import net.minecraft.block.BlockOre;
 import net.minecraft.block.BlockPumpkin;
 import net.minecraft.block.BlockRotatedPillar;
 import net.minecraft.block.BlockSand;
@@ -172,6 +170,10 @@ extends WorldGenerator {
     public LOTRWorldGenStructureBase2(boolean flag) {
         super(flag);
         this.notifyChanges = flag;
+    }
+
+    protected void placeRandomFlowerPot(World world, Random random, int i, int j, int k) {
+        this.placeFlowerPot(world, i, j, k, this.getRandomFlower(world, random));
     }
 
     public final boolean generate(World world, Random random, int i, int j, int k) {
@@ -579,6 +581,44 @@ extends WorldGenerator {
         return world.getTileEntity(i, j, k);
     }
 
+    protected void placeChest1(World world, Random random, int i, int j, int k, int meta, LOTRChestContents contents) {
+        this.placeChest1(world, random, i, j, k, meta, contents, -1);
+    }
+
+    protected void placeChest1(World world, Random random, int i, int j, int k, int meta, LOTRChestContents contents, int amount) {
+        this.placeChest1(world, random, i, j, k, LOTRMod.chestStone, meta, contents, amount);
+    }
+
+    protected void placeChest1(World world, Random random, int i, int j, int k, Block chest, int meta, LOTRChestContents contents) {
+        this.placeChest1(world, random, i, j, k, chest, meta, contents, -1);
+    }
+
+    protected void placeChest1(World world, Random random, int i, int j, int k, Block chest, int meta, LOTRChestContents contents, int amount) {
+        this.setBlockAndMetadata(world, i, j, k, chest, meta);
+        this.fillChest(world, random, i, j, k, contents, amount);
+    }
+
+    protected void fillChest1(World world, Random random, int i, int j, int k, LOTRChestContents contents, int amount) {
+        int i1 = i;
+        int k1 = k;
+        i = this.getX(i1, k1);
+        k = this.getZ(i1, k1);
+        if (!this.isInSBB(i, j = this.getY(j), k)) {
+            return;
+        }
+        LOTRChestContents.fillChest(world, random, i, j, k, contents, amount);
+    }
+
+    protected void putInventoryInChest1(World world, int i, int j, int k, IInventory inv) {
+        TileEntity tileentity = this.getTileEntity(world, i, j, k);
+        if (tileentity instanceof IInventory) {
+            IInventory blockInv = (IInventory)tileentity;
+            for (int l = 0; l < blockInv.getSizeInventory() && l < inv.getSizeInventory(); ++l) {
+                blockInv.setInventorySlotContents(l, inv.getStackInSlot(l));
+            }
+        }
+    }
+
     protected void placeChest(World world, Random random, int i, int j, int k, int meta, LOTRChestContents contents) {
         this.placeChest(world, random, i, j, k, meta, contents, -1);
     }
@@ -741,10 +781,6 @@ extends WorldGenerator {
     protected void plantFlower(World world, Random random, int i, int j, int k) {
         ItemStack itemstack = this.getRandomFlower(world, random);
         this.setBlockAndMetadata(world, i, j, k, Block.getBlockFromItem((Item)itemstack.getItem()), itemstack.getItemDamage());
-    }
-
-    protected void placeRandomFlowerPot(World world, Random random, int i, int j, int k) {
-        this.placeFlowerPot(world, i, j, k, this.getRandomFlower(world, random));
     }
 
     protected void placeFlowerPot(World world, int i, int j, int k, ItemStack itemstack) {
@@ -980,10 +1016,11 @@ extends WorldGenerator {
 
     protected void placeIthildinDoor(World world, int i, int j, int k, Block block, int meta, LOTRBlockGateDwarvenIthildin.DoorSize doorSize) {
         int xzFactorX;
+        int n;
         int i1 = this.getX(i, k);
         int j1 = this.getY(j);
         int k1 = this.getZ(i, k);
-        int n = meta == 2 ? -1 : (xzFactorX = meta == 3 ? 1 : 0);
+        int n2 = meta == 2 ? -1 : (xzFactorX = (n = meta == 3 ? 1 : 0));
         int xzFactorZ = meta == 4 ? 1 : (meta == 5 ? -1 : 0);
         for (int y = 0; y < doorSize.height; ++y) {
             for (int xz = 0; xz < doorSize.width; ++xz) {
@@ -1112,7 +1149,7 @@ extends WorldGenerator {
     protected void addBlockMetaAliasOption(String alias, int weight, Block block, int meta) {
         BlockAliasPool pool = this.scanAliases.get(alias);
         if (pool == null) {
-            pool = new BlockAliasPool(alias);
+            pool = new BlockAliasPool();
             this.scanAliases.put(alias, pool);
         }
         pool.addEntry(1, block, meta);
@@ -1129,65 +1166,57 @@ extends WorldGenerator {
 
     protected void generateStrScan(World world, Random random, int i, int j, int k) {
         for (int pass = 0; pass <= 1; ++pass) {
-            LOTRStructureScan.ScanStepBase step2 = null;
-            try {
-                for (LOTRStructureScan.ScanStepBase step2 : this.currentStrScan.scanSteps) {
-                    int i1 = i - step2.x;
-                    int j1 = j + step2.y;
-                    int k1 = k + step2.z;
-                    Block aliasBlock = null;
-                    int aliasMeta = -1;
-                    if (step2.hasAlias()) {
-                        String alias = step2.getAlias();
-                        BlockAliasPool pool = this.scanAliases.get(alias);
-                        if (pool == null) {
-                            throw new IllegalArgumentException("No block associated to alias " + alias + " !");
-                        }
-                        BlockAliasPool.BlockMetaEntry e = pool.getEntry(random);
-                        aliasBlock = e.block;
-                        aliasMeta = e.meta;
-                        if (this.scanAliasChances.containsKey(alias)) {
-                            float chance = this.scanAliasChances.get(alias).floatValue();
-                            if (!(random.nextFloat() < chance)) continue;
-                        }
+            for (LOTRStructureScan.ScanStepBase step : this.currentStrScan.scanSteps) {
+                int i1 = i - step.x;
+                int j1 = j + step.y;
+                int k1 = k + step.z;
+                Block aliasBlock = null;
+                int aliasMeta = -1;
+                if (step.hasAlias()) {
+                    String alias = step.getAlias();
+                    BlockAliasPool pool = this.scanAliases.get(alias);
+                    if (pool == null) {
+                        throw new IllegalArgumentException("No block associated to alias " + alias + " !");
                     }
-                    Block block = step2.getBlock(aliasBlock);
-                    int meta = step2.getMeta(aliasMeta);
-                    boolean inThisPass = false;
-                    if (block.getMaterial().isOpaque() || block == Blocks.air) {
-                        inThisPass = pass == 0;
-                    } else {
-                        boolean bl = inThisPass = pass == 1;
-                    }
-                    if (!inThisPass) continue;
-                    if (step2.findLowest) {
-                        while (this.getY(j1) > 0 && !this.getBlock(world, i1, j1 - 1, k1).getMaterial().blocksMovement()) {
-                            --j1;
-                        }
-                    }
-                    if (step2 instanceof LOTRStructureScan.ScanStepSkull) {
-                        this.placeSkull(world, random, i1, j1, k1);
-                        continue;
-                    }
-                    this.setBlockAndMetadata(world, i1, j1, k1, block, meta);
-                    if ((step2.findLowest || j1 <= 1) && block.isOpaqueCube()) {
-                        this.setGrassToDirt(world, i1, j1 - 1, k1);
-                    }
-                    if (!step2.fillDown) continue;
-                    int j2 = j1 - 1;
-                    while (!this.isOpaque(world, i1, j2, k1) && this.getY(j2) >= 0) {
-                        this.setBlockAndMetadata(world, i1, j2, k1, block, meta);
-                        if (block.isOpaqueCube()) {
-                            this.setGrassToDirt(world, i1, j2 - 1, k1);
-                        }
-                        --j2;
+                    BlockAliasPool.BlockMetaEntry e = pool.getEntry(random);
+                    aliasBlock = e.block;
+                    aliasMeta = e.meta;
+                    if (this.scanAliasChances.containsKey(alias)) {
+                        float chance = this.scanAliasChances.get(alias).floatValue();
+                        if (random.nextFloat() >= chance) continue;
                     }
                 }
-                continue;
-            }
-            catch (Exception e) {
-                String msg = String.format("lotr: Error generating structure from Structure Scan %s, line %d", this.currentStrScan.scanName, step2.lineNumber);
-                throw new RuntimeException(msg, e);
+                Block block = step.getBlock(aliasBlock);
+                int meta = step.getMeta(aliasMeta);
+                boolean inThisPass = false;
+                if (block.getMaterial().isOpaque() || block == Blocks.air) {
+                    inThisPass = pass == 0;
+                } else {
+                    boolean bl = inThisPass = pass == 1;
+                }
+                if (!inThisPass) continue;
+                if (step.findLowest) {
+                    while (this.getY(j1) > 0 && !this.getBlock(world, i1, j1 - 1, k1).getMaterial().blocksMovement()) {
+                        --j1;
+                    }
+                }
+                if (step instanceof LOTRStructureScan.ScanStepSkull) {
+                    this.placeSkull(world, random, i1, j1, k1);
+                    continue;
+                }
+                this.setBlockAndMetadata(world, i1, j1, k1, block, meta);
+                if ((step.findLowest || j1 <= 1) && block.isOpaqueCube()) {
+                    this.setGrassToDirt(world, i1, j1 - 1, k1);
+                }
+                if (!step.fillDown) continue;
+                int j2 = j1 - 1;
+                while (!this.isOpaque(world, i1, j2, k1) && this.getY(j2) >= 0) {
+                    this.setBlockAndMetadata(world, i1, j2, k1, block, meta);
+                    if (block.isOpaqueCube()) {
+                        this.setGrassToDirt(world, i1, j2 - 1, k1);
+                    }
+                    --j2;
+                }
             }
         }
         this.currentStrScan = null;
@@ -1267,25 +1296,17 @@ extends WorldGenerator {
         if (block == Blocks.sand || block == LOTRMod.whiteSand) {
             return true;
         }
-        if (block == LOTRMod.mordorDirt || block == LOTRMod.mordorGravel) {
-            return true;
-        }
-        return (block == Blocks.stone || block instanceof BlockOre) && !above.isOpaqueCube();
+        return block == LOTRMod.mordorDirt || block == LOTRMod.mordorGravel;
     }
 
     private static class BlockAliasPool {
-        public final String alias;
         private List<BlockMetaEntry> entries = new ArrayList<BlockMetaEntry>();
         private int totalWeight;
 
-        public BlockAliasPool(String a) {
-            this.alias = a;
+        private BlockAliasPool() {
         }
 
         public void addEntry(int w, Block b, int m) {
-            if (b == null) {
-                throw new IllegalArgumentException("Cannot associate NULL to a strscan block alias! Alias = " + this.alias);
-            }
             this.entries.add(new BlockMetaEntry(w, b, m));
             this.totalWeight = WeightedRandom.getTotalWeight(this.entries);
         }

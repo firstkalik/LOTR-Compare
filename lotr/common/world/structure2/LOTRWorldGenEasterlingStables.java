@@ -38,13 +38,13 @@ extends LOTRWorldGenEasterlingStructure {
 
     @Override
     public boolean generateWithSetRotation(World world, Random random, int i, int j, int k, int rotation) {
+        int k12;
         int i1;
         int k1;
-        int i12;
-        int j1;
-        int k12;
         int k2;
+        int j1;
         int i2;
+        int i12;
         this.setOriginAndRotation(world, i, j, k, rotation, 1);
         this.setupRandomBlocks(random);
         if (this.restrictions) {

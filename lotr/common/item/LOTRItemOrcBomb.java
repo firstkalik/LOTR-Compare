@@ -53,7 +53,7 @@ extends ItemBlock {
             list.add(StatCollector.translateToLocal((String)"tile.lotr.orcBomb.tripleStrength"));
         }
         if (LOTRBlockOrcBomb.isFireBomb(meta)) {
-            list.add(StatCollector.translateToLocal((String)"tile.lotr.orcBomb.fire"));
+            list.add("\u00a7c" + StatCollector.translateToLocal((String)"tile.lotr.orcBomb.fire"));
         }
     }
 }

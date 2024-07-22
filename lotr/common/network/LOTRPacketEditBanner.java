@@ -134,21 +134,17 @@ implements IMessage {
                             banner.whitelistPlayer(index, null);
                             continue;
                         }
+                        List<LOTRBannerProtection.Permission> decodedPerms = LOTRBannerWhitelistEntry.static_decodePermBitFlags(perms);
                         if (LOTRFellowshipProfile.hasFellowshipCode(username)) {
                             String fsName = LOTRFellowshipProfile.stripFellowshipCode(username);
                             LOTRFellowship fellowship = banner.getPlacersFellowshipByName(fsName);
-                            if (fellowship != null) {
-                                banner.whitelistFellowship(index, fellowship);
-                            }
-                        } else {
-                            GameProfile profile = MinecraftServer.getServer().func_152358_ax().func_152655_a(username);
-                            if (profile != null) {
-                                banner.whitelistPlayer(index, profile);
-                            }
+                            if (fellowship == null) continue;
+                            banner.whitelistFellowship(index, fellowship, decodedPerms);
+                            continue;
                         }
-                        LOTRBannerWhitelistEntry entry = banner.getWhitelistEntry(index);
-                        if (entry == null) continue;
-                        entry.decodePermBitFlags(perms);
+                        GameProfile profile = MinecraftServer.getServer().func_152358_ax().func_152655_a(username);
+                        if (profile == null) continue;
+                        banner.whitelistPlayer(index, profile, decodedPerms);
                     }
                 }
                 List<LOTRBannerProtection.Permission> defaultPerms = LOTRBannerWhitelistEntry.static_decodePermBitFlags(packet.defaultPerms);

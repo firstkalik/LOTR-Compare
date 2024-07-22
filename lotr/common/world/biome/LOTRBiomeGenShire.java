@@ -51,31 +51,23 @@ import net.minecraft.world.gen.feature.WorldGenerator;
 public class LOTRBiomeGenShire
 extends LOTRBiome {
     private LOTRBiomeSpawnList orcharderSpawnList = new LOTRBiomeSpawnList(this);
-    private static final float orcharderSpawnWeight = 0.3f;
 
     public LOTRBiomeGenShire(int i, boolean major) {
         super(i, major);
         this.spawnableCreatureList.add(new BiomeGenBase.SpawnListEntry(LOTREntityShirePony.class, 12, 2, 6));
-        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer = new LOTRBiomeSpawnList.SpawnListContainer[1];
-        arrspawnListContainer[0] = LOTRBiomeSpawnList.entry(LOTRSpawnList.HOBBITS, 10);
+        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer = new LOTRBiomeSpawnList.SpawnListContainer[]{LOTRBiomeSpawnList.entry(LOTRSpawnList.HOBBITS, 10)};
         this.npcSpawnList.newFactionList(100).add(arrspawnListContainer);
-        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer2 = new LOTRBiomeSpawnList.SpawnListContainer[2];
-        arrspawnListContainer2[0] = LOTRBiomeSpawnList.entry(LOTRSpawnList.GUNDABAD_ORCS, 10);
-        arrspawnListContainer2[1] = LOTRBiomeSpawnList.entry(LOTRSpawnList.GUNDABAD_WARGS, 3).setConquestThreshold(100.0f);
+        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer2 = new LOTRBiomeSpawnList.SpawnListContainer[]{LOTRBiomeSpawnList.entry(LOTRSpawnList.GUNDABAD_ORCS, 10), LOTRBiomeSpawnList.entry(LOTRSpawnList.GUNDABAD_WARGS, 3).setConquestThreshold(100.0f)};
         this.npcSpawnList.newFactionList(0).add(arrspawnListContainer2);
-        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer3 = new LOTRBiomeSpawnList.SpawnListContainer[2];
-        arrspawnListContainer3[0] = LOTRBiomeSpawnList.entry(LOTRSpawnList.ANGMAR_ORCS, 10);
-        arrspawnListContainer3[1] = LOTRBiomeSpawnList.entry(LOTRSpawnList.ANGMAR_WARGS, 3).setConquestThreshold(100.0f);
+        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer3 = new LOTRBiomeSpawnList.SpawnListContainer[]{LOTRBiomeSpawnList.entry(LOTRSpawnList.ANGMAR_ORCS, 10), LOTRBiomeSpawnList.entry(LOTRSpawnList.ANGMAR_WARGS, 3).setConquestThreshold(100.0f)};
         this.npcSpawnList.newFactionList(0).add(arrspawnListContainer3);
-        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer4 = new LOTRBiomeSpawnList.SpawnListContainer[3];
-        arrspawnListContainer4[0] = LOTRBiomeSpawnList.entry(LOTRSpawnList.RUFFIANS, 10);
-        arrspawnListContainer4[1] = LOTRBiomeSpawnList.entry(LOTRSpawnList.ISENGARD_SNAGA, 10).setConquestThreshold(25.0f);
-        arrspawnListContainer4[2] = LOTRBiomeSpawnList.entry(LOTRSpawnList.URUK_HAI, 5).setConquestThreshold(25.0f);
+        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer4 = new LOTRBiomeSpawnList.SpawnListContainer[]{LOTRBiomeSpawnList.entry(LOTRSpawnList.RUFFIANS, 10), LOTRBiomeSpawnList.entry(LOTRSpawnList.ISENGARD_SNAGA, 10).setConquestThreshold(25.0f), LOTRBiomeSpawnList.entry(LOTRSpawnList.URUK_HAI, 5).setConquestThreshold(25.0f)};
         this.npcSpawnList.newFactionList(0).add(arrspawnListContainer4);
         this.npcSpawnList.conquestGainRate = 0.2f;
-        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer5 = new LOTRBiomeSpawnList.SpawnListContainer[1];
-        arrspawnListContainer5[0] = LOTRBiomeSpawnList.entry(LOTRSpawnList.HOBBITS_ORCHARD);
+        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer5 = new LOTRBiomeSpawnList.SpawnListContainer[]{LOTRBiomeSpawnList.entry(LOTRSpawnList.HOBBITS_ORCHARD)};
         this.orcharderSpawnList.newFactionList(100).add(arrspawnListContainer5);
+        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer7 = new LOTRBiomeSpawnList.SpawnListContainer[]{LOTRBiomeSpawnList.entry(LOTRSpawnList.DURMETH_ORCS, 10), LOTRBiomeSpawnList.entry(LOTRSpawnList.DURMETH_WARGS, 3).setConquestThreshold(100.0f)};
+        this.npcSpawnList.newFactionList(0).add(arrspawnListContainer7);
         this.variantChance = 0.25f;
         this.addBiomeVariant(LOTRBiomeVariant.FLOWERS);
         this.addBiomeVariant(LOTRBiomeVariant.FOREST);
@@ -158,8 +150,8 @@ extends LOTRBiome {
     @Override
     public void decorate(World world, Random random, int i, int k) {
         int k1;
-        int i1;
         int j1;
+        int i1;
         super.decorate(world, random, i, k);
         for (int l = 0; l < this.decorator.grassPerChunk / 2; ++l) {
             int i12 = i + random.nextInt(16) + 8;

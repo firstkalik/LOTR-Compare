@@ -25,11 +25,11 @@ extends LOTRBlockSaplingBase {
 
     @Override
     public void growTree(World world, int i, int j, int k, Random random) {
-        int k1;
         int i1;
+        int k1;
         int meta = world.getBlockMetadata(i, j, k) & 7;
         WorldGenAbstractTree treeGen = null;
-        int trunkNeg = 0;
+        boolean trunkNeg = false;
         int trunkPos = 0;
         int xOffset = 0;
         int zOffset = 0;
@@ -38,14 +38,14 @@ extends LOTRBlockSaplingBase {
             if (partyTree != null) {
                 treeGen = LOTRTreeType.MAPLE_PARTY.create(true, random);
                 trunkPos = 1;
-                trunkNeg = 1;
+                trunkNeg = true;
                 xOffset = partyTree[0];
                 zOffset = partyTree[1];
             }
             if (treeGen == null) {
                 treeGen = random.nextInt(10) == 0 ? LOTRTreeType.MAPLE_LARGE.create(true, random) : LOTRTreeType.MAPLE.create(true, random);
                 trunkPos = 0;
-                trunkNeg = 0;
+                trunkNeg = false;
                 xOffset = 0;
                 zOffset = 0;
             }

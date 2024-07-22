@@ -145,7 +145,7 @@ implements LOTRAnimalSpawnConditions {
 
     protected void applyEntityAttributes() {
         super.applyEntityAttributes();
-        this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(40.0);
+        this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue((double)MathHelper.getRandomIntegerInRange((Random)this.rand, (int)40, (int)50));
         this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.2);
         this.getAttributeMap().registerAttribute(SharedMonsterAttributes.attackDamage).setBaseValue(4.0);
     }
@@ -172,8 +172,8 @@ implements LOTRAnimalSpawnConditions {
     }
 
     public void onLivingUpdate() {
-        EntityLivingBase entity;
         boolean isChild;
+        EntityLivingBase entity;
         if (!this.worldObj.isRemote && (isChild = this.isChild()) != this.prevIsChild) {
             if (isChild) {
                 this.tasks.removeTask(this.attackAI);
@@ -206,9 +206,25 @@ implements LOTRAnimalSpawnConditions {
     }
 
     protected void dropFewItems(boolean flag, int i) {
+        int l;
         int furs = 1 + this.rand.nextInt(3) + this.rand.nextInt(i + 1);
-        for (int l = 0; l < furs; ++l) {
+        for (l = 0; l < furs; ++l) {
             this.dropItem(LOTRMod.fur, 1);
+        }
+        for (l = 0; l < furs; ++l) {
+            this.dropItem(Items.bone, 1);
+        }
+        int k = 1 + this.rand.nextInt(3) + this.rand.nextInt(i + 1);
+        for (int j = 0; j < k; ++j) {
+            this.dropItem(Items.leather, 1);
+        }
+        int meat = this.rand.nextInt(3) + this.rand.nextInt(1 + i);
+        for (int l2 = 0; l2 < meat; ++l2) {
+            if (this.isBurning()) {
+                this.dropItem(LOTRMod.bearCooked, 1);
+                continue;
+            }
+            this.dropItem(LOTRMod.bearRaw, 1);
         }
         if (flag) {
             int rugChance = 30 - i * 5;
@@ -327,6 +343,14 @@ implements LOTRAnimalSpawnConditions {
         return new ItemStack(LOTRMod.spawnEgg, 1, LOTREntities.getEntityID((Entity)this));
     }
 
+    private static class BearGroupSpawnData
+    implements IEntityLivingData {
+        public int numSpawned = 0;
+
+        private BearGroupSpawnData() {
+        }
+    }
+
     public static enum BearType {
         LIGHT(0),
         DARK(1),
@@ -356,14 +380,6 @@ implements LOTRAnimalSpawnConditions {
                 names[i] = BearType.values()[i].textureName();
             }
             return names;
-        }
-    }
-
-    private static class BearGroupSpawnData
-    implements IEntityLivingData {
-        public int numSpawned = 0;
-
-        private BearGroupSpawnData() {
         }
     }
 

@@ -19,8 +19,7 @@ public class LOTRLog {
 
     public static void findLogger() {
         try {
-            Field[] fields;
-            for (Field f : fields = MinecraftServer.class.getDeclaredFields()) {
+            for (Field f : MinecraftServer.class.getDeclaredFields()) {
                 LOTRReflection.unlockFinalField(f);
                 Object obj = f.get(null);
                 if (!(obj instanceof Logger)) continue;

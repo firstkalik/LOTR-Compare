@@ -95,9 +95,7 @@ extends LOTRWorldGenTauredainHouse {
                 if (!this.isOpaque(world, i, j - 1, k)) {
                     this.setBlockAndMetadata(world, i, j, k - 1, Blocks.ladder, 2);
                 }
-            } else if (j >= 6) {
-                this.setBlockAndMetadata(world, i, j, k, this.woodBlock, this.woodMeta);
-            } else if (this.isOpaque(world, i, j - 1, k)) {
+            } else if (j >= 6 || this.isOpaque(world, i, j - 1, k)) {
                 this.setBlockAndMetadata(world, i, j, k, this.woodBlock, this.woodMeta);
             } else {
                 this.setBlockAndMetadata(world, i, j, k, this.fenceBlock, this.fenceMeta);

@@ -98,6 +98,7 @@ public class LOTRBiomeVariant {
     public static LOTRBiomeVariant[] SET_FOREST = new LOTRBiomeVariant[]{FLOWERS, HILLS, CLEARING};
     public static LOTRBiomeVariant[] SET_MOUNTAINS = new LOTRBiomeVariant[]{FOREST, FOREST_LIGHT};
     public static LOTRBiomeVariant[] SET_SWAMP = new LOTRBiomeVariant[]{SWAMP_LOWLAND, SWAMP_LOWLAND, SWAMP_LOWLAND, SWAMP_UPLAND};
+    public static LOTRBiomeVariant VariantGenst = new LOTRBiomeVariant(52, "VariantGenst", VariantScale.LARGE).setTemperatureRainfall(0.0f, -0.1f).setHeight(0.0f, 0.1f).setTrees(0.01f).setGrass(3.0f).setFlowers(0.8f);
     public static NoiseGeneratorPerlin marshNoise = new NoiseGeneratorPerlin(new Random(444L), 1);
     public static NoiseGeneratorPerlin podzolNoise = new NoiseGeneratorPerlin(new Random(58052L), 1);
     public final int variantID;

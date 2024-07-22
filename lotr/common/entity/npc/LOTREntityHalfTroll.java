@@ -111,15 +111,14 @@ extends LOTREntityNPC {
     }
 
     private boolean getHalfTrollModelFlag(int part) {
-        int pow2;
         byte i = this.dataWatcher.getWatchableObjectByte(17);
-        return (i & (pow2 = 1 << part)) != 0;
+        return (i & 1 << part) != 0;
     }
 
     private void setHalfTrollModelFlag(int part, boolean flag) {
         int i = this.dataWatcher.getWatchableObjectByte(17);
         int pow2 = 1 << part;
-        i = flag ? (i |= pow2) : (i &= ~pow2);
+        i = flag ? (i = i | pow2) : (i = i & ~pow2);
         this.dataWatcher.updateObject(17, (Object)((byte)i));
     }
 
@@ -264,13 +263,7 @@ extends LOTREntityNPC {
 
     @Override
     public boolean canReEquipHired(int slot, ItemStack itemstack) {
-        block3: {
-            block2: {
-                if (slot == 0) break block2;
-                if (slot == 1) break block2;
-                if (slot == 2) break block2;
-                if (slot != 3) break block3;
-            }
+        if (slot == 0 || slot == 1 || slot == 2 || slot == 3) {
             return itemstack != null && itemstack.getItem() instanceof ItemArmor && ((ItemArmor)itemstack.getItem()).getArmorMaterial() == LOTRMaterial.HALF_TROLL.toArmorMaterial();
         }
         return super.canReEquipHired(slot, itemstack);

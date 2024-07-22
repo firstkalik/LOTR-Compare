@@ -18,7 +18,7 @@ import lotr.common.entity.npc.LOTREntityEasterling;
 import lotr.common.entity.npc.LOTRFamilyInfo;
 import lotr.common.entity.npc.LOTRHiredNPCInfo;
 import lotr.common.entity.npc.LOTRInventoryNPCItems;
-import lotr.common.item.LOTRItemKaftan;
+import lotr.common.item.LOTRItemHaradRobes;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -67,11 +67,11 @@ extends LOTREntityEasterling {
         if (this.rand.nextBoolean()) {
             ItemStack kaftan = new ItemStack(LOTRMod.bodyKaftan);
             int kaftanColor = kaftanColors[this.rand.nextInt(kaftanColors.length)];
-            LOTRItemKaftan.setRobesColor(kaftan, kaftanColor);
+            LOTRItemHaradRobes.setRobesColor(kaftan, kaftanColor);
             this.setCurrentItemOrArmor(3, kaftan);
             if (this.rand.nextBoolean()) {
                 ItemStack kaftanLegs = new ItemStack(LOTRMod.legsKaftan);
-                LOTRItemKaftan.setRobesColor(kaftanLegs, kaftanColor);
+                LOTRItemHaradRobes.setRobesColor(kaftanLegs, kaftanColor);
                 this.setCurrentItemOrArmor(2, kaftanLegs);
             }
         }

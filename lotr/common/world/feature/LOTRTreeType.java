@@ -873,6 +873,10 @@ public enum LOTRTreeType {
         return this.treeFactory.createTree(flag, rand);
     }
 
+    private static interface ITreeFactory {
+        public WorldGenAbstractTree createTree(boolean var1, Random var2);
+    }
+
     public static class WeightedTreeType
     extends WeightedRandom.Item {
         public final LOTRTreeType treeType;
@@ -881,10 +885,6 @@ public enum LOTRTreeType {
             super(i);
             this.treeType = tree;
         }
-    }
-
-    private static interface ITreeFactory {
-        public WorldGenAbstractTree createTree(boolean var1, Random var2);
     }
 
 }

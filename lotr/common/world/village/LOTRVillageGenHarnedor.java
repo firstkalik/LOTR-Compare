@@ -60,21 +60,19 @@ extends LOTRVillageGen {
         return new Instance(this, world, i, k, random, loc);
     }
 
+    public static enum VillageType {
+        VILLAGE,
+        FORTRESS;
+
+    }
+
     public static class Instance
     extends LOTRVillageGen.AbstractInstance<LOTRVillageGenHarnedor> {
         public VillageType villageType;
         private boolean isRuined;
         public String[] villageName;
         private int numOuterHouses;
-        private static final int pathInner = 17;
-        private static final int roadWidth = 5;
-        private static final int pathFuzz = 3;
-        private static final int rHouses = 25;
-        private static final int rFarms = 45;
         private boolean palisade;
-        private static final int rPalisade = 61;
-        private static final int rTowers = 24;
-        private static final int rFortPalisade = 42;
 
         public Instance(LOTRVillageGenHarnedor village, World world, int i, int k, Random random, LocationInfo loc) {
             super(village, world, i, k, random, loc);
@@ -203,8 +201,8 @@ extends LOTRVillageGen {
                 int rSqMax = rMax * rMax;
                 for (int i = -61; i <= 61; ++i) {
                     for (int k = -61; k <= 61; ++k) {
-                        LOTRWorldGenHarnedorPalisade palisade;
                         int dSq;
+                        LOTRWorldGenHarnedorPalisade palisade;
                         int i1 = Math.abs(i);
                         if (i1 <= 4 && k < 0 || (dSq = i * i + k * k) < rSq || dSq >= rSqMax) continue;
                         if (this.isRuined) {
@@ -277,7 +275,7 @@ extends LOTRVillageGen {
         @Override
         protected LOTRRoadType getPath(Random random, int i, int k) {
             int i1 = Math.abs(i);
-            int k1 = Math.abs(k);
+            Math.abs(k);
             if (this.villageType == VillageType.VILLAGE) {
                 if (this.isRuined && random.nextInt(4) == 0) {
                     return null;
@@ -299,12 +297,6 @@ extends LOTRVillageGen {
         public boolean isVillageSpecificSurface(World world, int i, int j, int k) {
             return false;
         }
-
-    }
-
-    public static enum VillageType {
-        VILLAGE,
-        FORTRESS;
 
     }
 

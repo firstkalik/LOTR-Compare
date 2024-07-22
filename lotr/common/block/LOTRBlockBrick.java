@@ -22,9 +22,6 @@ import net.minecraft.world.IBlockAccess;
 public class LOTRBlockBrick
 extends LOTRBlockBrickBase
 implements LOTRConnectedBlock {
-    @SideOnly(value=Side.CLIENT)
-    private IIcon iconRohanSide;
-
     public LOTRBlockBrick() {
         this.setBrickNames("mordor", "gondor", "gondorMossy", "gondorCracked", "rohan", "gondorCarved", "dwarven", "mordorCracked", "dwarvenSilver", "dwarvenGold", "dwarvenMithril", "galadhrim", "galadhrimMossy", "galadhrimCracked", "blueRock", "nearHarad");
     }
@@ -39,8 +36,6 @@ implements LOTRConnectedBlock {
                 continue;
             }
             this.brickIcons[i] = iconregister.registerIcon(this.getTextureName() + "_" + this.brickNames[i]);
-            if (i != 4) continue;
-            this.iconRohanSide = iconregister.registerIcon(this.getTextureName() + "_" + this.brickNames[i] + "_side");
         }
     }
 
@@ -58,9 +53,6 @@ implements LOTRConnectedBlock {
     public IIcon getIcon(int i, int j) {
         if (j == 8 || j == 9 || j == 10) {
             return LOTRConnectedTextures.getConnectedIconItem(this, j);
-        }
-        if (j == 4 && i != 0 && i != 1) {
-            return this.iconRohanSide;
         }
         return super.getIcon(i, j);
     }

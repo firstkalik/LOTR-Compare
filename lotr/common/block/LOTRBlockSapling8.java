@@ -36,9 +36,9 @@ extends LOTRBlockSaplingBase {
             treeGen = LOTRTreeType.PLUM.create(true, random);
         }
         if (meta == 1) {
-            int[] tree4x4;
             int[] tree2x2;
             int[] tree3x3;
+            int[] tree4x4;
             int[] tree5x5 = LOTRBlockSaplingBase.findSaplingSquare(world, i, j, k, (Block)this, meta, -2, 2, -4, 4);
             if (tree5x5 != null) {
                 treeGen = LOTRTreeType.REDWOOD_5.create(true, random);

@@ -113,7 +113,7 @@ LOTRRandomSkinEntity {
     public IEntityLivingData onSpawnWithEgg(IEntityLivingData data) {
         data = super.onSpawnWithEgg(data);
         int i = MathHelper.floor_double((double)this.posX);
-        int j = MathHelper.floor_double((double)this.posY);
+        MathHelper.floor_double((double)this.posY);
         int k = MathHelper.floor_double((double)this.posZ);
         BiomeGenBase biome = this.worldObj.getBiomeGenForCoords(i, k);
         if (biome instanceof LOTRBiomeGenMirkwood || biome instanceof LOTRBiomeGenWoodlandRealm) {
@@ -172,9 +172,6 @@ LOTRRandomSkinEntity {
                 double d = this.posX;
                 double d1 = this.posY;
                 double d2 = this.posZ;
-                double d3 = this.motionX * -0.2;
-                double d4 = this.motionY * -0.2;
-                double d5 = this.motionZ * -0.2;
                 if (this.elfTorchBlock == null) {
                     Random torchRand = new Random();
                     torchRand.setSeed(this.entityUniqueID.getLeastSignificantBits());
@@ -190,12 +187,10 @@ LOTRRandomSkinEntity {
     protected void updateAITasks() {
         super.updateAITasks();
         if (this.isButterflyStill()) {
-            int j;
             int k;
+            int j;
             int i = MathHelper.floor_double((double)this.posX);
-            if (!this.worldObj.getBlock(i, j = (int)this.posY - 1, k = MathHelper.floor_double((double)this.posZ)).isSideSolid((IBlockAccess)this.worldObj, i, j, k, ForgeDirection.UP)) {
-                this.setButterflyStill(false);
-            } else if (this.rand.nextInt(400) == 0 || this.worldObj.getClosestPlayerToEntity((Entity)this, 3.0) != null) {
+            if (!this.worldObj.getBlock(i, j = (int)this.posY - 1, k = MathHelper.floor_double((double)this.posZ)).isSideSolid((IBlockAccess)this.worldObj, i, j, k, ForgeDirection.UP) || this.rand.nextInt(400) == 0 || this.worldObj.getClosestPlayerToEntity((Entity)this, 3.0) != null) {
                 this.setButterflyStill(false);
             }
         } else {

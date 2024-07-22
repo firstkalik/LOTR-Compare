@@ -36,8 +36,10 @@ extends LOTREnchantment {
     @Override
     public boolean canApply(ItemStack itemstack, boolean considering) {
         if (super.canApply(itemstack, considering)) {
+            float f;
             float reach = LOTRWeaponStats.getMeleeReachFactor(itemstack);
-            return (reach *= this.reachFactor) <= LOTRWeaponStats.MAX_MODIFIABLE_REACH;
+            reach *= this.reachFactor;
+            return f <= LOTRWeaponStats.MAX_MODIFIABLE_REACH;
         }
         return false;
     }

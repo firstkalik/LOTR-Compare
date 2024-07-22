@@ -13,8 +13,7 @@ extends LOTRBiomeGenFangorn {
     public LOTRBiomeGenFangornClearing(int i, boolean major) {
         super(i, major);
         this.npcSpawnList.clear();
-        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer = new LOTRBiomeSpawnList.SpawnListContainer[1];
-        arrspawnListContainer[0] = LOTRBiomeSpawnList.entry(LOTRSpawnList.ENTS, 10);
+        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer = new LOTRBiomeSpawnList.SpawnListContainer[]{LOTRBiomeSpawnList.entry(LOTRSpawnList.ENTS, 10)};
         this.npcSpawnList.newFactionList(100).add(arrspawnListContainer);
         this.clearBiomeVariants();
         this.decorator.treesPerChunk = 0;

@@ -27,10 +27,10 @@ extends LOTRWorldGenGondorStructure {
         this.setOriginAndRotation(world, i, j, k, rotation, 0);
         this.setupRandomBlocks(random);
         for (int l = -8; l <= 8; ++l) {
-            int k1;
             boolean pillar;
             int i1;
             int j1;
+            int k1;
             if (l >= 0) {
                 i1 = l / 2;
                 k1 = -((l + 1) / 2);

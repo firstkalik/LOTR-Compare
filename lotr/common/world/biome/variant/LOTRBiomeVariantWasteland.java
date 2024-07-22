@@ -33,6 +33,7 @@ extends LOTRBiomeVariant {
 
     @Override
     public void generateVariantTerrain(World world, Random random, Block[] blocks, byte[] meta, int i, int k, int height, LOTRBiome biome) {
+        double d;
         int chunkX = i & 0xF;
         int chunkZ = k & 0xF;
         int xzIndex = chunkX * 16 + chunkZ;
@@ -42,7 +43,8 @@ extends LOTRBiomeVariant {
         d2 *= 0.3;
         double d3 = podzolNoise.func_151601_a((double)i * 0.04, (double)k * 0.04);
         double d4 = podzolNoise.func_151601_a((double)i * 0.3, (double)k * 0.3);
-        if (d3 + (d4 *= 0.3) > 0.5) {
+        d4 *= 0.3;
+        if (d3 + d > 0.5) {
             int j = height;
             int index = xzIndex * ySize + j;
             blocks[index] = Blocks.dirt;

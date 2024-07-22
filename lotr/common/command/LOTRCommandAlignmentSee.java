@@ -53,7 +53,7 @@ extends CommandBase {
             String username = args[0];
             GameProfile profile = null;
             EntityPlayerMP entityplayer = MinecraftServer.getServer().getConfigurationManager().func_152612_a(username);
-            profile = entityplayer != null ? entityplayer.getGameProfile() : MinecraftServer.getServer().func_152358_ax().func_152655_a(username);
+            GameProfile gameProfile = profile = entityplayer != null ? entityplayer.getGameProfile() : MinecraftServer.getServer().func_152358_ax().func_152655_a(username);
             if (profile == null || profile.getId() == null) {
                 throw new PlayerNotFoundException("commands.lotr.alignmentsee.noPlayer", new Object[]{username});
             }
@@ -69,7 +69,7 @@ extends CommandBase {
 
     public List addTabCompletionOptions(ICommandSender sender, String[] args) {
         if (args.length == 1) {
-            return LOTRCommandAlignmentSee.getListOfStringsMatchingLastWord((String[])args, (String[])MinecraftServer.getServer().getAllUsernames());
+            return CommandBase.getListOfStringsMatchingLastWord((String[])args, (String[])MinecraftServer.getServer().getAllUsernames());
         }
         return null;
     }

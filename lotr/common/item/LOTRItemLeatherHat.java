@@ -36,10 +36,9 @@ public class LOTRItemLeatherHat
 extends LOTRItemArmor {
     public static final int HAT_LEATHER = 6834742;
     public static final int HAT_SHIRRIFF_CHIEF = 2301981;
-    public static final int HAT_BLACK = 0;
     public static final int FEATHER_WHITE = 16777215;
     public static final int FEATHER_SHIRRIFF_CHIEF = 3381529;
-    public static final int FEATHER_BREE_CAPTAIN = 40960;
+    public static final int HAT_BLACK = 0;
     @SideOnly(value=Side.CLIENT)
     private IIcon featherIcon;
 

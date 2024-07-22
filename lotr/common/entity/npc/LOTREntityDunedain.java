@@ -227,7 +227,7 @@ extends LOTREntityMan {
     @Override
     public float getBlockPathWeight(int i, int j, int k) {
         float f = 0.0f;
-        BiomeGenBase biome = this.worldObj.getBiomeGenForCoords(i, k);
+        this.worldObj.getBiomeGenForCoords(i, k);
         return f += 20.0f;
     }
 

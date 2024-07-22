@@ -40,7 +40,7 @@ implements LOTRUnitTradeable {
     public LOTREntityRohirrimMarshal(World world) {
         super(world);
         this.addTargetTasks(false);
-        this.npcCape = LOTRCapes.ROHAN;
+        this.npcCape = LOTRCapes.ALIGNMENT_ROHAN.capeTexture;
     }
 
     @Override
@@ -74,7 +74,7 @@ implements LOTRUnitTradeable {
     }
 
     @Override
-    public LOTRInvasions getWarhorn() {
+    public LOTRInvasions getConquestHorn() {
         return LOTRInvasions.ROHAN;
     }
 

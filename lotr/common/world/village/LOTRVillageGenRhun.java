@@ -42,19 +42,6 @@ import net.minecraft.world.World;
 public class LOTRVillageGenRhun
 extends LOTRVillageGen {
     private boolean enableTowns;
-    private static final int VILLAGE_CENTRE_SIZE = 15;
-    private static final int VILLAGE_PATH_LENGTH = 64;
-    private static final int VILLAGE_PATH_WIDTH = 3;
-    private static final int PATH_FUZZ = 4;
-    private static final int TOWN_ROAD_WIDTH = 6;
-    private static final int TOWN_INNER_ROAD = 12;
-    private static final int TOWN_OUTER_ROAD = 60;
-    private static final int TOWN_HOUSE_GAP = 2;
-    private static final int TOWN_EDGE = 86;
-    private static final int FORT_ROAD_WIDTH = 4;
-    private static final int FORT_EDGE = 54;
-    private static final int FORT_INNER_ROAD = 20;
-    private static final int FORT_OUTER_ROAD = 48;
 
     public LOTRVillageGenRhun(LOTRBiome biome, float f, boolean flag) {
         super(biome);
@@ -68,6 +55,13 @@ extends LOTRVillageGen {
     @Override
     protected LOTRVillageGen.AbstractInstance<?> createVillageInstance(World world, int i, int k, Random random, LocationInfo loc) {
         return new Instance(this, world, i, k, random, loc);
+    }
+
+    public static enum VillageType {
+        VILLAGE,
+        TOWN,
+        FORT;
+
     }
 
     public static class Instance
@@ -453,13 +447,6 @@ extends LOTRVillageGen {
         public boolean isVillageSpecificSurface(World world, int i, int j, int k) {
             return false;
         }
-
-    }
-
-    public static enum VillageType {
-        VILLAGE,
-        TOWN,
-        FORT;
 
     }
 

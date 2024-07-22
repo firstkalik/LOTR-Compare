@@ -43,21 +43,21 @@ extends LOTRWorldGenGondorStructure {
 
     @Override
     public boolean generateWithSetRotation(World world, Random random, int i, int j, int k, int rotation) {
-        int i1;
         int k1;
-        int i12;
-        int k12;
-        int k132;
+        int k13;
+        int i1;
         int j1;
+        int i12;
+        int k122;
         this.setOriginAndRotation(world, i, j, k, rotation, 1);
         this.setupRandomBlocks(random);
         if (this.restrictions) {
             int minHeight = 0;
             int maxHeight = 0;
             for (int i13 = -12; i13 <= 5; ++i13) {
-                for (k132 = -2; k132 <= 15; ++k132) {
-                    int j12 = this.getTopBlock(world, i13, k132) - 1;
-                    if (!this.isSurface(world, i13, j12, k132)) {
+                for (k122 = -2; k122 <= 15; ++k122) {
+                    int j12 = this.getTopBlock(world, i13, k122) - 1;
+                    if (!this.isSurface(world, i13, j12, k122)) {
                         return false;
                     }
                     if (j12 < minHeight) {
@@ -106,91 +106,91 @@ extends LOTRWorldGenGondorStructure {
             this.setBlockAndMetadata(world, i15, 4, 11, this.fenceBlock, this.fenceMeta);
             this.setBlockAndMetadata(world, i15, 4, 12, this.plankStairBlock, 6);
         }
-        for (int k132 : new int[]{0, 13}) {
-            for (i12 = -3; i12 <= 3; ++i12) {
+        for (int k1221 : new int[]{0, 13}) {
+            for (i1 = -3; i1 <= 3; ++i1) {
                 int j14;
-                int i2 = Math.abs(i12);
+                int i2 = Math.abs(i1);
                 if (i2 <= 1) {
-                    this.setBlockAndMetadata(world, i12, 1, k132, this.fenceGateBlock, 0);
+                    this.setBlockAndMetadata(world, i1, 1, k1221, this.fenceGateBlock, 0);
                 } else {
-                    this.setBlockAndMetadata(world, i12, 1, k132, this.rockBlock, this.rockMeta);
+                    this.setBlockAndMetadata(world, i1, 1, k1221, this.rockBlock, this.rockMeta);
                 }
                 if (i2 == 2) {
                     for (j14 = 2; j14 <= 7; ++j14) {
-                        this.setBlockAndMetadata(world, i12, j14, k132, this.woodBeamBlock, this.woodBeamMeta);
+                        this.setBlockAndMetadata(world, i1, j14, k1221, this.woodBeamBlock, this.woodBeamMeta);
                     }
                 }
                 if (i2 != 3) continue;
                 for (j14 = 2; j14 <= 5; ++j14) {
-                    this.setBlockAndMetadata(world, i12, j14, k132, this.plankBlock, this.plankMeta);
+                    this.setBlockAndMetadata(world, i1, j14, k1221, this.plankBlock, this.plankMeta);
                 }
                 for (j14 = 6; j14 <= 8; ++j14) {
-                    this.setBlockAndMetadata(world, i12, j14, k132, this.wallBlock, this.wallMeta);
+                    this.setBlockAndMetadata(world, i1, j14, k1221, this.wallBlock, this.wallMeta);
                 }
             }
-            this.setBlockAndMetadata(world, -1, 4, k132, this.plankStairBlock, 4);
-            this.setBlockAndMetadata(world, 1, 4, k132, this.plankStairBlock, 5);
-            for (i12 = -1; i12 <= 1; ++i12) {
-                this.setBlockAndMetadata(world, i12, 5, k132, this.plankBlock, this.plankMeta);
-                this.setBlockAndMetadata(world, i12, 6, k132, this.wallBlock, this.wallMeta);
-                this.setBlockAndMetadata(world, i12, 8, k132, this.wallBlock, this.wallMeta);
-                this.setBlockAndMetadata(world, i12, 9, k132, this.wallBlock, this.wallMeta);
+            this.setBlockAndMetadata(world, -1, 4, k1221, this.plankStairBlock, 4);
+            this.setBlockAndMetadata(world, 1, 4, k1221, this.plankStairBlock, 5);
+            for (i1 = -1; i1 <= 1; ++i1) {
+                this.setBlockAndMetadata(world, i1, 5, k1221, this.plankBlock, this.plankMeta);
+                this.setBlockAndMetadata(world, i1, 6, k1221, this.wallBlock, this.wallMeta);
+                this.setBlockAndMetadata(world, i1, 8, k1221, this.wallBlock, this.wallMeta);
+                this.setBlockAndMetadata(world, i1, 9, k1221, this.wallBlock, this.wallMeta);
             }
-            this.setBlockAndMetadata(world, -1, 7, k132, this.wallBlock, this.wallMeta);
-            this.setBlockAndMetadata(world, 0, 7, k132, this.fenceBlock, this.fenceMeta);
-            this.setBlockAndMetadata(world, 1, 7, k132, this.wallBlock, this.wallMeta);
+            this.setBlockAndMetadata(world, -1, 7, k1221, this.wallBlock, this.wallMeta);
+            this.setBlockAndMetadata(world, 0, 7, k1221, this.fenceBlock, this.fenceMeta);
+            this.setBlockAndMetadata(world, 1, 7, k1221, this.wallBlock, this.wallMeta);
         }
         int[] i14 = new int[]{-1, 14};
         k1 = i14.length;
         for (j1 = 0; j1 < k1; ++j1) {
-            k132 = i14[j1];
-            for (i12 = -3; i12 <= 3; ++i12) {
-                this.setBlockAndMetadata(world, i12, 6, k132, this.woodBeamBlock, this.woodBeamMeta | 4);
+            k122 = i14[j1];
+            for (i1 = -3; i1 <= 3; ++i1) {
+                this.setBlockAndMetadata(world, i1, 6, k122, this.woodBeamBlock, this.woodBeamMeta | 4);
             }
         }
         this.setBlockAndMetadata(world, 0, 5, -1, this.plankStairBlock, 6);
         this.setBlockAndMetadata(world, 0, 5, 14, this.plankStairBlock, 7);
-        for (k12 = -1; k12 <= 14; ++k12) {
-            this.setBlockAndMetadata(world, -2, 8, k12, this.woodBeamBlock, this.woodBeamMeta | 8);
-            this.setBlockAndMetadata(world, 2, 8, k12, this.woodBeamBlock, this.woodBeamMeta | 8);
-            this.setBlockAndMetadata(world, 0, 10, k12, this.woodBeamBlock, this.woodBeamMeta | 8);
-            this.setBlockAndMetadata(world, -5, 5, k12, this.roofStairBlock, 1);
-            this.setBlockAndMetadata(world, -4, 6, k12, this.roofBlock, this.roofMeta);
-            this.setBlockAndMetadata(world, -4, 7, k12, this.roofStairBlock, 1);
-            this.setBlockAndMetadata(world, -3, 8, k12, this.roofStairBlock, 1);
-            this.setBlockAndMetadata(world, -2, 9, k12, this.roofStairBlock, 1);
-            this.setBlockAndMetadata(world, -1, 10, k12, this.roofStairBlock, 1);
-            this.setBlockAndMetadata(world, 0, 11, k12, this.roofSlabBlock, this.roofSlabMeta);
-            this.setBlockAndMetadata(world, 1, 10, k12, this.roofStairBlock, 0);
-            this.setBlockAndMetadata(world, 2, 9, k12, this.roofStairBlock, 0);
-            this.setBlockAndMetadata(world, 3, 8, k12, this.roofStairBlock, 0);
-            this.setBlockAndMetadata(world, 4, 7, k12, this.roofStairBlock, 0);
-            this.setBlockAndMetadata(world, 4, 6, k12, this.roofBlock, this.roofMeta);
-            this.setBlockAndMetadata(world, 5, 5, k12, this.roofStairBlock, 0);
-            if (k12 != -1 && k12 != 14) continue;
-            this.setBlockAndMetadata(world, -4, 5, k12, this.roofStairBlock, 4);
-            this.setBlockAndMetadata(world, -3, 7, k12, this.roofStairBlock, 4);
-            this.setBlockAndMetadata(world, -1, 9, k12, this.roofStairBlock, 4);
-            this.setBlockAndMetadata(world, 1, 9, k12, this.roofStairBlock, 5);
-            this.setBlockAndMetadata(world, 3, 7, k12, this.roofStairBlock, 5);
-            this.setBlockAndMetadata(world, 4, 5, k12, this.roofStairBlock, 5);
+        for (k13 = -1; k13 <= 14; ++k13) {
+            this.setBlockAndMetadata(world, -2, 8, k13, this.woodBeamBlock, this.woodBeamMeta | 8);
+            this.setBlockAndMetadata(world, 2, 8, k13, this.woodBeamBlock, this.woodBeamMeta | 8);
+            this.setBlockAndMetadata(world, 0, 10, k13, this.woodBeamBlock, this.woodBeamMeta | 8);
+            this.setBlockAndMetadata(world, -5, 5, k13, this.roofStairBlock, 1);
+            this.setBlockAndMetadata(world, -4, 6, k13, this.roofBlock, this.roofMeta);
+            this.setBlockAndMetadata(world, -4, 7, k13, this.roofStairBlock, 1);
+            this.setBlockAndMetadata(world, -3, 8, k13, this.roofStairBlock, 1);
+            this.setBlockAndMetadata(world, -2, 9, k13, this.roofStairBlock, 1);
+            this.setBlockAndMetadata(world, -1, 10, k13, this.roofStairBlock, 1);
+            this.setBlockAndMetadata(world, 0, 11, k13, this.roofSlabBlock, this.roofSlabMeta);
+            this.setBlockAndMetadata(world, 1, 10, k13, this.roofStairBlock, 0);
+            this.setBlockAndMetadata(world, 2, 9, k13, this.roofStairBlock, 0);
+            this.setBlockAndMetadata(world, 3, 8, k13, this.roofStairBlock, 0);
+            this.setBlockAndMetadata(world, 4, 7, k13, this.roofStairBlock, 0);
+            this.setBlockAndMetadata(world, 4, 6, k13, this.roofBlock, this.roofMeta);
+            this.setBlockAndMetadata(world, 5, 5, k13, this.roofStairBlock, 0);
+            if (k13 != -1 && k13 != 14) continue;
+            this.setBlockAndMetadata(world, -4, 5, k13, this.roofStairBlock, 4);
+            this.setBlockAndMetadata(world, -3, 7, k13, this.roofStairBlock, 4);
+            this.setBlockAndMetadata(world, -1, 9, k13, this.roofStairBlock, 4);
+            this.setBlockAndMetadata(world, 1, 9, k13, this.roofStairBlock, 5);
+            this.setBlockAndMetadata(world, 3, 7, k13, this.roofStairBlock, 5);
+            this.setBlockAndMetadata(world, 4, 5, k13, this.roofStairBlock, 5);
         }
-        for (k12 = 1; k12 <= 3; ++k12) {
-            this.setBlockAndMetadata(world, -3, 1, k12, Blocks.hay_block, 0);
+        for (k13 = 1; k13 <= 3; ++k13) {
+            this.setBlockAndMetadata(world, -3, 1, k13, Blocks.hay_block, 0);
         }
-        for (k12 = 1; k12 <= 2; ++k12) {
-            this.setBlockAndMetadata(world, -3, 2, k12, Blocks.hay_block, 0);
-            this.setBlockAndMetadata(world, -2, 1, k12, Blocks.hay_block, 0);
+        for (k13 = 1; k13 <= 2; ++k13) {
+            this.setBlockAndMetadata(world, -3, 2, k13, Blocks.hay_block, 0);
+            this.setBlockAndMetadata(world, -2, 1, k13, Blocks.hay_block, 0);
         }
-        for (k12 = 10; k12 <= 12; ++k12) {
-            this.setBlockAndMetadata(world, -3, 1, k12, Blocks.hay_block, 0);
-            this.setBlockAndMetadata(world, 3, 1, k12, Blocks.hay_block, 0);
+        for (k13 = 10; k13 <= 12; ++k13) {
+            this.setBlockAndMetadata(world, -3, 1, k13, Blocks.hay_block, 0);
+            this.setBlockAndMetadata(world, 3, 1, k13, Blocks.hay_block, 0);
         }
-        for (k12 = 11; k12 <= 12; ++k12) {
-            this.setBlockAndMetadata(world, -3, 2, k12, Blocks.hay_block, 0);
-            this.setBlockAndMetadata(world, -2, 1, k12, Blocks.hay_block, 0);
-            this.setBlockAndMetadata(world, 2, 1, k12, Blocks.hay_block, 0);
-            this.setBlockAndMetadata(world, 3, 2, k12, Blocks.hay_block, 0);
+        for (k13 = 11; k13 <= 12; ++k13) {
+            this.setBlockAndMetadata(world, -3, 2, k13, Blocks.hay_block, 0);
+            this.setBlockAndMetadata(world, -2, 1, k13, Blocks.hay_block, 0);
+            this.setBlockAndMetadata(world, 2, 1, k13, Blocks.hay_block, 0);
+            this.setBlockAndMetadata(world, 3, 2, k13, Blocks.hay_block, 0);
         }
         this.setBlockAndMetadata(world, -3, 1, 4, Blocks.crafting_table, 0);
         this.setBlockAndMetadata(world, -3, 1, 9, Blocks.crafting_table, 0);
@@ -200,14 +200,14 @@ extends LOTRWorldGenGondorStructure {
             this.setBlockAndMetadata(world, -3, j15, 9, this.fenceBlock, this.fenceMeta);
             this.setBlockAndMetadata(world, 3, j15, 9, this.fenceBlock, this.fenceMeta);
         }
-        for (k12 = 1; k12 <= 12; ++k12) {
+        for (k13 = 1; k13 <= 12; ++k13) {
             for (int i16 = -3; i16 <= 3; ++i16) {
-                this.setBlockAndMetadata(world, i16, 5, k12, this.plankBlock, this.plankMeta);
+                this.setBlockAndMetadata(world, i16, 5, k13, this.plankBlock, this.plankMeta);
             }
-            this.setBlockAndMetadata(world, -3, 7, k12, this.plankSlabBlock, this.plankSlabMeta | 8);
-            this.setBlockAndMetadata(world, -1, 9, k12, this.plankSlabBlock, this.plankSlabMeta | 8);
-            this.setBlockAndMetadata(world, 1, 9, k12, this.plankSlabBlock, this.plankSlabMeta | 8);
-            this.setBlockAndMetadata(world, 3, 7, k12, this.plankSlabBlock, this.plankSlabMeta | 8);
+            this.setBlockAndMetadata(world, -3, 7, k13, this.plankSlabBlock, this.plankSlabMeta | 8);
+            this.setBlockAndMetadata(world, -1, 9, k13, this.plankSlabBlock, this.plankSlabMeta | 8);
+            this.setBlockAndMetadata(world, 1, 9, k13, this.plankSlabBlock, this.plankSlabMeta | 8);
+            this.setBlockAndMetadata(world, 3, 7, k13, this.plankSlabBlock, this.plankSlabMeta | 8);
         }
         this.setBlockAndMetadata(world, 0, 4, 4, LOTRMod.chandelier, 1);
         this.setBlockAndMetadata(world, 0, 4, 9, LOTRMod.chandelier, 1);
@@ -216,15 +216,15 @@ extends LOTRWorldGenGondorStructure {
             this.setBlockAndMetadata(world, 3, 1 + step, 3 + step, this.plankStairBlock, 7);
         }
         this.setBlockAndMetadata(world, 2, 4, 6, this.plankStairBlock, 5);
-        for (k12 = 3; k12 <= 5; ++k12) {
-            this.setAir(world, 3, 5, k12);
+        for (k13 = 3; k13 <= 5; ++k13) {
+            this.setAir(world, 3, 5, k13);
         }
         this.setAir(world, 3, 5, 6);
         this.setAir(world, 3, 7, 6);
         this.setBlockAndMetadata(world, 2, 5, 6, this.plankStairBlock, 0);
         this.setBlockAndMetadata(world, 3, 6, 2, this.fenceBlock, this.fenceMeta);
-        for (k12 = 2; k12 <= 5; ++k12) {
-            this.setBlockAndMetadata(world, 2, 6, k12, this.fenceBlock, this.fenceMeta);
+        for (k13 = 2; k13 <= 5; ++k13) {
+            this.setBlockAndMetadata(world, 2, 6, k13, this.fenceBlock, this.fenceMeta);
         }
         this.setBlockAndMetadata(world, 1, 6, 5, this.fenceBlock, this.fenceMeta);
         this.setBlockAndMetadata(world, 1, 6, 6, this.fenceGateBlock, 1);
@@ -236,9 +236,9 @@ extends LOTRWorldGenGondorStructure {
         this.setBlockAndMetadata(world, 2, 6, 12, Blocks.crafting_table, 0);
         this.setBlockAndMetadata(world, 3, 6, 12, this.tableBlock, 0);
         this.placeChest(world, random, 3, 6, 11, 5, LOTRChestContents.GONDOR_HOUSE);
-        for (i1 = -3; i1 <= -2; ++i1) {
+        for (i12 = -3; i12 <= -2; ++i12) {
             for (k1 = 7; k1 <= 8; ++k1) {
-                this.setBlockAndMetadata(world, i1, 6, k1, this.plankBlock, this.plankMeta);
+                this.setBlockAndMetadata(world, i12, 6, k1, this.plankBlock, this.plankMeta);
             }
         }
         this.placeBarrel(world, random, -3, 6, 6, 4, LOTRFoods.GONDOR_DRINK);
@@ -246,22 +246,22 @@ extends LOTRWorldGenGondorStructure {
         this.placePlateWithCertainty(world, random, -2, 7, 8, this.plateBlock, LOTRFoods.GONDOR);
         this.setBlockAndMetadata(world, 0, 9, 4, LOTRMod.chandelier, 1);
         this.setBlockAndMetadata(world, 0, 9, 9, LOTRMod.chandelier, 1);
-        for (k12 = 1; k12 <= 5; ++k12) {
-            this.setBlockAndMetadata(world, -3, 6, k12, Blocks.hay_block, 0);
+        for (k13 = 1; k13 <= 5; ++k13) {
+            this.setBlockAndMetadata(world, -3, 6, k13, Blocks.hay_block, 0);
         }
-        for (k12 = 1; k12 <= 4; ++k12) {
-            this.setBlockAndMetadata(world, -2, 6, k12, Blocks.hay_block, 0);
+        for (k13 = 1; k13 <= 4; ++k13) {
+            this.setBlockAndMetadata(world, -2, 6, k13, Blocks.hay_block, 0);
         }
-        for (k12 = 2; k12 <= 3; ++k12) {
-            this.setBlockAndMetadata(world, -2, 7, k12, Blocks.hay_block, 0);
-            this.setBlockAndMetadata(world, -1, 6, k12, Blocks.hay_block, 0);
+        for (k13 = 2; k13 <= 3; ++k13) {
+            this.setBlockAndMetadata(world, -2, 7, k13, Blocks.hay_block, 0);
+            this.setBlockAndMetadata(world, -1, 6, k13, Blocks.hay_block, 0);
         }
         this.setBlockAndMetadata(world, -3, 6, 11, Blocks.hay_block, 0);
         this.setBlockAndMetadata(world, -3, 6, 12, Blocks.hay_block, 0);
         this.setBlockAndMetadata(world, -3, 7, 12, Blocks.hay_block, 0);
-        for (k12 = 10; k12 <= 12; ++k12) {
-            this.setBlockAndMetadata(world, -2, 6, k12, Blocks.hay_block, 0);
-            this.setBlockAndMetadata(world, -1, 6, k12, Blocks.hay_block, 0);
+        for (k13 = 10; k13 <= 12; ++k13) {
+            this.setBlockAndMetadata(world, -2, 6, k13, Blocks.hay_block, 0);
+            this.setBlockAndMetadata(world, -1, 6, k13, Blocks.hay_block, 0);
         }
         this.setBlockAndMetadata(world, -2, 7, 11, Blocks.hay_block, 0);
         this.setBlockAndMetadata(world, -1, 7, 11, Blocks.hay_block, 0);
@@ -273,10 +273,10 @@ extends LOTRWorldGenGondorStructure {
                 this.placeChest(world, random, -1, 6, 11, 4, LOTRChestContents.GONDOR_HOUSE_TREASURE);
             }
         }
-        for (i1 = -4; i1 <= 4; ++i1) {
+        for (i12 = -4; i12 <= 4; ++i12) {
             for (k1 = 0; k1 <= 13; ++k1) {
-                if (!this.isOpaque(world, i1, 1, k1)) continue;
-                this.setGrassToDirt(world, i1, 0, k1);
+                if (!this.isOpaque(world, i12, 1, k1)) continue;
+                this.setGrassToDirt(world, i12, 0, k1);
             }
         }
         int animals = 3 + random.nextInt(6);

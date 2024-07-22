@@ -54,17 +54,16 @@ extends LOTREntityNearHaradrim {
 
     @Override
     public IEntityLivingData onSpawnWithEgg(IEntityLivingData data) {
-        int i;
         data = super.onSpawnWithEgg(data);
         if (this.rand.nextInt(3) == 0) {
-            i = this.rand.nextInt(weaponsBronze.length);
+            int i = this.rand.nextInt(weaponsBronze.length);
             this.npcItemsInv.setMeleeWeapon(weaponsBronze[i].copy());
             if (this.rand.nextInt(5) == 0) {
                 this.npcItemsInv.setSpearBackup(this.npcItemsInv.getMeleeWeapon());
                 this.npcItemsInv.setMeleeWeapon(new ItemStack(LOTRMod.spearHarad));
             }
         } else {
-            i = this.rand.nextInt(weaponsIron.length);
+            int i = this.rand.nextInt(weaponsIron.length);
             this.npcItemsInv.setMeleeWeapon(weaponsIron[i].copy());
             if (this.rand.nextInt(5) == 0) {
                 this.npcItemsInv.setSpearBackup(this.npcItemsInv.getMeleeWeapon());

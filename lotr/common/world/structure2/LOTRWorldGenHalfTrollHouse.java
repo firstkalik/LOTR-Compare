@@ -36,8 +36,8 @@ extends LOTRWorldGenStructureBase2 {
     @Override
     public boolean generateWithSetRotation(World world, Random random, int i, int j, int k, int rotation) {
         int k1;
-        int i1;
         int j1;
+        int i1;
         int radius = 5;
         int height = 6 + random.nextInt(4);
         this.setOriginAndRotation(world, i, j, k, rotation, radius + 1);
@@ -55,7 +55,7 @@ extends LOTRWorldGenStructureBase2 {
             for (k1 = -radius; k1 <= radius; ++k1) {
                 for (j1 = 0; j1 <= height; ++j1) {
                     double f = (double)(i1 * i1 + k1 * k1) / 2.0 - (double)(8 - j1);
-                    if (!(f < 8.0)) continue;
+                    if (f >= 8.0) continue;
                     if (j1 == 0) {
                         for (int j2 = 0; !(j2 != 0 && this.isOpaque(world, i1, j2, k1) || this.getY(j2) < 0); --j2) {
                             this.setBlockAndMetadata(world, i1, j2, k1, Blocks.hardened_clay, 0);

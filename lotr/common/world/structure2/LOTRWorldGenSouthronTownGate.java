@@ -41,29 +41,29 @@ extends LOTRWorldGenSouthronStructure {
 
     @Override
     public boolean generateWithSetRotation(World world, Random random, int i, int j, int k, int rotation) {
-        int k1;
-        int k12;
-        int i1;
         int i12;
-        int step;
+        int k12;
         int j1;
         int j12;
+        int k1;
+        int step;
         int j2;
+        int i1;
         this.setOriginAndRotation(world, i, j, k, rotation, 4);
         this.setupRandomBlocks(random);
         if (this.restrictions) {
             for (i12 = -8; i12 <= 8; ++i12) {
                 for (k12 = -3; k12 <= 3; ++k12) {
-                    j1 = this.getTopBlock(world, i12, k12) - 1;
-                    if (this.isSurface(world, i12, j1, k12)) continue;
+                    j12 = this.getTopBlock(world, i12, k12) - 1;
+                    if (this.isSurface(world, i12, j12, k12)) continue;
                     return false;
                 }
             }
         }
         for (i12 = -8; i12 <= 8; ++i12) {
             for (k12 = -3; k12 <= 3; ++k12) {
-                for (j1 = 1; j1 <= 12; ++j1) {
-                    this.setAir(world, i12, j1, k12);
+                for (j12 = 1; j12 <= 12; ++j12) {
+                    this.setAir(world, i12, j12, k12);
                 }
             }
         }
@@ -91,15 +91,18 @@ extends LOTRWorldGenSouthronStructure {
         }
         this.placeWallBanner(world, -6, 4, -2, this.bannerType, 2);
         this.placeWallBanner(world, 6, 4, -2, this.bannerType, 2);
-        int maxSteps = 12;
-        for (step = 0; step < 12 && !this.isOpaque(world, i1 = -7 - step, j12 = 5 - step, k1 = 2); ++step) {
-            if (j12 <= 1) {
-                this.setBlockAndMetadata(world, i1, j12, k1, this.stoneStairBlock, 1);
+        for (step = 0; step < 12; ++step) {
+            i1 = -7 - step;
+            j1 = 5 - step;
+            k1 = 2;
+            if (this.isOpaque(world, i1, j1, 2)) break;
+            if (j1 <= 1) {
+                this.setBlockAndMetadata(world, i1, j1, k1, this.stoneStairBlock, 1);
             } else {
-                this.setBlockAndMetadata(world, i1, j12, k1, this.brickStairBlock, 1);
+                this.setBlockAndMetadata(world, i1, j1, k1, this.brickStairBlock, 1);
             }
-            this.setGrassToDirt(world, i1, j12 - 1, k1);
-            j2 = j12 - 1;
+            this.setGrassToDirt(world, i1, j1 - 1, k1);
+            j2 = j1 - 1;
             while (!this.isOpaque(world, i1, j2, k1) && this.getY(j2) >= 0) {
                 if (j2 <= 1) {
                     this.setBlockAndMetadata(world, i1, j2, k1, this.stoneBlock, this.stoneMeta);
@@ -110,14 +113,18 @@ extends LOTRWorldGenSouthronStructure {
                 --j2;
             }
         }
-        for (step = 0; step < 12 && !this.isOpaque(world, i1 = 7 + step, j12 = 5 - step, k1 = 2); ++step) {
-            if (j12 <= 1) {
-                this.setBlockAndMetadata(world, i1, j12, k1, this.stoneStairBlock, 0);
+        for (step = 0; step < 12; ++step) {
+            i1 = 7 + step;
+            j1 = 5 - step;
+            k1 = 2;
+            if (this.isOpaque(world, i1, j1, 2)) break;
+            if (j1 <= 1) {
+                this.setBlockAndMetadata(world, i1, j1, k1, this.stoneStairBlock, 0);
             } else {
-                this.setBlockAndMetadata(world, i1, j12, k1, this.brickStairBlock, 0);
+                this.setBlockAndMetadata(world, i1, j1, k1, this.brickStairBlock, 0);
             }
-            this.setGrassToDirt(world, i1, j12 - 1, k1);
-            j2 = j12 - 1;
+            this.setGrassToDirt(world, i1, j1 - 1, k1);
+            j2 = j1 - 1;
             while (!this.isOpaque(world, i1, j2, k1) && this.getY(j2) >= 0) {
                 if (j2 <= 1) {
                     this.setBlockAndMetadata(world, i1, j2, k1, this.stoneBlock, this.stoneMeta);

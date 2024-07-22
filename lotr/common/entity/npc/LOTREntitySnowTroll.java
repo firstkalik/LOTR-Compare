@@ -17,7 +17,6 @@
  *  net.minecraft.entity.item.EntityItem
  *  net.minecraft.entity.player.EntityPlayer
  *  net.minecraft.entity.projectile.EntityArrow
- *  net.minecraft.entity.projectile.EntitySnowball
  *  net.minecraft.init.Items
  *  net.minecraft.item.Item
  *  net.minecraft.potion.Potion
@@ -50,7 +49,6 @@ import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
-import net.minecraft.entity.projectile.EntitySnowball;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.potion.Potion;

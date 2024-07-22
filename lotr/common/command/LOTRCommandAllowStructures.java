@@ -44,11 +44,11 @@ extends CommandBase {
                 throw new WrongUsageException("commands.lotr.allowStructures.alreadyAllowed", new Object[0]);
             }
             LOTRLevelData.setStructuresBanned(false);
-            LOTRCommandAllowStructures.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.allowStructures.allow", (Object[])new Object[0]);
+            CommandBase.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.allowStructures.allow", (Object[])new Object[0]);
         } else {
             LOTRLevelData.setPlayerBannedForStructures(args[0], false);
-            LOTRCommandAllowStructures.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.allowStructures.allowPlayer", (Object[])new Object[]{args[0]});
-            EntityPlayerMP entityplayer = LOTRCommandAllowStructures.getPlayer((ICommandSender)sender, (String)args[0]);
+            CommandBase.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.allowStructures.allowPlayer", (Object[])new Object[]{args[0]});
+            EntityPlayerMP entityplayer = CommandBase.getPlayer((ICommandSender)sender, (String)args[0]);
             if (entityplayer != null) {
                 entityplayer.addChatMessage((IChatComponent)new ChatComponentTranslation("chat.lotr.allowStructures", new Object[0]));
             }
@@ -59,7 +59,7 @@ extends CommandBase {
         if (args.length == 1) {
             ArrayList<String> bannedNames = new ArrayList<String>();
             bannedNames.addAll(LOTRLevelData.getBannedStructurePlayersUsernames());
-            return LOTRCommandAllowStructures.getListOfStringsMatchingLastWord((String[])args, (String[])bannedNames.toArray(new String[0]));
+            return CommandBase.getListOfStringsMatchingLastWord((String[])args, (String[])bannedNames.toArray(new String[0]));
         }
         return null;
     }

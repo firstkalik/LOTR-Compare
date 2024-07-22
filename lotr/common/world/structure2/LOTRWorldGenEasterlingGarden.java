@@ -179,7 +179,7 @@ extends LOTRWorldGenEasterlingStructure {
                         this.setBlockAndMetadata(world, i1, 0, k1, this.brickBlock, this.brickMeta);
                     }
                 }
-                if ((k2 != 8 || i2 < 7 || i2 > 8) && (i2 != 8 || k2 < 7 || k2 > 8)) continue;
+                if (!(k2 == 8 && i2 >= 7 && i2 <= 8 || i2 == 8 && k2 >= 7 && k2 <= 8)) continue;
                 this.setBlockAndMetadata(world, i1, 8, k1, Blocks.water, 0);
             }
         }
@@ -195,7 +195,7 @@ extends LOTRWorldGenEasterlingStructure {
                     int dy = j13 - domeY;
                     int dz = k1 - domeZ;
                     float dSq = dx * dx + dy * dy + dz * dz;
-                    if (!((double)Math.abs(dSq - (float)domeRadiusSq) <= 3.0)) continue;
+                    if ((double)Math.abs(dSq - (float)domeRadiusSq) > 3.0) continue;
                     this.setBlockAndMetadata(world, i1, j13, k1, this.leafBlock, this.leafMeta | 4);
                 }
             }

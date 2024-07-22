@@ -83,7 +83,7 @@ implements LOTRUnitTradeable {
     }
 
     @Override
-    public LOTRInvasions getWarhorn() {
+    public LOTRInvasions getConquestHorn() {
         return LOTRInvasions.BREE;
     }
 
@@ -110,7 +110,7 @@ implements LOTRUnitTradeable {
             }
             return "bree/captain/neutral";
         }
-        return "bree/guard/hostile";
+        return "bree/captain/hostile";
     }
 }
 

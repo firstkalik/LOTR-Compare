@@ -30,9 +30,9 @@ extends BehaviorDefaultDispenseItem {
     private final BehaviorDefaultDispenseItem dispenseDefault = new BehaviorDefaultDispenseItem();
 
     protected ItemStack dispenseStack(IBlockSource dispenser, ItemStack itemstack) {
+        int k;
         int i;
         int j;
-        int k;
         EnumFacing enumfacing = BlockDispenser.func_149937_b((int)dispenser.getBlockMetadata());
         World world = dispenser.getWorld();
         if (world.getBlock(i = dispenser.getXInt() + enumfacing.getFrontOffsetX(), j = dispenser.getYInt() + enumfacing.getFrontOffsetY(), k = dispenser.getZInt() + enumfacing.getFrontOffsetZ()).isReplaceable((IBlockAccess)world, i, j, k)) {

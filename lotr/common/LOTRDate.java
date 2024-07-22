@@ -65,8 +65,6 @@ public class LOTRDate {
     }
 
     public static void update(World world) {
-        long prevDay;
-        long day;
         if (!(world.getWorldInfo() instanceof LOTRWorldInfo)) {
             return;
         }
@@ -74,7 +72,7 @@ public class LOTRDate {
         if (prevWorldTime == -1L) {
             prevWorldTime = worldTime;
         }
-        if ((day = worldTime / (long)ticksInDay) != (prevDay = prevWorldTime / (long)ticksInDay)) {
+        if (worldTime / (long)ticksInDay != prevWorldTime / (long)ticksInDay) {
             LOTRDate.setDate(ShireReckoning.currentDay + 1);
         }
         prevWorldTime = worldTime;
@@ -94,6 +92,43 @@ public class LOTRDate {
         LOTRDate.saveDates(nbt);
         LOTRPacketDate packet = new LOTRPacketDate(nbt, update);
         LOTRPacketHandler.networkWrapper.sendTo((IMessage)packet, entityplayer);
+    }
+
+    public static enum Season {
+        SPRING("spring", 0, new float[]{1.0f, 1.0f, 1.0f}),
+        SUMMER("summer", 1, new float[]{1.15f, 1.15f, 0.9f}),
+        AUTUMN("autumn", 2, new float[]{1.2f, 1.0f, 0.7f}),
+        WINTER("winter", 3, new float[]{1.0f, 0.8f, 0.8f});
+
+        public static Season[] allSeasons;
+        private final String name;
+        public final int seasonID;
+        private final float[] grassRGB;
+
+        private Season(String s, int i, float[] f) {
+            this.name = s;
+            this.seasonID = i;
+            this.grassRGB = f;
+        }
+
+        public String codeName() {
+            return this.name;
+        }
+
+        public int transformColor(int color) {
+            float[] rgb = new Color(color).getRGBColorComponents(null);
+            float r = rgb[0];
+            float g = rgb[1];
+            float b = rgb[2];
+            r = Math.min(r * this.grassRGB[0], 1.0f);
+            g = Math.min(g * this.grassRGB[1], 1.0f);
+            b = Math.min(b * this.grassRGB[2], 1.0f);
+            return new Color(r, g, b).getRGB();
+        }
+
+        static {
+            allSeasons = new Season[]{SPRING, SUMMER, AUTUMN, WINTER};
+        }
     }
 
     public static class ShireReckoning {
@@ -129,6 +164,73 @@ public class LOTRDate {
 
         public static Season getSeason() {
             return ShireReckoning.getShireDate().month.season;
+        }
+
+        public static enum Day {
+            STERDAY("sterday"),
+            SUNDAY("sunday"),
+            MONDAY("monday"),
+            TREWSDAY("trewsday"),
+            HEVENSDAY("hevensday"),
+            MERSDAY("mersday"),
+            HIGHDAY("highday");
+
+            private String name;
+
+            private Day(String s) {
+                this.name = s;
+            }
+
+            public String getDayName() {
+                return StatCollector.translateToLocal((String)("lotr.date.shire.day." + this.name));
+            }
+        }
+
+        public static enum Month {
+            YULE_2("yule2", 1, Season.WINTER),
+            AFTERYULE("afteryule", 30, Season.WINTER),
+            SOLMATH("solmath", 30, Season.WINTER),
+            RETHE("rethe", 30, Season.WINTER),
+            ASTRON("astron", 30, Season.SPRING),
+            THRIMIDGE("thrimidge", 30, Season.SPRING),
+            FORELITHE("forelithe", 30, Season.SPRING),
+            LITHE_1("lithe1", 1, Season.SPRING),
+            MIDYEARSDAY("midyearsday", 1, Season.SUMMER, false, false),
+            OVERLITHE("overlithe", 1, Season.SUMMER, false, true),
+            LITHE_2("lithe2", 1, Season.SUMMER),
+            AFTERLITHE("afterlithe", 30, Season.SUMMER),
+            WEDMATH("wedmath", 30, Season.SUMMER),
+            HALIMATH("halimath", 30, Season.SUMMER),
+            WINTERFILTH("winterfilth", 30, Season.AUTUMN),
+            BLOTMATH("blotmath", 30, Season.AUTUMN),
+            FOREYULE("foreyule", 30, Season.AUTUMN),
+            YULE_1("yule1", 1, Season.AUTUMN);
+
+            private String name;
+            public int days;
+            public boolean hasWeekdayName;
+            public boolean isLeapYear;
+            public Season season;
+
+            private Month(String s, int i, Season se) {
+                this(s, i, se, true, false);
+            }
+
+            private Month(String s, int i, Season se, boolean flag, boolean flag1) {
+                this.name = s;
+                this.days = i;
+                this.hasWeekdayName = flag;
+                this.isLeapYear = flag1;
+                this.season = se;
+            }
+
+            public String getMonthName() {
+                return StatCollector.translateToLocal((String)("lotr.date.shire.month." + this.name));
+            }
+
+            public boolean isSingleDay() {
+                return this.days == 1;
+            }
         }
 
         public static class Date {
@@ -233,110 +335,6 @@ public class LOTRDate {
             }
         }
 
-        public static enum Month {
-            YULE_2("yule2", 1, Season.WINTER),
-            AFTERYULE("afteryule", 30, Season.WINTER),
-            SOLMATH("solmath", 30, Season.WINTER),
-            RETHE("rethe", 30, Season.WINTER),
-            ASTRON("astron", 30, Season.SPRING),
-            THRIMIDGE("thrimidge", 30, Season.SPRING),
-            FORELITHE("forelithe", 30, Season.SPRING),
-            LITHE_1("lithe1", 1, Season.SPRING),
-            MIDYEARSDAY("midyearsday", 1, Season.SUMMER, false, false),
-            OVERLITHE("overlithe", 1, Season.SUMMER, false, true),
-            LITHE_2("lithe2", 1, Season.SUMMER),
-            AFTERLITHE("afterlithe", 30, Season.SUMMER),
-            WEDMATH("wedmath", 30, Season.SUMMER),
-            HALIMATH("halimath", 30, Season.SUMMER),
-            WINTERFILTH("winterfilth", 30, Season.AUTUMN),
-            BLOTMATH("blotmath", 30, Season.AUTUMN),
-            FOREYULE("foreyule", 30, Season.AUTUMN),
-            YULE_1("yule1", 1, Season.AUTUMN);
-
-            private String name;
-            public int days;
-            public boolean hasWeekdayName;
-            public boolean isLeapYear;
-            public Season season;
-
-            private Month(String s, int i, Season se) {
-                this(s, i, se, true, false);
-            }
-
-            private Month(String s, int i, Season se, boolean flag, boolean flag1) {
-                this.name = s;
-                this.days = i;
-                this.hasWeekdayName = flag;
-                this.isLeapYear = flag1;
-                this.season = se;
-            }
-
-            public String getMonthName() {
-                return StatCollector.translateToLocal((String)("lotr.date.shire.month." + this.name));
-            }
-
-            public boolean isSingleDay() {
-                return this.days == 1;
-            }
-        }
-
-        public static enum Day {
-            STERDAY("sterday"),
-            SUNDAY("sunday"),
-            MONDAY("monday"),
-            TREWSDAY("trewsday"),
-            HEVENSDAY("hevensday"),
-            MERSDAY("mersday"),
-            HIGHDAY("highday");
-
-            private String name;
-
-            private Day(String s) {
-                this.name = s;
-            }
-
-            public String getDayName() {
-                return StatCollector.translateToLocal((String)("lotr.date.shire.day." + this.name));
-            }
-        }
-
-    }
-
-    public static enum Season {
-        SPRING("spring", 0, new float[]{1.0f, 1.0f, 1.0f}),
-        SUMMER("summer", 1, new float[]{1.15f, 1.15f, 0.9f}),
-        AUTUMN("autumn", 2, new float[]{1.2f, 1.0f, 0.7f}),
-        WINTER("winter", 3, new float[]{1.0f, 0.8f, 0.8f});
-
-        public static Season[] allSeasons;
-        private final String name;
-        public final int seasonID;
-        private final float[] grassRGB;
-
-        private Season(String s, int i, float[] f) {
-            this.name = s;
-            this.seasonID = i;
-            this.grassRGB = f;
-        }
-
-        public String codeName() {
-            return this.name;
-        }
-
-        public int transformColor(int color) {
-            float[] rgb = new Color(color).getRGBColorComponents(null);
-            float r = rgb[0];
-            float g = rgb[1];
-            float b = rgb[2];
-            r = Math.min(r * this.grassRGB[0], 1.0f);
-            g = Math.min(g * this.grassRGB[1], 1.0f);
-            b = Math.min(b * this.grassRGB[2], 1.0f);
-            return new Color(r, g, b).getRGB();
-        }
-
-        static {
-            allSeasons = new Season[]{SPRING, SUMMER, AUTUMN, WINTER};
-        }
     }
 
 }

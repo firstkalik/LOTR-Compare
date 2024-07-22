@@ -139,9 +139,9 @@ extends BlockContainer {
                     return true;
                 }
             } else if (itemstack != null) {
-                ItemStack vesselEmpty;
-                LOTRItemMug.Vessel[] draught;
                 ItemStack vesselFull;
+                ItemStack vesselEmpty;
+                ItemStack draught;
                 BiomeGenBase biome = world.getBiomeGenForCoords(i, k);
                 if (biome instanceof LOTRBiomeGenFangorn && jar.drinkAmount > 0 && (draught = LOTREntJarRecipes.findMatchingRecipe(itemstack)) != null) {
                     jar.drinkMeta = draught.getItemDamage();

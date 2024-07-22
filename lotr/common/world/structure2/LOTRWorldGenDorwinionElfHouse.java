@@ -56,91 +56,89 @@ extends LOTRWorldGenDorwinionHouse {
 
     @Override
     public boolean generateWithSetRotation(World world, Random random, int i, int j, int k, int rotation) {
-        int k1;
-        int k12;
-        int k2;
         int i1;
-        int i12;
-        int i13;
-        int j1;
-        int i14;
         int k13;
         int j12;
+        int i12;
+        int j1;
+        int i13;
+        int k1;
+        int k12;
         this.setOriginAndRotation(world, i, j, k, rotation, 1);
         this.setupRandomBlocks(random);
         if (this.restrictions) {
             for (int i15 = -4; i15 <= 8; ++i15) {
-                for (k1 = -1; k1 <= 20; ++k1) {
-                    j12 = this.getTopBlock(world, i15, k1) - 1;
-                    Block block = this.getBlock(world, i15, j12, k1);
+                for (k13 = -1; k13 <= 20; ++k13) {
+                    j12 = this.getTopBlock(world, i15, k13) - 1;
+                    int[] block = this.getBlock(world, i15, j12, k13);
                     if (block == Blocks.grass) continue;
                     return false;
                 }
             }
         }
         boolean generateBackGate = true;
-        for (i14 = 1; i14 <= 3; ++i14) {
-            k13 = 20;
-            j1 = this.getTopBlock(world, i14, k13) - 1;
+        for (i1 = 1; i1 <= 3; ++i1) {
+            k1 = 20;
+            j1 = this.getTopBlock(world, i1, k1) - 1;
             if (j1 == 0) continue;
             generateBackGate = false;
         }
-        for (i14 = -4; i14 <= 8; ++i14) {
-            for (k13 = 0; k13 <= 20; ++k13) {
+        for (i1 = -4; i1 <= 8; ++i1) {
+            for (k1 = 0; k1 <= 20; ++k1) {
                 for (j1 = 1; j1 <= 6; ++j1) {
-                    this.setAir(world, i14, j1, k13);
+                    this.setAir(world, i1, j1, k1);
                 }
-                this.setBlockAndMetadata(world, i14, 0, k13, (Block)Blocks.grass, 0);
+                this.setBlockAndMetadata(world, i1, 0, k1, (Block)Blocks.grass, 0);
                 j1 = -1;
-                while (!this.isOpaque(world, i14, j1, k13) && this.getY(j1) >= 0) {
-                    this.setBlockAndMetadata(world, i14, j1, k13, Blocks.dirt, 0);
-                    this.setGrassToDirt(world, i14, j1 - 1, k13);
+                while (!this.isOpaque(world, i1, j1, k1) && this.getY(j1) >= 0) {
+                    this.setBlockAndMetadata(world, i1, j1, k1, Blocks.dirt, 0);
+                    this.setGrassToDirt(world, i1, j1 - 1, k1);
                     --j1;
                 }
             }
         }
-        for (i14 = -3; i14 <= 7; ++i14) {
-            for (k13 = 0; k13 <= 8; ++k13) {
-                if (i14 >= 3 && k13 <= 2) {
+        for (i1 = -3; i1 <= 7; ++i1) {
+            for (k1 = 0; k1 <= 8; ++k1) {
+                if (i1 >= 3 && k1 <= 2) {
                     if (random.nextInt(3) != 0) continue;
-                    this.plantFlower(world, random, i14, 1, k13);
+                    this.plantFlower(world, random, i1, 1, k1);
                     continue;
                 }
-                if (k13 == 0 && (i14 == -3 || i14 == 2) || k13 == 3 && (i14 == 2 || i14 == 7) || k13 == 8 && (i14 == -3 || i14 == 7)) {
+                if (k1 == 0 && (i1 == -3 || i1 == 2) || k1 == 3 && (i1 == 2 || i1 == 7) || k1 == 8 && (i1 == -3 || i1 == 7)) {
                     for (j1 = 0; j1 <= 4; ++j1) {
-                        this.setBlockAndMetadata(world, i14, j1, k13, this.woodBeamBlock, this.woodBeamMeta);
+                        this.setBlockAndMetadata(world, i1, j1, k1, this.woodBeamBlock, this.woodBeamMeta);
                     }
                     continue;
                 }
-                if (i14 == -3 || i14 == 2 && k13 <= 3 || i14 == 7 || k13 == 0 || k13 == 3 && i14 >= 2 || k13 == 8) {
+                if (i1 == -3 || i1 == 2 && k1 <= 3 || i1 == 7 || k1 == 0 || k1 == 3 && i1 >= 2 || k1 == 8) {
                     for (j1 = 0; j1 <= 1; ++j1) {
-                        this.setBlockAndMetadata(world, i14, j1, k13, this.wallBlock, this.wallMeta);
+                        this.setBlockAndMetadata(world, i1, j1, k1, this.wallBlock, this.wallMeta);
                     }
                     for (j1 = 2; j1 <= 4; ++j1) {
-                        this.setBlockAndMetadata(world, i14, j1, k13, this.brickBlock, this.brickMeta);
+                        this.setBlockAndMetadata(world, i1, j1, k1, this.brickBlock, this.brickMeta);
                     }
                     continue;
                 }
-                this.setBlockAndMetadata(world, i14, 0, k13, this.floorBlock, this.floorMeta);
+                this.setBlockAndMetadata(world, i1, 0, k1, this.floorBlock, this.floorMeta);
             }
         }
-        for (k1 = 1; k1 <= 7; ++k1) {
-            k2 = IntMath.mod((int)k1, (int)3);
+        for (k13 = 1; k13 <= 7; ++k13) {
+            int k2 = IntMath.mod((int)k13, (int)3);
             if (k2 == 1) {
-                this.setBlockAndMetadata(world, -4, 1, k1, this.brickStairBlock, 1);
-                this.setGrassToDirt(world, -4, 0, k1);
+                this.setBlockAndMetadata(world, -4, 1, k13, this.brickStairBlock, 1);
+                this.setGrassToDirt(world, -4, 0, k13);
                 continue;
             }
             if (k2 == 2) {
-                this.setAir(world, -3, 2, k1);
-                this.setBlockAndMetadata(world, -3, 3, k1, this.brickStairBlock, 7);
-                this.setBlockAndMetadata(world, -4, 1, k1, this.leafBlock, this.leafMeta);
+                this.setAir(world, -3, 2, k13);
+                this.setBlockAndMetadata(world, -3, 3, k13, this.brickStairBlock, 7);
+                this.setBlockAndMetadata(world, -4, 1, k13, this.leafBlock, this.leafMeta);
                 continue;
             }
             if (k2 != 0) continue;
-            this.setAir(world, -3, 2, k1);
-            this.setBlockAndMetadata(world, -3, 3, k1, this.brickStairBlock, 6);
-            this.setBlockAndMetadata(world, -4, 1, k1, this.leafBlock, this.leafMeta);
+            this.setAir(world, -3, 2, k13);
+            this.setBlockAndMetadata(world, -3, 3, k13, this.brickStairBlock, 6);
+            this.setBlockAndMetadata(world, -4, 1, k13, this.leafBlock, this.leafMeta);
         }
         for (int k14 : new int[]{0, 8}) {
             this.setAir(world, -1, 2, k14);
@@ -314,11 +312,7 @@ extends LOTRWorldGenDorwinionHouse {
         this.setBlockAndMetadata(world, 6, 1, 7, this.plankBlock, this.plankMeta);
         this.setBlockAndMetadata(world, 5, 1, 7, this.plankSlabBlock, this.plankSlabMeta | 8);
         this.setBlockAndMetadata(world, 4, 1, 7, this.plankStairBlock, 4);
-        int[] i17 = new int[]{4, 7};
-        k2 = i17.length;
-        for (j1 = 0; j1 < k2; ++j1) {
-            int k14;
-            k14 = i17[j1];
+        for (int k14 : new int[]{4, 7}) {
             for (int i18 = 4; i18 <= 5; ++i18) {
                 this.placePlate(world, random, i18, 2, k14, this.plateBlock, LOTRFoods.DORWINION);
             }
@@ -332,27 +326,27 @@ extends LOTRWorldGenDorwinionHouse {
         this.spawnItemFrame(world, 2, 3, 8, 2, new ItemStack(this.grapeItem));
         this.setBlockAndMetadata(world, 2, 3, 9, Blocks.torch, 3);
         for (i13 = -3; i13 <= 7; ++i13) {
-            for (k13 = 9; k13 <= 19; ++k13) {
-                if (i13 == -3 || i13 == 7 || k13 == 19) {
-                    this.setGrassToDirt(world, i13, 0, k13);
-                    this.setBlockAndMetadata(world, i13, 1, k13, this.wallBlock, this.wallMeta);
-                    this.setBlockAndMetadata(world, i13, 2, k13, this.brickBlock, this.brickMeta);
-                    if (IntMath.mod((int)(i13 + k13), (int)2) != 0) continue;
-                    this.setBlockAndMetadata(world, i13, 3, k13, this.brickSlabBlock, this.brickSlabMeta);
+            for (k1 = 9; k1 <= 19; ++k1) {
+                if (i13 == -3 || i13 == 7 || k1 == 19) {
+                    this.setGrassToDirt(world, i13, 0, k1);
+                    this.setBlockAndMetadata(world, i13, 1, k1, this.wallBlock, this.wallMeta);
+                    this.setBlockAndMetadata(world, i13, 2, k1, this.brickBlock, this.brickMeta);
+                    if (IntMath.mod((int)(i13 + k1), (int)2) != 0) continue;
+                    this.setBlockAndMetadata(world, i13, 3, k1, this.brickSlabBlock, this.brickSlabMeta);
                     continue;
                 }
-                this.setBlockAndMetadata(world, i13, 0, k13, LOTRMod.dirtPath, 0);
+                this.setBlockAndMetadata(world, i13, 0, k1, LOTRMod.dirtPath, 0);
                 if (IntMath.mod((int)i13, (int)2) != 1) continue;
-                if (k13 == 14) {
-                    this.setBlockAndMetadata(world, i13, 0, k13, Blocks.water, 0);
-                    this.setBlockAndMetadata(world, i13, 1, k13, this.fenceBlock, this.fenceMeta);
-                    this.setBlockAndMetadata(world, i13, 2, k13, Blocks.torch, 5);
+                if (k1 == 14) {
+                    this.setBlockAndMetadata(world, i13, 0, k1, Blocks.water, 0);
+                    this.setBlockAndMetadata(world, i13, 1, k1, this.fenceBlock, this.fenceMeta);
+                    this.setBlockAndMetadata(world, i13, 2, k1, Blocks.torch, 5);
                     continue;
                 }
-                if (k13 < 11 || k13 > 17) continue;
-                this.setBlockAndMetadata(world, i13, 0, k13, Blocks.farmland, 7);
-                this.setBlockAndMetadata(world, i13, 1, k13, this.grapevineBlock, 7);
-                this.setBlockAndMetadata(world, i13, 2, k13, this.grapevineBlock, 7);
+                if (k1 < 11 || k1 > 17) continue;
+                this.setBlockAndMetadata(world, i13, 0, k1, Blocks.farmland, 7);
+                this.setBlockAndMetadata(world, i13, 1, k1, this.grapevineBlock, 7);
+                this.setBlockAndMetadata(world, i13, 2, k1, this.grapevineBlock, 7);
             }
         }
         for (i13 = 0; i13 <= 4; ++i13) {
@@ -374,15 +368,15 @@ extends LOTRWorldGenDorwinionHouse {
             this.setBlockAndMetadata(world, i16 + 3, 1, 20, this.brickStairBlock, 3);
         }
         if (generateBackGate) {
-            for (i1 = 1; i1 <= 3; ++i1) {
-                this.setBlockAndMetadata(world, i1, 0, 19, LOTRMod.dirtPath, 0);
+            for (int i14 = 1; i14 <= 3; ++i14) {
+                this.setBlockAndMetadata(world, i14, 0, 19, LOTRMod.dirtPath, 0);
                 for (j12 = 1; j12 <= 3; ++j12) {
-                    this.setBlockAndMetadata(world, i1, j12, 19, LOTRMod.gateWooden, 2);
+                    this.setBlockAndMetadata(world, i14, j12, 19, LOTRMod.gateWooden, 2);
                 }
             }
         } else {
-            for (i1 = 1; i1 <= 3; ++i1) {
-                this.setBlockAndMetadata(world, i1, 1, 20, this.leafBlock, this.leafMeta);
+            for (int i14 = 1; i14 <= 3; ++i14) {
+                this.setBlockAndMetadata(world, i14, 1, 20, this.leafBlock, this.leafMeta);
             }
         }
         LOTREntityDorwinionElf dorwinionElf = new LOTREntityDorwinionElf(world);

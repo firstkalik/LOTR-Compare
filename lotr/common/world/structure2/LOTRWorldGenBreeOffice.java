@@ -36,9 +36,9 @@ extends LOTRWorldGenBreeStructure {
 
     @Override
     public boolean generateWithSetRotation(World world, Random random, int i, int j, int k, int rotation) {
-        int k1;
-        int i1;
         int j1;
+        int i1;
+        int k1;
         this.setOriginAndRotation(world, i, j, k, rotation, 8);
         this.setupRandomBlocks(random);
         if (this.restrictions) {
@@ -129,8 +129,8 @@ extends LOTRWorldGenBreeStructure {
         this.placePlate(world, random, 0, 6, -4, LOTRMod.ceramicPlateBlock, LOTRFoods.BREE);
         this.placePlate(world, random, -6, 6, -2, LOTRMod.plateBlock, LOTRFoods.BREE);
         this.placePlate(world, random, 5, 6, 1, LOTRMod.ceramicPlateBlock, LOTRFoods.BREE);
-        this.setBlockAndMetadata(world, 5, 6, 2, LOTRWorldGenBreeOffice.getRandomPieBlock(random), 0);
-        this.setBlockAndMetadata(world, -3, 6, 2, LOTRWorldGenBreeOffice.getRandomPieBlock(random), 0);
+        this.setBlockAndMetadata(world, 5, 6, 2, LOTRWorldGenBreeStructure.getRandomPieBlock(random), 0);
+        this.setBlockAndMetadata(world, -3, 6, 2, LOTRWorldGenBreeStructure.getRandomPieBlock(random), 0);
         this.setBlockAndMetadata(world, 6, 1, -1, LOTRMod.strawBed, 2);
         this.setBlockAndMetadata(world, 6, 1, -2, LOTRMod.strawBed, 10);
         this.setBlockAndMetadata(world, 6, 1, 1, LOTRMod.strawBed, 0);
@@ -144,7 +144,11 @@ extends LOTRWorldGenBreeStructure {
         this.spawnItemFrame(world, 0, 2, 1, 2, new ItemStack(Items.clock));
         LOTREntityBreeCaptain sherriff = new LOTREntityBreeCaptain(world);
         this.spawnNPCAndSetHome(sherriff, world, 0, 4, 0, 12);
-        this.placeSign(world, 0, 3, -8, Blocks.wall_sign, 2, new String[]{"", "Sherriff", sherriff.getNPCName(), ""});
+        String[] sherriffNameParts = sherriff.getNPCName().split(" ");
+        if (sherriffNameParts.length < 2) {
+            sherriffNameParts = new String[]{sherriffNameParts[0], ""};
+        }
+        this.placeSign(world, 0, 3, -8, Blocks.wall_sign, 2, new String[]{"Sherriff", sherriffNameParts[0], sherriffNameParts[1], ""});
         return true;
     }
 }

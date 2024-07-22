@@ -74,8 +74,8 @@ extends LOTRGuiMenuBase {
         this.buttonConquest.setState(pd.getEnableConquestKills());
         this.buttonFeminineRank.setState(pd.getFemRankOverride());
         super.drawScreen(i, j, f);
-        for (int k = 0; k < this.buttonList.size(); ++k) {
-            GuiButton button = (GuiButton)this.buttonList.get(k);
+        for (Object element : this.buttonList) {
+            GuiButton button = (GuiButton)element;
             if (!(button instanceof LOTRGuiButtonOptions)) continue;
             ((LOTRGuiButtonOptions)button).drawTooltip(this.mc, i, j);
         }

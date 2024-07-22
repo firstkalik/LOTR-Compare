@@ -33,11 +33,11 @@ extends LOTRWorldGenStructureBase2 {
 
     @Override
     public boolean generateWithSetRotation(World world, Random random, int i, int j, int k, int rotation) {
-        int j1;
-        int k1;
         int j12;
+        int k1;
         int i1;
         int i12;
+        int j1;
         int radius = 12;
         int height = 7;
         int base = -4;

@@ -35,7 +35,7 @@ import net.minecraft.world.World;
 
 public abstract class LOTRWorldGenGondorMarketStall
 extends LOTRWorldGenGondorStructure {
-    private static final Class[] allStallTypes = new Class[]{Greengrocer.class, Lumber.class, Mason.class, Brewer.class, Flowers.class, Butcher.class, Fish.class, Farmer.class, Blacksmith.class, Baker.class};
+    private static Class[] allStallTypes = new Class[]{Greengrocer.class, Lumber.class, Mason.class, Brewer.class, Flowers.class, Butcher.class, Fish.class, Farmer.class, Blacksmith.class, Baker.class};
 
     public static LOTRWorldGenStructureBase2 getRandomStall(Random random, boolean flag) {
         try {
@@ -111,9 +111,31 @@ extends LOTRWorldGenGondorStructure {
 
     protected abstract LOTREntityGondorMan createTrader(World var1);
 
-    public static class Baker
+    public static class Greengrocer
     extends LOTRWorldGenGondorMarketStall {
-        public Baker(boolean flag) {
+        public Greengrocer(boolean flag) {
+            super(flag);
+        }
+
+        @Override
+        protected void generateRoof(World world, Random random, int i1, int j1, int k1) {
+            int i2 = Math.abs(i1);
+            if (IntMath.mod((int)(i2 + Math.abs(k1)), (int)2) == 0) {
+                this.setBlockAndMetadata(world, i1, j1, k1, Blocks.wool, 14);
+            } else {
+                this.setBlockAndMetadata(world, i1, j1, k1, Blocks.wool, 5);
+            }
+        }
+
+        @Override
+        protected LOTREntityGondorMan createTrader(World world) {
+            return new LOTREntityGondorGreengrocer(world);
+        }
+    }
+
+    public static class Lumber
+    extends LOTRWorldGenGondorMarketStall {
+        public Lumber(boolean flag) {
             super(flag);
         }
 
@@ -121,8 +143,8 @@ extends LOTRWorldGenGondorStructure {
         protected void generateRoof(World world, Random random, int i1, int j1, int k1) {
             int i2 = Math.abs(i1);
             int k2 = Math.abs(k1);
-            if (k2 % 2 == 0) {
-                this.setBlockAndMetadata(world, i1, j1, k1, Blocks.wool, 1);
+            if ((i2 == 2 || k2 == 2) && IntMath.mod((int)(i2 + k2), (int)2) == 0) {
+                this.setBlockAndMetadata(world, i1, j1, k1, Blocks.wool, 13);
             } else {
                 this.setBlockAndMetadata(world, i1, j1, k1, Blocks.wool, 12);
             }
@@ -130,57 +152,100 @@ extends LOTRWorldGenGondorStructure {
 
         @Override
         protected LOTREntityGondorMan createTrader(World world) {
-            return new LOTREntityGondorBaker(world);
+            return new LOTREntityGondorLumberman(world);
         }
     }
 
-    public static class Blacksmith
+    public static class Mason
     extends LOTRWorldGenGondorMarketStall {
-        public Blacksmith(boolean flag) {
+        public Mason(boolean flag) {
             super(flag);
         }
 
         @Override
         protected void generateRoof(World world, Random random, int i1, int j1, int k1) {
-            int k2;
             int i2 = Math.abs(i1);
-            if (i2 == (k2 = Math.abs(k1))) {
-                this.setBlockAndMetadata(world, i1, j1, k1, Blocks.wool, 15);
-            } else {
+            int k2 = Math.abs(k1);
+            if (i2 == 2 || k2 == 2 || i2 != 1 && k2 != 1) {
                 this.setBlockAndMetadata(world, i1, j1, k1, Blocks.wool, 7);
+            } else {
+                this.setBlockAndMetadata(world, i1, j1, k1, Blocks.wool, 8);
             }
         }
 
         @Override
         protected LOTREntityGondorMan createTrader(World world) {
-            return new LOTREntityGondorBlacksmith(world);
+            return new LOTREntityGondorMason(world);
         }
     }
 
-    public static class Farmer
+    public static class Brewer
     extends LOTRWorldGenGondorMarketStall {
-        public Farmer(boolean flag) {
+        public Brewer(boolean flag) {
             super(flag);
         }
 
         @Override
         protected void generateRoof(World world, Random random, int i1, int j1, int k1) {
-            int k2;
             int i2 = Math.abs(i1);
-            if (IntMath.mod((int)(i2 + (k2 = Math.abs(k1))), (int)2) == 0) {
-                if (Integer.signum(i1) != -Integer.signum(k1) && i2 + k2 == 2) {
-                    this.setBlockAndMetadata(world, i1, j1, k1, Blocks.wool, 4);
-                } else {
-                    this.setBlockAndMetadata(world, i1, j1, k1, Blocks.wool, 13);
-                }
-            } else {
+            Math.abs(k1);
+            if (i2 % 2 == 0) {
                 this.setBlockAndMetadata(world, i1, j1, k1, Blocks.wool, 12);
+            } else {
+                this.setBlockAndMetadata(world, i1, j1, k1, Blocks.wool, 4);
             }
         }
 
         @Override
         protected LOTREntityGondorMan createTrader(World world) {
-            return new LOTREntityGondorFarmer(world);
+            return new LOTREntityGondorBrewer(world);
+        }
+    }
+
+    public static class Flowers
+    extends LOTRWorldGenGondorMarketStall {
+        public Flowers(boolean flag) {
+            super(flag);
+        }
+
+        @Override
+        protected void generateRoof(World world, Random random, int i1, int j1, int k1) {
+            int i2 = Math.abs(i1);
+            if (i2 == Math.abs(k1)) {
+                this.setBlockAndMetadata(world, i1, j1, k1, Blocks.wool, 4);
+            } else {
+                this.setBlockAndMetadata(world, i1, j1, k1, Blocks.wool, 13);
+            }
+        }
+
+        @Override
+        protected LOTREntityGondorMan createTrader(World world) {
+            return new LOTREntityGondorFlorist(world);
+        }
+    }
+
+    public static class Butcher
+    extends LOTRWorldGenGondorMarketStall {
+        public Butcher(boolean flag) {
+            super(flag);
+        }
+
+        @Override
+        protected void generateRoof(World world, Random random, int i1, int j1, int k1) {
+            int i2 = Math.abs(i1);
+            int k2 = Math.abs(k1);
+            if (i2 == 2 || k2 == 2) {
+                this.setBlockAndMetadata(world, i1, j1, k1, Blocks.wool, 6);
+            } else if (i2 == 1 || k2 == 1) {
+                this.setBlockAndMetadata(world, i1, j1, k1, Blocks.wool, 14);
+            } else {
+                this.setBlockAndMetadata(world, i1, j1, k1, Blocks.wool, 0);
+            }
+        }
+
+        @Override
+        protected LOTREntityGondorMan createTrader(World world) {
+            return new LOTREntityGondorButcher(world);
         }
     }
 
@@ -211,128 +276,9 @@ extends LOTRWorldGenGondorStructure {
         }
     }
 
-    public static class Butcher
+    public static class Farmer
     extends LOTRWorldGenGondorMarketStall {
-        public Butcher(boolean flag) {
-            super(flag);
-        }
-
-        @Override
-        protected void generateRoof(World world, Random random, int i1, int j1, int k1) {
-            int i2 = Math.abs(i1);
-            int k2 = Math.abs(k1);
-            if (i2 == 2 || k2 == 2) {
-                this.setBlockAndMetadata(world, i1, j1, k1, Blocks.wool, 6);
-            } else if (i2 == 1 || k2 == 1) {
-                this.setBlockAndMetadata(world, i1, j1, k1, Blocks.wool, 14);
-            } else {
-                this.setBlockAndMetadata(world, i1, j1, k1, Blocks.wool, 0);
-            }
-        }
-
-        @Override
-        protected LOTREntityGondorMan createTrader(World world) {
-            return new LOTREntityGondorButcher(world);
-        }
-    }
-
-    public static class Flowers
-    extends LOTRWorldGenGondorMarketStall {
-        public Flowers(boolean flag) {
-            super(flag);
-        }
-
-        @Override
-        protected void generateRoof(World world, Random random, int i1, int j1, int k1) {
-            int k2;
-            int i2 = Math.abs(i1);
-            if (i2 == (k2 = Math.abs(k1))) {
-                this.setBlockAndMetadata(world, i1, j1, k1, Blocks.wool, 4);
-            } else {
-                this.setBlockAndMetadata(world, i1, j1, k1, Blocks.wool, 13);
-            }
-        }
-
-        @Override
-        protected LOTREntityGondorMan createTrader(World world) {
-            return new LOTREntityGondorFlorist(world);
-        }
-    }
-
-    public static class Brewer
-    extends LOTRWorldGenGondorMarketStall {
-        public Brewer(boolean flag) {
-            super(flag);
-        }
-
-        @Override
-        protected void generateRoof(World world, Random random, int i1, int j1, int k1) {
-            int i2 = Math.abs(i1);
-            int k2 = Math.abs(k1);
-            if (i2 % 2 == 0) {
-                this.setBlockAndMetadata(world, i1, j1, k1, Blocks.wool, 12);
-            } else {
-                this.setBlockAndMetadata(world, i1, j1, k1, Blocks.wool, 4);
-            }
-        }
-
-        @Override
-        protected LOTREntityGondorMan createTrader(World world) {
-            return new LOTREntityGondorBrewer(world);
-        }
-    }
-
-    public static class Mason
-    extends LOTRWorldGenGondorMarketStall {
-        public Mason(boolean flag) {
-            super(flag);
-        }
-
-        @Override
-        protected void generateRoof(World world, Random random, int i1, int j1, int k1) {
-            int i2 = Math.abs(i1);
-            int k2 = Math.abs(k1);
-            if (i2 == 2 || k2 == 2) {
-                this.setBlockAndMetadata(world, i1, j1, k1, Blocks.wool, 7);
-            } else if (i2 == 1 || k2 == 1) {
-                this.setBlockAndMetadata(world, i1, j1, k1, Blocks.wool, 8);
-            } else {
-                this.setBlockAndMetadata(world, i1, j1, k1, Blocks.wool, 7);
-            }
-        }
-
-        @Override
-        protected LOTREntityGondorMan createTrader(World world) {
-            return new LOTREntityGondorMason(world);
-        }
-    }
-
-    public static class Lumber
-    extends LOTRWorldGenGondorMarketStall {
-        public Lumber(boolean flag) {
-            super(flag);
-        }
-
-        @Override
-        protected void generateRoof(World world, Random random, int i1, int j1, int k1) {
-            int i2 = Math.abs(i1);
-            int k2 = Math.abs(k1);
-            if ((i2 == 2 || k2 == 2) && IntMath.mod((int)(i2 + k2), (int)2) == 0) {
-                this.setBlockAndMetadata(world, i1, j1, k1, Blocks.wool, 13);
-            } else {
-                this.setBlockAndMetadata(world, i1, j1, k1, Blocks.wool, 12);
-            }
-        }
-
-        @Override
-        protected LOTREntityGondorMan createTrader(World world) {
-            return new LOTREntityGondorLumberman(world);
-        }
-    }
-
-    public static class Greengrocer
-    extends LOTRWorldGenGondorMarketStall {
-        public Greengrocer(boolean flag) {
+        public Farmer(boolean flag) {
             super(flag);
         }
 
@@ -341,15 +287,64 @@ extends LOTRWorldGenGondorStructure {
             int k2;
             int i2 = Math.abs(i1);
             if (IntMath.mod((int)(i2 + (k2 = Math.abs(k1))), (int)2) == 0) {
-                this.setBlockAndMetadata(world, i1, j1, k1, Blocks.wool, 14);
+                if (Integer.signum(i1) != -Integer.signum(k1) && i2 + k2 == 2) {
+                    this.setBlockAndMetadata(world, i1, j1, k1, Blocks.wool, 4);
+                } else {
+                    this.setBlockAndMetadata(world, i1, j1, k1, Blocks.wool, 13);
+                }
             } else {
-                this.setBlockAndMetadata(world, i1, j1, k1, Blocks.wool, 5);
+                this.setBlockAndMetadata(world, i1, j1, k1, Blocks.wool, 12);
             }
         }
 
         @Override
         protected LOTREntityGondorMan createTrader(World world) {
-            return new LOTREntityGondorGreengrocer(world);
+            return new LOTREntityGondorFarmer(world);
+        }
+    }
+
+    public static class Blacksmith
+    extends LOTRWorldGenGondorMarketStall {
+        public Blacksmith(boolean flag) {
+            super(flag);
+        }
+
+        @Override
+        protected void generateRoof(World world, Random random, int i1, int j1, int k1) {
+            int i2 = Math.abs(i1);
+            if (i2 == Math.abs(k1)) {
+                this.setBlockAndMetadata(world, i1, j1, k1, Blocks.wool, 15);
+            } else {
+                this.setBlockAndMetadata(world, i1, j1, k1, Blocks.wool, 7);
+            }
+        }
+
+        @Override
+        protected LOTREntityGondorMan createTrader(World world) {
+            return new LOTREntityGondorBlacksmith(world);
+        }
+    }
+
+    public static class Baker
+    extends LOTRWorldGenGondorMarketStall {
+        public Baker(boolean flag) {
+            super(flag);
+        }
+
+        @Override
+        protected void generateRoof(World world, Random random, int i1, int j1, int k1) {
+            Math.abs(i1);
+            int k2 = Math.abs(k1);
+            if (k2 % 2 == 0) {
+                this.setBlockAndMetadata(world, i1, j1, k1, Blocks.wool, 1);
+            } else {
+                this.setBlockAndMetadata(world, i1, j1, k1, Blocks.wool, 12);
+            }
+        }
+
+        @Override
+        protected LOTREntityGondorMan createTrader(World world) {
+            return new LOTREntityGondorBaker(world);
         }
     }
 

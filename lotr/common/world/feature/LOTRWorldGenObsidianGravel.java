@@ -60,13 +60,13 @@ extends WorldGenerator {
             int j2 = MathHelper.floor_double((double)(zLerp + d10 / 2.0));
             for (int k2 = i1; k2 <= l1; ++k2) {
                 double d12 = ((double)k2 + 0.5 - xLerp) / (d10 / 2.0);
-                if (!(d12 * d12 < 1.0)) continue;
+                if (d12 * d12 >= 1.0) continue;
                 for (int l2 = j1; l2 <= i2; ++l2) {
                     double d13 = ((double)l2 + 0.5 - yLerp) / (d11 / 2.0);
-                    if (!(d12 * d12 + d13 * d13 < 1.0)) continue;
+                    if (d12 * d12 + d13 * d13 >= 1.0) continue;
                     for (int i3 = k1; i3 <= j2; ++i3) {
                         double d14 = ((double)i3 + 0.5 - zLerp) / (d10 / 2.0);
-                        if (!(d12 * d12 + d13 * d13 + d14 * d14 < 1.0) || !this.canReplace(world, k2, l2, i3)) continue;
+                        if (d12 * d12 + d13 * d13 + d14 * d14 >= 1.0 || !this.canReplace(world, k2, l2, i3)) continue;
                         world.setBlock(k2, l2, i3, this.genBlock, this.genMeta, 2);
                     }
                 }

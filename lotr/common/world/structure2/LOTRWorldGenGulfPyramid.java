@@ -26,27 +26,27 @@ extends LOTRWorldGenGulfStructure {
 
     @Override
     public boolean generateWithSetRotation(World world, Random random, int i, int j, int k, int rotation) {
-        int k1;
-        int i1;
-        int step;
-        int j2;
-        int j1;
         int j12;
+        int j1;
+        int i1;
+        int j2;
+        int step;
+        int k1;
         this.setOriginAndRotation(world, i, j, k, rotation, 11);
         this.setupRandomBlocks(random);
         if (this.restrictions) {
             for (i1 = -11; i1 <= 11; ++i1) {
                 for (k1 = -11; k1 <= 11; ++k1) {
-                    j12 = this.getTopBlock(world, i1, k1) - 1;
-                    if (this.isSurface(world, i1, j12, k1)) continue;
+                    j1 = this.getTopBlock(world, i1, k1) - 1;
+                    if (this.isSurface(world, i1, j1, k1)) continue;
                     return false;
                 }
             }
         }
         for (i1 = -10; i1 <= 10; ++i1) {
             for (k1 = -10; k1 <= 10; ++k1) {
-                for (j12 = 1; j12 <= 20; ++j12) {
-                    this.setAir(world, i1, j12, k1);
+                for (j1 = 1; j1 <= 20; ++j1) {
+                    this.setAir(world, i1, j1, k1);
                 }
             }
         }
@@ -83,20 +83,20 @@ extends LOTRWorldGenGulfStructure {
         int maxStep = 4;
         for (int k12 : new int[]{-11, 11}) {
             int i12;
-            for (step = 0; step < maxStep && !this.isOpaque(world, i12 = -7 - step, j1 = 0 - step, k12); ++step) {
-                this.setBlockAndMetadata(world, i12, j1, k12, Blocks.sandstone_stairs, 1);
-                this.setGrassToDirt(world, i12, j1 - 1, k12);
-                j2 = j1 - 1;
+            for (step = 0; step < maxStep && !this.isOpaque(world, i12 = -7 - step, j12 = 0 - step, k12); ++step) {
+                this.setBlockAndMetadata(world, i12, j12, k12, Blocks.sandstone_stairs, 1);
+                this.setGrassToDirt(world, i12, j12 - 1, k12);
+                j2 = j12 - 1;
                 while (!this.isOpaque(world, i12, j2, k12) && this.getY(j2) >= 0) {
                     this.setBlockAndMetadata(world, i12, j2, k12, Blocks.sandstone, 0);
                     this.setGrassToDirt(world, i12, j2 - 1, k12);
                     --j2;
                 }
             }
-            for (step = 0; step < maxStep && !this.isOpaque(world, i12 = 7 + step, j1 = 0 - step, k12); ++step) {
-                this.setBlockAndMetadata(world, i12, j1, k12, Blocks.sandstone_stairs, 0);
-                this.setGrassToDirt(world, i12, j1 - 1, k12);
-                j2 = j1 - 1;
+            for (step = 0; step < maxStep && !this.isOpaque(world, i12 = 7 + step, j12 = 0 - step, k12); ++step) {
+                this.setBlockAndMetadata(world, i12, j12, k12, Blocks.sandstone_stairs, 0);
+                this.setGrassToDirt(world, i12, j12 - 1, k12);
+                j2 = j12 - 1;
                 while (!this.isOpaque(world, i12, j2, k12) && this.getY(j2) >= 0) {
                     this.setBlockAndMetadata(world, i12, j2, k12, Blocks.sandstone, 0);
                     this.setGrassToDirt(world, i12, j2 - 1, k12);
@@ -106,20 +106,20 @@ extends LOTRWorldGenGulfStructure {
         }
         for (int i13 : new int[]{-11, 11}) {
             int k13;
-            for (step = 0; step < maxStep && !this.isOpaque(world, i13, j1 = 0 - step, k13 = -7 - step); ++step) {
-                this.setBlockAndMetadata(world, i13, j1, k13, Blocks.sandstone_stairs, 2);
-                this.setGrassToDirt(world, i13, j1 - 1, k13);
-                j2 = j1 - 1;
+            for (step = 0; step < maxStep && !this.isOpaque(world, i13, j12 = 0 - step, k13 = -7 - step); ++step) {
+                this.setBlockAndMetadata(world, i13, j12, k13, Blocks.sandstone_stairs, 2);
+                this.setGrassToDirt(world, i13, j12 - 1, k13);
+                j2 = j12 - 1;
                 while (!this.isOpaque(world, i13, j2, k13) && this.getY(j2) >= 0) {
                     this.setBlockAndMetadata(world, i13, j2, k13, Blocks.sandstone, 0);
                     this.setGrassToDirt(world, i13, j2 - 1, k13);
                     --j2;
                 }
             }
-            for (step = 0; step < maxStep && !this.isOpaque(world, i13, j1 = 0 - step, k13 = 7 + step); ++step) {
-                this.setBlockAndMetadata(world, i13, j1, k13, Blocks.sandstone_stairs, 3);
-                this.setGrassToDirt(world, i13, j1 - 1, k13);
-                j2 = j1 - 1;
+            for (step = 0; step < maxStep && !this.isOpaque(world, i13, j12 = 0 - step, k13 = 7 + step); ++step) {
+                this.setBlockAndMetadata(world, i13, j12, k13, Blocks.sandstone_stairs, 3);
+                this.setGrassToDirt(world, i13, j12 - 1, k13);
+                j2 = j12 - 1;
                 while (!this.isOpaque(world, i13, j2, k13) && this.getY(j2) >= 0) {
                     this.setBlockAndMetadata(world, i13, j2, k13, Blocks.sandstone, 0);
                     this.setGrassToDirt(world, i13, j2 - 1, k13);

@@ -92,7 +92,7 @@ extends ModelBase {
         this.rightArm.rotateAngleX = (float)Math.toRadians(-55.0);
         this.leftArm.rotateAngleX = (float)Math.toRadians(-55.0);
         float f6 = (float)Math.toRadians(45.0);
-        f6 = LOTRMod.isAprilFools() ? (f6 *= f2) : (f6 *= f1);
+        f6 = LOTRMod.isAprilFools() ? (f6 = f6 * f2) : (f6 = f6 * f1);
         this.body.rotateAngleX += f6;
         this.head.rotateAngleX -= f6;
         this.rightArm.rotateAngleX -= f6;

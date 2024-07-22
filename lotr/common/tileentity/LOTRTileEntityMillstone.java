@@ -42,12 +42,9 @@ extends TileEntity
 implements IInventory,
 ISidedInventory {
     protected ItemStack[] inventory = new ItemStack[2];
-    private static final int inputSlot = 0;
-    private static final int outputSlot = 1;
     private String specialMillstoneName;
     public boolean isMilling;
     public int currentMillTime = 0;
-    private static final int fullMillTime = 200;
 
     public int getSizeInventory() {
         return this.inventory.length;

@@ -80,10 +80,15 @@ extends LOTREntityHorse {
         return super.interact(entityplayer);
     }
 
+    @Override
     protected void dropFewItems(boolean flag, int i) {
         int j = this.rand.nextInt(2) + this.rand.nextInt(1 + i);
         for (int k = 0; k < j; ++k) {
             this.dropItem(Items.leather, 1);
+        }
+        int j3 = this.rand.nextInt(2) + this.rand.nextInt(1 + i);
+        for (int k = 0; k < j3; ++k) {
+            this.dropItem(Items.bone, 1);
         }
         j = this.rand.nextInt(2) + 1 + this.rand.nextInt(1 + i);
         for (int l = 0; l < j; ++l) {

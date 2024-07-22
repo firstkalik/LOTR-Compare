@@ -82,9 +82,6 @@ extends GuiScreen {
 
     protected void actionPerformed(GuiButton button) {
         if (button.enabled) {
-            if (button == this.buttonDone) {
-                // empty if block
-            }
             this.tileSign.markDirty();
             this.mc.displayGuiScreen(null);
         }
@@ -102,11 +99,9 @@ extends GuiScreen {
             String s = this.tileSign.signText[this.editLine];
             this.tileSign.signText[this.editLine] = s.substring(0, s.length() - 1);
         }
-        if (ChatAllowedCharacters.isAllowedCharacter((char)c)) {
-            if (this.tileSign.signText[this.editLine].length() < 15) {
-                int n = this.editLine;
-                this.tileSign.signText[n] = this.tileSign.signText[n] + c;
-            }
+        if (ChatAllowedCharacters.isAllowedCharacter((char)c) && this.tileSign.signText[this.editLine].length() < 15) {
+            int n = this.editLine;
+            this.tileSign.signText[n] = this.tileSign.signText[n] + c;
         }
         if (i == 1) {
             this.actionPerformed(this.buttonDone);
@@ -114,7 +109,7 @@ extends GuiScreen {
     }
 
     public void drawScreen(int i, int j, float f) {
-        Block block = this.tileSign.getBlockType();
+        this.tileSign.getBlockType();
         int meta = this.tileSign.getBlockMetadata();
         float rotation = (float)Direction.facingToDirection[meta] * 90.0f;
         IIcon onIcon = ((LOTRTileEntitySignCarved)this.tileSign).getOnBlockIcon();

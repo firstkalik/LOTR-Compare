@@ -35,20 +35,19 @@ extends LOTRBlockCraftingTable {
     @SideOnly(value=Side.CLIENT)
     public IIcon getIcon(int i, int j) {
         if (i == 1) {
-            return this.tableIcons[2];
+            return this.tableIcons[1];
         }
         if (i == 0) {
             return LOTRMod.brick.getIcon(0, 14);
         }
-        return i == 4 || i == 5 ? this.tableIcons[0] : this.tableIcons[1];
+        return this.tableIcons[0];
     }
 
     @SideOnly(value=Side.CLIENT)
     public void registerBlockIcons(IIconRegister iconregister) {
-        this.tableIcons = new IIcon[3];
-        this.tableIcons[0] = iconregister.registerIcon(this.getTextureName() + "_side0");
-        this.tableIcons[1] = iconregister.registerIcon(this.getTextureName() + "_side1");
-        this.tableIcons[2] = iconregister.registerIcon(this.getTextureName() + "_top");
+        this.tableIcons = new IIcon[2];
+        this.tableIcons[0] = iconregister.registerIcon(this.getTextureName() + "_side");
+        this.tableIcons[1] = iconregister.registerIcon(this.getTextureName() + "_top");
     }
 }
 

@@ -298,8 +298,7 @@ ISidedInventory {
         }
         if (side == 1) {
             ArrayList<LOTRSlotStackSize> list = new ArrayList<LOTRSlotStackSize>();
-            for (int i = 0; i < this.inputSlots.length; ++i) {
-                int slot = this.inputSlots[i];
+            for (int slot : this.inputSlots) {
                 int size = this.getStackInSlot(slot) == null ? 0 : this.getStackInSlot((int)slot).stackSize;
                 list.add(new LOTRSlotStackSize(slot, size));
             }

@@ -31,10 +31,9 @@ extends LOTRGenLayer {
         int k2 = zSizeZoom - 1 << 2;
         int[] ints = LOTRIntCache.get(world).getIntArray(i2 * k2);
         for (int k3 = 0; k3 < zSizeZoom - 1; ++k3) {
-            int i3;
-            int int00 = variants[i3 + 0 + (k3 + 0) * xSizeZoom];
-            int int01 = variants[i3 + 0 + (k3 + 1) * xSizeZoom];
-            for (i3 = 0; i3 < xSizeZoom - 1; ++i3) {
+            int int00 = variants[k3 * xSizeZoom];
+            int int01 = variants[k3 + 1 * xSizeZoom];
+            for (int i3 = 0; i3 < xSizeZoom - 1; ++i3) {
                 double d0 = 3.6;
                 this.initChunkSeed((long)(i3 + i1 << 2), (long)(k3 + k1 << 2));
                 double d00_a = (double)this.nextInt(this.zoomScale) / this.zoomDivisor * d0;

@@ -32,9 +32,7 @@ extends LOTRWorldGenGulfStructure {
 
     @Override
     public boolean generateWithSetRotation(World world, Random random, int i, int j, int k, int rotation) {
-        int k1;
         int j1;
-        int i1;
         this.setOriginAndRotation(world, i, j, k, rotation, 6);
         this.setupRandomBlocks(random);
         if (this.restrictions) {
@@ -108,7 +106,11 @@ extends LOTRWorldGenGulfStructure {
         LOTREntityGulfBlacksmith smith = new LOTREntityGulfBlacksmith(world);
         this.spawnNPCAndSetHome(smith, world, -6, 1, 0, 8);
         int maxSteps = 12;
-        for (int step = 0; step < maxSteps && !this.isOpaque(world, i1 = -9, j1 = 0 - step, k1 = -5 - step); ++step) {
+        for (int step = 0; step < maxSteps; ++step) {
+            int i1 = -9;
+            j1 = 0 - step;
+            int k1 = -5 - step;
+            if (this.isOpaque(world, -9, j1, k1)) break;
             this.setBlockAndMetadata(world, i1, j1, k1, LOTRMod.stairsRedSandstone, 2);
             this.setGrassToDirt(world, i1, j1 - 1, k1);
             int j2 = j1 - 1;

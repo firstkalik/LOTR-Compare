@@ -83,7 +83,7 @@ extends Teleporter {
                         if (!portalHere) continue;
                         double yDistance = (double)j1 + 0.5 - entity.posY;
                         double distanceSq = xDistance * xDistance + yDistance * yDistance + zDistance * zDistance;
-                        if (!(distanceToPortal < 0.0) && !(distanceSq < distanceToPortal)) continue;
+                        if (distanceToPortal >= 0.0 && distanceSq >= distanceToPortal) continue;
                         distanceToPortal = distanceSq;
                         i = i1;
                         j = j1;
@@ -121,12 +121,12 @@ extends Teleporter {
     }
 
     public boolean makePortal(Entity entity) {
-        int i1;
-        int j2;
-        int i2;
         int j1;
-        int k2;
+        int i2;
+        int j2;
         int k1;
+        int i1;
+        int k2;
         int range = 16;
         double distanceToPortal = -1.0;
         int i = MathHelper.floor_double((double)entity.posX);
@@ -154,7 +154,7 @@ extends Teleporter {
                     }
                     double yDistance = (double)j1 + 0.5 - entity.posY;
                     double distanceSq = xDistance * xDistance + yDistance * yDistance + zDistance * zDistance;
-                    if (!(distanceToPortal < 0.0) && !(distanceSq < distanceToPortal)) continue;
+                    if (distanceToPortal >= 0.0 && distanceSq >= distanceToPortal) continue;
                     distanceToPortal = distanceSq;
                     posX = i12;
                     posY = j1;

@@ -45,21 +45,18 @@ import net.minecraft.world.gen.feature.WorldGenerator;
 public class LOTRBiomeGenOcean
 extends LOTRBiome {
     private static Random iceRand = new Random();
-    private static final int iceLimitSouth = -30000;
-    private static final int iceLimitNorth = -60000;
-    private static final int palmStartZ = 64000;
-    private static final int palmFullZ = 130000;
     private WorldGenerator spongeGen = new LOTRWorldGenSeaBlock(Blocks.sponge, 0, 24);
     private WorldGenerator coralGen = new LOTRWorldGenSeaBlock(LOTRMod.coralReef, 0, 64);
 
     public LOTRBiomeGenOcean(int i, boolean major) {
         super(i, major);
         this.spawnableWaterCreatureList.add(new BiomeGenBase.SpawnListEntry(EntitySquid.class, 4, 4, 4));
-        this.spawnableLOTRAmbientList.add(new BiomeGenBase.SpawnListEntry(LOTREntitySeagull.class, 20, 4, 4));
+        this.spawnableLOTRAmbientList.add(new BiomeGenBase.SpawnListEntry(LOTREntitySeagull.class, 10, 4, 4));
         this.npcSpawnList.clear();
-        this.decorator.addOre((WorldGenerator)new WorldGenMinable(LOTRMod.oreSalt, 8), 4.0f, 0, 64);
+        this.decorator.addOre((WorldGenerator)new WorldGenMinable(LOTRMod.oreSalt, 16), 6.0f, 0, 64);
         this.decorator.addOre((WorldGenerator)new WorldGenMinable(LOTRMod.oreSalt, 8, (Block)Blocks.sand), 0.5f, 56, 80);
         this.decorator.addOre((WorldGenerator)new WorldGenMinable(LOTRMod.oreSalt, 8, LOTRMod.whiteSand), 0.5f, 56, 80);
+        this.decorator.addOre((WorldGenerator)new WorldGenMinable(LOTRMod.oreMithril, 8), 0.25f, 0, 16);
         this.decorator.treesPerChunk = 1;
         this.decorator.willowPerChunk = 1;
         this.decorator.flowersPerChunk = 2;
@@ -74,6 +71,7 @@ extends LOTRBiome {
         this.decorator.addTree(LOTRTreeType.BEECH_LARGE, 5);
         this.decorator.addTree(LOTRTreeType.APPLE, 3);
         this.decorator.addTree(LOTRTreeType.PEAR, 3);
+        this.decorator.generateAthelas = true;
         this.decorator.addRandomStructure(new LOTRWorldGenNumenorRuin(false), 500);
         this.decorator.addRandomStructure(new LOTRWorldGenSmallStoneRuin(false), 400);
         this.setBanditChance(LOTREventSpawner.EventChance.NEVER);
@@ -101,9 +99,9 @@ extends LOTRBiome {
 
     @Override
     public void decorate(World world, Random random, int i, int k) {
+        int j1;
         int k1;
         int i1;
-        int j1;
         super.decorate(world, random, i, k);
         if (i < LOTRWaypoint.MITHLOND_SOUTH.getXCoord() && k > LOTRWaypoint.SOUTH_FOROCHEL.getZCoord() && k < LOTRWaypoint.ERYN_VORN.getZCoord() && random.nextInt(200) == 0) {
             i1 = i + random.nextInt(16) + 8;
@@ -121,7 +119,7 @@ extends LOTRBiome {
         }
         if (k >= 64000) {
             float chance = 0.0f;
-            chance = k >= 130000 ? 1.0f : (float)(k - 64000) / 66000.0f;
+            float f = chance = k >= 130000 ? 1.0f : (float)(k - 64000) / 66000.0f;
             if (random.nextFloat() < chance && random.nextInt(6) == 0) {
                 int palms = 1 + random.nextInt(2);
                 if (random.nextInt(3) == 0) {

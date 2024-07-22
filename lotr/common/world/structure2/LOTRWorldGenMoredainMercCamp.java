@@ -72,12 +72,10 @@ extends LOTRWorldGenCampBase {
             int dummies = 1 + random.nextInt(3);
             for (int l = 0; l < dummies; ++l) {
                 int k1;
-                int rot;
                 int r;
                 int i1;
-                int j1;
                 float ang;
-                for (int att = 0; att < 8 && !this.generateSubstructureWithRestrictionFlag(new LOTRWorldGenMoredainMercDummy(this.notifyChanges), world, random, i1 = (int)((float)(r = MathHelper.getRandomIntegerInRange((Random)random, (int)8, (int)15)) * MathHelper.cos((float)(ang = random.nextFloat() * 3.1415927f * 2.0f))), j1 = this.getTopBlock(world, i1, k1 = (int)((float)r * MathHelper.sin((float)ang))), k1, rot = random.nextInt(4), true); ++att) {
+                for (int att = 0; att < 8 && !this.generateSubstructureWithRestrictionFlag(new LOTRWorldGenMoredainMercDummy(this.notifyChanges), world, random, i1 = (int)((float)(r = MathHelper.getRandomIntegerInRange((Random)random, (int)8, (int)15)) * MathHelper.cos((float)(ang = random.nextFloat() * 3.1415927f * 2.0f))), this.getTopBlock(world, i1, k1 = (int)((float)r * MathHelper.sin((float)ang))), k1, random.nextInt(4), true); ++att) {
                 }
             }
             return true;

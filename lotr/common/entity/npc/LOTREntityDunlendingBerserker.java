@@ -38,7 +38,7 @@ extends LOTREntityDunlendingWarrior {
     public LOTREntityDunlendingBerserker(World world) {
         super(world);
         this.npcShield = null;
-        this.npcCape = LOTRCapes.DUNLENDING_BERSERKER;
+        this.npcCape = LOTRCapes.DUNLENDING_BERSERKER.capeTexture;
     }
 
     @Override
@@ -57,11 +57,17 @@ extends LOTREntityDunlendingWarrior {
     @Override
     public IEntityLivingData onSpawnWithEgg(IEntityLivingData data) {
         data = super.onSpawnWithEgg(data);
-        int i = this.rand.nextInt(2);
+        int i = this.rand.nextInt(4);
         if (i == 0) {
-            this.npcItemsInv.setMeleeWeapon(new ItemStack(LOTRMod.battleaxeIron));
-        } else if (i == 1) {
             this.npcItemsInv.setMeleeWeapon(new ItemStack(LOTRMod.battleaxeBronze));
+        } else if (i == 1 || i == 2) {
+            this.npcItemsInv.setMeleeWeapon(new ItemStack(LOTRMod.battleaxeIron));
+        } else if (i == 3 || i == 4) {
+            this.npcItemsInv.setMeleeWeapon(new ItemStack(LOTRMod.dunlendingClubBurnt));
+        }
+        if (this.rand.nextInt(6) == 0) {
+            this.npcItemsInv.setSpearBackup(this.npcItemsInv.getMeleeWeapon());
+            this.npcItemsInv.setMeleeWeapon(new ItemStack(LOTRMod.spearIron));
         }
         this.npcItemsInv.setIdleItem(this.npcItemsInv.getMeleeWeapon());
         this.setCurrentItemOrArmor(1, new ItemStack(LOTRMod.bootsFur));

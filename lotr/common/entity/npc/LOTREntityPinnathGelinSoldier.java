@@ -34,7 +34,7 @@ extends LOTREntityGondorSoldier {
         super(world);
         this.spawnRidingHorse = this.rand.nextInt(8) == 0;
         this.npcShield = LOTRShields.ALIGNMENT_PINNATH_GELIN;
-        this.npcCape = LOTRCapes.PINNATH_GELIN;
+        this.npcCape = LOTRCapes.PINNATH_GELIN.capeTexture;
     }
 
     @Override

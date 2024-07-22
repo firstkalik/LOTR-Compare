@@ -83,7 +83,7 @@ implements IMessage {
                 }
             } else {
                 UUID sharingPlayerID = packet.sharingPlayer;
-                waypoint = sharingPlayerID != null ? playerData.getSharedCustomWaypointByID(sharingPlayerID, wpID) : playerData.getCustomWaypointByID(wpID);
+                LOTRCustomWaypoint lOTRCustomWaypoint = waypoint = sharingPlayerID != null ? playerData.getSharedCustomWaypointByID(sharingPlayerID, wpID) : playerData.getCustomWaypointByID(wpID);
             }
             if (waypoint != null) {
                 LOTRMod.proxy.displayFTScreen(waypoint, packet.startX, packet.startZ);

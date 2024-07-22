@@ -72,7 +72,7 @@ extends CommandBase {
                     this.aliasOrder.clear();
                     this.blockAliases.clear();
                     this.blockMetaAliases.clear();
-                    LOTRCommandStrScan.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"Begun scanning", (Object[])new Object[0]);
+                    CommandBase.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"Begun scanning", (Object[])new Object[0]);
                     return;
                 }
                 throw new WrongUsageException("Already begun scanning", new Object[0]);
@@ -89,7 +89,7 @@ extends CommandBase {
                     if (!this.blockAliases.containsValue(alias)) {
                         this.blockAliases.put(block, alias);
                         this.aliasOrder.add(alias);
-                        LOTRCommandStrScan.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"Associated block %s to alias %s", (Object[])new Object[]{blockID, alias});
+                        CommandBase.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"Associated block %s to alias %s", (Object[])new Object[]{blockID, alias});
                         return;
                     }
                     throw new WrongUsageException("Alias %s already used", new Object[]{alias});
@@ -104,13 +104,13 @@ extends CommandBase {
                     block = Block.getBlockById((int)intID);
                 }
                 if (block != null) {
-                    int meta = LOTRCommandStrScan.parseInt((ICommandSender)sender, (String)args[2]);
+                    int meta = CommandBase.parseInt((ICommandSender)sender, (String)args[2]);
                     if (meta >= 0 && meta <= 15) {
                         String alias = args[3];
                         if (!this.blockMetaAliases.containsValue(alias)) {
                             this.blockMetaAliases.put((Pair<Block, Integer>)Pair.of((Object)block, (Object)meta), alias);
                             this.aliasOrder.add(alias);
-                            LOTRCommandStrScan.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"Associated block %s and metadata %s to alias %s", (Object[])new Object[]{blockID, meta, alias});
+                            CommandBase.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"Associated block %s and metadata %s to alias %s", (Object[])new Object[]{blockID, meta, alias});
                             return;
                         }
                         throw new WrongUsageException("Alias %s already used", new Object[]{alias});
@@ -124,16 +124,16 @@ extends CommandBase {
                 int i = coords.posX;
                 int j = coords.posY;
                 int k = coords.posZ;
-                i = MathHelper.floor_double((double)LOTRCommandStrScan.func_110666_a((ICommandSender)sender, (double)i, (String)args[1]));
-                j = MathHelper.floor_double((double)LOTRCommandStrScan.func_110666_a((ICommandSender)sender, (double)j, (String)args[2]));
-                k = MathHelper.floor_double((double)LOTRCommandStrScan.func_110666_a((ICommandSender)sender, (double)k, (String)args[3]));
+                i = MathHelper.floor_double((double)CommandBase.func_110666_a((ICommandSender)sender, (double)i, (String)args[1]));
+                j = MathHelper.floor_double((double)CommandBase.func_110666_a((ICommandSender)sender, (double)j, (String)args[2]));
+                k = MathHelper.floor_double((double)CommandBase.func_110666_a((ICommandSender)sender, (double)k, (String)args[3]));
                 this.maxX = this.originX = i;
                 this.minX = this.originX;
                 this.maxY = this.originY = j;
                 this.minY = this.originY;
                 this.maxZ = this.originZ = k;
                 this.minZ = this.originZ;
-                LOTRCommandStrScan.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"Set scan origin to %s %s %s", (Object[])new Object[]{this.originX, this.originY, this.originZ});
+                CommandBase.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"Set scan origin to %s %s %s", (Object[])new Object[]{this.originX, this.originY, this.originZ});
                 return;
             }
             if (option.equals("expand") && args.length >= 4 && this.scanning) {
@@ -141,16 +141,16 @@ extends CommandBase {
                 int i = coords.posX;
                 int j = coords.posY;
                 int k = coords.posZ;
-                i = MathHelper.floor_double((double)LOTRCommandStrScan.func_110666_a((ICommandSender)sender, (double)i, (String)args[1]));
-                j = MathHelper.floor_double((double)LOTRCommandStrScan.func_110666_a((ICommandSender)sender, (double)j, (String)args[2]));
-                k = MathHelper.floor_double((double)LOTRCommandStrScan.func_110666_a((ICommandSender)sender, (double)k, (String)args[3]));
+                i = MathHelper.floor_double((double)CommandBase.func_110666_a((ICommandSender)sender, (double)i, (String)args[1]));
+                j = MathHelper.floor_double((double)CommandBase.func_110666_a((ICommandSender)sender, (double)j, (String)args[2]));
+                k = MathHelper.floor_double((double)CommandBase.func_110666_a((ICommandSender)sender, (double)k, (String)args[3]));
                 this.minX = Math.min(i, this.minX);
                 this.minY = Math.min(j, this.minY);
                 this.minZ = Math.min(k, this.minZ);
                 this.maxX = Math.max(i, this.maxX);
                 this.maxY = Math.max(j, this.maxY);
                 this.maxZ = Math.max(k, this.maxZ);
-                LOTRCommandStrScan.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"Expanded scan region to include %s %s %s", (Object[])new Object[]{i, j, k});
+                CommandBase.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"Expanded scan region to include %s %s %s", (Object[])new Object[]{i, j, k});
                 return;
             }
             if (option.equals("scan") && args.length >= 2 && this.scanning) {
@@ -188,7 +188,6 @@ extends CommandBase {
                             } else {
                                 step = new LOTRStructureScan.ScanStep(i1, j1, k1, block, meta);
                             }
-                            if (step == null) continue;
                             step.fillDown = fillBelow;
                             step.findLowest = findLowest;
                             scan.addScanStep(step);
@@ -206,7 +205,7 @@ extends CommandBase {
                 }
                 if (LOTRStructureScan.writeScanToFile(scan)) {
                     this.scanning = false;
-                    LOTRCommandStrScan.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"Scanned structure as %s", (Object[])new Object[]{scanName});
+                    CommandBase.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"Scanned structure as %s", (Object[])new Object[]{scanName});
                     return;
                 }
                 throw new WrongUsageException("Error scanning structure as %s", new Object[]{scanName});

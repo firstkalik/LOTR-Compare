@@ -33,12 +33,12 @@ extends LOTRWorldGenMoredainHut {
 
     @Override
     public boolean generateWithSetRotation(World world, Random random, int i, int j, int k, int rotation) {
-        int i1;
         int k2;
-        int i12;
         int i2;
-        int k1;
         int j1;
+        int k1;
+        int i12;
+        int i1;
         if (!super.generateWithSetRotation(world, random, i, j, k, rotation)) {
             return false;
         }
@@ -163,10 +163,7 @@ extends LOTRWorldGenMoredainHut {
                 this.setBlockAndMetadata(world, i12, 8, k1, this.thatchSlabBlock, this.thatchSlabMeta | 8);
             }
         }
-        int[] i13 = new int[]{-1, 1};
-        k1 = i13.length;
-        for (i2 = 0; i2 < k1; ++i2) {
-            int f = i13[i2];
+        for (int f : new int[]{-1, 1}) {
             this.layFoundation(world, 2 * f, -5);
             this.setBlockAndMetadata(world, 2 * f, 1, -5, this.clayBlock, this.clayMeta);
             this.setBlockAndMetadata(world, 2 * f, 2, -5, this.fenceBlock, this.fenceMeta);

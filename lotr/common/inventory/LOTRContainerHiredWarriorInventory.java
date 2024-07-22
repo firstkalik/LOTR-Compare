@@ -51,8 +51,7 @@ extends Container {
             LOTRSlotHiredReplaceItem slot = new LOTRSlotHiredReplaceItem(new LOTRSlotArmorStand(this.proxyInv, i2, 80, 21 + i2 * 18, i2, (Entity)inv.player), this.theNPC);
             this.addSlotToContainer((Slot)slot);
         }
-        int[] arrn = new int[1];
-        arrn[0] = 4;
+        int[] arrn = new int[]{4};
         for (int i3 : arrn) {
             LOTRSlotHiredReplaceItem slot = new LOTRSlotHiredReplaceItem(new LOTRSlotMeleeWeapon(this.proxyInv, i3, 50, 48), this.theNPC);
             this.addSlotToContainer((Slot)slot);

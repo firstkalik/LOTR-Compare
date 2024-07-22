@@ -16,7 +16,11 @@ import java.util.Random;
 import lotr.common.LOTRAchievement;
 import lotr.common.entity.animal.LOTREntityBear;
 import lotr.common.entity.animal.LOTREntityHorse;
+import lotr.common.entity.npc.LOTREntityBandit;
+import lotr.common.entity.npc.LOTREntityBanditRhun;
 import lotr.common.entity.npc.LOTREntityNearHaradMerchant;
+import lotr.common.entity.npc.LOTREntityPallando;
+import lotr.common.entity.npc.LOTREntityRedDwarfMerchant;
 import lotr.common.entity.npc.LOTREntityScrapTrader;
 import lotr.common.world.biome.LOTRBiome;
 import lotr.common.world.biome.LOTRBiomeDecorator;
@@ -77,6 +81,9 @@ extends LOTRBiome {
         this.decorator.addRandomStructure(new LOTRWorldGenSmallStoneRuin(false), 1000);
         this.registerTravellingTrader(LOTREntityNearHaradMerchant.class);
         this.registerTravellingTrader(LOTREntityScrapTrader.class);
+        this.registerTravellingTrader(LOTREntityRedDwarfMerchant.class);
+        this.registerTravellingTrader(LOTREntityPallando.class);
+        this.setBanditEntityClass(LOTREntityBanditRhun.class);
         this.setBanditChance(LOTREventSpawner.EventChance.BANDIT_RARE);
         this.invasionSpawns.addInvasion(LOTRInvasions.RHUN, LOTREventSpawner.EventChance.RARE);
     }

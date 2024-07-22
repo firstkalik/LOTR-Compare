@@ -99,10 +99,10 @@ implements IMessage {
     public static class Handler
     implements IMessageHandler<LOTRPacketMobSpawner, IMessage> {
         public IMessage onMessage(LOTRPacketMobSpawner packet, MessageContext context) {
+            int k;
+            TileEntity tileentity;
             int j;
             int i;
-            TileEntity tileentity;
-            int k;
             WorldServer world = DimensionManager.getWorld((int)packet.dimension);
             if (world != null && (tileentity = world.getTileEntity(i = packet.xCoord, j = packet.yCoord, k = packet.zCoord)) instanceof LOTRTileEntityMobSpawner) {
                 LOTRTileEntityMobSpawner mobSpawner = (LOTRTileEntityMobSpawner)tileentity;

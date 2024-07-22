@@ -88,11 +88,11 @@ extends EntityThrowable {
     }
 
     protected float func_70182_d() {
-        return 1.0f;
+        return 1.1f;
     }
 
     protected float getGravityVelocity() {
-        return 0.04f;
+        return 0.03f;
     }
 }
 

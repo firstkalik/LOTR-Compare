@@ -146,20 +146,8 @@ public class LOTRFactionBounties {
         return dir;
     }
 
-    private static File getFactionFile(LOTRFaction f, boolean findLegacy) {
-        File defaultFile = new File(LOTRFactionBounties.getBountiesDir(), f.codeName() + ".dat");
-        if (!findLegacy) {
-            return defaultFile;
-        }
-        if (defaultFile.exists()) {
-            return defaultFile;
-        }
-        for (String alias : f.listAliases()) {
-            File aliasFile = new File(LOTRFactionBounties.getBountiesDir(), alias + ".dat");
-            if (!aliasFile.exists()) continue;
-            return aliasFile;
-        }
-        return defaultFile;
+    private static File getFactionFile(LOTRFaction f) {
+        return new File(LOTRFactionBounties.getBountiesDir(), f.codeName() + ".dat");
     }
 
     public static void saveAll() {
@@ -189,7 +177,7 @@ public class LOTRFactionBounties {
     }
 
     private static LOTRFactionBounties loadFaction(LOTRFaction fac) {
-        File file = LOTRFactionBounties.getFactionFile(fac, true);
+        File file = LOTRFactionBounties.getFactionFile(fac);
         try {
             NBTTagCompound nbt = LOTRLevelData.loadNBTFromFile(file);
             if (nbt.hasNoTags()) {
@@ -210,7 +198,7 @@ public class LOTRFactionBounties {
         try {
             NBTTagCompound nbt = new NBTTagCompound();
             fb.writeToNBT(nbt);
-            LOTRLevelData.saveNBTToFile(LOTRFactionBounties.getFactionFile(fb.theFaction, false), nbt);
+            LOTRLevelData.saveNBTToFile(LOTRFactionBounties.getFactionFile(fb.theFaction), nbt);
         }
         catch (Exception e) {
             FMLLog.severe((String)"Error saving LOTR faction bounty data for %s", (Object[])new Object[]{fb.theFaction.codeName()});
@@ -323,6 +311,9 @@ public class LOTRFactionBounties {
 
         private static class KillRecord {
             private int timeElapsed = 3456000;
+
+            private KillRecord() {
+            }
 
             public void writeToNBT(NBTTagCompound nbt) {
                 nbt.setInteger("Time", this.timeElapsed);

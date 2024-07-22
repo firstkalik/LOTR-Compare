@@ -5,11 +5,14 @@
  *  net.minecraft.block.Block
  *  net.minecraft.init.Blocks
  *  net.minecraft.world.World
+ *  net.minecraft.world.gen.feature.WorldGenMinable
+ *  net.minecraft.world.gen.feature.WorldGenerator
  */
 package lotr.common.world.biome;
 
 import java.util.List;
 import java.util.Random;
+import lotr.common.LOTRMod;
 import lotr.common.world.biome.LOTRBiomeDecorator;
 import lotr.common.world.biome.LOTRBiomeGenFarHarad;
 import lotr.common.world.biome.LOTRMusicRegion;
@@ -19,6 +22,8 @@ import lotr.common.world.spawning.LOTREventSpawner;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
+import net.minecraft.world.gen.feature.WorldGenMinable;
+import net.minecraft.world.gen.feature.WorldGenerator;
 
 public class LOTRBiomeGenHaradMountains
 extends LOTRBiomeGenFarHarad {
@@ -27,6 +32,9 @@ extends LOTRBiomeGenFarHarad {
         this.spawnableMonsterList.clear();
         this.addBiomeVariantSet(LOTRBiomeVariant.SET_MOUNTAINS);
         this.decorator.biomeGemFactor = 1.0f;
+        this.decorator.addSoil((WorldGenerator)new WorldGenMinable(LOTRMod.rock, 6, 32, Blocks.stone), 1.0f, 0, 100);
+        this.decorator.addSoil((WorldGenerator)new WorldGenMinable(LOTRMod.rock, 7, 32, Blocks.stone), 1.0f, 0, 100);
+        this.decorator.addSoil((WorldGenerator)new WorldGenMinable(LOTRMod.rock, 8, 32, Blocks.stone), 1.0f, 0, 100);
         this.setBanditChance(LOTREventSpawner.EventChance.NEVER);
     }
 

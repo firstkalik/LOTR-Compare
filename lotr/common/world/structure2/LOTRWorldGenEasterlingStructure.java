@@ -66,7 +66,6 @@ extends LOTRWorldGenStructureBase2 {
     protected Block woodBeamBlock;
     protected int woodBeamMeta;
     protected Block doorBlock;
-    protected Block trapdoorBlock;
     protected Block roofBlock;
     protected int roofMeta;
     protected Block roofSlabBlock;
@@ -137,7 +136,6 @@ extends LOTRWorldGenStructureBase2 {
             this.woodBeamBlock = LOTRMod.woodBeam8;
             this.woodBeamMeta = 1;
             this.doorBlock = LOTRMod.doorRedwood;
-            this.trapdoorBlock = LOTRMod.trapdoorRedwood;
         } else {
             int randomWood = random.nextInt(4);
             if (randomWood == 0) {
@@ -154,7 +152,6 @@ extends LOTRWorldGenStructureBase2 {
                 this.woodBeamBlock = LOTRMod.woodBeamV1;
                 this.woodBeamMeta = 0;
                 this.doorBlock = Blocks.wooden_door;
-                this.trapdoorBlock = Blocks.trapdoor;
             } else if (randomWood == 1) {
                 this.logBlock = LOTRMod.wood2;
                 this.logMeta = 1;
@@ -169,7 +166,6 @@ extends LOTRWorldGenStructureBase2 {
                 this.woodBeamBlock = LOTRMod.woodBeam2;
                 this.woodBeamMeta = 1;
                 this.doorBlock = LOTRMod.doorBeech;
-                this.trapdoorBlock = LOTRMod.trapdoorBeech;
             } else if (randomWood == 2) {
                 this.logBlock = LOTRMod.wood6;
                 this.logMeta = 2;
@@ -184,7 +180,6 @@ extends LOTRWorldGenStructureBase2 {
                 this.woodBeamBlock = LOTRMod.woodBeam6;
                 this.woodBeamMeta = 2;
                 this.doorBlock = LOTRMod.doorCypress;
-                this.trapdoorBlock = LOTRMod.trapdoorCypress;
             } else if (randomWood == 3) {
                 this.logBlock = LOTRMod.wood6;
                 this.logMeta = 3;
@@ -199,7 +194,6 @@ extends LOTRWorldGenStructureBase2 {
                 this.woodBeamBlock = LOTRMod.woodBeam6;
                 this.woodBeamMeta = 3;
                 this.doorBlock = LOTRMod.doorOlive;
-                this.trapdoorBlock = LOTRMod.trapdoorOlive;
             }
         }
         if (this.useTownBlocks()) {
@@ -243,8 +237,8 @@ extends LOTRWorldGenStructureBase2 {
         this.barsBlock = random.nextBoolean() ? Blocks.iron_bars : LOTRMod.bronzeBars;
         this.tableBlock = LOTRMod.rhunTable;
         this.gateBlock = LOTRMod.gateRhun;
-        this.bedBlock = this.useTownBlocks() ? Blocks.bed : LOTRMod.strawBed;
-        this.plateBlock = this.useTownBlocks() ? LOTRMod.ceramicPlateBlock : (random.nextBoolean() ? LOTRMod.ceramicPlateBlock : LOTRMod.woodPlateBlock);
+        Block block = this.bedBlock = this.useTownBlocks() ? Blocks.bed : LOTRMod.strawBed;
+        Block block2 = this.useTownBlocks() ? LOTRMod.ceramicPlateBlock : (this.plateBlock = random.nextBoolean() ? LOTRMod.ceramicPlateBlock : LOTRMod.woodPlateBlock);
         if (random.nextBoolean()) {
             this.cropBlock = Blocks.wheat;
             this.cropMeta = 7;

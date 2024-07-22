@@ -45,7 +45,7 @@ implements LOTRUnitTradeable {
     public LOTREntityDaleCaptain(World world) {
         super(world);
         this.addTargetTasks(false);
-        this.npcCape = LOTRCapes.DALE;
+        this.npcCape = LOTRCapes.ALIGNMENT_DALE.capeTexture;
     }
 
     @Override
@@ -82,7 +82,7 @@ implements LOTRUnitTradeable {
     }
 
     @Override
-    public LOTRInvasions getWarhorn() {
+    public LOTRInvasions getConquestHorn() {
         return LOTRInvasions.DALE;
     }
 

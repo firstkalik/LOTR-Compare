@@ -5,11 +5,14 @@
  *  net.minecraft.block.Block
  *  net.minecraft.init.Blocks
  *  net.minecraft.world.World
+ *  net.minecraft.world.gen.feature.WorldGenMinable
+ *  net.minecraft.world.gen.feature.WorldGenerator
  */
 package lotr.common.world.biome;
 
 import java.util.List;
 import java.util.Random;
+import lotr.common.LOTRMod;
 import lotr.common.world.biome.LOTRBiomeDecorator;
 import lotr.common.world.biome.LOTRBiomeGenAngmar;
 import lotr.common.world.biome.variant.LOTRBiomeVariant;
@@ -18,18 +21,22 @@ import lotr.common.world.spawning.LOTRSpawnList;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
+import net.minecraft.world.gen.feature.WorldGenMinable;
+import net.minecraft.world.gen.feature.WorldGenerator;
 
 public class LOTRBiomeGenAngmarMountains
 extends LOTRBiomeGenAngmar {
     public LOTRBiomeGenAngmarMountains(int i, boolean major) {
         super(i, major);
         this.spawnableCreatureList.clear();
-        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer = new LOTRBiomeSpawnList.SpawnListContainer[1];
-        arrspawnListContainer[0] = LOTRBiomeSpawnList.entry(LOTRSpawnList.SNOW_TROLLS, 10);
+        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer = new LOTRBiomeSpawnList.SpawnListContainer[]{LOTRBiomeSpawnList.entry(LOTRSpawnList.SNOW_TROLLS, 10)};
         this.npcSpawnList.newFactionList(50).add(arrspawnListContainer);
         this.clearBiomeVariants();
         this.addBiomeVariantSet(LOTRBiomeVariant.SET_MOUNTAINS);
         this.decorator.biomeGemFactor = 0.75f;
+        this.decorator.addSoil((WorldGenerator)new WorldGenMinable(LOTRMod.rock, 6, 32, Blocks.stone), 1.0f, 0, 100);
+        this.decorator.addSoil((WorldGenerator)new WorldGenMinable(LOTRMod.rock, 7, 32, Blocks.stone), 1.0f, 0, 100);
+        this.decorator.addSoil((WorldGenerator)new WorldGenMinable(LOTRMod.rock, 8, 32, Blocks.stone), 1.0f, 0, 100);
     }
 
     @Override

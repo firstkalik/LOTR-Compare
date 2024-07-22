@@ -52,8 +52,8 @@ extends WorldGenAbstractTree {
         int height = MathHelper.getRandomIntegerInRange((Random)random, (int)this.minHeight, (int)this.maxHeight);
         boolean flag = true;
         if (j >= 1 && j + height + 1 <= 256) {
-            int k1;
             int i1;
+            int k1;
             for (int j1 = j; j1 <= j + 1 + height; ++j1) {
                 int range = 1;
                 if (j1 == j) {

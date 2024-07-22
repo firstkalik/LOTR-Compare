@@ -15,7 +15,6 @@ import lotr.common.LOTRFoods;
 import lotr.common.LOTRMod;
 import lotr.common.entity.LOTREntityNPCRespawner;
 import lotr.common.entity.npc.LOTREntityDaleLevyman;
-import lotr.common.entity.npc.LOTREntityDaleMan;
 import lotr.common.entity.npc.LOTREntityDaleSoldier;
 import lotr.common.item.LOTRItemBanner;
 import lotr.common.world.structure.LOTRChestContents;
@@ -34,20 +33,20 @@ extends LOTRWorldGenDaleStructure {
 
     @Override
     public boolean generateWithSetRotation(World world, Random random, int i, int j, int k, int rotation) {
-        int i1;
+        int i2;
+        int k2;
+        int j12;
         int k1;
+        int i1;
         int i12;
         int j1;
-        int k2;
-        int i2;
-        int j12;
         this.setOriginAndRotation(world, i, j, k, rotation, 3);
         this.setupRandomBlocks(random);
         if (this.restrictions) {
             for (i12 = -3; i12 <= 3; ++i12) {
                 for (k1 = -3; k1 <= 3; ++k1) {
-                    j12 = this.getTopBlock(world, i12, k1);
-                    Block block = this.getBlock(world, i12, j12 - 1, k1);
+                    j1 = this.getTopBlock(world, i12, k1);
+                    Block block = this.getBlock(world, i12, j1 - 1, k1);
                     if (block == Blocks.grass) continue;
                     return false;
                 }
@@ -55,8 +54,8 @@ extends LOTRWorldGenDaleStructure {
         }
         for (i12 = -2; i12 <= 2; ++i12) {
             for (k1 = -2; k1 <= 2; ++k1) {
-                for (j12 = 9; j12 <= 13; ++j12) {
-                    this.setAir(world, i12, j12, k1);
+                for (j1 = 9; j1 <= 13; ++j1) {
+                    this.setAir(world, i12, j1, k1);
                 }
             }
         }
@@ -64,17 +63,17 @@ extends LOTRWorldGenDaleStructure {
             for (k1 = -2; k1 <= 2; ++k1) {
                 i2 = Math.abs(i12);
                 k2 = Math.abs(k1);
-                for (j1 = 8; !(j1 < 0 && this.isOpaque(world, i12, j1, k1) || this.getY(j1) < 0); --j1) {
+                for (j12 = 8; !(j12 < 0 && this.isOpaque(world, i12, j12, k1) || this.getY(j12) < 0); --j12) {
                     if (i2 == 2 && k2 == 2) {
-                        this.setBlockAndMetadata(world, i12, j1, k1, this.pillarBlock, this.pillarMeta);
+                        this.setBlockAndMetadata(world, i12, j12, k1, this.pillarBlock, this.pillarMeta);
                     } else {
-                        this.setBlockAndMetadata(world, i12, j1, k1, this.brickBlock, this.brickMeta);
+                        this.setBlockAndMetadata(world, i12, j12, k1, this.brickBlock, this.brickMeta);
                     }
-                    this.setGrassToDirt(world, i12, j1 - 1, k1);
+                    this.setGrassToDirt(world, i12, j12 - 1, k1);
                 }
                 if (i2 != 2 || k2 != 2) continue;
-                for (j1 = 9; j1 <= 11; ++j1) {
-                    this.setBlockAndMetadata(world, i12, j1, k1, this.pillarBlock, this.pillarMeta);
+                for (j12 = 9; j12 <= 11; ++j12) {
+                    this.setBlockAndMetadata(world, i12, j12, k1, this.pillarBlock, this.pillarMeta);
                 }
                 this.setBlockAndMetadata(world, i12, 12, k1, this.roofBlock, this.roofMeta);
                 this.setBlockAndMetadata(world, i12, 12, k1 - 1, this.roofStairBlock, 6);
@@ -87,10 +86,10 @@ extends LOTRWorldGenDaleStructure {
             for (k1 = -3; k1 <= 3; ++k1) {
                 i2 = Math.abs(i12);
                 k2 = Math.abs(k1);
-                if ((i2 != 1 || k2 != 3) && (i2 != 3 || k2 != 1)) continue;
-                for (j1 = 3; !(j1 < 0 && this.isOpaque(world, i12, j1, k1) || this.getY(j1) < 0); --j1) {
-                    this.setBlockAndMetadata(world, i12, j1, k1, this.brickBlock, this.brickMeta);
-                    this.setGrassToDirt(world, i12, j1 - 1, k1);
+                if (!(i2 == 1 && k2 == 3 || i2 == 3 && k2 == 1)) continue;
+                for (j12 = 3; !(j12 < 0 && this.isOpaque(world, i12, j12, k1) || this.getY(j12) < 0); --j12) {
+                    this.setBlockAndMetadata(world, i12, j12, k1, this.brickBlock, this.brickMeta);
+                    this.setGrassToDirt(world, i12, j12 - 1, k1);
                 }
             }
         }
@@ -104,11 +103,11 @@ extends LOTRWorldGenDaleStructure {
         this.setBlockAndMetadata(world, 3, 4, 1, this.brickStairBlock, 0);
         for (i12 = -1; i12 <= 1; ++i12) {
             for (k1 = -1; k1 <= 1; ++k1) {
-                for (j12 = 1; j12 <= 3; ++j12) {
-                    this.setAir(world, i12, j12, k1);
+                for (j1 = 1; j1 <= 3; ++j1) {
+                    this.setAir(world, i12, j1, k1);
                 }
-                for (j12 = 5; j12 <= 7; ++j12) {
-                    this.setAir(world, i12, j12, k1);
+                for (j1 = 5; j1 <= 7; ++j1) {
+                    this.setAir(world, i12, j1, k1);
                 }
                 this.setBlockAndMetadata(world, i12, 4, k1, this.plankBlock, this.plankMeta);
                 this.setBlockAndMetadata(world, i12, 8, k1, this.plankBlock, this.plankMeta);
@@ -125,7 +124,7 @@ extends LOTRWorldGenDaleStructure {
         for (int j13 = 1; j13 <= 7; ++j13) {
             this.setBlockAndMetadata(world, 0, j13, 1, Blocks.ladder, 2);
         }
-        this.setBlockAndMetadata(world, 0, 8, 1, this.trapdoorBlock, 9);
+        this.setBlockAndMetadata(world, 0, 8, 1, Blocks.trapdoor, 9);
         this.setBlockAndMetadata(world, 0, 1, -2, this.doorBlock, 1);
         this.setBlockAndMetadata(world, 0, 2, -2, this.doorBlock, 8);
         this.setBlockAndMetadata(world, 0, 3, -1, Blocks.torch, 3);
@@ -140,8 +139,8 @@ extends LOTRWorldGenDaleStructure {
         this.setAir(world, 2, 2, 1);
         int[] j13 = new int[]{-1, 1};
         k1 = j13.length;
-        for (j12 = 0; j12 < k1; ++j12) {
-            int i13 = j13[j12];
+        for (j1 = 0; j1 < k1; ++j1) {
+            int i13 = j13[j1];
             this.setBlockAndMetadata(world, i13, 5, 0, LOTRMod.strawBed, 2);
             this.setBlockAndMetadata(world, i13, 5, -1, LOTRMod.strawBed, 10);
         }

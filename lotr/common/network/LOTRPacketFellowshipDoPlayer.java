@@ -75,6 +75,15 @@ extends LOTRPacketFellowshipDo {
         return null;
     }
 
+    public static enum PlayerFunction {
+        INVITE,
+        REMOVE,
+        TRANSFER,
+        OP,
+        DEOP;
+
+    }
+
     public static class Handler
     implements IMessageHandler<LOTRPacketFellowshipDoPlayer, IMessage> {
         public IMessage onMessage(LOTRPacketFellowshipDoPlayer packet, MessageContext context) {
@@ -97,15 +106,6 @@ extends LOTRPacketFellowshipDo {
             }
             return null;
         }
-    }
-
-    public static enum PlayerFunction {
-        INVITE,
-        REMOVE,
-        TRANSFER,
-        OP,
-        DEOP;
-
     }
 
 }

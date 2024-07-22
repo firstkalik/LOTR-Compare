@@ -100,8 +100,8 @@ extends Entity {
         if (this.getScale() >= MAX_SCALE) {
             int i;
             List players = this.worldObj.getEntitiesWithinAABB(EntityPlayer.class, this.boundingBox.expand(8.0, 8.0, 8.0));
-            for (int i2 = 0; i2 < players.size(); ++i2) {
-                EntityPlayer entityplayer = (EntityPlayer)players.get(i2);
+            for (Object player : players) {
+                EntityPlayer entityplayer = (EntityPlayer)player;
                 if (!this.boundingBox.intersectsWith(entityplayer.boundingBox) || entityplayer.ridingEntity != null || entityplayer.riddenByEntity != null) continue;
                 LOTRMod.proxy.setInPortal(entityplayer);
             }

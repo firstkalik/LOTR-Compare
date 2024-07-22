@@ -51,9 +51,9 @@ extends LOTRWorldGenStructureBase {
     }
 
     public boolean generate(World world, Random random, int i, int j, int k) {
-        int i1;
-        int k1;
         int j1;
+        int k1;
+        int i1;
         int xSize = random.nextInt(3) + 2;
         int ySize = 3;
         int zSize = random.nextInt(3) + 2;

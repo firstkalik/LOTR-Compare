@@ -35,12 +35,12 @@ extends CommandBase {
             String flag = args[0];
             if (flag.equals("enable")) {
                 LOTRLevelData.setEnableAlignmentZones(true);
-                LOTRCommandEnableAlignmentZones.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.alignmentZones.enable", (Object[])new Object[0]);
+                CommandBase.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.alignmentZones.enable", (Object[])new Object[0]);
                 return;
             }
             if (flag.equals("disable")) {
                 LOTRLevelData.setEnableAlignmentZones(false);
-                LOTRCommandEnableAlignmentZones.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.alignmentZones.disable", (Object[])new Object[0]);
+                CommandBase.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.alignmentZones.disable", (Object[])new Object[0]);
                 return;
             }
         }
@@ -49,7 +49,7 @@ extends CommandBase {
 
     public List addTabCompletionOptions(ICommandSender sender, String[] args) {
         if (args.length == 1) {
-            return LOTRCommandEnableAlignmentZones.getListOfStringsMatchingLastWord((String[])args, (String[])new String[]{"enable", "disable"});
+            return CommandBase.getListOfStringsMatchingLastWord((String[])args, (String[])new String[]{"enable", "disable"});
         }
         return null;
     }

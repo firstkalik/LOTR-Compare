@@ -38,8 +38,7 @@ implements IPlantable {
     }
 
     public boolean onItemUse(ItemStack itemstack, EntityPlayer entityplayer, World world, int i, int j, int k, int side, float f, float f1, float f2) {
-        Block block;
-        if (entityplayer.canPlayerEdit(i, j, k, side, itemstack) && (block = world.getBlock(i, j, k)) == LOTRMod.grapevine && LOTRBlockGrapevine.canPlantGrapesAt(world, i, j, k, this)) {
+        if (entityplayer.canPlayerEdit(i, j, k, side, itemstack) && world.getBlock(i, j, k) == LOTRMod.grapevine && LOTRBlockGrapevine.canPlantGrapesAt(world, i, j, k, this)) {
             world.setBlock(i, j, k, this.grapevineBlock, 0, 3);
             --itemstack.stackSize;
             return true;

@@ -41,17 +41,17 @@ extends CommandBase {
     public void processCommand(ICommandSender sender, String[] args) {
         if (args.length >= 1) {
             EntityPlayerMP entityplayer;
-            int cd = LOTRCommandPledgeCooldown.parseIntBounded((ICommandSender)sender, (String)args[0], (int)0, (int)10000000);
+            int cd = CommandBase.parseIntBounded((ICommandSender)sender, (String)args[0], (int)0, (int)10000000);
             if (args.length >= 2) {
-                entityplayer = LOTRCommandPledgeCooldown.getPlayer((ICommandSender)sender, (String)args[1]);
+                entityplayer = CommandBase.getPlayer((ICommandSender)sender, (String)args[1]);
             } else {
-                entityplayer = LOTRCommandPledgeCooldown.getCommandSenderAsPlayer((ICommandSender)sender);
+                entityplayer = CommandBase.getCommandSenderAsPlayer((ICommandSender)sender);
                 if (entityplayer == null) {
                     throw new PlayerNotFoundException();
                 }
             }
             LOTRLevelData.getData((EntityPlayer)entityplayer).setPledgeBreakCooldown(cd);
-            LOTRCommandPledgeCooldown.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.pledgeCooldown.set", (Object[])new Object[]{entityplayer.getCommandSenderName(), cd, LOTRLevelData.getHMSTime_Ticks(cd)});
+            CommandBase.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.pledgeCooldown.set", (Object[])new Object[]{entityplayer.getCommandSenderName(), cd, LOTRLevelData.getHMSTime_Ticks(cd)});
             return;
         }
         throw new WrongUsageException(this.getCommandUsage(sender), new Object[0]);
@@ -59,7 +59,7 @@ extends CommandBase {
 
     public List addTabCompletionOptions(ICommandSender sender, String[] args) {
         if (args.length == 2) {
-            return LOTRCommandPledgeCooldown.getListOfStringsMatchingLastWord((String[])args, (String[])MinecraftServer.getServer().getAllUsernames());
+            return CommandBase.getListOfStringsMatchingLastWord((String[])args, (String[])MinecraftServer.getServer().getAllUsernames());
         }
         return null;
     }

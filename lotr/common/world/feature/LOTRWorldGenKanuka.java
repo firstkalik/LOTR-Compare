@@ -125,7 +125,7 @@ extends WorldGenAbstractTree {
                         }
                     }
                 }
-                if (pass != true) continue;
+                if (pass != 1) continue;
                 int branchHeight = (int)((double)height * 0.67);
                 int deg = 0;
                 while (deg < 360) {
@@ -178,9 +178,8 @@ extends WorldGenAbstractTree {
             for (int i1 = i - leafRange; i1 <= i + leafRange; ++i1) {
                 for (int k1 = k - leafRange; k1 <= k + leafRange; ++k1) {
                     Block block;
-                    int k2;
                     int i2 = Math.abs(i1 - i);
-                    int dist = i2 + (k2 = Math.abs(k1 - k));
+                    int dist = i2 + Math.abs(k1 - k);
                     if (dist > leafRange || !(block = world.getBlock(i1, j2, k1)).isReplaceable((IBlockAccess)world, i1, j2, k1) && !block.isLeaves((IBlockAccess)world, i1, j2, k1)) continue;
                     this.setBlockAndNotifyAdequately(world, i1, j2, k1, this.leafBlock, this.leafMeta);
                 }

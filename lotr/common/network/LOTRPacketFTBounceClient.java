@@ -33,7 +33,7 @@ implements IMessage {
     public static class Handler
     implements IMessageHandler<LOTRPacketFTBounceClient, IMessage> {
         public IMessage onMessage(LOTRPacketFTBounceClient packet, MessageContext context) {
-            EntityPlayer entityplayer = LOTRMod.proxy.getClientPlayer();
+            LOTRMod.proxy.getClientPlayer();
             LOTRPacketFTBounceServer packetResponse = new LOTRPacketFTBounceServer();
             LOTRPacketHandler.networkWrapper.sendToServer((IMessage)packetResponse);
             return null;

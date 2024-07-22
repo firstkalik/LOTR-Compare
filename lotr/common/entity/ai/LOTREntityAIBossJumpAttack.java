@@ -5,7 +5,6 @@
  *  net.minecraft.entity.Entity
  *  net.minecraft.entity.EntityLivingBase
  *  net.minecraft.entity.ai.EntityAIBase
- *  net.minecraft.world.World
  */
 package lotr.common.entity.ai;
 
@@ -17,18 +16,15 @@ import lotr.common.entity.npc.LOTREntityNPC;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIBase;
-import net.minecraft.world.World;
 
 public class LOTREntityAIBossJumpAttack
 extends EntityAIBase {
-    private World theWorld;
     private LOTREntityNPC theBoss;
     private double jumpSpeed;
     private float jumpChance;
 
     public LOTREntityAIBossJumpAttack(LOTREntityNPC boss, double d, float f) {
         this.theBoss = boss;
-        this.theWorld = boss.worldObj;
         this.jumpSpeed = d;
         this.jumpChance = f;
         this.setMutexBits(3);
@@ -42,18 +38,20 @@ extends EntityAIBase {
             return false;
         }
         if (this.theBoss.getRNG().nextInt(20) == 0) {
-            float f = ((LOTRBoss)((Object)this.theBoss)).getBaseChanceModifier();
-            f *= this.jumpChance;
+            float f;
+            float f2 = ((LOTRBoss)((Object)this.theBoss)).getBaseChanceModifier();
+            f2 *= this.jumpChance;
             int enemies = this.theBoss.bossInfo.getNearbyEnemies().size();
             if ((float)enemies > 1.0f) {
-                f *= (float)enemies * 4.0f;
+                f2 *= (float)enemies * 4.0f;
             }
             float distance = this.theBoss.getDistanceToEntity((Entity)this.theBoss.getAttackTarget());
             distance = 8.0f - distance;
-            if ((distance /= 2.0f) > 1.0f) {
-                f *= distance;
+            distance /= 2.0f;
+            if (f > 1.0f) {
+                f2 *= distance;
             }
-            return this.theBoss.getRNG().nextFloat() < f;
+            return this.theBoss.getRNG().nextFloat() < f2;
         }
         return false;
     }

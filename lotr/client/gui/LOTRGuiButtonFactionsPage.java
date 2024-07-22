@@ -30,7 +30,6 @@ extends GuiButton {
 
     public void drawButton(Minecraft mc, int i, int j) {
         if (this.visible) {
-            FontRenderer fontrenderer = mc.fontRenderer;
             mc.getTextureManager().bindTexture(LOTRGuiFactions.factionsTexture);
             GL11.glColor4f((float)1.0f, (float)1.0f, (float)1.0f, (float)1.0f);
             this.field_146123_n = i >= this.xPosition && j >= this.yPosition && i < this.xPosition + this.width && j < this.yPosition + this.height;

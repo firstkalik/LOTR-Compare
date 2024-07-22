@@ -71,8 +71,8 @@ extends LOTRGuiScreenBase {
         String s = StatCollector.translateToLocal((String)"lotr.gui.hornSelect.title");
         this.fontRendererObj.drawString(s, this.guiLeft + this.xSize / 2 - this.fontRendererObj.getStringWidth(s) / 2, this.guiTop + 11, 4210752);
         super.drawScreen(i, j, f);
-        for (int k = 0; k < this.buttonList.size(); ++k) {
-            GuiButton button = (GuiButton)this.buttonList.get(k);
+        for (Object element : this.buttonList) {
+            GuiButton button = (GuiButton)element;
             itemRenderer.renderItemIntoGUI(this.fontRendererObj, this.mc.getTextureManager(), new ItemStack(LOTRMod.commandHorn, 1, button.id), button.xPosition - 22, button.yPosition + 2);
         }
     }

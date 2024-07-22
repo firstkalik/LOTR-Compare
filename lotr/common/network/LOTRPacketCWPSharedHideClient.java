@@ -55,8 +55,7 @@ implements IMessage {
         public IMessage onMessage(LOTRPacketCWPSharedHideClient packet, MessageContext context) {
             LOTRCustomWaypoint cwp;
             LOTRPlayerData pd;
-            EntityPlayer entityplayer;
-            if (!LOTRMod.proxy.isSingleplayer() && (cwp = (pd = LOTRLevelData.getData(entityplayer = LOTRMod.proxy.getClientPlayer())).getSharedCustomWaypointByID(packet.sharingPlayer, packet.cwpID)) != null) {
+            if (!LOTRMod.proxy.isSingleplayer() && (cwp = (pd = LOTRLevelData.getData(LOTRMod.proxy.getClientPlayer())).getSharedCustomWaypointByID(packet.sharingPlayer, packet.cwpID)) != null) {
                 pd.hideOrUnhideSharedCustomWaypoint(cwp, packet.hideCWP);
             }
             return null;

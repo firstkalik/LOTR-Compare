@@ -182,109 +182,109 @@ extends LOTRWorldGenStructureBase2 {
 
     @Override
     public boolean generateWithSetRotation(World world, Random random, int i, int j, int k, int rotation) {
-        int i1;
-        int beam;
         int k1;
-        int i12;
-        int j1;
         int k12;
+        int i1;
+        int j1;
+        int i12;
+        int beam;
         this.setOriginAndRotation(world, i, j, k, rotation, 1);
         this.setupRandomBlocks(random);
         if (this.restrictions) {
-            for (i1 = -10; i1 <= 3; ++i1) {
+            for (i12 = -10; i12 <= 3; ++i12) {
                 for (int k122 = 0; k122 <= 10; ++k122) {
-                    j1 = this.getTopBlock(world, i1, k122) - 1;
-                    Block block = this.getBlock(world, i1, j1, k122);
+                    j1 = this.getTopBlock(world, i12, k122) - 1;
+                    Block block = this.getBlock(world, i12, j1, k122);
                     if (block == Blocks.grass) continue;
                     return false;
                 }
             }
         }
-        for (i1 = -10; i1 <= 3; ++i1) {
+        for (i12 = -10; i12 <= 3; ++i12) {
             for (k12 = 0; k12 <= 10; ++k12) {
-                boolean garden;
+                int garden;
                 int j12;
                 for (j1 = 1; j1 <= 10; ++j1) {
-                    this.setAir(world, i1, j1, k12);
+                    this.setAir(world, i12, j1, k12);
                 }
                 beam = 0;
-                if ((i1 == -2 || i1 == 3) && k12 == 0) {
+                if ((i12 == -2 || i12 == 3) && k12 == 0) {
                     beam = 1;
                 }
-                if (i1 == 3 && k12 == 5) {
+                if (i12 == 3 && k12 == 5) {
                     beam = 1;
                 }
-                if ((i1 == 3 || i1 == -2 || i1 == -10) && k12 == 10) {
+                if ((i12 == 3 || i12 == -2 || i12 == -10) && k12 == 10) {
                     beam = 1;
                 }
-                if ((i1 == -10 || i1 == -2) && k12 == 4) {
+                if ((i12 == -10 || i12 == -2) && k12 == 4) {
                     beam = 1;
                 }
                 boolean wall = false;
                 if (k12 == 0 || k12 == 10) {
                     wall = true;
                 }
-                if (i1 == 3 || i1 == -10) {
+                if (i12 == 3 || i12 == -10) {
                     wall = true;
                 }
-                if (i1 == -2 && k12 <= 4) {
+                if (i12 == -2 && k12 <= 4) {
                     wall = true;
                 }
-                if (k12 == 4 && i1 <= -2) {
+                if (k12 == 4 && i12 <= -2) {
                     wall = true;
                 }
-                boolean bl = garden = i1 >= -10 && i1 <= -3 && k12 >= 0 && k12 <= 3;
-                if (garden) {
-                    this.setBlockAndMetadata(world, i1, 0, k12, (Block)Blocks.grass, 0);
+                int n = garden = i12 >= -10 && i12 <= -3 && k12 >= 0 && k12 <= 3 ? 1 : 0;
+                if (garden != 0) {
+                    this.setBlockAndMetadata(world, i12, 0, k12, (Block)Blocks.grass, 0);
                     j12 = -1;
-                    while (!this.isOpaque(world, i1, j12, k12) && this.getY(j12) >= 0) {
-                        this.setBlockAndMetadata(world, i1, j12, k12, Blocks.dirt, 0);
-                        this.setGrassToDirt(world, i1, j12 - 1, k12);
+                    while (!this.isOpaque(world, i12, j12, k12) && this.getY(j12) >= 0) {
+                        this.setBlockAndMetadata(world, i12, j12, k12, Blocks.dirt, 0);
+                        this.setGrassToDirt(world, i12, j12 - 1, k12);
                         --j12;
                     }
                     if (random.nextInt(3) != 0) continue;
-                    this.plantFlower(world, random, i1, 1, k12);
+                    this.plantFlower(world, random, i12, 1, k12);
                     continue;
                 }
                 if (beam != 0) {
                     for (int j122 = 1; j122 <= 8; ++j122) {
-                        this.setBlockAndMetadata(world, i1, j122, k12, this.woodBeamBlock, this.woodBeamMeta);
+                        this.setBlockAndMetadata(world, i12, j122, k12, this.woodBeamBlock, this.woodBeamMeta);
                     }
-                    for (j12 = 0; !(j12 < 0 && this.isOpaque(world, i1, j12, k12) || this.getY(j12) < 0); --j12) {
-                        this.setBlockAndMetadata(world, i1, j12, k12, this.wallBlock, this.wallMeta);
-                        this.setGrassToDirt(world, i1, j12 - 1, k12);
+                    for (j12 = 0; !(j12 < 0 && this.isOpaque(world, i12, j12, k12) || this.getY(j12) < 0); --j12) {
+                        this.setBlockAndMetadata(world, i12, j12, k12, this.wallBlock, this.wallMeta);
+                        this.setGrassToDirt(world, i12, j12 - 1, k12);
                     }
                     continue;
                 }
                 if (wall) {
-                    for (j12 = 0; !(j12 < 0 && this.isOpaque(world, i1, j12, k12) || this.getY(j12) < 0); --j12) {
-                        this.setBlockAndMetadata(world, i1, j12, k12, this.wallBlock, this.wallMeta);
-                        this.setGrassToDirt(world, i1, j12 - 1, k12);
+                    for (j12 = 0; !(j12 < 0 && this.isOpaque(world, i12, j12, k12) || this.getY(j12) < 0); --j12) {
+                        this.setBlockAndMetadata(world, i12, j12, k12, this.wallBlock, this.wallMeta);
+                        this.setGrassToDirt(world, i12, j12 - 1, k12);
                     }
-                    this.setBlockAndMetadata(world, i1, 1, k12, this.wallBlock, this.wallMeta);
-                    this.setBlockAndMetadata(world, i1, 2, k12, this.brickBlock, this.brickMeta);
-                    this.setBlockAndMetadata(world, i1, 3, k12, this.brickBlock, this.brickMeta);
-                    this.setBlockAndMetadata(world, i1, 5, k12, this.wallBlock, this.wallMeta);
-                    this.setBlockAndMetadata(world, i1, 6, k12, this.brickBlock, this.brickMeta);
-                    this.setBlockAndMetadata(world, i1, 7, k12, this.brickBlock, this.brickMeta);
-                    if (i1 == -10 || i1 == -2 || i1 == 3) {
-                        this.setBlockAndMetadata(world, i1, 4, k12, this.woodBeamBlock, this.woodBeamMeta | 8);
-                        this.setBlockAndMetadata(world, i1, 8, k12, this.woodBeamBlock, this.woodBeamMeta | 8);
+                    this.setBlockAndMetadata(world, i12, 1, k12, this.wallBlock, this.wallMeta);
+                    this.setBlockAndMetadata(world, i12, 2, k12, this.brickBlock, this.brickMeta);
+                    this.setBlockAndMetadata(world, i12, 3, k12, this.brickBlock, this.brickMeta);
+                    this.setBlockAndMetadata(world, i12, 5, k12, this.wallBlock, this.wallMeta);
+                    this.setBlockAndMetadata(world, i12, 6, k12, this.brickBlock, this.brickMeta);
+                    this.setBlockAndMetadata(world, i12, 7, k12, this.brickBlock, this.brickMeta);
+                    if (i12 == -10 || i12 == -2 || i12 == 3) {
+                        this.setBlockAndMetadata(world, i12, 4, k12, this.woodBeamBlock, this.woodBeamMeta | 8);
+                        this.setBlockAndMetadata(world, i12, 8, k12, this.woodBeamBlock, this.woodBeamMeta | 8);
                         continue;
                     }
-                    this.setBlockAndMetadata(world, i1, 4, k12, this.woodBeamBlock, this.woodBeamMeta | 4);
-                    this.setBlockAndMetadata(world, i1, 8, k12, this.woodBeamBlock, this.woodBeamMeta | 4);
+                    this.setBlockAndMetadata(world, i12, 4, k12, this.woodBeamBlock, this.woodBeamMeta | 4);
+                    this.setBlockAndMetadata(world, i12, 8, k12, this.woodBeamBlock, this.woodBeamMeta | 4);
                     continue;
                 }
-                for (j12 = 0; !(j12 < 0 && this.isOpaque(world, i1, j12, k12) || this.getY(j12) < 0); --j12) {
-                    this.setBlockAndMetadata(world, i1, j12, k12, this.floorBlock, this.floorMeta);
-                    this.setGrassToDirt(world, i1, j12 - 1, k12);
+                for (j12 = 0; !(j12 < 0 && this.isOpaque(world, i12, j12, k12) || this.getY(j12) < 0); --j12) {
+                    this.setBlockAndMetadata(world, i12, j12, k12, this.floorBlock, this.floorMeta);
+                    this.setGrassToDirt(world, i12, j12 - 1, k12);
                 }
-                if (i1 >= 0 && i1 <= 1 && k12 >= 2 && k12 <= 8 || i1 >= -8 && i1 <= -2 && k12 >= 6 && k12 <= 8) {
-                    this.setBlockAndMetadata(world, i1, 4, k12, this.plankSlabBlock, this.plankSlabMeta | 8);
+                if (i12 >= 0 && i12 <= 1 && k12 >= 2 && k12 <= 8 || i12 >= -8 && i12 <= -2 && k12 >= 6 && k12 <= 8) {
+                    this.setBlockAndMetadata(world, i12, 4, k12, this.plankSlabBlock, this.plankSlabMeta | 8);
                     continue;
                 }
-                this.setBlockAndMetadata(world, i1, 4, k12, this.plankBlock, this.plankMeta);
+                this.setBlockAndMetadata(world, i12, 4, k12, this.plankBlock, this.plankMeta);
             }
         }
         for (int j13 : new int[]{2, 6}) {
@@ -417,45 +417,45 @@ extends LOTRWorldGenStructureBase2 {
         this.setBlockAndMetadata(world, 0, 5, 3, this.plankStairBlock, 4);
         this.setBlockAndMetadata(world, 1, 5, 2, this.plankStairBlock, 5);
         this.setBlockAndMetadata(world, 1, 5, 3, this.plankStairBlock, 5);
-        for (int i122 = 0; i122 <= 1; ++i122) {
+        for (i1 = 0; i1 <= 1; ++i1) {
             for (k12 = 2; k12 <= 3; ++k12) {
-                this.placePlate(world, random, i122, 6, k12, this.plateBlock, LOTRFoods.DORWINION);
+                this.placePlate(world, random, i1, 6, k12, this.plateBlock, LOTRFoods.DORWINION);
             }
         }
         this.setBlockAndMetadata(world, -1, 6, 1, Blocks.torch, 3);
         this.setBlockAndMetadata(world, 2, 6, 1, Blocks.torch, 3);
-        for (i12 = -2; i12 <= 3; ++i12) {
-            this.setBlockAndMetadata(world, i12, 8, -1, this.brickStairBlock, 6);
+        for (i1 = -2; i1 <= 3; ++i1) {
+            this.setBlockAndMetadata(world, i1, 8, -1, this.brickStairBlock, 6);
         }
         for (k1 = -1; k1 <= 11; ++k1) {
             this.setBlockAndMetadata(world, 4, 8, k1, this.brickStairBlock, 4);
             if (IntMath.mod((int)k1, (int)2) != 1) continue;
             this.setBlockAndMetadata(world, 4, 9, k1, this.brickSlabBlock, this.brickSlabMeta);
         }
-        for (i12 = -11; i12 <= 3; ++i12) {
-            this.setBlockAndMetadata(world, i12, 8, 11, this.brickStairBlock, 7);
-            if (i12 > -3 || IntMath.mod((int)i12, (int)2) != 1) continue;
-            this.setBlockAndMetadata(world, i12, 9, 11, this.brickSlabBlock, this.brickSlabMeta);
+        for (i1 = -11; i1 <= 3; ++i1) {
+            this.setBlockAndMetadata(world, i1, 8, 11, this.brickStairBlock, 7);
+            if (i1 > -3 || IntMath.mod((int)i1, (int)2) != 1) continue;
+            this.setBlockAndMetadata(world, i1, 9, 11, this.brickSlabBlock, this.brickSlabMeta);
         }
         for (k1 = 4; k1 <= 10; ++k1) {
             this.setBlockAndMetadata(world, -11, 8, k1, this.brickStairBlock, 5);
         }
-        for (i12 = -11; i12 <= -3; ++i12) {
-            this.setBlockAndMetadata(world, i12, 8, 3, this.brickStairBlock, 6);
-            if (IntMath.mod((int)i12, (int)2) != 1) continue;
-            this.setBlockAndMetadata(world, i12, 9, 3, this.brickSlabBlock, this.brickSlabMeta);
+        for (i1 = -11; i1 <= -3; ++i1) {
+            this.setBlockAndMetadata(world, i1, 8, 3, this.brickStairBlock, 6);
+            if (IntMath.mod((int)i1, (int)2) != 1) continue;
+            this.setBlockAndMetadata(world, i1, 9, 3, this.brickSlabBlock, this.brickSlabMeta);
         }
         for (k1 = -1; k1 <= 2; ++k1) {
             this.setBlockAndMetadata(world, -3, 8, k1, this.brickStairBlock, 5);
             if (IntMath.mod((int)k1, (int)2) != 1) continue;
             this.setBlockAndMetadata(world, -3, 9, k1, this.brickSlabBlock, this.brickSlabMeta);
         }
-        for (i12 = -9; i12 <= -1; ++i12) {
-            this.setBlockAndMetadata(world, i12, 9, 5, this.plankStairBlock, 7);
-            this.setBlockAndMetadata(world, i12, 10, 6, this.plankStairBlock, 7);
-            this.setBlockAndMetadata(world, i12, 10, 7, this.plankSlabBlock, this.plankSlabMeta | 8);
-            this.setBlockAndMetadata(world, i12, 10, 8, this.plankStairBlock, 6);
-            this.setBlockAndMetadata(world, i12, 9, 9, this.plankStairBlock, 6);
+        for (i1 = -9; i1 <= -1; ++i1) {
+            this.setBlockAndMetadata(world, i1, 9, 5, this.plankStairBlock, 7);
+            this.setBlockAndMetadata(world, i1, 10, 6, this.plankStairBlock, 7);
+            this.setBlockAndMetadata(world, i1, 10, 7, this.plankSlabBlock, this.plankSlabMeta | 8);
+            this.setBlockAndMetadata(world, i1, 10, 8, this.plankStairBlock, 6);
+            this.setBlockAndMetadata(world, i1, 9, 9, this.plankStairBlock, 6);
         }
         for (k1 = 1; k1 <= 9; ++k1) {
             if (k1 <= 5) {

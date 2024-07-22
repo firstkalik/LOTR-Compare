@@ -44,14 +44,14 @@ extends CommandBase {
     public void processCommand(ICommandSender sender, String[] args) {
         if (args.length >= 2) {
             String regionName = args[1];
-            EntityPlayerMP entityplayer = args.length >= 3 ? LOTRCommandWaypoints.getPlayer((ICommandSender)sender, (String)args[2]) : LOTRCommandWaypoints.getCommandSenderAsPlayer((ICommandSender)sender);
+            EntityPlayerMP entityplayer = args.length >= 3 ? CommandBase.getPlayer((ICommandSender)sender, (String)args[2]) : CommandBase.getCommandSenderAsPlayer((ICommandSender)sender);
             LOTRPlayerData playerData = LOTRLevelData.getData((EntityPlayer)entityplayer);
             if (args[0].equalsIgnoreCase("unlock")) {
                 if (regionName.equalsIgnoreCase("all")) {
                     for (LOTRWaypoint.Region region : LOTRWaypoint.Region.values()) {
                         playerData.unlockFTRegion(region);
                     }
-                    LOTRCommandWaypoints.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.lotrWaypoints.unlockAll", (Object[])new Object[]{entityplayer.getCommandSenderName()});
+                    CommandBase.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.lotrWaypoints.unlockAll", (Object[])new Object[]{entityplayer.getCommandSenderName()});
                     return;
                 }
                 LOTRWaypoint.Region region = this.findRegionByName(regionName);
@@ -59,7 +59,7 @@ extends CommandBase {
                     throw new WrongUsageException("commands.lotr.lotrWaypoints.unlock.fail", new Object[]{entityplayer.getCommandSenderName(), region.name()});
                 }
                 playerData.unlockFTRegion(region);
-                LOTRCommandWaypoints.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.lotrWaypoints.unlock", (Object[])new Object[]{entityplayer.getCommandSenderName(), region.name()});
+                CommandBase.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.lotrWaypoints.unlock", (Object[])new Object[]{entityplayer.getCommandSenderName(), region.name()});
                 return;
             }
             if (args[0].equalsIgnoreCase("lock")) {
@@ -67,7 +67,7 @@ extends CommandBase {
                     for (LOTRWaypoint.Region region : LOTRWaypoint.Region.values()) {
                         playerData.lockFTRegion(region);
                     }
-                    LOTRCommandWaypoints.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.lotrWaypoints.lockAll", (Object[])new Object[]{entityplayer.getCommandSenderName()});
+                    CommandBase.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.lotrWaypoints.lockAll", (Object[])new Object[]{entityplayer.getCommandSenderName()});
                     return;
                 }
                 LOTRWaypoint.Region region = this.findRegionByName(regionName);
@@ -75,7 +75,7 @@ extends CommandBase {
                     throw new WrongUsageException("commands.lotr.lotrWaypoints.lock.fail", new Object[]{entityplayer.getCommandSenderName(), region.name()});
                 }
                 playerData.lockFTRegion(region);
-                LOTRCommandWaypoints.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.lotrWaypoints.lock", (Object[])new Object[]{entityplayer.getCommandSenderName(), region.name()});
+                CommandBase.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.lotrWaypoints.lock", (Object[])new Object[]{entityplayer.getCommandSenderName(), region.name()});
                 return;
             }
         }
@@ -92,7 +92,7 @@ extends CommandBase {
 
     public List addTabCompletionOptions(ICommandSender sender, String[] args) {
         if (args.length == 1) {
-            return LOTRCommandWaypoints.getListOfStringsMatchingLastWord((String[])args, (String[])new String[]{"unlock", "lock"});
+            return CommandBase.getListOfStringsMatchingLastWord((String[])args, (String[])new String[]{"unlock", "lock"});
         }
         if (args.length == 2) {
             ArrayList<String> names = new ArrayList<String>();
@@ -100,10 +100,10 @@ extends CommandBase {
                 names.add(r.name());
             }
             names.add("all");
-            return LOTRCommandWaypoints.getListOfStringsMatchingLastWord((String[])args, (String[])names.toArray(new String[0]));
+            return CommandBase.getListOfStringsMatchingLastWord((String[])args, (String[])names.toArray(new String[0]));
         }
         if (args.length == 3) {
-            return LOTRCommandWaypoints.getListOfStringsMatchingLastWord((String[])args, (String[])MinecraftServer.getServer().getAllUsernames());
+            return CommandBase.getListOfStringsMatchingLastWord((String[])args, (String[])MinecraftServer.getServer().getAllUsernames());
         }
         return null;
     }

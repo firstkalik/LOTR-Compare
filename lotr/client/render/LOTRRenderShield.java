@@ -46,8 +46,8 @@ public class LOTRRenderShield {
     private static float MODELSCALE = 0.0625f;
 
     public static void renderShield(LOTRShields shield, EntityLivingBase entity, ModelBiped model) {
-        boolean blocking;
         ItemStack inUse;
+        boolean blocking;
         Minecraft mc = Minecraft.getMinecraft();
         ResourceLocation shieldTexture = shield.shieldTexture;
         ItemStack held = entity == null ? null : entity.getHeldItem();
@@ -103,8 +103,8 @@ public class LOTRRenderShield {
 
     private static void doRenderShield(float f) {
         int k;
-        float f9;
         float f8;
+        float f9;
         float f7;
         float minU = 0.0f + f;
         float maxU = 0.5f + f;

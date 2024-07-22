@@ -45,7 +45,7 @@ implements LOTRUnitTradeable {
     public LOTREntityPelargirCaptain(World world) {
         super(world);
         this.addTargetTasks(false);
-        this.npcCape = LOTRCapes.PELARGIR;
+        this.npcCape = LOTRCapes.PELARGIR.capeTexture;
     }
 
     @Override
@@ -82,7 +82,7 @@ implements LOTRUnitTradeable {
     }
 
     @Override
-    public LOTRInvasions getWarhorn() {
+    public LOTRInvasions getConquestHorn() {
         return LOTRInvasions.GONDOR_PELARGIR;
     }
 

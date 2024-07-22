@@ -38,8 +38,8 @@ extends GuiContainer {
     private int chestRows;
     private int pouchRows;
 
-    public LOTRGuiChestWithPouch(EntityPlayer entityplayer, IInventory chest) {
-        super((Container)new LOTRContainerChestWithPouch(entityplayer, chest));
+    public LOTRGuiChestWithPouch(EntityPlayer entityplayer, int slot, IInventory chest) {
+        super((Container)new LOTRContainerChestWithPouch(entityplayer, slot, chest));
         this.pouchInv = ((LOTRContainerChestWithPouch)this.inventorySlots).pouchContainer.pouchInventory;
         this.chestInv = chest;
         this.allowUserInput = false;

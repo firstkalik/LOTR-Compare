@@ -58,10 +58,10 @@ implements IItemRenderer {
                     Vec3 viewerPos = viewer.getPosition(f);
                     Vec3 entityPos = jarLiving.getPosition(f);
                     double dx = entityPos.xCoord - viewerPos.xCoord;
-                    double dy = entityPos.yCoord - viewerPos.yCoord;
                     double dz = entityPos.zCoord - viewerPos.zCoord;
                     float lookYaw = (float)Math.toDegrees(Math.atan2(dz, dx));
-                    jarLiving.rotationYaw = jarLiving.prevRotationYaw = (lookYaw += 90.0f);
+                    jarLiving.prevRotationYaw = lookYaw += 90.0f;
+                    jarLiving.rotationYaw = lookYaw;
                 }
                 jarLiving.renderYawOffset = jarLiving.rotationYaw;
                 jarLiving.prevRenderYawOffset = jarLiving.prevRotationYaw;

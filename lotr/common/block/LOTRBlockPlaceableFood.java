@@ -97,7 +97,7 @@ extends Block {
     }
 
     public void setBlockBoundsBasedOnState(IBlockAccess world, int i, int j, int k) {
-        int l = world.getBlockMetadata(i, j, k);
+        world.getBlockMetadata(i, j, k);
         float f = 0.5f - this.foodHalfWidth;
         float f1 = 0.5f + this.foodHalfWidth;
         float f2 = f + (f1 - f) * ((float)world.getBlockMetadata(i, j, k) / (float)MAX_EATS);

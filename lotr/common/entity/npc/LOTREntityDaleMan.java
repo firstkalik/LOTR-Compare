@@ -118,7 +118,7 @@ extends LOTREntityMan {
     @Override
     protected void applyEntityAttributes() {
         super.applyEntityAttributes();
-        this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(20.0);
+        this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue((double)MathHelper.getRandomIntegerInRange((Random)this.rand, (int)20, (int)21));
         this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.2);
         this.getEntityAttribute(npcRangedAccuracy).setBaseValue(0.5);
     }

@@ -105,7 +105,9 @@ extends EntityAIBase {
         });
         for (Object obj : nearbyAllies) {
             EntityLiving ally = (EntityLiving)obj;
-            if (!(ally instanceof LOTREntityOrc ? ((LOTREntityOrc)ally).currentRevengeTarget instanceof EntityPlayer : ally.getAttackTarget() instanceof EntityPlayer)) continue;
+            if (ally instanceof LOTREntityOrc) {
+                if (!(((LOTREntityOrc)ally).currentRevengeTarget instanceof EntityPlayer)) continue;
+            } else if (!(ally.getAttackTarget() instanceof EntityPlayer)) continue;
             return true;
         }
         return false;

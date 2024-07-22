@@ -38,6 +38,11 @@ extends LOTREnchantmentProtectionSpecial {
     }
 
     @Override
+    public boolean isBeneficial() {
+        return this.protectLevel >= 0;
+    }
+
+    @Override
     protected int calcIntProtection() {
         float f = (float)this.protectLevel * (float)(this.protectLevel + 1) / 2.0f;
         return 3 + MathHelper.floor_float((float)f);

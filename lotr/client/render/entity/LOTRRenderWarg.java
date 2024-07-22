@@ -29,6 +29,8 @@ import lotr.common.LOTRMod;
 import lotr.common.entity.item.LOTREntityOrcBomb;
 import lotr.common.entity.npc.LOTREntityWarg;
 import lotr.common.entity.npc.LOTREntityWargBombardier;
+import lotr.common.entity.npc.LOTREntityWargBombardier2;
+import lotr.common.entity.npc.LOTREntityWargBombardier4;
 import lotr.common.entity.npc.LOTRHiredNPCInfo;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
@@ -71,19 +73,62 @@ extends RenderLiving {
     }
 
     public void doRender(EntityLiving entity, double d, double d1, double d2, float f, float f1) {
+        LOTRRenderOrcBomb bombRenderer;
+        int k;
+        int j;
+        int i;
         if (entity instanceof LOTREntityWargBombardier) {
             GL11.glEnable((int)32826);
             GL11.glPushMatrix();
             GL11.glTranslatef((float)((float)d), (float)((float)d1 + 1.7f), (float)((float)d2));
             GL11.glRotatef((float)(-f), (float)0.0f, (float)1.0f, (float)0.0f);
-            int i = entity.getBrightnessForRender(f1);
-            int j = i % 65536;
-            int k = i / 65536;
+            i = entity.getBrightnessForRender(f1);
+            j = i % 65536;
+            k = i / 65536;
             OpenGlHelper.setLightmapTextureCoords((int)OpenGlHelper.lightmapTexUnit, (float)((float)j / 1.0f), (float)((float)k / 1.0f));
             GL11.glColor4f((float)1.0f, (float)1.0f, (float)1.0f, (float)1.0f);
             GL11.glColor4f((float)1.0f, (float)1.0f, (float)1.0f, (float)1.0f);
-            LOTRRenderOrcBomb bombRenderer = (LOTRRenderOrcBomb)RenderManager.instance.getEntityClassRenderObject(LOTREntityOrcBomb.class);
+            bombRenderer = (LOTRRenderOrcBomb)RenderManager.instance.getEntityClassRenderObject(LOTREntityOrcBomb.class);
             bombRenderer.renderBomb((Entity)entity, 0.0, 0.0, 0.0, f1, ((LOTREntityWargBombardier)entity).getBombFuse(), ((LOTREntityWargBombardier)entity).getBombStrengthLevel(), 0.75f, 1.0f);
+            GL11.glPopMatrix();
+            GL11.glDisable((int)32826);
+            GL11.glColor4f((float)1.0f, (float)1.0f, (float)1.0f, (float)1.0f);
+        }
+        super.doRender(entity, d, d1, d2, f, f1);
+        if (Minecraft.isGuiEnabled() && ((LOTREntityWarg)entity).hiredNPCInfo.getHiringPlayer() == this.renderManager.livingPlayer) {
+            LOTRNPCRendering.renderHiredIcon((EntityLivingBase)entity, d, d1 + 0.5, d2);
+            LOTRNPCRendering.renderNPCHealthBar((EntityLivingBase)entity, d, d1 + 0.5, d2);
+        }
+        if (entity instanceof LOTREntityWargBombardier2) {
+            GL11.glEnable((int)32826);
+            GL11.glPushMatrix();
+            GL11.glTranslatef((float)((float)d), (float)((float)d1 + 1.7f), (float)((float)d2));
+            GL11.glRotatef((float)(-f), (float)0.0f, (float)1.0f, (float)0.0f);
+            i = entity.getBrightnessForRender(f1);
+            j = i % 65536;
+            k = i / 65536;
+            OpenGlHelper.setLightmapTextureCoords((int)OpenGlHelper.lightmapTexUnit, (float)((float)j / 1.0f), (float)((float)k / 1.0f));
+            GL11.glColor4f((float)1.0f, (float)1.0f, (float)1.0f, (float)1.0f);
+            GL11.glColor4f((float)1.0f, (float)1.0f, (float)1.0f, (float)1.0f);
+            bombRenderer = (LOTRRenderOrcBomb)RenderManager.instance.getEntityClassRenderObject(LOTREntityOrcBomb.class);
+            bombRenderer.renderBomb((Entity)entity, 0.0, 0.0, 0.0, f1, ((LOTREntityWargBombardier2)entity).getBombFuse(), ((LOTREntityWargBombardier2)entity).getBombStrengthLevel(), 0.75f, 1.0f);
+            GL11.glPopMatrix();
+            GL11.glDisable((int)32826);
+            GL11.glColor4f((float)1.0f, (float)1.0f, (float)1.0f, (float)1.0f);
+        }
+        super.doRender(entity, d, d1, d2, f, f1);
+        if (entity instanceof LOTREntityWargBombardier4) {
+            GL11.glEnable((int)32826);
+            GL11.glPushMatrix();
+            GL11.glTranslatef((float)((float)d), (float)((float)d1 + 1.7f), (float)((float)d2));
+            GL11.glRotatef((float)(-f), (float)0.0f, (float)1.0f, (float)0.0f);
+            i = entity.getBrightnessForRender(f1);
+            j = i % 65536;
+            k = i / 65536;
+            OpenGlHelper.setLightmapTextureCoords((int)OpenGlHelper.lightmapTexUnit, (float)((float)j / 1.0f), (float)((float)k / 1.0f));
+            GL11.glColor4f((float)0.0f, (float)1.0f, (float)0.0f, (float)1.0f);
+            bombRenderer = (LOTRRenderOrcBomb)RenderManager.instance.getEntityClassRenderObject(LOTREntityOrcBomb.class);
+            bombRenderer.renderBomb((Entity)entity, 0.0, 0.0, 0.0, f1, ((LOTREntityWargBombardier4)entity).getBombFuse(), ((LOTREntityWargBombardier4)entity).getBombStrengthLevel(), 0.75f, 1.0f);
             GL11.glPopMatrix();
             GL11.glDisable((int)32826);
             GL11.glColor4f((float)1.0f, (float)1.0f, (float)1.0f, (float)1.0f);

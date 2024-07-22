@@ -49,16 +49,16 @@ extends LOTRWorldGenHobbitStructure {
 
     @Override
     public boolean generateWithSetRotation(World world, Random random, int i, int j, int k, int rotation) {
+        int j1;
         int k1;
         int i1;
-        int j1;
         this.setOriginAndRotation(world, i, j, k, rotation, 8);
         this.setupRandomBlocks(random);
         if (this.restrictions) {
-            for (i1 = -9; i1 <= 9; ++i1) {
+            for (int m = -9; m <= 9; ++m) {
                 for (k1 = -7; k1 <= 8; ++k1) {
-                    j1 = this.getTopBlock(world, i1, k1) - 1;
-                    if (this.isSurface(world, i1, j1, k1)) continue;
+                    j1 = this.getTopBlock(world, m, k1) - 1;
+                    if (this.isSurface(world, m, j1, k1)) continue;
                     return false;
                 }
             }
@@ -98,8 +98,6 @@ extends LOTRWorldGenHobbitStructure {
         this.placeChest(world, random, 1, 1, 2, 2, this.burrowLoot, MathHelper.getRandomIntegerInRange((Random)random, (int)1, (int)3));
         this.placeChest(world, random, 0, 1, 2, 2, this.burrowLoot, MathHelper.getRandomIntegerInRange((Random)random, (int)1, (int)3));
         this.placePlateWithCertainty(world, random, 3, 2, -1, this.plateBlock, this.foodPool);
-        this.placeRandomFlowerPot(world, random, -3, 2, -5);
-        this.placeRandomFlowerPot(world, random, -1, 4, -4);
         this.placeSign(world, 0, 2, -4, Blocks.wall_sign, 2, new String[]{"", this.homeName1, this.homeName2, ""});
         for (i1 = -8; i1 <= 8; ++i1) {
             for (k1 = -6; k1 <= 8; ++k1) {

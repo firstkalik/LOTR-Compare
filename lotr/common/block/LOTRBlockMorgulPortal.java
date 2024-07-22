@@ -32,7 +32,7 @@ import net.minecraft.world.World;
 public class LOTRBlockMorgulPortal
 extends LOTRBlockPortal {
     public LOTRBlockMorgulPortal() {
-        super(new LOTRFaction[]{LOTRFaction.MORDOR, LOTRFaction.ANGMAR, LOTRFaction.DOL_GULDUR}, LOTRTeleporterMorgulPortal.class);
+        super(new LOTRFaction[]{LOTRFaction.MORDOR, LOTRFaction.GUNDABAD, LOTRFaction.DOL_GULDUR}, LOTRTeleporterMorgulPortal.class);
     }
 
     public TileEntity createNewTileEntity(World world, int i) {
@@ -70,7 +70,9 @@ extends LOTRBlockPortal {
                     }
                     continue;
                 }
-                if (!(Math.abs(i1 - i) == 2 || Math.abs(k1 - k) == 2 ? !LOTRMod.isOpaque(world, i1, j, k1) : world.getBlock(i1, j, k1) != (portalAlreadyMade ? LOTRMod.morgulPortal : Blocks.lava) || !LOTRMod.isOpaque(world, i1, j - 1, k1))) continue;
+                if (Math.abs(i1 - i) == 2 || Math.abs(k1 - k) == 2) {
+                    if (LOTRMod.isOpaque(world, i1, j, k1)) continue;
+                } else if (world.getBlock(i1, j, k1) == (portalAlreadyMade ? LOTRMod.morgulPortal : Blocks.lava) && LOTRMod.isOpaque(world, i1, j - 1, k1)) continue;
                 return false;
             }
         }

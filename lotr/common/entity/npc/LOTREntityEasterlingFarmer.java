@@ -20,7 +20,7 @@ import lotr.common.entity.npc.LOTRTradeable;
 import lotr.common.entity.npc.LOTRUnitTradeEntries;
 import lotr.common.entity.npc.LOTRUnitTradeable;
 import lotr.common.fac.LOTRFaction;
-import lotr.common.item.LOTRItemKaftan;
+import lotr.common.item.LOTRItemHaradRobes;
 import lotr.common.world.spawning.LOTRInvasions;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.player.EntityPlayer;
@@ -55,8 +55,8 @@ LOTRUnitTradeable {
         int robeColor = 7577646;
         ItemStack body = new ItemStack(LOTRMod.bodyKaftan);
         ItemStack legs = new ItemStack(LOTRMod.legsKaftan);
-        LOTRItemKaftan.setRobesColor(body, robeColor);
-        LOTRItemKaftan.setRobesColor(legs, robeColor);
+        LOTRItemHaradRobes.setRobesColor(body, robeColor);
+        LOTRItemHaradRobes.setRobesColor(legs, robeColor);
         this.setCurrentItemOrArmor(3, body);
         this.setCurrentItemOrArmor(2, legs);
         return data;
@@ -68,7 +68,7 @@ LOTRUnitTradeable {
     }
 
     @Override
-    public LOTRInvasions getWarhorn() {
+    public LOTRInvasions getConquestHorn() {
         return null;
     }
 

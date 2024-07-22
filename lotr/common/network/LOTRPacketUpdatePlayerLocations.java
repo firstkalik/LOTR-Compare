@@ -106,17 +106,6 @@ implements IMessage {
         }
     }
 
-    public static class Handler
-    implements IMessageHandler<LOTRPacketUpdatePlayerLocations, IMessage> {
-        public IMessage onMessage(LOTRPacketUpdatePlayerLocations packet, MessageContext context) {
-            LOTRMod.proxy.clearMapPlayerLocations();
-            for (PlayerLocationInfo info : packet.playerLocations) {
-                LOTRMod.proxy.addMapPlayerLocation(info.playerProfile, info.posX, info.posZ);
-            }
-            return null;
-        }
-    }
-
     private static class PlayerLocationInfo {
         public final GameProfile playerProfile;
         public final double posX;
@@ -126,6 +115,17 @@ implements IMessage {
             this.playerProfile = profile;
             this.posX = x;
             this.posZ = z;
+        }
+    }
+
+    public static class Handler
+    implements IMessageHandler<LOTRPacketUpdatePlayerLocations, IMessage> {
+        public IMessage onMessage(LOTRPacketUpdatePlayerLocations packet, MessageContext context) {
+            LOTRMod.proxy.clearMapPlayerLocations();
+            for (PlayerLocationInfo info : packet.playerLocations) {
+                LOTRMod.proxy.addMapPlayerLocation(info.playerProfile, info.posX, info.posZ);
+            }
+            return null;
         }
     }
 

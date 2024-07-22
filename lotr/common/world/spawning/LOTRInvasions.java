@@ -12,8 +12,23 @@
 package lotr.common.world.spawning;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import lotr.common.LOTRMod;
+import lotr.common.entity.npc.LOTREntityAngbandBerserk;
+import lotr.common.entity.npc.LOTREntityAngbandOrc;
+import lotr.common.entity.npc.LOTREntityAngbandSpiderFire;
+import lotr.common.entity.npc.LOTREntityAngbandSpiderIce;
+import lotr.common.entity.npc.LOTREntityAngbandSpiderObsidian;
+import lotr.common.entity.npc.LOTREntityAngbandTrollObsidian;
+import lotr.common.entity.npc.LOTREntityAngbandUruc;
+import lotr.common.entity.npc.LOTREntityAngbandWarg;
+import lotr.common.entity.npc.LOTREntityAngbandWargBombardier;
+import lotr.common.entity.npc.LOTREntityAngbandWargFire;
+import lotr.common.entity.npc.LOTREntityAngbandWargIce;
+import lotr.common.entity.npc.LOTREntityAngbandWargObsidian;
+import lotr.common.entity.npc.LOTREntityAngbandZnam;
+import lotr.common.entity.npc.LOTREntityAngbandZnam2;
 import lotr.common.entity.npc.LOTREntityAngmarBannerBearer;
 import lotr.common.entity.npc.LOTREntityAngmarHillman;
 import lotr.common.entity.npc.LOTREntityAngmarHillmanAxeThrower;
@@ -22,11 +37,18 @@ import lotr.common.entity.npc.LOTREntityAngmarHillmanWarrior;
 import lotr.common.entity.npc.LOTREntityAngmarOrc;
 import lotr.common.entity.npc.LOTREntityAngmarOrcArcher;
 import lotr.common.entity.npc.LOTREntityAngmarOrcBombardier;
+import lotr.common.entity.npc.LOTREntityAngmarOrcWarrior;
 import lotr.common.entity.npc.LOTREntityAngmarWarg;
 import lotr.common.entity.npc.LOTREntityAngmarWargBombardier;
+import lotr.common.entity.npc.LOTREntityAvariElfBannerBearer;
+import lotr.common.entity.npc.LOTREntityAvariElfScout;
+import lotr.common.entity.npc.LOTREntityAvariElfWarrior;
 import lotr.common.entity.npc.LOTREntityBlackUruk;
 import lotr.common.entity.npc.LOTREntityBlackUrukArcher;
 import lotr.common.entity.npc.LOTREntityBlackUrukBannerBearer;
+import lotr.common.entity.npc.LOTREntityBlacklockAxeThrower;
+import lotr.common.entity.npc.LOTREntityBlacklockWarrior;
+import lotr.common.entity.npc.LOTREntityBlacklockZnam;
 import lotr.common.entity.npc.LOTREntityBlackrootArcher;
 import lotr.common.entity.npc.LOTREntityBlackrootBannerBearer;
 import lotr.common.entity.npc.LOTREntityBlackrootSoldier;
@@ -46,6 +68,10 @@ import lotr.common.entity.npc.LOTREntityDolAmrothSoldier;
 import lotr.common.entity.npc.LOTREntityDolGuldurBannerBearer;
 import lotr.common.entity.npc.LOTREntityDolGuldurOrc;
 import lotr.common.entity.npc.LOTREntityDolGuldurOrcArcher;
+import lotr.common.entity.npc.LOTREntityDolGuldurUruk;
+import lotr.common.entity.npc.LOTREntityDolGuldurUrukArcher;
+import lotr.common.entity.npc.LOTREntityDolGuldurUrukBannerBearer;
+import lotr.common.entity.npc.LOTREntityDolGuldurUrukBerserk;
 import lotr.common.entity.npc.LOTREntityDorwinionBannerBearer;
 import lotr.common.entity.npc.LOTREntityDorwinionCrossbower;
 import lotr.common.entity.npc.LOTREntityDorwinionElfArcher;
@@ -58,6 +84,10 @@ import lotr.common.entity.npc.LOTREntityDunlendingAxeThrower;
 import lotr.common.entity.npc.LOTREntityDunlendingBannerBearer;
 import lotr.common.entity.npc.LOTREntityDunlendingBerserker;
 import lotr.common.entity.npc.LOTREntityDunlendingWarrior;
+import lotr.common.entity.npc.LOTREntityDurmethBannerBearer;
+import lotr.common.entity.npc.LOTREntityDurmethOrc;
+import lotr.common.entity.npc.LOTREntityDurmethOrcArcher;
+import lotr.common.entity.npc.LOTREntityDurmethWarg;
 import lotr.common.entity.npc.LOTREntityDwarfAxeThrower;
 import lotr.common.entity.npc.LOTREntityDwarfBannerBearer;
 import lotr.common.entity.npc.LOTREntityDwarfWarrior;
@@ -68,6 +98,11 @@ import lotr.common.entity.npc.LOTREntityEasterlingGoldWarrior;
 import lotr.common.entity.npc.LOTREntityEasterlingLevyman;
 import lotr.common.entity.npc.LOTREntityEasterlingWarrior;
 import lotr.common.entity.npc.LOTREntityEnt;
+import lotr.common.entity.npc.LOTREntityEreborDwarfAxeThrower;
+import lotr.common.entity.npc.LOTREntityEreborDwarfBannerBearer;
+import lotr.common.entity.npc.LOTREntityEreborDwarfBerserk;
+import lotr.common.entity.npc.LOTREntityEreborDwarfCrossbow;
+import lotr.common.entity.npc.LOTREntityEreborDwarfWarrior;
 import lotr.common.entity.npc.LOTREntityEsgarothBannerBearer;
 import lotr.common.entity.npc.LOTREntityGaladhrimBannerBearer;
 import lotr.common.entity.npc.LOTREntityGaladhrimWarrior;
@@ -80,6 +115,7 @@ import lotr.common.entity.npc.LOTREntityGulfHaradArcher;
 import lotr.common.entity.npc.LOTREntityGulfHaradBannerBearer;
 import lotr.common.entity.npc.LOTREntityGulfHaradWarrior;
 import lotr.common.entity.npc.LOTREntityGundabadBannerBearer;
+import lotr.common.entity.npc.LOTREntityGundabadCaveTroll;
 import lotr.common.entity.npc.LOTREntityGundabadOrc;
 import lotr.common.entity.npc.LOTREntityGundabadOrcArcher;
 import lotr.common.entity.npc.LOTREntityGundabadUruk;
@@ -95,6 +131,9 @@ import lotr.common.entity.npc.LOTREntityHighElfBannerBearer;
 import lotr.common.entity.npc.LOTREntityHighElfWarrior;
 import lotr.common.entity.npc.LOTREntityHobbitBounder;
 import lotr.common.entity.npc.LOTREntityHuorn;
+import lotr.common.entity.npc.LOTREntityIronfistBerserk;
+import lotr.common.entity.npc.LOTREntityIronfistWarrior;
+import lotr.common.entity.npc.LOTREntityIronfistZnam;
 import lotr.common.entity.npc.LOTREntityIsengardSnaga;
 import lotr.common.entity.npc.LOTREntityIsengardSnagaArcher;
 import lotr.common.entity.npc.LOTREntityLamedonArcher;
@@ -118,6 +157,8 @@ import lotr.common.entity.npc.LOTREntityMordorWargBombardier;
 import lotr.common.entity.npc.LOTREntityMoredainBannerBearer;
 import lotr.common.entity.npc.LOTREntityMoredainMercenary;
 import lotr.common.entity.npc.LOTREntityMoredainWarrior;
+import lotr.common.entity.npc.LOTREntityMoriaOrc;
+import lotr.common.entity.npc.LOTREntityMoriaOrcArcher;
 import lotr.common.entity.npc.LOTREntityNPC;
 import lotr.common.entity.npc.LOTREntityNanUngolBannerBearer;
 import lotr.common.entity.npc.LOTREntityNearHaradBannerBearer;
@@ -140,11 +181,19 @@ import lotr.common.entity.npc.LOTREntityRivendellWarrior;
 import lotr.common.entity.npc.LOTREntityRohanBannerBearer;
 import lotr.common.entity.npc.LOTREntityRohirrimArcher;
 import lotr.common.entity.npc.LOTREntityRohirrimWarrior;
+import lotr.common.entity.npc.LOTREntitySnowTroll;
 import lotr.common.entity.npc.LOTREntitySouthronChampion;
+import lotr.common.entity.npc.LOTREntityStiffbeardCrossbow;
+import lotr.common.entity.npc.LOTREntityStiffbeardWarrior;
+import lotr.common.entity.npc.LOTREntityStiffbeardZnam;
+import lotr.common.entity.npc.LOTREntityStonefootFlameThrower;
+import lotr.common.entity.npc.LOTREntityStonefootWarrior;
+import lotr.common.entity.npc.LOTREntityStonefootZnam;
 import lotr.common.entity.npc.LOTREntitySwanKnight;
 import lotr.common.entity.npc.LOTREntityTauredainBannerBearer;
 import lotr.common.entity.npc.LOTREntityTauredainBlowgunner;
 import lotr.common.entity.npc.LOTREntityTauredainWarrior;
+import lotr.common.entity.npc.LOTREntityTundraSnowTroll;
 import lotr.common.entity.npc.LOTREntityUmbarArcher;
 import lotr.common.entity.npc.LOTREntityUmbarBannerBearer;
 import lotr.common.entity.npc.LOTREntityUmbarWarrior;
@@ -155,6 +204,11 @@ import lotr.common.entity.npc.LOTREntityUrukHaiCrossbower;
 import lotr.common.entity.npc.LOTREntityUrukHaiSapper;
 import lotr.common.entity.npc.LOTREntityUrukWarg;
 import lotr.common.entity.npc.LOTREntityUrukWargBombardier;
+import lotr.common.entity.npc.LOTREntityWickedDwarf2;
+import lotr.common.entity.npc.LOTREntityWickedElf;
+import lotr.common.entity.npc.LOTREntityWindDwarfAxeThrower;
+import lotr.common.entity.npc.LOTREntityWindDwarfBannerBearer;
+import lotr.common.entity.npc.LOTREntityWindDwarfWarrior;
 import lotr.common.entity.npc.LOTREntityWoodElfBannerBearer;
 import lotr.common.entity.npc.LOTREntityWoodElfScout;
 import lotr.common.entity.npc.LOTREntityWoodElfWarrior;
@@ -175,11 +229,12 @@ public enum LOTRInvasions {
     HIGH_ELF_RIVENDELL(LOTRFaction.HIGH_ELF, "rivendell"),
     GUNDABAD(LOTRFaction.GUNDABAD),
     GUNDABAD_WARG(LOTRFaction.GUNDABAD, "warg"),
-    ANGMAR(LOTRFaction.ANGMAR),
-    ANGMAR_HILLMEN(LOTRFaction.ANGMAR, "hillmen"),
-    ANGMAR_WARG(LOTRFaction.ANGMAR, "warg"),
+    ANGMAR(LOTRFaction.GUNDABAD, "orcs"),
+    ANGMAR_HILLMEN(LOTRFaction.GUNDABAD, "hillmen"),
+    ANGMAR_WARG(LOTRFaction.GUNDABAD, "wargs"),
     WOOD_ELF(LOTRFaction.WOOD_ELF),
     DOL_GULDUR(LOTRFaction.DOL_GULDUR),
+    DOL_GULDUR_URUK(LOTRFaction.DOL_GULDUR),
     DALE(LOTRFaction.DALE),
     DWARF(LOTRFaction.DURINS_FOLK),
     GALADHRIM(LOTRFaction.LOTHLORIEN),
@@ -211,7 +266,20 @@ public enum LOTRInvasions {
     NEAR_HARAD_GULF(LOTRFaction.NEAR_HARAD, "gulf"),
     MOREDAIN(LOTRFaction.MORWAITH),
     TAUREDAIN(LOTRFaction.TAURETHRIM),
-    HALF_TROLL(LOTRFaction.HALF_TROLL);
+    HALF_TROLL(LOTRFaction.HALF_TROLL),
+    ANGBAND(LOTRFaction.UTUMNO),
+    BLACKLOCK(LOTRFaction.RED_MOUNTAINS, "blacklock"),
+    STONEFOOT(LOTRFaction.RED_MOUNTAINS, "stonefoot"),
+    STIFFBEARD(LOTRFaction.RED_MOUNTAINS, "stiffbeard"),
+    IRONFIST(LOTRFaction.RED_MOUNTAINS, "ironfist"),
+    EREBOR(LOTRFaction.DURINS_FOLK, "erebor"),
+    ANGBAND1(LOTRFaction.UTUMNO, "utumno_spiders"),
+    ANGBAND2(LOTRFaction.UTUMNO, "utumno_wargs"),
+    DURMETH(LOTRFaction.GUNDABAD, "durmeth"),
+    MORIA(LOTRFaction.GUNDABAD, "moria"),
+    DURMETH_WARG(LOTRFaction.GUNDABAD, "durmeth_wargs"),
+    AVARI_ELF(LOTRFaction.AVARI),
+    WIND(LOTRFaction.WIND);
 
     public final LOTRFaction invasionFaction;
     private final String subfaction;
@@ -233,6 +301,21 @@ public enum LOTRInvasions {
             s = s + "_" + this.subfaction;
         }
         return s;
+    }
+
+    public List<String> codeNameAndAliases() {
+        ArrayList<String> aliases = new ArrayList<String>();
+        if (this.subfaction != null) {
+            String subfactionAdd = "_" + this.subfaction;
+            aliases.add(this.invasionFaction.codeName() + subfactionAdd);
+            for (String al : this.invasionFaction.listAliases()) {
+                aliases.add(al + subfactionAdd);
+            }
+        } else {
+            aliases.add(this.invasionFaction.codeName());
+            aliases.addAll(this.invasionFaction.listAliases());
+        }
+        return aliases;
     }
 
     public String invasionName() {
@@ -292,6 +375,7 @@ public enum LOTRInvasions {
         LOTRInvasions.ANGMAR.invasionMobs.add(new InvasionSpawnEntry(LOTREntityAngmarOrc.class, 10));
         LOTRInvasions.ANGMAR.invasionMobs.add(new InvasionSpawnEntry(LOTREntityAngmarOrcArcher.class, 5));
         LOTRInvasions.ANGMAR.invasionMobs.add(new InvasionSpawnEntry(LOTREntityAngmarOrcBombardier.class, 3));
+        LOTRInvasions.ANGMAR.invasionMobs.add(new InvasionSpawnEntry(LOTREntityAngmarOrcWarrior.class, 3));
         LOTRInvasions.ANGMAR.invasionMobs.add(new InvasionSpawnEntry(LOTREntityAngmarBannerBearer.class, 2));
         LOTRInvasions.ANGMAR.invasionMobs.add(new InvasionSpawnEntry(LOTREntityAngmarWarg.class, 10));
         LOTRInvasions.ANGMAR.invasionMobs.add(new InvasionSpawnEntry(LOTREntityAngmarWargBombardier.class, 1));
@@ -306,12 +390,22 @@ public enum LOTRInvasions {
         LOTRInvasions.WOOD_ELF.invasionMobs.add(new InvasionSpawnEntry(LOTREntityWoodElfWarrior.class, 10));
         LOTRInvasions.WOOD_ELF.invasionMobs.add(new InvasionSpawnEntry(LOTREntityWoodElfScout.class, 5));
         LOTRInvasions.WOOD_ELF.invasionMobs.add(new InvasionSpawnEntry(LOTREntityWoodElfBannerBearer.class, 2));
+        LOTRInvasions.AVARI_ELF.invasionIcon = LOTRMod.swordWoodElven;
+        LOTRInvasions.AVARI_ELF.invasionMobs.add(new InvasionSpawnEntry(LOTREntityAvariElfWarrior.class, 10));
+        LOTRInvasions.AVARI_ELF.invasionMobs.add(new InvasionSpawnEntry(LOTREntityAvariElfScout.class, 5));
+        LOTRInvasions.AVARI_ELF.invasionMobs.add(new InvasionSpawnEntry(LOTREntityAvariElfBannerBearer.class, 2));
         LOTRInvasions.DOL_GULDUR.invasionIcon = LOTRMod.swordDolGuldur;
         LOTRInvasions.DOL_GULDUR.invasionMobs.add(new InvasionSpawnEntry(LOTREntityMirkwoodSpider.class, 15));
         LOTRInvasions.DOL_GULDUR.invasionMobs.add(new InvasionSpawnEntry(LOTREntityDolGuldurOrc.class, 10));
         LOTRInvasions.DOL_GULDUR.invasionMobs.add(new InvasionSpawnEntry(LOTREntityDolGuldurOrcArcher.class, 5));
+        LOTRInvasions.DOL_GULDUR.invasionMobs.add(new InvasionSpawnEntry(LOTREntityDolGuldurUruk.class, 3));
         LOTRInvasions.DOL_GULDUR.invasionMobs.add(new InvasionSpawnEntry(LOTREntityDolGuldurBannerBearer.class, 2));
         LOTRInvasions.DOL_GULDUR.invasionMobs.add(new InvasionSpawnEntry(LOTREntityMirkTroll.class, 3));
+        LOTRInvasions.DOL_GULDUR_URUK.invasionIcon = LOTRMod.swordDolGuldurUruk;
+        LOTRInvasions.DOL_GULDUR_URUK.invasionMobs.add(new InvasionSpawnEntry(LOTREntityDolGuldurUruk.class, 10));
+        LOTRInvasions.DOL_GULDUR_URUK.invasionMobs.add(new InvasionSpawnEntry(LOTREntityDolGuldurUrukBerserk.class, 3));
+        LOTRInvasions.DOL_GULDUR_URUK.invasionMobs.add(new InvasionSpawnEntry(LOTREntityDolGuldurUrukArcher.class, 5));
+        LOTRInvasions.DOL_GULDUR_URUK.invasionMobs.add(new InvasionSpawnEntry(LOTREntityDolGuldurUrukBannerBearer.class, 2));
         LOTRInvasions.DALE.invasionIcon = LOTRMod.swordDale;
         LOTRInvasions.DALE.invasionMobs.add(new InvasionSpawnEntry(LOTREntityDaleLevyman.class, 5));
         LOTRInvasions.DALE.invasionMobs.add(new InvasionSpawnEntry(LOTREntityDaleSoldier.class, 10));
@@ -464,12 +558,75 @@ public enum LOTRInvasions {
         LOTRInvasions.HALF_TROLL.invasionMobs.add(new InvasionSpawnEntry(LOTREntityHalfTroll.class, 10));
         LOTRInvasions.HALF_TROLL.invasionMobs.add(new InvasionSpawnEntry(LOTREntityHalfTrollWarrior.class, 10));
         LOTRInvasions.HALF_TROLL.invasionMobs.add(new InvasionSpawnEntry(LOTREntityHalfTrollBannerBearer.class, 2));
+        LOTRInvasions.BLACKLOCK.invasionIcon = LOTRMod.swordRed;
+        LOTRInvasions.BLACKLOCK.invasionMobs.add(new InvasionSpawnEntry(LOTREntityBlacklockWarrior.class, 10));
+        LOTRInvasions.BLACKLOCK.invasionMobs.add(new InvasionSpawnEntry(LOTREntityIronfistBerserk.class, 2));
+        LOTRInvasions.BLACKLOCK.invasionMobs.add(new InvasionSpawnEntry(LOTREntityBlacklockZnam.class, 2));
+        LOTRInvasions.STONEFOOT.invasionIcon = LOTRMod.battleaxeRed;
+        LOTRInvasions.STONEFOOT.invasionMobs.add(new InvasionSpawnEntry(LOTREntityStonefootWarrior.class, 10));
+        LOTRInvasions.STONEFOOT.invasionMobs.add(new InvasionSpawnEntry(LOTREntityStonefootFlameThrower.class, 2));
+        LOTRInvasions.STONEFOOT.invasionMobs.add(new InvasionSpawnEntry(LOTREntityStonefootZnam.class, 2));
+        LOTRInvasions.IRONFIST.invasionIcon = LOTRMod.hammerRed;
+        LOTRInvasions.IRONFIST.invasionMobs.add(new InvasionSpawnEntry(LOTREntityIronfistWarrior.class, 10));
+        LOTRInvasions.IRONFIST.invasionMobs.add(new InvasionSpawnEntry(LOTREntityBlacklockAxeThrower.class, 2));
+        LOTRInvasions.IRONFIST.invasionMobs.add(new InvasionSpawnEntry(LOTREntityIronfistZnam.class, 2));
+        LOTRInvasions.STIFFBEARD.invasionIcon = LOTRMod.spearRed;
+        LOTRInvasions.STIFFBEARD.invasionMobs.add(new InvasionSpawnEntry(LOTREntityStiffbeardWarrior.class, 10));
+        LOTRInvasions.STIFFBEARD.invasionMobs.add(new InvasionSpawnEntry(LOTREntityStiffbeardCrossbow.class, 2));
+        LOTRInvasions.STIFFBEARD.invasionMobs.add(new InvasionSpawnEntry(LOTREntityStiffbeardZnam.class, 2));
+        LOTRInvasions.EREBOR.invasionIcon = LOTRMod.swordDwarven;
+        LOTRInvasions.EREBOR.invasionMobs.add(new InvasionSpawnEntry(LOTREntityEreborDwarfWarrior.class, 10));
+        LOTRInvasions.EREBOR.invasionMobs.add(new InvasionSpawnEntry(LOTREntityEreborDwarfAxeThrower.class, 5));
+        LOTRInvasions.EREBOR.invasionMobs.add(new InvasionSpawnEntry(LOTREntityEreborDwarfCrossbow.class, 5));
+        LOTRInvasions.EREBOR.invasionMobs.add(new InvasionSpawnEntry(LOTREntityEreborDwarfBerserk.class, 2));
+        LOTRInvasions.EREBOR.invasionMobs.add(new InvasionSpawnEntry(LOTREntityEreborDwarfBannerBearer.class, 2));
+        LOTRInvasions.ANGBAND.invasionIcon = LOTRMod.swordAngband;
+        LOTRInvasions.ANGBAND.invasionMobs.add(new InvasionSpawnEntry(LOTREntityAngbandOrc.class, 10));
+        LOTRInvasions.ANGBAND.invasionMobs.add(new InvasionSpawnEntry(LOTREntityAngbandUruc.class, 5));
+        LOTRInvasions.ANGBAND.invasionMobs.add(new InvasionSpawnEntry(LOTREntityWickedElf.class, 5));
+        LOTRInvasions.ANGBAND.invasionMobs.add(new InvasionSpawnEntry(LOTREntityAngbandBerserk.class, 2));
+        LOTRInvasions.ANGBAND.invasionMobs.add(new InvasionSpawnEntry(LOTREntityAngbandTrollObsidian.class, 2));
+        LOTRInvasions.ANGBAND.invasionMobs.add(new InvasionSpawnEntry(LOTREntityAngbandZnam2.class, 2));
+        LOTRInvasions.ANGBAND1.invasionIcon = LOTRMod.spearAngband;
+        LOTRInvasions.ANGBAND1.invasionMobs.add(new InvasionSpawnEntry(LOTREntityAngbandSpiderIce.class, 10));
+        LOTRInvasions.ANGBAND1.invasionMobs.add(new InvasionSpawnEntry(LOTREntityAngbandSpiderObsidian.class, 9));
+        LOTRInvasions.ANGBAND1.invasionMobs.add(new InvasionSpawnEntry(LOTREntityAngbandSpiderFire.class, 8));
+        LOTRInvasions.ANGBAND1.invasionMobs.add(new InvasionSpawnEntry(LOTREntityAngbandZnam.class, 2));
+        LOTRInvasions.WIND.invasionIcon = LOTRMod.battleaxeDwarven;
+        LOTRInvasions.WIND.invasionMobs.add(new InvasionSpawnEntry(LOTREntityWindDwarfWarrior.class, 10));
+        LOTRInvasions.WIND.invasionMobs.add(new InvasionSpawnEntry(LOTREntityWindDwarfAxeThrower.class, 5));
+        LOTRInvasions.WIND.invasionMobs.add(new InvasionSpawnEntry(LOTREntityWindDwarfBannerBearer.class, 2));
+        LOTRInvasions.ANGBAND2.invasionIcon = LOTRMod.wargBone;
+        LOTRInvasions.ANGBAND2.invasionMobs.add(new InvasionSpawnEntry(LOTREntityAngbandWarg.class, 10));
+        LOTRInvasions.ANGBAND2.invasionMobs.add(new InvasionSpawnEntry(LOTREntityAngbandWargIce.class, 8));
+        LOTRInvasions.ANGBAND2.invasionMobs.add(new InvasionSpawnEntry(LOTREntityAngbandWargObsidian.class, 7));
+        LOTRInvasions.ANGBAND2.invasionMobs.add(new InvasionSpawnEntry(LOTREntityAngbandWargFire.class, 5));
+        LOTRInvasions.ANGBAND2.invasionMobs.add(new InvasionSpawnEntry(LOTREntityAngbandWargBombardier.class, 2));
+        LOTRInvasions.DURMETH.invasionIcon = LOTRMod.hammerGundabadUruk;
+        LOTRInvasions.DURMETH.invasionMobs.add(new InvasionSpawnEntry(LOTREntityDurmethOrc.class, 20));
+        LOTRInvasions.DURMETH.invasionMobs.add(new InvasionSpawnEntry(LOTREntityDurmethOrcArcher.class, 15));
+        LOTRInvasions.DURMETH.invasionMobs.add(new InvasionSpawnEntry(LOTREntityWickedDwarf2.class, 15));
+        LOTRInvasions.DURMETH.invasionMobs.add(new InvasionSpawnEntry(LOTREntityDurmethWarg.class, 20));
+        LOTRInvasions.DURMETH.invasionMobs.add(new InvasionSpawnEntry(LOTREntityDurmethBannerBearer.class, 5));
+        LOTRInvasions.DURMETH.invasionMobs.add(new InvasionSpawnEntry(LOTREntityGundabadCaveTroll.class, 3));
+        LOTRInvasions.DURMETH.invasionMobs.add(new InvasionSpawnEntry(LOTREntityTundraSnowTroll.class, 2));
+        LOTRInvasions.DURMETH.invasionMobs.add(new InvasionSpawnEntry(LOTREntitySnowTroll.class, 2));
+        LOTRInvasions.DURMETH_WARG.invasionIcon = LOTRMod.wargBone;
+        LOTRInvasions.DURMETH_WARG.invasionMobs.add(new InvasionSpawnEntry(LOTREntityDurmethWarg.class, 10));
+        LOTRInvasions.MORIA.invasionIcon = LOTRMod.battleaxeGundabadUruk;
+        LOTRInvasions.MORIA.invasionMobs.add(new InvasionSpawnEntry(LOTREntityMoriaOrc.class, 20));
+        LOTRInvasions.MORIA.invasionMobs.add(new InvasionSpawnEntry(LOTREntityMoriaOrcArcher.class, 15));
+        LOTRInvasions.MORIA.invasionMobs.add(new InvasionSpawnEntry(LOTREntityGundabadWarg.class, 20));
+        LOTRInvasions.MORIA.invasionMobs.add(new InvasionSpawnEntry(LOTREntityGundabadCaveTroll.class, 3));
     }
 
     public static LOTRInvasions forName(String name) {
         for (LOTRInvasions i : LOTRInvasions.values()) {
-            if (!i.codeName().equals(name)) continue;
-            return i;
+            List<String> aliases = i.codeNameAndAliases();
+            for (String al : aliases) {
+                if (!al.equals(name)) continue;
+                return i;
+            }
         }
         return null;
     }

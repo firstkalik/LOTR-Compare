@@ -45,8 +45,8 @@ extends WorldGenerator {
             meta = flower.metadata;
         }
         for (int l = 0; l < 64; ++l) {
-            int k1;
             int j1;
+            int k1;
             int i1 = i + random.nextInt(8) - random.nextInt(8);
             if (!world.isAirBlock(i1, j1 = j + random.nextInt(4) - random.nextInt(4), k1 = k + random.nextInt(8) - random.nextInt(8)) || world.provider.hasNoSky && j1 >= 255 || !block.canBlockStay(world, i1, j1, k1)) continue;
             world.setBlock(i1, j1, k1, block, meta, 2);

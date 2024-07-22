@@ -149,7 +149,7 @@ extends LOTREntityNPC {
     @Override
     protected void applyEntityAttributes() {
         super.applyEntityAttributes();
-        this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(60.0);
+        this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue((double)MathHelper.getRandomIntegerInRange((Random)this.rand, (int)60, (int)80));
         this.getEntityAttribute(SharedMonsterAttributes.followRange).setBaseValue(24.0);
         this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.2);
         this.getEntityAttribute(npcAttackDamage).setBaseValue(5.0);
@@ -177,7 +177,7 @@ extends LOTREntityNPC {
 
     @Override
     public LOTRFaction getFaction() {
-        return LOTRFaction.ANGMAR;
+        return LOTRFaction.GUNDABAD;
     }
 
     protected boolean hasTrollName() {
@@ -417,47 +417,53 @@ extends LOTREntityNPC {
             }
         }
         int animalDrops = 1 + this.rand.nextInt(3) + this.rand.nextInt(i + 1);
-        block13: for (int l = 0; l < animalDrops; ++l) {
+        block15: for (int l = 0; l < animalDrops; ++l) {
             int drop = this.rand.nextInt(10);
             switch (drop) {
                 case 0: {
                     this.entityDropItem(new ItemStack(Items.leather, 1 + this.rand.nextInt(3)), 0.0f);
-                    continue block13;
+                    continue block15;
                 }
                 case 1: {
                     this.entityDropItem(new ItemStack(Items.beef, 1 + this.rand.nextInt(2)), 0.0f);
-                    continue block13;
+                    continue block15;
                 }
                 case 2: {
                     this.entityDropItem(new ItemStack(Items.chicken, 1 + this.rand.nextInt(2)), 0.0f);
-                    continue block13;
+                    continue block15;
                 }
                 case 3: {
                     this.entityDropItem(new ItemStack(Items.feather, 1 + this.rand.nextInt(3)), 0.0f);
-                    continue block13;
+                    continue block15;
                 }
                 case 4: {
                     this.entityDropItem(new ItemStack(Items.porkchop, 1 + this.rand.nextInt(2)), 0.0f);
-                    continue block13;
+                    continue block15;
                 }
                 case 5: {
                     this.entityDropItem(new ItemStack(Blocks.wool, 1 + this.rand.nextInt(3)), 0.0f);
-                    continue block13;
+                    continue block15;
                 }
                 case 6: {
                     this.entityDropItem(new ItemStack(Items.rotten_flesh, 1 + this.rand.nextInt(3)), 0.0f);
-                    continue block13;
+                    continue block15;
                 }
                 case 7: {
                     this.entityDropItem(new ItemStack(LOTRMod.rabbitRaw, 1 + this.rand.nextInt(2)), 0.0f);
-                    continue block13;
+                    continue block15;
                 }
                 case 8: {
                     this.entityDropItem(new ItemStack(LOTRMod.muttonRaw, 1 + this.rand.nextInt(2)), 0.0f);
-                    continue block13;
+                    continue block15;
                 }
                 case 9: {
                     this.entityDropItem(new ItemStack(LOTRMod.deerRaw, 1 + this.rand.nextInt(2)), 0.0f);
+                }
+                case 10: {
+                    this.entityDropItem(new ItemStack(LOTRMod.horseRaw, 1 + this.rand.nextInt(2)), 0.0f);
+                }
+                case 11: {
+                    this.entityDropItem(new ItemStack(LOTRMod.bearRaw, 1 + this.rand.nextInt(2)), 0.0f);
                 }
             }
         }

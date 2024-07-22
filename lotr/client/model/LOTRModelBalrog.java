@@ -148,8 +148,7 @@ extends ModelBase {
             this.rightWing.showModel = false;
             this.leftWing.showModel = false;
         } else {
-            this.rightWing.showModel = LOTRConfig.balrogWings && balrog.isWreathedInFlame();
-            this.leftWing.showModel = this.rightWing.showModel;
+            this.leftWing.showModel = this.rightWing.showModel = LOTRConfig.balrogWings && balrog.isWreathedInFlame();
         }
         this.setRotationAngles(f, f1, f2, f3, f4, f5, entity);
         this.body.render(f5);
@@ -158,7 +157,6 @@ extends ModelBase {
     }
 
     public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, Entity entity) {
-        LOTREntityBalrog balrog = (LOTREntityBalrog)entity;
         this.neck.rotateAngleX = (float)Math.toRadians(-10.0);
         this.neck.rotateAngleY = 0.0f;
         this.neck.rotateAngleX += f4 / (float)Math.toDegrees(1.0);

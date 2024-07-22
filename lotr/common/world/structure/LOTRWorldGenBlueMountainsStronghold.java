@@ -44,9 +44,9 @@ extends LOTRWorldGenStructureBase {
 
     public boolean generate(World world, Random random, int i, int j, int k) {
         int i1;
-        Block block;
-        int i12;
         int k1;
+        int i12;
+        Block block;
         if (this.restrictions && (block = world.getBlock(i, j - 1, k)) != Blocks.grass && block != Blocks.stone && block != Blocks.dirt && block != LOTRMod.rock && block != Blocks.snow) {
             return false;
         }
@@ -94,46 +94,46 @@ extends LOTRWorldGenStructureBase {
             }
         }
         for (k1 = k - 6; k1 <= k + 6; ++k1) {
-            for (i12 = i - 6; i12 <= i + 6; ++i12) {
-                boolean flag = Math.abs(k1 - k) == 6 && Math.abs(i12 - i) == 6;
-                for (int j1 = j + 7; !(j1 < j && LOTRMod.isOpaque(world, i12, j1, k1) || j1 < 0); --j1) {
+            for (i1 = i - 6; i1 <= i + 6; ++i1) {
+                boolean flag = Math.abs(k1 - k) == 6 && Math.abs(i1 - i) == 6;
+                for (int j1 = j + 7; !(j1 < j && LOTRMod.isOpaque(world, i1, j1, k1) || j1 < 0); --j1) {
                     if (flag) {
-                        this.setBlockAndNotifyAdequately(world, i12, j1, k1, LOTRMod.pillar, 3);
+                        this.setBlockAndNotifyAdequately(world, i1, j1, k1, LOTRMod.pillar, 3);
                     } else {
-                        if (Math.abs(i12 - i) < 6 && Math.abs(k1 - k) < 6) {
+                        if (Math.abs(i1 - i) < 6 && Math.abs(k1 - k) < 6) {
                             if (j1 >= j + 1 && j1 <= j + 3) {
-                                this.setAir(world, i12, j1, k1);
+                                this.setAir(world, i1, j1, k1);
                                 continue;
                             }
                             if (j1 >= j + 4 && j1 <= j + 7) {
-                                this.setAir(world, i12, j1, k1);
+                                this.setAir(world, i1, j1, k1);
                                 continue;
                             }
                             if (j1 == j) {
-                                this.setBlockAndNotifyAdequately(world, i12, j1, k1, Blocks.planks, 1);
+                                this.setBlockAndNotifyAdequately(world, i1, j1, k1, Blocks.planks, 1);
                                 continue;
                             }
                         }
-                        this.setBlockAndNotifyAdequately(world, i12, j1, k1, LOTRMod.brick, 14);
+                        this.setBlockAndNotifyAdequately(world, i1, j1, k1, LOTRMod.brick, 14);
                     }
                     if (j1 > j) continue;
-                    this.setGrassToDirt(world, i12, j1 - 1, k1);
+                    this.setGrassToDirt(world, i1, j1 - 1, k1);
                 }
             }
         }
-        for (i1 = i - 6; i1 <= i + 6; ++i1) {
-            this.setBlockAndNotifyAdequately(world, i1, j + 8, k - 6, LOTRMod.stairsDwarvenBrick, 2);
-            this.setBlockAndNotifyAdequately(world, i1, j + 8, k + 6, LOTRMod.stairsDwarvenBrick, 3);
+        for (i12 = i - 6; i12 <= i + 6; ++i12) {
+            this.setBlockAndNotifyAdequately(world, i12, j + 8, k - 6, LOTRMod.stairsDwarvenBrick, 2);
+            this.setBlockAndNotifyAdequately(world, i12, j + 8, k + 6, LOTRMod.stairsDwarvenBrick, 3);
         }
         for (k1 = k - 6; k1 <= k + 6; ++k1) {
             this.setBlockAndNotifyAdequately(world, i - 6, j + 8, k1, LOTRMod.stairsDwarvenBrick, 0);
             this.setBlockAndNotifyAdequately(world, i + 6, j + 8, k1, LOTRMod.stairsDwarvenBrick, 1);
         }
         for (k1 = k - 5; k1 <= k + 5; ++k1) {
-            for (i12 = i - 5; i12 <= i + 5; ++i12) {
-                this.setBlockAndNotifyAdequately(world, i12, j + 4, k1, LOTRMod.slabDouble3, 0);
-                this.setBlockAndNotifyAdequately(world, i12, j + 8, k1, LOTRMod.slabDouble3, 0);
-                int i2 = Math.abs(i12 - i);
+            for (i1 = i - 5; i1 <= i + 5; ++i1) {
+                this.setBlockAndNotifyAdequately(world, i1, j + 4, k1, LOTRMod.slabDouble3, 0);
+                this.setBlockAndNotifyAdequately(world, i1, j + 8, k1, LOTRMod.slabDouble3, 0);
+                int i2 = Math.abs(i1 - i);
                 int k2 = Math.abs(k1 - k);
                 int l = -1;
                 if (i2 == 5) {
@@ -144,24 +144,24 @@ extends LOTRWorldGenStructureBase {
                 if (l <= -1) continue;
                 if (l == 1) {
                     for (int j1 = j + 9; j1 <= j + 11; ++j1) {
-                        this.setBlockAndNotifyAdequately(world, i12, j1, k1, LOTRMod.pillar, 3);
+                        this.setBlockAndNotifyAdequately(world, i1, j1, k1, LOTRMod.pillar, 3);
                     }
                     continue;
                 }
-                this.setBlockAndNotifyAdequately(world, i12, j + 9, k1, LOTRMod.wall, 14);
+                this.setBlockAndNotifyAdequately(world, i1, j + 9, k1, LOTRMod.wall, 14);
             }
         }
-        for (i1 = i - 5; i1 <= i + 5; ++i1) {
-            this.setBlockAndNotifyAdequately(world, i1, j + 12, k - 5, LOTRMod.stairsDwarvenBrick, 2);
-            this.setBlockAndNotifyAdequately(world, i1, j + 12, k + 5, LOTRMod.stairsDwarvenBrick, 3);
+        for (i12 = i - 5; i12 <= i + 5; ++i12) {
+            this.setBlockAndNotifyAdequately(world, i12, j + 12, k - 5, LOTRMod.stairsDwarvenBrick, 2);
+            this.setBlockAndNotifyAdequately(world, i12, j + 12, k + 5, LOTRMod.stairsDwarvenBrick, 3);
         }
         for (k1 = k - 5; k1 <= k + 5; ++k1) {
             this.setBlockAndNotifyAdequately(world, i - 5, j + 12, k1, LOTRMod.stairsDwarvenBrick, 0);
             this.setBlockAndNotifyAdequately(world, i + 5, j + 12, k1, LOTRMod.stairsDwarvenBrick, 1);
         }
         for (k1 = k - 4; k1 <= k + 4; ++k1) {
-            for (i12 = i - 4; i12 <= i + 4; ++i12) {
-                this.setBlockAndNotifyAdequately(world, i12, j + 12, k1, LOTRMod.slabSingle, 15);
+            for (i1 = i - 4; i1 <= i + 4; ++i1) {
+                this.setBlockAndNotifyAdequately(world, i1, j + 12, k1, LOTRMod.slabSingle, 15);
             }
         }
         this.setBlockAndNotifyAdequately(world, i, j + 7, k, LOTRMod.chandelier, 11);
@@ -197,25 +197,25 @@ extends LOTRWorldGenStructureBase {
     }
 
     private void generateFacingSouth(World world, Random random, int i, int j, int k) {
-        int k1;
-        int i1;
-        int i12;
+        int j12;
         int i13;
+        int i12;
+        int i1;
+        int k1;
         int j1;
         int j2;
-        int j12;
-        for (i1 = i - 6; i1 <= i + 6; ++i1) {
-            this.setBlockAndNotifyAdequately(world, i1, j + 1, k - 7, LOTRMod.slabSingle3, 0);
-            this.setGrassToDirt(world, i1, j, k - 7);
-            for (j12 = j; !LOTRMod.isOpaque(world, i1, j12, k - 7) && j12 >= 0; --j12) {
-                this.setBlockAndNotifyAdequately(world, i1, j12, k - 7, LOTRMod.pillar, 3);
-                this.setGrassToDirt(world, i1, j12 - 1, k - 7);
+        for (i12 = i - 6; i12 <= i + 6; ++i12) {
+            this.setBlockAndNotifyAdequately(world, i12, j + 1, k - 7, LOTRMod.slabSingle3, 0);
+            this.setGrassToDirt(world, i12, j, k - 7);
+            for (j1 = j; !LOTRMod.isOpaque(world, i12, j1, k - 7) && j1 >= 0; --j1) {
+                this.setBlockAndNotifyAdequately(world, i12, j1, k - 7, LOTRMod.pillar, 3);
+                this.setGrassToDirt(world, i12, j1 - 1, k - 7);
             }
         }
-        for (j1 = j + 1; j1 <= j + 2; ++j1) {
-            this.setAir(world, i, j1, k - 6);
-            this.setBlockAndNotifyAdequately(world, i - 1, j1, k - 7, LOTRMod.pillar, 3);
-            this.setBlockAndNotifyAdequately(world, i + 1, j1, k - 7, LOTRMod.pillar, 3);
+        for (j12 = j + 1; j12 <= j + 2; ++j12) {
+            this.setAir(world, i, j12, k - 6);
+            this.setBlockAndNotifyAdequately(world, i - 1, j12, k - 7, LOTRMod.pillar, 3);
+            this.setBlockAndNotifyAdequately(world, i + 1, j12, k - 7, LOTRMod.pillar, 3);
         }
         this.setBlockAndNotifyAdequately(world, i, j, k - 7, Blocks.planks, 1);
         this.setBlockAndNotifyAdequately(world, i, j, k - 6, Blocks.planks, 1);
@@ -226,114 +226,114 @@ extends LOTRWorldGenStructureBase {
         this.setBlockAndNotifyAdequately(world, i + 1, j + 3, k - 7, LOTRMod.stairsDwarvenBrick, 1);
         this.setBlockAndNotifyAdequately(world, i, j + 4, k - 7, LOTRMod.slabSingle, 7);
         this.placeWallBanner(world, i, j + 6, k - 6, 2, LOTRItemBanner.BannerType.BLUE_MOUNTAINS);
-        for (j1 = j + 1; j1 <= j + 3; ++j1) {
+        for (j12 = j + 1; j12 <= j + 3; ++j12) {
             for (k1 = k - 4; k1 <= k - 1; ++k1) {
-                for (i13 = i - 5; i13 <= i - 1; ++i13) {
-                    this.setBlockAndNotifyAdequately(world, i13, j1, k1, LOTRMod.brick, 14);
+                for (i1 = i - 5; i1 <= i - 1; ++i1) {
+                    this.setBlockAndNotifyAdequately(world, i1, j12, k1, LOTRMod.brick, 14);
                 }
-                for (i13 = i + 1; i13 <= i + 5; ++i13) {
-                    this.setBlockAndNotifyAdequately(world, i13, j1, k1, LOTRMod.brick, 14);
+                for (i1 = i + 1; i1 <= i + 5; ++i1) {
+                    this.setBlockAndNotifyAdequately(world, i1, j12, k1, LOTRMod.brick, 14);
                 }
             }
             for (k1 = k - 2; k1 <= k + 5; ++k1) {
-                this.setBlockAndNotifyAdequately(world, i - 1, j1, k1, LOTRMod.brick, 14);
-                this.setBlockAndNotifyAdequately(world, i + 1, j1, k1, LOTRMod.brick, 14);
+                this.setBlockAndNotifyAdequately(world, i - 1, j12, k1, LOTRMod.brick, 14);
+                this.setBlockAndNotifyAdequately(world, i + 1, j12, k1, LOTRMod.brick, 14);
             }
         }
         this.setBlockAndNotifyAdequately(world, i - 1, j + 1, k + 3, LOTRMod.doorSpruce, 0);
         this.setBlockAndNotifyAdequately(world, i - 1, j + 2, k + 3, LOTRMod.doorSpruce, 8);
         this.setBlockAndNotifyAdequately(world, i + 1, j + 1, k + 3, LOTRMod.doorSpruce, 2);
         this.setBlockAndNotifyAdequately(world, i + 1, j + 2, k + 3, LOTRMod.doorSpruce, 8);
-        for (i1 = i - 5; i1 <= i + 2; i1 += 7) {
-            this.setBlockAndNotifyAdequately(world, i1, j + 1, k + 1, LOTRMod.dwarvenBed, 2);
-            this.setBlockAndNotifyAdequately(world, i1, j + 1, k, LOTRMod.dwarvenBed, 10);
-            this.setBlockAndNotifyAdequately(world, i1 + 3, j + 1, k + 1, LOTRMod.dwarvenBed, 2);
-            this.setBlockAndNotifyAdequately(world, i1 + 3, j + 1, k, LOTRMod.dwarvenBed, 10);
-            this.setBlockAndNotifyAdequately(world, i1 + 1, j + 1, k, (Block)Blocks.chest, 0);
-            this.setBlockAndNotifyAdequately(world, i1 + 2, j + 1, k, (Block)Blocks.chest, 0);
-            LOTRChestContents.fillChest(world, random, i1 + 1, j + 1, k, LOTRChestContents.DWARF_HOUSE_LARDER);
-            LOTRChestContents.fillChest(world, random, i1 + 2, j + 1, k, LOTRChestContents.BLUE_MOUNTAINS_STRONGHOLD);
-            this.setBlockAndNotifyAdequately(world, i1 + 1, j + 3, k + 3, LOTRMod.chandelier, 11);
-            this.setBlockAndNotifyAdequately(world, i1, j + 1, k + 5, Blocks.planks, 1);
-            this.setBlockAndNotifyAdequately(world, i1 + 3, j + 1, k + 5, Blocks.planks, 1);
-            this.placeBarrel(world, random, i1, j + 2, k + 5, 2, LOTRFoods.DWARF_DRINK);
-            this.placeBarrel(world, random, i1 + 3, j + 2, k + 5, 2, LOTRFoods.DWARF_DRINK);
-            this.setBlockAndNotifyAdequately(world, i1 + 1, j + 1, k + 5, Blocks.furnace, 0);
-            this.setBlockMetadata(world, i1 + 1, j + 1, k + 5, 2);
-            this.setBlockAndNotifyAdequately(world, i1 + 2, j + 1, k + 5, Blocks.furnace, 0);
-            this.setBlockMetadata(world, i1 + 2, j + 1, k + 5, 2);
+        for (i12 = i - 5; i12 <= i + 2; i12 += 7) {
+            this.setBlockAndNotifyAdequately(world, i12, j + 1, k + 1, LOTRMod.dwarvenBed, 2);
+            this.setBlockAndNotifyAdequately(world, i12, j + 1, k, LOTRMod.dwarvenBed, 10);
+            this.setBlockAndNotifyAdequately(world, i12 + 3, j + 1, k + 1, LOTRMod.dwarvenBed, 2);
+            this.setBlockAndNotifyAdequately(world, i12 + 3, j + 1, k, LOTRMod.dwarvenBed, 10);
+            this.setBlockAndNotifyAdequately(world, i12 + 1, j + 1, k, (Block)Blocks.chest, 0);
+            this.setBlockAndNotifyAdequately(world, i12 + 2, j + 1, k, (Block)Blocks.chest, 0);
+            LOTRChestContents.fillChest(world, random, i12 + 1, j + 1, k, LOTRChestContents.DWARF_HOUSE_LARDER);
+            LOTRChestContents.fillChest(world, random, i12 + 2, j + 1, k, LOTRChestContents.BLUE_MOUNTAINS_STRONGHOLD);
+            this.setBlockAndNotifyAdequately(world, i12 + 1, j + 3, k + 3, LOTRMod.chandelier, 11);
+            this.setBlockAndNotifyAdequately(world, i12, j + 1, k + 5, Blocks.planks, 1);
+            this.setBlockAndNotifyAdequately(world, i12 + 3, j + 1, k + 5, Blocks.planks, 1);
+            this.placeBarrel(world, random, i12, j + 2, k + 5, 2, LOTRFoods.DWARF_DRINK);
+            this.placeBarrel(world, random, i12 + 3, j + 2, k + 5, 2, LOTRFoods.DWARF_DRINK);
+            this.setBlockAndNotifyAdequately(world, i12 + 1, j + 1, k + 5, Blocks.furnace, 0);
+            this.setBlockMetadata(world, i12 + 1, j + 1, k + 5, 2);
+            this.setBlockAndNotifyAdequately(world, i12 + 2, j + 1, k + 5, Blocks.furnace, 0);
+            this.setBlockMetadata(world, i12 + 2, j + 1, k + 5, 2);
         }
         this.setAir(world, i, j + 4, k - 5);
         int stairX = 1;
-        for (j12 = j + 1; j12 <= j + 4; ++j12) {
+        for (j1 = j + 1; j1 <= j + 4; ++j1) {
             this.setAir(world, i - stairX, j + 4, k - 5);
             this.setAir(world, i + stairX, j + 4, k - 5);
-            this.setBlockAndNotifyAdequately(world, i - stairX, j12, k - 5, LOTRMod.stairsDwarvenBrick, 1);
-            this.setBlockAndNotifyAdequately(world, i + stairX, j12, k - 5, LOTRMod.stairsDwarvenBrick, 0);
-            for (j2 = j12 - 1; j2 > j; --j2) {
+            this.setBlockAndNotifyAdequately(world, i - stairX, j1, k - 5, LOTRMod.stairsDwarvenBrick, 1);
+            this.setBlockAndNotifyAdequately(world, i + stairX, j1, k - 5, LOTRMod.stairsDwarvenBrick, 0);
+            for (j2 = j1 - 1; j2 > j; --j2) {
                 this.setBlockAndNotifyAdequately(world, i - stairX, j2, k - 5, LOTRMod.brick, 6);
                 this.setBlockAndNotifyAdequately(world, i + stairX, j2, k - 5, LOTRMod.brick, 6);
             }
             ++stairX;
         }
-        for (j12 = j + 1; j12 <= j + 3; ++j12) {
-            this.setBlockAndNotifyAdequately(world, i - stairX, j12, k - 5, LOTRMod.brick, 6);
-            this.setBlockAndNotifyAdequately(world, i + stairX, j12, k - 5, LOTRMod.brick, 6);
+        for (j1 = j + 1; j1 <= j + 3; ++j1) {
+            this.setBlockAndNotifyAdequately(world, i - stairX, j1, k - 5, LOTRMod.brick, 6);
+            this.setBlockAndNotifyAdequately(world, i + stairX, j1, k - 5, LOTRMod.brick, 6);
         }
-        for (i12 = i - 5; i12 <= i + 5; i12 += 10) {
-            this.setBlockAndNotifyAdequately(world, i12, j + 5, k - 2, Blocks.planks, 1);
-            this.setBlockAndNotifyAdequately(world, i12, j + 6, k - 2, (Block)Blocks.wooden_slab, 1);
-            this.setBlockAndNotifyAdequately(world, i12, j + 5, k + 2, Blocks.planks, 1);
-            this.setBlockAndNotifyAdequately(world, i12, j + 6, k + 2, (Block)Blocks.wooden_slab, 1);
-            this.setBlockAndNotifyAdequately(world, i12, j + 5, k, LOTRMod.blueDwarvenTable, 0);
-            this.setBlockAndNotifyAdequately(world, i12, j + 5, k - 1, LOTRMod.dwarvenForge, 0);
-            this.setBlockAndNotifyAdequately(world, i12, j + 5, k + 1, LOTRMod.dwarvenForge, 0);
+        for (i13 = i - 5; i13 <= i + 5; i13 += 10) {
+            this.setBlockAndNotifyAdequately(world, i13, j + 5, k - 2, Blocks.planks, 1);
+            this.setBlockAndNotifyAdequately(world, i13, j + 6, k - 2, (Block)Blocks.wooden_slab, 1);
+            this.setBlockAndNotifyAdequately(world, i13, j + 5, k + 2, Blocks.planks, 1);
+            this.setBlockAndNotifyAdequately(world, i13, j + 6, k + 2, (Block)Blocks.wooden_slab, 1);
+            this.setBlockAndNotifyAdequately(world, i13, j + 5, k, LOTRMod.blueDwarvenTable, 0);
+            this.setBlockAndNotifyAdequately(world, i13, j + 5, k - 1, LOTRMod.dwarvenForge, 0);
+            this.setBlockAndNotifyAdequately(world, i13, j + 5, k + 1, LOTRMod.dwarvenForge, 0);
         }
         this.setBlockAndNotifyAdequately(world, i - 3, j + 6, k + 6, LOTRMod.brick3, 12);
         this.setBlockAndNotifyAdequately(world, i + 3, j + 6, k + 6, LOTRMod.brick3, 12);
         stairX = 4;
-        for (j12 = j + 5; j12 <= j + 8; ++j12) {
+        for (j1 = j + 5; j1 <= j + 8; ++j1) {
             this.setAir(world, i - stairX, j + 8, k - 4);
             this.setAir(world, i + stairX, j + 8, k - 4);
-            this.setBlockAndNotifyAdequately(world, i - stairX, j12, k - 4, LOTRMod.stairsDwarvenBrick, 0);
-            this.setBlockAndNotifyAdequately(world, i + stairX, j12, k - 4, LOTRMod.stairsDwarvenBrick, 1);
-            for (j2 = j12 - 1; j2 > j + 4; --j2) {
+            this.setBlockAndNotifyAdequately(world, i - stairX, j1, k - 4, LOTRMod.stairsDwarvenBrick, 0);
+            this.setBlockAndNotifyAdequately(world, i + stairX, j1, k - 4, LOTRMod.stairsDwarvenBrick, 1);
+            for (j2 = j1 - 1; j2 > j + 4; --j2) {
                 this.setBlockAndNotifyAdequately(world, i - stairX, j2, k - 4, LOTRMod.brick, 6);
                 this.setBlockAndNotifyAdequately(world, i + stairX, j2, k - 4, LOTRMod.brick, 6);
             }
             --stairX;
         }
-        for (j12 = j + 5; j12 <= j + 7; ++j12) {
-            this.setBlockAndNotifyAdequately(world, i, j12, k - 4, LOTRMod.brick, 6);
+        for (j1 = j + 5; j1 <= j + 7; ++j1) {
+            this.setBlockAndNotifyAdequately(world, i, j1, k - 4, LOTRMod.brick, 6);
         }
         this.setBlockAndNotifyAdequately(world, i, j + 6, k - 4, LOTRMod.brick3, 12);
         for (k1 = k + 7; k1 <= k + 8; ++k1) {
-            for (i13 = i - 4; i13 <= i + 4; ++i13) {
-                this.placeBalconySection(world, i13, j, k1, false, false);
+            for (i1 = i - 4; i1 <= i + 4; ++i1) {
+                this.placeBalconySection(world, i1, j, k1, false, false);
             }
             this.placeBalconySection(world, i - 5, j, k1, true, false);
             this.placeBalconySection(world, i + 5, j, k1, true, false);
         }
-        for (i12 = i - 2; i12 <= i + 2; ++i12) {
-            this.placeBalconySection(world, i12, j, k + 9, false, false);
+        for (i13 = i - 2; i13 <= i + 2; ++i13) {
+            this.placeBalconySection(world, i13, j, k + 9, false, false);
         }
-        for (i12 = i - 5; i12 <= i + 5; ++i12) {
-            if (Math.abs(i12 - i) < 3) continue;
-            this.placeBalconySection(world, i12, j, k + 9, true, false);
+        for (i13 = i - 5; i13 <= i + 5; ++i13) {
+            if (Math.abs(i13 - i) < 3) continue;
+            this.placeBalconySection(world, i13, j, k + 9, true, false);
         }
-        for (i12 = i - 1; i12 <= i + 1; ++i12) {
-            this.placeBalconySection(world, i12, j, k + 10, false, false);
+        for (i13 = i - 1; i13 <= i + 1; ++i13) {
+            this.placeBalconySection(world, i13, j, k + 10, false, false);
         }
-        for (i12 = i - 3; i12 <= i + 3; ++i12) {
-            if (Math.abs(i12 - i) < 2) continue;
-            this.placeBalconySection(world, i12, j, k + 10, true, false);
+        for (i13 = i - 3; i13 <= i + 3; ++i13) {
+            if (Math.abs(i13 - i) < 2) continue;
+            this.placeBalconySection(world, i13, j, k + 10, true, false);
         }
-        for (i12 = i - 2; i12 <= i + 2; ++i12) {
-            if (Math.abs(i12 - i) == 0) {
-                this.placeBalconySection(world, i12, j, k + 11, true, true);
+        for (i13 = i - 2; i13 <= i + 2; ++i13) {
+            if (Math.abs(i13 - i) == 0) {
+                this.placeBalconySection(world, i13, j, k + 11, true, true);
                 continue;
             }
-            this.placeBalconySection(world, i12, j, k + 11, true, false);
+            this.placeBalconySection(world, i13, j, k + 11, true, false);
         }
         this.setBlockAndNotifyAdequately(world, i, j + 4, k + 6, LOTRMod.slabDouble3, 0);
         this.setAir(world, i, j + 5, k + 6);
@@ -342,42 +342,42 @@ extends LOTRWorldGenStructureBase {
         this.setBlockAndNotifyAdequately(world, i, j + 1, k + 6, LOTRMod.doorSpruce, 3);
         this.setBlockAndNotifyAdequately(world, i, j + 2, k + 6, LOTRMod.doorSpruce, 8);
         this.setBlockAndNotifyAdequately(world, i, j + 3, k + 8, LOTRMod.chandelier, 11);
-        for (j12 = j + 1; j12 <= j + 2; ++j12) {
+        for (j1 = j + 1; j1 <= j + 2; ++j1) {
             for (int k12 = k + 7; k12 <= k + 8; ++k12) {
-                this.placeRandomOre(world, random, i - 4, j12, k12);
-                this.placeRandomOre(world, random, i - 3, j12, k12);
-                this.placeRandomOre(world, random, i + 3, j12, k12);
-                this.placeRandomOre(world, random, i + 4, j12, k12);
+                this.placeRandomOre(world, random, i - 4, j1, k12);
+                this.placeRandomOre(world, random, i - 3, j1, k12);
+                this.placeRandomOre(world, random, i + 3, j1, k12);
+                this.placeRandomOre(world, random, i + 4, j1, k12);
             }
-            this.placeRandomOre(world, random, i - 2, j12, k + 9);
-            this.placeRandomOre(world, random, i + 2, j12, k + 9);
-            for (i13 = i - 1; i13 <= i + 1; ++i13) {
-                this.placeRandomOre(world, random, i13, j12, k + 10);
+            this.placeRandomOre(world, random, i - 2, j1, k + 9);
+            this.placeRandomOre(world, random, i + 2, j1, k + 9);
+            for (i1 = i - 1; i1 <= i + 1; ++i1) {
+                this.placeRandomOre(world, random, i1, j1, k + 10);
             }
         }
         this.setBlockAndNotifyAdequately(world, i, j + 9, k + 3, LOTRMod.commandTable, 0);
     }
 
     private void generateFacingWest(World world, Random random, int i, int j, int k) {
-        int k1;
+        int j12;
         int k12;
-        int k13;
         int i1;
         int j1;
         int j2;
-        int j12;
-        for (k13 = k - 6; k13 <= k + 6; ++k13) {
-            this.setBlockAndNotifyAdequately(world, i + 7, j + 1, k13, LOTRMod.slabSingle3, 0);
-            this.setGrassToDirt(world, i + 7, j, k13);
-            for (j12 = j; !LOTRMod.isOpaque(world, i + 7, j12, k13) && j12 >= 0; --j12) {
-                this.setBlockAndNotifyAdequately(world, i + 7, j12, k13, LOTRMod.pillar, 3);
-                this.setGrassToDirt(world, i + 7, j12 - 1, k13);
+        int k1;
+        int k13;
+        for (k12 = k - 6; k12 <= k + 6; ++k12) {
+            this.setBlockAndNotifyAdequately(world, i + 7, j + 1, k12, LOTRMod.slabSingle3, 0);
+            this.setGrassToDirt(world, i + 7, j, k12);
+            for (j1 = j; !LOTRMod.isOpaque(world, i + 7, j1, k12) && j1 >= 0; --j1) {
+                this.setBlockAndNotifyAdequately(world, i + 7, j1, k12, LOTRMod.pillar, 3);
+                this.setGrassToDirt(world, i + 7, j1 - 1, k12);
             }
         }
-        for (j1 = j + 1; j1 <= j + 2; ++j1) {
-            this.setAir(world, i + 6, j1, k);
-            this.setBlockAndNotifyAdequately(world, i + 7, j1, k - 1, LOTRMod.pillar, 3);
-            this.setBlockAndNotifyAdequately(world, i + 7, j1, k + 1, LOTRMod.pillar, 3);
+        for (j12 = j + 1; j12 <= j + 2; ++j12) {
+            this.setAir(world, i + 6, j12, k);
+            this.setBlockAndNotifyAdequately(world, i + 7, j12, k - 1, LOTRMod.pillar, 3);
+            this.setBlockAndNotifyAdequately(world, i + 7, j12, k + 1, LOTRMod.pillar, 3);
         }
         this.setBlockAndNotifyAdequately(world, i + 7, j, k, Blocks.planks, 1);
         this.setBlockAndNotifyAdequately(world, i + 6, j, k, Blocks.planks, 1);
@@ -388,59 +388,59 @@ extends LOTRWorldGenStructureBase {
         this.setBlockAndNotifyAdequately(world, i + 7, j + 3, k + 1, LOTRMod.stairsDwarvenBrick, 3);
         this.setBlockAndNotifyAdequately(world, i + 7, j + 4, k, LOTRMod.slabSingle, 7);
         this.placeWallBanner(world, i + 6, j + 6, k, 3, LOTRItemBanner.BannerType.BLUE_MOUNTAINS);
-        for (j1 = j + 1; j1 <= j + 3; ++j1) {
+        for (j12 = j + 1; j12 <= j + 3; ++j12) {
             for (i1 = i + 4; i1 >= i + 1; --i1) {
-                for (k12 = k - 5; k12 <= k - 1; ++k12) {
-                    this.setBlockAndNotifyAdequately(world, i1, j1, k12, LOTRMod.brick, 14);
+                for (k13 = k - 5; k13 <= k - 1; ++k13) {
+                    this.setBlockAndNotifyAdequately(world, i1, j12, k13, LOTRMod.brick, 14);
                 }
-                for (k12 = k + 1; k12 <= k + 5; ++k12) {
-                    this.setBlockAndNotifyAdequately(world, i1, j1, k12, LOTRMod.brick, 14);
+                for (k13 = k + 1; k13 <= k + 5; ++k13) {
+                    this.setBlockAndNotifyAdequately(world, i1, j12, k13, LOTRMod.brick, 14);
                 }
             }
             for (i1 = i + 2; i1 >= i - 5; --i1) {
-                this.setBlockAndNotifyAdequately(world, i1, j1, k - 1, LOTRMod.brick, 14);
-                this.setBlockAndNotifyAdequately(world, i1, j1, k + 1, LOTRMod.brick, 14);
+                this.setBlockAndNotifyAdequately(world, i1, j12, k - 1, LOTRMod.brick, 14);
+                this.setBlockAndNotifyAdequately(world, i1, j12, k + 1, LOTRMod.brick, 14);
             }
         }
         this.setBlockAndNotifyAdequately(world, i - 3, j + 1, k - 1, LOTRMod.doorSpruce, 1);
         this.setBlockAndNotifyAdequately(world, i - 3, j + 2, k - 1, LOTRMod.doorSpruce, 8);
         this.setBlockAndNotifyAdequately(world, i - 3, j + 1, k + 1, LOTRMod.doorSpruce, 3);
         this.setBlockAndNotifyAdequately(world, i - 3, j + 2, k + 1, LOTRMod.doorSpruce, 8);
-        for (k13 = k - 5; k13 <= k + 2; k13 += 7) {
-            this.setBlockAndNotifyAdequately(world, i - 1, j + 1, k13, LOTRMod.dwarvenBed, 3);
-            this.setBlockAndNotifyAdequately(world, i, j + 1, k13, LOTRMod.dwarvenBed, 11);
-            this.setBlockAndNotifyAdequately(world, i - 1, j + 1, k13 + 3, LOTRMod.dwarvenBed, 3);
-            this.setBlockAndNotifyAdequately(world, i, j + 1, k13 + 3, LOTRMod.dwarvenBed, 11);
-            this.setBlockAndNotifyAdequately(world, i, j + 1, k13 + 1, (Block)Blocks.chest, 0);
-            this.setBlockAndNotifyAdequately(world, i, j + 1, k13 + 2, (Block)Blocks.chest, 0);
-            LOTRChestContents.fillChest(world, random, i, j + 1, k13 + 1, LOTRChestContents.DWARF_HOUSE_LARDER);
-            LOTRChestContents.fillChest(world, random, i, j + 1, k13 + 2, LOTRChestContents.BLUE_MOUNTAINS_STRONGHOLD);
-            this.setBlockAndNotifyAdequately(world, i - 3, j + 3, k13 + 1, LOTRMod.chandelier, 11);
-            this.setBlockAndNotifyAdequately(world, i - 5, j + 1, k13, Blocks.planks, 1);
-            this.setBlockAndNotifyAdequately(world, i - 5, j + 1, k13 + 3, Blocks.planks, 1);
-            this.placeBarrel(world, random, i - 5, j + 2, k13, 5, LOTRFoods.DWARF_DRINK);
-            this.placeBarrel(world, random, i - 5, j + 2, k13 + 3, 5, LOTRFoods.DWARF_DRINK);
-            this.setBlockAndNotifyAdequately(world, i - 5, j + 1, k13 + 1, Blocks.furnace, 0);
-            this.setBlockMetadata(world, i - 5, j + 1, k13 + 1, 5);
-            this.setBlockAndNotifyAdequately(world, i - 5, j + 1, k13 + 2, Blocks.furnace, 0);
-            this.setBlockMetadata(world, i - 5, j + 1, k13 + 2, 5);
+        for (k12 = k - 5; k12 <= k + 2; k12 += 7) {
+            this.setBlockAndNotifyAdequately(world, i - 1, j + 1, k12, LOTRMod.dwarvenBed, 3);
+            this.setBlockAndNotifyAdequately(world, i, j + 1, k12, LOTRMod.dwarvenBed, 11);
+            this.setBlockAndNotifyAdequately(world, i - 1, j + 1, k12 + 3, LOTRMod.dwarvenBed, 3);
+            this.setBlockAndNotifyAdequately(world, i, j + 1, k12 + 3, LOTRMod.dwarvenBed, 11);
+            this.setBlockAndNotifyAdequately(world, i, j + 1, k12 + 1, (Block)Blocks.chest, 0);
+            this.setBlockAndNotifyAdequately(world, i, j + 1, k12 + 2, (Block)Blocks.chest, 0);
+            LOTRChestContents.fillChest(world, random, i, j + 1, k12 + 1, LOTRChestContents.DWARF_HOUSE_LARDER);
+            LOTRChestContents.fillChest(world, random, i, j + 1, k12 + 2, LOTRChestContents.BLUE_MOUNTAINS_STRONGHOLD);
+            this.setBlockAndNotifyAdequately(world, i - 3, j + 3, k12 + 1, LOTRMod.chandelier, 11);
+            this.setBlockAndNotifyAdequately(world, i - 5, j + 1, k12, Blocks.planks, 1);
+            this.setBlockAndNotifyAdequately(world, i - 5, j + 1, k12 + 3, Blocks.planks, 1);
+            this.placeBarrel(world, random, i - 5, j + 2, k12, 5, LOTRFoods.DWARF_DRINK);
+            this.placeBarrel(world, random, i - 5, j + 2, k12 + 3, 5, LOTRFoods.DWARF_DRINK);
+            this.setBlockAndNotifyAdequately(world, i - 5, j + 1, k12 + 1, Blocks.furnace, 0);
+            this.setBlockMetadata(world, i - 5, j + 1, k12 + 1, 5);
+            this.setBlockAndNotifyAdequately(world, i - 5, j + 1, k12 + 2, Blocks.furnace, 0);
+            this.setBlockMetadata(world, i - 5, j + 1, k12 + 2, 5);
         }
         this.setAir(world, i + 5, j + 4, k);
         int stairX = 1;
-        for (j12 = j + 1; j12 <= j + 4; ++j12) {
+        for (j1 = j + 1; j1 <= j + 4; ++j1) {
             this.setAir(world, i + 5, j + 4, k - stairX);
             this.setAir(world, i + 5, j + 4, k + stairX);
-            this.setBlockAndNotifyAdequately(world, i + 5, j12, k - stairX, LOTRMod.stairsDwarvenBrick, 3);
-            this.setBlockAndNotifyAdequately(world, i + 5, j12, k + stairX, LOTRMod.stairsDwarvenBrick, 2);
-            for (j2 = j12 - 1; j2 > j; --j2) {
+            this.setBlockAndNotifyAdequately(world, i + 5, j1, k - stairX, LOTRMod.stairsDwarvenBrick, 3);
+            this.setBlockAndNotifyAdequately(world, i + 5, j1, k + stairX, LOTRMod.stairsDwarvenBrick, 2);
+            for (j2 = j1 - 1; j2 > j; --j2) {
                 this.setBlockAndNotifyAdequately(world, i + 5, j2, k - stairX, LOTRMod.brick, 6);
                 this.setBlockAndNotifyAdequately(world, i + 5, j2, k + stairX, LOTRMod.brick, 6);
             }
             ++stairX;
         }
-        for (j12 = j + 1; j12 <= j + 3; ++j12) {
-            this.setBlockAndNotifyAdequately(world, i + 5, j12, k - stairX, LOTRMod.brick, 6);
-            this.setBlockAndNotifyAdequately(world, i + 5, j12, k + stairX, LOTRMod.brick, 6);
+        for (j1 = j + 1; j1 <= j + 3; ++j1) {
+            this.setBlockAndNotifyAdequately(world, i + 5, j1, k - stairX, LOTRMod.brick, 6);
+            this.setBlockAndNotifyAdequately(world, i + 5, j1, k + stairX, LOTRMod.brick, 6);
         }
         for (k1 = k - 5; k1 <= k + 5; k1 += 10) {
             this.setBlockAndNotifyAdequately(world, i - 2, j + 5, k1, Blocks.planks, 1);
@@ -454,24 +454,24 @@ extends LOTRWorldGenStructureBase {
         this.setBlockAndNotifyAdequately(world, i - 6, j + 6, k - 3, LOTRMod.brick3, 12);
         this.setBlockAndNotifyAdequately(world, i - 6, j + 6, k + 3, LOTRMod.brick3, 12);
         stairX = 4;
-        for (j12 = j + 5; j12 <= j + 8; ++j12) {
+        for (j1 = j + 5; j1 <= j + 8; ++j1) {
             this.setAir(world, i + 4, j + 8, k - stairX);
             this.setAir(world, i + 4, j + 8, k + stairX);
-            this.setBlockAndNotifyAdequately(world, i + 4, j12, k - stairX, LOTRMod.stairsDwarvenBrick, 2);
-            this.setBlockAndNotifyAdequately(world, i + 4, j12, k + stairX, LOTRMod.stairsDwarvenBrick, 3);
-            for (j2 = j12 - 1; j2 > j + 4; --j2) {
+            this.setBlockAndNotifyAdequately(world, i + 4, j1, k - stairX, LOTRMod.stairsDwarvenBrick, 2);
+            this.setBlockAndNotifyAdequately(world, i + 4, j1, k + stairX, LOTRMod.stairsDwarvenBrick, 3);
+            for (j2 = j1 - 1; j2 > j + 4; --j2) {
                 this.setBlockAndNotifyAdequately(world, i + 4, j2, k - stairX, LOTRMod.brick, 6);
                 this.setBlockAndNotifyAdequately(world, i + 4, j2, k + stairX, LOTRMod.brick, 6);
             }
             --stairX;
         }
-        for (j12 = j + 5; j12 <= j + 7; ++j12) {
-            this.setBlockAndNotifyAdequately(world, i + 4, j12, k, LOTRMod.brick, 6);
+        for (j1 = j + 5; j1 <= j + 7; ++j1) {
+            this.setBlockAndNotifyAdequately(world, i + 4, j1, k, LOTRMod.brick, 6);
         }
         this.setBlockAndNotifyAdequately(world, i + 4, j + 6, k, LOTRMod.brick3, 12);
         for (i1 = i - 7; i1 >= i - 8; --i1) {
-            for (k12 = k - 4; k12 <= k + 4; ++k12) {
-                this.placeBalconySection(world, i1, j, k12, false, false);
+            for (k13 = k - 4; k13 <= k + 4; ++k13) {
+                this.placeBalconySection(world, i1, j, k13, false, false);
             }
             this.placeBalconySection(world, i1, j, k - 5, true, false);
             this.placeBalconySection(world, i1, j, k + 5, true, false);
@@ -504,42 +504,42 @@ extends LOTRWorldGenStructureBase {
         this.setBlockAndNotifyAdequately(world, i - 6, j + 1, k, LOTRMod.doorSpruce, 0);
         this.setBlockAndNotifyAdequately(world, i - 6, j + 2, k, LOTRMod.doorSpruce, 8);
         this.setBlockAndNotifyAdequately(world, i - 8, j + 3, k, LOTRMod.chandelier, 11);
-        for (j12 = j + 1; j12 <= j + 2; ++j12) {
+        for (j1 = j + 1; j1 <= j + 2; ++j1) {
             for (int i12 = i - 7; i12 >= i - 8; --i12) {
-                this.placeRandomOre(world, random, i12, j12, k - 4);
-                this.placeRandomOre(world, random, i12, j12, k - 3);
-                this.placeRandomOre(world, random, i12, j12, k + 3);
-                this.placeRandomOre(world, random, i12, j12, k + 4);
+                this.placeRandomOre(world, random, i12, j1, k - 4);
+                this.placeRandomOre(world, random, i12, j1, k - 3);
+                this.placeRandomOre(world, random, i12, j1, k + 3);
+                this.placeRandomOre(world, random, i12, j1, k + 4);
             }
-            this.placeRandomOre(world, random, i - 9, j12, k - 2);
-            this.placeRandomOre(world, random, i - 9, j12, k + 2);
-            for (k12 = k - 1; k12 <= k + 1; ++k12) {
-                this.placeRandomOre(world, random, i - 10, j12, k12);
+            this.placeRandomOre(world, random, i - 9, j1, k - 2);
+            this.placeRandomOre(world, random, i - 9, j1, k + 2);
+            for (k13 = k - 1; k13 <= k + 1; ++k13) {
+                this.placeRandomOre(world, random, i - 10, j1, k13);
             }
         }
         this.setBlockAndNotifyAdequately(world, i - 3, j + 9, k, LOTRMod.commandTable, 0);
     }
 
     private void generateFacingNorth(World world, Random random, int i, int j, int k) {
-        int k1;
-        int i1;
-        int i12;
+        int j12;
         int i13;
+        int i12;
+        int i1;
+        int k1;
         int j1;
         int j2;
-        int j12;
-        for (i1 = i - 6; i1 <= i + 6; ++i1) {
-            this.setBlockAndNotifyAdequately(world, i1, j + 1, k + 7, LOTRMod.slabSingle3, 0);
-            this.setGrassToDirt(world, i1, j, k + 7);
-            for (j12 = j; !LOTRMod.isOpaque(world, i1, j12, k + 7) && j12 >= 0; --j12) {
-                this.setBlockAndNotifyAdequately(world, i1, j12, k + 7, LOTRMod.pillar, 3);
-                this.setGrassToDirt(world, i1, j12 - 1, k + 7);
+        for (i12 = i - 6; i12 <= i + 6; ++i12) {
+            this.setBlockAndNotifyAdequately(world, i12, j + 1, k + 7, LOTRMod.slabSingle3, 0);
+            this.setGrassToDirt(world, i12, j, k + 7);
+            for (j1 = j; !LOTRMod.isOpaque(world, i12, j1, k + 7) && j1 >= 0; --j1) {
+                this.setBlockAndNotifyAdequately(world, i12, j1, k + 7, LOTRMod.pillar, 3);
+                this.setGrassToDirt(world, i12, j1 - 1, k + 7);
             }
         }
-        for (j1 = j + 1; j1 <= j + 2; ++j1) {
-            this.setAir(world, i, j1, k + 6);
-            this.setBlockAndNotifyAdequately(world, i - 1, j1, k + 7, LOTRMod.pillar, 3);
-            this.setBlockAndNotifyAdequately(world, i + 1, j1, k + 7, LOTRMod.pillar, 3);
+        for (j12 = j + 1; j12 <= j + 2; ++j12) {
+            this.setAir(world, i, j12, k + 6);
+            this.setBlockAndNotifyAdequately(world, i - 1, j12, k + 7, LOTRMod.pillar, 3);
+            this.setBlockAndNotifyAdequately(world, i + 1, j12, k + 7, LOTRMod.pillar, 3);
         }
         this.setBlockAndNotifyAdequately(world, i, j, k + 7, Blocks.planks, 1);
         this.setBlockAndNotifyAdequately(world, i, j, k + 6, Blocks.planks, 1);
@@ -550,114 +550,114 @@ extends LOTRWorldGenStructureBase {
         this.setBlockAndNotifyAdequately(world, i + 1, j + 3, k + 7, LOTRMod.stairsDwarvenBrick, 1);
         this.setBlockAndNotifyAdequately(world, i, j + 4, k + 7, LOTRMod.slabSingle, 7);
         this.placeWallBanner(world, i, j + 6, k + 6, 0, LOTRItemBanner.BannerType.BLUE_MOUNTAINS);
-        for (j1 = j + 1; j1 <= j + 3; ++j1) {
+        for (j12 = j + 1; j12 <= j + 3; ++j12) {
             for (k1 = k + 4; k1 >= k + 1; --k1) {
-                for (i13 = i - 5; i13 <= i - 1; ++i13) {
-                    this.setBlockAndNotifyAdequately(world, i13, j1, k1, LOTRMod.brick, 14);
+                for (i1 = i - 5; i1 <= i - 1; ++i1) {
+                    this.setBlockAndNotifyAdequately(world, i1, j12, k1, LOTRMod.brick, 14);
                 }
-                for (i13 = i + 1; i13 <= i + 5; ++i13) {
-                    this.setBlockAndNotifyAdequately(world, i13, j1, k1, LOTRMod.brick, 14);
+                for (i1 = i + 1; i1 <= i + 5; ++i1) {
+                    this.setBlockAndNotifyAdequately(world, i1, j12, k1, LOTRMod.brick, 14);
                 }
             }
             for (k1 = k + 2; k1 >= k - 5; --k1) {
-                this.setBlockAndNotifyAdequately(world, i - 1, j1, k1, LOTRMod.brick, 14);
-                this.setBlockAndNotifyAdequately(world, i + 1, j1, k1, LOTRMod.brick, 14);
+                this.setBlockAndNotifyAdequately(world, i - 1, j12, k1, LOTRMod.brick, 14);
+                this.setBlockAndNotifyAdequately(world, i + 1, j12, k1, LOTRMod.brick, 14);
             }
         }
         this.setBlockAndNotifyAdequately(world, i - 1, j + 1, k - 3, LOTRMod.doorSpruce, 0);
         this.setBlockAndNotifyAdequately(world, i - 1, j + 2, k - 3, LOTRMod.doorSpruce, 8);
         this.setBlockAndNotifyAdequately(world, i + 1, j + 1, k - 3, LOTRMod.doorSpruce, 2);
         this.setBlockAndNotifyAdequately(world, i + 1, j + 2, k - 3, LOTRMod.doorSpruce, 8);
-        for (i1 = i - 5; i1 <= i + 2; i1 += 7) {
-            this.setBlockAndNotifyAdequately(world, i1, j + 1, k - 1, LOTRMod.dwarvenBed, 0);
-            this.setBlockAndNotifyAdequately(world, i1, j + 1, k, LOTRMod.dwarvenBed, 8);
-            this.setBlockAndNotifyAdequately(world, i1 + 3, j + 1, k - 1, LOTRMod.dwarvenBed, 0);
-            this.setBlockAndNotifyAdequately(world, i1 + 3, j + 1, k, LOTRMod.dwarvenBed, 8);
-            this.setBlockAndNotifyAdequately(world, i1 + 1, j + 1, k, (Block)Blocks.chest, 0);
-            this.setBlockAndNotifyAdequately(world, i1 + 2, j + 1, k, (Block)Blocks.chest, 0);
-            LOTRChestContents.fillChest(world, random, i1 + 1, j + 1, k, LOTRChestContents.DWARF_HOUSE_LARDER);
-            LOTRChestContents.fillChest(world, random, i1 + 2, j + 1, k, LOTRChestContents.BLUE_MOUNTAINS_STRONGHOLD);
-            this.setBlockAndNotifyAdequately(world, i1 + 1, j + 3, k - 3, LOTRMod.chandelier, 11);
-            this.setBlockAndNotifyAdequately(world, i1, j + 1, k - 5, Blocks.planks, 1);
-            this.setBlockAndNotifyAdequately(world, i1 + 3, j + 1, k - 5, Blocks.planks, 1);
-            this.placeBarrel(world, random, i1, j + 2, k - 5, 3, LOTRFoods.DWARF_DRINK);
-            this.placeBarrel(world, random, i1 + 3, j + 2, k - 5, 3, LOTRFoods.DWARF_DRINK);
-            this.setBlockAndNotifyAdequately(world, i1 + 1, j + 1, k - 5, Blocks.furnace, 0);
-            this.setBlockMetadata(world, i1 + 1, j + 1, k - 5, 3);
-            this.setBlockAndNotifyAdequately(world, i1 + 2, j + 1, k - 5, Blocks.furnace, 0);
-            this.setBlockMetadata(world, i1 + 2, j + 1, k - 5, 3);
+        for (i12 = i - 5; i12 <= i + 2; i12 += 7) {
+            this.setBlockAndNotifyAdequately(world, i12, j + 1, k - 1, LOTRMod.dwarvenBed, 0);
+            this.setBlockAndNotifyAdequately(world, i12, j + 1, k, LOTRMod.dwarvenBed, 8);
+            this.setBlockAndNotifyAdequately(world, i12 + 3, j + 1, k - 1, LOTRMod.dwarvenBed, 0);
+            this.setBlockAndNotifyAdequately(world, i12 + 3, j + 1, k, LOTRMod.dwarvenBed, 8);
+            this.setBlockAndNotifyAdequately(world, i12 + 1, j + 1, k, (Block)Blocks.chest, 0);
+            this.setBlockAndNotifyAdequately(world, i12 + 2, j + 1, k, (Block)Blocks.chest, 0);
+            LOTRChestContents.fillChest(world, random, i12 + 1, j + 1, k, LOTRChestContents.DWARF_HOUSE_LARDER);
+            LOTRChestContents.fillChest(world, random, i12 + 2, j + 1, k, LOTRChestContents.BLUE_MOUNTAINS_STRONGHOLD);
+            this.setBlockAndNotifyAdequately(world, i12 + 1, j + 3, k - 3, LOTRMod.chandelier, 11);
+            this.setBlockAndNotifyAdequately(world, i12, j + 1, k - 5, Blocks.planks, 1);
+            this.setBlockAndNotifyAdequately(world, i12 + 3, j + 1, k - 5, Blocks.planks, 1);
+            this.placeBarrel(world, random, i12, j + 2, k - 5, 3, LOTRFoods.DWARF_DRINK);
+            this.placeBarrel(world, random, i12 + 3, j + 2, k - 5, 3, LOTRFoods.DWARF_DRINK);
+            this.setBlockAndNotifyAdequately(world, i12 + 1, j + 1, k - 5, Blocks.furnace, 0);
+            this.setBlockMetadata(world, i12 + 1, j + 1, k - 5, 3);
+            this.setBlockAndNotifyAdequately(world, i12 + 2, j + 1, k - 5, Blocks.furnace, 0);
+            this.setBlockMetadata(world, i12 + 2, j + 1, k - 5, 3);
         }
         this.setAir(world, i, j + 4, k + 5);
         int stairX = 1;
-        for (j12 = j + 1; j12 <= j + 4; ++j12) {
+        for (j1 = j + 1; j1 <= j + 4; ++j1) {
             this.setAir(world, i - stairX, j + 4, k + 5);
             this.setAir(world, i + stairX, j + 4, k + 5);
-            this.setBlockAndNotifyAdequately(world, i - stairX, j12, k + 5, LOTRMod.stairsDwarvenBrick, 1);
-            this.setBlockAndNotifyAdequately(world, i + stairX, j12, k + 5, LOTRMod.stairsDwarvenBrick, 0);
-            for (j2 = j12 - 1; j2 > j; --j2) {
+            this.setBlockAndNotifyAdequately(world, i - stairX, j1, k + 5, LOTRMod.stairsDwarvenBrick, 1);
+            this.setBlockAndNotifyAdequately(world, i + stairX, j1, k + 5, LOTRMod.stairsDwarvenBrick, 0);
+            for (j2 = j1 - 1; j2 > j; --j2) {
                 this.setBlockAndNotifyAdequately(world, i - stairX, j2, k + 5, LOTRMod.brick, 6);
                 this.setBlockAndNotifyAdequately(world, i + stairX, j2, k + 5, LOTRMod.brick, 6);
             }
             ++stairX;
         }
-        for (j12 = j + 1; j12 <= j + 3; ++j12) {
-            this.setBlockAndNotifyAdequately(world, i - stairX, j12, k + 5, LOTRMod.brick, 6);
-            this.setBlockAndNotifyAdequately(world, i + stairX, j12, k + 5, LOTRMod.brick, 6);
+        for (j1 = j + 1; j1 <= j + 3; ++j1) {
+            this.setBlockAndNotifyAdequately(world, i - stairX, j1, k + 5, LOTRMod.brick, 6);
+            this.setBlockAndNotifyAdequately(world, i + stairX, j1, k + 5, LOTRMod.brick, 6);
         }
-        for (i12 = i - 5; i12 <= i + 5; i12 += 10) {
-            this.setBlockAndNotifyAdequately(world, i12, j + 5, k + 2, Blocks.planks, 1);
-            this.setBlockAndNotifyAdequately(world, i12, j + 6, k + 2, (Block)Blocks.wooden_slab, 1);
-            this.setBlockAndNotifyAdequately(world, i12, j + 5, k - 2, Blocks.planks, 1);
-            this.setBlockAndNotifyAdequately(world, i12, j + 6, k - 2, (Block)Blocks.wooden_slab, 1);
-            this.setBlockAndNotifyAdequately(world, i12, j + 5, k, LOTRMod.blueDwarvenTable, 0);
-            this.setBlockAndNotifyAdequately(world, i12, j + 5, k + 1, LOTRMod.dwarvenForge, 0);
-            this.setBlockAndNotifyAdequately(world, i12, j + 5, k - 1, LOTRMod.dwarvenForge, 0);
+        for (i13 = i - 5; i13 <= i + 5; i13 += 10) {
+            this.setBlockAndNotifyAdequately(world, i13, j + 5, k + 2, Blocks.planks, 1);
+            this.setBlockAndNotifyAdequately(world, i13, j + 6, k + 2, (Block)Blocks.wooden_slab, 1);
+            this.setBlockAndNotifyAdequately(world, i13, j + 5, k - 2, Blocks.planks, 1);
+            this.setBlockAndNotifyAdequately(world, i13, j + 6, k - 2, (Block)Blocks.wooden_slab, 1);
+            this.setBlockAndNotifyAdequately(world, i13, j + 5, k, LOTRMod.blueDwarvenTable, 0);
+            this.setBlockAndNotifyAdequately(world, i13, j + 5, k + 1, LOTRMod.dwarvenForge, 0);
+            this.setBlockAndNotifyAdequately(world, i13, j + 5, k - 1, LOTRMod.dwarvenForge, 0);
         }
         this.setBlockAndNotifyAdequately(world, i - 3, j + 6, k - 6, LOTRMod.brick3, 12);
         this.setBlockAndNotifyAdequately(world, i + 3, j + 6, k - 6, LOTRMod.brick3, 12);
         stairX = 4;
-        for (j12 = j + 5; j12 <= j + 8; ++j12) {
+        for (j1 = j + 5; j1 <= j + 8; ++j1) {
             this.setAir(world, i - stairX, j + 8, k + 4);
             this.setAir(world, i + stairX, j + 8, k + 4);
-            this.setBlockAndNotifyAdequately(world, i - stairX, j12, k + 4, LOTRMod.stairsDwarvenBrick, 0);
-            this.setBlockAndNotifyAdequately(world, i + stairX, j12, k + 4, LOTRMod.stairsDwarvenBrick, 1);
-            for (j2 = j12 - 1; j2 > j + 4; --j2) {
+            this.setBlockAndNotifyAdequately(world, i - stairX, j1, k + 4, LOTRMod.stairsDwarvenBrick, 0);
+            this.setBlockAndNotifyAdequately(world, i + stairX, j1, k + 4, LOTRMod.stairsDwarvenBrick, 1);
+            for (j2 = j1 - 1; j2 > j + 4; --j2) {
                 this.setBlockAndNotifyAdequately(world, i - stairX, j2, k + 4, LOTRMod.brick, 6);
                 this.setBlockAndNotifyAdequately(world, i + stairX, j2, k + 4, LOTRMod.brick, 6);
             }
             --stairX;
         }
-        for (j12 = j + 5; j12 <= j + 7; ++j12) {
-            this.setBlockAndNotifyAdequately(world, i, j12, k + 4, LOTRMod.brick, 6);
+        for (j1 = j + 5; j1 <= j + 7; ++j1) {
+            this.setBlockAndNotifyAdequately(world, i, j1, k + 4, LOTRMod.brick, 6);
         }
         this.setBlockAndNotifyAdequately(world, i, j + 6, k + 4, LOTRMod.brick3, 12);
         for (k1 = k - 7; k1 >= k - 8; --k1) {
-            for (i13 = i - 4; i13 <= i + 4; ++i13) {
-                this.placeBalconySection(world, i13, j, k1, false, false);
+            for (i1 = i - 4; i1 <= i + 4; ++i1) {
+                this.placeBalconySection(world, i1, j, k1, false, false);
             }
             this.placeBalconySection(world, i - 5, j, k1, true, false);
             this.placeBalconySection(world, i + 5, j, k1, true, false);
         }
-        for (i12 = i - 2; i12 <= i + 2; ++i12) {
-            this.placeBalconySection(world, i12, j, k - 9, false, false);
+        for (i13 = i - 2; i13 <= i + 2; ++i13) {
+            this.placeBalconySection(world, i13, j, k - 9, false, false);
         }
-        for (i12 = i - 5; i12 <= i + 5; ++i12) {
-            if (Math.abs(i12 - i) < 3) continue;
-            this.placeBalconySection(world, i12, j, k - 9, true, false);
+        for (i13 = i - 5; i13 <= i + 5; ++i13) {
+            if (Math.abs(i13 - i) < 3) continue;
+            this.placeBalconySection(world, i13, j, k - 9, true, false);
         }
-        for (i12 = i - 1; i12 <= i + 1; ++i12) {
-            this.placeBalconySection(world, i12, j, k - 10, false, false);
+        for (i13 = i - 1; i13 <= i + 1; ++i13) {
+            this.placeBalconySection(world, i13, j, k - 10, false, false);
         }
-        for (i12 = i - 3; i12 <= i + 3; ++i12) {
-            if (Math.abs(i12 - i) < 2) continue;
-            this.placeBalconySection(world, i12, j, k - 10, true, false);
+        for (i13 = i - 3; i13 <= i + 3; ++i13) {
+            if (Math.abs(i13 - i) < 2) continue;
+            this.placeBalconySection(world, i13, j, k - 10, true, false);
         }
-        for (i12 = i - 2; i12 <= i + 2; ++i12) {
-            if (Math.abs(i12 - i) == 0) {
-                this.placeBalconySection(world, i12, j, k - 11, true, true);
+        for (i13 = i - 2; i13 <= i + 2; ++i13) {
+            if (Math.abs(i13 - i) == 0) {
+                this.placeBalconySection(world, i13, j, k - 11, true, true);
                 continue;
             }
-            this.placeBalconySection(world, i12, j, k - 11, true, false);
+            this.placeBalconySection(world, i13, j, k - 11, true, false);
         }
         this.setBlockAndNotifyAdequately(world, i, j + 4, k - 6, LOTRMod.slabDouble3, 0);
         this.setAir(world, i, j + 5, k - 6);
@@ -666,42 +666,42 @@ extends LOTRWorldGenStructureBase {
         this.setBlockAndNotifyAdequately(world, i, j + 1, k - 6, LOTRMod.doorSpruce, 1);
         this.setBlockAndNotifyAdequately(world, i, j + 2, k - 6, LOTRMod.doorSpruce, 8);
         this.setBlockAndNotifyAdequately(world, i, j + 3, k - 8, LOTRMod.chandelier, 11);
-        for (j12 = j + 1; j12 <= j + 2; ++j12) {
+        for (j1 = j + 1; j1 <= j + 2; ++j1) {
             for (int k12 = k - 7; k12 >= k - 8; --k12) {
-                this.placeRandomOre(world, random, i - 4, j12, k12);
-                this.placeRandomOre(world, random, i - 3, j12, k12);
-                this.placeRandomOre(world, random, i + 3, j12, k12);
-                this.placeRandomOre(world, random, i + 4, j12, k12);
+                this.placeRandomOre(world, random, i - 4, j1, k12);
+                this.placeRandomOre(world, random, i - 3, j1, k12);
+                this.placeRandomOre(world, random, i + 3, j1, k12);
+                this.placeRandomOre(world, random, i + 4, j1, k12);
             }
-            this.placeRandomOre(world, random, i - 2, j12, k - 9);
-            this.placeRandomOre(world, random, i + 2, j12, k - 9);
-            for (i13 = i - 1; i13 <= i + 1; ++i13) {
-                this.placeRandomOre(world, random, i13, j12, k - 10);
+            this.placeRandomOre(world, random, i - 2, j1, k - 9);
+            this.placeRandomOre(world, random, i + 2, j1, k - 9);
+            for (i1 = i - 1; i1 <= i + 1; ++i1) {
+                this.placeRandomOre(world, random, i1, j1, k - 10);
             }
         }
         this.setBlockAndNotifyAdequately(world, i, j + 9, k - 3, LOTRMod.commandTable, 0);
     }
 
     private void generateFacingEast(World world, Random random, int i, int j, int k) {
-        int k1;
+        int j12;
         int k12;
-        int k13;
         int i1;
         int j1;
         int j2;
-        int j12;
-        for (k13 = k - 6; k13 <= k + 6; ++k13) {
-            this.setBlockAndNotifyAdequately(world, i - 7, j + 1, k13, LOTRMod.slabSingle3, 0);
-            this.setGrassToDirt(world, i - 7, j, k13);
-            for (j12 = j; !LOTRMod.isOpaque(world, i - 7, j12, k13) && j12 >= 0; --j12) {
-                this.setBlockAndNotifyAdequately(world, i - 7, j12, k13, LOTRMod.pillar, 3);
-                this.setGrassToDirt(world, i - 7, j12 - 1, k13);
+        int k1;
+        int k13;
+        for (k12 = k - 6; k12 <= k + 6; ++k12) {
+            this.setBlockAndNotifyAdequately(world, i - 7, j + 1, k12, LOTRMod.slabSingle3, 0);
+            this.setGrassToDirt(world, i - 7, j, k12);
+            for (j1 = j; !LOTRMod.isOpaque(world, i - 7, j1, k12) && j1 >= 0; --j1) {
+                this.setBlockAndNotifyAdequately(world, i - 7, j1, k12, LOTRMod.pillar, 3);
+                this.setGrassToDirt(world, i - 7, j1 - 1, k12);
             }
         }
-        for (j1 = j + 1; j1 <= j + 2; ++j1) {
-            this.setAir(world, i - 6, j1, k);
-            this.setBlockAndNotifyAdequately(world, i - 7, j1, k - 1, LOTRMod.pillar, 3);
-            this.setBlockAndNotifyAdequately(world, i - 7, j1, k + 1, LOTRMod.pillar, 3);
+        for (j12 = j + 1; j12 <= j + 2; ++j12) {
+            this.setAir(world, i - 6, j12, k);
+            this.setBlockAndNotifyAdequately(world, i - 7, j12, k - 1, LOTRMod.pillar, 3);
+            this.setBlockAndNotifyAdequately(world, i - 7, j12, k + 1, LOTRMod.pillar, 3);
         }
         this.setBlockAndNotifyAdequately(world, i - 7, j, k, Blocks.planks, 1);
         this.setBlockAndNotifyAdequately(world, i - 6, j, k, Blocks.planks, 1);
@@ -712,59 +712,59 @@ extends LOTRWorldGenStructureBase {
         this.setBlockAndNotifyAdequately(world, i - 7, j + 3, k + 1, LOTRMod.stairsDwarvenBrick, 3);
         this.setBlockAndNotifyAdequately(world, i - 7, j + 4, k, LOTRMod.slabSingle, 7);
         this.placeWallBanner(world, i - 6, j + 6, k, 1, LOTRItemBanner.BannerType.BLUE_MOUNTAINS);
-        for (j1 = j + 1; j1 <= j + 3; ++j1) {
+        for (j12 = j + 1; j12 <= j + 3; ++j12) {
             for (i1 = i - 4; i1 <= i - 1; ++i1) {
-                for (k12 = k - 5; k12 <= k - 1; ++k12) {
-                    this.setBlockAndNotifyAdequately(world, i1, j1, k12, LOTRMod.brick, 14);
+                for (k13 = k - 5; k13 <= k - 1; ++k13) {
+                    this.setBlockAndNotifyAdequately(world, i1, j12, k13, LOTRMod.brick, 14);
                 }
-                for (k12 = k + 1; k12 <= k + 5; ++k12) {
-                    this.setBlockAndNotifyAdequately(world, i1, j1, k12, LOTRMod.brick, 14);
+                for (k13 = k + 1; k13 <= k + 5; ++k13) {
+                    this.setBlockAndNotifyAdequately(world, i1, j12, k13, LOTRMod.brick, 14);
                 }
             }
             for (i1 = i - 2; i1 <= i + 5; ++i1) {
-                this.setBlockAndNotifyAdequately(world, i1, j1, k - 1, LOTRMod.brick, 14);
-                this.setBlockAndNotifyAdequately(world, i1, j1, k + 1, LOTRMod.brick, 14);
+                this.setBlockAndNotifyAdequately(world, i1, j12, k - 1, LOTRMod.brick, 14);
+                this.setBlockAndNotifyAdequately(world, i1, j12, k + 1, LOTRMod.brick, 14);
             }
         }
         this.setBlockAndNotifyAdequately(world, i + 3, j + 1, k - 1, LOTRMod.doorSpruce, 1);
         this.setBlockAndNotifyAdequately(world, i + 3, j + 2, k - 1, LOTRMod.doorSpruce, 8);
         this.setBlockAndNotifyAdequately(world, i + 3, j + 1, k + 1, LOTRMod.doorSpruce, 3);
         this.setBlockAndNotifyAdequately(world, i + 3, j + 2, k + 1, LOTRMod.doorSpruce, 8);
-        for (k13 = k - 5; k13 <= k + 2; k13 += 7) {
-            this.setBlockAndNotifyAdequately(world, i + 1, j + 1, k13, LOTRMod.dwarvenBed, 1);
-            this.setBlockAndNotifyAdequately(world, i, j + 1, k13, LOTRMod.dwarvenBed, 9);
-            this.setBlockAndNotifyAdequately(world, i + 1, j + 1, k13 + 3, LOTRMod.dwarvenBed, 1);
-            this.setBlockAndNotifyAdequately(world, i, j + 1, k13 + 3, LOTRMod.dwarvenBed, 9);
-            this.setBlockAndNotifyAdequately(world, i, j + 1, k13 + 1, (Block)Blocks.chest, 0);
-            this.setBlockAndNotifyAdequately(world, i, j + 1, k13 + 2, (Block)Blocks.chest, 0);
-            LOTRChestContents.fillChest(world, random, i, j + 1, k13 + 1, LOTRChestContents.DWARF_HOUSE_LARDER);
-            LOTRChestContents.fillChest(world, random, i, j + 1, k13 + 2, LOTRChestContents.BLUE_MOUNTAINS_STRONGHOLD);
-            this.setBlockAndNotifyAdequately(world, i + 3, j + 3, k13 + 1, LOTRMod.chandelier, 11);
-            this.setBlockAndNotifyAdequately(world, i + 5, j + 1, k13, Blocks.planks, 1);
-            this.setBlockAndNotifyAdequately(world, i + 5, j + 1, k13 + 3, Blocks.planks, 1);
-            this.placeBarrel(world, random, i + 5, j + 2, k13, 4, LOTRFoods.DWARF_DRINK);
-            this.placeBarrel(world, random, i + 5, j + 2, k13 + 3, 4, LOTRFoods.DWARF_DRINK);
-            this.setBlockAndNotifyAdequately(world, i + 5, j + 1, k13 + 1, Blocks.furnace, 0);
-            this.setBlockMetadata(world, i + 5, j + 1, k13 + 1, 4);
-            this.setBlockAndNotifyAdequately(world, i + 5, j + 1, k13 + 2, Blocks.furnace, 0);
-            this.setBlockMetadata(world, i + 5, j + 1, k13 + 2, 4);
+        for (k12 = k - 5; k12 <= k + 2; k12 += 7) {
+            this.setBlockAndNotifyAdequately(world, i + 1, j + 1, k12, LOTRMod.dwarvenBed, 1);
+            this.setBlockAndNotifyAdequately(world, i, j + 1, k12, LOTRMod.dwarvenBed, 9);
+            this.setBlockAndNotifyAdequately(world, i + 1, j + 1, k12 + 3, LOTRMod.dwarvenBed, 1);
+            this.setBlockAndNotifyAdequately(world, i, j + 1, k12 + 3, LOTRMod.dwarvenBed, 9);
+            this.setBlockAndNotifyAdequately(world, i, j + 1, k12 + 1, (Block)Blocks.chest, 0);
+            this.setBlockAndNotifyAdequately(world, i, j + 1, k12 + 2, (Block)Blocks.chest, 0);
+            LOTRChestContents.fillChest(world, random, i, j + 1, k12 + 1, LOTRChestContents.DWARF_HOUSE_LARDER);
+            LOTRChestContents.fillChest(world, random, i, j + 1, k12 + 2, LOTRChestContents.BLUE_MOUNTAINS_STRONGHOLD);
+            this.setBlockAndNotifyAdequately(world, i + 3, j + 3, k12 + 1, LOTRMod.chandelier, 11);
+            this.setBlockAndNotifyAdequately(world, i + 5, j + 1, k12, Blocks.planks, 1);
+            this.setBlockAndNotifyAdequately(world, i + 5, j + 1, k12 + 3, Blocks.planks, 1);
+            this.placeBarrel(world, random, i + 5, j + 2, k12, 4, LOTRFoods.DWARF_DRINK);
+            this.placeBarrel(world, random, i + 5, j + 2, k12 + 3, 4, LOTRFoods.DWARF_DRINK);
+            this.setBlockAndNotifyAdequately(world, i + 5, j + 1, k12 + 1, Blocks.furnace, 0);
+            this.setBlockMetadata(world, i + 5, j + 1, k12 + 1, 4);
+            this.setBlockAndNotifyAdequately(world, i + 5, j + 1, k12 + 2, Blocks.furnace, 0);
+            this.setBlockMetadata(world, i + 5, j + 1, k12 + 2, 4);
         }
         this.setAir(world, i - 5, j + 4, k);
         int stairX = 1;
-        for (j12 = j + 1; j12 <= j + 4; ++j12) {
+        for (j1 = j + 1; j1 <= j + 4; ++j1) {
             this.setAir(world, i - 5, j + 4, k - stairX);
             this.setAir(world, i - 5, j + 4, k + stairX);
-            this.setBlockAndNotifyAdequately(world, i - 5, j12, k - stairX, LOTRMod.stairsDwarvenBrick, 3);
-            this.setBlockAndNotifyAdequately(world, i - 5, j12, k + stairX, LOTRMod.stairsDwarvenBrick, 2);
-            for (j2 = j12 - 1; j2 > j; --j2) {
+            this.setBlockAndNotifyAdequately(world, i - 5, j1, k - stairX, LOTRMod.stairsDwarvenBrick, 3);
+            this.setBlockAndNotifyAdequately(world, i - 5, j1, k + stairX, LOTRMod.stairsDwarvenBrick, 2);
+            for (j2 = j1 - 1; j2 > j; --j2) {
                 this.setBlockAndNotifyAdequately(world, i - 5, j2, k - stairX, LOTRMod.brick, 6);
                 this.setBlockAndNotifyAdequately(world, i - 5, j2, k + stairX, LOTRMod.brick, 6);
             }
             ++stairX;
         }
-        for (j12 = j + 1; j12 <= j + 3; ++j12) {
-            this.setBlockAndNotifyAdequately(world, i - 5, j12, k - stairX, LOTRMod.brick, 6);
-            this.setBlockAndNotifyAdequately(world, i - 5, j12, k + stairX, LOTRMod.brick, 6);
+        for (j1 = j + 1; j1 <= j + 3; ++j1) {
+            this.setBlockAndNotifyAdequately(world, i - 5, j1, k - stairX, LOTRMod.brick, 6);
+            this.setBlockAndNotifyAdequately(world, i - 5, j1, k + stairX, LOTRMod.brick, 6);
         }
         for (k1 = k - 5; k1 <= k + 5; k1 += 10) {
             this.setBlockAndNotifyAdequately(world, i - 2, j + 5, k1, Blocks.planks, 1);
@@ -778,24 +778,24 @@ extends LOTRWorldGenStructureBase {
         this.setBlockAndNotifyAdequately(world, i + 6, j + 6, k - 3, LOTRMod.brick3, 12);
         this.setBlockAndNotifyAdequately(world, i + 6, j + 6, k + 3, LOTRMod.brick3, 12);
         stairX = 4;
-        for (j12 = j + 5; j12 <= j + 8; ++j12) {
+        for (j1 = j + 5; j1 <= j + 8; ++j1) {
             this.setAir(world, i - 4, j + 8, k - stairX);
             this.setAir(world, i - 4, j + 8, k + stairX);
-            this.setBlockAndNotifyAdequately(world, i - 4, j12, k - stairX, LOTRMod.stairsDwarvenBrick, 2);
-            this.setBlockAndNotifyAdequately(world, i - 4, j12, k + stairX, LOTRMod.stairsDwarvenBrick, 3);
-            for (j2 = j12 - 1; j2 > j + 4; --j2) {
+            this.setBlockAndNotifyAdequately(world, i - 4, j1, k - stairX, LOTRMod.stairsDwarvenBrick, 2);
+            this.setBlockAndNotifyAdequately(world, i - 4, j1, k + stairX, LOTRMod.stairsDwarvenBrick, 3);
+            for (j2 = j1 - 1; j2 > j + 4; --j2) {
                 this.setBlockAndNotifyAdequately(world, i - 4, j2, k - stairX, LOTRMod.brick, 6);
                 this.setBlockAndNotifyAdequately(world, i - 4, j2, k + stairX, LOTRMod.brick, 6);
             }
             --stairX;
         }
-        for (j12 = j + 5; j12 <= j + 7; ++j12) {
-            this.setBlockAndNotifyAdequately(world, i - 4, j12, k, LOTRMod.brick, 6);
+        for (j1 = j + 5; j1 <= j + 7; ++j1) {
+            this.setBlockAndNotifyAdequately(world, i - 4, j1, k, LOTRMod.brick, 6);
         }
         this.setBlockAndNotifyAdequately(world, i - 4, j + 6, k, LOTRMod.brick3, 12);
         for (i1 = i + 7; i1 <= i + 8; ++i1) {
-            for (k12 = k - 4; k12 <= k + 4; ++k12) {
-                this.placeBalconySection(world, i1, j, k12, false, false);
+            for (k13 = k - 4; k13 <= k + 4; ++k13) {
+                this.placeBalconySection(world, i1, j, k13, false, false);
             }
             this.placeBalconySection(world, i1, j, k - 5, true, false);
             this.placeBalconySection(world, i1, j, k + 5, true, false);
@@ -828,17 +828,17 @@ extends LOTRWorldGenStructureBase {
         this.setBlockAndNotifyAdequately(world, i + 6, j + 1, k, LOTRMod.doorSpruce, 2);
         this.setBlockAndNotifyAdequately(world, i + 6, j + 2, k, LOTRMod.doorSpruce, 8);
         this.setBlockAndNotifyAdequately(world, i + 8, j + 3, k, LOTRMod.chandelier, 11);
-        for (j12 = j + 1; j12 <= j + 2; ++j12) {
+        for (j1 = j + 1; j1 <= j + 2; ++j1) {
             for (int i12 = i + 7; i12 <= i + 8; ++i12) {
-                this.placeRandomOre(world, random, i12, j12, k - 4);
-                this.placeRandomOre(world, random, i12, j12, k - 3);
-                this.placeRandomOre(world, random, i12, j12, k + 3);
-                this.placeRandomOre(world, random, i12, j12, k + 4);
+                this.placeRandomOre(world, random, i12, j1, k - 4);
+                this.placeRandomOre(world, random, i12, j1, k - 3);
+                this.placeRandomOre(world, random, i12, j1, k + 3);
+                this.placeRandomOre(world, random, i12, j1, k + 4);
             }
-            this.placeRandomOre(world, random, i + 9, j12, k - 2);
-            this.placeRandomOre(world, random, i + 9, j12, k + 2);
-            for (k12 = k - 1; k12 <= k + 1; ++k12) {
-                this.placeRandomOre(world, random, i + 10, j12, k12);
+            this.placeRandomOre(world, random, i + 9, j1, k - 2);
+            this.placeRandomOre(world, random, i + 9, j1, k + 2);
+            for (k13 = k - 1; k13 <= k + 1; ++k13) {
+                this.placeRandomOre(world, random, i + 10, j1, k13);
             }
         }
         this.setBlockAndNotifyAdequately(world, i + 3, j + 9, k, LOTRMod.commandTable, 0);

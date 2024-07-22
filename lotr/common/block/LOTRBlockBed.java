@@ -7,6 +7,7 @@
  *  net.minecraft.block.Block
  *  net.minecraft.block.Block$SoundType
  *  net.minecraft.block.BlockBed
+ *  net.minecraft.block.BlockDirectional
  *  net.minecraft.client.renderer.texture.IIconRegister
  *  net.minecraft.entity.EntityLivingBase
  *  net.minecraft.item.Item
@@ -22,6 +23,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import java.util.Random;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBed;
+import net.minecraft.block.BlockDirectional;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.Item;
@@ -55,9 +57,9 @@ extends BlockBed {
         if (i == 0) {
             return this.bedBottomBlock.getIcon(0, this.bedBottomMetadata);
         }
-        int k = LOTRBlockBed.getDirection((int)j);
+        int k = BlockDirectional.getDirection((int)j);
         int l = Direction.bedDirection[k][i];
-        int n = i1 = LOTRBlockBed.isBlockHeadOfBed((int)j) ? 1 : 0;
+        int n = i1 = BlockBed.isBlockHeadOfBed((int)j) ? 1 : 0;
         return !(i1 == 1 && l == 2 || i1 == 0 && l == 3) ? (l != 5 && l != 4 ? this.bedIconsTop[i1] : this.bedIconsSide[i1]) : this.bedIconsEnd[i1];
     }
 
@@ -69,7 +71,7 @@ extends BlockBed {
     }
 
     public Item getItemDropped(int i, Random random, int j) {
-        return LOTRBlockBed.isBlockHeadOfBed((int)i) ? null : this.bedItem;
+        return BlockBed.isBlockHeadOfBed((int)i) ? null : this.bedItem;
     }
 
     @SideOnly(value=Side.CLIENT)

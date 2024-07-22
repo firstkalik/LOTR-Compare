@@ -64,7 +64,7 @@ LOTRUnitTradeable {
     }
 
     @Override
-    public LOTRInvasions getWarhorn() {
+    public LOTRInvasions getConquestHorn() {
         return null;
     }
 
@@ -96,9 +96,9 @@ LOTRUnitTradeable {
     @Override
     public String getSpeechBank(EntityPlayer entityplayer) {
         if (this.isFriendly(entityplayer)) {
-            return "nearHarad/harnennor/farmer/friendly";
+            return "nearHarad/harnedor/farmer/friendly";
         }
-        return "nearHarad/harnennor/farmer/hostile";
+        return "nearHarad/harnedor/farmer/hostile";
     }
 }
 

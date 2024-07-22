@@ -123,12 +123,11 @@ implements LOTRRandomSkinEntity {
             EntityLivingBase target;
             boolean isChild = this.isChild();
             if (isChild != this.prevIsChild) {
-                EntityAITasks.EntityAITaskEntry taskEntry;
                 if (isChild) {
-                    taskEntry = LOTREntityUtils.removeAITask((EntityCreature)this, this.attackAI.getClass());
+                    EntityAITasks.EntityAITaskEntry taskEntry = LOTREntityUtils.removeAITask((EntityCreature)this, this.attackAI.getClass());
                     this.tasks.addTask(taskEntry.priority, this.panicAI);
                 } else {
-                    taskEntry = LOTREntityUtils.removeAITask((EntityCreature)this, this.panicAI.getClass());
+                    EntityAITasks.EntityAITaskEntry taskEntry = LOTREntityUtils.removeAITask((EntityCreature)this, this.panicAI.getClass());
                     this.tasks.addTask(taskEntry.priority, this.attackAI);
                 }
             }
@@ -168,9 +167,9 @@ implements LOTRRandomSkinEntity {
         boolean flag = super.attackEntityFrom(damagesource, f);
         if (flag && this.isChild() && (attacker = damagesource.getEntity()) instanceof EntityLivingBase) {
             List list = this.worldObj.getEntitiesWithinAABBExcludingEntity((Entity)this, this.boundingBox.expand(12.0, 12.0, 12.0));
-            for (int i = 0; i < list.size(); ++i) {
+            for (Object element : list) {
                 LOTREntityAurochs aurochs;
-                Entity entity = (Entity)list.get(i);
+                Entity entity = (Entity)element;
                 if (entity.getClass() != this.getClass() || (aurochs = (LOTREntityAurochs)entity).isChild()) continue;
                 aurochs.setAttackTarget((EntityLivingBase)attacker);
             }

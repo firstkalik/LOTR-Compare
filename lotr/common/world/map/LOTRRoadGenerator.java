@@ -36,15 +36,14 @@ public class LOTRRoadGenerator {
         LOTRRoadType roadType = biome.getRoadBlock();
         LOTRRoadType.BridgeType bridgeType = biome.getBridgeBlock();
         if (LOTRRoads.isRoadAt(i, k)) {
-            int index;
             int j;
+            int index;
             int indexLower;
             int roadTop = 0;
             int bridgeBase = 0;
             boolean bridge = false;
             boolean bridgeSlab = false;
             for (j = ySize - 1; j > 0; --j) {
-                Block blockLower;
                 index = xzIndex * ySize + j;
                 Block block = blocks[index];
                 if (block.isOpaqueCube()) {
@@ -56,7 +55,7 @@ public class LOTRRoadGenerator {
                 bridgeBase = roadTop = j + 1;
                 int maxBridgeTop = j + 6;
                 float bridgeHeight = 0.0f;
-                for (int j1 = j - 1; j1 > 0 && (blockLower = blocks[indexLower = xzIndex * ySize + j1]).getMaterial().isLiquid(); --j1) {
+                for (int j1 = j - 1; j1 > 0 && blocks[indexLower = xzIndex * ySize + j1].getMaterial().isLiquid(); --j1) {
                     bridgeHeight += 0.5f;
                 }
                 int bridgeHeightInt = (int)Math.floor(bridgeHeight);
@@ -83,8 +82,7 @@ public class LOTRRoadGenerator {
                     boolean pillar = LOTRRoadGenerator.isPillarAt(i, k);
                     if (pillar) {
                         int pillarIndex;
-                        Block block;
-                        for (int j2 = roadTop + 4; j2 > 0 && !(block = blocks[pillarIndex = xzIndex * ySize + j2]).isOpaqueCube(); --j2) {
+                        for (int j2 = roadTop + 4; j2 > 0 && !blocks[pillarIndex = xzIndex * ySize + j2].isOpaqueCube(); --j2) {
                             if (j2 >= roadTop + 4) {
                                 blocks[pillarIndex] = bridgeFence.block;
                                 metadata[pillarIndex] = (byte)bridgeFence.meta;
@@ -134,7 +132,7 @@ public class LOTRRoadGenerator {
                 for (j = roadTop; j > roadTop - 4 && j > 0; --j) {
                     index = xzIndex * ySize + j;
                     float repair = roadType.getRepair();
-                    if (!(rand.nextFloat() < repair)) continue;
+                    if (rand.nextFloat() >= repair) continue;
                     boolean isTop = j == roadTop;
                     boolean isSlab = false;
                     if (isTop && j >= 63) {
@@ -203,10 +201,9 @@ public class LOTRRoadGenerator {
     }
 
     private static boolean isPillarAt(int i, int k) {
-        int zmod;
         int pRange = 8;
         int xmod = IntMath.mod((int)i, (int)pRange);
-        if (IntMath.mod((int)(xmod + (zmod = IntMath.mod((int)k, (int)pRange))), (int)pRange) == 0) {
+        if (IntMath.mod((int)(xmod + IntMath.mod((int)k, (int)pRange)), (int)pRange) == 0) {
             return !LOTRRoadGenerator.isBridgeEdgePillar(i + 1, k - 1) && !LOTRRoadGenerator.isBridgeEdgePillar(i + 1, k + 1);
         }
         return false;

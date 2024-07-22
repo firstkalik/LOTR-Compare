@@ -103,7 +103,7 @@ implements LOTRConnectedBlock {
 
     protected static void setGateOpen(World world, int i, int j, int k, boolean flag) {
         int meta = world.getBlockMetadata(i, j, k);
-        meta = flag ? (meta |= 8) : (meta &= 7);
+        meta = flag ? (meta = meta | 8) : (meta = meta & 7);
         world.setBlockMetadataWithNotify(i, j, k, meta, 3);
     }
 
@@ -347,12 +347,8 @@ implements LOTRConnectedBlock {
                 powered = true;
                 break;
             }
-            if (powered || block.canProvidePower()) {
-                if (powered && !open) {
-                    this.activateGate(world, i, j, k);
-                } else if (!powered && open) {
-                    this.activateGate(world, i, j, k);
-                }
+            if ((powered || block.canProvidePower()) && (powered && !open || !powered && open)) {
+                this.activateGate(world, i, j, k);
             }
         }
     }

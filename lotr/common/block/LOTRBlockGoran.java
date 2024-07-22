@@ -42,7 +42,7 @@ extends Block {
     @SideOnly(value=Side.CLIENT)
     private IIcon[] goranIcons;
     private static final String[] goranNames = new String[]{"", "rock"};
-    public static final String[] displayNames = new String[]{"Goran", "Cargoran"};
+    public static final String[] displayNames = new String[]{"Goran", "Sarngoran"};
 
     public LOTRBlockGoran() {
         super(Material.rock);

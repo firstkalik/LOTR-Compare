@@ -28,8 +28,7 @@ extends LOTRBiomeGenBreeland {
         this.spawnableCreatureList.add(new BiomeGenBase.SpawnListEntry(EntityWolf.class, 4, 2, 6));
         this.spawnableCreatureList.add(new BiomeGenBase.SpawnListEntry(LOTREntityDeer.class, 20, 4, 6));
         this.npcSpawnList.clear();
-        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer = new LOTRBiomeSpawnList.SpawnListContainer[1];
-        arrspawnListContainer[0] = LOTRBiomeSpawnList.entry(LOTRSpawnList.RUFFIANS, 10).setSpawnChance(500);
+        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer = new LOTRBiomeSpawnList.SpawnListContainer[]{LOTRBiomeSpawnList.entry(LOTRSpawnList.RUFFIANS, 10).setSpawnChance(500)};
         this.npcSpawnList.newFactionList(100).add(arrspawnListContainer);
         this.clearBiomeVariants();
         this.addBiomeVariantSet(LOTRBiomeVariant.SET_FOREST);
@@ -39,6 +38,7 @@ extends LOTRBiomeGenBreeland {
         this.decorator.grassPerChunk = 6;
         this.decorator.doubleGrassPerChunk = 1;
         this.registerForestFlowers();
+        this.decorator.clearVillages();
         this.setBanditChance(LOTREventSpawner.EventChance.BANDIT_UNCOMMON);
     }
 

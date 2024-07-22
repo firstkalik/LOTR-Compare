@@ -32,7 +32,6 @@ extends LOTRBiomeGenNearHarad {
 
     @Override
     public void generateBiomeTerrain(World world, Random random, Block[] blocks, byte[] meta, int i, int k, double stoneNoise, int height, LOTRBiomeVariant variant) {
-        double d4;
         Block topBlock_pre = this.topBlock;
         int topBlockMeta_pre = this.topBlockMeta;
         Block fillerBlock_pre = this.fillerBlock;
@@ -40,7 +39,7 @@ extends LOTRBiomeGenNearHarad {
         double d1 = noiseSandstone.func_151601_a((double)i * 0.09, (double)k * 0.09);
         double d2 = noiseSandstone.func_151601_a((double)i * 0.4, (double)k * 0.4);
         double d3 = noiseStone.func_151601_a((double)i * 0.09, (double)k * 0.09);
-        if (d3 + (d4 = noiseStone.func_151601_a((double)i * 0.4, (double)k * 0.4)) > 0.6) {
+        if (d3 + noiseStone.func_151601_a((double)i * 0.4, (double)k * 0.4) > 0.6) {
             this.topBlock = Blocks.stone;
             this.topBlockMeta = 0;
             this.fillerBlock = this.topBlock;

@@ -54,8 +54,8 @@ public class LOTRCustomWaypointLogger {
             return;
         }
         try {
-            File logFile;
             File dupeLogDir;
+            File logFile;
             Date date = Calendar.getInstance().getTime();
             String logLine = String.format("%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s", MONTH_DATE_FORMAT.format(date), TIME_FORMAT.format(date), function, entityplayer.getCommandSenderName(), entityplayer.getPersistentID(), cwp.getCodeName(), cwp.getXCoord(), cwp.getYCoordSaved(), cwp.getZCoord(), cwp.isShared(), cwp.isShared() ? cwp.getSharingPlayerName() : "N/A", cwp.isShared() ? cwp.getSharingPlayerID() : "N/A");
             if (cwp.isShared()) {

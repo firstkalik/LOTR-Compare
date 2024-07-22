@@ -19,7 +19,7 @@ public class LOTRItemHammer
 extends LOTRItemSword {
     public LOTRItemHammer(LOTRMaterial material) {
         this(material.toToolMaterial());
-        this.lotrWeaponDamage += 2.0f;
+        this.lotrWeaponDamage += 2.5f;
     }
 
     public LOTRItemHammer(Item.ToolMaterial material) {

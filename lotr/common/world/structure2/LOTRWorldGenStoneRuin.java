@@ -65,8 +65,7 @@ extends LOTRWorldGenStructureBase2 {
                 int baseHeight = 4 + random.nextInt(4) + random.nextInt(width * 3);
                 for (int i1 = columnX; i1 < columnX + width; ++i1) {
                     for (int k1 = columnZ; k1 < columnZ + width; ++k1) {
-                        int height;
-                        for (int j1 = height = (int)((float)baseHeight * (1.0f + random.nextFloat())); j1 >= minHeight; --j1) {
+                        for (int j1 = (int)((float)baseHeight * (1.0f + random.nextFloat())); j1 >= minHeight; --j1) {
                             this.placeRandomBrick(world, random, i1, j1, k1);
                             this.setGrassToDirt(world, i1, j1 - 1, k1);
                         }
@@ -108,9 +107,9 @@ extends LOTRWorldGenStructureBase2 {
 
     protected abstract void placeRandomSlab(World var1, Random var2, int var3, int var4, int var5);
 
-    public static class TAUREDAIN
+    public static class STONE
     extends LOTRWorldGenStoneRuin {
-        public TAUREDAIN(int i, int j) {
+        public STONE(int i, int j) {
             super(i, j);
         }
 
@@ -119,15 +118,15 @@ extends LOTRWorldGenStructureBase2 {
             int l = random.nextInt(3);
             switch (l) {
                 case 0: {
-                    this.setBlockAndMetadata(world, i, j, k, LOTRMod.brick4, 0);
+                    this.setBlockAndMetadata(world, i, j, k, Blocks.stonebrick, 0);
                     break;
                 }
                 case 1: {
-                    this.setBlockAndMetadata(world, i, j, k, LOTRMod.brick4, 1);
+                    this.setBlockAndMetadata(world, i, j, k, Blocks.stonebrick, 1);
                     break;
                 }
                 case 2: {
-                    this.setBlockAndMetadata(world, i, j, k, LOTRMod.brick4, 2);
+                    this.setBlockAndMetadata(world, i, j, k, Blocks.stonebrick, 2);
                 }
             }
         }
@@ -135,23 +134,526 @@ extends LOTRWorldGenStructureBase2 {
         @Override
         protected void placeRandomSlab(World world, Random random, int i, int j, int k) {
             if (random.nextInt(4) == 0) {
-                this.setBlockAndMetadata(world, i, j, k, LOTRMod.slabSingle8, 5);
+                this.setBlockAndMetadata(world, i, j, k, (Block)Blocks.stone_slab, 0);
             } else {
                 int l = random.nextInt(3);
                 switch (l) {
                     case 0: {
-                        this.setBlockAndMetadata(world, i, j, k, LOTRMod.slabSingle8, 0);
+                        this.setBlockAndMetadata(world, i, j, k, (Block)Blocks.stone_slab, 5);
                         break;
                     }
                     case 1: {
-                        this.setBlockAndMetadata(world, i, j, k, LOTRMod.slabSingle8, 1);
+                        this.setBlockAndMetadata(world, i, j, k, LOTRMod.slabSingleV, 0);
                         break;
                     }
                     case 2: {
-                        this.setBlockAndMetadata(world, i, j, k, LOTRMod.slabSingle8, 2);
+                        this.setBlockAndMetadata(world, i, j, k, LOTRMod.slabSingleV, 1);
                     }
                 }
             }
+        }
+    }
+
+    public static class ANGMAR
+    extends LOTRWorldGenStoneRuin {
+        public ANGMAR(int i, int j) {
+            super(i, j);
+        }
+
+        @Override
+        protected void placeRandomBrick(World world, Random random, int i, int j, int k) {
+            int l = random.nextInt(2);
+            switch (l) {
+                case 0: {
+                    this.setBlockAndMetadata(world, i, j, k, LOTRMod.brick2, 0);
+                    break;
+                }
+                case 1: {
+                    this.setBlockAndMetadata(world, i, j, k, LOTRMod.brick2, 1);
+                }
+            }
+        }
+
+        @Override
+        protected void placeRandomSlab(World world, Random random, int i, int j, int k) {
+            int l = random.nextInt(2);
+            switch (l) {
+                case 0: {
+                    this.setBlockAndMetadata(world, i, j, k, LOTRMod.slabSingle3, 3);
+                    break;
+                }
+                case 1: {
+                    this.setBlockAndMetadata(world, i, j, k, LOTRMod.slabSingle3, 4);
+                }
+            }
+        }
+    }
+
+    public static class ARNOR
+    extends LOTRWorldGenStoneRuin {
+        public ARNOR(int i, int j) {
+            super(i, j);
+        }
+
+        @Override
+        protected void placeRandomBrick(World world, Random random, int i, int j, int k) {
+            int l = random.nextInt(3);
+            switch (l) {
+                case 0: {
+                    this.setBlockAndMetadata(world, i, j, k, LOTRMod.brick2, 3);
+                    break;
+                }
+                case 1: {
+                    this.setBlockAndMetadata(world, i, j, k, LOTRMod.brick2, 4);
+                    break;
+                }
+                case 2: {
+                    this.setBlockAndMetadata(world, i, j, k, LOTRMod.brick2, 5);
+                }
+            }
+        }
+
+        @Override
+        protected void placeRandomSlab(World world, Random random, int i, int j, int k) {
+            int l = random.nextInt(3);
+            switch (l) {
+                case 0: {
+                    this.setBlockAndMetadata(world, i, j, k, LOTRMod.slabSingle4, 1);
+                    break;
+                }
+                case 1: {
+                    this.setBlockAndMetadata(world, i, j, k, LOTRMod.slabSingle4, 2);
+                    break;
+                }
+                case 2: {
+                    this.setBlockAndMetadata(world, i, j, k, LOTRMod.slabSingle4, 3);
+                }
+            }
+        }
+    }
+
+    public static class DOL_GULDUR
+    extends LOTRWorldGenStoneRuin {
+        public DOL_GULDUR(int i, int j) {
+            super(i, j);
+        }
+
+        @Override
+        protected void placeRandomBrick(World world, Random random, int i, int j, int k) {
+            int l = random.nextInt(3);
+            switch (l) {
+                case 0: {
+                    this.setBlockAndMetadata(world, i, j, k, LOTRMod.brick2, 8);
+                    break;
+                }
+                case 1: {
+                    this.setBlockAndMetadata(world, i, j, k, LOTRMod.brick2, 9);
+                    break;
+                }
+                case 2: {
+                    this.setBlockAndMetadata(world, i, j, k, LOTRMod.brick6, 11);
+                }
+            }
+        }
+
+        @Override
+        protected void placeRandomSlab(World world, Random random, int i, int j, int k) {
+            int l = random.nextInt(3);
+            switch (l) {
+                case 0: {
+                    this.setBlockAndMetadata(world, i, j, k, LOTRMod.slabSingle4, 6);
+                    break;
+                }
+                case 1: {
+                    this.setBlockAndMetadata(world, i, j, k, LOTRMod.slabSingle4, 5);
+                    break;
+                }
+                case 2: {
+                    this.setBlockAndMetadata(world, i, j, k, LOTRMod.slabSingle14, 1);
+                }
+            }
+        }
+    }
+
+    public static class DORWINION
+    extends LOTRWorldGenStoneRuin {
+        public DORWINION(int i, int j) {
+            super(i, j);
+        }
+
+        @Override
+        protected void placeRandomBrick(World world, Random random, int i, int j, int k) {
+            this.setBlockAndMetadata(world, i, j, k, LOTRMod.brick5, 2);
+        }
+
+        @Override
+        protected void placeRandomSlab(World world, Random random, int i, int j, int k) {
+            this.setBlockAndMetadata(world, i, j, k, LOTRMod.slabSingle9, 7);
+        }
+    }
+
+    public static class UTUMNO
+    extends LOTRWorldGenStoneRuin {
+        public UTUMNO(int i, int j) {
+            super(i, j);
+        }
+
+        @Override
+        protected void placeRandomBrick(World world, Random random, int i, int j, int k) {
+            int l = random.nextInt(2);
+            switch (l) {
+                case 0: {
+                    this.setBlockAndMetadata(world, i, j, k, LOTRMod.utumnoBrick, 2);
+                    break;
+                }
+                case 1: {
+                    this.setBlockAndMetadata(world, i, j, k, LOTRMod.utumnoBrick, 3);
+                }
+            }
+        }
+
+        @Override
+        protected void placeRandomSlab(World world, Random random, int i, int j, int k) {
+            int l = random.nextInt(2);
+            switch (l) {
+                case 0: {
+                    this.setBlockAndMetadata(world, i, j, k, LOTRMod.slabUtumnoSingle, 1);
+                    break;
+                }
+                case 1: {
+                    this.setBlockAndMetadata(world, i, j, k, LOTRMod.slabUtumnoSingle, 1);
+                }
+            }
+        }
+    }
+
+    public static class REDDWARVENSNOWY
+    extends LOTRWorldGenStoneRuin {
+        public REDDWARVENSNOWY(int i, int j) {
+            super(i, j);
+        }
+
+        @Override
+        protected void placeRandomBrick(World world, Random random, int i, int j, int k) {
+            int l = random.nextInt(2);
+            switch (l) {
+                case 0: {
+                    this.setBlockAndMetadata(world, i, j, k, LOTRMod.brick2, 2);
+                    break;
+                }
+                case 1: {
+                    this.setBlockAndMetadata(world, i, j, k, LOTRMod.brick9, 2);
+                }
+            }
+        }
+
+        @Override
+        protected void placeRandomSlab(World world, Random random, int i, int j, int k) {
+            int l = random.nextInt(2);
+            switch (l) {
+                case 0: {
+                    this.setBlockAndMetadata(world, i, j, k, LOTRMod.slabSingle3, 6);
+                    break;
+                }
+                case 1: {
+                    this.setBlockAndMetadata(world, i, j, k, LOTRMod.slabSingle119, 2);
+                }
+            }
+        }
+    }
+
+    public static class REDDWARVENMOSSY
+    extends LOTRWorldGenStoneRuin {
+        public REDDWARVENMOSSY(int i, int j) {
+            super(i, j);
+        }
+
+        @Override
+        protected void placeRandomBrick(World world, Random random, int i, int j, int k) {
+            int l = random.nextInt(2);
+            switch (l) {
+                case 0: {
+                    this.setBlockAndMetadata(world, i, j, k, LOTRMod.brick2, 2);
+                    break;
+                }
+                case 1: {
+                    this.setBlockAndMetadata(world, i, j, k, LOTRMod.brick9, 1);
+                }
+            }
+        }
+
+        @Override
+        protected void placeRandomSlab(World world, Random random, int i, int j, int k) {
+            int l = random.nextInt(2);
+            switch (l) {
+                case 0: {
+                    this.setBlockAndMetadata(world, i, j, k, LOTRMod.slabSingle3, 6);
+                    break;
+                }
+                case 1: {
+                    this.setBlockAndMetadata(world, i, j, k, LOTRMod.slabSingle119, 1);
+                }
+            }
+        }
+    }
+
+    public static class REDDWARVEN
+    extends LOTRWorldGenStoneRuin {
+        public REDDWARVEN(int i, int j) {
+            super(i, j);
+        }
+
+        @Override
+        protected void placeRandomBrick(World world, Random random, int i, int j, int k) {
+            int l = random.nextInt(2);
+            switch (l) {
+                case 0: {
+                    this.setBlockAndMetadata(world, i, j, k, LOTRMod.brick2, 2);
+                    break;
+                }
+                case 1: {
+                    this.setBlockAndMetadata(world, i, j, k, LOTRMod.brick7, 0);
+                }
+            }
+        }
+
+        @Override
+        protected void placeRandomSlab(World world, Random random, int i, int j, int k) {
+            int l = random.nextInt(2);
+            switch (l) {
+                case 0: {
+                    this.setBlockAndMetadata(world, i, j, k, LOTRMod.slabSingle3, 6);
+                    break;
+                }
+                case 1: {
+                    this.setBlockAndMetadata(world, i, j, k, LOTRMod.slabSingle122, 0);
+                }
+            }
+        }
+    }
+
+    public static class DWARVEN
+    extends LOTRWorldGenStoneRuin {
+        public DWARVEN(int i, int j) {
+            super(i, j);
+        }
+
+        @Override
+        protected void placeRandomBrick(World world, Random random, int i, int j, int k) {
+            int l = random.nextInt(2);
+            switch (l) {
+                case 0: {
+                    this.setBlockAndMetadata(world, i, j, k, LOTRMod.brick, 6);
+                    break;
+                }
+                case 1: {
+                    this.setBlockAndMetadata(world, i, j, k, LOTRMod.brick4, 5);
+                }
+            }
+        }
+
+        @Override
+        protected void placeRandomSlab(World world, Random random, int i, int j, int k) {
+            int l = random.nextInt(2);
+            switch (l) {
+                case 0: {
+                    this.setBlockAndMetadata(world, i, j, k, LOTRMod.slabSingle, 7);
+                    break;
+                }
+                case 1: {
+                    this.setBlockAndMetadata(world, i, j, k, LOTRMod.slabSingle7, 6);
+                }
+            }
+        }
+    }
+
+    public static class GALADHRIM
+    extends LOTRWorldGenStoneRuin {
+        public GALADHRIM(int i, int j) {
+            super(i, j);
+        }
+
+        @Override
+        protected void placeRandomBrick(World world, Random random, int i, int j, int k) {
+            int l = random.nextInt(3);
+            switch (l) {
+                case 0: {
+                    this.setBlockAndMetadata(world, i, j, k, LOTRMod.brick, 11);
+                    break;
+                }
+                case 1: {
+                    this.setBlockAndMetadata(world, i, j, k, LOTRMod.brick, 12);
+                    break;
+                }
+                case 2: {
+                    this.setBlockAndMetadata(world, i, j, k, LOTRMod.brick, 13);
+                }
+            }
+        }
+
+        @Override
+        protected void placeRandomSlab(World world, Random random, int i, int j, int k) {
+            if (random.nextInt(4) == 0) {
+                this.setBlockAndMetadata(world, i, j, k, LOTRMod.slabSingle2, 6 + random.nextInt(2));
+            } else {
+                this.setBlockAndMetadata(world, i, j, k, LOTRMod.slabSingle2, 3 + random.nextInt(3));
+            }
+        }
+    }
+
+    public static class HIGH_ELVEN
+    extends LOTRWorldGenStoneRuin {
+        public HIGH_ELVEN(int i, int j) {
+            super(i, j);
+        }
+
+        @Override
+        protected void placeRandomBrick(World world, Random random, int i, int j, int k) {
+            int l = random.nextInt(3);
+            switch (l) {
+                case 0: {
+                    this.setBlockAndMetadata(world, i, j, k, LOTRMod.brick3, 2);
+                    break;
+                }
+                case 1: {
+                    this.setBlockAndMetadata(world, i, j, k, LOTRMod.brick3, 3);
+                    break;
+                }
+                case 2: {
+                    this.setBlockAndMetadata(world, i, j, k, LOTRMod.brick3, 4);
+                }
+            }
+        }
+
+        @Override
+        protected void placeRandomSlab(World world, Random random, int i, int j, int k) {
+            if (random.nextInt(4) == 0) {
+                this.setBlockAndMetadata(world, i, j, k, LOTRMod.slabSingle6, 0 + random.nextInt(2));
+            } else {
+                this.setBlockAndMetadata(world, i, j, k, LOTRMod.slabSingle5, 5 + random.nextInt(3));
+            }
+        }
+    }
+
+    public static class MORDOR
+    extends LOTRWorldGenStoneRuin {
+        public MORDOR(int i, int j) {
+            super(i, j);
+        }
+
+        @Override
+        protected void placeRandomBrick(World world, Random random, int i, int j, int k) {
+            int l = random.nextInt(2);
+            switch (l) {
+                case 0: {
+                    this.setBlockAndMetadata(world, i, j, k, LOTRMod.brick, 0);
+                    break;
+                }
+                case 1: {
+                    this.setBlockAndMetadata(world, i, j, k, LOTRMod.brick, 7);
+                }
+            }
+        }
+
+        @Override
+        protected void placeRandomSlab(World world, Random random, int i, int j, int k) {
+            int l = random.nextInt(2);
+            switch (l) {
+                case 0: {
+                    this.setBlockAndMetadata(world, i, j, k, LOTRMod.slabSingle, 1);
+                    break;
+                }
+                case 1: {
+                    this.setBlockAndMetadata(world, i, j, k, LOTRMod.slabSingle2, 2);
+                }
+            }
+        }
+    }
+
+    public static class NEAR_HARAD
+    extends LOTRWorldGenStoneRuin {
+        public NEAR_HARAD(int i, int j) {
+            super(i, j);
+        }
+
+        @Override
+        protected void placeRandomBrick(World world, Random random, int i, int j, int k) {
+            int l = random.nextInt(2);
+            switch (l) {
+                case 0: {
+                    this.setBlockAndMetadata(world, i, j, k, LOTRMod.brick, 15);
+                    break;
+                }
+                case 1: {
+                    this.setBlockAndMetadata(world, i, j, k, LOTRMod.brick3, 11);
+                }
+            }
+        }
+
+        @Override
+        protected void placeRandomSlab(World world, Random random, int i, int j, int k) {
+            int l = random.nextInt(2);
+            switch (l) {
+                case 0: {
+                    this.setBlockAndMetadata(world, i, j, k, LOTRMod.slabSingle4, 0);
+                    break;
+                }
+                case 1: {
+                    this.setBlockAndMetadata(world, i, j, k, LOTRMod.slabSingle7, 1);
+                }
+            }
+        }
+    }
+
+    public static class UMBAR
+    extends LOTRWorldGenStoneRuin {
+        public UMBAR(int i, int j) {
+            super(i, j);
+        }
+
+        @Override
+        protected void placeRandomBrick(World world, Random random, int i, int j, int k) {
+            int l = random.nextInt(2);
+            switch (l) {
+                case 0: {
+                    this.setBlockAndMetadata(world, i, j, k, LOTRMod.brick6, 6);
+                    break;
+                }
+                case 1: {
+                    this.setBlockAndMetadata(world, i, j, k, LOTRMod.brick6, 7);
+                }
+            }
+        }
+
+        @Override
+        protected void placeRandomSlab(World world, Random random, int i, int j, int k) {
+            int l = random.nextInt(2);
+            switch (l) {
+                case 0: {
+                    this.setBlockAndMetadata(world, i, j, k, LOTRMod.slabSingle13, 2);
+                    break;
+                }
+                case 1: {
+                    this.setBlockAndMetadata(world, i, j, k, LOTRMod.slabSingle13, 3);
+                }
+            }
+        }
+    }
+
+    public static class NUMENOR
+    extends LOTRWorldGenStoneRuin {
+        public NUMENOR(int i, int j) {
+            super(i, j);
+        }
+
+        @Override
+        protected void placeRandomBrick(World world, Random random, int i, int j, int k) {
+            this.setBlockAndMetadata(world, i, j, k, LOTRMod.brick2, 11);
+        }
+
+        @Override
+        protected void placeRandomSlab(World world, Random random, int i, int j, int k) {
+            this.setBlockAndMetadata(world, i, j, k, LOTRMod.slabSingle5, 3);
         }
     }
 
@@ -202,131 +704,9 @@ extends LOTRWorldGenStructureBase2 {
         }
     }
 
-    public static class NUMENOR
+    public static class TAUREDAIN
     extends LOTRWorldGenStoneRuin {
-        public NUMENOR(int i, int j) {
-            super(i, j);
-        }
-
-        @Override
-        protected void placeRandomBrick(World world, Random random, int i, int j, int k) {
-            this.setBlockAndMetadata(world, i, j, k, LOTRMod.brick2, 11);
-        }
-
-        @Override
-        protected void placeRandomSlab(World world, Random random, int i, int j, int k) {
-            this.setBlockAndMetadata(world, i, j, k, LOTRMod.slabSingle5, 3);
-        }
-    }
-
-    public static class UMBAR
-    extends LOTRWorldGenStoneRuin {
-        public UMBAR(int i, int j) {
-            super(i, j);
-        }
-
-        @Override
-        protected void placeRandomBrick(World world, Random random, int i, int j, int k) {
-            int l = random.nextInt(2);
-            switch (l) {
-                case 0: {
-                    this.setBlockAndMetadata(world, i, j, k, LOTRMod.brick6, 6);
-                    break;
-                }
-                case 1: {
-                    this.setBlockAndMetadata(world, i, j, k, LOTRMod.brick6, 7);
-                }
-            }
-        }
-
-        @Override
-        protected void placeRandomSlab(World world, Random random, int i, int j, int k) {
-            int l = random.nextInt(2);
-            switch (l) {
-                case 0: {
-                    this.setBlockAndMetadata(world, i, j, k, LOTRMod.slabSingle13, 2);
-                    break;
-                }
-                case 1: {
-                    this.setBlockAndMetadata(world, i, j, k, LOTRMod.slabSingle13, 3);
-                }
-            }
-        }
-    }
-
-    public static class NEAR_HARAD
-    extends LOTRWorldGenStoneRuin {
-        public NEAR_HARAD(int i, int j) {
-            super(i, j);
-        }
-
-        @Override
-        protected void placeRandomBrick(World world, Random random, int i, int j, int k) {
-            int l = random.nextInt(2);
-            switch (l) {
-                case 0: {
-                    this.setBlockAndMetadata(world, i, j, k, LOTRMod.brick, 15);
-                    break;
-                }
-                case 1: {
-                    this.setBlockAndMetadata(world, i, j, k, LOTRMod.brick3, 11);
-                }
-            }
-        }
-
-        @Override
-        protected void placeRandomSlab(World world, Random random, int i, int j, int k) {
-            int l = random.nextInt(2);
-            switch (l) {
-                case 0: {
-                    this.setBlockAndMetadata(world, i, j, k, LOTRMod.slabSingle4, 0);
-                    break;
-                }
-                case 1: {
-                    this.setBlockAndMetadata(world, i, j, k, LOTRMod.slabSingle7, 1);
-                }
-            }
-        }
-    }
-
-    public static class MORDOR
-    extends LOTRWorldGenStoneRuin {
-        public MORDOR(int i, int j) {
-            super(i, j);
-        }
-
-        @Override
-        protected void placeRandomBrick(World world, Random random, int i, int j, int k) {
-            int l = random.nextInt(2);
-            switch (l) {
-                case 0: {
-                    this.setBlockAndMetadata(world, i, j, k, LOTRMod.brick, 0);
-                    break;
-                }
-                case 1: {
-                    this.setBlockAndMetadata(world, i, j, k, LOTRMod.brick, 7);
-                }
-            }
-        }
-
-        @Override
-        protected void placeRandomSlab(World world, Random random, int i, int j, int k) {
-            int l = random.nextInt(2);
-            switch (l) {
-                case 0: {
-                    this.setBlockAndMetadata(world, i, j, k, LOTRMod.slabSingle, 1);
-                    break;
-                }
-                case 1: {
-                    this.setBlockAndMetadata(world, i, j, k, LOTRMod.slabSingle2, 2);
-                }
-            }
-        }
-    }
-
-    public static class HIGH_ELVEN
-    extends LOTRWorldGenStoneRuin {
-        public HIGH_ELVEN(int i, int j) {
+        public TAUREDAIN(int i, int j) {
             super(i, j);
         }
 
@@ -335,15 +715,15 @@ extends LOTRWorldGenStructureBase2 {
             int l = random.nextInt(3);
             switch (l) {
                 case 0: {
-                    this.setBlockAndMetadata(world, i, j, k, LOTRMod.brick3, 2);
+                    this.setBlockAndMetadata(world, i, j, k, LOTRMod.brick4, 0);
                     break;
                 }
                 case 1: {
-                    this.setBlockAndMetadata(world, i, j, k, LOTRMod.brick3, 3);
+                    this.setBlockAndMetadata(world, i, j, k, LOTRMod.brick4, 1);
                     break;
                 }
                 case 2: {
-                    this.setBlockAndMetadata(world, i, j, k, LOTRMod.brick3, 4);
+                    this.setBlockAndMetadata(world, i, j, k, LOTRMod.brick4, 2);
                 }
             }
         }
@@ -351,261 +731,20 @@ extends LOTRWorldGenStructureBase2 {
         @Override
         protected void placeRandomSlab(World world, Random random, int i, int j, int k) {
             if (random.nextInt(4) == 0) {
-                this.setBlockAndMetadata(world, i, j, k, LOTRMod.slabSingle6, 0 + random.nextInt(2));
-            } else {
-                this.setBlockAndMetadata(world, i, j, k, LOTRMod.slabSingle5, 5 + random.nextInt(3));
-            }
-        }
-    }
-
-    public static class GALADHRIM
-    extends LOTRWorldGenStoneRuin {
-        public GALADHRIM(int i, int j) {
-            super(i, j);
-        }
-
-        @Override
-        protected void placeRandomBrick(World world, Random random, int i, int j, int k) {
-            int l = random.nextInt(3);
-            switch (l) {
-                case 0: {
-                    this.setBlockAndMetadata(world, i, j, k, LOTRMod.brick, 11);
-                    break;
-                }
-                case 1: {
-                    this.setBlockAndMetadata(world, i, j, k, LOTRMod.brick, 12);
-                    break;
-                }
-                case 2: {
-                    this.setBlockAndMetadata(world, i, j, k, LOTRMod.brick, 13);
-                }
-            }
-        }
-
-        @Override
-        protected void placeRandomSlab(World world, Random random, int i, int j, int k) {
-            if (random.nextInt(4) == 0) {
-                this.setBlockAndMetadata(world, i, j, k, LOTRMod.slabSingle2, 6 + random.nextInt(2));
-            } else {
-                this.setBlockAndMetadata(world, i, j, k, LOTRMod.slabSingle2, 3 + random.nextInt(3));
-            }
-        }
-    }
-
-    public static class DWARVEN
-    extends LOTRWorldGenStoneRuin {
-        public DWARVEN(int i, int j) {
-            super(i, j);
-        }
-
-        @Override
-        protected void placeRandomBrick(World world, Random random, int i, int j, int k) {
-            int l = random.nextInt(2);
-            switch (l) {
-                case 0: {
-                    this.setBlockAndMetadata(world, i, j, k, LOTRMod.brick, 6);
-                    break;
-                }
-                case 1: {
-                    this.setBlockAndMetadata(world, i, j, k, LOTRMod.brick4, 5);
-                }
-            }
-        }
-
-        @Override
-        protected void placeRandomSlab(World world, Random random, int i, int j, int k) {
-            int l = random.nextInt(2);
-            switch (l) {
-                case 0: {
-                    this.setBlockAndMetadata(world, i, j, k, LOTRMod.slabSingle, 7);
-                    break;
-                }
-                case 1: {
-                    this.setBlockAndMetadata(world, i, j, k, LOTRMod.slabSingle7, 6);
-                }
-            }
-        }
-    }
-
-    public static class DORWINION
-    extends LOTRWorldGenStoneRuin {
-        public DORWINION(int i, int j) {
-            super(i, j);
-        }
-
-        @Override
-        protected void placeRandomBrick(World world, Random random, int i, int j, int k) {
-            this.setBlockAndMetadata(world, i, j, k, LOTRMod.brick5, 2);
-        }
-
-        @Override
-        protected void placeRandomSlab(World world, Random random, int i, int j, int k) {
-            this.setBlockAndMetadata(world, i, j, k, LOTRMod.slabSingle9, 7);
-        }
-    }
-
-    public static class DOL_GULDUR
-    extends LOTRWorldGenStoneRuin {
-        public DOL_GULDUR(int i, int j) {
-            super(i, j);
-        }
-
-        @Override
-        protected void placeRandomBrick(World world, Random random, int i, int j, int k) {
-            int l = random.nextInt(3);
-            switch (l) {
-                case 0: {
-                    this.setBlockAndMetadata(world, i, j, k, LOTRMod.brick2, 8);
-                    break;
-                }
-                case 1: {
-                    this.setBlockAndMetadata(world, i, j, k, LOTRMod.brick2, 9);
-                    break;
-                }
-                case 2: {
-                    this.setBlockAndMetadata(world, i, j, k, LOTRMod.brick6, 11);
-                }
-            }
-        }
-
-        @Override
-        protected void placeRandomSlab(World world, Random random, int i, int j, int k) {
-            int l = random.nextInt(3);
-            switch (l) {
-                case 0: {
-                    this.setBlockAndMetadata(world, i, j, k, LOTRMod.slabSingle4, 6);
-                    break;
-                }
-                case 1: {
-                    this.setBlockAndMetadata(world, i, j, k, LOTRMod.slabSingle4, 5);
-                    break;
-                }
-                case 2: {
-                    this.setBlockAndMetadata(world, i, j, k, LOTRMod.slabSingle14, 1);
-                }
-            }
-        }
-    }
-
-    public static class ARNOR
-    extends LOTRWorldGenStoneRuin {
-        public ARNOR(int i, int j) {
-            super(i, j);
-        }
-
-        @Override
-        protected void placeRandomBrick(World world, Random random, int i, int j, int k) {
-            int l = random.nextInt(3);
-            switch (l) {
-                case 0: {
-                    this.setBlockAndMetadata(world, i, j, k, LOTRMod.brick2, 3);
-                    break;
-                }
-                case 1: {
-                    this.setBlockAndMetadata(world, i, j, k, LOTRMod.brick2, 4);
-                    break;
-                }
-                case 2: {
-                    this.setBlockAndMetadata(world, i, j, k, LOTRMod.brick2, 5);
-                }
-            }
-        }
-
-        @Override
-        protected void placeRandomSlab(World world, Random random, int i, int j, int k) {
-            int l = random.nextInt(3);
-            switch (l) {
-                case 0: {
-                    this.setBlockAndMetadata(world, i, j, k, LOTRMod.slabSingle4, 1);
-                    break;
-                }
-                case 1: {
-                    this.setBlockAndMetadata(world, i, j, k, LOTRMod.slabSingle4, 2);
-                    break;
-                }
-                case 2: {
-                    this.setBlockAndMetadata(world, i, j, k, LOTRMod.slabSingle4, 3);
-                }
-            }
-        }
-    }
-
-    public static class ANGMAR
-    extends LOTRWorldGenStoneRuin {
-        public ANGMAR(int i, int j) {
-            super(i, j);
-        }
-
-        @Override
-        protected void placeRandomBrick(World world, Random random, int i, int j, int k) {
-            int l = random.nextInt(2);
-            switch (l) {
-                case 0: {
-                    this.setBlockAndMetadata(world, i, j, k, LOTRMod.brick2, 0);
-                    break;
-                }
-                case 1: {
-                    this.setBlockAndMetadata(world, i, j, k, LOTRMod.brick2, 1);
-                }
-            }
-        }
-
-        @Override
-        protected void placeRandomSlab(World world, Random random, int i, int j, int k) {
-            int l = random.nextInt(2);
-            switch (l) {
-                case 0: {
-                    this.setBlockAndMetadata(world, i, j, k, LOTRMod.slabSingle3, 3);
-                    break;
-                }
-                case 1: {
-                    this.setBlockAndMetadata(world, i, j, k, LOTRMod.slabSingle3, 4);
-                }
-            }
-        }
-    }
-
-    public static class STONE
-    extends LOTRWorldGenStoneRuin {
-        public STONE(int i, int j) {
-            super(i, j);
-        }
-
-        @Override
-        protected void placeRandomBrick(World world, Random random, int i, int j, int k) {
-            int l = random.nextInt(3);
-            switch (l) {
-                case 0: {
-                    this.setBlockAndMetadata(world, i, j, k, Blocks.stonebrick, 0);
-                    break;
-                }
-                case 1: {
-                    this.setBlockAndMetadata(world, i, j, k, Blocks.stonebrick, 1);
-                    break;
-                }
-                case 2: {
-                    this.setBlockAndMetadata(world, i, j, k, Blocks.stonebrick, 2);
-                }
-            }
-        }
-
-        @Override
-        protected void placeRandomSlab(World world, Random random, int i, int j, int k) {
-            if (random.nextInt(4) == 0) {
-                this.setBlockAndMetadata(world, i, j, k, (Block)Blocks.stone_slab, 0);
+                this.setBlockAndMetadata(world, i, j, k, LOTRMod.slabSingle8, 5);
             } else {
                 int l = random.nextInt(3);
                 switch (l) {
                     case 0: {
-                        this.setBlockAndMetadata(world, i, j, k, (Block)Blocks.stone_slab, 5);
+                        this.setBlockAndMetadata(world, i, j, k, LOTRMod.slabSingle8, 0);
                         break;
                     }
                     case 1: {
-                        this.setBlockAndMetadata(world, i, j, k, LOTRMod.slabSingleV, 0);
+                        this.setBlockAndMetadata(world, i, j, k, LOTRMod.slabSingle8, 1);
                         break;
                     }
                     case 2: {
-                        this.setBlockAndMetadata(world, i, j, k, LOTRMod.slabSingleV, 1);
+                        this.setBlockAndMetadata(world, i, j, k, LOTRMod.slabSingle8, 2);
                     }
                 }
             }

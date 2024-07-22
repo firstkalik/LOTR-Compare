@@ -144,7 +144,7 @@ implements IPickpocketable {
         int i = this.rand.nextInt(weapons.length);
         this.npcItemsInv.setMeleeWeapon(weapons[i].copy());
         this.npcItemsInv.setIdleItem(null);
-        if (this.familyInfo.isMale() && this.rand.nextInt(500) == 0) {
+        if (this.familyInfo.isMale() && this.rand.nextInt(2000) == 0) {
             this.familyInfo.setName(CARROT_EATER_NAME);
             this.npcItemsInv.setIdleItem(new ItemStack(Items.carrot));
         }

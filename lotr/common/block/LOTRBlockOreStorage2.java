@@ -18,7 +18,7 @@ import net.minecraft.util.IIcon;
 public class LOTRBlockOreStorage2
 extends LOTRBlockOreStorageBase {
     public LOTRBlockOreStorage2() {
-        this.setOreStorageNames("blackUrukSteel", "elfSteel", "gildedIron", "salt");
+        this.setOreStorageNames("blackUrukSteel", "elfSteel", "gildedIron", "salt", "goldRaw", "ironRaw");
     }
 
     @SideOnly(value=Side.CLIENT)

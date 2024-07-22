@@ -16,6 +16,8 @@
 package lotr.common.world.mapgen;
 
 import java.util.Random;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import lotr.common.LOTRMod;
 import lotr.common.world.LOTRChunkProvider;
 import lotr.common.world.biome.LOTRBiome;
@@ -33,6 +35,40 @@ import net.minecraft.world.gen.MapGenBase;
 public class LOTRMapGenCaves
 extends MapGenBase {
     public LOTRChunkProvider.ChunkFlags chunkFlags;
+    private int numThreads;
+
+    public void LOTRMapGenCavesMultiThreaded(int numThreads) {
+        this.numThreads = numThreads;
+    }
+
+    public void generate(World world, int chunkX, int chunkZ, Block[] blockArray) {
+        ExecutorService executor = Executors.newFixedThreadPool(this.numThreads);
+        int i = 0;
+        while (i < this.numThreads) {
+            int threadIndex = i++;
+            executor.execute(() -> {
+                int startX = chunkX + threadIndex;
+                int startZ = chunkZ + threadIndex;
+                this.generateChunk(world, startX, startZ, blockArray);
+            });
+        }
+        executor.shutdown();
+        while (!executor.isTerminated()) {
+            Thread.yield();
+        }
+    }
+
+    private void generateChunk(World world, int chunkX, int chunkZ, Block[] blockArray) {
+        int startX = chunkX * 16;
+        int startZ = chunkZ * 16;
+        int endX = startX + 15;
+        int endZ = startZ + 15;
+        for (int x = startX; x <= endX; ++x) {
+            for (int z = startZ; z <= endZ; ++z) {
+                this.generateChunk(world, x, z, blockArray);
+            }
+        }
+    }
 
     protected void generateLargeCaveNode(long seed, int par3, int par4, Block[] blockArray, double par6, double par8, double par10, boolean cutSurface) {
         this.generateCaveNode(seed, par3, par4, blockArray, par6, par8, par10, 1.0f + this.rand.nextFloat() * 6.0f, 0.0f, 0.0f, -1, -1, 0.5, cutSurface);
@@ -64,7 +100,7 @@ extends MapGenBase {
             par6 += (double)(MathHelper.cos((float)angle) * var33);
             par8 += (double)var34;
             par10 += (double)(MathHelper.sin((float)angle) * var33);
-            par14 = var28 ? (par14 *= 0.92f) : (par14 *= 0.7f);
+            par14 = var28 ? (par14 = par14 * 0.92f) : (par14 = par14 * 0.7f);
             par14 += var24 * 0.1f;
             angle += var23 * 0.1f;
             var24 *= 0.9f;
@@ -120,7 +156,7 @@ extends MapGenBase {
                                 double var46 = ((double)(var45 + par4 * 16) + 0.5 - par10) / var29;
                                 int xzIndex = var42 * 16 + var45;
                                 int blockIndex = xzIndex * 256 + (var57 + 1);
-                                if (!(var59 * var59 + var46 * var46 < 1.0)) continue;
+                                if (var59 * var59 + var46 * var46 >= 1.0) continue;
                                 for (int var50 = var57; var50 <= var38 - 1; ++var50) {
                                     double var51 = ((double)var50 + 0.5 - par8) / var31;
                                     if (var51 > -0.7 && var59 * var59 + var51 * var51 + var46 * var46 < 1.0) {
@@ -140,29 +176,32 @@ extends MapGenBase {
     }
 
     protected void digBlock(Block[] blockArray, int index, int xzIndex, int i, int j, int k, int chunkX, int chunkZ, LOTRBiome biome, boolean cutSurface) {
-        int j1;
-        int roadDepth;
         boolean dig;
+        int checkAboveMax;
+        int j1;
         Block block = blockArray[index];
         boolean isTop = false;
         boolean belowVillageOrRoad = false;
         int topCheckDepth = 1;
         if (j >= 59 - topCheckDepth) {
             isTop = true;
-            int checkAboveMax = 5;
+            checkAboveMax = 5;
             for (int j12 = topCheckDepth + 1; j12 <= topCheckDepth + checkAboveMax && j + j12 <= 255; ++j12) {
                 if (!blockArray[index + j12].isOpaqueCube()) continue;
                 isTop = false;
                 break;
             }
         }
-        if ((this.chunkFlags.isVillage || this.chunkFlags.roadFlags[xzIndex]) && j >= 59 - (roadDepth = 4)) {
-            belowVillageOrRoad = true;
-            int checkAboveMax = 5;
-            for (j1 = roadDepth + 1; j1 <= roadDepth + checkAboveMax && j + j1 <= 255; ++j1) {
-                if (!blockArray[index + j1].isOpaqueCube()) continue;
-                belowVillageOrRoad = false;
-                break;
+        if (this.chunkFlags.isVillage || this.chunkFlags.roadFlags[xzIndex]) {
+            int roadDepth = 4;
+            if (j >= 59 - 4) {
+                belowVillageOrRoad = true;
+                checkAboveMax = 5;
+                for (j1 = roadDepth + 1; j1 <= roadDepth + checkAboveMax && j + j1 <= 255; ++j1) {
+                    if (!blockArray[index + j1].isOpaqueCube()) continue;
+                    belowVillageOrRoad = false;
+                    break;
+                }
             }
         }
         boolean bl = dig = LOTRMapGenCaves.isTerrainBlock(block, biome) || block.getMaterial().isLiquid();

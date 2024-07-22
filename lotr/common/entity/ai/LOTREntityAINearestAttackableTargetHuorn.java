@@ -34,8 +34,8 @@ extends LOTREntityAINearestAttackableTargetBasic {
     public boolean shouldExecute() {
         int chance = 400;
         List nearbyHuorns = this.taskOwner.worldObj.getEntitiesWithinAABB(LOTREntityHuornBase.class, this.taskOwner.boundingBox.expand(24.0, 8.0, 24.0));
-        for (int i = 0; i < nearbyHuorns.size(); ++i) {
-            LOTREntityHuornBase huorn = (LOTREntityHuornBase)nearbyHuorns.get(i);
+        for (Object nearbyHuorn : nearbyHuorns) {
+            LOTREntityHuornBase huorn = (LOTREntityHuornBase)nearbyHuorn;
             if (huorn.getAttackTarget() == null) continue;
             chance /= 2;
         }

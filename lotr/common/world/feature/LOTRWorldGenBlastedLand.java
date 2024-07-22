@@ -52,7 +52,7 @@ extends WorldGenerator {
                     if (random.nextInt(chance) == 0) {
                         world.setBlock(i1, j1, k1, LOTRMod.wasteBlock, 0, 2);
                     }
-                    if (!this.aflame || !(d < (double)radius / 2.0) || random.nextInt(10) != 0 || world.getBlock(i1, j1 + 1, k1).isOpaqueCube()) continue;
+                    if (!this.aflame || d >= (double)radius / 2.0 || random.nextInt(10) != 0 || world.getBlock(i1, j1 + 1, k1).isOpaqueCube()) continue;
                     world.setBlock(i1, j1, k1, LOTRMod.wasteBlock, 0, 2);
                     world.setBlock(i1, j1 + 1, k1, (Block)Blocks.fire, 0, 2);
                 }

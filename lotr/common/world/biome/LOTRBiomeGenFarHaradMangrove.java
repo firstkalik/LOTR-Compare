@@ -63,8 +63,8 @@ extends LOTRBiomeGenFarHarad {
 
     @Override
     public void decorate(World world, Random random, int i, int k) {
-        int i1;
         int l;
+        int i1;
         super.decorate(world, random, i, k);
         for (l = 0; l < 2; ++l) {
             int k1;

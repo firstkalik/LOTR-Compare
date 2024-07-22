@@ -30,9 +30,11 @@ implements IMessage {
     public boolean difficultyLocked;
     public boolean alignmentZones;
     public boolean feastMode;
+    public boolean fellowshipCreation;
     public boolean enchanting;
     public boolean enchantingLOTR;
     public boolean conquestDecay;
+    public boolean strictFactionTitleRequirements;
 
     public void toBytes(ByteBuf data) {
         data.writeInt(this.ringPortalX);
@@ -45,9 +47,11 @@ implements IMessage {
         data.writeBoolean(this.difficultyLocked);
         data.writeBoolean(this.alignmentZones);
         data.writeBoolean(this.feastMode);
+        data.writeBoolean(this.fellowshipCreation);
         data.writeBoolean(this.enchanting);
         data.writeBoolean(this.enchantingLOTR);
         data.writeBoolean(this.conquestDecay);
+        data.writeBoolean(this.strictFactionTitleRequirements);
     }
 
     public void fromBytes(ByteBuf data) {
@@ -61,9 +65,11 @@ implements IMessage {
         this.difficultyLocked = data.readBoolean();
         this.alignmentZones = data.readBoolean();
         this.feastMode = data.readBoolean();
+        this.fellowshipCreation = data.readBoolean();
         this.enchanting = data.readBoolean();
         this.enchantingLOTR = data.readBoolean();
         this.conquestDecay = data.readBoolean();
+        this.strictFactionTitleRequirements = data.readBoolean();
     }
 
     public static class Handler
@@ -75,7 +81,7 @@ implements IMessage {
             LOTRLevelData.middleEarthPortalX = packet.ringPortalX;
             LOTRLevelData.middleEarthPortalY = packet.ringPortalY;
             LOTRLevelData.middleEarthPortalZ = packet.ringPortalZ;
-            LOTRLevelData.setFTCooldown(packet.ftCooldownMax, packet.ftCooldownMin);
+            LOTRLevelData.setWaypointCooldown(packet.ftCooldownMax, packet.ftCooldownMin);
             EnumDifficulty diff = packet.difficulty;
             if (diff != null) {
                 LOTRLevelData.setSavedDifficulty(diff);
@@ -86,8 +92,10 @@ implements IMessage {
             LOTRLevelData.setDifficultyLocked(packet.difficultyLocked);
             LOTRLevelData.setEnableAlignmentZones(packet.alignmentZones);
             LOTRLevelData.clientside_thisServer_feastMode = packet.feastMode;
+            LOTRLevelData.clientside_thisServer_fellowshipCreation = packet.fellowshipCreation;
             LOTRLevelData.clientside_thisServer_enchanting = packet.enchanting;
             LOTRLevelData.clientside_thisServer_enchantingLOTR = packet.enchantingLOTR;
+            LOTRLevelData.clientside_thisServer_strictFactionTitleRequirements = packet.strictFactionTitleRequirements;
             return null;
         }
     }

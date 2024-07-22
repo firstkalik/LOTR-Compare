@@ -44,7 +44,6 @@ import lotr.common.entity.ai.LOTREntityAIHiredRemainStill;
 import lotr.common.entity.npc.LOTREntityMan;
 import lotr.common.entity.npc.LOTREntityNPC;
 import lotr.common.entity.npc.LOTREntityUrukWargBombardier;
-import lotr.common.entity.npc.LOTREntityWarg;
 import lotr.common.entity.npc.LOTRFamilyInfo;
 import lotr.common.entity.npc.LOTRHiredNPCInfo;
 import lotr.common.entity.npc.LOTRInventoryNPCItems;
@@ -122,7 +121,7 @@ extends LOTREntityMan {
     @Override
     protected void applyEntityAttributes() {
         super.applyEntityAttributes();
-        this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(20.0);
+        this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue((double)MathHelper.getRandomIntegerInRange((Random)this.rand, (int)20, (int)22));
         this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.2);
     }
 

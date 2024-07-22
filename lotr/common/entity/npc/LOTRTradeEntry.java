@@ -11,7 +11,6 @@ package lotr.common.entity.npc;
 
 import lotr.common.entity.npc.LOTREntityNPC;
 import lotr.common.item.LOTRItemMug;
-import lotr.common.quest.IPickpocketable;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -21,8 +20,6 @@ public class LOTRTradeEntry {
     private final ItemStack tradeItem;
     private int tradeCost;
     private int recentTradeValue;
-    private static final int valueThreshold = 200;
-    private static final int valueDecayTime = 60;
     private int lockedTicks;
 
     public LOTRTradeEntry(ItemStack itemstack, int cost) {
@@ -46,38 +43,18 @@ public class LOTRTradeEntry {
         return this.recentTradeValue < 200 && this.lockedTicks <= 0;
     }
 
-    public float getLockedProgress() {
-        return (float)this.recentTradeValue / 200.0f;
-    }
-
-    public int getLockedProgressInt(int i) {
-        float f = this.getLockedProgress();
-        return Math.round(f * (float)i);
-    }
-
-    public int getLockedProgressSlot() {
-        return this.getLockedProgressInt(16);
-    }
-
     public boolean updateAvailable(LOTREntityNPC entity) {
         boolean prevAvailable = this.isAvailable();
-        int prevLockProgress = this.getLockedProgressSlot();
         if (entity.ticksExisted % 60 == 0 && this.recentTradeValue > 0) {
             --this.recentTradeValue;
         }
         if (this.lockedTicks > 0) {
             --this.lockedTicks;
         }
-        if (this.isAvailable() != prevAvailable) {
-            return true;
-        }
-        return this.getLockedProgressSlot() != prevLockProgress;
+        return this.isAvailable() != prevAvailable;
     }
 
     public boolean matches(ItemStack itemstack) {
-        if (IPickpocketable.Helper.isPickpocketed(itemstack)) {
-            return false;
-        }
         ItemStack tradeCreated = this.createTradeItem();
         if (LOTRItemMug.isItemFullDrink(tradeCreated)) {
             ItemStack tradeDrink = LOTRItemMug.getEquivalentDrink(tradeCreated);

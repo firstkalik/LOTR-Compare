@@ -18,6 +18,8 @@
  *  net.minecraft.util.AxisAlignedBB
  *  net.minecraft.util.DamageSource
  *  net.minecraft.util.MathHelper
+ *  net.minecraft.util.MovingObjectPosition
+ *  net.minecraft.util.Vec3
  *  net.minecraft.world.World
  */
 package lotr.common.item;
@@ -25,6 +27,7 @@ package lotr.common.item;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import lotr.common.LOTRCreativeTabs;
@@ -48,6 +51,8 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
+import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 
 public class LOTRItemSauronMace
@@ -71,10 +76,9 @@ implements LOTRStoryItem {
         if (!world.isRemote) {
             List entities = world.getEntitiesWithinAABB(EntityLivingBase.class, user.boundingBox.expand(12.0, 8.0, 12.0));
             if (!entities.isEmpty()) {
-                for (int i = 0; i < entities.size(); ++i) {
-                    EntityLiving entityliving;
-                    EntityLivingBase entity = (EntityLivingBase)entities.get(i);
-                    if (entity == user || entity instanceof EntityLiving && LOTRFaction.MORDOR.isGoodRelation(LOTRMod.getNPCFaction((Entity)(entityliving = (EntityLiving)entity))) || entity instanceof EntityPlayer && (!(user instanceof EntityPlayer) ? user instanceof EntityLiving && ((EntityLiving)user).getAttackTarget() != entity && LOTRLevelData.getData((EntityPlayer)entity).getAlignment(LOTRFaction.MORDOR) > 0.0f : !MinecraftServer.getServer().isPVPEnabled() || LOTRLevelData.getData((EntityPlayer)entity).getAlignment(LOTRFaction.MORDOR) > 0.0f)) continue;
+                for (Object entitie : entities) {
+                    EntityLivingBase entity = (EntityLivingBase)entitie;
+                    if (entity == user || entity instanceof EntityLiving && LOTRFaction.MORDOR.isGoodRelation(LOTRMod.getNPCFaction((Entity)((EntityLiving)entity))) || entity instanceof EntityPlayer && (user instanceof EntityPlayer ? !MinecraftServer.getServer().isPVPEnabled() || LOTRLevelData.getData((EntityPlayer)entity).getAlignment(LOTRFaction.MORDOR) > 0.0f : user instanceof EntityLiving && ((EntityLiving)user).getAttackTarget() != entity && LOTRLevelData.getData((EntityPlayer)entity).getAlignment(LOTRFaction.MORDOR) > 0.0f)) continue;
                     float strength = 6.0f - user.getDistanceToEntity((Entity)entity) * 0.75f;
                     if (strength < 1.0f) {
                         strength = 1.0f;
@@ -104,6 +108,56 @@ implements LOTRStoryItem {
     @Override
     public EnumAction getItemUseAction(ItemStack itemstack) {
         return EnumAction.bow;
+    }
+
+    @Override
+    public boolean hitEntity(ItemStack itemstack, EntityLivingBase entity, EntityLivingBase attacker) {
+        itemstack.damageItem(1, attacker);
+        this.useTwoHandedSword(itemstack, entity.worldObj, entity, attacker);
+        return true;
+    }
+
+    public void useTwoHandedSword(ItemStack itemstack, World world, EntityLivingBase target, EntityLivingBase user) {
+        user.swingItem();
+        if (!world.isRemote) {
+            double radius = 5.5;
+            Vec3 position = Vec3.createVectorHelper((double)user.posX, (double)user.posY, (double)user.posZ);
+            Vec3 look = user.getLookVec();
+            Vec3 sight = position.addVector(look.xCoord * radius, look.yCoord * radius, look.zCoord * radius);
+            float sightWidth = 1.0f;
+            List entities = world.getEntitiesWithinAABBExcludingEntity((Entity)user, user.boundingBox.addCoord(look.xCoord * radius, look.yCoord * radius, look.zCoord * radius).expand((double)sightWidth, (double)sightWidth, (double)sightWidth));
+            ArrayList<EntityLivingBase> targets = new ArrayList<EntityLivingBase>();
+            if (!entities.isEmpty()) {
+                for (Object element : entities) {
+                    EntityLivingBase entity;
+                    Entity obj = (Entity)element;
+                    if (!(obj instanceof EntityLivingBase) || (entity = (EntityLivingBase)obj) == user.ridingEntity && !entity.canRiderInteract() || !entity.canBeCollidedWith()) continue;
+                    float width = 1.0f;
+                    AxisAlignedBB axisalignedbb = entity.boundingBox.expand((double)width, (double)width, (double)width);
+                    MovingObjectPosition movingobjectposition = axisalignedbb.calculateIntercept(position, sight);
+                    if (axisalignedbb.isVecInside(position)) {
+                        targets.add(entity);
+                        continue;
+                    }
+                    if (movingobjectposition == null) continue;
+                    targets.add(entity);
+                }
+            }
+            if (!targets.isEmpty()) {
+                for (EntityLivingBase entity : targets) {
+                    if (entity == user || entity == target || entity instanceof EntityPlayer && (user instanceof EntityPlayer ? !MinecraftServer.getServer().isPVPEnabled() : user instanceof EntityLiving && ((EntityLiving)user).getAttackTarget() != entity)) continue;
+                    float strength = this.lotrWeaponDamage - user.getDistanceToEntity((Entity)entity) * 0.75f;
+                    if (strength <= 0.0f) {
+                        strength = 0.01f;
+                    }
+                    if (user instanceof EntityPlayer) {
+                        entity.attackEntityFrom(DamageSource.causePlayerDamage((EntityPlayer)((EntityPlayer)user)), strength / 3.5f);
+                        continue;
+                    }
+                    entity.attackEntityFrom(DamageSource.causeMobDamage((EntityLivingBase)user), strength / 3.5f);
+                }
+            }
+        }
     }
 
     @Override

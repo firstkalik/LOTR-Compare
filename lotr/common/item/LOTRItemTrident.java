@@ -73,9 +73,9 @@ extends LOTRItemPolearm {
     }
 
     public void onPlayerStoppedUsing(ItemStack itemstack, World world, EntityPlayer entityplayer, int useTick) {
-        int i;
         int k;
         int j;
+        int i;
         int usageTime = this.getMaxItemUseDuration(itemstack) - useTick;
         if (usageTime <= 5) {
             return;

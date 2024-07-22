@@ -40,7 +40,7 @@ extends WorldGenerator {
     }
 
     public boolean generate(World world, Random random, int i, int j, int k) {
-        BiomeGenBase biome = world.getBiomeGenForCoords(i, k);
+        world.getBiomeGenForCoords(i, k);
         if (!LOTRWorldGenStructureBase2.isSurfaceStatic(world, i, j - 1, k)) {
             return false;
         }

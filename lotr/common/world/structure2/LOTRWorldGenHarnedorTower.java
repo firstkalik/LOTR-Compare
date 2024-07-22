@@ -11,7 +11,6 @@ package lotr.common.world.structure2;
 import java.util.Random;
 import lotr.common.LOTRMod;
 import lotr.common.entity.LOTREntityNPCRespawner;
-import lotr.common.entity.npc.LOTREntityHarnedhrim;
 import lotr.common.entity.npc.LOTREntityHarnedorArcher;
 import lotr.common.entity.npc.LOTREntityHarnedorWarrior;
 import lotr.common.world.structure.LOTRChestContents;

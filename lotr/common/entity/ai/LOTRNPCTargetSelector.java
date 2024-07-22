@@ -45,7 +45,6 @@ implements IEntitySelector {
                 return true;
             }
             if (this.ownerFaction.isNeutral(targetFaction)) {
-                float alignment;
                 EntityPlayer hiringPlayer = null;
                 if (this.owner instanceof LOTREntityNPC) {
                     LOTREntityNPC npc = (LOTREntityNPC)this.owner;
@@ -53,7 +52,7 @@ implements IEntitySelector {
                         hiringPlayer = npc.hiredNPCInfo.getHiringPlayer();
                     }
                 }
-                if (hiringPlayer != null && (alignment = LOTRLevelData.getData(hiringPlayer).getAlignment(targetFaction)) < 0.0f) {
+                if (hiringPlayer != null && LOTRLevelData.getData(hiringPlayer).getAlignment(targetFaction) < 0.0f) {
                     return true;
                 }
             }

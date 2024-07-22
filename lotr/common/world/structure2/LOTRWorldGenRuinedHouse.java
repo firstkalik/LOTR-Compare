@@ -38,15 +38,16 @@ extends LOTRWorldGenStructureBase2 {
     @Override
     public boolean generateWithSetRotation(World world, Random random, int i, int j, int k, int rotation) {
         int i1;
+        int k1;
         int width = 4 + random.nextInt(3);
         this.setOriginAndRotation(world, i, j, k, rotation, width + 1);
         if (this.restrictions) {
             int minHeight = 1;
             int maxHeight = 1;
             for (int i12 = -width; i12 <= width; ++i12) {
-                for (int k1 = -width; k1 <= width; ++k1) {
-                    int j1 = this.getTopBlock(world, i12, k1);
-                    Block block = this.getBlock(world, i12, j1 - 1, k1);
+                for (int k12 = -width; k12 <= width; ++k12) {
+                    int j1 = this.getTopBlock(world, i12, k12);
+                    Block block = this.getBlock(world, i12, j1 - 1, k12);
                     if (block != Blocks.grass && block != Blocks.dirt && block != Blocks.stone) {
                         return false;
                     }
@@ -62,7 +63,7 @@ extends LOTRWorldGenStructureBase2 {
             }
         }
         for (i1 = -width; i1 <= width; ++i1) {
-            for (int k1 = -width; k1 <= width; ++k1) {
+            for (k1 = -width; k1 <= width; ++k1) {
                 int j1;
                 for (j1 = 0; j1 <= 5; ++j1) {
                     this.setAir(world, i1, j1, k1);
@@ -75,7 +76,7 @@ extends LOTRWorldGenStructureBase2 {
                 }
             }
         }
-        for (int k1 = -width; k1 <= width; ++k1) {
+        for (k1 = -width; k1 <= width; ++k1) {
             this.placeRandomWallOrStone(world, random, -width, 1, -k1);
             this.placeRandomWallOrStone(world, random, width, 1, k1);
             this.placeRandomWall(world, random, -width, 2, k1, true);
@@ -111,9 +112,9 @@ extends LOTRWorldGenStructureBase2 {
             this.setBlockAndMetadata(world, -width + 1, 1, -width + 2, Blocks.furnace, 0);
         }
         if (random.nextBoolean()) {
-            this.placeChest(world, random, width - 1, 1, width - 2, 0, LOTRChestContents.RUINED_HOUSE);
+            this.placeChest(world, random, width - 1, 1, width - 2, 0, LOTRChestContents.LOTRChestContents2.RUINED_HOUSE);
         } else {
-            this.placeChest(world, random, -width + 1, 1, width - 2, 0, LOTRChestContents.RUINED_HOUSE);
+            this.placeChest(world, random, -width + 1, 1, width - 2, 0, LOTRChestContents.LOTRChestContents2.RUINED_HOUSE);
         }
         return true;
     }

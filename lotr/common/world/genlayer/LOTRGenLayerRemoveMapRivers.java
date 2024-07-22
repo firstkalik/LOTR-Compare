@@ -10,7 +10,6 @@ package lotr.common.world.genlayer;
 import cpw.mods.fml.common.FMLLog;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import lotr.common.LOTRDimension;
@@ -42,23 +41,22 @@ extends LOTRGenLayer {
                 if (biomeID == LOTRBiome.river.biomeID) {
                     int replaceID = -1;
                     for (int range = 1; range <= maxRange; ++range) {
-                        int count;
-                        Object subBiomeID;
                         int id;
+                        int count;
                         HashMap viableBiomes = new HashMap();
                         HashMap<Integer, Integer> viableBiomesWateryAdjacent = new HashMap<Integer, Integer>();
                         for (int k2 = k1 - range; k2 <= k1 + range; ++k2) {
                             for (int i2 = i1 - range; i2 <= i1 + range; ++i2) {
+                                int subBiomeID;
                                 LOTRBiome subBiome;
-                                int subIndex;
-                                if (Math.abs(i2 - i1) != range && Math.abs(k2 - k1) != range || (subBiome = this.dimension.biomeList[subBiomeID = (Object)biomes[subIndex = i2 + maxRange + (k2 + maxRange) * (xSize + maxRange * 2)]]) == LOTRBiome.river) continue;
-                                boolean wateryAdjacent = subBiome.isWateryBiome() && range == 1;
-                                HashMap<Integer, Integer> srcMap = wateryAdjacent ? viableBiomesWateryAdjacent : viableBiomes;
+                                if (Math.abs(i2 - i1) != range && Math.abs(k2 - k1) != range || (subBiome = this.dimension.biomeList[subBiomeID = biomes[i2 + maxRange + (k2 + maxRange) * (xSize + maxRange * 2)]]) == LOTRBiome.river) continue;
+                                Object wateryAdjacent = subBiome.isWateryBiome() && range == 1;
+                                HashMap<Integer, Integer> srcMap = wateryAdjacent != false ? viableBiomesWateryAdjacent : viableBiomes;
                                 int count2 = 0;
-                                if (srcMap.containsKey(Integer.valueOf(subBiomeID))) {
-                                    count2 = (Integer)srcMap.get(Integer.valueOf(subBiomeID));
+                                if (srcMap.containsKey(subBiomeID)) {
+                                    count2 = (Integer)srcMap.get(subBiomeID);
                                 }
-                                srcMap.put(Integer.valueOf(subBiomeID), ++count2);
+                                srcMap.put(subBiomeID, ++count2);
                             }
                         }
                         HashMap priorityMap = viableBiomes;
@@ -74,10 +72,7 @@ extends LOTRGenLayer {
                             if (count <= maxCount) continue;
                             maxCount = count;
                         }
-                        subBiomeID = priorityMap.entrySet().iterator();
-                        while (subBiomeID.hasNext()) {
-                            Map.Entry e;
-                            e = subBiomeID.next();
+                        for (Map.Entry e : priorityMap.entrySet()) {
                             id = (Integer)e.getKey();
                             count = (Integer)e.getValue();
                             if (count != maxCount) continue;

@@ -118,11 +118,10 @@ extends BlockContainer {
     }
 
     public int getLightValue(IBlockAccess world, int i, int j, int k) {
-        LOTRTileEntityAnimalJar jar;
-        int light;
+        int light2;
         TileEntity te = world.getTileEntity(i, j, k);
-        if (te instanceof LOTRTileEntityAnimalJar && (light = (jar = (LOTRTileEntityAnimalJar)te).getLightValue()) > 0) {
-            return light;
+        if (te instanceof LOTRTileEntityAnimalJar && (light2 = ((LOTRTileEntityAnimalJar)te).getLightValue()) > 0) {
+            return light2;
         }
         return super.getLightValue(world, i, j, k);
     }

@@ -92,8 +92,8 @@ implements LOTRAmbientCreature {
     public void onUpdate() {
         super.onUpdate();
         this.motionY *= 0.6;
-        for (int l = 0; l < this.midges.length; ++l) {
-            this.midges[l].update();
+        for (Midge midge : this.midges) {
+            midge.update();
         }
         if (this.rand.nextInt(5) == 0) {
             this.playSound("lotr:midges.swarm", this.getSoundVolume(), this.getSoundPitch());

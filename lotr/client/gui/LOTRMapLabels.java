@@ -95,13 +95,13 @@ public enum LOTRMapLabels {
     RHUN_LAND((Object)((Object)LOTRBiome.rhunLand), 1870, 1010, 3.0f, -10, -2.0f, 0.5f),
     RHUN_RED_FOREST((Object)((Object)LOTRBiome.rhunRedForest), 1880, 835, 1.25f, 10, -1.5f, 1.5f),
     WILD_WOOD("wildWood", 2450, 1120, 6.0f, 60, -2.5f, 0.5f),
-    HARUNNOR("harunnor", 2610, 1760, 10.0f, -5, -3.5f, -0.5f),
+    HARUDOR("harudor", 2610, 1760, 10.0f, -5, -3.5f, -0.5f),
     MOUNTAINS_WIND((Object)((Object)LOTRBiome.windMountains), 2490, 1610, 4.0f, -10, -3.5f, 0.5f),
     LAST_DESERT((Object)((Object)LOTRBiome.lastDesert), 2540, 1460, 4.0f, -20, -2.5f, 0.5f),
     UTTER_EAST("utterEast", 2740, 1000, 10.0f, 60, -3.5f, -1.0f),
-    OROCARNI((Object)((Object)LOTRBiome.redMountains), 2420, 870, 6.0f, 60, -3.5f, -0.5f),
+    OROCARNI("red", 2420, 870, 6.0f, 60, -3.5f, -0.5f),
     NEAR_HARAD("nearHarad", 1590, 1685, 8.0f, -2, -4.5f, -0.5f),
-    HARNENNOR((Object)((Object)LOTRBiome.harnedor), 1440, 1580, 3.0f, -3, -2.5f, 1.5f),
+    HARNEDOR((Object)((Object)LOTRBiome.harnedor), 1440, 1580, 3.0f, -3, -2.5f, 1.5f),
     LITHNEN("lithnen", 1615, 1615, 1.5f, -15, -1.5f, 1.5f),
     UMBAR((Object)((Object)LOTRBiome.umbar), 1160, 1685, 4.0f, -15, -3.5f, 1.5f),
     LOSTLADEN("lostladen", 1685, 1470, 2.0f, -5, -2.5f, 1.5f),
@@ -113,7 +113,7 @@ public enum LOTRMapLabels {
     GREAT_PLAINS("greatPlains", 1370, 2280, 7.5f, 2, -2.5f, -0.5f),
     FORESTS_SOUTH("forestsSouth", 1300, 3000, 6.0f, 2, -2.5f, -0.5f),
     HARAD_MOUNTAINS((Object)((Object)LOTRBiome.haradMountains), 850, 2280, 5.0f, 80, -2.5f, 0.5f),
-    PERDOROGWAITH((Object)((Object)LOTRBiome.pertorogwaith), 1920, 2560, 5.0f, -10, -2.5f, 0.5f),
+    PERTOROGWAITH((Object)((Object)LOTRBiome.pertorogwaith), 1920, 2560, 5.0f, -10, -2.5f, 0.5f),
     FOREST_TROLLS((Object)((Object)LOTRBiome.halfTrollForest), 1740, 2530, 2.0f, 5, -2.0f, 1.5f);
 
     public final int posX;

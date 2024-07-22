@@ -26,7 +26,6 @@ extends EntityAIAvoidEntity {
     public LOTREntityAIAvoidHuorn(final EntityCreature entity, float range, double near, double far) {
         super(entity, LOTREntityHuornBase.class, range, near, far);
         try {
-            Field[] fs;
             IEntitySelector replaceSelect = new IEntitySelector(){
 
                 public boolean isEntityApplicable(Entity target) {
@@ -37,7 +36,7 @@ extends EntityAIAvoidEntity {
                     return false;
                 }
             };
-            for (Field f : fs = EntityAIAvoidEntity.class.getFields()) {
+            for (Field f : EntityAIAvoidEntity.class.getFields()) {
                 Object inst = f.get((Object)this);
                 if (inst != this.field_98218_a) continue;
                 LOTRReflection.unlockFinalField(f);

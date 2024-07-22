@@ -45,7 +45,7 @@ implements LOTRUnitTradeable {
     public LOTREntityNearHaradrimWarlord(World world) {
         super(world);
         this.addTargetTasks(false);
-        this.npcCape = LOTRCapes.NEAR_HARAD;
+        this.npcCape = LOTRCapes.ALIGNMENT_NEAR_HARAD.capeTexture;
     }
 
     @Override
@@ -79,7 +79,7 @@ implements LOTRUnitTradeable {
     }
 
     @Override
-    public LOTRInvasions getWarhorn() {
+    public LOTRInvasions getConquestHorn() {
         return LOTRInvasions.NEAR_HARAD_COAST;
     }
 

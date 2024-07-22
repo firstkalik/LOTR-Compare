@@ -28,16 +28,15 @@ package lotr.common.item;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import lotr.common.LOTRCommonProxy;
 import lotr.common.LOTRCreativeTabs;
 import lotr.common.LOTRMod;
+import lotr.common.block.LOTRBlockChest;
 import lotr.common.inventory.LOTRContainerChestWithPouch;
 import lotr.common.inventory.LOTRContainerPouch;
 import lotr.common.inventory.LOTRInventoryPouch;
-import lotr.common.tileentity.LOTRTileEntityChest;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockChest;
 import net.minecraft.block.BlockEnderChest;
@@ -79,7 +78,7 @@ extends Item {
 
     public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer) {
         if (!world.isRemote) {
-            entityplayer.openGui((Object)LOTRMod.instance, 15, world, 0, 0, 0);
+            entityplayer.openGui((Object)LOTRMod.instance, 15, world, entityplayer.inventory.currentItem, 0, 0);
         }
         return itemstack;
     }
@@ -87,14 +86,14 @@ extends Item {
     public boolean onItemUseFirst(ItemStack itemstack, EntityPlayer entityplayer, World world, int i, int j, int k, int side, float hitX, float hitY, float hitZ) {
         IInventory chest = LOTRItemPouch.getChestInvAt(entityplayer, world, i, j, k);
         if (chest != null) {
-            LOTRMod.proxy.usePouchOnChest(entityplayer, world, i, j, k, side, itemstack);
+            LOTRMod.proxy.usePouchOnChest(entityplayer, world, i, j, k, side, itemstack, entityplayer.inventory.currentItem);
             return true;
         }
         return false;
     }
 
-    public static boolean isHoldingPouch(EntityPlayer entityplayer) {
-        return entityplayer.inventory.getCurrentItem() != null && entityplayer.inventory.getCurrentItem().getItem() instanceof LOTRItemPouch;
+    public static boolean isHoldingPouch(EntityPlayer entityplayer, int slot) {
+        return entityplayer.inventory.getStackInSlot(slot) != null && entityplayer.inventory.getStackInSlot(slot).getItem() instanceof LOTRItemPouch;
     }
 
     public static IInventory getChestInvAt(EntityPlayer entityplayer, World world, int i, int j, int k) {
@@ -104,8 +103,8 @@ extends Item {
         if (block instanceof BlockChest) {
             return ((BlockChest)block).func_149951_m(world, i, j, k);
         }
-        if (te instanceof LOTRTileEntityChest) {
-            return (LOTRTileEntityChest)te;
+        if (block instanceof LOTRBlockChest) {
+            return ((LOTRBlockChest)block).getModChestAt(world, i, j, k);
         }
         if (block instanceof BlockEnderChest && !world.getBlock(i, j + 1, k).isNormalCube() && (enderInv = entityplayer.getInventoryEnderChest()) != null && te instanceof TileEntityEnderChest) {
             TileEntityEnderChest enderChest = (TileEntityEnderChest)te;
@@ -253,7 +252,7 @@ extends Item {
             for (int i = 0; i < pouchInv.getSizeInventory() && itemstack.stackSize > 0; ++i) {
                 int difference;
                 ItemStack itemInSlot = pouchInv.getStackInSlot(i);
-                if (itemInSlot != null ? itemInSlot.stackSize >= itemInSlot.getMaxStackSize() || itemInSlot.getItem() != itemstack.getItem() || !itemInSlot.isStackable() || itemInSlot.getHasSubtypes() && itemInSlot.getItemDamage() != itemstack.getItemDamage() || !ItemStack.areItemStackTagsEqual((ItemStack)itemInSlot, (ItemStack)itemstack) : requireMatchInPouch) continue;
+                if (itemInSlot == null ? requireMatchInPouch : itemInSlot.stackSize >= itemInSlot.getMaxStackSize() || itemInSlot.getItem() != itemstack.getItem() || !itemInSlot.isStackable() || itemInSlot.getHasSubtypes() && itemInSlot.getItemDamage() != itemstack.getItemDamage() || !ItemStack.areItemStackTagsEqual((ItemStack)itemInSlot, (ItemStack)itemstack)) continue;
                 if (itemInSlot == null) {
                     pouchInv.setInventorySlotContents(i, itemstack);
                     return true;
@@ -276,12 +275,11 @@ extends Item {
     }
 
     public static boolean restockPouches(EntityPlayer player) {
-        Object itemstack;
         InventoryPlayer inv = player.inventory;
         ArrayList<Integer> pouchSlots = new ArrayList<Integer>();
         ArrayList<Integer> itemSlots = new ArrayList<Integer>();
         for (int i = 0; i < inv.mainInventory.length; ++i) {
-            itemstack = inv.getStackInSlot(i);
+            ItemStack itemstack = inv.getStackInSlot(i);
             if (itemstack == null) continue;
             if (itemstack.getItem() instanceof LOTRItemPouch) {
                 pouchSlots.add(i);
@@ -290,22 +288,19 @@ extends Item {
             itemSlots.add(i);
         }
         boolean movedAny = false;
-        itemstack = itemSlots.iterator();
-        block1 : while (itemstack.hasNext()) {
-            int i = (Integer)itemstack.next();
-            ItemStack itemstack2 = inv.getStackInSlot(i);
-            Iterator iterator = pouchSlots.iterator();
-            while (iterator.hasNext()) {
-                int p = (Integer)iterator.next();
+        for (Integer integer : itemSlots) {
+            int j = integer;
+            ItemStack itemstack = inv.getStackInSlot(j);
+            for (Integer integer2 : pouchSlots) {
+                int p = integer2;
                 ItemStack pouch = inv.getStackInSlot(p);
-                int stackSizeBefore = itemstack2.stackSize;
-                LOTRItemPouch.tryAddItemToPouch(pouch, itemstack2, true);
-                if (itemstack2.stackSize != stackSizeBefore) {
+                int stackSizeBefore = itemstack.stackSize;
+                LOTRItemPouch.tryAddItemToPouch(pouch, itemstack, true);
+                if (itemstack.stackSize != stackSizeBefore) {
                     movedAny = true;
                 }
-                if (itemstack2.stackSize > 0) continue;
-                inv.setInventorySlotContents(i, null);
-                continue block1;
+                if (itemstack.stackSize > 0) continue;
+                inv.setInventorySlotContents(j, null);
             }
         }
         return movedAny;

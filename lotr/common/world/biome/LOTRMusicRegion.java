@@ -47,6 +47,7 @@ public enum LOTRMusicRegion {
     FAR_HARAD("farHarad"),
     FAR_HARAD_JUNGLE("farHaradJungle"),
     PERDOROGWAITH("perdorogwaith"),
+    SUN("sun"),
     UTUMNO("utumno");
 
     public static final String allRegionCode = "all";

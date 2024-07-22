@@ -49,7 +49,6 @@ extends WorldGenAbstractTree {
     }
 
     public boolean generate(World world, Random random, int i, int j, int k) {
-        boolean isSoil;
         Block below;
         int height = MathHelper.getRandomIntegerInRange((Random)random, (int)this.minHeight, (int)this.maxHeight);
         boolean flag = true;
@@ -76,17 +75,15 @@ extends WorldGenAbstractTree {
         } else {
             flag = false;
         }
-        if (!(isSoil = (below = world.getBlock(i, j - 1, k)).canSustainPlant((IBlockAccess)world, i, j - 1, k, ForgeDirection.UP, (IPlantable)Blocks.sapling))) {
+        if (!(below = world.getBlock(i, j - 1, k)).canSustainPlant((IBlockAccess)world, i, j - 1, k, ForgeDirection.UP, (IPlantable)Blocks.sapling)) {
             flag = false;
         }
         if (this.needsWater) {
             boolean water = false;
             int attempts = 4;
             for (int l = 0; l < attempts; ++l) {
-                int k1;
-                int j1;
                 int i1 = i + MathHelper.getRandomIntegerInRange((Random)random, (int)-12, (int)12);
-                if (world.getBlock(i1, j1 = j + MathHelper.getRandomIntegerInRange((Random)random, (int)-8, (int)4), k1 = k + MathHelper.getRandomIntegerInRange((Random)random, (int)-12, (int)12)).getMaterial() != Material.water) continue;
+                if (world.getBlock(i1, j + MathHelper.getRandomIntegerInRange((Random)random, (int)-8, (int)4), k + MathHelper.getRandomIntegerInRange((Random)random, (int)-12, (int)12)).getMaterial() != Material.water) continue;
                 water = true;
                 break;
             }
@@ -143,7 +140,7 @@ extends WorldGenAbstractTree {
                     this.setBlockAndNotifyAdequately(world, rootX, rootY, rootZ, this.woodBlock, this.woodMeta | 0xC);
                     world.getBlock(rootX, rootY - 1, rootZ).onPlantGrow(world, rootX, rootY - 1, rootZ, rootX, rootY, rootZ);
                     --rootY;
-                    if (++roots <= 4 + random.nextInt(3)) continue;
+                    if (++roots > 4 + random.nextInt(3)) continue;
                 }
             }
         }
@@ -206,12 +203,9 @@ extends WorldGenAbstractTree {
 
     private void growVines(World world, Random random, int i, int j, int k, int meta) {
         this.setBlockAndNotifyAdequately(world, i, j, k, LOTRMod.willowVines, meta);
-        int vines = 0;
-        while (world.getBlock(i, --j, k).isAir((IBlockAccess)world, i, j, k) && vines < 2 + random.nextInt(4)) {
+        for (int vines = 0; world.getBlock(i, --j, k).isAir((IBlockAccess)world, i, j, k) && vines < 2 + random.nextInt(4); ++vines) {
             this.setBlockAndNotifyAdequately(world, i, j, k, LOTRMod.willowVines, meta);
-            ++vines;
         }
-        return;
     }
 }
 

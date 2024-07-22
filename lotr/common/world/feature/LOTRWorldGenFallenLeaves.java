@@ -23,18 +23,17 @@ import net.minecraft.world.gen.feature.WorldGenerator;
 public class LOTRWorldGenFallenLeaves
 extends WorldGenerator {
     public boolean generate(World world, Random random, int i, int j, int k) {
-        int k1;
+        int j1;
         int i1;
         int l;
-        int j1;
+        int k1;
         Block fallenLeaf = null;
         int fallenMeta = 0;
         for (l = 0; l < 40; ++l) {
-            int meta;
             Object[] obj;
             i1 = i - random.nextInt(6) + random.nextInt(6);
             Block block = world.getBlock(i1, j1 = j + random.nextInt(12), k1 = k - random.nextInt(6) + random.nextInt(6));
-            if (!(block instanceof BlockLeavesBase) || (obj = LOTRBlockFallenLeaves.fallenBlockMetaFromLeafBlockMeta(block, meta = world.getBlockMetadata(i1, j1, k1))) == null) continue;
+            if (!(block instanceof BlockLeavesBase) || (obj = LOTRBlockFallenLeaves.fallenBlockMetaFromLeafBlockMeta(block, world.getBlockMetadata(i1, j1, k1))) == null) continue;
             fallenLeaf = (Block)obj[0];
             fallenMeta = (Integer)obj[1];
             break;
@@ -46,7 +45,7 @@ extends WorldGenerator {
             i1 = i - random.nextInt(5) + random.nextInt(5);
             j1 = j - random.nextInt(3) + random.nextInt(3);
             k1 = k - random.nextInt(5) + random.nextInt(5);
-            Block below = world.getBlock(i1, j1 - 1, k1);
+            world.getBlock(i1, j1 - 1, k1);
             Block block = world.getBlock(i1, j1, k1);
             if (!fallenLeaf.canBlockStay(world, i1, j1, k1) || block.getMaterial().isLiquid() || !block.isReplaceable((IBlockAccess)world, i1, j1, k1)) continue;
             world.setBlock(i1, j1, k1, fallenLeaf, fallenMeta, 2);

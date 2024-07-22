@@ -31,15 +31,15 @@ extends LOTRWorldGenGondorStructure {
             int maxHeight = 0;
             for (int i1 = -3; i1 <= 3; ++i1) {
                 for (int k1 = -3; k1 <= 3; ++k1) {
-                    j1 = this.getTopBlock(world, i1, k1) - 1;
-                    if (!this.isSurface(world, i1, j1, k1)) {
+                    j12 = this.getTopBlock(world, i1, k1) - 1;
+                    if (!this.isSurface(world, i1, j12, k1)) {
                         return false;
                     }
-                    if (j1 < minHeight) {
-                        minHeight = j1;
+                    if (j12 < minHeight) {
+                        minHeight = j12;
                     }
-                    if (j1 > maxHeight) {
-                        maxHeight = j1;
+                    if (j12 > maxHeight) {
+                        maxHeight = j12;
                     }
                     if (maxHeight - minHeight <= 8) continue;
                     return false;
@@ -50,12 +50,12 @@ extends LOTRWorldGenGondorStructure {
             for (int k1 = -3; k1 <= 3; ++k1) {
                 int i2 = Math.abs(i1);
                 int k2 = Math.abs(k1);
-                for (j1 = 0; !(j1 < 0 && this.isOpaque(world, i1, j1, k1) || this.getY(j1) < 0); --j1) {
-                    this.setBlockAndMetadata(world, i1, j1, k1, this.rockBlock, this.rockMeta);
-                    this.setGrassToDirt(world, i1, j1 - 1, k1);
+                for (j12 = 0; !(j12 < 0 && this.isOpaque(world, i1, j12, k1) || this.getY(j12) < 0); --j12) {
+                    this.setBlockAndMetadata(world, i1, j12, k1, this.rockBlock, this.rockMeta);
+                    this.setGrassToDirt(world, i1, j12 - 1, k1);
                 }
-                for (j1 = 1; j1 <= 6; ++j1) {
-                    this.setAir(world, i1, j1, k1);
+                for (j12 = 1; j12 <= 6; ++j12) {
+                    this.setAir(world, i1, j12, k1);
                 }
                 if (i2 == 2 && k2 == 2) {
                     this.setBlockAndMetadata(world, i1, 1, k1, this.rockBlock, this.rockMeta);
@@ -83,16 +83,16 @@ extends LOTRWorldGenGondorStructure {
                         this.setBlockAndMetadata(world, i1, 7, k1, this.rockSlabBlock, this.rockSlabMeta);
                     }
                 }
-                if ((i2 != 2 || k2 > 1) && (k2 != 2 || i2 > 1)) continue;
+                if (!(i2 == 2 && k2 <= 1 || k2 == 2 && i2 <= 1)) continue;
                 this.setBlockAndMetadata(world, i1, 1, k1, this.fenceBlock, this.fenceMeta);
                 this.setBlockAndMetadata(world, i1, 0, k1, this.rockSlabDoubleBlock, this.rockSlabDoubleMeta);
             }
         }
         int waterDepth = 1 + random.nextInt(4);
         int depth = waterDepth + 1 + random.nextInt(3);
-        for (j12 = 0; j12 < depth; ++j12) {
-            int j2 = 0 - j12;
-            boolean watery = j12 >= depth - waterDepth;
+        for (j1 = 0; j1 < depth; ++j1) {
+            int j2 = 0 - j1;
+            boolean watery = j1 >= depth - waterDepth;
             for (int i1 = -1; i1 <= 1; ++i1) {
                 for (int k1 = -1; k1 <= 1; ++k1) {
                     if (watery) {
@@ -112,8 +112,8 @@ extends LOTRWorldGenGondorStructure {
         this.setBlockAndMetadata(world, 0, 1, 2, this.fenceGateBlock, 2);
         this.setBlockAndMetadata(world, -2, 1, 0, this.fenceGateBlock, 1);
         this.setBlockAndMetadata(world, 2, 1, 0, this.fenceGateBlock, 3);
-        for (j12 = 4; j12 <= 5; ++j12) {
-            this.setBlockAndMetadata(world, 0, j12, 0, this.fenceBlock, this.fenceMeta);
+        for (j1 = 4; j1 <= 5; ++j1) {
+            this.setBlockAndMetadata(world, 0, j1, 0, this.fenceBlock, this.fenceMeta);
         }
         this.setBlockAndMetadata(world, -3, 5, 0, Blocks.torch, 1);
         this.setBlockAndMetadata(world, 3, 5, 0, Blocks.torch, 2);

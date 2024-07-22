@@ -68,21 +68,23 @@ extends EntityRenderer {
             float lookWidth = LOTRWeaponStats.getMeleeExtraLookWidth();
             List entities = this.theMC.theWorld.getEntitiesWithinAABBExcludingEntity((Entity)this.theMC.renderViewEntity, this.theMC.renderViewEntity.boundingBox.addCoord(lookVec.xCoord * reach, lookVec.yCoord * reach, lookVec.zCoord * reach).expand((double)lookWidth, (double)lookWidth, (double)lookWidth));
             double leastDist = maxDist;
-            for (int i = 0; i < entities.size(); ++i) {
-                double entityDist;
-                Entity entity = (Entity)entities.get(i);
+            for (Object entitie : entities) {
+                double d;
+                Entity entity = (Entity)entitie;
                 if (!entity.canBeCollidedWith()) continue;
                 float f = entity.getCollisionBorderSize();
                 AxisAlignedBB entityBB = entity.boundingBox.expand((double)f, (double)f, (double)f);
                 MovingObjectPosition movingobjectposition = entityBB.calculateIntercept(posVec, sightVec);
                 if (entityBB.isVecInside(posVec)) {
-                    if (!(0.0 < leastDist) && leastDist != 0.0) continue;
+                    if (0.0 >= leastDist && leastDist != 0.0) continue;
                     this.thePointedEntity = entity;
                     targetVec = movingobjectposition == null ? posVec : movingobjectposition.hitVec;
                     leastDist = 0.0;
                     continue;
                 }
-                if (movingobjectposition == null || !((entityDist = posVec.distanceTo(movingobjectposition.hitVec)) < leastDist) && leastDist != 0.0) continue;
+                if (movingobjectposition == null) continue;
+                double entityDist = posVec.distanceTo(movingobjectposition.hitVec);
+                if (d >= leastDist && leastDist != 0.0) continue;
                 if (entity == this.theMC.renderViewEntity.ridingEntity && !entity.canRiderInteract()) {
                     if (leastDist != 0.0) continue;
                     this.thePointedEntity = entity;

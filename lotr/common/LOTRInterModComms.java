@@ -28,10 +28,10 @@ public class LOTRInterModComms {
             for (FMLInterModComms.IMCMessage message : messages) {
                 if (!message.key.equals("SIEGE_ACTIVE")) continue;
                 String playerName = message.getStringValue();
-                EntityPlayerMP entityplayer = MinecraftServer.getServer().getConfigurationManager().func_152612_a(playerName);
-                if (entityplayer == null) continue;
+                EntityPlayerMP entityPlayerMP = MinecraftServer.getServer().getConfigurationManager().func_152612_a(playerName);
+                if (entityPlayerMP == null) continue;
                 int duration = 20;
-                LOTRLevelData.getData((EntityPlayer)entityplayer).setSiegeActive(duration);
+                LOTRLevelData.getData((EntityPlayer)entityPlayerMP).setSiegeActive(duration);
             }
         }
     }

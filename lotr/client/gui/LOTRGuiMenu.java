@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import lotr.client.gui.LOTRGuiAchievements;
 import lotr.client.gui.LOTRGuiButtonMenu;
+import lotr.client.gui.LOTRGuiCapes;
 import lotr.client.gui.LOTRGuiFactions;
 import lotr.client.gui.LOTRGuiFellowships;
 import lotr.client.gui.LOTRGuiMap;
@@ -55,7 +56,7 @@ extends LOTRGuiScreenBase {
         this.buttonList.add(new LOTRGuiButtonMenu(this, 2, 0, 0, LOTRGuiAchievements.class, StatCollector.translateToLocal((String)"lotr.gui.achievements"), 30));
         this.buttonList.add(new LOTRGuiButtonMenu(this, 3, 0, 0, LOTRGuiMap.class, StatCollector.translateToLocal((String)"lotr.gui.map"), 50));
         this.buttonList.add(new LOTRGuiButtonMenu(this, 4, 0, 0, LOTRGuiFactions.class, StatCollector.translateToLocal((String)"lotr.gui.factions"), 33));
-        this.buttonList.add(new LOTRGuiButtonMenu(this, 0, 0, 0, null, "?", -1));
+        this.buttonList.add(new LOTRGuiButtonMenu(this, 0, 0, 0, LOTRGuiCapes.class, StatCollector.translateToLocal((String)"lotr.gui.capes"), 51));
         this.buttonList.add(new LOTRGuiButtonMenu(this, 6, 0, 0, LOTRGuiFellowships.class, StatCollector.translateToLocal((String)"lotr.gui.fellowships"), 25));
         this.buttonList.add(new LOTRGuiButtonMenu(this, 7, 0, 0, LOTRGuiTitles.class, StatCollector.translateToLocal((String)"lotr.gui.titles"), 20));
         this.buttonList.add(new LOTRGuiButtonMenu(this, 5, 0, 0, LOTRGuiShields.class, StatCollector.translateToLocal((String)"lotr.gui.shields"), 31));

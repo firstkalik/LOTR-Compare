@@ -7,19 +7,27 @@
  *  net.minecraft.item.ItemStack
  *  net.minecraft.util.MathHelper
  *  net.minecraft.util.StatCollector
+ *  net.minecraft.world.World
+ *  net.minecraft.world.WorldProvider
  */
 package lotr.common.enchant;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+import lotr.common.LOTRConfig;
 import lotr.common.enchant.LOTREnchantment;
 import lotr.common.enchant.LOTREnchantmentDamage;
+import lotr.common.entity.npc.LOTREntityNPC;
+import lotr.common.entity.npc.LOTRHiredNPCInfo;
+import lotr.common.world.LOTRWorldProviderUtumno;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.StatCollector;
+import net.minecraft.world.World;
+import net.minecraft.world.WorldProvider;
 
 public class LOTREnchantmentBane
 extends LOTREnchantmentDamage {
@@ -51,7 +59,7 @@ extends LOTREnchantmentDamage {
         return this;
     }
 
-    public boolean isEntityType(EntityLivingBase entity) {
+    private boolean isEntityType(EntityLivingBase entity) {
         if (this.entityClasses != null) {
             for (Class<? extends EntityLivingBase> cls : this.entityClasses) {
                 if (!cls.isAssignableFrom(entity.getClass())) continue;
@@ -61,6 +69,16 @@ extends LOTREnchantmentDamage {
             return entity.getCreatureAttribute() == this.entityAttribute;
         }
         return false;
+    }
+
+    public boolean doesEntityKillCountTowardsBane(EntityLivingBase entity, World world) {
+        if (!LOTRConfig.hiredUnitKillsCountForBane && entity instanceof LOTREntityNPC && ((LOTREntityNPC)entity).hiredNPCInfo.isActive) {
+            return false;
+        }
+        if (world.provider instanceof LOTRWorldProviderUtumno) {
+            return false;
+        }
+        return this.isEntityType(entity);
     }
 
     @Override

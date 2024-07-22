@@ -60,9 +60,9 @@ implements LOTRUnitTradeable {
         data = super.onSpawnWithEgg(data);
         this.npcItemsInv.setMeleeWeapon(new ItemStack(LOTRMod.hammerBlueDwarven));
         this.npcItemsInv.setIdleItem(this.npcItemsInv.getMeleeWeapon());
-        this.setCurrentItemOrArmor(1, new ItemStack(LOTRMod.bootsBlueDwarven));
-        this.setCurrentItemOrArmor(2, new ItemStack(LOTRMod.legsBlueDwarven));
-        this.setCurrentItemOrArmor(3, new ItemStack(LOTRMod.bodyBlueDwarven));
+        this.setCurrentItemOrArmor(1, new ItemStack(LOTRMod.bdgoldboots));
+        this.setCurrentItemOrArmor(2, new ItemStack(LOTRMod.bdgoldlegs));
+        this.setCurrentItemOrArmor(3, new ItemStack(LOTRMod.bdgoldbody));
         this.setCurrentItemOrArmor(4, null);
         return data;
     }
@@ -78,7 +78,7 @@ implements LOTRUnitTradeable {
     }
 
     @Override
-    public LOTRInvasions getWarhorn() {
+    public LOTRInvasions getConquestHorn() {
         return LOTRInvasions.BLUE_MOUNTAINS;
     }
 

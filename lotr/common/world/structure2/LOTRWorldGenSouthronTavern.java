@@ -34,8 +34,9 @@ extends LOTRWorldGenSouthronStructure {
 
     @Override
     public boolean generateWithSetRotation(World world, Random random, int i, int j, int k, int rotation) {
-        int i1;
         int k1;
+        int j1;
+        int i1;
         this.setOriginAndRotation(world, i, j, k, rotation, 16);
         this.setupRandomBlocks(random);
         if (this.restrictions) {
@@ -43,7 +44,7 @@ extends LOTRWorldGenSouthronStructure {
             int maxHeight = 0;
             for (i1 = -6; i1 <= 6; ++i1) {
                 for (k1 = -16; k1 <= 16; ++k1) {
-                    int j1 = this.getTopBlock(world, i1, k1) - 1;
+                    j1 = this.getTopBlock(world, i1, k1) - 1;
                     if (!this.isSurface(world, i1, j1, k1)) {
                         return false;
                     }
@@ -60,7 +61,7 @@ extends LOTRWorldGenSouthronStructure {
         }
         for (int i12 = -5; i12 <= 5; ++i12) {
             for (int k12 = -15; k12 <= 15; ++k12) {
-                int j1 = 0;
+                j1 = 0;
                 while (!this.isOpaque(world, i12, j1, k12) && this.getY(j1) >= 0) {
                     this.setBlockAndMetadata(world, i12, j1, k12, this.stoneBlock, this.stoneMeta);
                     this.setGrassToDirt(world, i12, j1 - 1, k12);
@@ -160,17 +161,17 @@ extends LOTRWorldGenSouthronStructure {
             this.spawnNPCAndSetHome(southron, world, 0, 1, 0, 16);
         }
         block11: for (int i13 = -1; i13 <= 1; ++i13) {
-            int j1 = 0;
+            int j12 = 0;
             for (int step = 0; step < 12; ++step) {
                 int j2;
                 int k13 = -17 - step;
-                if (this.isOpaque(world, i13, j1 + 1, k13)) {
-                    this.setAir(world, i13, ++j1 + 1, k13);
-                    this.setAir(world, i13, j1 + 2, k13);
-                    this.setAir(world, i13, j1 + 3, k13);
-                    this.setBlockAndMetadata(world, i13, j1, k13, this.stoneStairBlock, 3);
-                    this.setGrassToDirt(world, i13, j1 - 1, k13);
-                    j2 = j1 - 1;
+                if (this.isOpaque(world, i13, j12 + 1, k13)) {
+                    this.setAir(world, i13, ++j12 + 1, k13);
+                    this.setAir(world, i13, j12 + 2, k13);
+                    this.setAir(world, i13, j12 + 3, k13);
+                    this.setBlockAndMetadata(world, i13, j12, k13, this.stoneStairBlock, 3);
+                    this.setGrassToDirt(world, i13, j12 - 1, k13);
+                    j2 = j12 - 1;
                     while (!this.isOpaque(world, i13, j2, k13) && this.getY(j2) >= 0) {
                         this.setBlockAndMetadata(world, i13, j2, k13, this.stoneBlock, this.stoneMeta);
                         this.setGrassToDirt(world, i13, j2 - 1, k13);
@@ -178,19 +179,19 @@ extends LOTRWorldGenSouthronStructure {
                     }
                     continue;
                 }
-                if (this.isOpaque(world, i13, j1, k13)) continue block11;
-                this.setAir(world, i13, j1 + 1, k13);
-                this.setAir(world, i13, j1 + 2, k13);
-                this.setAir(world, i13, j1 + 3, k13);
-                this.setBlockAndMetadata(world, i13, j1, k13, this.stoneStairBlock, 2);
-                this.setGrassToDirt(world, i13, j1 - 1, k13);
-                j2 = j1 - 1;
+                if (this.isOpaque(world, i13, j12, k13)) continue block11;
+                this.setAir(world, i13, j12 + 1, k13);
+                this.setAir(world, i13, j12 + 2, k13);
+                this.setAir(world, i13, j12 + 3, k13);
+                this.setBlockAndMetadata(world, i13, j12, k13, this.stoneStairBlock, 2);
+                this.setGrassToDirt(world, i13, j12 - 1, k13);
+                j2 = j12 - 1;
                 while (!this.isOpaque(world, i13, j2, k13) && this.getY(j2) >= 0) {
                     this.setBlockAndMetadata(world, i13, j2, k13, this.stoneBlock, this.stoneMeta);
                     this.setGrassToDirt(world, i13, j2 - 1, k13);
                     --j2;
                 }
-                --j1;
+                --j12;
             }
         }
         this.setBlockAndMetadata(world, 0, 5, -16, this.fenceBlock, this.fenceMeta);

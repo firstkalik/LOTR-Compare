@@ -82,9 +82,8 @@ extends WorldGenAbstractTree {
                     for (int i1 = i - maxRange; i1 <= i + maxRange; ++i1) {
                         for (int k1 = k - maxRange; k1 <= k + maxRange; ++k1) {
                             Block block;
-                            int k2;
                             int i2 = Math.abs(i1 - i);
-                            if (i2 + (k2 = Math.abs(k1 - k)) > leafRange || !(block = world.getBlock(i1, j1, k1)).isReplaceable((IBlockAccess)world, i1, j1, k1) && !block.isLeaves((IBlockAccess)world, i1, j1, k1)) continue;
+                            if (i2 + Math.abs(k1 - k) > leafRange || !(block = world.getBlock(i1, j1, k1)).isReplaceable((IBlockAccess)world, i1, j1, k1) && !block.isLeaves((IBlockAccess)world, i1, j1, k1)) continue;
                             this.setBlockAndNotifyAdequately(world, i1, j1, k1, this.leafBlock, this.leafMeta);
                         }
                     }

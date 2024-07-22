@@ -93,6 +93,21 @@ implements IMessage {
         }
     }
 
+    public static enum Type {
+        FULL_MAP,
+        RESET,
+        ONE_ENTRY;
+
+
+        public static Type forID(int id) {
+            for (Type t : Type.values()) {
+                if (t.ordinal() != id) continue;
+                return t;
+            }
+            return null;
+        }
+    }
+
     public static class Handler
     implements IMessageHandler<LOTRPacketFactionRelations, IMessage> {
         public IMessage onMessage(LOTRPacketFactionRelations packet, MessageContext context) {
@@ -112,21 +127,6 @@ implements IMessage {
                     LOTRFactionRelations.Relation rel = packet.singleRelation;
                     LOTRFactionRelations.overrideRelations(key.getLeft(), key.getRight(), rel);
                 }
-            }
-            return null;
-        }
-    }
-
-    public static enum Type {
-        FULL_MAP,
-        RESET,
-        ONE_ENTRY;
-
-
-        public static Type forID(int id) {
-            for (Type t : Type.values()) {
-                if (t.ordinal() != id) continue;
-                return t;
             }
             return null;
         }

@@ -81,7 +81,6 @@ import net.minecraft.world.World;
 public class LOTREntitySaruman
 extends LOTREntityNPC {
     private LOTREntityRabbit targetingRabbit;
-    private int ticksChasingRabbit;
     private String randomNameTag;
 
     public LOTREntitySaruman(World world) {
@@ -100,7 +99,7 @@ extends LOTREntityNPC {
     @Override
     protected void applyEntityAttributes() {
         super.applyEntityAttributes();
-        this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(20.0);
+        this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(30.0);
         this.getEntityAttribute(SharedMonsterAttributes.followRange).setBaseValue(40.0);
         this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.5);
     }
@@ -141,12 +140,13 @@ extends LOTREntityNPC {
         super.onLivingUpdate();
         if (!this.worldObj.isRemote) {
             List rabbits;
+            LOTREntityRabbit rabbit;
             if (this.rand.nextInt(10) == 0) {
                 this.playSound(this.getLivingSound(), this.getSoundVolume(), this.getSoundPitch());
             }
             List allMobsExcludingRabbits = this.worldObj.getEntitiesWithinAABBExcludingEntity((Entity)this, this.boundingBox.expand(24.0, 24.0, 24.0));
-            for (int i = 0; i < allMobsExcludingRabbits.size(); ++i) {
-                Entity entity = (Entity)allMobsExcludingRabbits.get(i);
+            for (Object allMobsExcludingRabbit : allMobsExcludingRabbits) {
+                Entity entity = (Entity)allMobsExcludingRabbit;
                 if (entity instanceof LOTREntityRabbit || entity instanceof LOTREntityGandalf) continue;
                 double dSq = this.getDistanceSqToEntity(entity);
                 if (dSq <= 0.0) {
@@ -172,7 +172,7 @@ extends LOTREntityNPC {
                 entity.motionZ += z;
             }
             if (this.rand.nextInt(40) == 0) {
-                LOTREntityRabbit rabbit = new LOTREntityRabbit(this.worldObj);
+                rabbit = new LOTREntityRabbit(this.worldObj);
                 int i = MathHelper.floor_double((double)this.posX) - this.rand.nextInt(16) + this.rand.nextInt(16);
                 int j = MathHelper.floor_double((double)this.boundingBox.minY) - this.rand.nextInt(8) + this.rand.nextInt(8);
                 int k = MathHelper.floor_double((double)this.posZ) - this.rand.nextInt(16) + this.rand.nextInt(16);
@@ -183,7 +183,7 @@ extends LOTREntityNPC {
                 }
             }
             if (this.targetingRabbit == null && this.rand.nextInt(20) == 0 && !(rabbits = this.worldObj.getEntitiesWithinAABB(LOTREntityRabbit.class, this.boundingBox.expand(24.0, 24.0, 24.0))).isEmpty()) {
-                LOTREntityRabbit rabbit = (LOTREntityRabbit)rabbits.get(this.rand.nextInt(rabbits.size()));
+                rabbit = (LOTREntityRabbit)rabbits.get(this.rand.nextInt(rabbits.size()));
                 if (rabbit.ridingEntity == null) {
                     this.targetingRabbit = rabbit;
                 }

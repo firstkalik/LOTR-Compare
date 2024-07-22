@@ -56,7 +56,6 @@ extends LOTRItemSword {
     }
 
     public void onPlayerStoppedUsing(ItemStack itemstack, World world, EntityPlayer entityplayer, int i) {
-        int fireAspect;
         if (entityplayer.getHeldItem() != itemstack) {
             return;
         }
@@ -71,7 +70,7 @@ extends LOTRItemSword {
         if (charge >= 1.0f) {
             spear.setIsCritical(true);
         }
-        if ((fireAspect = EnchantmentHelper.getEnchantmentLevel((int)Enchantment.flame.effectId, (ItemStack)itemstack) + LOTREnchantmentHelper.calcFireAspect(itemstack)) > 0) {
+        if (EnchantmentHelper.getEnchantmentLevel((int)Enchantment.flame.effectId, (ItemStack)itemstack) + LOTREnchantmentHelper.calcFireAspect(itemstack) > 0) {
             spear.setFire(100);
         }
         for (LOTREnchantment ench : LOTREnchantment.allEnchantments) {
@@ -107,7 +106,7 @@ extends LOTRItemSword {
 
     public float getRangedDamageMultiplier(ItemStack itemstack, Entity shooter, Entity hit) {
         float damage = this.getLOTRWeaponDamage();
-        damage = shooter instanceof EntityLivingBase && hit instanceof EntityLivingBase ? (damage += EnchantmentHelper.getEnchantmentModifierLiving((EntityLivingBase)((EntityLivingBase)shooter), (EntityLivingBase)((EntityLivingBase)hit))) : (damage += EnchantmentHelper.func_152377_a((ItemStack)itemstack, (EnumCreatureAttribute)EnumCreatureAttribute.UNDEFINED));
+        damage = shooter instanceof EntityLivingBase && hit instanceof EntityLivingBase ? (damage = damage + EnchantmentHelper.getEnchantmentModifierLiving((EntityLivingBase)((EntityLivingBase)shooter), (EntityLivingBase)((EntityLivingBase)hit))) : (damage = damage + EnchantmentHelper.func_152377_a((ItemStack)itemstack, (EnumCreatureAttribute)EnumCreatureAttribute.UNDEFINED));
         return damage * 0.7f;
     }
 }

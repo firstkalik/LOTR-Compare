@@ -196,7 +196,23 @@ extends LOTRWorldGenMordorStructure {
     }
 
     private void placeUrukArmor(World world, Random random, int i, int j, int k, int meta) {
-        ItemStack[] armor = random.nextInt(4) != 0 ? new ItemStack[]{null, null, null, null} : new ItemStack[]{new ItemStack(LOTRMod.helmetBlackUruk), new ItemStack(LOTRMod.bodyBlackUruk), new ItemStack(LOTRMod.legsBlackUruk), new ItemStack(LOTRMod.bootsBlackUruk)};
+        ItemStack[] arritemStack;
+        if (random.nextInt(4) != 0) {
+            ItemStack[] arritemStack2 = new ItemStack[4];
+            arritemStack2[0] = null;
+            arritemStack2[1] = null;
+            arritemStack2[2] = null;
+            arritemStack = arritemStack2;
+            arritemStack2[3] = null;
+        } else {
+            ItemStack[] arritemStack3 = new ItemStack[4];
+            arritemStack3[0] = new ItemStack(LOTRMod.helmetBlackUruk);
+            arritemStack3[1] = new ItemStack(LOTRMod.bodyBlackUruk);
+            arritemStack3[2] = new ItemStack(LOTRMod.legsBlackUruk);
+            arritemStack = arritemStack3;
+            arritemStack3[3] = new ItemStack(LOTRMod.bootsBlackUruk);
+        }
+        ItemStack[] armor = arritemStack;
         this.placeArmorStand(world, i, j, k, meta, armor);
     }
 }

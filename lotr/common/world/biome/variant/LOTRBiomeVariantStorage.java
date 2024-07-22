@@ -100,17 +100,15 @@ public class LOTRBiomeVariantStorage {
 
     public static void performCleanup(WorldServer world) {
         Map<ChunkCoordIntPair, byte[]> dimensionMap = LOTRBiomeVariantStorage.getDimensionChunkMap((World)world);
-        int loaded = dimensionMap.size();
-        long l = System.nanoTime();
+        dimensionMap.size();
+        System.nanoTime();
         ArrayList<ChunkCoordIntPair> removalChunks = new ArrayList<ChunkCoordIntPair>();
         for (ChunkCoordIntPair chunk : dimensionMap.keySet()) {
             if (world.theChunkProviderServer.chunkExists(chunk.chunkXPos, chunk.chunkZPos)) continue;
             removalChunks.add(chunk);
         }
-        int removed = 0;
         for (ChunkCoordIntPair chunk : removalChunks) {
             dimensionMap.remove((Object)chunk);
-            ++removed;
         }
     }
 

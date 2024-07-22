@@ -5,14 +5,18 @@
  *  net.minecraft.block.Block
  *  net.minecraft.init.Blocks
  *  net.minecraft.world.World
+ *  net.minecraft.world.biome.BiomeGenBase
+ *  net.minecraft.world.biome.BiomeGenBase$SpawnListEntry
  *  net.minecraft.world.gen.feature.WorldGenMinable
  *  net.minecraft.world.gen.feature.WorldGenerator
  */
 package lotr.common.world.biome;
 
+import java.util.List;
 import java.util.Random;
 import lotr.common.LOTRAchievement;
 import lotr.common.LOTRMod;
+import lotr.common.entity.animal.LOTREntityRam;
 import lotr.common.entity.npc.LOTREntityDaleMerchant;
 import lotr.common.entity.npc.LOTREntityIronHillsMerchant;
 import lotr.common.entity.npc.LOTREntityRivendellTrader;
@@ -35,6 +39,7 @@ import lotr.common.world.structure2.LOTRWorldGenBlueMountainsSmithy;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.gen.feature.WorldGenMinable;
 import net.minecraft.world.gen.feature.WorldGenerator;
 
@@ -42,17 +47,12 @@ public class LOTRBiomeGenBlueMountains
 extends LOTRBiome {
     public LOTRBiomeGenBlueMountains(int i, boolean major) {
         super(i, major);
-        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer = new LOTRBiomeSpawnList.SpawnListContainer[1];
-        arrspawnListContainer[0] = LOTRBiomeSpawnList.entry(LOTRSpawnList.BLUE_DWARVES, 10);
+        this.spawnableCreatureList.add(new BiomeGenBase.SpawnListEntry(LOTREntityRam.class, 50, 4, 4));
+        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer = new LOTRBiomeSpawnList.SpawnListContainer[]{LOTRBiomeSpawnList.entry(LOTRSpawnList.BLUE_DWARVES, 10)};
         this.npcSpawnList.newFactionList(600).add(arrspawnListContainer);
-        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer2 = new LOTRBiomeSpawnList.SpawnListContainer[3];
-        arrspawnListContainer2[0] = LOTRBiomeSpawnList.entry(LOTRSpawnList.GUNDABAD_ORCS, 4);
-        arrspawnListContainer2[1] = LOTRBiomeSpawnList.entry(LOTRSpawnList.GUNDABAD_WARGS, 1);
-        arrspawnListContainer2[2] = LOTRBiomeSpawnList.entry(LOTRSpawnList.GUNDABAD_URUKS, 1).setConquestThreshold(50.0f);
+        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer2 = new LOTRBiomeSpawnList.SpawnListContainer[]{LOTRBiomeSpawnList.entry(LOTRSpawnList.GUNDABAD_ORCS, 4), LOTRBiomeSpawnList.entry(LOTRSpawnList.GUNDABAD_WARGS, 1), LOTRBiomeSpawnList.entry(LOTRSpawnList.GUNDABAD_URUKS, 1).setConquestThreshold(50.0f)};
         this.npcSpawnList.newFactionList(1, 2.0f).add(arrspawnListContainer2);
-        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer3 = new LOTRBiomeSpawnList.SpawnListContainer[2];
-        arrspawnListContainer3[0] = LOTRBiomeSpawnList.entry(LOTRSpawnList.ANGMAR_ORCS, 4);
-        arrspawnListContainer3[1] = LOTRBiomeSpawnList.entry(LOTRSpawnList.ANGMAR_WARGS, 1);
+        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer3 = new LOTRBiomeSpawnList.SpawnListContainer[]{LOTRBiomeSpawnList.entry(LOTRSpawnList.ANGMAR_ORCS, 4), LOTRBiomeSpawnList.entry(LOTRSpawnList.ANGMAR_WARGS, 1)};
         this.npcSpawnList.newFactionList(0, 2.0f).add(arrspawnListContainer3);
         this.variantChance = 0.2f;
         this.addBiomeVariantSet(LOTRBiomeVariant.SET_MOUNTAINS);
@@ -62,6 +62,9 @@ extends LOTRBiome {
         this.addBiomeVariant(LOTRBiomeVariant.FOREST_PINE, 0.2f);
         this.addBiomeVariant(LOTRBiomeVariant.FOREST_ASPEN, 0.2f);
         this.decorator.biomeGemFactor = 1.0f;
+        this.decorator.addSoil((WorldGenerator)new WorldGenMinable(LOTRMod.rock, 6, 32, Blocks.stone), 1.0f, 0, 100);
+        this.decorator.addSoil((WorldGenerator)new WorldGenMinable(LOTRMod.rock, 7, 32, Blocks.stone), 1.0f, 0, 100);
+        this.decorator.addSoil((WorldGenerator)new WorldGenMinable(LOTRMod.rock, 8, 32, Blocks.stone), 1.0f, 0, 100);
         this.decorator.addSoil((WorldGenerator)new WorldGenMinable(LOTRMod.rock, 3, 60, Blocks.stone), 6.0f, 0, 96);
         this.decorator.addOre((WorldGenerator)new WorldGenMinable(Blocks.coal_ore, 8), 10.0f, 0, 128);
         this.decorator.addOre((WorldGenerator)new WorldGenMinable(Blocks.iron_ore, 4), 10.0f, 0, 96);
@@ -82,6 +85,7 @@ extends LOTRBiome {
         this.decorator.addTree(LOTRTreeType.PINE, 500);
         this.registerMountainsFlowers();
         this.addFlower(LOTRMod.dwarfHerb, 0, 1);
+        this.addFlower(LOTRMod.khamCrop, 0, 1);
         this.biomeColors.setSky(7506425);
         this.decorator.addRandomStructure(new LOTRWorldGenBlueMountainsStronghold(false), 400);
         this.decorator.addRandomStructure(new LOTRWorldGenBlueMountainsSmithy(false), 150);

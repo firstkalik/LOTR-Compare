@@ -112,10 +112,7 @@ extends WorldChunkManager {
 
     @SideOnly(value=Side.CLIENT)
     public float getTemperatureAtHeight(float f, int height) {
-        if (this.worldObj.isRemote && LOTRMod.isChristmas()) {
-            return 0.0f;
-        }
-        return f;
+        return this.worldObj.isRemote && LOTRMod.isChristmas() ? 0.0f : f;
     }
 
     public BiomeGenBase[] getBiomesForGeneration(BiomeGenBase[] biomes, int i, int k, int xSize, int zSize) {
@@ -188,7 +185,6 @@ extends WorldChunkManager {
         int[] variantsRiversInts = variantsRivers.getInts(this.worldObj, i, k, xSize, zSize);
         for (int k1 = 0; k1 < zSize; ++k1) {
             for (int i1 = 0; i1 < xSize; ++i1) {
-                int riverCode;
                 int index = i1 + k1 * xSize;
                 LOTRBiome biome = (LOTRBiome)biomes[index];
                 LOTRBiomeVariant variant = LOTRBiomeVariant.STANDARD;
@@ -202,14 +198,17 @@ extends WorldChunkManager {
                 boolean mountainNear = flags[0];
                 boolean structureNear = flags[1];
                 boolean fixedVillageNear = biome.decorator.anyFixedVillagesAt(this.worldObj, xPos, zPos);
-                if (!mountainNear && !fixedVillageNear) {
+                if (fixedVillageNear) {
+                    variant = LOTRBiomeVariant.VariantGenst;
+                } else if (!mountainNear) {
+                    int lakeCode;
                     float variantChance = biome.variantChance;
                     if (variantChance > 0.0f) {
-                        for (int pass = 0; pass <= 1; ++pass) {
+                        for (lakeCode = 0; lakeCode <= 1; ++lakeCode) {
                             LOTRBiomeVariantList variantList;
-                            LOTRBiomeVariantList lOTRBiomeVariantList = variantList = pass == 0 ? biome.getBiomeVariantsLarge() : biome.getBiomeVariantsSmall();
+                            LOTRBiomeVariantList lOTRBiomeVariantList = variantList = lakeCode == 0 ? biome.getBiomeVariantsLarge() : biome.getBiomeVariantsSmall();
                             if (variantList.isEmpty()) continue;
-                            int[] sourceInts = pass == 0 ? variantsLargeInts : variantsSmallInts;
+                            int[] sourceInts = lakeCode == 0 ? variantsLargeInts : variantsSmallInts;
                             int variantCode = sourceInts[index];
                             float variantF = (float)variantCode / (float)LOTRGenLayerBiomeVariants.RANDOM_MAX;
                             if (variantF < variantChance) {
@@ -221,7 +220,7 @@ extends WorldChunkManager {
                         }
                     }
                     if (!structureNear && biome.getEnableRiver()) {
-                        int lakeCode = variantsLakesInts[index];
+                        lakeCode = variantsLakesInts[index];
                         if (LOTRGenLayerBiomeVariantsLake.getFlag(lakeCode, 1)) {
                             variant = LOTRBiomeVariant.LAKE;
                         }
@@ -233,7 +232,8 @@ extends WorldChunkManager {
                         }
                     }
                 }
-                if ((riverCode = variantsRiversInts[index]) == 2) {
+                int riverCode = variantsRiversInts[index];
+                if (riverCode == 2) {
                     variant = LOTRBiomeVariant.RIVER;
                 } else if (riverCode == 1 && biome.getEnableRiver() && !structureNear && !mountainNear) {
                     variant = LOTRBiomeVariant.RIVER;
@@ -256,10 +256,7 @@ extends WorldChunkManager {
             }
             FMLLog.severe((String)("Found chunk biome variant array of unexpected length " + variants.length), (Object[])new Object[0]);
         }
-        if (!this.worldObj.isRemote) {
-            return this.getBiomeVariants(null, i, k, 1, 1)[0];
-        }
-        return LOTRBiomeVariant.STANDARD;
+        return !this.worldObj.isRemote ? this.getBiomeVariants(null, i, k, 1, 1)[0] : LOTRBiomeVariant.STANDARD;
     }
 
     public boolean areBiomesViable(int i, int k, int range, List list) {
@@ -288,7 +285,10 @@ extends WorldChunkManager {
         int i3 = i2 - i1 + 1;
         int k3 = k2 - k1 + 1;
         BiomeGenBase[] biomes = this.getBiomesForGeneration(null, i1, k1, i3, k3);
-        for (LOTRBiomeVariant v : variants = this.getVariantsChunkGen(null, i1, k1, i3, k3, biomes)) {
+        LOTRBiomeVariant[] var13 = variants = this.getVariantsChunkGen(null, i1, k1, i3, k3, biomes);
+        int var14 = variants.length;
+        for (int var15 = 0; var15 < var14; ++var15) {
+            LOTRBiomeVariant v = var13[var15];
             if (v.hillFactor > 1.6f || requireFlat && v.hillFactor > 1.0f) {
                 return false;
             }

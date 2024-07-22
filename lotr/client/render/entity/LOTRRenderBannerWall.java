@@ -53,7 +53,6 @@ extends Render {
             GL11.glDisable((int)2896);
             GL11.glDisable((int)2884);
             GL11.glDisable((int)3042);
-            float width = entity.width / 2.0f;
             AxisAlignedBB aabb = banner.boundingBox.copy().offset(-RenderManager.renderPosX, -RenderManager.renderPosY, -RenderManager.renderPosZ);
             GL11.glColor4f((float)1.0f, (float)1.0f, (float)1.0f, (float)1.0f);
             RenderGlobal.drawOutlinedBoundingBox((AxisAlignedBB)aabb, (int)16777215);

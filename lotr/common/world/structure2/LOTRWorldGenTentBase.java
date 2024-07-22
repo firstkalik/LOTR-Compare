@@ -40,10 +40,9 @@ extends LOTRWorldGenStructureBase2 {
 
     @Override
     public boolean generateWithSetRotation(World world, Random random, int i, int j, int k, int rotation) {
-        int k1;
         int i1;
-        BiomeGenBase biome;
         int j1;
+        int k1;
         this.setOriginAndRotation(world, i, j, k, rotation, 4);
         this.setupRandomBlocks(random);
         if (this.restrictions) {
@@ -59,7 +58,7 @@ extends LOTRWorldGenStructureBase2 {
             for (k1 = -3; k1 <= 3; ++k1) {
                 for (j1 = 0; !(j1 < 0 && this.isOpaque(world, i1, j1, k1) || this.getY(j1) < 0); --j1) {
                     int randomGround;
-                    biome = this.getBiome(world, i1, k1);
+                    BiomeGenBase biome = this.getBiome(world, i1, k1);
                     if (biome instanceof LOTRBiomeGenMordor) {
                         randomGround = random.nextInt(3);
                         if (randomGround == 0) {
@@ -91,10 +90,7 @@ extends LOTRWorldGenStructureBase2 {
             }
         }
         for (int k12 = -3; k12 <= 3; ++k12) {
-            int[] k13 = new int[]{-2, 2};
-            j1 = k13.length;
-            for (biome = (BiomeGenBase)false; biome < j1; ++biome) {
-                int i12 = k13[biome];
+            for (int i12 : new int[]{-2, 2}) {
                 for (int j12 = 1; j12 <= 2; ++j12) {
                     this.setBlockAndMetadata(world, i12, j12, k12, this.tentBlock, this.tentMeta);
                 }

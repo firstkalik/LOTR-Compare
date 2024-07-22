@@ -12,7 +12,6 @@ package lotr.common.world.structure2;
 import java.util.Random;
 import lotr.common.LOTRMod;
 import lotr.common.entity.LOTREntityNPCRespawner;
-import lotr.common.entity.npc.LOTREntityGondorSoldier;
 import lotr.common.entity.npc.LOTREntityGondorTowerGuard;
 import lotr.common.item.LOTRItemBanner;
 import lotr.common.world.structure.LOTRChestContents;
@@ -36,63 +35,63 @@ extends LOTRWorldGenGondorStructure {
     }
 
     public boolean generateWithSetRotationAndHeight(World world, Random random, int i, int j, int k, int rotation, int height) {
-        int i1;
-        int i12;
-        int j1;
-        int k1;
         int j12;
-        int i2;
+        int j1;
+        int i12;
+        int i1;
         int k2;
+        int k1;
+        int i2;
         int doorBase = j - 1;
         this.setOriginAndRotation(world, i, j += height, k, rotation, 3);
         doorBase -= this.getY(0);
         this.setupRandomBlocks(random);
         if (this.restrictions) {
-            for (i12 = -3; i12 <= 3; ++i12) {
+            for (i1 = -3; i1 <= 3; ++i1) {
                 for (k1 = -3; k1 <= 3; ++k1) {
-                    j1 = this.getTopBlock(world, i12, k1) - 1;
-                    if (this.isSurface(world, i12, j1, k1)) continue;
+                    j12 = this.getTopBlock(world, i1, k1) - 1;
+                    if (this.isSurface(world, i1, j12, k1)) continue;
                     return false;
                 }
             }
         }
-        for (i12 = -2; i12 <= 2; ++i12) {
+        for (i1 = -2; i1 <= 2; ++i1) {
             for (k1 = -2; k1 <= 2; ++k1) {
-                for (j1 = 9; j1 <= 13; ++j1) {
-                    this.setAir(world, i12, j1, k1);
+                for (j12 = 9; j12 <= 13; ++j12) {
+                    this.setAir(world, i1, j12, k1);
                 }
             }
         }
-        for (i12 = -2; i12 <= 2; ++i12) {
+        for (i1 = -2; i1 <= 2; ++i1) {
             for (k1 = -2; k1 <= 2; ++k1) {
-                i2 = Math.abs(i12);
+                i2 = Math.abs(i1);
                 k2 = Math.abs(k1);
-                for (j12 = 8; j12 >= doorBase || !this.isOpaque(world, i12, j12, k1) && this.getY(j12) >= 0; --j12) {
+                for (j1 = 8; j1 >= doorBase || !this.isOpaque(world, i1, j1, k1) && this.getY(j1) >= 0; --j1) {
                     if (i2 == 2 && k2 == 2) {
-                        this.setBlockAndMetadata(world, i12, j12, k1, this.pillarBlock, this.pillarMeta);
+                        this.setBlockAndMetadata(world, i1, j1, k1, this.pillarBlock, this.pillarMeta);
                     } else {
-                        this.setBlockAndMetadata(world, i12, j12, k1, this.brickBlock, this.brickMeta);
+                        this.setBlockAndMetadata(world, i1, j1, k1, this.brickBlock, this.brickMeta);
                     }
-                    this.setGrassToDirt(world, i12, j12 - 1, k1);
+                    this.setGrassToDirt(world, i1, j1 - 1, k1);
                 }
                 if (i2 == 2 && k2 == 2) {
-                    for (j12 = 9; j12 <= 12; ++j12) {
-                        this.setBlockAndMetadata(world, i12, j12, k1, this.pillarBlock, this.pillarMeta);
+                    for (j1 = 9; j1 <= 12; ++j1) {
+                        this.setBlockAndMetadata(world, i1, j1, k1, this.pillarBlock, this.pillarMeta);
                     }
                     continue;
                 }
                 if (i2 != 2 && k2 != 2) continue;
-                this.setBlockAndMetadata(world, i12, 9, k1, this.fenceBlock, this.fenceMeta);
+                this.setBlockAndMetadata(world, i1, 9, k1, this.fenceBlock, this.fenceMeta);
             }
         }
-        for (i12 = -3; i12 <= 3; ++i12) {
+        for (i1 = -3; i1 <= 3; ++i1) {
             for (k1 = -3; k1 <= 3; ++k1) {
-                i2 = Math.abs(i12);
+                i2 = Math.abs(i1);
                 k2 = Math.abs(k1);
-                if ((i2 != 3 || k2 != 1) && (k2 != 3 || i2 != 1)) continue;
-                for (j12 = 4; j12 >= 1 || !this.isOpaque(world, i12, j12, k1) && this.getY(j12) >= 0; --j12) {
-                    this.setBlockAndMetadata(world, i12, j12, k1, this.brickBlock, this.brickMeta);
-                    this.setGrassToDirt(world, i12, j12 - 1, k1);
+                if (!(i2 == 3 && k2 == 1 || k2 == 3 && i2 == 1)) continue;
+                for (j1 = 4; j1 >= 1 || !this.isOpaque(world, i1, j1, k1) && this.getY(j1) >= 0; --j1) {
+                    this.setBlockAndMetadata(world, i1, j1, k1, this.brickBlock, this.brickMeta);
+                    this.setGrassToDirt(world, i1, j1 - 1, k1);
                 }
             }
         }
@@ -107,9 +106,9 @@ extends LOTRWorldGenGondorStructure {
             this.setBlockAndMetadata(world, -3, 5, k12, this.brickStairBlock, 1);
             this.setBlockAndMetadata(world, 3, 5, k12, this.brickStairBlock, 0);
         }
-        for (i1 = -1; i1 <= 1; ++i1) {
+        for (i12 = -1; i12 <= 1; ++i12) {
             for (k1 = -1; k1 <= 1; ++k1) {
-                this.setBlockAndMetadata(world, i1, 8, k1, this.rockSlabDoubleBlock, this.rockSlabDoubleMeta);
+                this.setBlockAndMetadata(world, i12, 8, k1, this.rockSlabDoubleBlock, this.rockSlabDoubleMeta);
             }
         }
         this.setBlockAndMetadata(world, 0, 9, 0, this.rockBlock, this.rockMeta);
@@ -124,25 +123,25 @@ extends LOTRWorldGenGondorStructure {
         this.setBlockAndMetadata(world, 2, 12, -1, Blocks.torch, 3);
         this.setBlockAndMetadata(world, -2, 12, 1, Blocks.torch, 4);
         this.setBlockAndMetadata(world, 2, 12, 1, Blocks.torch, 4);
-        for (i1 = -3; i1 <= 3; ++i1) {
+        for (i12 = -3; i12 <= 3; ++i12) {
             for (k1 = -3; k1 <= 3; ++k1) {
-                i2 = Math.abs(i1);
+                i2 = Math.abs(i12);
                 k2 = Math.abs(k1);
                 if (i2 == 3 || k2 == 3) {
-                    this.setBlockAndMetadata(world, i1, 13, k1, this.brickSlabBlock, this.brickSlabMeta | 8);
+                    this.setBlockAndMetadata(world, i12, 13, k1, this.brickSlabBlock, this.brickSlabMeta | 8);
                     continue;
                 }
                 if (i2 == 2 || k2 == 2) {
                     if (i2 == 2 && k2 == 2) {
-                        this.setBlockAndMetadata(world, i1, 13, k1, this.brickBlock, this.brickMeta);
+                        this.setBlockAndMetadata(world, i12, 13, k1, this.brickBlock, this.brickMeta);
                     } else {
-                        this.setBlockAndMetadata(world, i1, 13, k1, this.brickSlabBlock, this.brickSlabMeta | 8);
+                        this.setBlockAndMetadata(world, i12, 13, k1, this.brickSlabBlock, this.brickSlabMeta | 8);
                     }
-                    this.setBlockAndMetadata(world, i1, 14, k1, this.brickSlabBlock, this.brickSlabMeta);
+                    this.setBlockAndMetadata(world, i12, 14, k1, this.brickSlabBlock, this.brickSlabMeta);
                     continue;
                 }
                 if (i2 != 1 && k2 != 1) continue;
-                this.setBlockAndMetadata(world, i1, 14, k1, this.brickBlock, this.brickMeta);
+                this.setBlockAndMetadata(world, i12, 14, k1, this.brickBlock, this.brickMeta);
             }
         }
         int[] i15 = new int[]{-2, 2};
@@ -150,7 +149,10 @@ extends LOTRWorldGenGondorStructure {
         for (i2 = 0; i2 < k1; ++i2) {
             int i13;
             i13 = i15[i2];
-            for (int k13 : new int[]{-2, 2}) {
+            int[] arrn = new int[]{-2, 2};
+            int n = arrn.length;
+            for (int i3 = 0; i3 < n; ++i3) {
+                int k13 = arrn[i3];
                 this.setBlockAndMetadata(world, i13, 13, k13 - 1, this.brickStairBlock, 6);
                 this.setBlockAndMetadata(world, i13, 13, k13 + 1, this.brickStairBlock, 7);
                 this.setBlockAndMetadata(world, i13 - 1, 13, k13, this.brickStairBlock, 5);
@@ -164,8 +166,8 @@ extends LOTRWorldGenGondorStructure {
             for (int i16 = -1; i16 <= 1; ++i16) {
                 for (k1 = -1; k1 <= 1; ++k1) {
                     this.setBlockAndMetadata(world, i16, doorBase, k1, this.brickBlock, this.brickMeta);
-                    for (j1 = doorBase + 1; j1 <= doorBase + 4; ++j1) {
-                        this.setAir(world, i16, j1, k1);
+                    for (j12 = doorBase + 1; j12 <= doorBase + 4; ++j12) {
+                        this.setAir(world, i16, j12, k1);
                     }
                 }
             }

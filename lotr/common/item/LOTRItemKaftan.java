@@ -55,7 +55,7 @@ extends LOTRItemHaradRobes {
     }
 
     public int getColor(ItemStack itemstack) {
-        return LOTRItemKaftan.getRobesColor(itemstack);
+        return LOTRItemHaradRobes.getRobesColor(itemstack);
     }
 }
 

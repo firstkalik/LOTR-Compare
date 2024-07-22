@@ -36,9 +36,8 @@ public class LOTRScarecrows {
         Block block = world.getBlock(i, j, k);
         if (block instanceof BlockFence) {
             for (int j1 = j + 2; j1 <= j + 6; ++j1) {
-                Block belowAbove;
                 Block above = world.getBlock(i, j1, k);
-                if (!(above instanceof BlockPumpkin) && !(above instanceof BlockSkull) || !(belowAbove = world.getBlock(i, j1 - 1, k)).isNormalCube()) continue;
+                if (!(above instanceof BlockPumpkin) && !(above instanceof BlockSkull) || !world.getBlock(i, j1 - 1, k).isNormalCube()) continue;
                 return true;
             }
         }

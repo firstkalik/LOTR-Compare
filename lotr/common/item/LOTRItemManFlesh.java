@@ -48,7 +48,7 @@ extends ItemFood {
         boolean orcAligned = false;
         for (LOTRFaction faction : LOTRItemManFlesh.getManFleshFactions()) {
             float alignment = LOTRLevelData.getData(entityplayer).getAlignment(faction);
-            if (!(alignment > 0.0f)) continue;
+            if (alignment <= 0.0f) continue;
             orcAligned = true;
             break;
         }

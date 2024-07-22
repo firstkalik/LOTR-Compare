@@ -50,15 +50,15 @@ extends CommandBase {
                 double posY = sender.getPlayerCoordinates().posY;
                 double posZ = (double)sender.getPlayerCoordinates().posZ + 0.5;
                 if (args.length >= 4) {
-                    posX = LOTRCommandInvasion.func_110666_a((ICommandSender)sender, (double)posX, (String)args[1]);
-                    posY = LOTRCommandInvasion.func_110666_a((ICommandSender)sender, (double)posY, (String)args[2]);
-                    posZ = LOTRCommandInvasion.func_110666_a((ICommandSender)sender, (double)posZ, (String)args[3]);
+                    posX = CommandBase.func_110666_a((ICommandSender)sender, (double)posX, (String)args[1]);
+                    posY = CommandBase.func_110666_a((ICommandSender)sender, (double)posY, (String)args[2]);
+                    posZ = CommandBase.func_110666_a((ICommandSender)sender, (double)posZ, (String)args[3]);
                 } else {
                     posY += 3.0;
                 }
                 int size = -1;
                 if (args.length >= 5) {
-                    size = LOTRCommandInvasion.parseIntBounded((ICommandSender)sender, (String)args[4], (int)0, (int)10000);
+                    size = CommandBase.parseIntBounded((ICommandSender)sender, (String)args[4], (int)0, (int)10000);
                 }
                 LOTREntityInvasionSpawner invasion = new LOTREntityInvasionSpawner(world);
                 invasion.setInvasionType(type);
@@ -66,7 +66,7 @@ extends CommandBase {
                 world.spawnEntityInWorld((Entity)invasion);
                 invasion.selectAppropriateBonusFactions();
                 invasion.startInvasion(player, size);
-                LOTRCommandInvasion.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.invasion.start", (Object[])new Object[]{type.invasionName(), invasion.getInvasionSize(), posX, posY, posZ});
+                CommandBase.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.invasion.start", (Object[])new Object[]{type.invasionName(), invasion.getInvasionSize(), posX, posY, posZ});
                 return;
             }
             throw new WrongUsageException("commands.lotr.invasion.noType", new Object[]{typeName});
@@ -76,7 +76,7 @@ extends CommandBase {
 
     public List addTabCompletionOptions(ICommandSender sender, String[] args) {
         if (args.length == 1) {
-            return LOTRCommandInvasion.getListOfStringsMatchingLastWord((String[])args, (String[])LOTRInvasions.listInvasionNames());
+            return CommandBase.getListOfStringsMatchingLastWord((String[])args, (String[])LOTRInvasions.listInvasionNames());
         }
         return null;
     }

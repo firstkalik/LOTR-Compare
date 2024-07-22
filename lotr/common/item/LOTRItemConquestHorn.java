@@ -124,7 +124,7 @@ extends Item {
     }
 
     public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer) {
-        boolean canUse = this.canUseHorn(itemstack, world, entityplayer, false);
+        this.canUseHorn(itemstack, world, entityplayer, false);
         entityplayer.setItemInUse(itemstack, this.getMaxItemUseDuration(itemstack));
         return itemstack;
     }

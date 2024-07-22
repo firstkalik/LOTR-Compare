@@ -131,7 +131,7 @@ extends TileEntitySpecialRenderer {
                 float f = 1.6f;
                 float f1 = 0.016666668f * f;
                 double dSq = renderManager.livingPlayer.getDistanceSq((double)rack.xCoord + 0.5, (double)rack.yCoord + 0.5, (double)rack.zCoord);
-                if (dSq < (double)((f2 = 64.0f) * f2)) {
+                if (dSq < (double)(64.0f * (f2 = 64.0f))) {
                     String name = weaponItem.getDisplayName();
                     GL11.glPushMatrix();
                     GL11.glTranslatef((float)((float)d), (float)((float)d1 + 0.5f), (float)((float)d2));

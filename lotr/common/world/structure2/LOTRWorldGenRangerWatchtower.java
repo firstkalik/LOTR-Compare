@@ -32,7 +32,6 @@ extends LOTRWorldGenStructureBase2 {
     private Block fenceBlock;
     private int fenceMeta;
     private Block stairBlock;
-    private Block trapdoorBlock;
 
     public LOTRWorldGenRangerWatchtower(boolean flag) {
         super(flag);
@@ -40,8 +39,8 @@ extends LOTRWorldGenStructureBase2 {
 
     @Override
     public boolean generateWithSetRotation(World world, Random random, int i, int j, int k, int rotation) {
-        int i1;
         int randomWood;
+        int i1;
         int j1;
         int k1;
         int i12;
@@ -64,7 +63,6 @@ extends LOTRWorldGenStructureBase2 {
             this.fenceBlock = Blocks.fence;
             this.fenceMeta = 0;
             this.stairBlock = Blocks.oak_stairs;
-            this.trapdoorBlock = Blocks.trapdoor;
         } else if (randomWood == 1) {
             this.woodBlock = Blocks.log;
             this.woodMeta = 1;
@@ -73,7 +71,6 @@ extends LOTRWorldGenStructureBase2 {
             this.fenceBlock = Blocks.fence;
             this.fenceMeta = 0;
             this.stairBlock = Blocks.spruce_stairs;
-            this.trapdoorBlock = LOTRMod.trapdoorSpruce;
         } else if (randomWood == 2) {
             this.woodBlock = LOTRMod.wood2;
             this.woodMeta = 1;
@@ -82,7 +79,6 @@ extends LOTRWorldGenStructureBase2 {
             this.fenceBlock = LOTRMod.fence;
             this.fenceMeta = 9;
             this.stairBlock = LOTRMod.stairsBeech;
-            this.trapdoorBlock = LOTRMod.trapdoorBeech;
         } else if (randomWood == 3) {
             this.woodBlock = LOTRMod.wood3;
             this.woodMeta = 0;
@@ -91,7 +87,6 @@ extends LOTRWorldGenStructureBase2 {
             this.fenceBlock = LOTRMod.fence;
             this.fenceMeta = 12;
             this.stairBlock = LOTRMod.stairsMaple;
-            this.trapdoorBlock = LOTRMod.trapdoorMaple;
         }
         this.generateSupportPillar(world, -3, 4, -3);
         this.generateSupportPillar(world, -3, 4, 3);
@@ -144,7 +139,7 @@ extends LOTRWorldGenStructureBase2 {
                 int k2 = Math.abs(k1);
                 if (i2 >= 2 && k2 >= 2) continue;
                 this.setBlockAndMetadata(world, i12, 15, k1, this.plankBlock, this.plankMeta);
-                if ((i2 >= 2 || k2 != 2) && (i2 != 2 || k2 >= 2)) continue;
+                if (!(i2 < 2 && k2 == 2 || i2 == 2 && k2 < 2)) continue;
                 this.setBlockAndMetadata(world, i12, 16, k1, this.fenceBlock, this.fenceMeta);
             }
         }
@@ -154,8 +149,8 @@ extends LOTRWorldGenStructureBase2 {
             if (j1 > 15) continue;
             this.setBlockAndMetadata(world, 0, j1, -1, Blocks.ladder, 2);
         }
-        this.setBlockAndMetadata(world, 0, 6, -1, this.trapdoorBlock, 0);
-        this.setBlockAndMetadata(world, 0, 11, -1, this.trapdoorBlock, 0);
+        this.setBlockAndMetadata(world, 0, 6, -1, Blocks.trapdoor, 0);
+        this.setBlockAndMetadata(world, 0, 11, -1, Blocks.trapdoor, 0);
         this.setBlockAndMetadata(world, 0, 17, -2, Blocks.torch, 5);
         this.setBlockAndMetadata(world, 0, 17, 2, Blocks.torch, 5);
         this.setBlockAndMetadata(world, -2, 17, 0, Blocks.torch, 5);

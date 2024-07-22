@@ -64,8 +64,6 @@ public class LOTRSpawnerAnimals {
     private static Set<ChunkCoordIntPair> eligibleSpawnChunks = new HashSet<ChunkCoordIntPair>();
     private static Map<Integer, Integer> ticksSinceCycle = new HashMap<Integer, Integer>();
     private static Map<Integer, DimInfo> dimInfos = new HashMap<Integer, DimInfo>();
-    private static final int FAIL_THRESHOLD = 10;
-    private static final int FAIL_BLOCKINGS = 100;
 
     private static TypeInfo forDimAndType(World world, EnumCreatureType type) {
         TypeInfo typeInfo;
@@ -109,7 +107,7 @@ public class LOTRSpawnerAnimals {
             int maxCount;
             TypeInfo typeInfo = LOTRSpawnerAnimals.forDimAndType((World)world, creatureType);
             boolean canSpawnType = true;
-            canSpawnType = creatureType.getPeacefulCreature() ? peacefuls : hostiles;
+            boolean bl = canSpawnType = creatureType.getPeacefulCreature() ? peacefuls : hostiles;
             if (creatureType.getAnimal()) {
                 canSpawnType = rareTick;
             }
@@ -123,9 +121,9 @@ public class LOTRSpawnerAnimals {
                 int newlySpawned = 0;
                 List<ChunkCoordIntPair> shuffled = LOTRSpawnerNPCs.shuffle(eligibleSpawnChunks);
                 block4: for (ChunkCoordIntPair chunkCoords : shuffled) {
-                    int k;
-                    int j;
                     int i;
+                    int j;
+                    int k;
                     ChunkPosition chunkposition = LOTRSpawnerNPCs.getRandomSpawningPointInChunk((World)world, chunkCoords);
                     if (chunkposition == null || world.spawnRandomCreature(creatureType, i = chunkposition.chunkPosX, j = chunkposition.chunkPosY, k = chunkposition.chunkPosZ) == null || world.getBlock(i, j, k).isNormalCube() || world.getBlock(i, j, k).getMaterial() != creatureType.getCreatureMaterial()) continue;
                     for (int groupsSpawned = 0; groupsSpawned < 3; ++groupsSpawned) {
@@ -136,15 +134,17 @@ public class LOTRSpawnerAnimals {
                         BiomeGenBase.SpawnListEntry spawnEntry = null;
                         IEntityLivingData entityData = null;
                         for (int attempts = 0; attempts < 4; ++attempts) {
-                            EntityLiving entity;
                             float f5;
-                            float f2;
                             float f;
-                            float f4;
-                            float f3;
+                            float f2;
                             float f1;
-                            float distSq;
-                            if (!world.blockExists(i1 += world.rand.nextInt(range) - world.rand.nextInt(range), j1 += world.rand.nextInt(1) - world.rand.nextInt(1), k1 += world.rand.nextInt(range) - world.rand.nextInt(range)) || !SpawnerAnimals.canCreatureTypeSpawnAtLocation((EnumCreatureType)creatureType, (World)world, (int)i1, (int)j1, (int)k1) || world.getClosestPlayer((double)(f = (float)i1 + 0.5f), (double)(f1 = (float)j1), (double)(f2 = (float)k1 + 0.5f), 24.0) != null || !((distSq = (f3 = f - (float)spawnPoint.posX) * f3 + (f4 = f1 - (float)spawnPoint.posY) * f4 + (f5 = f2 - (float)spawnPoint.posZ) * f5) >= 576.0f)) continue;
+                            float f3;
+                            float f4;
+                            float f22;
+                            EntityLiving entity;
+                            float f32;
+                            float f42;
+                            if (!world.blockExists(i1 += world.rand.nextInt(range) - world.rand.nextInt(range), j1 += world.rand.nextInt(1) - world.rand.nextInt(1), k1 += world.rand.nextInt(range) - world.rand.nextInt(range)) || !SpawnerAnimals.canCreatureTypeSpawnAtLocation((EnumCreatureType)creatureType, (World)world, (int)i1, (int)j1, (int)k1) || world.getClosestPlayer((double)(f3 = (float)i1 + 0.5f), (double)(f1 = (float)j1), (double)(f22 = (float)k1 + 0.5f), 24.0) != null || f2 * (f32 = f3 - (float)spawnPoint.posX) + f * (f42 = f1 - (float)spawnPoint.posY) + f4 * (f5 = f22 - (float)spawnPoint.posZ) < 576.0f) continue;
                             if (spawnEntry == null && (spawnEntry = world.spawnRandomCreature(creatureType, i1, j1, k1)) == null) continue block4;
                             try {
                                 entity = (EntityLiving)spawnEntry.entityClass.getConstructor(World.class).newInstance(new Object[]{world});
@@ -153,12 +153,12 @@ public class LOTRSpawnerAnimals {
                                 e.printStackTrace();
                                 return totalSpawned;
                             }
-                            entity.setLocationAndAngles((double)f, (double)f1, (double)f2, world.rand.nextFloat() * 360.0f, 0.0f);
-                            Event.Result canSpawn = ForgeEventFactory.canEntitySpawn((EntityLiving)entity, (World)world, (float)f, (float)f1, (float)f2);
+                            entity.setLocationAndAngles((double)f3, (double)f1, (double)f22, world.rand.nextFloat() * 360.0f, 0.0f);
+                            Event.Result canSpawn = ForgeEventFactory.canEntitySpawn((EntityLiving)entity, (World)world, (float)f3, (float)f1, (float)f22);
                             if (canSpawn != Event.Result.ALLOW && (canSpawn != Event.Result.DEFAULT || !entity.getCanSpawnHere())) continue;
                             ++totalSpawned;
                             world.spawnEntityInWorld((Entity)entity);
-                            if (!ForgeEventFactory.doSpecialSpawn((EntityLiving)entity, (World)world, (float)f, (float)f1, (float)f2)) {
+                            if (!ForgeEventFactory.doSpecialSpawn((EntityLiving)entity, (World)world, (float)f3, (float)f1, (float)f22)) {
                                 entityData = entity.onSpawnWithEgg(entityData);
                             }
                             ++newlySpawned;
@@ -201,7 +201,6 @@ public class LOTRSpawnerAnimals {
                         int j1 = world.getTopSolidOrLiquidBlock(i1, k1);
                         if (SpawnerAnimals.canCreatureTypeSpawnAtLocation((EnumCreatureType)EnumCreatureType.creature, (World)world, (int)i1, (int)j1, (int)k1)) {
                             EntityLiving entity;
-                            LOTRAnimalSpawnConditions conditions;
                             float f = (float)i1 + 0.5f;
                             float f1 = j1;
                             float f2 = (float)k1 + 0.5f;
@@ -213,7 +212,7 @@ public class LOTRSpawnerAnimals {
                                 continue;
                             }
                             boolean canSpawn = true;
-                            if (entity instanceof LOTRAnimalSpawnConditions && !(conditions = (LOTRAnimalSpawnConditions)entity).canWorldGenSpawnAt(i1, j1, k1, biome, variant)) {
+                            if (entity instanceof LOTRAnimalSpawnConditions && !((LOTRAnimalSpawnConditions)entity).canWorldGenSpawnAt(i1, j1, k1, biome, variant)) {
                                 canSpawn = false;
                             }
                             if (canSpawn) {
@@ -235,18 +234,18 @@ public class LOTRSpawnerAnimals {
         }
     }
 
+    private static class DimInfo {
+        public Map<EnumCreatureType, TypeInfo> types = new HashMap<EnumCreatureType, TypeInfo>();
+
+        private DimInfo() {
+        }
+    }
+
     private static class TypeInfo {
         public int failedCycles;
         public int blockedCycles;
 
         private TypeInfo() {
-        }
-    }
-
-    private static class DimInfo {
-        public Map<EnumCreatureType, TypeInfo> types = new HashMap<EnumCreatureType, TypeInfo>();
-
-        private DimInfo() {
         }
     }
 

@@ -17,7 +17,6 @@
  */
 package lotr.client.render.entity;
 
-import lotr.client.fx.LOTREntitySwordCommandMarker;
 import lotr.common.LOTRMod;
 import net.minecraft.client.renderer.ItemRenderer;
 import net.minecraft.client.renderer.entity.Render;
@@ -38,7 +37,6 @@ extends Render {
     }
 
     public void doRender(Entity entity, double d, double d1, double d2, float f, float f1) {
-        LOTREntitySwordCommandMarker marker = (LOTREntitySwordCommandMarker)entity;
         GL11.glPushMatrix();
         GL11.glEnable((int)32826);
         GL11.glTranslatef((float)((float)d), (float)((float)d1), (float)((float)d2));

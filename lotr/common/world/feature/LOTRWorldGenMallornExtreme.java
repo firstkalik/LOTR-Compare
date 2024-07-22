@@ -67,9 +67,10 @@ extends WorldGenAbstractTree {
         int trunkWidth = 2;
         boolean flag = true;
         if (j >= 1 && j + height + 5 <= 256 || forceGeneration) {
-            int k1;
             int i1;
-            for (int j1 = j; j1 <= j + 1 + height; ++j1) {
+            int k1;
+            int j1;
+            for (j1 = j; j1 <= j + 1 + height; ++j1) {
                 int range = trunkWidth;
                 if (j1 == j) {
                     range = 0;
@@ -115,7 +116,7 @@ extends WorldGenAbstractTree {
                     if (!forceGeneration) {
                         world.getBlock(i1, j - 1, k1).onPlantGrow(world, i1, j - 1, k1, i1, j, k1);
                     }
-                    for (int j1 = 0; j1 < height; ++j1) {
+                    for (j1 = 0; j1 < height; ++j1) {
                         Block block = world.getBlock(i1, j + j1, k1);
                         if (!block.isReplaceable((IBlockAccess)world, i1, j + j1, k1) && !block.isLeaves((IBlockAccess)world, i1, j + j1, k1)) continue;
                         this.setBlockAndNotifyAdequately(world, i1, j + j1, k1, LOTRMod.wood, 1);
@@ -134,10 +135,10 @@ extends WorldGenAbstractTree {
                 for (int l = 0; l < boughLength; ++l) {
                     int i12 = i + Math.round(sin * (float)l);
                     int k12 = k + Math.round(cos * (float)l);
-                    int j1 = boughBaseHeight + Math.round((float)l / (float)boughLength * (float)boughHeight);
+                    int j12 = boughBaseHeight + Math.round((float)l / (float)boughLength * (float)boughHeight);
                     int range = boughThickness - Math.round((float)l / (float)boughLength * (float)boughThickness * 0.5f);
                     for (int i2 = i12 - range; i2 <= i12 + range; ++i2) {
-                        for (int j2 = j1 - range; j2 <= j1 + range; ++j2) {
+                        for (int j2 = j12 - range; j2 <= j12 + range; ++j2) {
                             for (int k2 = k12 - range; k2 <= k12 + range; ++k2) {
                                 Block block = world.getBlock(i2, j2, k2);
                                 if (!block.isReplaceable((IBlockAccess)world, i2, j2, k2) && !block.isLeaves((IBlockAccess)world, i2, j2, k2)) continue;
@@ -156,7 +157,7 @@ extends WorldGenAbstractTree {
                         for (int b1 = 0; b1 < branchLength; ++b1) {
                             int i2 = i12 + Math.round(branch_sin * (float)b1);
                             int k2 = k12 + Math.round(branch_cos * (float)b1);
-                            int j2 = j1 + Math.round((float)b1 / (float)branchLength * (float)branchHeight);
+                            int j2 = j12 + Math.round((float)b1 / (float)branchLength * (float)branchHeight);
                             Block block = world.getBlock(i2, j2, k2);
                             if (block.isReplaceable((IBlockAccess)world, i2, j2, k2) || block.isLeaves((IBlockAccess)world, i2, j2, k2)) {
                                 this.setBlockAndNotifyAdequately(world, i2, j2, k2, LOTRMod.wood, 13);
@@ -168,15 +169,15 @@ extends WorldGenAbstractTree {
                 }
             }
             if (trunkWidth > 0) {
-                for (int j1 = j + (int)((float)height * BOUGH_BASE_HEIGHT_MIN); j1 > j + (int)((float)height * 0.67f); j1 -= 1 + random.nextInt(3)) {
+                for (int j13 = j + (int)((float)height * BOUGH_BASE_HEIGHT_MIN); j13 > j + (int)((float)height * 0.67f); j13 -= 1 + random.nextInt(3)) {
                     int branches = 1 + random.nextInt(5);
                     for (int b = 0; b < branches; ++b) {
                         float branchAngle = random.nextFloat() * 3.1415927f * 2.0f;
                         int i13 = i + (int)(1.5f + MathHelper.cos((float)branchAngle) * 4.0f);
                         int k13 = k + (int)(1.5f + MathHelper.sin((float)branchAngle) * 4.0f);
-                        int j2 = j1;
+                        int j2 = j13;
                         int length = MathHelper.getRandomIntegerInRange((Random)random, (int)10, (int)20);
-                        for (int l = 0; l < length && this.isReplaceable(world, i13 = i + (int)(1.5f + MathHelper.cos((float)branchAngle) * (float)l), j2 = j1 - 3 + l / 2, k13 = k + (int)(1.5f + MathHelper.sin((float)branchAngle) * (float)l)); ++l) {
+                        for (int l = 0; l < length && this.isReplaceable(world, i13 = i + (int)(1.5f + MathHelper.cos((float)branchAngle) * (float)l), j2 = j13 - 3 + l / 2, k13 = k + (int)(1.5f + MathHelper.sin((float)branchAngle) * (float)l)); ++l) {
                             this.setBlockAndNotifyAdequately(world, i13, j2, k13, LOTRMod.wood, 13);
                         }
                         this.spawnLeafLayer(world, random, i13, j2 + 1, k13, 2);
@@ -189,7 +190,7 @@ extends WorldGenAbstractTree {
                 int roots = MathHelper.getRandomIntegerInRange((Random)random, (int)6, (int)10);
                 for (int l = 0; l < roots; ++l) {
                     int i14 = i;
-                    int j1 = j + 1 + random.nextInt(5);
+                    int j14 = j + 1 + random.nextInt(5);
                     int k14 = k;
                     int xDirection = 0;
                     int zDirection = 0;
@@ -217,14 +218,14 @@ extends WorldGenAbstractTree {
                     }
                     for (int l1 = 0; l1 < rootLength; ++l1) {
                         int rootBlocks = 0;
-                        int j2 = j1;
+                        int j2 = j14;
                         while (!LOTRMod.isOpaque(world, i14, j2, k14)) {
                             this.setBlockAndNotifyAdequately(world, i14, j2, k14, LOTRMod.wood, 13);
                             world.getBlock(i14, j2 - 1, k14).onPlantGrow(world, i14, j2 - 1, k14, i14, j2, k14);
                             if (++rootBlocks > 5) break;
                             --j2;
                         }
-                        --j1;
+                        --j14;
                         if (!random.nextBoolean()) continue;
                         if (xDirection == -1) {
                             --i14;

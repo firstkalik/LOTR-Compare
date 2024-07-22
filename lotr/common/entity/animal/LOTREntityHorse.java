@@ -19,6 +19,7 @@
  *  net.minecraft.entity.ai.attributes.BaseAttributeMap
  *  net.minecraft.entity.ai.attributes.IAttribute
  *  net.minecraft.entity.ai.attributes.IAttributeInstance
+ *  net.minecraft.entity.item.EntityItem
  *  net.minecraft.entity.passive.EntityHorse
  *  net.minecraft.entity.player.EntityPlayer
  *  net.minecraft.entity.player.InventoryPlayer
@@ -44,6 +45,7 @@ package lotr.common.entity.animal;
 import java.io.PrintStream;
 import java.util.List;
 import java.util.Random;
+import lotr.common.LOTRBannerProtection;
 import lotr.common.LOTRMod;
 import lotr.common.LOTRReflection;
 import lotr.common.entity.LOTREntities;
@@ -72,6 +74,7 @@ import net.minecraft.entity.ai.EntityAITasks;
 import net.minecraft.entity.ai.attributes.BaseAttributeMap;
 import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.passive.EntityHorse;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -196,6 +199,17 @@ implements LOTRNPCMount {
         return this.dataWatcher.getWatchableObjectByte(25) == 1;
     }
 
+    protected void dropFewItems(boolean flag, int i) {
+        int meats = this.rand.nextInt(4) + this.rand.nextInt(1 + i);
+        for (int l = 0; l < meats; ++l) {
+            if (this.isBurning()) {
+                this.dropItem(LOTRMod.horseCooked, 1);
+                continue;
+            }
+            this.dropItem(LOTRMod.horseRaw, 1);
+        }
+    }
+
     @Override
     public void setBelongsToNPC(boolean flag) {
         this.dataWatcher.updateObject(25, (Object)(flag ? (byte)1 : 0));
@@ -298,7 +312,6 @@ implements LOTRNPCMount {
     }
 
     public void onLivingUpdate() {
-        AxisAlignedBB swimCheckBox;
         if (!this.worldObj.isRemote) {
             ItemStack armor = LOTRReflection.getHorseInv(this).getStackInSlot(1);
             if (this.ticksExisted > 20 && !ItemStack.areItemStacksEqual((ItemStack)this.prevMountArmor, (ItemStack)armor)) {
@@ -306,37 +319,43 @@ implements LOTRNPCMount {
             }
             this.prevMountArmor = armor;
             this.setMountArmorWatched(armor);
-        }
-        super.onLivingUpdate();
-        if (!this.worldObj.isRemote && this.riddenByEntity instanceof EntityPlayer && this.isInWater() && this.motionY < 0.0 && this.worldObj.func_147461_a(swimCheckBox = this.boundingBox.copy().addCoord(0.0, -1.0, 0.0)).isEmpty() && this.rand.nextFloat() < 0.55f) {
-            this.motionY += 0.05;
-            this.isAirBorne = true;
-        }
-        if (!this.worldObj.isRemote && this.isMountHostile()) {
-            EntityLivingBase target;
-            boolean isChild = this.isChild();
-            if (isChild != this.prevIsChild) {
-                EntityAITasks.EntityAITaskEntry taskEntry;
-                if (isChild) {
-                    taskEntry = LOTREntityUtils.removeAITask((EntityCreature)this, this.attackAI.getClass());
-                    this.tasks.addTask(taskEntry.priority, this.panicAI);
-                } else {
-                    taskEntry = LOTREntityUtils.removeAITask((EntityCreature)this, this.panicAI.getClass());
-                    this.tasks.addTask(taskEntry.priority, this.attackAI);
+            if (this.riddenByEntity instanceof EntityPlayer) {
+                EntityPlayer player = (EntityPlayer)this.riddenByEntity;
+                if (LOTRBannerProtection.isProtected(this.worldObj, (int)this.posX, (int)this.posY, (int)this.posZ, LOTRBannerProtection.forPlayer(player), true)) {
+                    this.riddenByEntity.mountEntity(null);
+                    return;
+                }
+                if (this.isInWater() && this.motionY < 0.0 && this.worldObj.func_147461_a(this.boundingBox.copy().addCoord(0.0, -1.0, 0.0)).isEmpty() && this.rand.nextFloat() < 0.55f) {
+                    this.motionY += 0.05;
+                    this.isAirBorne = true;
                 }
             }
-            if (this.getAttackTarget() != null && (!(target = this.getAttackTarget()).isEntityAlive() || target instanceof EntityPlayer && ((EntityPlayer)target).capabilities.isCreativeMode)) {
-                this.setAttackTarget(null);
+            if (this.isMountHostile()) {
+                EntityLivingBase target;
+                boolean isChild = this.isChild();
+                if (isChild != this.prevIsChild) {
+                    if (isChild) {
+                        EntityAITasks.EntityAITaskEntry taskEntry = LOTREntityUtils.removeAITask((EntityCreature)this, this.attackAI.getClass());
+                        this.tasks.addTask(taskEntry.priority, this.panicAI);
+                    } else {
+                        EntityAITasks.EntityAITaskEntry taskEntry = LOTREntityUtils.removeAITask((EntityCreature)this, this.panicAI.getClass());
+                        this.tasks.addTask(taskEntry.priority, this.attackAI);
+                    }
+                }
+                if (this.getAttackTarget() != null && (!(target = this.getAttackTarget()).isEntityAlive() || target instanceof EntityPlayer && ((EntityPlayer)target).capabilities.isCreativeMode)) {
+                    this.setAttackTarget(null);
+                }
+                if (this.riddenByEntity instanceof EntityLiving) {
+                    target = ((EntityLiving)this.riddenByEntity).getAttackTarget();
+                    this.setAttackTarget(target);
+                } else if (this.riddenByEntity instanceof EntityPlayer) {
+                    this.setAttackTarget(null);
+                }
+                this.setMountEnraged(this.getAttackTarget() != null);
             }
-            if (this.riddenByEntity instanceof EntityLiving) {
-                target = ((EntityLiving)this.riddenByEntity).getAttackTarget();
-                this.setAttackTarget(target);
-            } else if (this.riddenByEntity instanceof EntityPlayer) {
-                this.setAttackTarget(null);
-            }
-            this.setMountEnraged(this.getAttackTarget() != null);
+            this.prevIsChild = this.isChild();
         }
-        this.prevIsChild = this.isChild();
+        super.onLivingUpdate();
     }
 
     protected boolean isMovementBlocked() {
@@ -398,9 +417,10 @@ implements LOTRNPCMount {
     }
 
     private double getChildAttribute(EntityAgeable parent, EntityAgeable otherParent, IAttribute stat, double variance) {
-        double val2;
+        double d;
         double val1 = parent.getEntityAttribute(stat).getBaseValue();
-        if (val1 <= (val2 = otherParent.getEntityAttribute(stat).getBaseValue())) {
+        double val2 = otherParent.getEntityAttribute(stat).getBaseValue();
+        if (val1 <= d) {
             return MathHelper.getRandomDoubleInRange((Random)this.rand, (double)(val1 - variance), (double)(val2 + variance));
         }
         return MathHelper.getRandomDoubleInRange((Random)this.rand, (double)(val2 - variance), (double)(val1 + variance));
@@ -419,6 +439,9 @@ implements LOTRNPCMount {
     }
 
     public boolean interact(EntityPlayer entityplayer) {
+        if (!this.worldObj.isRemote && LOTRBannerProtection.isProtected(this.worldObj, (int)this.posX, (int)this.posY, (int)this.posZ, LOTRBannerProtection.forPlayer(entityplayer), true)) {
+            return true;
+        }
         if (!this.getMountable()) {
             return false;
         }
@@ -464,9 +487,9 @@ implements LOTRNPCMount {
         boolean flag = super.attackEntityFrom(damagesource, f);
         if (flag && this.isChild() && this.isMountHostile() && (attacker = damagesource.getEntity()) instanceof EntityLivingBase) {
             List list = this.worldObj.getEntitiesWithinAABBExcludingEntity((Entity)this, this.boundingBox.expand(12.0, 12.0, 12.0));
-            for (int i = 0; i < list.size(); ++i) {
+            for (Object element : list) {
                 LOTREntityHorse mount;
-                Entity entity = (Entity)list.get(i);
+                Entity entity = (Entity)element;
                 if (entity.getClass() != this.getClass() || (mount = (LOTREntityHorse)entity).isChild() || mount.isTame()) continue;
                 mount.setAttackTarget((EntityLivingBase)attacker);
             }
@@ -494,7 +517,6 @@ implements LOTRNPCMount {
 
     public void readEntityFromNBT(NBTTagCompound nbt) {
         ItemStack armor;
-        double jumpStrength;
         super.readEntityFromNBT(nbt);
         boolean pre35 = false;
         if (nbt.hasKey("BelongsToNPC")) {
@@ -510,11 +532,15 @@ implements LOTRNPCMount {
         if (nbt.hasKey("LOTRMountArmorItem") && (armor = ItemStack.loadItemStackFromNBT((NBTTagCompound)nbt.getCompoundTag("LOTRMountArmorItem"))) != null && this.isMountArmorValid(armor)) {
             inv.setInventorySlotContents(1, armor);
         }
-        if (pre35 && (jumpStrength = this.getEntityAttribute(LOTRReflection.getHorseJumpStrength()).getAttributeValue()) > 1.0) {
-            System.out.println("Reducing horse jump strength from " + jumpStrength);
-            jumpStrength = 1.0;
-            this.getEntityAttribute(LOTRReflection.getHorseJumpStrength()).setBaseValue(jumpStrength);
-            System.out.println("Jump strength now " + this.getEntityAttribute(LOTRReflection.getHorseJumpStrength()).getAttributeValue());
+        if (pre35) {
+            double d;
+            double jumpStrength = this.getEntityAttribute(LOTRReflection.getHorseJumpStrength()).getAttributeValue();
+            if (d > 1.0) {
+                System.out.println("Reducing horse jump strength from " + jumpStrength);
+                jumpStrength = 1.0;
+                this.getEntityAttribute(LOTRReflection.getHorseJumpStrength()).setBaseValue(jumpStrength);
+                System.out.println("Jump strength now " + this.getEntityAttribute(LOTRReflection.getHorseJumpStrength()).getAttributeValue());
+            }
         }
     }
 
@@ -555,6 +581,11 @@ implements LOTRNPCMount {
 
     public boolean shouldDismountInWater(Entity rider) {
         return false;
+    }
+
+    @Override
+    public float getStepHeightWhileRiddenByPlayer() {
+        return 1.0f;
     }
 }
 

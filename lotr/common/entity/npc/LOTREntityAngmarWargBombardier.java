@@ -6,19 +6,19 @@
  */
 package lotr.common.entity.npc;
 
-import lotr.common.entity.npc.LOTREntityWargBombardier;
+import lotr.common.entity.npc.LOTREntityWargBombardier4;
 import lotr.common.fac.LOTRFaction;
 import net.minecraft.world.World;
 
 public class LOTREntityAngmarWargBombardier
-extends LOTREntityWargBombardier {
+extends LOTREntityWargBombardier4 {
     public LOTREntityAngmarWargBombardier(World world) {
         super(world);
     }
 
     @Override
     public LOTRFaction getFaction() {
-        return LOTRFaction.ANGMAR;
+        return LOTRFaction.GUNDABAD;
     }
 
     @Override

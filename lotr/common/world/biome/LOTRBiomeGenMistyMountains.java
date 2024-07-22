@@ -5,6 +5,7 @@
  *  net.minecraft.block.Block
  *  net.minecraft.init.Blocks
  *  net.minecraft.world.World
+ *  net.minecraft.world.gen.NoiseGeneratorPerlin
  *  net.minecraft.world.gen.feature.WorldGenMinable
  *  net.minecraft.world.gen.feature.WorldGenerator
  */
@@ -23,12 +24,13 @@ import lotr.common.world.map.LOTRWaypoint;
 import lotr.common.world.spawning.LOTRBiomeSpawnList;
 import lotr.common.world.spawning.LOTREventSpawner;
 import lotr.common.world.spawning.LOTRSpawnList;
-import lotr.common.world.structure2.LOTRWorldGenRuinedDwarvenTower;
+import lotr.common.world.structure2.LOTRWorldGenRuinedMoriaDwarvenTower;
 import lotr.common.world.structure2.LOTRWorldGenSmallStoneRuin;
 import lotr.common.world.structure2.LOTRWorldGenStoneRuin;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
+import net.minecraft.world.gen.NoiseGeneratorPerlin;
 import net.minecraft.world.gen.feature.WorldGenMinable;
 import net.minecraft.world.gen.feature.WorldGenerator;
 
@@ -38,35 +40,28 @@ extends LOTRBiome {
         super(i, major);
         this.spawnableCreatureList.clear();
         this.spawnableLOTRAmbientList.clear();
-        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer = new LOTRBiomeSpawnList.SpawnListContainer[3];
-        arrspawnListContainer[0] = LOTRBiomeSpawnList.entry(LOTRSpawnList.GUNDABAD_ORCS, 30);
-        arrspawnListContainer[1] = LOTRBiomeSpawnList.entry(LOTRSpawnList.GUNDABAD_WARGS, 20);
-        arrspawnListContainer[2] = LOTRBiomeSpawnList.entry(LOTRSpawnList.GUNDABAD_URUKS, 7);
+        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer = new LOTRBiomeSpawnList.SpawnListContainer[]{LOTRBiomeSpawnList.entry(LOTRSpawnList.GUNDABAD_ORCS, 30), LOTRBiomeSpawnList.entry(LOTRSpawnList.GUNDABAD_WARGS, 20), LOTRBiomeSpawnList.entry(LOTRSpawnList.GUNDABAD_URUKS, 7)};
         this.npcSpawnList.newFactionList(100).add(arrspawnListContainer);
-        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer2 = new LOTRBiomeSpawnList.SpawnListContainer[4];
-        arrspawnListContainer2[0] = LOTRBiomeSpawnList.entry(LOTRSpawnList.SNOW_TROLLS, 1).setSpawnChance(5000);
-        arrspawnListContainer2[1] = LOTRBiomeSpawnList.entry(LOTRSpawnList.ANGMAR_ORCS, 30).setConquestOnly();
-        arrspawnListContainer2[2] = LOTRBiomeSpawnList.entry(LOTRSpawnList.ANGMAR_WARGS, 20).setConquestOnly();
-        arrspawnListContainer2[3] = LOTRBiomeSpawnList.entry(LOTRSpawnList.SNOW_TROLLS, 6).setConquestOnly();
+        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer2 = new LOTRBiomeSpawnList.SpawnListContainer[]{LOTRBiomeSpawnList.entry(LOTRSpawnList.SNOW_TROLLS, 1).setSpawnChance(5000), LOTRBiomeSpawnList.entry(LOTRSpawnList.ANGMAR_ORCS, 30).setConquestOnly(), LOTRBiomeSpawnList.entry(LOTRSpawnList.ANGMAR_WARGS, 20).setConquestOnly(), LOTRBiomeSpawnList.entry(LOTRSpawnList.SNOW_TROLLS, 6).setConquestOnly()};
         this.npcSpawnList.newFactionList(20).add(arrspawnListContainer2);
-        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer3 = new LOTRBiomeSpawnList.SpawnListContainer[1];
-        arrspawnListContainer3[0] = LOTRBiomeSpawnList.entry(LOTRSpawnList.BLUE_DWARVES, 10);
+        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer3 = new LOTRBiomeSpawnList.SpawnListContainer[]{LOTRBiomeSpawnList.entry(LOTRSpawnList.BLUE_DWARVES, 10)};
         this.npcSpawnList.newFactionList(0).add(arrspawnListContainer3);
-        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer4 = new LOTRBiomeSpawnList.SpawnListContainer[1];
-        arrspawnListContainer4[0] = LOTRBiomeSpawnList.entry(LOTRSpawnList.DWARVES, 10);
+        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer4 = new LOTRBiomeSpawnList.SpawnListContainer[]{LOTRBiomeSpawnList.entry(LOTRSpawnList.DWARVES, 10)};
         this.npcSpawnList.newFactionList(0).add(arrspawnListContainer4);
-        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer5 = new LOTRBiomeSpawnList.SpawnListContainer[3];
-        arrspawnListContainer5[0] = LOTRBiomeSpawnList.entry(LOTRSpawnList.ISENGARD_SNAGA, 15);
-        arrspawnListContainer5[1] = LOTRBiomeSpawnList.entry(LOTRSpawnList.URUK_HAI, 30);
-        arrspawnListContainer5[2] = LOTRBiomeSpawnList.entry(LOTRSpawnList.URUK_WARGS, 20);
+        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer5 = new LOTRBiomeSpawnList.SpawnListContainer[]{LOTRBiomeSpawnList.entry(LOTRSpawnList.ISENGARD_SNAGA, 15), LOTRBiomeSpawnList.entry(LOTRSpawnList.URUK_HAI, 30), LOTRBiomeSpawnList.entry(LOTRSpawnList.URUK_WARGS, 20)};
         this.npcSpawnList.newFactionList(0).add(arrspawnListContainer5);
+        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer6 = new LOTRBiomeSpawnList.SpawnListContainer[]{LOTRBiomeSpawnList.entry(LOTRSpawnList.BLACKLOCK, 10), LOTRBiomeSpawnList.entry(LOTRSpawnList.STIFFBEARD, 10), LOTRBiomeSpawnList.entry(LOTRSpawnList.STONEFOOT, 10)};
+        this.npcSpawnList.newFactionList(0).add(arrspawnListContainer6);
         this.variantChance = 0.1f;
         this.addBiomeVariantSet(LOTRBiomeVariant.SET_MOUNTAINS);
         this.addBiomeVariant(LOTRBiomeVariant.FOREST_LARCH, 0.3f);
         this.addBiomeVariant(LOTRBiomeVariant.FOREST_PINE, 0.3f);
         this.addBiomeVariant(LOTRBiomeVariant.FOREST_ASPEN, 0.3f);
         this.decorator.biomeGemFactor = 1.0f;
-        this.decorator.addOre((WorldGenerator)new WorldGenMinable(LOTRMod.oreMithril, 6), 0.25f, 0, 16);
+        this.decorator.addSoil((WorldGenerator)new WorldGenMinable(LOTRMod.rock, 6, 32, Blocks.stone), 1.0f, 0, 100);
+        this.decorator.addSoil((WorldGenerator)new WorldGenMinable(LOTRMod.rock, 7, 32, Blocks.stone), 1.0f, 0, 100);
+        this.decorator.addSoil((WorldGenerator)new WorldGenMinable(LOTRMod.rock, 8, 32, Blocks.stone), 1.0f, 0, 100);
+        this.decorator.addOre((WorldGenerator)new WorldGenMinable(LOTRMod.oreMithril, 6), 0.28f, 0, 16);
         this.decorator.addOre((WorldGenerator)new WorldGenMinable(LOTRMod.oreGlowstone, 4), 8.0f, 0, 48);
         this.decorator.flowersPerChunk = 1;
         this.decorator.grassPerChunk = 3;
@@ -84,7 +79,7 @@ extends LOTRBiome {
         this.decorator.generateOrcDungeon = true;
         this.decorator.addRandomStructure(new LOTRWorldGenStoneRuin.STONE(1, 4), 500);
         this.decorator.addRandomStructure(new LOTRWorldGenStoneRuin.DWARVEN(1, 4), 1500);
-        this.decorator.addRandomStructure(new LOTRWorldGenRuinedDwarvenTower(false), 1000);
+        this.decorator.addRandomStructure(new LOTRWorldGenRuinedMoriaDwarvenTower(false), 1000);
         this.decorator.addRandomStructure(new LOTRWorldGenSmallStoneRuin(false), 400);
         this.setBanditChance(LOTREventSpawner.EventChance.NEVER);
     }
@@ -124,7 +119,46 @@ extends LOTRBiome {
             if (block != this.topBlock && block != this.fillerBlock) continue;
             blocks[index] = Blocks.stone;
             meta[index] = 0;
+            if (random.nextInt(24) == 0) {
+                int h = 1 + random.nextInt(24);
+                for (int j1 = j; j1 > j - h && j1 > 0; --j1) {
+                    int indexH = xzIndex * ySize + j1;
+                    if (blocks[indexH] != Blocks.snow) continue;
+                    blocks[indexH] = LOTRMod.snowdrift;
+                    meta[indexH] = 0;
+                }
+                continue;
+            }
+            if (random.nextInt(7) != 0) continue;
+            blocks[index] = LOTRMod.snowdrift;
+            meta[index] = 0;
         }
+    }
+
+    @Override
+    public void generateBiomeTerrain(World world, Random random, Block[] blocks, byte[] meta, int i, int k, double stoneNoise, int height, LOTRBiomeVariant variant) {
+        Block topBlock_pre = this.topBlock;
+        int topBlockMeta_pre = this.topBlockMeta;
+        Block fillerBlock_pre = this.fillerBlock;
+        int fillerBlockMeta_pre = this.fillerBlockMeta;
+        double d1 = biomeTerrainNoise.func_151601_a((double)i * 0.07, (double)k * 0.07);
+        double d2 = biomeTerrainNoise.func_151601_a((double)i * 0.4, (double)k * 0.4);
+        if (d1 + (d2 *= 0.6) > 0.7) {
+            this.topBlock = Blocks.snow;
+            this.topBlockMeta = 0;
+            this.fillerBlock = Blocks.snow;
+            this.fillerBlockMeta = 0;
+        } else if (d1 + d1 > 1.5) {
+            this.topBlock = LOTRMod.snowdrift;
+            this.topBlockMeta = 0;
+            this.fillerBlock = this.topBlock;
+            this.fillerBlockMeta = this.topBlockMeta;
+        }
+        super.generateBiomeTerrain(world, random, blocks, meta, i, k, stoneNoise, height, variant);
+        this.topBlock = topBlock_pre;
+        this.topBlockMeta = topBlockMeta_pre;
+        this.fillerBlock = fillerBlock_pre;
+        this.fillerBlockMeta = fillerBlockMeta_pre;
     }
 
     @Override

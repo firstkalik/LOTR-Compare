@@ -18,7 +18,6 @@ package lotr.common.world.structure;
 
 import java.util.Random;
 import lotr.common.LOTRMod;
-import lotr.common.entity.npc.LOTREntityElf;
 import lotr.common.entity.npc.LOTREntityGaladhrimLord;
 import lotr.common.entity.npc.LOTREntityNPC;
 import lotr.common.item.LOTRItemBanner;
@@ -44,20 +43,20 @@ extends LOTRWorldGenStructureBase {
     }
 
     public boolean generate(World world, Random random, int i, int j, int k) {
-        int k1;
-        int k2;
         int k12;
         int distSq;
-        int j1;
+        int k2;
         int i1;
+        int k1;
+        int j1;
         int k13;
         int j12;
         int i2;
         if (this.restrictions) {
             for (i1 = i - 14; i1 <= i + 14; ++i1) {
-                for (j12 = j; j12 <= j + 7; ++j12) {
-                    for (k12 = k - 14; k12 <= k + 14; ++k12) {
-                        if (Math.abs(i1 - i) <= 2 && Math.abs(k12 - k) <= 2 || world.isAirBlock(i1, j12, k12)) continue;
+                for (j1 = j; j1 <= j + 7; ++j1) {
+                    for (k13 = k - 14; k13 <= k + 14; ++k13) {
+                        if (Math.abs(i1 - i) <= 2 && Math.abs(k13 - k) <= 2 || world.isAirBlock(i1, j1, k13)) continue;
                         return false;
                     }
                 }
@@ -87,56 +86,56 @@ extends LOTRWorldGenStructureBase {
             }
         } else if (this.usingPlayer != null) {
             for (int i14 = i - 2; i14 <= i + 2; ++i14) {
-                for (k13 = k - 2; k13 <= k + 2; ++k13) {
-                    for (j1 = j; !LOTRMod.isOpaque(world, i14, j1, k13) && j1 >= 0; --j1) {
-                        this.setBlockAndNotifyAdequately(world, i14, j1, k13, LOTRMod.wood, 1);
+                for (k1 = k - 2; k1 <= k + 2; ++k1) {
+                    for (j12 = j; !LOTRMod.isOpaque(world, i14, j12, k1) && j12 >= 0; --j12) {
+                        this.setBlockAndNotifyAdequately(world, i14, j12, k1, LOTRMod.wood, 1);
                     }
                 }
             }
             LOTRWorldGenMallornExtreme treeGen = new LOTRWorldGenMallornExtreme(true);
-            j12 = treeGen.generateAndReturnHeight(world, random, i, --j, k, true);
-            j += MathHelper.floor_double((double)((float)j12 * MathHelper.randomFloatClamp((Random)random, (float)LOTRWorldGenMallornExtreme.HOUSE_HEIGHT_MIN, (float)LOTRWorldGenMallornExtreme.HOUSE_HEIGHT_MAX)));
+            j1 = treeGen.generateAndReturnHeight(world, random, i, --j, k, true);
+            j += MathHelper.floor_double((double)((float)j1 * MathHelper.randomFloatClamp((Random)random, (float)LOTRWorldGenMallornExtreme.HOUSE_HEIGHT_MIN, (float)LOTRWorldGenMallornExtreme.HOUSE_HEIGHT_MAX)));
         }
         this.buildStaircase(world, random, i, j, k);
         for (i1 = i - 14; i1 <= i + 14; ++i1) {
-            for (j12 = j; j12 <= j + 6; ++j12) {
-                for (k12 = k - 14; k12 <= k + 14; ++k12) {
-                    this.setBlockAndNotifyAdequately(world, i1, j12, k12, Blocks.air, 0);
+            for (j1 = j; j1 <= j + 6; ++j1) {
+                for (k13 = k - 14; k13 <= k + 14; ++k13) {
+                    this.setBlockAndNotifyAdequately(world, i1, j1, k13, Blocks.air, 0);
                 }
             }
         }
         for (i1 = i - 2; i1 <= i + 2; ++i1) {
-            for (j12 = j; j12 <= j + 7; ++j12) {
-                for (k12 = k - 2; k12 <= k + 2; ++k12) {
-                    this.setBlockAndNotifyAdequately(world, i1, j12, k12, LOTRMod.wood, 1);
+            for (j1 = j; j1 <= j + 7; ++j1) {
+                for (k13 = k - 2; k13 <= k + 2; ++k13) {
+                    this.setBlockAndNotifyAdequately(world, i1, j1, k13, LOTRMod.wood, 1);
                 }
             }
         }
         for (i1 = i - 12; i1 <= i + 12; ++i1) {
-            for (k13 = k - 12; k13 <= k + 12; ++k13) {
+            for (k1 = k - 12; k1 <= k + 12; ++k1) {
                 i2 = i1 - i;
-                k2 = k13 - k;
+                k2 = k1 - k;
                 if (Math.abs(i2) <= 2 && Math.abs(k2) <= 2) continue;
                 distSq = i2 * i2 + k2 * k2;
                 if (distSq < 100) {
-                    this.setBlockAndNotifyAdequately(world, i1, j, k13, LOTRMod.planks, 1);
+                    this.setBlockAndNotifyAdequately(world, i1, j, k1, LOTRMod.planks, 1);
                     continue;
                 }
                 if (distSq >= 169) continue;
-                this.setBlockAndNotifyAdequately(world, i1, j + 1, k13, LOTRMod.planks, 1);
+                this.setBlockAndNotifyAdequately(world, i1, j + 1, k1, LOTRMod.planks, 1);
                 if (distSq <= 132) continue;
-                this.setBlockAndNotifyAdequately(world, i1, j + 2, k13, LOTRMod.fence, 1);
+                this.setBlockAndNotifyAdequately(world, i1, j + 2, k1, LOTRMod.fence, 1);
             }
         }
         for (i1 = i - 12; i1 <= i + 12; ++i1) {
-            for (k13 = k - 12; k13 <= k + 12; ++k13) {
+            for (k1 = k - 12; k1 <= k + 12; ++k1) {
                 i2 = i1 - i;
-                k2 = k13 - k;
+                k2 = k1 - k;
                 distSq = i2 * i2 + k2 * k2;
                 if (Math.abs(i2) <= 2 && Math.abs(k2) <= 2 || distSq >= 169) continue;
-                this.setBlockAndNotifyAdequately(world, i1, j + 6, k13, LOTRMod.planks, 1);
+                this.setBlockAndNotifyAdequately(world, i1, j + 6, k1, LOTRMod.planks, 1);
                 int i3 = i1;
-                int k3 = k13;
+                int k3 = k1;
                 if (i3 > i) {
                     --i3;
                 }
@@ -164,19 +163,19 @@ extends LOTRWorldGenStructureBase {
             this.setBlockAndNotifyAdequately(world, i1, j + 5, k - 3, LOTRMod.stairsMallorn, 6);
             this.setBlockAndNotifyAdequately(world, i1, j + 5, k + 3, LOTRMod.stairsMallorn, 7);
         }
-        for (k1 = k - 2; k1 <= k + 2; ++k1) {
-            this.setBlockAndNotifyAdequately(world, i - 3, j + 5, k1, LOTRMod.stairsMallorn, 4);
-            this.setBlockAndNotifyAdequately(world, i + 3, j + 5, k1, LOTRMod.stairsMallorn, 5);
+        for (k12 = k - 2; k12 <= k + 2; ++k12) {
+            this.setBlockAndNotifyAdequately(world, i - 3, j + 5, k12, LOTRMod.stairsMallorn, 4);
+            this.setBlockAndNotifyAdequately(world, i + 3, j + 5, k12, LOTRMod.stairsMallorn, 5);
         }
         for (i1 = i - 4; i1 <= i + 4; i1 += 8) {
-            for (k13 = k - 4; k13 <= k + 4; k13 += 8) {
-                for (j1 = j + 1; j1 <= j + 5; ++j1) {
-                    this.setBlockAndNotifyAdequately(world, i1, j1, k13, LOTRMod.wood, 1);
+            for (k1 = k - 4; k1 <= k + 4; k1 += 8) {
+                for (j12 = j + 1; j12 <= j + 5; ++j12) {
+                    this.setBlockAndNotifyAdequately(world, i1, j12, k1, LOTRMod.wood, 1);
                 }
-                this.setBlockAndNotifyAdequately(world, i1 + 1, j + 3, k13, LOTRWorldGenElfHouse.getRandomTorch(random), 1);
-                this.setBlockAndNotifyAdequately(world, i1 - 1, j + 3, k13, LOTRWorldGenElfHouse.getRandomTorch(random), 2);
-                this.setBlockAndNotifyAdequately(world, i1, j + 3, k13 + 1, LOTRWorldGenElfHouse.getRandomTorch(random), 3);
-                this.setBlockAndNotifyAdequately(world, i1, j + 3, k13 - 1, LOTRWorldGenElfHouse.getRandomTorch(random), 4);
+                this.setBlockAndNotifyAdequately(world, i1 + 1, j + 3, k1, LOTRWorldGenElfHouse.getRandomTorch(random), 1);
+                this.setBlockAndNotifyAdequately(world, i1 - 1, j + 3, k1, LOTRWorldGenElfHouse.getRandomTorch(random), 2);
+                this.setBlockAndNotifyAdequately(world, i1, j + 3, k1 + 1, LOTRWorldGenElfHouse.getRandomTorch(random), 3);
+                this.setBlockAndNotifyAdequately(world, i1, j + 3, k1 - 1, LOTRWorldGenElfHouse.getRandomTorch(random), 4);
             }
         }
         this.setBlockAndNotifyAdequately(world, i - 5, j + 1, k - 5, LOTRMod.elvenTable, 0);
@@ -204,16 +203,16 @@ extends LOTRWorldGenStructureBase {
         this.placeRandomChandelier(world, random, i, j + 5, k - 8);
         this.placeRandomChandelier(world, random, i, j + 5, k + 8);
         for (i1 = i - 8; i1 <= i + 8; i1 += 16) {
-            for (k13 = k - 8; k13 <= k + 8; k13 += 16) {
-                for (j1 = j + 2; j1 <= j + 5; ++j1) {
-                    this.setBlockAndNotifyAdequately(world, i1, j1, k13, LOTRMod.planks, 1);
+            for (k1 = k - 8; k1 <= k + 8; k1 += 16) {
+                for (j12 = j + 2; j12 <= j + 5; ++j12) {
+                    this.setBlockAndNotifyAdequately(world, i1, j12, k1, LOTRMod.planks, 1);
                 }
                 for (i2 = i1 - 1; i2 <= i1 + 1; ++i2) {
-                    this.setBlockAndNotifyAdequately(world, i2, j + 5, k13 - 1, LOTRMod.stairsMallorn, 6);
-                    this.setBlockAndNotifyAdequately(world, i2, j + 5, k13 + 1, LOTRMod.stairsMallorn, 7);
+                    this.setBlockAndNotifyAdequately(world, i2, j + 5, k1 - 1, LOTRMod.stairsMallorn, 6);
+                    this.setBlockAndNotifyAdequately(world, i2, j + 5, k1 + 1, LOTRMod.stairsMallorn, 7);
                 }
-                this.setBlockAndNotifyAdequately(world, i1 - 1, j + 5, k13, LOTRMod.stairsMallorn, 4);
-                this.setBlockAndNotifyAdequately(world, i1 + 1, j + 5, k13, LOTRMod.stairsMallorn, 5);
+                this.setBlockAndNotifyAdequately(world, i1 - 1, j + 5, k1, LOTRMod.stairsMallorn, 4);
+                this.setBlockAndNotifyAdequately(world, i1 + 1, j + 5, k1, LOTRMod.stairsMallorn, 5);
             }
         }
         for (int j15 = j + 2; j15 <= j + 5; ++j15) {
@@ -226,22 +225,22 @@ extends LOTRWorldGenStructureBase {
             this.setBlockAndNotifyAdequately(world, i - 4, j15, k + 12, LOTRMod.wood, 1);
             this.setBlockAndNotifyAdequately(world, i + 4, j15, k + 12, LOTRMod.wood, 1);
         }
-        for (k1 = k - 5; k1 <= k + 5; ++k1) {
-            if (Math.abs(k1 - k) <= 2) {
-                this.setBlockAndNotifyAdequately(world, i - 12, j + 5, k1, LOTRMod.woodSlabSingle, 9);
-                this.setBlockAndNotifyAdequately(world, i + 12, j + 5, k1, LOTRMod.woodSlabSingle, 9);
+        for (k12 = k - 5; k12 <= k + 5; ++k12) {
+            if (Math.abs(k12 - k) <= 2) {
+                this.setBlockAndNotifyAdequately(world, i - 12, j + 5, k12, LOTRMod.woodSlabSingle, 9);
+                this.setBlockAndNotifyAdequately(world, i + 12, j + 5, k12, LOTRMod.woodSlabSingle, 9);
             } else {
-                this.setBlockAndNotifyAdequately(world, i - 11, j + 5, k1, LOTRMod.stairsMallorn, 5);
-                this.setBlockAndNotifyAdequately(world, i + 11, j + 5, k1, LOTRMod.stairsMallorn, 4);
+                this.setBlockAndNotifyAdequately(world, i - 11, j + 5, k12, LOTRMod.stairsMallorn, 5);
+                this.setBlockAndNotifyAdequately(world, i + 11, j + 5, k12, LOTRMod.stairsMallorn, 4);
             }
-            if (k1 - k == -5 || k1 - k == 3) {
-                this.setBlockAndNotifyAdequately(world, i - 12, j + 5, k1, LOTRMod.stairsMallorn, 6);
-                this.setBlockAndNotifyAdequately(world, i + 12, j + 5, k1, LOTRMod.stairsMallorn, 6);
+            if (k12 - k == -5 || k12 - k == 3) {
+                this.setBlockAndNotifyAdequately(world, i - 12, j + 5, k12, LOTRMod.stairsMallorn, 6);
+                this.setBlockAndNotifyAdequately(world, i + 12, j + 5, k12, LOTRMod.stairsMallorn, 6);
                 continue;
             }
-            if (k1 - k != -3 && k1 - k != 5) continue;
-            this.setBlockAndNotifyAdequately(world, i - 12, j + 5, k1, LOTRMod.stairsMallorn, 7);
-            this.setBlockAndNotifyAdequately(world, i + 12, j + 5, k1, LOTRMod.stairsMallorn, 7);
+            if (k12 - k != -3 && k12 - k != 5) continue;
+            this.setBlockAndNotifyAdequately(world, i - 12, j + 5, k12, LOTRMod.stairsMallorn, 7);
+            this.setBlockAndNotifyAdequately(world, i + 12, j + 5, k12, LOTRMod.stairsMallorn, 7);
         }
         for (i1 = i - 5; i1 <= i + 5; ++i1) {
             if (Math.abs(i1 - i) <= 2) {
@@ -280,8 +279,8 @@ extends LOTRWorldGenStructureBase {
         this.tryPlaceLight(world, i - 2, j, k - 12, random);
         this.tryPlaceLight(world, i - 9, j, k - 9, random);
         for (i1 = i - 4; i1 <= i - 3; ++i1) {
-            for (k13 = k - 3; k13 <= k; ++k13) {
-                this.setBlockAndNotifyAdequately(world, i1, j, k13, Blocks.air, 0);
+            for (k1 = k - 3; k1 <= k; ++k1) {
+                this.setBlockAndNotifyAdequately(world, i1, j, k1, Blocks.air, 0);
             }
             this.setBlockAndNotifyAdequately(world, i1, j, k - 3, LOTRMod.stairsMallorn, 3);
         }
@@ -301,11 +300,11 @@ extends LOTRWorldGenStructureBase {
         int k1 = k - 2;
         int l = 0;
         while (j1 >= 0 && (!(block = world.getBlock(i1, j1, k1)).isOpaqueCube() || block.isWood((IBlockAccess)world, i1, j1, k1))) {
-            int k2;
             int i2;
+            int k2;
+            int k23;
             int k22;
             int j2;
-            int k23;
             int l1 = l % 24;
             if (l1 < 5) {
                 for (i2 = i1; i2 >= i1 - 2; --i2) {
@@ -325,14 +324,14 @@ extends LOTRWorldGenStructureBase {
             } else if (l1 == 5) {
                 for (i2 = i1; i2 >= i1 - 2; --i2) {
                     for (j2 = j1 + 1; j2 <= j1 + 3; ++j2) {
-                        for (k23 = k1; k23 <= k1 + 2; ++k23) {
-                            this.setBlockAndNotifyAdequately(world, i2, j2, k23, Blocks.air, 0);
+                        for (k22 = k1; k22 <= k1 + 2; ++k22) {
+                            this.setBlockAndNotifyAdequately(world, i2, j2, k22, Blocks.air, 0);
                         }
                     }
                 }
                 for (i2 = i1; i2 >= i1 - 1; --i2) {
-                    for (k22 = k1; k22 <= k1 + 1; ++k22) {
-                        this.setBlockAndNotifyAdequately(world, i2, j1, k22, LOTRMod.planks, 1);
+                    for (k23 = k1; k23 <= k1 + 1; ++k23) {
+                        this.setBlockAndNotifyAdequately(world, i2, j1, k23, LOTRMod.planks, 1);
                     }
                 }
                 for (k2 = k1; k2 <= k1 + 2; ++k2) {
@@ -364,14 +363,14 @@ extends LOTRWorldGenStructureBase {
             } else if (l1 == 11) {
                 for (i2 = i1; i2 <= i1 + 2; ++i2) {
                     for (j2 = j1 + 1; j2 <= j1 + 3; ++j2) {
-                        for (k23 = k1; k23 <= k1 + 2; ++k23) {
-                            this.setBlockAndNotifyAdequately(world, i2, j2, k23, Blocks.air, 0);
+                        for (k22 = k1; k22 <= k1 + 2; ++k22) {
+                            this.setBlockAndNotifyAdequately(world, i2, j2, k22, Blocks.air, 0);
                         }
                     }
                 }
                 for (i2 = i1; i2 <= i1 + 1; ++i2) {
-                    for (k22 = k1; k22 <= k1 + 1; ++k22) {
-                        this.setBlockAndNotifyAdequately(world, i2, j1, k22, LOTRMod.planks, 1);
+                    for (k23 = k1; k23 <= k1 + 1; ++k23) {
+                        this.setBlockAndNotifyAdequately(world, i2, j1, k23, LOTRMod.planks, 1);
                     }
                 }
                 for (i2 = i1; i2 <= i1 + 2; ++i2) {
@@ -403,14 +402,14 @@ extends LOTRWorldGenStructureBase {
             } else if (l1 == 17) {
                 for (i2 = i1; i2 <= i1 + 2; ++i2) {
                     for (j2 = j1 + 1; j2 <= j1 + 3; ++j2) {
-                        for (k23 = k1; k23 >= k1 - 2; --k23) {
-                            this.setBlockAndNotifyAdequately(world, i2, j2, k23, Blocks.air, 0);
+                        for (k22 = k1; k22 >= k1 - 2; --k22) {
+                            this.setBlockAndNotifyAdequately(world, i2, j2, k22, Blocks.air, 0);
                         }
                     }
                 }
                 for (i2 = i1; i2 <= i1 + 1; ++i2) {
-                    for (k22 = k1; k22 >= k1 - 1; --k22) {
-                        this.setBlockAndNotifyAdequately(world, i2, j1, k22, LOTRMod.planks, 1);
+                    for (k23 = k1; k23 >= k1 - 1; --k23) {
+                        this.setBlockAndNotifyAdequately(world, i2, j1, k23, LOTRMod.planks, 1);
                     }
                 }
                 for (k2 = k1; k2 >= k1 - 2; --k2) {
@@ -442,14 +441,14 @@ extends LOTRWorldGenStructureBase {
             } else if (l1 == 23) {
                 for (i2 = i1; i2 >= i1 - 2; --i2) {
                     for (j2 = j1 + 1; j2 <= j1 + 3; ++j2) {
-                        for (k23 = k1; k23 >= k1 - 2; --k23) {
-                            this.setBlockAndNotifyAdequately(world, i2, j2, k23, Blocks.air, 0);
+                        for (k22 = k1; k22 >= k1 - 2; --k22) {
+                            this.setBlockAndNotifyAdequately(world, i2, j2, k22, Blocks.air, 0);
                         }
                     }
                 }
                 for (i2 = i1; i2 >= i1 - 1; --i2) {
-                    for (k22 = k1; k22 >= k1 - 1; --k22) {
-                        this.setBlockAndNotifyAdequately(world, i2, j1, k22, LOTRMod.planks, 1);
+                    for (k23 = k1; k23 >= k1 - 1; --k23) {
+                        this.setBlockAndNotifyAdequately(world, i2, j1, k23, LOTRMod.planks, 1);
                     }
                 }
                 for (i2 = i1; i2 >= i1 - 2; --i2) {

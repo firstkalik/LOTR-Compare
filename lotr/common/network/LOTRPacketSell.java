@@ -92,6 +92,18 @@ implements IMessage {
                     if (totalCoins >= 1000) {
                         LOTRLevelData.getData((EntityPlayer)entityplayer).addAchievement(LOTRAchievement.earnManyCoins);
                     }
+                    if (totalCoins >= 5000) {
+                        LOTRLevelData.getData((EntityPlayer)entityplayer).addAchievement(LOTRAchievement.earnManyCoins1);
+                    }
+                    if (totalCoins >= 10000) {
+                        LOTRLevelData.getData((EntityPlayer)entityplayer).addAchievement(LOTRAchievement.earnManyCoins2);
+                    }
+                    if (totalCoins >= 20000) {
+                        LOTRLevelData.getData((EntityPlayer)entityplayer).addAchievement(LOTRAchievement.earnManyCoins3);
+                    }
+                    if (totalCoins >= 30000) {
+                        LOTRLevelData.getData((EntityPlayer)entityplayer).addAchievement(LOTRAchievement.earnManyCoins4);
+                    }
                     trader.playTradeSound();
                 }
             }

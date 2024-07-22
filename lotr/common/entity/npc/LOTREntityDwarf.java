@@ -59,7 +59,7 @@ import lotr.common.quest.LOTRMiniQuestFactory;
 import lotr.common.world.biome.LOTRBiomeGenBlueMountains;
 import lotr.common.world.biome.LOTRBiomeGenErebor;
 import lotr.common.world.biome.LOTRBiomeGenIronHills;
-import lotr.common.world.biome.LOTRBiomeGenRedMountains;
+import lotr.common.world.biome.LOTRBiomeGenRedMountainsStonefoot;
 import lotr.common.world.structure.LOTRChestContents;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -146,7 +146,7 @@ extends LOTREntityNPC {
     @Override
     protected void applyEntityAttributes() {
         super.applyEntityAttributes();
-        this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(26.0);
+        this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue((double)MathHelper.getRandomIntegerInRange((Random)this.rand, (int)24, (int)28));
         this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.2);
     }
 
@@ -302,7 +302,7 @@ extends LOTREntityNPC {
     public float getBlockPathWeight(int i, int j, int k) {
         float f = 0.0f;
         BiomeGenBase biome = this.worldObj.getBiomeGenForCoords(i, k);
-        if (biome instanceof LOTRBiomeGenIronHills || biome instanceof LOTRBiomeGenErebor || biome instanceof LOTRBiomeGenBlueMountains || biome instanceof LOTRBiomeGenRedMountains) {
+        if (biome instanceof LOTRBiomeGenIronHills || biome instanceof LOTRBiomeGenErebor || biome instanceof LOTRBiomeGenBlueMountains || biome instanceof LOTRBiomeGenRedMountainsStonefoot) {
             f += 20.0f;
         }
         return f;

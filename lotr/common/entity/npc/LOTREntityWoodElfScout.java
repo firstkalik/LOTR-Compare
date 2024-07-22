@@ -61,6 +61,14 @@ public class LOTREntityWoodElfScout
 extends LOTREntityWoodElf {
     private static final UUID scoutArmorSpeedBoost_id = UUID.fromString("cf0ceb91-0f13-4788-be0e-a6c67a830308");
     public static final AttributeModifier scoutArmorSpeedBoost = new AttributeModifier(scoutArmorSpeedBoost_id, "WE Scout armor speed boost", 0.3, 2).setSaved(false);
+    private static final UUID healtBoost_id = UUID.fromString("cf0ceb91-0f13-4788-be0e-a6c67a830309");
+    public static final AttributeModifier healthBoost = new AttributeModifier(healtBoost_id, "WE hp boost", 0.5, 0).setSaved(false);
+    private static final UUID powerBoost_id = UUID.fromString("cf0ceb91-0f13-4788-be0e-a7c67a830400");
+    public static final AttributeModifier powerBoost = new AttributeModifier(powerBoost_id, "WE power boost", 1.0, 0).setSaved(false);
+    private static final UUID scoutArmorSpeedBoostmew_id = UUID.fromString("33f41444-7b2d-11ee-b962-0242ac120002");
+    public static final AttributeModifier scoutArmorSpeedBoostmew = new AttributeModifier(scoutArmorSpeedBoostmew_id, "WE Scout armor speed boost", -0.05, 2).setSaved(false);
+    private static final UUID KnockbackResistBoost_id = UUID.fromString("ec28a23b-641e-441f-93bf-f5474c7ccbd9");
+    public static final AttributeModifier KnockbackResistBoost = new AttributeModifier(KnockbackResistBoost_id, "WE Scout armor boost", 0.1, 2).setSaved(false);
 
     public LOTREntityWoodElfScout(World world) {
         super(world);
@@ -101,7 +109,7 @@ extends LOTREntityWoodElf {
                 int j;
                 int k;
                 int i = MathHelper.floor_double((double)this.posX) - this.rand.nextInt(16) + this.rand.nextInt(16);
-                if (!(this.getDistance((double)i, (double)(j = MathHelper.floor_double((double)this.posY) - this.rand.nextInt(3) + this.rand.nextInt(3)), (double)(k = MathHelper.floor_double((double)this.posZ) - this.rand.nextInt(16) + this.rand.nextInt(16))) > 6.0) || !this.worldObj.getBlock(i, j - 1, k).isNormalCube() || this.worldObj.getBlock(i, j, k).isNormalCube() || this.worldObj.getBlock(i, j + 1, k).isNormalCube()) continue;
+                if (this.getDistance((double)i, (double)(j = MathHelper.floor_double((double)this.posY) - this.rand.nextInt(3) + this.rand.nextInt(3)), (double)(k = MathHelper.floor_double((double)this.posZ) - this.rand.nextInt(16) + this.rand.nextInt(16))) <= 6.0 || !this.worldObj.getBlock(i, j - 1, k).isNormalCube() || this.worldObj.getBlock(i, j, k).isNormalCube() || this.worldObj.getBlock(i, j + 1, k).isNormalCube()) continue;
                 double d = (double)i + 0.5;
                 double d1 = j;
                 double d2 = (double)k + 0.5;
@@ -147,7 +155,7 @@ extends LOTREntityWoodElf {
             if (this.hiredNPCInfo.getHiringPlayer() == entityplayer) {
                 return "woodElf/elf/hired";
             }
-            if (LOTRLevelData.getData(entityplayer).getAlignment(this.getFaction()) >= LOTREntityWoodElfScout.getWoodlandTrustLevel()) {
+            if (LOTRLevelData.getData(entityplayer).getAlignment(this.getFaction()) >= LOTREntityWoodElf.getWoodlandTrustLevel()) {
                 return "woodElf/warrior/friendly";
             }
             return "woodElf/elf/neutral";

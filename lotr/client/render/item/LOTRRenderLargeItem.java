@@ -34,6 +34,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import lotr.client.LOTRClientProxy;
+import lotr.common.item.LOTRItemDagger5;
 import lotr.common.item.LOTRItemLance;
 import lotr.common.item.LOTRItemPike;
 import lotr.common.item.LOTRItemSpear;
@@ -174,6 +175,20 @@ implements IItemRenderer {
                 GL11.glRotatef((float)40.0f, (float)0.0f, (float)0.0f, (float)1.0f);
             }
         }
+        if (item instanceof LOTRItemDagger5 && holder instanceof EntityLivingBase && (entityliving = (EntityLivingBase)holder).getHeldItem() == itemstack && entityliving.swingProgress <= 0.0f) {
+            if (entityliving.isSneaking()) {
+                if (isFirstPerson) {
+                    GL11.glRotatef((float)270.0f, (float)0.0f, (float)0.0f, (float)1.0f);
+                    GL11.glTranslatef((float)-1.0f, (float)0.0f, (float)0.0f);
+                } else {
+                    GL11.glTranslatef((float)0.0f, (float)-0.1f, (float)0.0f);
+                    GL11.glRotatef((float)20.0f, (float)0.0f, (float)0.0f, (float)1.0f);
+                }
+            } else if (!isFirstPerson) {
+                GL11.glTranslatef((float)0.0f, (float)-0.3f, (float)0.0f);
+                GL11.glRotatef((float)40.0f, (float)0.0f, (float)0.0f, (float)1.0f);
+            }
+        }
         if (item instanceof LOTRItemLance && holder instanceof EntityLivingBase && (entityliving = (EntityLivingBase)holder).getHeldItem() == itemstack) {
             if (isFirstPerson) {
                 GL11.glRotatef((float)260.0f, (float)0.0f, (float)0.0f, (float)1.0f);
@@ -193,6 +208,7 @@ implements IItemRenderer {
 
     static {
         sizeFolders.put("large", Float.valueOf(2.0f));
+        sizeFolders.put("large1", Float.valueOf(2.35f));
         sizeFolders.put("large2", Float.valueOf(3.0f));
     }
 

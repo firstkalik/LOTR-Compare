@@ -7,6 +7,7 @@
  *  net.minecraft.client.Minecraft
  *  net.minecraft.client.entity.EntityClientPlayerMP
  *  net.minecraft.client.gui.FontRenderer
+ *  net.minecraft.client.gui.Gui
  *  net.minecraft.client.gui.GuiButton
  *  net.minecraft.client.gui.GuiTextField
  *  net.minecraft.entity.Entity
@@ -28,6 +29,7 @@ import lotr.common.network.LOTRPacketHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.entity.Entity;
@@ -174,7 +176,7 @@ extends LOTRGuiScreenBase {
             int stringWidth = this.mc.fontRenderer.getStringWidth(tooltip);
             int stringHeight = this.mc.fontRenderer.FONT_HEIGHT;
             int offset = 10;
-            LOTRGuiNPCRespawner.drawRect((int)(i += offset), (int)(j += offset), (int)(i + stringWidth + border * 2), (int)(j + stringHeight + border * 2), (int)-1073741824);
+            Gui.drawRect((int)(i += offset), (int)(j += offset), (int)(i + stringWidth + border * 2), (int)(j + stringHeight + border * 2), (int)-1073741824);
             this.mc.fontRenderer.drawString(tooltip, i + border, j + border, 16777215);
         }
     }
@@ -281,14 +283,13 @@ extends LOTRGuiScreenBase {
     }
 
     private void sendSpawnerData() {
-        Class<? extends Entity> entityClass;
         String s1 = this.textSpawnClass1.getText();
         String s2 = this.textSpawnClass2.getText();
         if (!StringUtils.isNullOrEmpty((String)s1)) {
-            this.theSpawner.spawnClass1 = entityClass = LOTREntities.getClassFromString(s1);
+            this.theSpawner.spawnClass1 = LOTREntities.getClassFromString(s1);
         }
         if (!StringUtils.isNullOrEmpty((String)s2)) {
-            this.theSpawner.spawnClass2 = entityClass = LOTREntities.getClassFromString(s2);
+            this.theSpawner.spawnClass2 = LOTREntities.getClassFromString(s2);
         }
         LOTRPacketEditNPCRespawner packet = new LOTRPacketEditNPCRespawner(this.theSpawner);
         packet.destroy = this.destroySpawner;

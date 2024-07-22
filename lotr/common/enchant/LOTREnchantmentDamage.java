@@ -56,8 +56,10 @@ extends LOTREnchantment {
     @Override
     public boolean canApply(ItemStack itemstack, boolean considering) {
         if (super.canApply(itemstack, considering)) {
+            float f;
             float dmg = LOTRWeaponStats.getMeleeDamageBonus(itemstack);
-            return (dmg += this.baseDamageBoost) > 0.0f;
+            dmg += this.baseDamageBoost;
+            return f > 0.0f;
         }
         return false;
     }

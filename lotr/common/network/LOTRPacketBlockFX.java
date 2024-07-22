@@ -51,6 +51,11 @@ implements IMessage {
         this.blockZ = data.readInt();
     }
 
+    public static enum Type {
+        UTUMNO_EVAPORATE;
+
+    }
+
     public static class Handler
     implements IMessageHandler<LOTRPacketBlockFX, IMessage> {
         public IMessage onMessage(LOTRPacketBlockFX packet, MessageContext context) {
@@ -66,11 +71,6 @@ implements IMessage {
             }
             return null;
         }
-    }
-
-    public static enum Type {
-        UTUMNO_EVAPORATE;
-
     }
 
 }

@@ -76,8 +76,8 @@ extends ModelBase {
     }
 
     public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, Entity entity) {
-        float f6;
-        this.leg1.rotateAngleZ = f6 = -0.51460177f;
+        float f6 = -0.51460177f;
+        this.leg1.rotateAngleZ = -0.51460177f;
         this.leg2.rotateAngleZ = -f6;
         this.leg3.rotateAngleZ = f6 * 0.74f;
         this.leg4.rotateAngleZ = -f6 * 0.74f;
@@ -94,7 +94,7 @@ extends ModelBase {
         float f9 = -(MathHelper.cos((float)(f * 0.6662f * 2.0f + 0.0f)) * 0.4f) * f1;
         float f10 = -(MathHelper.cos((float)(f * 0.6662f * 2.0f + 3.1415927f)) * 0.4f) * f1;
         float f11 = -(MathHelper.cos((float)(f * 0.6662f * 2.0f + 1.5707964f)) * 0.4f) * f1;
-        float f12 = -(MathHelper.cos((float)(f * 0.6662f * 2.0f + 4.712389f)) * 0.4f) * f1;
+        MathHelper.cos((float)(f * 0.6662f * 2.0f + 4.712389f));
         float f13 = Math.abs(MathHelper.sin((float)(f * 0.6662f + 0.0f)) * 0.4f) * f1;
         float f14 = Math.abs(MathHelper.sin((float)(f * 0.6662f + 3.1415927f)) * 0.4f) * f1;
         float f15 = Math.abs(MathHelper.sin((float)(f * 0.6662f + 1.5707964f)) * 0.4f) * f1;

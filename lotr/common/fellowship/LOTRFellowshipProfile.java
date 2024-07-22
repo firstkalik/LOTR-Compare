@@ -23,12 +23,10 @@ import net.minecraft.util.StatCollector;
 public class LOTRFellowshipProfile
 extends GameProfile {
     public static final String fellowshipPrefix = "f/";
-    private LOTREntityBanner theBanner;
     private String fellowshipName;
 
     public LOTRFellowshipProfile(LOTREntityBanner banner, UUID fsID, String fsName) {
         super(fsID, fsName);
-        this.theBanner = banner;
         this.fellowshipName = fsName;
     }
 

@@ -13,7 +13,6 @@ import net.minecraft.world.ChunkCoordIntPair;
 
 public class LOTRVillagePositionCache {
     private Map<ChunkCoordIntPair, LocationInfo> cacheMap = new HashMap<ChunkCoordIntPair, LocationInfo>();
-    private static final int MAX_SIZE = 20000;
 
     public LocationInfo markResult(int chunkX, int chunkZ, LocationInfo result) {
         if (this.cacheMap.size() >= 20000) {

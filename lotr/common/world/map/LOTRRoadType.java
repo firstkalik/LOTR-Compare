@@ -265,6 +265,58 @@ public abstract class LOTRRoadType {
             return new RoadBlock(LOTRMod.brick, 6);
         }
     };
+    public static final LOTRRoadType UTUMNO = new LOTRRoadType(){
+
+        @Override
+        public RoadBlock getBlock(Random rand, BiomeGenBase biome, boolean top, boolean slab) {
+            if (slab) {
+                return new RoadBlock(LOTRMod.slabUtumnoSingle, 1);
+            }
+            return new RoadBlock(LOTRMod.utumnoBrick, 2);
+        }
+    };
+    public static final LOTRRoadType REDDWARVEN = new LOTRRoadType(){
+
+        @Override
+        public RoadBlock getBlock(Random rand, BiomeGenBase biome, boolean top, boolean slab) {
+            if (slab) {
+                return new RoadBlock(LOTRMod.slabSingle3, 6);
+            }
+            return new RoadBlock(LOTRMod.brick2, 2);
+        }
+    };
+    public static final LOTRRoadType REDDWARVEN_RUINED = new LOTRRoadType(){
+
+        @Override
+        public RoadBlock getBlock(Random rand, BiomeGenBase biome, boolean top, boolean slab) {
+            if (slab) {
+                if (rand.nextInt(8) == 0) {
+                    return rand.nextBoolean() ? new RoadBlock(LOTRMod.slabSingle3, 6) : new RoadBlock(LOTRMod.slabSingle122, 0);
+                }
+                return new RoadBlock(LOTRMod.slabSingle3, 6);
+            }
+            if (rand.nextInt(8) == 0) {
+                return rand.nextBoolean() ? new RoadBlock(LOTRMod.brick7, 0) : new RoadBlock(LOTRMod.brick2, 2);
+            }
+            return new RoadBlock(LOTRMod.brick7, 0);
+        }
+    };
+    public static final LOTRRoadType REDDWARVEN_RUINED_RUINED = new LOTRRoadType(){
+
+        @Override
+        public RoadBlock getBlock(Random rand, BiomeGenBase biome, boolean top, boolean slab) {
+            if (slab) {
+                if (rand.nextInt(4) == 0) {
+                    return rand.nextBoolean() ? new RoadBlock(LOTRMod.slabSingle3, 6) : new RoadBlock(LOTRMod.slabSingle122, 0);
+                }
+                return new RoadBlock(LOTRMod.slabSingle3, 6);
+            }
+            if (rand.nextInt(4) == 0) {
+                return rand.nextBoolean() ? new RoadBlock(LOTRMod.brick7, 0) : new RoadBlock(LOTRMod.brick2, 2);
+            }
+            return new RoadBlock(LOTRMod.brick7, 0);
+        }
+    };
     public static final LOTRRoadType DALE = new LOTRRoadType(){
 
         @Override
@@ -508,16 +560,6 @@ public abstract class LOTRRoadType {
         };
     }
 
-    public static class RoadBlock {
-        public Block block;
-        public final int meta;
-
-        public RoadBlock(Block b, int i) {
-            this.block = b;
-            this.meta = i;
-        }
-    }
-
     public static abstract class BridgeType {
         public static final BridgeType DEFAULT = new BridgeType(){
 
@@ -589,6 +631,16 @@ public abstract class LOTRRoadType {
 
         public abstract RoadBlock getFence(Random var1);
 
+    }
+
+    public static class RoadBlock {
+        public Block block;
+        public final int meta;
+
+        public RoadBlock(Block b, int i) {
+            this.block = b;
+            this.meta = i;
+        }
     }
 
 }

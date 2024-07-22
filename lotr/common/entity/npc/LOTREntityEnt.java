@@ -24,6 +24,8 @@
  *  net.minecraft.item.ItemStack
  *  net.minecraft.nbt.NBTTagCompound
  *  net.minecraft.pathfinding.PathNavigate
+ *  net.minecraft.potion.Potion
+ *  net.minecraft.potion.PotionEffect
  *  net.minecraft.util.AxisAlignedBB
  *  net.minecraft.util.ChunkCoordinates
  *  net.minecraft.util.DamageSource
@@ -32,17 +34,21 @@
  */
 package lotr.common.entity.npc;
 
+import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 import lotr.common.LOTRAchievement;
 import lotr.common.LOTRCommonProxy;
+import lotr.common.LOTRLevelData;
 import lotr.common.LOTRMod;
 import lotr.common.block.LOTRBlockCorruptMallorn;
 import lotr.common.entity.ai.LOTREntityAIAttackOnCollide;
 import lotr.common.entity.ai.LOTREntityAIEntHealSapling;
+import lotr.common.entity.ai.LOTREntityAIFollowHiringPlayer;
 import lotr.common.entity.npc.LOTREntityNPC;
 import lotr.common.entity.npc.LOTREntityTree;
 import lotr.common.entity.npc.LOTRFamilyInfo;
+import lotr.common.entity.npc.LOTRMercenary;
 import lotr.common.entity.npc.LOTRNames;
 import lotr.common.fac.LOTRFaction;
 import lotr.common.item.LOTRItemEntDraught;
@@ -68,6 +74,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.pathfinding.PathNavigate;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.DamageSource;
@@ -75,7 +83,8 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
 public class LOTREntityEnt
-extends LOTREntityTree {
+extends LOTREntityTree
+implements LOTRMercenary {
     private Random branchRand = new Random();
     public int eyesClosed;
     public ChunkCoordinates saplingHealTarget;
@@ -93,6 +102,7 @@ extends LOTREntityTree {
         this.tasks.addTask(3, (EntityAIBase)new EntityAIWatchClosest2((EntityLiving)this, LOTREntityNPC.class, 8.0f, 0.02f));
         this.tasks.addTask(4, (EntityAIBase)new EntityAIWatchClosest((EntityLiving)this, EntityLiving.class, 10.0f, 0.02f));
         this.tasks.addTask(5, (EntityAIBase)new EntityAILookIdle((EntityLiving)this));
+        this.tasks.addTask(6, (EntityAIBase)new LOTREntityAIFollowHiringPlayer(this));
         this.addTargetTasks(true);
     }
 
@@ -118,10 +128,11 @@ extends LOTREntityTree {
     @Override
     protected void applyEntityAttributes() {
         super.applyEntityAttributes();
-        this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(100.0);
-        this.getEntityAttribute(SharedMonsterAttributes.followRange).setBaseValue(24.0);
-        this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.2);
-        this.getEntityAttribute(npcAttackDamage).setBaseValue(7.0);
+        this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue((double)MathHelper.getRandomIntegerInRange((Random)this.rand, (int)100, (int)120));
+        this.getEntityAttribute(SharedMonsterAttributes.followRange).setBaseValue(32.0);
+        this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.25);
+        this.getEntityAttribute(npcAttackDamageExtra).setBaseValue(1.0);
+        this.getEntityAttribute(npcAttackDamage).setBaseValue(8.0);
     }
 
     @Override
@@ -130,8 +141,28 @@ extends LOTREntityTree {
     }
 
     @Override
-    public void setAttackTarget(EntityLivingBase target, boolean speak) {
-        super.setAttackTarget(target, speak);
+    public LOTRFaction getHiringFaction() {
+        return LOTRFaction.FANGORN;
+    }
+
+    @Override
+    public int getMercBaseCost() {
+        return 100;
+    }
+
+    @Override
+    public float getMercAlignmentRequired() {
+        return 1000.0f;
+    }
+
+    @Override
+    public boolean canTradeWith(EntityPlayer entityplayer) {
+        return LOTRLevelData.getData(entityplayer).getAlignment(this.getFaction()) >= 0.0f && this.isFriendly(entityplayer);
+    }
+
+    @Override
+    public void setAttackTarget(EntityLivingBase target) {
+        super.setAttackTarget(target);
         if (this.getAttackTarget() == null) {
             this.canHealSapling = true;
         }
@@ -205,8 +236,29 @@ extends LOTREntityTree {
     @Override
     public boolean attackEntityAsMob(Entity entity) {
         if (super.attackEntityAsMob(entity)) {
-            float knockbackModifier = 1.5f;
-            entity.addVelocity((double)(-MathHelper.sin((float)(this.rotationYaw * 3.1415927f / 180.0f)) * knockbackModifier * 0.5f), 0.15, (double)(MathHelper.cos((float)(this.rotationYaw * 3.1415927f / 180.0f)) * knockbackModifier * 0.5f));
+            List entities;
+            float attackDamage = (float)this.getEntityAttribute(LOTREntityNPC.npcAttackDamage).getAttributeValue();
+            float knockbackModifier = 0.25f * attackDamage;
+            entity.addVelocity((double)(-MathHelper.sin((float)(this.rotationYaw * 3.1415927f / 180.0f)) * knockbackModifier * 0.5f), 0.0, (double)(MathHelper.cos((float)(this.rotationYaw * 3.1415927f / 180.0f)) * knockbackModifier * 0.5f));
+            this.worldObj.playSoundAtEntity(entity, "lotr:ent.step", 1.0f, (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2f + 1.0f);
+            if (!this.worldObj.isRemote && !(entities = this.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, entity.boundingBox.expand(4.0, 4.0, 4.0))).isEmpty()) {
+                for (Object entitie : entities) {
+                    float f;
+                    EntityLivingBase hitEntity = (EntityLivingBase)entitie;
+                    if (hitEntity == this || hitEntity == entity || !LOTRMod.canNPCAttackEntity(this, hitEntity, false)) continue;
+                    float strength = 4.0f - entity.getDistanceToEntity((Entity)hitEntity);
+                    strength += 1.0f;
+                    if (f > 4.0f) {
+                        strength = 4.0f;
+                    }
+                    if (!hitEntity.attackEntityFrom(DamageSource.causeMobDamage((EntityLivingBase)this), strength / 4.0f * attackDamage)) continue;
+                    float knockback = strength * 0.25f;
+                    if (knockback < 0.75f) {
+                        knockback = 0.75f;
+                    }
+                    hitEntity.addVelocity((double)(-MathHelper.sin((float)(this.rotationYaw * 3.1415927f / 180.0f)) * knockback * 0.5f), 0.2 + 0.12 * (double)knockback, (double)(MathHelper.cos((float)(this.rotationYaw * 3.1415927f / 180.0f)) * knockback * 0.5f));
+                }
+            }
             return true;
         }
         return false;
@@ -293,6 +345,19 @@ extends LOTREntityTree {
             return "ent/ent/friendly";
         }
         return "ent/ent/hostile";
+    }
+
+    @Override
+    public void addPotionEffect(PotionEffect effect) {
+        if (effect.getPotionID() == Potion.wither.id) {
+            return;
+        }
+        super.addPotionEffect(effect);
+    }
+
+    @Override
+    public void onUnitTrade(EntityPlayer entityplayer) {
+        LOTRLevelData.getData(entityplayer).addAchievement(LOTRAchievement.hireMoredainMercenary);
     }
 }
 

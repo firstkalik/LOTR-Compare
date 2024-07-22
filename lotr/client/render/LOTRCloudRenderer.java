@@ -3,11 +3,8 @@
  * 
  * Could not load the following classes:
  *  com.google.common.math.IntMath
- *  net.minecraft.block.Block
- *  net.minecraft.block.material.Material
  *  net.minecraft.client.Minecraft
  *  net.minecraft.client.multiplayer.WorldClient
- *  net.minecraft.client.renderer.ActiveRenderInfo
  *  net.minecraft.client.renderer.EntityRenderer
  *  net.minecraft.client.renderer.OpenGlHelper
  *  net.minecraft.client.renderer.Tessellator
@@ -18,7 +15,6 @@
  *  net.minecraft.util.MathHelper
  *  net.minecraft.util.ResourceLocation
  *  net.minecraft.util.Vec3
- *  net.minecraft.world.World
  *  net.minecraft.world.WorldProvider
  *  net.minecraftforge.client.IRenderHandler
  *  org.lwjgl.opengl.ContextCapabilities
@@ -33,11 +29,8 @@ import java.util.Random;
 import lotr.client.LOTRReflectionClient;
 import lotr.common.LOTRConfig;
 import lotr.common.LOTRDate;
-import net.minecraft.block.Block;
-import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
-import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.renderer.EntityRenderer;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
@@ -48,7 +41,6 @@ import net.minecraft.profiler.Profiler;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Vec3;
-import net.minecraft.world.World;
 import net.minecraft.world.WorldProvider;
 import net.minecraftforge.client.IRenderHandler;
 import org.lwjgl.opengl.ContextCapabilities;
@@ -88,12 +80,8 @@ extends IRenderHandler {
     }
 
     public void render(float partialTicks, WorldClient world, Minecraft mc) {
-        world.theProfiler.startSection("lotrClouds");
         if (world.provider.isSurfaceWorld()) {
-            Block block = ActiveRenderInfo.getBlockAtEntityViewpoint((World)world, (EntityLivingBase)mc.renderViewEntity, (float)partialTicks);
-            if (block.getMaterial() == Material.water) {
-                return;
-            }
+            world.theProfiler.startSection("lotrClouds");
             cloudRange = LOTRConfig.cloudRange;
             GL11.glMatrixMode((int)5889);
             GL11.glPushMatrix();
@@ -173,8 +161,8 @@ extends IRenderHandler {
             GL11.glPopMatrix();
             GL11.glMatrixMode((int)5888);
             GL11.glPopMatrix();
+            world.theProfiler.endSection();
         }
-        world.theProfiler.endSection();
     }
 
     static {

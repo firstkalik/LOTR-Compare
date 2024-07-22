@@ -93,8 +93,8 @@ extends LOTREntityWarg {
     }
 
     @Override
-    public void setAttackTarget(EntityLivingBase target, boolean speak) {
-        super.setAttackTarget(target, speak);
+    public void setAttackTarget(EntityLivingBase target) {
+        super.setAttackTarget(target);
         if (target != null) {
             this.worldObj.playSoundAtEntity((Entity)this, "game.tnt.primed", 1.0f, 1.0f);
         }

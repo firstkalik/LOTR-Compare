@@ -21,6 +21,7 @@ package lotr.client.render.entity;
 import java.util.HashMap;
 import java.util.Map;
 import lotr.client.model.LOTRModelBanner;
+import lotr.common.LOTRConfig;
 import lotr.common.entity.item.LOTREntityBanner;
 import lotr.common.item.LOTRItemBanner;
 import net.minecraft.client.Minecraft;
@@ -72,15 +73,15 @@ extends Render {
     }
 
     public void doRender(Entity entity, double d, double d1, double d2, float f, float f1) {
-        int ly;
         int lx;
-        int light;
+        int light2;
+        int ly;
         LOTREntityBanner banner = (LOTREntityBanner)entity;
         Minecraft mc = Minecraft.getMinecraft();
         boolean debug = mc.gameSettings.showDebugInfo;
         boolean protecting = banner.isProtectingTerritory();
         boolean renderBox = debug && protecting;
-        boolean seeThroughWalls = renderBox && mc.thePlayer.capabilities.isCreativeMode;
+        boolean seeThroughWalls = renderBox && LOTRConfig.showPermittedBannerSilhouettes && (mc.thePlayer.capabilities.isCreativeMode || banner.clientside_playerHasPermissionInSurvival());
         int protectColor = 65280;
         bannerFrustum.setPosition(d + RenderManager.renderPosX, d1 + RenderManager.renderPosY, d2 + RenderManager.renderPosZ);
         if (bannerFrustum.isBoundingBoxInFrustum(banner.boundingBox)) {
@@ -94,9 +95,9 @@ extends Render {
                 GL11.glDisable((int)2929);
                 GL11.glDisable((int)3553);
                 GL11.glDisable((int)2896);
-                light = 15728880;
-                lx = light % 65536;
-                ly = light / 65536;
+                light2 = 15728880;
+                lx = light2 % 65536;
+                ly = light2 / 65536;
                 OpenGlHelper.setLightmapTextureCoords((int)OpenGlHelper.lightmapTexUnit, (float)((float)lx / 1.0f), (float)((float)ly / 1.0f));
                 GL11.glColor4f((float)((float)(protectColor >> 16 & 0xFF) / 255.0f), (float)((float)(protectColor >> 8 & 0xFF) / 255.0f), (float)((float)(protectColor >> 0 & 0xFF) / 255.0f), (float)1.0f);
             }
@@ -119,9 +120,9 @@ extends Render {
             GL11.glDisable((int)3553);
             GL11.glDisable((int)2884);
             GL11.glDisable((int)3042);
-            light = 15728880;
-            lx = light % 65536;
-            ly = light / 65536;
+            light2 = 15728880;
+            lx = light2 % 65536;
+            ly = light2 / 65536;
             OpenGlHelper.setLightmapTextureCoords((int)OpenGlHelper.lightmapTexUnit, (float)((float)lx / 1.0f), (float)((float)ly / 1.0f));
             GL11.glColor4f((float)1.0f, (float)1.0f, (float)1.0f, (float)1.0f);
             GL11.glDisable((int)2896);

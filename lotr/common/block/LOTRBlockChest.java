@@ -72,13 +72,17 @@ extends BlockContainer {
     }
 
     public boolean onBlockActivated(World world, int i, int j, int k, EntityPlayer entityplayer, int side, float f, float f1, float f2) {
-        if (world.isSideSolid(i, j + 1, k, ForgeDirection.DOWN)) {
-            return false;
-        }
-        if (!world.isRemote) {
+        if (!world.isRemote && this.getModChestAt(world, i, j, k) != null) {
             entityplayer.openGui((Object)LOTRMod.instance, 41, world, i, j, k);
         }
         return true;
+    }
+
+    public IInventory getModChestAt(World world, int i, int j, int k) {
+        if (world.isSideSolid(i, j + 1, k, ForgeDirection.DOWN)) {
+            return null;
+        }
+        return (IInventory)world.getTileEntity(i, j, k);
     }
 
     @SideOnly(value=Side.CLIENT)

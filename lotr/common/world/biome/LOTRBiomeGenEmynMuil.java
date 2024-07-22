@@ -43,13 +43,9 @@ extends LOTRBiome {
         this.fillerBlock = Blocks.stone;
         this.spawnableCreatureList.clear();
         this.spawnableLOTRAmbientList.clear();
-        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer = new LOTRBiomeSpawnList.SpawnListContainer[2];
-        arrspawnListContainer[0] = LOTRBiomeSpawnList.entry(LOTRSpawnList.MORDOR_ORCS, 10);
-        arrspawnListContainer[1] = LOTRBiomeSpawnList.entry(LOTRSpawnList.MORDOR_WARGS, 1);
+        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer = new LOTRBiomeSpawnList.SpawnListContainer[]{LOTRBiomeSpawnList.entry(LOTRSpawnList.MORDOR_ORCS, 10), LOTRBiomeSpawnList.entry(LOTRSpawnList.MORDOR_WARGS, 1)};
         this.npcSpawnList.newFactionList(100).add(arrspawnListContainer);
-        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer2 = new LOTRBiomeSpawnList.SpawnListContainer[2];
-        arrspawnListContainer2[0] = LOTRBiomeSpawnList.entry(LOTRSpawnList.GONDOR_SOLDIERS, 1);
-        arrspawnListContainer2[1] = LOTRBiomeSpawnList.entry(LOTRSpawnList.RANGERS_ITHILIEN, 10);
+        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer2 = new LOTRBiomeSpawnList.SpawnListContainer[]{LOTRBiomeSpawnList.entry(LOTRSpawnList.GONDOR_SOLDIERS, 1), LOTRBiomeSpawnList.entry(LOTRSpawnList.RANGERS_ITHILIEN, 10)};
         this.npcSpawnList.newFactionList(0).add(arrspawnListContainer2);
         this.decorator.flowersPerChunk = 1;
         this.decorator.grassPerChunk = 10;
@@ -81,8 +77,8 @@ extends LOTRBiome {
     @Override
     public void decorate(World world, Random random, int i, int k) {
         int k1;
-        int i1;
         int l;
+        int i1;
         super.decorate(world, random, i, k);
         for (l = 0; l < 20; ++l) {
             i1 = i + random.nextInt(16) + 8;

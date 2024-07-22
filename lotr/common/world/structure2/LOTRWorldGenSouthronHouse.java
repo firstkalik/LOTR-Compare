@@ -69,7 +69,7 @@ extends LOTRWorldGenSouthronStructure {
                         this.setAir(world, i1, j1, k1);
                     }
                 }
-                if ((i2 > 2 || k1 != 5) && (i1 < -3 || i1 > 2 || k1 != 6)) continue;
+                if (!(i2 <= 2 && k1 == 5 || i1 >= -3 && i1 <= 2 && k1 == 6)) continue;
                 j1 = 0;
                 while (!this.isOpaque(world, i1, j1, k1) && this.getY(j1) >= 0) {
                     this.setBlockAndMetadata(world, i1, j1, k1, this.brickBlock, this.brickMeta);

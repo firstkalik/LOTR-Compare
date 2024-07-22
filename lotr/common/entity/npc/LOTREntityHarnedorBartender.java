@@ -86,9 +86,9 @@ implements LOTRTradeable.Bartender {
     @Override
     public String getSpeechBank(EntityPlayer entityplayer) {
         if (this.isFriendly(entityplayer)) {
-            return "nearHarad/harnennor/bartender/friendly";
+            return "nearHarad/harnedor/bartender/friendly";
         }
-        return "nearHarad/harnennor/bartender/hostile";
+        return "nearHarad/harnedor/bartender/hostile";
     }
 }
 

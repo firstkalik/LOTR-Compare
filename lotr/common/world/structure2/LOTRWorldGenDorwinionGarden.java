@@ -63,21 +63,21 @@ extends LOTRWorldGenStructureBase2 {
                 int i2 = Math.abs(i1);
                 int k2 = Math.abs(k1);
                 boolean within = false;
-                for (j1 = 0; j1 >= -h; --j1) {
-                    int j2 = j1 + r - 2;
+                for (j12 = 0; j12 >= -h; --j12) {
+                    int j2 = j12 + r - 2;
                     int d = i2 * i2 + j2 * j2 + k2 * k2;
                     if (d >= r * r) continue;
-                    boolean grass = !this.isOpaque(world, i1, j1 + 1, k1);
-                    this.setBlockAndMetadata(world, i1, j1, k1, (Block)(grass ? Blocks.grass : Blocks.dirt), 0);
-                    this.setGrassToDirt(world, i1, j1 - 1, k1);
+                    boolean grass = !this.isOpaque(world, i1, j12 + 1, k1);
+                    this.setBlockAndMetadata(world, i1, j12, k1, (Block)(grass ? Blocks.grass : Blocks.dirt), 0);
+                    this.setGrassToDirt(world, i1, j12 - 1, k1);
                     within = true;
                 }
                 if (!within) continue;
-                j1 = -h - 1;
-                while (!this.isOpaque(world, i1, j1, k1) && this.getY(j1) >= 0) {
-                    this.setBlockAndMetadata(world, i1, j1, k1, Blocks.dirt, 0);
-                    this.setGrassToDirt(world, i1, j1 - 1, k1);
-                    --j1;
+                j12 = -h - 1;
+                while (!this.isOpaque(world, i1, j12, k1) && this.getY(j12) >= 0) {
+                    this.setBlockAndMetadata(world, i1, j12, k1, Blocks.dirt, 0);
+                    this.setGrassToDirt(world, i1, j12 - 1, k1);
+                    --j12;
                 }
                 int dh = i2 * i2 + k2 * k2;
                 if (dh < gardenR * gardenR) {
@@ -85,8 +85,8 @@ extends LOTRWorldGenStructureBase2 {
                 } else if (dh < leafR * leafR) {
                     this.setBlockAndMetadata(world, i1, 1, k1, LOTRMod.leaves6, 6);
                 } else if (random.nextInt(5) == 0) {
-                    j12 = this.getTopBlock(world, i1, k1);
-                    this.plantFlower(world, random, i1, j12, k1);
+                    j1 = this.getTopBlock(world, i1, k1);
+                    this.plantFlower(world, random, i1, j1, k1);
                 }
                 if (i2 == 6 && k2 == 6) {
                     this.setGrassToDirt(world, i1, 0, k1);
@@ -111,14 +111,14 @@ extends LOTRWorldGenStructureBase2 {
                     this.setBlockAndMetadata(world, i1, 1, k1, LOTRMod.slabSingle9, 7);
                 }
                 if (i2 == 2 && k2 <= 1 || k2 == 2 && i2 <= 1) {
-                    for (j12 = -1; j12 <= 1; ++j12) {
-                        this.setBlockAndMetadata(world, i1, j12, k1, LOTRMod.brick5, 2);
+                    for (j1 = -1; j1 <= 1; ++j1) {
+                        this.setBlockAndMetadata(world, i1, j1, k1, LOTRMod.brick5, 2);
                     }
                 }
                 if (i2 > 1 || k2 > 1) continue;
                 this.setBlockAndMetadata(world, i1, -2, k1, LOTRMod.brick5, 2);
-                for (j12 = -1; j12 <= 1; ++j12) {
-                    this.setBlockAndMetadata(world, i1, j12, k1, Blocks.water, 0);
+                for (j1 = -1; j1 <= 1; ++j1) {
+                    this.setBlockAndMetadata(world, i1, j1, k1, Blocks.water, 0);
                 }
             }
         }

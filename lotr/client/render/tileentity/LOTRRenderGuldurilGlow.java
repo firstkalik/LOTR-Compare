@@ -7,7 +7,6 @@
  *  net.minecraft.client.renderer.OpenGlHelper
  *  net.minecraft.client.renderer.Tessellator
  *  net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer
- *  net.minecraft.entity.EntityLivingBase
  *  net.minecraft.tileentity.TileEntity
  *  net.minecraft.util.ResourceLocation
  *  net.minecraft.util.Vec3
@@ -23,7 +22,6 @@ import net.minecraft.client.model.PositionTextureVertex;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Vec3;
@@ -33,7 +31,6 @@ import org.lwjgl.opengl.GL11;
 public class LOTRRenderGuldurilGlow
 extends TileEntitySpecialRenderer {
     private static ResourceLocation texture = new ResourceLocation("lotr:misc/gulduril_glow.png");
-    private static final float texSize = 64.0f;
 
     public void renderTileEntityAt(TileEntity tileentity, double d, double d1, double d2, float f) {
         LOTRTileEntityGulduril glow = (LOTRTileEntityGulduril)tileentity;
@@ -64,8 +61,6 @@ extends TileEntitySpecialRenderer {
         boolean glowAbove = this.guldurilBlockAt(te, 0, 1, 0);
         boolean glowNorth = this.guldurilBlockAt(te, 0, 0, -1);
         boolean glowSouth = this.guldurilBlockAt(te, 0, 0, 1);
-        float edge = 8.0f;
-        float edgeNoGlow = 8.5f;
         float xMin = -(glowWest ? 8.0f : 8.5f) / 16.0f;
         float xMax = (glowEast ? 8.0f : 8.5f) / 16.0f;
         float yMin = -(glowBelow ? 8.0f : 8.5f) / 16.0f;
@@ -118,7 +113,6 @@ extends TileEntitySpecialRenderer {
     }
 
     private void renderFace(PositionTextureVertex v0, PositionTextureVertex v1, PositionTextureVertex v2, PositionTextureVertex v3) {
-        PositionTextureVertex[] vertices;
         float uMin = 0.0f;
         float uMax = 0.25f;
         float vMin = 0.0f;
@@ -133,7 +127,7 @@ extends TileEntitySpecialRenderer {
         v3.texturePositionY = vMin;
         Tessellator tess = Tessellator.instance;
         tess.startDrawingQuads();
-        for (PositionTextureVertex v : vertices = new PositionTextureVertex[]{v0, v1, v2, v3}) {
+        for (PositionTextureVertex v : new PositionTextureVertex[]{v0, v1, v2, v3}) {
             tess.addVertexWithUV(v.vector3D.xCoord, v.vector3D.yCoord, v.vector3D.zCoord, (double)v.texturePositionX, (double)v.texturePositionY);
         }
         tess.draw();
@@ -142,7 +136,7 @@ extends TileEntitySpecialRenderer {
     public void renderInvGlow() {
         GL11.glRotatef((float)90.0f, (float)0.0f, (float)1.0f, (float)0.0f);
         GL11.glTranslatef((float)-0.5f, (float)-0.5f, (float)-0.5f);
-        EntityLivingBase viewer = Minecraft.getMinecraft().renderViewEntity;
+        Minecraft.getMinecraft();
         this.renderGlowAt(0.0, 0.0, 0.0, LOTRTickHandlerClient.clientTick, LOTRTickHandlerClient.renderTick, null);
         GL11.glEnable((int)32826);
     }

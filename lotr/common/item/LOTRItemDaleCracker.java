@@ -74,13 +74,9 @@ extends Item {
 
     public static ItemStack setEmpty(ItemStack itemstack, boolean flag) {
         int i = itemstack.getItemDamage();
-        i = flag ? (i |= emptyMeta) : (i &= ~emptyMeta);
+        i = flag ? (i = i | emptyMeta) : (i = i & ~emptyMeta);
         itemstack.setItemDamage(i);
         return itemstack;
-    }
-
-    private static int getBaseCrackerMetadata(ItemStack itemstack) {
-        return LOTRItemDaleCracker.getBaseCrackerMetadata(itemstack.getItemDamage());
     }
 
     private static int getBaseCrackerMetadata(int i) {

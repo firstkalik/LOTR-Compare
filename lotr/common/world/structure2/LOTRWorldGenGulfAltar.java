@@ -26,18 +26,19 @@ extends LOTRWorldGenGulfStructure {
 
     @Override
     public boolean generateWithSetRotation(World world, Random random, int i, int j, int k, int rotation) {
-        int k1;
         int step;
+        int k1;
         int j1;
+        int i1;
         this.setOriginAndRotation(world, i, j, k, rotation, 13);
         this.setupRandomBlocks(random);
         if (this.restrictions) {
             int minHeight = 0;
             int maxHeight = 0;
-            for (int i1 = -12; i1 <= 12; ++i1) {
+            for (int i12 = -12; i12 <= 12; ++i12) {
                 for (int k12 = -12; k12 <= 8; ++k12) {
-                    int j12 = this.getTopBlock(world, i1, k12) - 1;
-                    if (!this.isSurface(world, i1, j12, k12)) {
+                    int j12 = this.getTopBlock(world, i12, k12) - 1;
+                    if (!this.isSurface(world, i12, j12, k12)) {
                         return false;
                     }
                     if (j12 < minHeight) {
@@ -51,10 +52,10 @@ extends LOTRWorldGenGulfStructure {
                 }
             }
         }
-        for (int i1 = -3; i1 <= 3; ++i1) {
+        for (int i13 = -3; i13 <= 3; ++i13) {
             for (int k13 = -3; k13 <= 3; ++k13) {
                 for (int j13 = 5; j13 <= 10; ++j13) {
-                    this.setAir(world, i1, j13, k13);
+                    this.setAir(world, i13, j13, k13);
                 }
             }
         }
@@ -72,14 +73,13 @@ extends LOTRWorldGenGulfStructure {
         int holeX = 0;
         int holeZ = 6;
         int holeR = 3;
-        int holeD = 3;
         if (this.getTopBlock(world, holeX, holeZ) >= -8) {
-            for (int i1 = -holeR; i1 <= holeR; ++i1) {
+            for (int i14 = -holeR; i14 <= holeR; ++i14) {
                 for (k1 = -holeR; k1 <= holeR; ++k1) {
                     int holeY;
-                    int i2 = holeX + i1;
+                    int i2 = holeX + i14;
                     int k2 = holeZ + k1;
-                    int dSq = i1 * i1 + k1 * k1;
+                    int dSq = i14 * i14 + k1 * k1;
                     if (dSq >= holeR * holeR || !this.isSurface(world, i2, holeY = this.getTopBlock(world, i2, k2) - 1, k2)) continue;
                     int holeDHere = (int)Math.round(Math.sqrt(Math.max(0, holeR * holeR - dSq)));
                     for (int j14 = 3; j14 >= -holeDHere; --j14) {
@@ -105,7 +105,7 @@ extends LOTRWorldGenGulfStructure {
             }
         }
         int maxSteps = 12;
-        for (int i1 = -1; i1 <= 1; ++i1) {
+        for (i1 = -1; i1 <= 1; ++i1) {
             int k14;
             for (step = 0; step < maxSteps && !this.isOpaque(world, i1, j1 = 0 - step / 2, k14 = -13 - step); ++step) {
                 if (step % 2 == 0) {
@@ -118,7 +118,6 @@ extends LOTRWorldGenGulfStructure {
             }
         }
         for (k1 = -1; k1 <= 1; ++k1) {
-            int i1;
             for (step = 0; step < maxSteps && !this.isOpaque(world, i1 = -13 - step, j1 = 0 - step / 2, k1); ++step) {
                 if (step % 2 == 0) {
                     this.setBlockAndMetadata(world, i1, j1, k1, this.plankBlock, this.plankMeta);

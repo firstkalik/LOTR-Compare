@@ -163,11 +163,9 @@ extends BlockFalling {
         if (LOTRMod.doFireTick(world)) {
             boolean foundFire = false;
             for (int l = 0; l < 12; ++l) {
-                int k1;
-                int j1;
                 int range = 1 + random.nextInt(4);
                 int i1 = i + MathHelper.getRandomIntegerInRange((Random)random, (int)(-range), (int)range);
-                Block block = world.getBlock(i1, j1 = j + MathHelper.getRandomIntegerInRange((Random)random, (int)(-range), (int)range), k1 = k + MathHelper.getRandomIntegerInRange((Random)random, (int)(-range), (int)range));
+                Block block = world.getBlock(i1, j + MathHelper.getRandomIntegerInRange((Random)random, (int)(-range), (int)range), k + MathHelper.getRandomIntegerInRange((Random)random, (int)(-range), (int)range));
                 Material material = block.getMaterial();
                 if (material != Material.fire && material != Material.lava) continue;
                 foundFire = true;
@@ -177,7 +175,7 @@ extends BlockFalling {
                 this.explode(world, i, j, k);
             }
         }
-        if (world.getBlock(i, j, k) == this && !world.isRemote && BlockFalling.func_149831_e((World)world, (int)i, (int)(j - 1), (int)k) && j >= 0 && world.checkChunksExist(i - (b0 = 32), j - b0, k - b0, i + b0, j + b0, k + b0)) {
+        if (world.getBlock(i, j, k) == this && !world.isRemote && BlockFalling.func_149831_e((World)world, (int)i, (int)(j - 1), (int)k) && j >= 0 && world.checkChunksExist(i - 32, j - (b0 = 32), k - b0, i + b0, j + b0, k + b0)) {
             LOTREntityFallingFireJar falling = new LOTREntityFallingFireJar(world, (double)i + 0.5, (double)j + 0.5, (double)k + 0.5, (Block)this, world.getBlockMetadata(i, j, k));
             this.func_149829_a((EntityFallingBlock)falling);
             world.spawnEntityInWorld((Entity)falling);

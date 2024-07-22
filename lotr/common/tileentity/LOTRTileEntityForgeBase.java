@@ -267,21 +267,18 @@ ISidedInventory {
             return temp;
         }
         if (side == 1) {
-            ArrayList<LOTRSlotStackSize> slotsWithStackSize = new ArrayList<LOTRSlotStackSize>();
-            int[] temp = this.inputSlots;
-            int i = temp.length;
-            for (int j = 0; j < i; ++j) {
-                int slot = temp[j];
+            ArrayList<LOTRSlotStackSize> list = new ArrayList<LOTRSlotStackSize>();
+            for (int slot : this.inputSlots) {
                 int size = this.getStackInSlot(slot) == null ? 0 : this.getStackInSlot((int)slot).stackSize;
-                slotsWithStackSize.add(new LOTRSlotStackSize(slot, size));
+                list.add(new LOTRSlotStackSize(slot, size));
             }
-            Collections.sort(slotsWithStackSize);
-            int[] sortedSlots = new int[this.inputSlots.length];
-            for (i = 0; i < sortedSlots.length; ++i) {
-                LOTRSlotStackSize slotAndStack = (LOTRSlotStackSize)slotsWithStackSize.get(i);
-                sortedSlots[i] = slotAndStack.slot;
+            Collections.sort(list);
+            int[] temp = new int[this.inputSlots.length];
+            for (int i = 0; i < temp.length; ++i) {
+                LOTRSlotStackSize obj = (LOTRSlotStackSize)list.get(i);
+                temp[i] = obj.slot;
             }
-            return sortedSlots;
+            return temp;
         }
         return new int[]{this.fuelSlot};
     }

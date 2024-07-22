@@ -41,43 +41,43 @@ extends LOTRWorldGenBreeStructure {
 
     @Override
     public boolean generateWithSetRotation(World world, Random random, int i, int j, int k, int rotation) {
-        int k1;
-        int i1;
-        int j1;
+        int j2;
         int step;
         int i12;
-        int k122;
-        int j2;
         int j12;
+        int i1;
+        int j1;
+        int k12;
+        int k13;
         this.setOriginAndRotation(world, i, j, k, rotation, 8);
         this.setupRandomBlocks(random);
         if (this.restrictions) {
-            for (i1 = -6; i1 <= 6; ++i1) {
-                for (k1 = -9; k1 <= 9; ++k1) {
-                    j12 = this.getTopBlock(world, i1, k1) - 1;
-                    if (this.isSurface(world, i1, j12, k1)) continue;
+            for (i12 = -6; i12 <= 6; ++i12) {
+                for (k12 = -9; k12 <= 9; ++k12) {
+                    j12 = this.getTopBlock(world, i12, k12) - 1;
+                    if (this.isSurface(world, i12, j12, k12)) continue;
                     return false;
                 }
             }
         }
-        for (i1 = -5; i1 <= 5; ++i1) {
-            for (k1 = -7; k1 <= 7; ++k1) {
+        for (i12 = -5; i12 <= 5; ++i12) {
+            for (k12 = -7; k12 <= 7; ++k12) {
                 for (j12 = 1; j12 <= 4; ++j12) {
-                    this.setAir(world, i1, j12, k1);
+                    this.setAir(world, i12, j12, k12);
                 }
             }
         }
-        for (i1 = -6; i1 <= 6; ++i1) {
-            for (k1 = -9; k1 <= 9; ++k1) {
+        for (i12 = -6; i12 <= 6; ++i12) {
+            for (k12 = -9; k12 <= 9; ++k12) {
                 for (j12 = 5; j12 <= 10; ++j12) {
-                    this.setAir(world, i1, j12, k1);
+                    this.setAir(world, i12, j12, k12);
                 }
             }
         }
-        for (i1 = -1; i1 <= 1; ++i1) {
-            for (int k122 : new int[]{-8, 8}) {
+        for (i12 = -1; i12 <= 1; ++i12) {
+            for (int k131 : new int[]{-8, 8}) {
                 for (int j13 = 1; j13 <= 3; ++j13) {
-                    this.setAir(world, i1, j13, k122);
+                    this.setAir(world, i12, j13, k131);
                 }
             }
         }
@@ -103,27 +103,26 @@ extends LOTRWorldGenBreeStructure {
         this.addBlockMetaAliasOption("GROUND", 7, Blocks.cobblestone, 0);
         this.associateBlockMetaAlias("LEAF", (Block)Blocks.leaves, 4);
         this.generateStrScan(world, random, 0, 0, 0);
-        int maxSteps = 12;
-        for (i12 = -1; i12 <= 1; ++i12) {
-            for (step = 0; step < 12 && !this.isOpaque(world, i12, j1 = 0 - step, k122 = -8 - step); ++step) {
-                this.setBlockAndMetadata(world, i12, j1, k122, (Block)Blocks.grass, 0);
-                this.setGrassToDirt(world, i12, j1 - 1, k122);
+        for (i1 = -1; i1 <= 1; ++i1) {
+            for (step = 0; step < 12 && !this.isOpaque(world, i1, j1 = 0 - step, k13 = -8 - step); ++step) {
+                this.setBlockAndMetadata(world, i1, j1, k13, (Block)Blocks.grass, 0);
+                this.setGrassToDirt(world, i1, j1 - 1, k13);
                 j2 = j1 - 1;
-                while (!this.isOpaque(world, i12, j2, k122) && this.getY(j2) >= 0) {
-                    this.setBlockAndMetadata(world, i12, j2, k122, Blocks.dirt, 0);
-                    this.setGrassToDirt(world, i12, j2 - 1, k122);
+                while (!this.isOpaque(world, i1, j2, k13) && this.getY(j2) >= 0) {
+                    this.setBlockAndMetadata(world, i1, j2, k13, Blocks.dirt, 0);
+                    this.setGrassToDirt(world, i1, j2 - 1, k13);
                     --j2;
                 }
             }
         }
-        for (i12 = -1; i12 <= 1; ++i12) {
-            for (step = 0; step < 12 && !this.isOpaque(world, i12, j1 = 0 - step, k122 = 8 + step); ++step) {
-                this.setBlockAndMetadata(world, i12, j1, k122, (Block)Blocks.grass, 0);
-                this.setGrassToDirt(world, i12, j1 - 1, k122);
+        for (i1 = -1; i1 <= 1; ++i1) {
+            for (step = 0; step < 12 && !this.isOpaque(world, i1, j1 = 0 - step, k13 = 8 + step); ++step) {
+                this.setBlockAndMetadata(world, i1, j1, k13, (Block)Blocks.grass, 0);
+                this.setGrassToDirt(world, i1, j1 - 1, k13);
                 j2 = j1 - 1;
-                while (!this.isOpaque(world, i12, j2, k122) && this.getY(j2) >= 0) {
-                    this.setBlockAndMetadata(world, i12, j2, k122, Blocks.dirt, 0);
-                    this.setGrassToDirt(world, i12, j2 - 1, k122);
+                while (!this.isOpaque(world, i1, j2, k13) && this.getY(j2) >= 0) {
+                    this.setBlockAndMetadata(world, i1, j2, k13, Blocks.dirt, 0);
+                    this.setGrassToDirt(world, i1, j2 - 1, k13);
                     --j2;
                 }
             }

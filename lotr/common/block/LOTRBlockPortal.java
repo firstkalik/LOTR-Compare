@@ -84,7 +84,7 @@ extends BlockContainer {
         }
         if (entity instanceof EntityPlayer) {
             for (LOTRFaction faction : this.portalFactions) {
-                if (!(LOTRLevelData.getData((EntityPlayer)entity).getAlignment(faction) >= 1.0f)) continue;
+                if (LOTRLevelData.getData((EntityPlayer)entity).getAlignment(faction) < 1.0f) continue;
                 if (entity.ridingEntity == null && entity.riddenByEntity == null) {
                     this.setPlayerInPortal((EntityPlayer)entity);
                 }
@@ -107,9 +107,9 @@ extends BlockContainer {
     }
 
     public Teleporter getPortalTeleporter(WorldServer world) {
-        for (E obj : world.customTeleporters) {
-            if (!this.teleporterClass.isInstance(obj)) continue;
-            return (Teleporter)obj;
+        for (Teleporter obj : world.customTeleporters) {
+            if (!this.teleporterClass.isInstance((Object)obj)) continue;
+            return obj;
         }
         Teleporter teleporter = null;
         try {

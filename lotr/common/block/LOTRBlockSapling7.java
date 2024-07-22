@@ -25,11 +25,11 @@ extends LOTRBlockSaplingBase {
 
     @Override
     public void growTree(World world, int i, int j, int k, Random random) {
-        int k1;
         int i1;
+        int k1;
         int meta = world.getBlockMetadata(i, j, k) & 7;
         WorldGenAbstractTree treeGen = null;
-        int trunkNeg = 0;
+        boolean trunkNeg = false;
         int trunkPos = 0;
         int xOffset = 0;
         int zOffset = 0;
@@ -38,7 +38,7 @@ extends LOTRBlockSaplingBase {
                 for (k1 = 0; k1 >= -1; --k1) {
                     if (!this.isSameSapling(world, i + i1, j, k + k1, meta) || !this.isSameSapling(world, i + i1 + 1, j, k + k1, meta) || !this.isSameSapling(world, i + i1, j, k + k1 + 1, meta) || !this.isSameSapling(world, i + i1 + 1, j, k + k1 + 1, meta)) continue;
                     treeGen = LOTRTreeType.ASPEN_LARGE.create(true, random);
-                    trunkNeg = 0;
+                    trunkNeg = false;
                     trunkPos = 1;
                     xOffset = i1;
                     zOffset = k1;
@@ -47,7 +47,7 @@ extends LOTRBlockSaplingBase {
             }
             if (treeGen == null) {
                 trunkPos = 0;
-                trunkNeg = 0;
+                trunkNeg = false;
                 xOffset = 0;
                 zOffset = 0;
                 treeGen = LOTRTreeType.ASPEN.create(true, random);
@@ -58,14 +58,14 @@ extends LOTRBlockSaplingBase {
             if (partyTree != null) {
                 treeGen = LOTRTreeType.GREEN_OAK_LARGE.create(true, random);
                 trunkPos = 1;
-                trunkNeg = 1;
+                trunkNeg = true;
                 xOffset = partyTree[0];
                 zOffset = partyTree[1];
             }
             if (treeGen == null) {
                 treeGen = LOTRTreeType.GREEN_OAK.create(true, random);
                 trunkPos = 0;
-                trunkNeg = 0;
+                trunkNeg = false;
                 xOffset = 0;
                 zOffset = 0;
             }
@@ -75,7 +75,7 @@ extends LOTRBlockSaplingBase {
                 for (k1 = 0; k1 >= -1; --k1) {
                     if (!this.isSameSapling(world, i + i1, j, k + k1, meta) || !this.isSameSapling(world, i + i1 + 1, j, k + k1, meta) || !this.isSameSapling(world, i + i1, j, k + k1 + 1, meta) || !this.isSameSapling(world, i + i1 + 1, j, k + k1 + 1, meta)) continue;
                     treeGen = LOTRTreeType.LAIRELOSSE_LARGE.create(true, random);
-                    trunkNeg = 0;
+                    trunkNeg = false;
                     trunkPos = 1;
                     xOffset = i1;
                     zOffset = k1;

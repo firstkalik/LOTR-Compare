@@ -33,7 +33,7 @@ extends LOTRBlockRope {
         if (entity instanceof EntityLivingBase && ((EntityLivingBase)entity).isOnLadder()) {
             LOTRFaction ropeFaction = LOTRFaction.LOTHLORIEN;
             boolean harm = false;
-            harm = entity instanceof EntityPlayer ? LOTRLevelData.getData((EntityPlayer)entity).getAlignment(ropeFaction) < 0.0f : LOTRMod.getNPCFaction(entity).isBadRelation(ropeFaction);
+            boolean bl = entity instanceof EntityPlayer ? LOTRLevelData.getData((EntityPlayer)entity).getAlignment(ropeFaction) < 0.0f : (harm = LOTRMod.getNPCFaction(entity).isBadRelation(ropeFaction));
             if (harm) {
                 entity.attackEntityFrom(DamageSource.magic, 1.0f);
             }

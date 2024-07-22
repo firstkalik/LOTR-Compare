@@ -36,9 +36,8 @@ extends EntityAnimal {
             return false;
         }
         if (this.getAnimalMFBaseClass().equals(mfMate.getAnimalMFBaseClass()) && this.isInLove() && mate.isInLove()) {
-            boolean otherMale;
             boolean thisMale = this.isMale();
-            return thisMale != (otherMale = mfMate.isMale());
+            return thisMale != mfMate.isMale();
         }
         return false;
     }

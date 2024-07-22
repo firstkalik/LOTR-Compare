@@ -56,7 +56,7 @@ extends LOTREntityNPC {
                 if (entity instanceof EntityPlayer) {
                     LOTRPlayerData playerData = LOTRLevelData.getData((EntityPlayer)entity);
                     for (LOTRFaction f : manFleshFactions) {
-                        if (!(playerData.getAlignment(f) > 0.0f)) continue;
+                        if (playerData.getAlignment(f) <= 0.0f) continue;
                         isAligned = true;
                     }
                 } else {

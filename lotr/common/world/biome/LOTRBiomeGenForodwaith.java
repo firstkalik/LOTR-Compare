@@ -6,6 +6,8 @@
  *  net.minecraft.init.Blocks
  *  net.minecraft.world.World
  *  net.minecraft.world.biome.BiomeGenBase
+ *  net.minecraft.world.biome.BiomeGenBase$SpawnListEntry
+ *  net.minecraft.world.gen.NoiseGeneratorPerlin
  *  net.minecraft.world.gen.feature.WorldGenAbstractTree
  *  net.minecraft.world.gen.feature.WorldGenMinable
  *  net.minecraft.world.gen.feature.WorldGenerator
@@ -16,9 +18,14 @@ import java.util.List;
 import java.util.Random;
 import lotr.common.LOTRAchievement;
 import lotr.common.LOTRMod;
+import lotr.common.entity.animal.LOTREntityBear2;
+import lotr.common.entity.animal.LOTREntityDeer2;
+import lotr.common.entity.npc.LOTREntityBandit;
+import lotr.common.entity.npc.LOTREntityBanditNorth;
 import lotr.common.world.biome.LOTRBiome;
 import lotr.common.world.biome.LOTRBiomeDecorator;
 import lotr.common.world.biome.LOTRMusicRegion;
+import lotr.common.world.biome.variant.LOTRBiomeVariant;
 import lotr.common.world.feature.LOTRTreeType;
 import lotr.common.world.feature.LOTRWorldGenBoulder;
 import lotr.common.world.feature.LOTRWorldGenMirkOak;
@@ -35,6 +42,7 @@ import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.world.gen.NoiseGeneratorPerlin;
 import net.minecraft.world.gen.feature.WorldGenAbstractTree;
 import net.minecraft.world.gen.feature.WorldGenMinable;
 import net.minecraft.world.gen.feature.WorldGenerator;
@@ -49,11 +57,12 @@ extends LOTRBiome {
         this.setEnableSnow();
         this.topBlock = Blocks.snow;
         this.spawnableCreatureList.clear();
+        this.spawnableCreatureList.add(new BiomeGenBase.SpawnListEntry(LOTREntityDeer2.class, 1, 2, 4));
+        this.spawnableCreatureList.add(new BiomeGenBase.SpawnListEntry(LOTREntityBear2.class, 1, 2, 4));
         this.spawnableWaterCreatureList.clear();
         this.spawnableCaveCreatureList.clear();
         this.spawnableLOTRAmbientList.clear();
-        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer = new LOTRBiomeSpawnList.SpawnListContainer[1];
-        arrspawnListContainer[0] = LOTRBiomeSpawnList.entry(LOTRSpawnList.SNOW_TROLLS, 10).setSpawnChance(100000);
+        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer = new LOTRBiomeSpawnList.SpawnListContainer[]{LOTRBiomeSpawnList.entry(LOTRSpawnList.SNOW_TROLLS, 10).setSpawnChance(100000), LOTRBiomeSpawnList.entry(LOTRSpawnList.MOUNTAIN_SNOW_TROLLS, 10).setSpawnChance(100000)};
         this.npcSpawnList.newFactionList(100).add(arrspawnListContainer);
         this.decorator.addSoil((WorldGenerator)new WorldGenMinable(Blocks.packed_ice, 16), 40.0f, 32, 256);
         this.decorator.treesPerChunk = 0;
@@ -63,12 +72,39 @@ extends LOTRBiome {
         this.biomeColors.setSky(10069160);
         this.decorator.addRandomStructure(new LOTRWorldGenRuinedHouse(false), 4000);
         this.decorator.addRandomStructure(new LOTRWorldGenStoneRuin.STONE(1, 5), 4000);
-        this.setBanditChance(LOTREventSpawner.EventChance.NEVER);
+        this.setBanditEntityClass(LOTREntityBanditNorth.class);
+        this.setBanditChance(LOTREventSpawner.EventChance.BANDIT_RARE);
     }
 
     @Override
     public LOTRAchievement getBiomeAchievement() {
         return LOTRAchievement.enterForodwaith;
+    }
+
+    @Override
+    public void generateBiomeTerrain(World world, Random random, Block[] blocks, byte[] meta, int i, int k, double stoneNoise, int height, LOTRBiomeVariant variant) {
+        Block topBlock_pre = this.topBlock;
+        int topBlockMeta_pre = this.topBlockMeta;
+        Block fillerBlock_pre = this.fillerBlock;
+        int fillerBlockMeta_pre = this.fillerBlockMeta;
+        double d1 = biomeTerrainNoise.func_151601_a((double)i * 0.07, (double)k * 0.07);
+        double d2 = biomeTerrainNoise.func_151601_a((double)i * 0.4, (double)k * 0.4);
+        if (d1 + (d2 *= 0.6) > 0.7) {
+            this.topBlock = Blocks.snow;
+            this.topBlockMeta = 0;
+            this.fillerBlock = Blocks.snow;
+            this.fillerBlockMeta = 0;
+        } else if (d1 + d1 > 1.5) {
+            this.topBlock = LOTRMod.snowdrift;
+            this.topBlockMeta = 0;
+            this.fillerBlock = this.topBlock;
+            this.fillerBlockMeta = this.topBlockMeta;
+        }
+        super.generateBiomeTerrain(world, random, blocks, meta, i, k, stoneNoise, height, variant);
+        this.topBlock = topBlock_pre;
+        this.topBlockMeta = topBlockMeta_pre;
+        this.fillerBlock = fillerBlock_pre;
+        this.fillerBlockMeta = fillerBlockMeta_pre;
     }
 
     @Override
@@ -91,7 +127,7 @@ extends LOTRBiome {
         int i1;
         int k1;
         super.decorate(world, random, i, k);
-        if (LOTRFixedStructures.UTUMNO_ENTRANCE.isAt(i, k)) {
+        if (LOTRFixedStructures.UTUMNO_ENTRANCE.isAt(world, i, k)) {
             new LOTRWorldGenUtumnoEntrance().generate(world, random, i, world.getHeightValue(i, k), k);
         }
         if (random.nextInt(32) == 0) {
@@ -121,5 +157,9 @@ extends LOTRBiome {
     public float getTreeIncreaseChance() {
         return 0.0f;
     }
+
+    public static interface ImmuneToFrost {
+    }
+
 }
 

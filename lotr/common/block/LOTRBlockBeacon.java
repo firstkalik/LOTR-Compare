@@ -37,7 +37,6 @@ import lotr.common.LOTRCommonProxy;
 import lotr.common.LOTRCreativeTabs;
 import lotr.common.LOTRLevelData;
 import lotr.common.LOTRMod;
-import lotr.common.item.LOTRItemMatch;
 import lotr.common.tileentity.LOTRTileEntityBeacon;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
@@ -121,15 +120,8 @@ extends BlockContainer {
         ItemStack itemstack = entityplayer.getCurrentEquippedItem();
         if (this.canItemLightBeacon(itemstack) && !LOTRBlockBeacon.isLit((IBlockAccess)world, i, j, k) && world.getBlock(i, j + 1, k).getMaterial() != Material.water) {
             world.playSoundEffect((double)i + 0.5, (double)j + 0.5, (double)k + 0.5, "fire.ignite", 1.0f, world.rand.nextFloat() * 0.4f + 0.8f);
-            if (!entityplayer.capabilities.isCreativeMode) {
-                if (itemstack.getItem().isDamageable()) {
-                    itemstack.damageItem(1, (EntityLivingBase)entityplayer);
-                } else if (itemstack.getMaxStackSize() > 1) {
-                    --itemstack.stackSize;
-                    if (itemstack.stackSize <= 0) {
-                        entityplayer.inventory.setInventorySlotContents(entityplayer.inventory.currentItem, null);
-                    }
-                }
+            if (itemstack.getItem().isDamageable()) {
+                itemstack.damageItem(1, (EntityLivingBase)entityplayer);
             }
             if (!world.isRemote) {
                 LOTRBlockBeacon.setLit(world, i, j, k, true);
@@ -156,7 +148,7 @@ extends BlockContainer {
             return false;
         }
         Item item = itemstack.getItem();
-        return item == Items.flint_and_steel || item instanceof LOTRItemMatch || item instanceof ItemBlock && ((ItemBlock)item).field_150939_a instanceof BlockTorch;
+        return item == Items.flint_and_steel || item instanceof ItemBlock && ((ItemBlock)item).field_150939_a instanceof BlockTorch;
     }
 
     public int getLightValue(IBlockAccess world, int i, int j, int k) {

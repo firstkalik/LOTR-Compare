@@ -33,18 +33,19 @@ extends LOTRWorldGenTauredainHouse {
 
     @Override
     public boolean generateWithSetRotation(World world, Random random, int i, int j, int k, int rotation) {
+        int k1;
+        int i2;
+        int i12;
+        int j1;
         int i1;
         int k2;
-        int i12;
-        int i2;
-        int k1;
         if (!super.generateWithSetRotation(world, random, i, j, k, rotation)) {
             return false;
         }
         this.bedBlock = LOTRMod.strawBed;
         for (i12 = -3; i12 <= 3; ++i12) {
             for (k1 = -3; k1 <= 3; ++k1) {
-                for (int j1 = 3; j1 <= 7; ++j1) {
+                for (j1 = 3; j1 <= 7; ++j1) {
                     this.setAir(world, i12, j1, k1);
                 }
             }
@@ -59,7 +60,7 @@ extends LOTRWorldGenTauredainHouse {
                 i2 = Math.abs(i12);
                 k2 = Math.abs(k1);
                 if (i2 == 3 && k2 == 3) {
-                    for (int j1 = 3; j1 <= 7; ++j1) {
+                    for (j1 = 3; j1 <= 7; ++j1) {
                         this.setBlockAndMetadata(world, i12, j1, k1, this.woodBlock, this.woodMeta);
                     }
                 }
@@ -97,15 +98,15 @@ extends LOTRWorldGenTauredainHouse {
         int[] i13 = new int[]{3, 6};
         k1 = i13.length;
         for (i2 = 0; i2 < k1; ++i2) {
-            int j1 = i13[i2];
-            this.setBlockAndMetadata(world, -4, j1, -3, this.woodBlock, this.woodMeta | 4);
-            this.setBlockAndMetadata(world, 4, j1, -3, this.woodBlock, this.woodMeta | 4);
-            this.setBlockAndMetadata(world, -4, j1, 3, this.woodBlock, this.woodMeta | 4);
-            this.setBlockAndMetadata(world, 4, j1, 3, this.woodBlock, this.woodMeta | 4);
-            this.setBlockAndMetadata(world, -3, j1, -4, this.woodBlock, this.woodMeta | 8);
-            this.setBlockAndMetadata(world, -3, j1, 4, this.woodBlock, this.woodMeta | 8);
-            this.setBlockAndMetadata(world, 3, j1, -4, this.woodBlock, this.woodMeta | 8);
-            this.setBlockAndMetadata(world, 3, j1, 4, this.woodBlock, this.woodMeta | 8);
+            int j12 = i13[i2];
+            this.setBlockAndMetadata(world, -4, j12, -3, this.woodBlock, this.woodMeta | 4);
+            this.setBlockAndMetadata(world, 4, j12, -3, this.woodBlock, this.woodMeta | 4);
+            this.setBlockAndMetadata(world, -4, j12, 3, this.woodBlock, this.woodMeta | 4);
+            this.setBlockAndMetadata(world, 4, j12, 3, this.woodBlock, this.woodMeta | 4);
+            this.setBlockAndMetadata(world, -3, j12, -4, this.woodBlock, this.woodMeta | 8);
+            this.setBlockAndMetadata(world, -3, j12, 4, this.woodBlock, this.woodMeta | 8);
+            this.setBlockAndMetadata(world, 3, j12, -4, this.woodBlock, this.woodMeta | 8);
+            this.setBlockAndMetadata(world, 3, j12, 4, this.woodBlock, this.woodMeta | 8);
         }
         for (i1 = -4; i1 <= 4; ++i1) {
             for (k1 = -4; k1 <= 4; ++k1) {

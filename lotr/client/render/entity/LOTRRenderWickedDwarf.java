@@ -25,10 +25,12 @@ import net.minecraft.util.ResourceLocation;
 public class LOTRRenderWickedDwarf
 extends LOTRRenderDwarf {
     private static LOTRRandomSkins wickedSkinsMale;
+    private static LOTRRandomSkins wickedBanditSkinsMale;
     private static final ResourceLocation apronTexture;
 
     public LOTRRenderWickedDwarf() {
         wickedSkinsMale = LOTRRandomSkins.loadSkinsList("lotr:mob/dwarf/wicked_male");
+        wickedBanditSkinsMale = LOTRRandomSkins.loadSkinsList("lotr:mob/dwarf/wicked_male");
     }
 
     @Override

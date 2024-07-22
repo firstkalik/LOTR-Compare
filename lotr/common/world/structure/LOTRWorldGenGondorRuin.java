@@ -26,9 +26,9 @@ extends LOTRWorldGenStructureBase {
     }
 
     public boolean generate(World world, Random random, int i, int j, int k) {
+        int j1;
         int k1;
         int i1;
-        int j1;
         int rotation = random.nextInt(4);
         if (!this.restrictions && this.usingPlayer != null) {
             rotation = this.usingPlayerRotation();
@@ -123,14 +123,6 @@ extends LOTRWorldGenStructureBase {
             this.setBlockAndNotifyAdequately(world, i, j, k, LOTRMod.slabSingle, 4 + random.nextInt(2));
         } else {
             this.setBlockAndNotifyAdequately(world, i, j, k, LOTRMod.slabSingle, 3);
-        }
-    }
-
-    private void placeRandomStairs(World world, Random random, int i, int j, int k, int metadata) {
-        if (random.nextInt(4) == 0) {
-            this.setBlockAndNotifyAdequately(world, i, j, k, random.nextBoolean() ? LOTRMod.stairsGondorBrickMossy : LOTRMod.stairsGondorBrickCracked, metadata);
-        } else {
-            this.setBlockAndNotifyAdequately(world, i, j, k, LOTRMod.stairsGondorBrick, metadata);
         }
     }
 }

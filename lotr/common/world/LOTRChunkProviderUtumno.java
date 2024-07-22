@@ -3,7 +3,7 @@
  * 
  * Could not load the following classes:
  *  net.minecraft.block.Block
- *  net.minecraft.block.BlockSand
+ *  net.minecraft.block.BlockFalling
  *  net.minecraft.entity.EnumCreatureType
  *  net.minecraft.init.Blocks
  *  net.minecraft.util.IProgressUpdate
@@ -28,7 +28,7 @@ import lotr.common.world.biome.variant.LOTRBiomeVariantStorage;
 import lotr.common.world.mapgen.LOTRMapGenCaves;
 import lotr.common.world.mapgen.LOTRMapGenCavesUtumno;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockSand;
+import net.minecraft.block.BlockFalling;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.IProgressUpdate;
@@ -108,7 +108,7 @@ implements IChunkProvider {
     }
 
     public void populate(IChunkProvider ichunkprovider, int chunkX, int chunkZ) {
-        BlockSand.fallInstantly = true;
+        BlockFalling.fallInstantly = true;
         int i = chunkX * 16;
         int k = chunkZ * 16;
         BiomeGenBase biomegenbase = this.worldObj.getBiomeGenForCoords(i + 16, k + 16);
@@ -121,7 +121,7 @@ implements IChunkProvider {
         long l2 = this.rand.nextLong() / 2L * 2L + 1L;
         this.rand.setSeed((long)chunkX * l1 + (long)chunkZ * l2 ^ this.worldObj.getSeed());
         biome.decorate(this.worldObj, this.rand, i, k);
-        BlockSand.fallInstantly = false;
+        BlockFalling.fallInstantly = false;
     }
 
     public boolean saveChunks(boolean flag, IProgressUpdate update) {

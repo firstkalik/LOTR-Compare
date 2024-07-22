@@ -39,38 +39,38 @@ extends LOTRWorldGenTauredainHouse {
 
     @Override
     public boolean generateWithSetRotation(World world, Random random, int i, int j, int k, int rotation) {
-        int j1;
-        int i1;
-        int k1;
         int i12;
         int i13;
-        int k12;
+        int j1;
+        int k1;
         int j12;
+        int k12;
+        int i1;
         if (!super.generateWithSetRotation(world, random, i, j, k, rotation)) {
             return false;
         }
-        for (i1 = -6; i1 <= 5; ++i1) {
-            for (k12 = -4; k12 <= 4; ++k12) {
-                this.layFoundation(world, i1, k12);
-                for (j1 = 1; j1 <= 11; ++j1) {
-                    this.setAir(world, i1, j1, k12);
+        for (i13 = -6; i13 <= 5; ++i13) {
+            for (k1 = -4; k1 <= 4; ++k1) {
+                this.layFoundation(world, i13, k1);
+                for (j12 = 1; j12 <= 11; ++j12) {
+                    this.setAir(world, i13, j12, k1);
                 }
             }
         }
-        for (i1 = -6; i1 <= 5; ++i1) {
-            for (k12 = -4; k12 <= 4; ++k12) {
-                if (i1 >= -5 && i1 <= 4 && k12 >= -3 && k12 <= 3) {
-                    this.setBlockAndMetadata(world, i1, 0, k12, this.floorBlock, this.floorMeta);
+        for (i13 = -6; i13 <= 5; ++i13) {
+            for (k1 = -4; k1 <= 4; ++k1) {
+                if (i13 >= -5 && i13 <= 4 && k1 >= -3 && k1 <= 3) {
+                    this.setBlockAndMetadata(world, i13, 0, k1, this.floorBlock, this.floorMeta);
                 }
-                if ((i1 == -5 || i1 == 4) && k12 >= -3 && k12 <= 3 || (k12 == -3 || k12 == 3) && i1 >= -5 && i1 <= 4) {
-                    this.setBlockAndMetadata(world, i1, 3, k12, this.brickSlabBlock, this.brickSlabMeta | 8);
-                    this.setBlockAndMetadata(world, i1, 4, k12, LOTRMod.mudGrass, 0);
-                    this.setBlockAndMetadata(world, i1, 5, k12, (Block)Blocks.tallgrass, 1);
+                if ((i13 == -5 || i13 == 4) && k1 >= -3 && k1 <= 3 || (k1 == -3 || k1 == 3) && i13 >= -5 && i13 <= 4) {
+                    this.setBlockAndMetadata(world, i13, 3, k1, this.brickSlabBlock, this.brickSlabMeta | 8);
+                    this.setBlockAndMetadata(world, i13, 4, k1, LOTRMod.mudGrass, 0);
+                    this.setBlockAndMetadata(world, i13, 5, k1, (Block)Blocks.tallgrass, 1);
                 }
-                if ((i1 != -4 && i1 != 3 || k12 < -2 || k12 > 2) && (k12 != -2 && k12 != 2 || i1 < -4 || i1 > 3)) continue;
-                this.setBlockAndMetadata(world, i1, 4, k12, this.brickBlock, this.brickMeta);
-                this.setBlockAndMetadata(world, i1, 5, k12, this.brickBlock, this.brickMeta);
-                this.setBlockAndMetadata(world, i1, 8, k12, this.plankBlock, this.plankMeta);
+                if ((i13 != -4 && i13 != 3 || k1 < -2 || k1 > 2) && (k1 != -2 && k1 != 2 || i13 < -4 || i13 > 3)) continue;
+                this.setBlockAndMetadata(world, i13, 4, k1, this.brickBlock, this.brickMeta);
+                this.setBlockAndMetadata(world, i13, 5, k1, this.brickBlock, this.brickMeta);
+                this.setBlockAndMetadata(world, i13, 8, k1, this.plankBlock, this.plankMeta);
             }
         }
         for (int i14 : new int[]{-6, 5}) {
@@ -113,10 +113,10 @@ extends LOTRWorldGenTauredainHouse {
             this.setBlockAndMetadata(world, 0, j15, 4, this.brickBlock, this.brickMeta);
         }
         int[] j15 = new int[]{-6, 5};
-        k12 = j15.length;
-        for (j1 = 0; j1 < k12; ++j1) {
-            int i14;
-            i14 = j15[j1];
+        k1 = j15.length;
+        for (j12 = 0; j12 < k1; ++j12) {
+            int k14;
+            int i14 = j15[j12];
             for (int k15 = -3; k15 <= 3; ++k15) {
                 this.setBlockAndMetadata(world, i14, 5, k15, this.brickSlabBlock, this.brickSlabMeta);
                 if (k15 % 2 == 0) {
@@ -129,7 +129,10 @@ extends LOTRWorldGenTauredainHouse {
                 this.setBlockAndMetadata(world, i14, j16, -3, this.brickBlock, this.brickMeta);
                 this.setBlockAndMetadata(world, i14, j16, 3, this.brickBlock, this.brickMeta);
             }
-            for (int k13 : new int[]{-2, 1}) {
+            int[] j16 = new int[]{-2, 1};
+            k14 = j16.length;
+            for (int j14 = 0; j14 < k14; ++j14) {
+                int k13 = j16[j14];
                 this.setBlockAndMetadata(world, i14, 1, k13, this.brickBlock, this.brickMeta);
                 this.setBlockAndMetadata(world, i14, 1, k13 + 1, this.brickBlock, this.brickMeta);
                 if (random.nextInt(3) == 0) {
@@ -142,24 +145,24 @@ extends LOTRWorldGenTauredainHouse {
                 this.setBlockAndMetadata(world, i14, 3, k13 + 1, this.brickStairBlock, 7);
             }
         }
-        for (j12 = 1; j12 <= 3; ++j12) {
-            this.setBlockAndMetadata(world, -2, j12, -4, this.woodBlock, this.woodMeta);
-            this.setBlockAndMetadata(world, 1, j12, -4, this.woodBlock, this.woodMeta);
-            this.setBlockAndMetadata(world, -2, j12, 4, this.woodBlock, this.woodMeta);
-            this.setBlockAndMetadata(world, 1, j12, 4, this.woodBlock, this.woodMeta);
-            this.setBlockAndMetadata(world, -6, j12, 0, this.woodBlock, this.woodMeta);
-            this.setBlockAndMetadata(world, 5, j12, 0, this.woodBlock, this.woodMeta);
+        for (j1 = 1; j1 <= 3; ++j1) {
+            this.setBlockAndMetadata(world, -2, j1, -4, this.woodBlock, this.woodMeta);
+            this.setBlockAndMetadata(world, 1, j1, -4, this.woodBlock, this.woodMeta);
+            this.setBlockAndMetadata(world, -2, j1, 4, this.woodBlock, this.woodMeta);
+            this.setBlockAndMetadata(world, 1, j1, 4, this.woodBlock, this.woodMeta);
+            this.setBlockAndMetadata(world, -6, j1, 0, this.woodBlock, this.woodMeta);
+            this.setBlockAndMetadata(world, 5, j1, 0, this.woodBlock, this.woodMeta);
         }
         for (int i17 = -3; i17 <= 2; ++i17) {
-            for (k12 = -1; k12 <= 1; ++k12) {
-                this.setBlockAndMetadata(world, i17, 4, k12, this.plankSlabBlock, this.plankSlabMeta | 8);
+            for (k1 = -1; k1 <= 1; ++k1) {
+                this.setBlockAndMetadata(world, i17, 4, k1, this.plankSlabBlock, this.plankSlabMeta | 8);
             }
         }
-        for (j12 = 5; j12 <= 9; ++j12) {
-            this.setBlockAndMetadata(world, -4, j12, -2, this.woodBlock, this.woodMeta);
-            this.setBlockAndMetadata(world, 3, j12, -2, this.woodBlock, this.woodMeta);
-            this.setBlockAndMetadata(world, -4, j12, 2, this.woodBlock, this.woodMeta);
-            this.setBlockAndMetadata(world, 3, j12, 2, this.woodBlock, this.woodMeta);
+        for (j1 = 5; j1 <= 9; ++j1) {
+            this.setBlockAndMetadata(world, -4, j1, -2, this.woodBlock, this.woodMeta);
+            this.setBlockAndMetadata(world, 3, j1, -2, this.woodBlock, this.woodMeta);
+            this.setBlockAndMetadata(world, -4, j1, 2, this.woodBlock, this.woodMeta);
+            this.setBlockAndMetadata(world, 3, j1, 2, this.woodBlock, this.woodMeta);
         }
         for (int k16 = -3; k16 <= 3; ++k16) {
             this.setBlockAndMetadata(world, -2, 8, k16, this.woodBlock, this.woodMeta | 8);
@@ -187,35 +190,34 @@ extends LOTRWorldGenTauredainHouse {
             if (random.nextInt(3) != 0) continue;
             this.placeTauredainFlowerPot(world, i14, 6, 0, random);
         }
-        for (i13 = -3; i13 <= 2; ++i13) {
-            this.setBlockAndMetadata(world, i13, 9, -2, LOTRMod.stairsTauredainBrickGold, 2);
-            this.setBlockAndMetadata(world, i13, 10, -1, LOTRMod.stairsTauredainBrickGold, 2);
-            this.setBlockAndMetadata(world, i13, 9, 2, LOTRMod.stairsTauredainBrickGold, 3);
-            this.setBlockAndMetadata(world, i13, 10, 1, LOTRMod.stairsTauredainBrickGold, 3);
+        for (i1 = -3; i1 <= 2; ++i1) {
+            this.setBlockAndMetadata(world, i1, 9, -2, LOTRMod.stairsTauredainBrickGold, 2);
+            this.setBlockAndMetadata(world, i1, 10, -1, LOTRMod.stairsTauredainBrickGold, 2);
+            this.setBlockAndMetadata(world, i1, 9, 2, LOTRMod.stairsTauredainBrickGold, 3);
+            this.setBlockAndMetadata(world, i1, 10, 1, LOTRMod.stairsTauredainBrickGold, 3);
         }
-        for (k1 = -1; k1 <= 1; ++k1) {
-            this.setBlockAndMetadata(world, -4, 9, k1, LOTRMod.stairsTauredainBrickGold, 1);
-            this.setBlockAndMetadata(world, -3, 10, k1, LOTRMod.stairsTauredainBrickGold, 1);
-            this.setBlockAndMetadata(world, 3, 9, k1, LOTRMod.stairsTauredainBrickGold, 0);
-            this.setBlockAndMetadata(world, 2, 10, k1, LOTRMod.stairsTauredainBrickGold, 0);
+        for (k12 = -1; k12 <= 1; ++k12) {
+            this.setBlockAndMetadata(world, -4, 9, k12, LOTRMod.stairsTauredainBrickGold, 1);
+            this.setBlockAndMetadata(world, -3, 10, k12, LOTRMod.stairsTauredainBrickGold, 1);
+            this.setBlockAndMetadata(world, 3, 9, k12, LOTRMod.stairsTauredainBrickGold, 0);
+            this.setBlockAndMetadata(world, 2, 10, k12, LOTRMod.stairsTauredainBrickGold, 0);
         }
-        for (i13 = -2; i13 <= 1; ++i13) {
-            this.setBlockAndMetadata(world, i13, 10, 0, this.brickBlock, this.brickMeta);
-            this.setBlockAndMetadata(world, i13, 11, 0, this.brickSlabBlock, this.brickSlabMeta);
+        for (i1 = -2; i1 <= 1; ++i1) {
+            this.setBlockAndMetadata(world, i1, 10, 0, this.brickBlock, this.brickMeta);
+            this.setBlockAndMetadata(world, i1, 11, 0, this.brickSlabBlock, this.brickSlabMeta);
         }
-        for (k1 = 0; k1 <= 1; ++k1) {
-            this.setBlockAndMetadata(world, -2, 5, k1, this.bedBlock, 3);
-            this.setBlockAndMetadata(world, -3, 5, k1, this.bedBlock, 11);
+        for (k12 = 0; k12 <= 1; ++k12) {
+            this.setBlockAndMetadata(world, -2, 5, k12, this.bedBlock, 3);
+            this.setBlockAndMetadata(world, -3, 5, k12, this.bedBlock, 11);
         }
         this.setBlockAndMetadata(world, -3, 5, -1, this.woodBlock, this.woodMeta);
         this.placeTauredainFlowerPot(world, -3, 6, -1, random);
         this.placeSkull(world, random, -2, 9, 0);
         this.placeSkull(world, random, 1, 9, 0);
         int[] k17 = new int[]{-1, 1};
-        k12 = k17.length;
-        for (j1 = 0; j1 < k12; ++j1) {
-            int k14;
-            k14 = k17[j1];
+        k1 = k17.length;
+        for (j12 = 0; j12 < k1; ++j12) {
+            int k14 = k17[j12];
             this.setBlockAndMetadata(world, -3, 8, k14, Blocks.torch, 2);
             this.setBlockAndMetadata(world, 2, 8, k14, Blocks.torch, 1);
         }
@@ -227,17 +229,17 @@ extends LOTRWorldGenTauredainHouse {
         }
         this.placeWallBanner(world, 3, 3, 1, LOTRItemBanner.BannerType.TAUREDAIN, 2);
         for (i12 = -1; i12 <= 0; ++i12) {
-            for (k12 = 0; k12 <= 2; ++k12) {
-                this.setBlockAndMetadata(world, i12, 3, k12, this.brickSlabBlock, this.brickSlabMeta | 8);
-                this.setBlockAndMetadata(world, i12, 4, k12, this.plankBlock, this.plankMeta);
+            for (k1 = 0; k1 <= 2; ++k1) {
+                this.setBlockAndMetadata(world, i12, 3, k1, this.brickSlabBlock, this.brickSlabMeta | 8);
+                this.setBlockAndMetadata(world, i12, 4, k1, this.plankBlock, this.plankMeta);
             }
-            for (k12 = 0; k12 <= 3; ++k12) {
-                this.setBlockAndMetadata(world, i12, 1, k12, this.plankBlock, this.plankMeta);
-                if ((i12 + k12) % 2 == 0) {
-                    this.placePlateWithCertainty(world, random, i12, 2, k12, this.plateBlock, LOTRFoods.TAUREDAIN);
+            for (k1 = 0; k1 <= 3; ++k1) {
+                this.setBlockAndMetadata(world, i12, 1, k1, this.plankBlock, this.plankMeta);
+                if ((i12 + k1) % 2 == 0) {
+                    this.placePlateWithCertainty(world, random, i12, 2, k1, this.plateBlock, LOTRFoods.TAUREDAIN);
                     continue;
                 }
-                this.placeMug(world, random, i12, 2, k12, random.nextInt(4), LOTRFoods.TAUREDAIN_DRINK);
+                this.placeMug(world, random, i12, 2, k1, random.nextInt(4), LOTRFoods.TAUREDAIN_DRINK);
             }
         }
         for (i12 = -5; i12 <= -4; ++i12) {

@@ -55,9 +55,9 @@ extends WorldGenAbstractTree {
         int leafTop = j + height + 1;
         boolean flag = true;
         if (j >= 1 && j + height + 1 <= 256) {
+            Block below;
             int k1;
             int i1;
-            Block below;
             for (int j1 = j; j1 <= j + height + 1; ++j1) {
                 int range = 1;
                 if (j1 == j) {
@@ -89,8 +89,8 @@ extends WorldGenAbstractTree {
                 }
             }
             if (canGrow) {
-                int j1;
                 int i13;
+                int j1;
                 int k13;
                 for (i1 = i; i1 <= i + this.extraTrunk; ++i1) {
                     for (k1 = k; k1 <= k + this.extraTrunk; ++k1) {

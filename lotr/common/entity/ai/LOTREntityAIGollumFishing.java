@@ -89,8 +89,8 @@ extends EntityAIBase {
     private Vec3 findPossibleFishingLocation() {
         Random random = this.theGollum.getRNG();
         for (int l = 0; l < 32; ++l) {
-            int j;
             int k;
+            int j;
             int i = MathHelper.floor_double((double)this.theGollum.posX) - 16 + random.nextInt(33);
             if (this.theWorld.getBlock(i, (j = MathHelper.floor_double((double)this.theGollum.boundingBox.minY) - 8 + random.nextInt(17)) + 1, k = MathHelper.floor_double((double)this.theGollum.posZ) - 16 + random.nextInt(33)).isNormalCube() || this.theWorld.getBlock(i, j, k).isNormalCube() || this.theWorld.getBlock(i, j - 1, k).getMaterial() != Material.water) continue;
             return Vec3.createVectorHelper((double)((double)i + 0.5), (double)((double)j + 0.5), (double)((double)k + 0.5));
@@ -148,8 +148,8 @@ extends EntityAIBase {
 
     private boolean atFishingLocation() {
         if (this.theGollum.getDistanceSq(this.xPosition, this.yPosition, this.zPosition) < 4.0) {
-            int j;
             int k;
+            int j;
             int i = MathHelper.floor_double((double)this.theGollum.posX);
             return this.theWorld.getBlock(i, j = MathHelper.floor_double((double)this.theGollum.boundingBox.minY), k = MathHelper.floor_double((double)this.theGollum.posZ)).getMaterial() == Material.water || this.theWorld.getBlock(i, j - 1, k).getMaterial() == Material.water;
         }

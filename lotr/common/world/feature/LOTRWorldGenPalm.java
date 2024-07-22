@@ -93,7 +93,7 @@ extends WorldGenAbstractTree {
             if ((double)Math.abs(trunkCos) >= MathHelper.getRandomDoubleInRange((Random)random, (double)0.25, (double)0.5)) {
                 trunkX = (int)((float)trunkX + Math.signum(trunkCos));
             }
-            if (!((double)Math.abs(trunkSin) >= MathHelper.getRandomDoubleInRange((Random)random, (double)0.25, (double)0.5))) continue;
+            if ((double)Math.abs(trunkSin) < MathHelper.getRandomDoubleInRange((Random)random, (double)0.25, (double)0.5)) continue;
             trunkZ = (int)((float)trunkZ + Math.signum(trunkSin));
         }
         int leafAngle = 0;
@@ -102,21 +102,21 @@ extends WorldGenAbstractTree {
             float sin = MathHelper.sin((float)angleR);
             float cos = MathHelper.cos((float)angleR);
             float angleY = random.nextFloat() * (float)Math.toRadians(30.0);
-            float cosY = MathHelper.cos((float)angleY);
+            MathHelper.cos((float)angleY);
             float sinY = MathHelper.sin((float)angleY);
             int i1 = trunkX;
             int j1 = j + height - 1;
             int k1 = trunkZ;
-            int jStart = j1;
             int branchLength = 5;
             for (int l = 1; l <= branchLength; ++l) {
                 if (Math.floor(sinY * (float)l) != Math.floor(sinY * (float)(l - 1))) {
                     j1 = (int)((float)j1 + Math.signum(sinY));
                 } else {
                     boolean cosOrSin;
+                    boolean bl;
                     double dCos = Math.floor(Math.abs(cos * (float)l)) - Math.floor(Math.abs(cos * (float)(l - 1)));
                     double dSin = Math.floor(Math.abs(sin * (float)l)) - Math.floor(Math.abs(sin * (float)(l - 1)));
-                    boolean bl = (dCos = Math.abs(dCos)) == (dSin = Math.abs(dSin)) ? random.nextBoolean() : (cosOrSin = dCos > dSin);
+                    boolean bl2 = (dCos = Math.abs(dCos)) == (dSin = Math.abs(dSin)) ? random.nextBoolean() : (cosOrSin = (bl = dCos > dSin));
                     if (cosOrSin) {
                         i1 = (int)((float)i1 + Math.signum(cos));
                     } else {

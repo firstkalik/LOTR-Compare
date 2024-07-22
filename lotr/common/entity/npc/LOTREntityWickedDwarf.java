@@ -5,6 +5,7 @@
  *  net.minecraft.block.Block
  *  net.minecraft.entity.IEntityLivingData
  *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.init.Blocks
  *  net.minecraft.item.Item
  *  net.minecraft.item.ItemStack
  *  net.minecraft.util.AxisAlignedBB
@@ -29,6 +30,7 @@ import lotr.common.quest.LOTRMiniQuestFactory;
 import net.minecraft.block.Block;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
@@ -39,8 +41,8 @@ import net.minecraft.world.biome.BiomeGenBase;
 public class LOTREntityWickedDwarf
 extends LOTREntityDwarf
 implements LOTRTradeable.Smith {
-    public static final LOTRFaction[] tradeFactions = new LOTRFaction[]{LOTRFaction.MORDOR, LOTRFaction.GUNDABAD, LOTRFaction.ANGMAR, LOTRFaction.RHUDEL};
-    private static ItemStack[] wickedWeapons = new ItemStack[]{new ItemStack(LOTRMod.swordDwarven), new ItemStack(LOTRMod.battleaxeDwarven), new ItemStack(LOTRMod.hammerDwarven)};
+    public static final LOTRFaction[] tradeFactions = new LOTRFaction[]{LOTRFaction.MORDOR, LOTRFaction.GUNDABAD, LOTRFaction.RHUDEL};
+    private static ItemStack[] wickedWeapons = new ItemStack[]{new ItemStack(LOTRMod.swordWickedDwarf), new ItemStack(LOTRMod.battleaxeWickedDwarf), new ItemStack(LOTRMod.hammerWickedDwarf)};
 
     public LOTREntityWickedDwarf(World world) {
         super(world);
@@ -67,11 +69,36 @@ implements LOTRTradeable.Smith {
         data = super.onSpawnWithEgg(data);
         int i = this.rand.nextInt(wickedWeapons.length);
         this.npcItemsInv.setMeleeWeapon(wickedWeapons[i].copy());
-        this.npcItemsInv.setIdleItem(new ItemStack(LOTRMod.pickaxeDwarven));
+        this.npcItemsInv.setIdleItem(new ItemStack(LOTRMod.pickaxeWickedDwarf));
         if (this.rand.nextInt(4) == 0) {
             this.setCurrentItemOrArmor(1, new ItemStack(LOTRMod.bootsDwarven));
             this.setCurrentItemOrArmor(2, new ItemStack(LOTRMod.legsDwarven));
             this.setCurrentItemOrArmor(3, new ItemStack(LOTRMod.bodyDwarven));
+        }
+        if (this.rand.nextInt(4) == 0) {
+            this.setCurrentItemOrArmor(1, new ItemStack(LOTRMod.bootsIronfist));
+            this.setCurrentItemOrArmor(2, new ItemStack(LOTRMod.legsIronfist));
+            this.setCurrentItemOrArmor(3, new ItemStack(LOTRMod.bodyIronfist));
+        }
+        if (this.rand.nextInt(4) == 0) {
+            this.setCurrentItemOrArmor(1, new ItemStack(LOTRMod.bootsStonefoot));
+            this.setCurrentItemOrArmor(2, new ItemStack(LOTRMod.legsStonefoot));
+            this.setCurrentItemOrArmor(3, new ItemStack(LOTRMod.bodyStonefoot));
+        }
+        if (this.rand.nextInt(4) == 0) {
+            this.setCurrentItemOrArmor(1, new ItemStack(LOTRMod.bootsBlacklock));
+            this.setCurrentItemOrArmor(2, new ItemStack(LOTRMod.legsBlacklock));
+            this.setCurrentItemOrArmor(3, new ItemStack(LOTRMod.bodyBlacklock));
+        }
+        if (this.rand.nextInt(4) == 0) {
+            this.setCurrentItemOrArmor(1, new ItemStack(LOTRMod.bootsStiffbeard));
+            this.setCurrentItemOrArmor(2, new ItemStack(LOTRMod.legsStiffbeard));
+            this.setCurrentItemOrArmor(3, new ItemStack(LOTRMod.bodyStiffbeard));
+        }
+        if (this.rand.nextInt(4) == 0) {
+            this.setCurrentItemOrArmor(1, new ItemStack(LOTRMod.wdboots));
+            this.setCurrentItemOrArmor(2, new ItemStack(LOTRMod.wdlegs));
+            this.setCurrentItemOrArmor(3, new ItemStack(LOTRMod.wdbody));
         } else {
             this.setCurrentItemOrArmor(1, null);
             this.setCurrentItemOrArmor(2, null);
@@ -100,7 +127,7 @@ implements LOTRTradeable.Smith {
     public boolean canTradeWith(EntityPlayer entityplayer) {
         boolean hasAlignment = false;
         for (LOTRFaction f : tradeFactions) {
-            if (!(LOTRLevelData.getData(entityplayer).getAlignment(f) >= 100.0f)) continue;
+            if (LOTRLevelData.getData(entityplayer).getAlignment(f) < 100.0f) continue;
             hasAlignment = true;
             break;
         }
@@ -123,6 +150,14 @@ implements LOTRTradeable.Smith {
         int j = MathHelper.floor_double((double)this.boundingBox.minY);
         int k = MathHelper.floor_double((double)this.posZ);
         return j > 62 && this.worldObj.getBlock(i, j - 1, k) == this.worldObj.getBiomeGenForCoords((int)i, (int)k).topBlock;
+    }
+
+    @Override
+    public boolean getCanSpawnHere() {
+        int i = MathHelper.floor_double((double)this.posX);
+        int j = MathHelper.floor_double((double)this.boundingBox.minY);
+        int k = MathHelper.floor_double((double)this.posZ);
+        return j > 30 && this.worldObj.getBlock(i, j - 1, k) == Blocks.snow;
     }
 
     @Override

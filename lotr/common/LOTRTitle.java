@@ -15,6 +15,7 @@ package lotr.common;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 import lotr.common.LOTRAchievement;
@@ -34,8 +35,7 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
 import net.minecraft.util.StatCollector;
 
-public class LOTRTitle
-implements Comparable<LOTRTitle> {
+public class LOTRTitle {
     public static List<LOTRTitle> allTitles = new ArrayList<LOTRTitle>();
     public static LOTRTitle adventurer;
     public static LOTRTitle rogue;
@@ -384,9 +384,9 @@ implements Comparable<LOTRTitle> {
         return null;
     }
 
-    public String getUntranslatedName() {
+    public String getUntranslatedName(EntityPlayer entityplayer) {
         if (this.useAchievementName && this.titleAchievement != null) {
-            return this.titleAchievement.getUntranslatedTitle();
+            return this.titleAchievement.getUntranslatedTitle(entityplayer);
         }
         if (this.titleType == TitleType.RANK) {
             if (this.isFeminineRank) {
@@ -397,14 +397,14 @@ implements Comparable<LOTRTitle> {
         return "lotr.title." + this.name;
     }
 
-    public String getDisplayName() {
+    public String getDisplayName(EntityPlayer entityplayer) {
         if (this.titleType == TitleType.RANK) {
             if (this.isFeminineRank) {
                 return this.titleRank.getDisplayFullNameFem();
             }
             return this.titleRank.getDisplayFullName();
         }
-        return StatCollector.translateToLocal((String)this.getUntranslatedName());
+        return StatCollector.translateToLocal((String)this.getUntranslatedName(entityplayer));
     }
 
     public String getDescription(EntityPlayer entityplayer) {
@@ -453,9 +453,14 @@ implements Comparable<LOTRTitle> {
         return this.titleType == TitleType.RANK && this.isFeminineRank;
     }
 
-    @Override
-    public int compareTo(LOTRTitle other) {
-        return this.getDisplayName().compareTo(other.getDisplayName());
+    public static Comparator<LOTRTitle> createTitleSorter(final EntityPlayer entityplayer) {
+        return new Comparator<LOTRTitle>(){
+
+            @Override
+            public int compare(LOTRTitle title1, LOTRTitle title2) {
+                return title1.getDisplayName(entityplayer).compareTo(title2.getDisplayName(entityplayer));
+            }
+        };
     }
 
     public boolean canPlayerUse(EntityPlayer entityplayer) {
@@ -472,7 +477,7 @@ implements Comparable<LOTRTitle> {
             }
             case ALIGNMENT: {
                 for (LOTRFaction f : this.alignmentFactions) {
-                    if (!(LOTRLevelData.getData(entityplayer).getAlignment(f) >= this.alignmentRequired)) continue;
+                    if (LOTRLevelData.getData(entityplayer).getAlignment(f) < this.alignmentRequired) continue;
                     return true;
                 }
                 return false;
@@ -607,14 +612,14 @@ implements Comparable<LOTRTitle> {
         GUNDABAD_mountGundabad = new LOTRTitle("GUNDABAD_mountGundabad").setAlignment(LOTRFaction.GUNDABAD);
         GUNDABAD_mountGram = new LOTRTitle("GUNDABAD_mountGram").setAlignment(LOTRFaction.GUNDABAD);
         GUNDABAD_gundabadUruk = new LOTRTitle("GUNDABAD_gundabadUruk").setAlignment(LOTRFaction.GUNDABAD);
-        ANGMAR_angmar = new LOTRTitle("ANGMAR_angmar").setAlignment(LOTRFaction.ANGMAR);
-        ANGMAR_angmarOrc = new LOTRTitle("ANGMAR_angmarOrc").setAlignment(LOTRFaction.ANGMAR);
-        ANGMAR_troll = new LOTRTitle("ANGMAR_troll").setAlignment(LOTRFaction.ANGMAR);
-        ANGMAR_carnDum = new LOTRTitle("ANGMAR_carnDum").setAlignment(LOTRFaction.ANGMAR);
-        ANGMAR_hillman = new LOTRTitle("ANGMAR_hillman").setAlignment(LOTRFaction.ANGMAR);
-        ANGMAR_rhudaur = new LOTRTitle("ANGMAR_rhudaur").setAlignment(LOTRFaction.ANGMAR);
-        ANGMAR_ettenmoors = new LOTRTitle("ANGMAR_ettenmoors").setAlignment(LOTRFaction.ANGMAR);
-        ANGMAR_coldfells = new LOTRTitle("ANGMAR_coldfells").setAlignment(LOTRFaction.ANGMAR);
+        ANGMAR_angmar = new LOTRTitle("ANGMAR_angmar").setAlignment(LOTRFaction.GUNDABAD);
+        ANGMAR_angmarOrc = new LOTRTitle("ANGMAR_angmarOrc").setAlignment(LOTRFaction.GUNDABAD);
+        ANGMAR_troll = new LOTRTitle("ANGMAR_troll").setAlignment(LOTRFaction.GUNDABAD);
+        ANGMAR_carnDum = new LOTRTitle("ANGMAR_carnDum").setAlignment(LOTRFaction.GUNDABAD);
+        ANGMAR_hillman = new LOTRTitle("ANGMAR_hillman").setAlignment(LOTRFaction.GUNDABAD);
+        ANGMAR_rhudaur = new LOTRTitle("ANGMAR_rhudaur").setAlignment(LOTRFaction.GUNDABAD);
+        ANGMAR_ettenmoors = new LOTRTitle("ANGMAR_ettenmoors").setAlignment(LOTRFaction.GUNDABAD);
+        ANGMAR_coldfells = new LOTRTitle("ANGMAR_coldfells").setAlignment(LOTRFaction.GUNDABAD);
         WOOD_ELF_woodElf = new LOTRTitle("WOOD_ELF_woodElf").setAlignment(LOTRFaction.WOOD_ELF);
         WOOD_ELF_woodlandRealm = new LOTRTitle("WOOD_ELF_woodlandRealm").setAlignment(LOTRFaction.WOOD_ELF);
         DOL_GULDUR_dolGuldur = new LOTRTitle("DOL_GULDUR_dolGuldur").setAlignment(LOTRFaction.DOL_GULDUR);
@@ -739,6 +744,15 @@ implements Comparable<LOTRTitle> {
         nextTitleID = 0;
     }
 
+    public static enum TitleType {
+        STARTER,
+        PLAYER_EXCLUSIVE,
+        ALIGNMENT,
+        ACHIEVEMENT,
+        RANK;
+
+    }
+
     public static class PlayerTitle {
         private final LOTRTitle theTitle;
         private final EnumChatFormatting theColor;
@@ -755,14 +769,14 @@ implements Comparable<LOTRTitle> {
             this.theColor = color;
         }
 
-        public IChatComponent getFullTitleComponent() {
-            IChatComponent component = new ChatComponentText("[").appendSibling((IChatComponent)new ChatComponentTranslation(this.theTitle.getUntranslatedName(), new Object[0])).appendText("]").appendText(" ");
+        public IChatComponent getFullTitleComponent(EntityPlayer entityplayer) {
+            IChatComponent component = new ChatComponentText("[").appendSibling((IChatComponent)new ChatComponentTranslation(this.theTitle.getUntranslatedName(entityplayer), new Object[0])).appendText("]").appendText(" ");
             component.getChatStyle().setColor(this.theColor);
             return component;
         }
 
-        public String getFormattedTitle() {
-            return this.getFullTitleComponent().getFormattedText();
+        public String getFormattedTitle(EntityPlayer entityplayer) {
+            return this.getFullTitleComponent(entityplayer).getFormattedText();
         }
 
         public LOTRTitle getTitle() {
@@ -780,15 +794,6 @@ implements Comparable<LOTRTitle> {
             }
             return null;
         }
-    }
-
-    public static enum TitleType {
-        STARTER,
-        PLAYER_EXCLUSIVE,
-        ALIGNMENT,
-        ACHIEVEMENT,
-        RANK;
-
     }
 
 }

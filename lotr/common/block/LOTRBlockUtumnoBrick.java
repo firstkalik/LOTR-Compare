@@ -39,10 +39,6 @@ extends Block
 implements LOTRWorldProviderUtumno.UtumnoBlock {
     @SideOnly(value=Side.CLIENT)
     private IIcon[] brickIcons;
-    @SideOnly(value=Side.CLIENT)
-    private IIcon iceGlowingTop;
-    @SideOnly(value=Side.CLIENT)
-    private IIcon fireTileSide;
     private String[] brickNames = new String[]{"fire", "burning", "ice", "iceGlowing", "obsidian", "obsidianFire", "iceTile", "obsidianTile", "fireTile"};
 
     public LOTRBlockUtumnoBrick() {
@@ -54,30 +50,18 @@ implements LOTRWorldProviderUtumno.UtumnoBlock {
     }
 
     @SideOnly(value=Side.CLIENT)
-    public IIcon getIcon(int side, int meta) {
-        if (meta >= this.brickNames.length) {
-            meta = 0;
+    public IIcon getIcon(int i, int j) {
+        if (j >= this.brickNames.length) {
+            j = 0;
         }
-        if (meta == 3 && side == 1) {
-            return this.iceGlowingTop;
-        }
-        if (meta == 8 && side != 1 && side != 0) {
-            return this.fireTileSide;
-        }
-        return this.brickIcons[meta];
+        return this.brickIcons[j];
     }
 
     @SideOnly(value=Side.CLIENT)
     public void registerBlockIcons(IIconRegister iconregister) {
         this.brickIcons = new IIcon[this.brickNames.length];
         for (int i = 0; i < this.brickNames.length; ++i) {
-            String subName = this.getTextureName() + "_" + this.brickNames[i];
-            this.brickIcons[i] = iconregister.registerIcon(subName);
-            if (i == 3) {
-                this.iceGlowingTop = iconregister.registerIcon(subName + "_top");
-            }
-            if (i != 8) continue;
-            this.fireTileSide = iconregister.registerIcon(subName + "_side");
+            this.brickIcons[i] = iconregister.registerIcon(this.getTextureName() + "_" + this.brickNames[i]);
         }
     }
 

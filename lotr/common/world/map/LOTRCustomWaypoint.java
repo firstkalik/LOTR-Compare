@@ -15,7 +15,6 @@
  *  net.minecraft.util.StatCollector
  *  net.minecraft.world.IBlockAccess
  *  net.minecraft.world.World
- *  net.minecraft.world.biome.BiomeGenBase
  *  org.apache.commons.lang3.StringUtils
  */
 package lotr.common.world.map;
@@ -38,7 +37,6 @@ import lotr.common.network.LOTRPacketDeleteCWPClient;
 import lotr.common.network.LOTRPacketFellowship;
 import lotr.common.network.LOTRPacketRenameCWPClient;
 import lotr.common.network.LOTRPacketShareCWPClient;
-import lotr.common.world.biome.LOTRBiome;
 import lotr.common.world.map.LOTRAbstractWaypoint;
 import lotr.common.world.map.LOTRWaypoint;
 import net.minecraft.block.Block;
@@ -54,7 +52,6 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
 import org.apache.commons.lang3.StringUtils;
 
 public class LOTRCustomWaypoint
@@ -70,7 +67,6 @@ implements LOTRAbstractWaypoint {
     private UUID sharingPlayer;
     private String sharingPlayerName;
     private boolean sharedUnlocked;
-    private static final int SHARED_UNLOCK_RANGE = 1000;
     private boolean sharedHidden;
 
     public static LOTRCustomWaypoint createForPlayer(String name, EntityPlayer entityplayer) {
@@ -98,18 +94,18 @@ implements LOTRAbstractWaypoint {
     }
 
     @Override
-    public int getX() {
+    public double getX() {
         return this.mapX;
-    }
-
-    @Override
-    public int getY() {
-        return this.mapY;
     }
 
     @Override
     public int getXCoord() {
         return this.xCoord;
+    }
+
+    @Override
+    public double getY() {
+        return this.mapY;
     }
 
     @Override
@@ -119,7 +115,6 @@ implements LOTRAbstractWaypoint {
             this.yCoord = LOTRMod.getTrueTopBlock(world, i, k);
         } else if (!this.isSafeBlock(world, i, j, k)) {
             int j1;
-            int start;
             Block below = world.getBlock(i, j - 1, k);
             Block block = world.getBlock(i, j, k);
             Block above = world.getBlock(i, j + 1, k);
@@ -128,7 +123,7 @@ implements LOTRAbstractWaypoint {
             boolean aboveSafe = !above.isNormalCube((IBlockAccess)world, i, j + 1, k);
             boolean foundSafe = false;
             if (!belowSafe) {
-                for (j1 = start = j - 1; j1 >= 1; --j1) {
+                for (j1 = j - 1; j1 >= 1; --j1) {
                     if (!this.isSafeBlock(world, i, j1, k)) continue;
                     this.yCoord = j1;
                     foundSafe = true;
@@ -136,11 +131,14 @@ implements LOTRAbstractWaypoint {
                 }
             }
             if (!(foundSafe || blockSafe && aboveSafe)) {
-                for (j1 = start = aboveSafe ? j + 1 : j + 2; j1 <= world.getHeight() - 1; ++j1) {
-                    if (!this.isSafeBlock(world, i, j1, k)) continue;
-                    this.yCoord = j1;
-                    foundSafe = true;
-                    break;
+                int n = j1 = aboveSafe ? j + 1 : j + 2;
+                while (j1 <= world.getHeight() - 1) {
+                    if (this.isSafeBlock(world, i, j1, k)) {
+                        this.yCoord = j1;
+                        foundSafe = true;
+                        break;
+                    }
+                    ++j1;
                 }
             }
             if (!foundSafe) {
@@ -193,7 +191,6 @@ implements LOTRAbstractWaypoint {
         boolean bl = shared = this.isShared() && this.sharingPlayerName != null;
         if (ownShared || shared) {
             int numShared = this.sharedFellowshipIDs.size();
-            int maxShow = 3;
             int numShown = 0;
             ArrayList<String> fsNames = new ArrayList<String>();
             for (int i = 0; i < 3 && i < this.sharedFellowshipIDs.size(); ++i) {
@@ -246,14 +243,6 @@ implements LOTRAbstractWaypoint {
     @Override
     public int getID() {
         return this.ID;
-    }
-
-    private LOTRWaypoint.Region getWorldPosRegion(World world) {
-        BiomeGenBase biome = world.getBiomeGenForCoords(this.xCoord, this.zCoord);
-        if (biome instanceof LOTRBiome) {
-            return ((LOTRBiome)biome).getBiomeWaypoints();
-        }
-        return null;
     }
 
     public void rename(String newName) {
@@ -355,9 +344,8 @@ implements LOTRAbstractWaypoint {
 
     public boolean canUnlockShared(EntityPlayer entityplayer) {
         if (this.yCoord >= 0) {
-            double unlockRangeSq;
             double distSq = entityplayer.getDistanceSq((double)this.xCoord + 0.5, (double)this.yCoord + 0.5, (double)this.zCoord + 0.5);
-            return distSq <= (unlockRangeSq = 1000000.0);
+            return distSq <= 1000000.0;
         }
         return false;
     }

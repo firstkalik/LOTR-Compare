@@ -101,8 +101,8 @@ implements LOTRCharacter {
     public int prevFishTime = 400;
     public boolean isFishing;
     public LOTRInventoryNPC inventory = new LOTRInventoryNPC("gollum", this, INV_ROWS * 9);
-    public int prevFishRequired;
-    public int fishRequired = this.prevFishRequired = 20;
+    public int prevFishRequired = 20;
+    public int fishRequired = 20;
 
     public LOTREntityGollum(World world) {
         super(world);
@@ -197,7 +197,6 @@ implements LOTRCharacter {
 
     @Override
     public void onLivingUpdate() {
-        double d;
         super.onLivingUpdate();
         if (!this.worldObj.isRemote && this.rand.nextInt(500) == 0) {
             this.heal(1.0f);
@@ -214,7 +213,7 @@ implements LOTRCharacter {
         if (this.isGollumSitting() && !this.worldObj.isRemote && this.onGround) {
             this.getJumpHelper().setJumping();
         }
-        if (!this.worldObj.isRemote && this.getEquipmentInSlot(0) != null && this.getGollumOwner() != null && (d = this.getDistanceSqToEntity((Entity)this.getGollumOwner())) < 4.0) {
+        if (!this.worldObj.isRemote && this.getEquipmentInSlot(0) != null && this.getGollumOwner() != null && this.getDistanceSqToEntity((Entity)this.getGollumOwner()) < 4.0) {
             this.getLookHelper().setLookPositionWithEntity((Entity)this.getGollumOwner(), 100.0f, 100.0f);
             this.getLookHelper().onUpdateLook();
             EntityItem entityitem = new EntityItem(this.worldObj, this.posX, this.posY + (double)this.getEyeHeight(), this.posZ, this.getEquipmentInSlot(0));
@@ -272,7 +271,6 @@ implements LOTRCharacter {
             }
             ItemStack itemstack = entityplayer.inventory.getCurrentItem();
             if (itemstack != null && itemstack.getItem() == Items.fish) {
-                boolean tamed = false;
                 if (itemstack.stackSize >= this.fishRequired) {
                     if (!entityplayer.capabilities.isCreativeMode) {
                         itemstack.stackSize -= this.fishRequired;

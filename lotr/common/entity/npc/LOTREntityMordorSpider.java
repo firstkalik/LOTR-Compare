@@ -27,7 +27,7 @@ extends LOTREntitySpiderBase {
 
     @Override
     protected int getRandomSpiderScale() {
-        return 1 + this.rand.nextInt(3);
+        return 2 + this.rand.nextInt(3);
     }
 
     @Override

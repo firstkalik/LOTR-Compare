@@ -32,6 +32,10 @@ import lotr.common.item.LOTRItemBlowgun;
 import lotr.common.item.LOTRItemBow;
 import lotr.common.item.LOTRItemCrossbow;
 import lotr.common.item.LOTRItemDagger;
+import lotr.common.item.LOTRItemDagger2;
+import lotr.common.item.LOTRItemDagger3;
+import lotr.common.item.LOTRItemDagger4;
+import lotr.common.item.LOTRItemDagger5;
 import lotr.common.item.LOTRItemHammer;
 import lotr.common.item.LOTRItemLance;
 import lotr.common.item.LOTRItemPolearm;
@@ -56,7 +60,7 @@ import net.minecraftforge.common.ISpecialArmor;
 
 public class LOTRWeaponStats {
     private static int basePlayerMeleeTime = 15;
-    private static int baseMobMeleeTime = 20;
+    private static int baseMobMeleeTime = 15;
     private static Map meleeSpeed = new HashMap();
     private static Map meleeReach = new HashMap();
     private static Map meleeExtraKnockback = new HashMap();
@@ -189,6 +193,46 @@ public class LOTRWeaponStats {
         return false;
     }
 
+    public static boolean isPoisoned2(ItemStack itemstack) {
+        if (itemstack != null) {
+            Item item = itemstack.getItem();
+            return item instanceof LOTRItemDagger2 && ((LOTRItemDagger2)item).getDaggerEffect() == LOTRItemDagger2.DaggerEffect.POISON;
+        }
+        return false;
+    }
+
+    public static boolean isPoisoned3(ItemStack itemstack) {
+        if (itemstack != null) {
+            Item item = itemstack.getItem();
+            return item instanceof LOTRItemDagger3 && ((LOTRItemDagger3)item).getDaggerEffect() == LOTRItemDagger3.DaggerEffect.POISON;
+        }
+        return false;
+    }
+
+    public static boolean isPoisoned4(ItemStack itemstack) {
+        if (itemstack != null) {
+            Item item = itemstack.getItem();
+            return item instanceof LOTRItemDagger4 && ((LOTRItemDagger4)item).getDaggerEffect() == LOTRItemDagger4.DaggerEffect.POISON;
+        }
+        return false;
+    }
+
+    public static boolean isPoisoned5(ItemStack itemstack) {
+        if (itemstack != null) {
+            Item item = itemstack.getItem();
+            return item instanceof LOTRItemDagger5 && ((LOTRItemDagger5)item).getDaggerEffect() == LOTRItemDagger5.DaggerEffect.POISON;
+        }
+        return false;
+    }
+
+    public static boolean isPoisoned1(ItemStack itemstack) {
+        if (itemstack != null) {
+            Item item = itemstack.getItem();
+            return item instanceof LOTRItemDagger && ((LOTRItemDagger)item).getDaggerEffect() == LOTRItemDagger.DaggerEffect.WITHER;
+        }
+        return false;
+    }
+
     public static boolean isRangedWeapon(ItemStack itemstack) {
         if (itemstack != null) {
             Item item = itemstack.getItem();
@@ -298,6 +342,7 @@ public class LOTRWeaponStats {
 
     static {
         LOTRWeaponStats.registerMeleeSpeed(LOTRItemDagger.class, 1.5f);
+        LOTRWeaponStats.registerMeleeSpeed(LOTRItemDagger3.class, 0.667f);
         LOTRWeaponStats.registerMeleeSpeed(LOTRItemSpear.class, 0.833f);
         LOTRWeaponStats.registerMeleeSpeed(LOTRItemPolearm.class, 0.667f);
         LOTRWeaponStats.registerMeleeSpeed(LOTRItemPolearmLong.class, 0.5f);
@@ -306,15 +351,17 @@ public class LOTRWeaponStats {
         LOTRWeaponStats.registerMeleeSpeed(LOTRItemHammer.class, 0.667f);
         LOTRWeaponStats.registerMeleeReach(LOTRItemDagger.class, 0.75f);
         LOTRWeaponStats.registerMeleeReach(LOTRItemSpear.class, 1.5f);
-        LOTRWeaponStats.registerMeleeReach(LOTRItemPolearm.class, 1.5f);
+        LOTRWeaponStats.registerMeleeReach(LOTRItemDagger3.class, 1.0f);
+        LOTRWeaponStats.registerMeleeReach(LOTRItemPolearm.class, 1.0f);
         LOTRWeaponStats.registerMeleeReach(LOTRItemPolearmLong.class, 2.0f);
         LOTRWeaponStats.registerMeleeReach(LOTRItemLance.class, 2.0f);
         LOTRWeaponStats.registerMeleeReach(LOTRItemBalrogWhip.class, 1.5f);
         LOTRWeaponStats.registerMeleeExtraKnockback(LOTRItemHammer.class, 1);
+        LOTRWeaponStats.registerMeleeExtraKnockback(LOTRItemDagger3.class, 1);
         LOTRWeaponStats.registerMeleeExtraKnockback(LOTRItemLance.class, 1);
         MAX_MODIFIABLE_REACH = 2.0f;
-        MAX_MODIFIABLE_SPEED = 1.6f;
-        MAX_MODIFIABLE_KNOCKBACK = 2;
+        MAX_MODIFIABLE_SPEED = 2.0f;
+        MAX_MODIFIABLE_KNOCKBACK = 3;
     }
 }
 

@@ -39,8 +39,10 @@ package lotr.common.entity.animal;
 
 import java.util.List;
 import java.util.Random;
+import java.util.UUID;
 import lotr.common.LOTRMod;
 import lotr.common.entity.LOTREntities;
+import lotr.common.entity.LOTRRandomSkinEntity;
 import lotr.common.entity.ai.LOTREntityAIAttackOnCollide;
 import lotr.common.entity.npc.LOTREntityNPC;
 import lotr.common.world.biome.LOTRBiomeGenFarHaradSwamp;
@@ -78,7 +80,8 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 
 public class LOTREntityCrocodile
-extends EntityMob {
+extends EntityMob
+implements LOTRRandomSkinEntity {
     private EntityAIBase targetAI;
     private boolean prevCanTarget = true;
 
@@ -99,7 +102,7 @@ extends EntityMob {
 
     protected void applyEntityAttributes() {
         super.applyEntityAttributes();
-        this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(20.0);
+        this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue((double)MathHelper.getRandomIntegerInRange((Random)this.rand, (int)18, (int)40));
         this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.2);
         this.getEntityAttribute(SharedMonsterAttributes.attackDamage).setBaseValue(4.0);
     }
@@ -134,10 +137,10 @@ extends EntityMob {
     }
 
     public void onLivingUpdate() {
+        EntityLivingBase entity;
+        List list;
         int i;
         EntityAnimal entityanimal;
-        List list;
-        EntityLivingBase entity;
         super.onLivingUpdate();
         if (!this.worldObj.isRemote && this.isInWater()) {
             this.motionY += 0.02;
@@ -172,27 +175,30 @@ extends EntityMob {
     protected void dropFewItems(boolean flag, int i) {
         super.dropFewItems(flag, i);
         int count = this.rand.nextInt(3) + this.rand.nextInt(i + 1);
-        block7: for (int j = 0; j < count; ++j) {
-            int drop = this.rand.nextInt(5);
+        block8: for (int j = 0; j < count; ++j) {
+            int drop = this.rand.nextInt(6);
             switch (drop) {
                 case 0: {
                     this.dropItem(Items.bone, 1);
-                    continue block7;
+                    continue block8;
                 }
                 case 1: {
                     this.dropItem(Items.fish, 1);
-                    continue block7;
+                    continue block8;
                 }
                 case 2: {
                     this.dropItem(Items.leather, 1);
-                    continue block7;
+                    continue block8;
                 }
                 case 3: {
                     this.dropItem(LOTRMod.zebraRaw, 1);
-                    continue block7;
+                    continue block8;
                 }
                 case 4: {
                     this.dropItem(LOTRMod.gemsbokHide, 1);
+                }
+                case 5: {
+                    this.dropItem(LOTRMod.manFlesh, 1);
                 }
             }
         }
@@ -210,7 +216,7 @@ extends EntityMob {
     }
 
     public boolean getCanSpawnHere() {
-        List nearbyCrocodiles = this.worldObj.getEntitiesWithinAABB(((Object)((Object)this)).getClass(), this.boundingBox.expand(24.0, 12.0, 24.0));
+        List nearbyCrocodiles = this.worldObj.getEntitiesWithinAABB(this.getClass(), this.boundingBox.expand(24.0, 12.0, 24.0));
         if (nearbyCrocodiles.size() > 3) {
             return false;
         }
@@ -218,11 +224,10 @@ extends EntityMob {
             for (int i = -8; i <= 8; ++i) {
                 for (int j = -8; j <= 8; ++j) {
                     for (int k = -8; k <= 8; ++k) {
-                        int k1;
                         int j1;
-                        Block block;
+                        int k1;
                         int i1 = MathHelper.floor_double((double)this.posX) + i;
-                        if (!this.worldObj.blockExists(i1, j1 = MathHelper.floor_double((double)this.posY) + j, k1 = MathHelper.floor_double((double)this.posZ) + k) || (block = this.worldObj.getBlock(i1, j1, k1)).getMaterial() != Material.water) continue;
+                        if (!this.worldObj.blockExists(i1, j1 = MathHelper.floor_double((double)this.posY) + j, k1 = MathHelper.floor_double((double)this.posZ) + k) || this.worldObj.getBlock(i1, j1, k1).getMaterial() != Material.water) continue;
                         if (this.posY > 60.0) {
                             return true;
                         }
@@ -236,9 +241,8 @@ extends EntityMob {
     }
 
     protected boolean isValidLightLevel() {
-        int k;
         int i = MathHelper.floor_double((double)this.posX);
-        if (this.worldObj.getBiomeGenForCoords(i, k = MathHelper.floor_double((double)this.posZ)) instanceof LOTRBiomeGenFarHaradSwamp) {
+        if (this.worldObj.getBiomeGenForCoords(i, MathHelper.floor_double((double)this.posZ)) instanceof LOTRBiomeGenFarHaradSwamp) {
             return true;
         }
         return super.isValidLightLevel();
@@ -253,6 +257,11 @@ extends EntityMob {
 
     public ItemStack getPickedResult(MovingObjectPosition target) {
         return new ItemStack(LOTRMod.spawnEgg, 1, LOTREntities.getEntityID((Entity)this));
+    }
+
+    @Override
+    public void setUniqueID(UUID uuid) {
+        this.entityUniqueID = uuid;
     }
 }
 

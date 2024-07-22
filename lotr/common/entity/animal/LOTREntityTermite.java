@@ -61,8 +61,8 @@ import net.minecraft.world.World;
 public class LOTREntityTermite
 extends EntityMob {
     private int fuseTime;
-    private static final int maxFuseTime = 20;
-    public static final float explosionSize = 2.0f;
+    private static int maxFuseTime = 20;
+    public static float explosionSize = 2.0f;
 
     public LOTREntityTermite(World world) {
         super(world);
@@ -108,7 +108,7 @@ extends EntityMob {
                     --this.fuseTime;
                 }
             }
-            this.fuseTime = Math.min(Math.max(this.fuseTime, 0), 20);
+            this.fuseTime = Math.min(Math.max(this.fuseTime, 0), maxFuseTime);
         }
     }
 
@@ -118,7 +118,7 @@ extends EntityMob {
 
     private void explode() {
         if (!this.worldObj.isRemote) {
-            this.worldObj.createExplosion((Entity)this, this.posX, this.posY, this.posZ, 2.0f, LOTRMod.canGrief(this.worldObj));
+            this.worldObj.createExplosion((Entity)this, this.posX, this.posY, this.posZ, explosionSize, LOTRMod.canGrief(this.worldObj));
             this.setDead();
         }
     }

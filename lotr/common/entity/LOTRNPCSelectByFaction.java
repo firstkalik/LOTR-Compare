@@ -14,18 +14,14 @@ import net.minecraft.entity.Entity;
 
 public class LOTRNPCSelectByFaction
 implements IEntitySelector {
-    protected final LOTRFaction faction;
+    protected LOTRFaction faction;
 
     public LOTRNPCSelectByFaction(LOTRFaction f) {
         this.faction = f;
     }
 
     public boolean isEntityApplicable(Entity entity) {
-        return entity.isEntityAlive() && this.matchFaction(entity);
-    }
-
-    protected boolean matchFaction(Entity entity) {
-        return LOTRMod.getNPCFaction(entity) == this.faction;
+        return entity.isEntityAlive() && LOTRMod.getNPCFaction(entity) == this.faction;
     }
 }
 

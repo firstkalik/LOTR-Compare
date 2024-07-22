@@ -122,8 +122,7 @@ extends ItemBlock {
                 return itemstack;
             }
             if (!world.isRemote) {
-                NBTTagCompound barrelData;
-                barrel.barrelItemData = barrelData = LOTRItemBarrel.getBarrelData(itemstack);
+                barrel.barrelItemData = LOTRItemBarrel.getBarrelData(itemstack);
                 world.spawnEntityInWorld((Entity)barrel);
             }
             if (!entityplayer.capabilities.isCreativeMode) {

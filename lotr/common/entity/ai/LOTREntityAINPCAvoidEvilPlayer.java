@@ -60,11 +60,11 @@ extends EntityAIBase {
         if (list.isEmpty()) {
             return false;
         }
-        for (int i = 0; i < list.size(); ++i) {
-            EntityPlayer entityplayer = (EntityPlayer)list.get(i);
+        for (Object element : list) {
+            EntityPlayer entityplayer = (EntityPlayer)element;
             if (entityplayer.capabilities.isCreativeMode) continue;
             float alignment = LOTRLevelData.getData(entityplayer).getAlignment(this.theNPC.getFaction());
-            if (!(this.theNPC.familyInfo.getAge() < 0 && alignment < 0.0f) && (!(this.theNPC instanceof LOTREntityHobbit) || !(alignment <= -100.0f))) continue;
+            if ((this.theNPC.familyInfo.getAge() >= 0 || alignment >= 0.0f) && (!(this.theNPC instanceof LOTREntityHobbit) || alignment > -100.0f)) continue;
             validPlayers.add(entityplayer);
         }
         if (validPlayers.isEmpty()) {

@@ -209,8 +209,8 @@ public class LOTRFamilyInfo {
             return null;
         }
         List list = this.theEntity.worldObj.getEntitiesWithinAABB(this.theEntity.getClass(), this.theEntity.boundingBox.expand(16.0, 8.0, 16.0));
-        for (int i = 0; i < list.size(); ++i) {
-            Entity entity = (Entity)list.get(i);
+        for (Object element : list) {
+            Entity entity = (Entity)element;
             if (!(entity instanceof LOTREntityNPC) || entity == this.theEntity || !entity.getUniqueID().equals(this.spouseUniqueID)) continue;
             LOTREntityNPC npc = (LOTREntityNPC)entity;
             if (npc.familyInfo.spouseUniqueID == null || !this.theEntity.getUniqueID().equals(npc.familyInfo.spouseUniqueID)) continue;
@@ -222,8 +222,8 @@ public class LOTRFamilyInfo {
     public LOTREntityNPC getParentToFollow() {
         UUID parentToFollowID = this.isMale() ? this.maleParentID : this.femaleParentID;
         List list = this.theEntity.worldObj.getEntitiesWithinAABB(this.theEntity.getClass(), this.theEntity.boundingBox.expand(16.0, 8.0, 16.0));
-        for (int i = 0; i < list.size(); ++i) {
-            Entity entity = (Entity)list.get(i);
+        for (Object element : list) {
+            Entity entity = (Entity)element;
             if (!(entity instanceof LOTREntityNPC) || entity == this.theEntity || parentToFollowID == null || !entity.getUniqueID().equals(parentToFollowID)) continue;
             return (LOTREntityNPC)entity;
         }

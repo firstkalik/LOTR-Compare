@@ -50,7 +50,7 @@ extends CommandBase {
                     }
                     try {
                         LOTRFactionRelations.overrideRelations(fac1, fac2, relation);
-                        LOTRCommandFactionRelations.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.facRelations.set", (Object[])new Object[]{fac1.factionName(), fac2.factionName(), relation.getDisplayName()});
+                        CommandBase.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.facRelations.set", (Object[])new Object[]{fac1.factionName(), fac2.factionName(), relation.getDisplayName()});
                         return;
                     }
                     catch (IllegalArgumentException e) {
@@ -59,7 +59,7 @@ extends CommandBase {
                 }
             } else if (function.equals("reset")) {
                 LOTRFactionRelations.resetAllRelations();
-                LOTRCommandFactionRelations.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.facRelations.reset", (Object[])new Object[0]);
+                CommandBase.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.facRelations.reset", (Object[])new Object[0]);
                 return;
             }
         }
@@ -68,15 +68,15 @@ extends CommandBase {
 
     public List addTabCompletionOptions(ICommandSender sender, String[] args) {
         if (args.length == 1) {
-            return LOTRCommandFactionRelations.getListOfStringsMatchingLastWord((String[])args, (String[])new String[]{"set", "reset"});
+            return CommandBase.getListOfStringsMatchingLastWord((String[])args, (String[])new String[]{"set", "reset"});
         }
         if (args.length == 2 || args.length == 3) {
             List<String> list = LOTRFaction.getPlayableAlignmentFactionNames();
-            return LOTRCommandFactionRelations.getListOfStringsMatchingLastWord((String[])args, (String[])list.toArray(new String[0]));
+            return CommandBase.getListOfStringsMatchingLastWord((String[])args, (String[])list.toArray(new String[0]));
         }
         if (args.length == 4) {
             List<String> list = LOTRFactionRelations.Relation.listRelationNames();
-            return LOTRCommandFactionRelations.getListOfStringsMatchingLastWord((String[])args, (String[])list.toArray(new String[0]));
+            return CommandBase.getListOfStringsMatchingLastWord((String[])args, (String[])list.toArray(new String[0]));
         }
         return null;
     }

@@ -43,42 +43,38 @@ extends LOTRWorldGenBreeStructure {
 
     @Override
     public boolean generateWithSetRotation(World world, Random random, int i, int j, int k, int rotation) {
-        int k1;
-        int stepsDown;
-        int i1;
         int k12;
-        int j1;
         int i12;
-        int j12;
+        int j1;
         this.setOriginAndRotation(world, i, j, k, rotation, 2);
         this.setupRandomBlocks(random);
         if (this.restrictions) {
-            for (i1 = -10; i1 <= 5; ++i1) {
-                for (k1 = -5; k1 <= 10; ++k1) {
-                    j12 = this.getTopBlock(world, i1, k1) - 1;
-                    if (this.isSurface(world, i1, j12, k1)) continue;
+            for (i12 = -10; i12 <= 5; ++i12) {
+                for (k12 = -5; k12 <= 10; ++k12) {
+                    j1 = this.getTopBlock(world, i12, k12) - 1;
+                    if (this.isSurface(world, i12, j1, k12)) continue;
                     return false;
                 }
             }
         }
-        for (i1 = -4; i1 <= 4; ++i1) {
-            for (k1 = -1; k1 <= 1; ++k1) {
-                for (j12 = 1; j12 <= 8; ++j12) {
-                    this.setAir(world, i1, j12, k1);
+        for (i12 = -4; i12 <= 4; ++i12) {
+            for (k12 = -1; k12 <= 1; ++k12) {
+                for (j1 = 1; j1 <= 8; ++j1) {
+                    this.setAir(world, i12, j1, k12);
                 }
             }
         }
-        for (i1 = -9; i1 <= -4; ++i1) {
-            for (k1 = 4; k1 <= 9; ++k1) {
-                for (j12 = 1; j12 <= 8; ++j12) {
-                    this.setAir(world, i1, j12, k1);
+        for (i12 = -9; i12 <= -4; ++i12) {
+            for (k12 = 4; k12 <= 9; ++k12) {
+                for (j1 = 1; j1 <= 8; ++j1) {
+                    this.setAir(world, i12, j1, k12);
                 }
             }
         }
         for (int k13 = 6; k13 <= 7; ++k13) {
             int i13 = -3;
-            for (j12 = 1; j12 <= 7; ++j12) {
-                this.setAir(world, i13, j12, k13);
+            for (j1 = 1; j1 <= 7; ++j1) {
+                this.setAir(world, i13, j1, k13);
             }
         }
         this.loadStrScan("bree_gatehouse");
@@ -104,17 +100,21 @@ extends LOTRWorldGenBreeStructure {
         this.addBlockMetaAliasOption("PATH", 2, Blocks.gravel, 0);
         this.generateStrScan(world, random, 0, 0, 0);
         int maxSteps = 12;
-        for (int step = 0; step < maxSteps && !this.isOpaque(world, i12 = -3, j1 = 0 - (stepsDown = Math.max(0, step - 2)), k12 = 6 + step); ++step) {
+        for (int step = 0; step < maxSteps; ++step) {
+            int k1;
+            int i1 = -3;
+            int j12 = 0 - Math.max(0, step - 2);
+            if (this.isOpaque(world, -3, j12, k1 = 6 + step)) break;
             if (step < 2) {
-                this.setBlockAndMetadata(world, i12, j1, k12, Blocks.cobblestone, 0);
+                this.setBlockAndMetadata(world, i1, j12, k1, Blocks.cobblestone, 0);
             } else {
-                this.setBlockAndMetadata(world, i12, j1, k12, Blocks.stone_stairs, 3);
+                this.setBlockAndMetadata(world, i1, j12, k1, Blocks.stone_stairs, 3);
             }
-            this.setGrassToDirt(world, i12, j1 - 1, k12);
-            int j2 = j1 - 1;
-            while (!this.isOpaque(world, i12, j2, k12) && this.getY(j2) >= 0) {
-                this.setBlockAndMetadata(world, i12, j2, k12, Blocks.cobblestone, 0);
-                this.setGrassToDirt(world, i12, j2 - 1, k12);
+            this.setGrassToDirt(world, i1, j12 - 1, k1);
+            int j2 = j12 - 1;
+            while (!this.isOpaque(world, i1, j2, k1) && this.getY(j2) >= 0) {
+                this.setBlockAndMetadata(world, i1, j2, k1, Blocks.cobblestone, 0);
+                this.setGrassToDirt(world, i1, j2 - 1, k1);
                 --j2;
             }
         }

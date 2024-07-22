@@ -60,8 +60,10 @@ extends EntityAIBase {
         double distanceSq = Double.MAX_VALUE;
         for (LOTREntityNPC candidate : list) {
             double d;
-            if (!this.theNPC.familyInfo.canMarryNPC(candidate) || !candidate.familyInfo.canMarryNPC(this.theNPC) || !((d = this.theNPC.getDistanceSqToEntity((Entity)candidate)) <= distanceSq)) continue;
-            distanceSq = d;
+            if (!this.theNPC.familyInfo.canMarryNPC(candidate) || !candidate.familyInfo.canMarryNPC(this.theNPC)) continue;
+            double d2 = this.theNPC.getDistanceSqToEntity((Entity)candidate);
+            if (d > distanceSq) continue;
+            distanceSq = d2;
             spouse = candidate;
         }
         if (spouse == null) {

@@ -26,8 +26,7 @@ extends LOTRItemMug {
     public ItemStack onEaten(ItemStack itemstack, World world, EntityPlayer entityplayer) {
         ItemStack result = super.onEaten(itemstack, world, entityplayer);
         if (!world.isRemote) {
-            for (int i = 0; i < Potion.potionTypes.length; ++i) {
-                Potion potion = Potion.potionTypes[i];
+            for (Potion potion : Potion.potionTypes) {
                 if (potion == null || !LOTRReflection.isBadEffect(potion)) continue;
                 entityplayer.removePotionEffect(potion.id);
             }

@@ -55,7 +55,7 @@ extends EntityThrowable {
             Block block;
             EntityLivingBase thrower = this.getThrower();
             Entity hitEntity = m.entityHit;
-            double range = 3.0;
+            double range = 6.0;
             List entities = this.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, this.boundingBox.expand(range, range, range));
             if (hitEntity instanceof EntityLivingBase && !entities.contains((Object)hitEntity)) {
                 entities.add(hitEntity);

@@ -34,33 +34,34 @@ extends LOTRWorldGenGulfStructure {
 
     @Override
     public boolean generateWithSetRotation(World world, Random random, int i, int j, int k, int rotation) {
-        int k1;
-        int i1;
         int j1;
-        int j12;
         this.setOriginAndRotation(world, i, j, k, rotation, 0);
         this.setupRandomBlocks(random);
-        if (this.restrictions && !this.isSurface(world, i1 = 0, j1 = this.getTopBlock(world, i1, k1 = 0) - 1, k1)) {
-            return false;
-        }
-        for (j12 = 1; !(j12 < 0 && this.isOpaque(world, 0, j12, 0) || this.getY(j12) < 0); --j12) {
-            if (random.nextBoolean()) {
-                this.setBlockAndMetadata(world, 0, j12, 0, Blocks.sandstone, 0);
-            } else {
-                this.setBlockAndMetadata(world, 0, j12, 0, this.brickBlock, this.brickMeta);
+        if (this.restrictions) {
+            int i1 = 0;
+            int k1 = 0;
+            if (!this.isSurface(world, 0, this.getTopBlock(world, i1, 0) - 1, k1)) {
+                return false;
             }
-            this.setGrassToDirt(world, 0, j12 - 1, 0);
         }
-        for (j12 = 2; j12 <= 4; ++j12) {
+        for (j1 = 1; !(j1 < 0 && this.isOpaque(world, 0, j1, 0) || this.getY(j1) < 0); --j1) {
             if (random.nextBoolean()) {
-                this.setBlockAndMetadata(world, 0, j12, 0, Blocks.sandstone, 0);
+                this.setBlockAndMetadata(world, 0, j1, 0, Blocks.sandstone, 0);
+            } else {
+                this.setBlockAndMetadata(world, 0, j1, 0, this.brickBlock, this.brickMeta);
+            }
+            this.setGrassToDirt(world, 0, j1 - 1, 0);
+        }
+        for (j1 = 2; j1 <= 4; ++j1) {
+            if (random.nextBoolean()) {
+                this.setBlockAndMetadata(world, 0, j1, 0, Blocks.sandstone, 0);
                 continue;
             }
-            this.setBlockAndMetadata(world, 0, j12, 0, this.brickBlock, this.brickMeta);
+            this.setBlockAndMetadata(world, 0, j1, 0, this.brickBlock, this.brickMeta);
         }
         if (this.isTall) {
-            for (j12 = 5; j12 <= 6; ++j12) {
-                this.setBlockAndMetadata(world, 0, j12, 0, this.boneWallBlock, this.boneWallMeta);
+            for (j1 = 5; j1 <= 6; ++j1) {
+                this.setBlockAndMetadata(world, 0, j1, 0, this.boneWallBlock, this.boneWallMeta);
             }
             this.setBlockAndMetadata(world, 0, 7, 0, this.boneBlock, this.boneMeta);
             this.placeWallBanner(world, 0, 7, 0, LOTRItemBanner.BannerType.HARAD_GULF, 2);

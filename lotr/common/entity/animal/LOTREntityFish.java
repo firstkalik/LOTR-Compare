@@ -59,7 +59,6 @@ extends EntityWaterMob
 implements LOTRRandomSkinEntity {
     private ChunkCoordinates currentSwimTarget;
     private int swimTargetTime = 0;
-    private static final int swimTargetTimeMax = 200;
 
     public LOTREntityFish(World world) {
         super(world);
@@ -105,9 +104,9 @@ implements LOTRRandomSkinEntity {
     public IEntityLivingData onSpawnWithEgg(IEntityLivingData data) {
         data = super.onSpawnWithEgg(data);
         int i = MathHelper.floor_double((double)this.posX);
-        int j = MathHelper.floor_double((double)this.posY);
+        MathHelper.floor_double((double)this.posY);
         int k = MathHelper.floor_double((double)this.posZ);
-        BiomeGenBase biome = this.worldObj.getBiomeGenForCoords(i, k);
+        this.worldObj.getBiomeGenForCoords(i, k);
         if (this.rand.nextInt(30) == 0) {
             this.setFishType(FishType.CLOWNFISH);
         } else if (this.rand.nextInt(8) == 0) {

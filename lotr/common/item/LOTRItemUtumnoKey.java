@@ -58,7 +58,7 @@ extends Item {
     }
 
     public boolean onItemUse(ItemStack itemstack, EntityPlayer entityplayer, World world, int i, int j, int k, int side, float f, float f1, float f2) {
-        if (LOTRDimension.getCurrentDimensionWithFallback(world) == LOTRDimension.UTUMNO && side == 1) {
+        if (LOTRDimension.getCurrentDimension(world) == LOTRDimension.UTUMNO && side == 1) {
             Block block = world.getBlock(i, j, k);
             int meta = world.getBlockMetadata(i, j, k);
             LOTRUtumnoLevel utumnoLevel = LOTRUtumnoLevel.forY(j);

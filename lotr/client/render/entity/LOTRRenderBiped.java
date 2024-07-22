@@ -138,16 +138,17 @@ extends RenderBiped {
 
     protected void renderEquippedItems(EntityLivingBase entity, float f) {
         ItemStack heldItem;
+        IItemRenderer customRenderer;
         ItemStack heldItemLeft;
         float f1;
+        boolean is3D;
         GL11.glColor3f((float)1.0f, (float)1.0f, (float)1.0f);
         ItemStack headItem = entity.getEquipmentInSlot(4);
         if (headItem != null) {
-            boolean is3D;
             GL11.glPushMatrix();
             this.modelBipedMain.bipedHead.postRender(0.0625f);
-            IItemRenderer customRenderer = MinecraftForgeClient.getItemRenderer((ItemStack)headItem, (IItemRenderer.ItemRenderType)IItemRenderer.ItemRenderType.EQUIPPED);
-            boolean bl = is3D = customRenderer != null && customRenderer.shouldUseRenderHelper(IItemRenderer.ItemRenderType.EQUIPPED, headItem, IItemRenderer.ItemRendererHelper.BLOCK_3D);
+            IItemRenderer customRenderer2 = MinecraftForgeClient.getItemRenderer((ItemStack)headItem, (IItemRenderer.ItemRenderType)IItemRenderer.ItemRenderType.EQUIPPED);
+            boolean bl = is3D = customRenderer2 != null && customRenderer2.shouldUseRenderHelper(IItemRenderer.ItemRenderType.EQUIPPED, headItem, IItemRenderer.ItemRendererHelper.BLOCK_3D);
             if (headItem.getItem() instanceof ItemBlock) {
                 if (is3D || RenderBlocks.renderItemIn3d((int)Block.getBlockFromItem((Item)headItem.getItem()).getRenderType())) {
                     f1 = 0.625f;
@@ -165,7 +166,7 @@ extends RenderBiped {
                     if (nbttagcompound.hasKey("SkullOwner", (int)new NBTTagCompound().getId())) {
                         gameprofile = NBTUtil.func_152459_a((NBTTagCompound)nbttagcompound.getCompoundTag("SkullOwner"));
                     } else if (nbttagcompound.hasKey("SkullOwner", (int)new NBTTagString().getId()) && !StringUtils.isNullOrEmpty((String)nbttagcompound.getString("SkullOwner"))) {
-                        gameprofile = new GameProfile((UUID)null, nbttagcompound.getString("SkullOwner"));
+                        gameprofile = new GameProfile(null, nbttagcompound.getString("SkullOwner"));
                     }
                 }
                 TileEntitySkullRenderer.field_147536_b.func_152674_a(-0.5f, 0.0f, -0.5f, 1, 180.0f, headItem.getItemDamage(), gameprofile);
@@ -174,7 +175,6 @@ extends RenderBiped {
         }
         if ((heldItem = entity.getHeldItem()) != null) {
             float f12;
-            boolean is3D;
             GL11.glPushMatrix();
             if (this.mainModel.isChild) {
                 float f13 = 0.5f;
@@ -184,7 +184,7 @@ extends RenderBiped {
             }
             this.modelBipedMain.bipedRightArm.postRender(0.0625f);
             GL11.glTranslatef((float)-0.0625f, (float)0.4375f, (float)0.0625f);
-            IItemRenderer customRenderer = MinecraftForgeClient.getItemRenderer((ItemStack)heldItem, (IItemRenderer.ItemRenderType)IItemRenderer.ItemRenderType.EQUIPPED);
+            customRenderer = MinecraftForgeClient.getItemRenderer((ItemStack)heldItem, (IItemRenderer.ItemRenderType)IItemRenderer.ItemRenderType.EQUIPPED);
             boolean bl = is3D = customRenderer != null && customRenderer.shouldUseRenderHelper(IItemRenderer.ItemRenderType.EQUIPPED, heldItem, IItemRenderer.ItemRendererHelper.BLOCK_3D);
             if (heldItem.getItem() instanceof ItemBlock && (is3D || RenderBlocks.renderItemIn3d((int)Block.getBlockFromItem((Item)heldItem.getItem()).getRenderType()))) {
                 f12 = 0.5f;
@@ -227,7 +227,6 @@ extends RenderBiped {
         }
         if ((heldItemLeft = ((LOTREntityNPC)entity).getHeldItemLeft()) != null) {
             float f14;
-            boolean is3D;
             GL11.glPushMatrix();
             if (this.mainModel.isChild) {
                 f1 = 0.5f;
@@ -237,7 +236,7 @@ extends RenderBiped {
             }
             this.modelBipedMain.bipedLeftArm.postRender(0.0625f);
             GL11.glTranslatef((float)0.0625f, (float)0.4375f, (float)0.0625f);
-            IItemRenderer customRenderer = MinecraftForgeClient.getItemRenderer((ItemStack)heldItemLeft, (IItemRenderer.ItemRenderType)IItemRenderer.ItemRenderType.EQUIPPED);
+            customRenderer = MinecraftForgeClient.getItemRenderer((ItemStack)heldItemLeft, (IItemRenderer.ItemRenderType)IItemRenderer.ItemRenderType.EQUIPPED);
             boolean bl = is3D = customRenderer != null && customRenderer.shouldUseRenderHelper(IItemRenderer.ItemRenderType.EQUIPPED, heldItemLeft, IItemRenderer.ItemRendererHelper.BLOCK_3D);
             if (heldItemLeft.getItem() instanceof ItemBlock && (is3D || RenderBlocks.renderItemIn3d((int)Block.getBlockFromItem((Item)heldItemLeft.getItem()).getRenderType()))) {
                 f14 = 0.5f;
@@ -274,12 +273,8 @@ extends RenderBiped {
         this.renderNPCShield((LOTREntityNPC)entity);
     }
 
-    protected ResourceLocation getCapeToRender(LOTREntityNPC entity) {
-        return entity.npcCape;
-    }
-
     protected void renderNPCCape(LOTREntityNPC entity) {
-        ResourceLocation capeTexture = this.getCapeToRender(entity);
+        ResourceLocation capeTexture = entity.npcCape;
         if (capeTexture != null) {
             GL11.glPushMatrix();
             GL11.glTranslatef((float)0.0f, (float)0.0f, (float)0.125f);

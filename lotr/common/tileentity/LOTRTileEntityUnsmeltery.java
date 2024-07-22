@@ -54,7 +54,6 @@ import lotr.common.item.LOTRItemCrossbow;
 import lotr.common.item.LOTRItemMountArmor;
 import lotr.common.item.LOTRItemThrowingAxe;
 import lotr.common.item.LOTRMaterial;
-import lotr.common.item.LOTRStoryItem;
 import lotr.common.recipe.LOTRRecipePoisonWeapon;
 import lotr.common.recipe.LOTRRecipes;
 import lotr.common.tileentity.LOTRTileEntityForgeBase;
@@ -90,15 +89,15 @@ import org.apache.commons.lang3.tuple.Pair;
 
 public class LOTRTileEntityUnsmeltery
 extends LOTRTileEntityForgeBase {
-    private static Random unsmeltingRand = new Random();
-    private static Map<Pair<Item, Integer>, Integer> unsmeltableCraftingCounts = new HashMap<Pair<Item, Integer>, Integer>();
-    private float prevRocking;
-    private float rocking;
-    private float prevRockingPhase;
-    private float rockingPhase = unsmeltingRand.nextFloat() * 3.1415927f * 2.0f;
-    private boolean prevServerActive;
-    private boolean serverActive;
-    private boolean clientActive;
+    public static Random unsmeltingRand = new Random();
+    public static Map<Pair<Item, Integer>, Integer> unsmeltableCraftingCounts = new HashMap<Pair<Item, Integer>, Integer>();
+    public float prevRocking;
+    public float rocking;
+    public float prevRockingPhase;
+    public float rockingPhase = unsmeltingRand.nextFloat() * 3.1415927f * 2.0f;
+    public boolean prevServerActive;
+    public boolean serverActive;
+    public boolean clientActive;
 
     @Override
     public int getForgeInvSize() {
@@ -173,7 +172,6 @@ extends LOTRTileEntityForgeBase {
             ItemStack input = this.inventory[this.inputSlots[0]];
             ItemStack result = this.getRandomUnsmeltingResult(input);
             if (result != null) {
-                int slot = this.outputSlots[0];
                 if (this.inventory[this.outputSlots[0]] == null) {
                     this.inventory[this.outputSlots[0]] = result.copy();
                 } else if (this.inventory[this.outputSlots[0]].isItemEqual(result)) {
@@ -196,9 +194,6 @@ extends LOTRTileEntityForgeBase {
         if (itemstack == null) {
             return false;
         }
-        if (itemstack.getItem() instanceof LOTRStoryItem) {
-            return false;
-        }
         ItemStack material = LOTRTileEntityUnsmeltery.getEquipmentMaterial(itemstack);
         if (material != null) {
             if (TileEntityFurnace.getItemBurnTime((ItemStack)material) != 0) {
@@ -212,7 +207,7 @@ extends LOTRTileEntityForgeBase {
         return false;
     }
 
-    private ItemStack getLargestUnsmeltingResult(ItemStack itemstack) {
+    public ItemStack getLargestUnsmeltingResult(ItemStack itemstack) {
         if (itemstack == null || !this.canBeUnsmelted(itemstack)) {
             return null;
         }
@@ -225,7 +220,7 @@ extends LOTRTileEntityForgeBase {
         return new ItemStack(material.getItem(), items, meta);
     }
 
-    private ItemStack getRandomUnsmeltingResult(ItemStack itemstack) {
+    public ItemStack getRandomUnsmeltingResult(ItemStack itemstack) {
         int items_int;
         ItemStack result = this.getLargestUnsmeltingResult(itemstack);
         if (result == null) {
@@ -242,7 +237,7 @@ extends LOTRTileEntityForgeBase {
         return new ItemStack(result.getItem(), items_int, result.getItemDamage());
     }
 
-    private static ItemStack getEquipmentMaterial(ItemStack itemstack) {
+    public static ItemStack getEquipmentMaterial(ItemStack itemstack) {
         if (itemstack == null) {
             return null;
         }
@@ -288,17 +283,17 @@ extends LOTRTileEntityForgeBase {
                 return new ItemStack(LOTRMod.silver);
             }
             if (item == LOTRMod.gobletCopper) {
-                return new ItemStack(LOTRMod.copper);
+                return new ItemStack(LOTRMod.bronze);
             }
         }
         return null;
     }
 
-    private int determineResourcesUsed(ItemStack itemstack, ItemStack material) {
+    public int determineResourcesUsed(ItemStack itemstack, ItemStack material) {
         return this.determineResourcesUsed(itemstack, material, null);
     }
 
-    private int determineResourcesUsed(ItemStack itemstack, ItemStack material, List<IRecipe> recursiveCheckedRecipes) {
+    public int determineResourcesUsed(ItemStack itemstack, ItemStack material, List<IRecipe> recursiveCheckedRecipes) {
         if (itemstack == null) {
             return 0;
         }
@@ -322,9 +317,9 @@ extends LOTRTileEntityForgeBase {
         }
         block1: for (List recipes : allRecipeLists) {
             for (Object recipesObj : recipes) {
+                int i;
                 ShapedRecipes shaped;
                 ShapelessRecipes shapeless;
-                int i;
                 ItemStack result;
                 Object ingredients;
                 IRecipe irecipe = (IRecipe)recipesObj;
@@ -379,16 +374,16 @@ extends LOTRTileEntityForgeBase {
         return count;
     }
 
-    private EntityPlayer getProxyPlayer() {
+    public EntityPlayer getProxyPlayer() {
         if (!this.worldObj.isRemote) {
             return FakePlayerFactory.get((WorldServer)((WorldServer)this.worldObj), (GameProfile)new GameProfile(null, "LOTRUnsmeltery"));
         }
         return LOTRMod.proxy.getClientPlayer();
     }
 
-    private int countMatchingIngredients(ItemStack material, List ingredientList, List<IRecipe> recursiveCheckedRecipes) {
+    public int countMatchingIngredients(ItemStack material, List ingredientList, List<IRecipe> recursiveCheckedRecipes) {
         int i = 0;
-        block0: for (Object obj : ingredientList) {
+        for (Object obj : ingredientList) {
             if (obj instanceof ItemStack) {
                 ItemStack ingredient = (ItemStack)obj;
                 if (OreDictionary.itemMatches((ItemStack)material, (ItemStack)ingredient, (boolean)false)) {
@@ -416,7 +411,6 @@ extends LOTRTileEntityForgeBase {
                 int sub = this.determineResourcesUsed(ingredient, material, recursiveCheckedRecipes);
                 if (sub <= 0) continue;
                 i += sub;
-                continue block0;
             }
         }
         return i;

@@ -68,15 +68,17 @@ extends LOTRVillageGen {
         return new Instance(this, world, i, k, random, loc);
     }
 
+    public static enum VillageType {
+        VILLAGE,
+        TOWN,
+        FORT;
+
+    }
+
     public static class Instance
     extends LOTRVillageGen.AbstractInstance<LOTRVillageGenSouthron> {
         public VillageType villageType;
         public String[] villageName;
-        private static final int roadWidth = 5;
-        private static final int pathFuzz = 3;
-        private static final int rInnerSquare = 14;
-        private static final int rOuterSquare = 45;
-        private static final int tavernEdge = 7;
 
         public Instance(LOTRVillageGenSouthron village, World world, int i, int k, Random random, LocationInfo loc) {
             super(village, world, i, k, random, loc);
@@ -109,7 +111,7 @@ extends LOTRVillageGen {
 
                 @Override
                 public void setupRespawner(LOTREntityNPCRespawner spawner) {
-                    Instance.this.setCivilianSpawnClass(spawner);
+                    this.setCivilianSpawnClass(spawner);
                     spawner.setCheckRanges(64, -12, 12, 24);
                     spawner.setSpawnRanges(32, -6, 6, 32);
                     spawner.setBlockEnemySpawnRange(64);
@@ -119,7 +121,7 @@ extends LOTRVillageGen {
 
                 @Override
                 public void setupRespawner(LOTREntityNPCRespawner spawner) {
-                    Instance.this.setWarriorSpawnClasses(spawner);
+                    this.setWarriorSpawnClasses(spawner);
                     spawner.setCheckRanges(64, -12, 12, 12);
                     spawner.setSpawnRanges(32, -6, 6, 32);
                     spawner.setBlockEnemySpawnRange(64);
@@ -238,14 +240,14 @@ extends LOTRVillageGen {
 
         private void setupTown(Random random) {
             int i;
+            int l;
             int r;
             int k;
-            int l;
             this.addStructure(new LOTRWorldGenNPCRespawner(false){
 
                 @Override
                 public void setupRespawner(LOTREntityNPCRespawner spawner) {
-                    Instance.this.setCivilianSpawnClass(spawner);
+                    this.setCivilianSpawnClass(spawner);
                     spawner.setCheckRanges(80, -12, 12, 100);
                     spawner.setSpawnRanges(40, -6, 6, 64);
                     spawner.setBlockEnemySpawnRange(60);
@@ -257,7 +259,7 @@ extends LOTRVillageGen {
 
                         @Override
                         public void setupRespawner(LOTREntityNPCRespawner spawner) {
-                            Instance.this.setWarriorSpawnClasses(spawner);
+                            this.setWarriorSpawnClasses(spawner);
                             spawner.setCheckRanges(40, -12, 12, 16);
                             spawner.setSpawnRanges(20, -6, 6, 64);
                             spawner.setBlockEnemySpawnRange(60);
@@ -453,14 +455,14 @@ extends LOTRVillageGen {
 
         private void setupFort(Random random) {
             int i;
+            int l;
             int r;
             int k;
-            int l;
             this.addStructure(new LOTRWorldGenNPCRespawner(false){
 
                 @Override
                 public void setupRespawner(LOTREntityNPCRespawner spawner) {
-                    Instance.this.setCivilianSpawnClass(spawner);
+                    this.setCivilianSpawnClass(spawner);
                     spawner.setCheckRanges(60, -12, 12, 16);
                     spawner.setSpawnRanges(24, -6, 6, 40);
                     spawner.setBlockEnemySpawnRange(60);
@@ -472,7 +474,7 @@ extends LOTRVillageGen {
 
                         @Override
                         public void setupRespawner(LOTREntityNPCRespawner spawner) {
-                            Instance.this.setWarriorSpawnClasses(spawner);
+                            this.setWarriorSpawnClasses(spawner);
                             spawner.setCheckRanges(35, -12, 12, 16);
                             spawner.setSpawnRanges(15, -6, 6, 40);
                             spawner.setBlockEnemySpawnRange(35);
@@ -596,7 +598,6 @@ extends LOTRVillageGen {
             int i1 = Math.abs(i);
             int k1 = Math.abs(k);
             if (this.villageType == VillageType.VILLAGE) {
-                int dSq = i * i + k * k;
                 int imn = 2;
                 int imx = 14 + random.nextInt(3);
                 int kmn = 2;
@@ -612,10 +613,9 @@ extends LOTRVillageGen {
                     return LOTRRoadType.PATH;
                 }
                 if (k < 0) {
-                    int d1;
                     imn = 14;
                     imx = 45;
-                    if (i1 + k1 >= imn + imn && i1 + k1 <= imx + imx && (d1 = Math.abs(i1 - k1)) <= (int)(2.5f + (float)random.nextInt(3) * 2.0f)) {
+                    if (i1 + k1 >= imn + imn && i1 + k1 <= imx + imx && Math.abs(i1 - k1) <= (int)(2.5f + (float)random.nextInt(3) * 2.0f)) {
                         return LOTRRoadType.PATH;
                     }
                 }
@@ -660,13 +660,6 @@ extends LOTRVillageGen {
             }
             return false;
         }
-
-    }
-
-    public static enum VillageType {
-        VILLAGE,
-        TOWN,
-        FORT;
 
     }
 

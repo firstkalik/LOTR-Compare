@@ -47,19 +47,11 @@ extends LOTRBiomeGenMordor {
     public LOTRBiomeGenMorgulVale(int i, boolean major) {
         super(i, major);
         this.npcSpawnList.clear();
-        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer = new LOTRBiomeSpawnList.SpawnListContainer[5];
-        arrspawnListContainer[0] = LOTRBiomeSpawnList.entry(LOTRSpawnList.MORDOR_ORCS, 15).setSpawnChance(30);
-        arrspawnListContainer[1] = LOTRBiomeSpawnList.entry(LOTRSpawnList.MORDOR_WARGS, 2).setSpawnChance(30);
-        arrspawnListContainer[2] = LOTRBiomeSpawnList.entry(LOTRSpawnList.BLACK_URUKS, 2).setConquestThreshold(50.0f);
-        arrspawnListContainer[3] = LOTRBiomeSpawnList.entry(LOTRSpawnList.BLACK_URUKS, 2).setConquestThreshold(100.0f);
-        arrspawnListContainer[4] = LOTRBiomeSpawnList.entry(LOTRSpawnList.OLOG_HAI, 2).setConquestThreshold(200.0f);
+        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer = new LOTRBiomeSpawnList.SpawnListContainer[]{LOTRBiomeSpawnList.entry(LOTRSpawnList.MORDOR_ORCS, 15).setSpawnChance(30), LOTRBiomeSpawnList.entry(LOTRSpawnList.MORDOR_WARGS, 2).setSpawnChance(30), LOTRBiomeSpawnList.entry(LOTRSpawnList.BLACK_URUKS, 2).setConquestThreshold(50.0f), LOTRBiomeSpawnList.entry(LOTRSpawnList.BLACK_URUKS, 2).setConquestThreshold(100.0f), LOTRBiomeSpawnList.entry(LOTRSpawnList.OLOG_HAI, 2).setConquestThreshold(200.0f)};
         this.npcSpawnList.newFactionList(100).add(arrspawnListContainer);
-        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer2 = new LOTRBiomeSpawnList.SpawnListContainer[1];
-        arrspawnListContainer2[0] = LOTRBiomeSpawnList.entry(LOTRSpawnList.ROHIRRIM_WARRIORS, 10);
+        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer2 = new LOTRBiomeSpawnList.SpawnListContainer[]{LOTRBiomeSpawnList.entry(LOTRSpawnList.ROHIRRIM_WARRIORS, 10)};
         this.npcSpawnList.newFactionList(0).add(arrspawnListContainer2);
-        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer3 = new LOTRBiomeSpawnList.SpawnListContainer[2];
-        arrspawnListContainer3[0] = LOTRBiomeSpawnList.entry(LOTRSpawnList.GONDOR_SOLDIERS, 10);
-        arrspawnListContainer3[1] = LOTRBiomeSpawnList.entry(LOTRSpawnList.RANGERS_ITHILIEN, 3);
+        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer3 = new LOTRBiomeSpawnList.SpawnListContainer[]{LOTRBiomeSpawnList.entry(LOTRSpawnList.GONDOR_SOLDIERS, 10), LOTRBiomeSpawnList.entry(LOTRSpawnList.RANGERS_ITHILIEN, 3)};
         this.npcSpawnList.newFactionList(0).add(arrspawnListContainer3);
         this.npcSpawnList.conquestGainRate = 0.5f;
         this.topBlock = Blocks.grass;
@@ -105,7 +97,6 @@ extends LOTRBiomeGenMordor {
 
     @Override
     public void generateBiomeTerrain(World world, Random random, Block[] blocks, byte[] meta, int i, int k, double stoneNoise, int height, LOTRBiomeVariant variant) {
-        double d6;
         Block topBlock_pre = this.topBlock;
         int topBlockMeta_pre = this.topBlockMeta;
         Block fillerBlock_pre = this.fillerBlock;
@@ -115,7 +106,7 @@ extends LOTRBiomeGenMordor {
         double d3 = this.noiseGravel.func_151601_a((double)i * 0.06, (double)k * 0.06);
         double d4 = this.noiseGravel.func_151601_a((double)i * 0.3, (double)k * 0.3);
         double d5 = this.noiseRock.func_151601_a((double)i * 0.06, (double)k * 0.06);
-        if (d5 + (d6 = this.noiseRock.func_151601_a((double)i * 0.3, (double)k * 0.3)) > 1.1) {
+        if (d5 + this.noiseRock.func_151601_a((double)i * 0.3, (double)k * 0.3) > 1.1) {
             this.topBlock = LOTRMod.rock;
             this.topBlockMeta = 0;
             this.fillerBlock = this.topBlock;
@@ -147,11 +138,9 @@ extends LOTRBiomeGenMordor {
             int j1 = world.getHeightValue(i1, k1);
             boolean foundWater = false;
             for (int a = 0; a < 20; ++a) {
-                int k2;
-                int j2;
                 int range = 8;
                 int i2 = i1 + MathHelper.getRandomIntegerInRange((Random)random, (int)(-range), (int)range);
-                Block block = world.getBlock(i2, j2 = j1 + MathHelper.getRandomIntegerInRange((Random)random, (int)(-range), (int)range), k2 = k1 + MathHelper.getRandomIntegerInRange((Random)random, (int)(-range), (int)range));
+                Block block = world.getBlock(i2, j1 + MathHelper.getRandomIntegerInRange((Random)random, (int)(-range), (int)range), k1 + MathHelper.getRandomIntegerInRange((Random)random, (int)(-range), (int)range));
                 if (block.getMaterial() != Material.water) continue;
                 foundWater = true;
                 break;

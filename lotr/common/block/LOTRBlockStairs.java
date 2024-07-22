@@ -15,15 +15,10 @@ import net.minecraft.creativetab.CreativeTabs;
 
 public class LOTRBlockStairs
 extends BlockStairs {
-    private Block baseBlock;
-    private int baseMeta;
-
-    public LOTRBlockStairs(Block block, int meta) {
-        super(block, meta);
+    public LOTRBlockStairs(Block block, int metadata) {
+        super(block, metadata);
         this.setCreativeTab((CreativeTabs)LOTRCreativeTabs.tabBlock);
         this.useNeighborBrightness = true;
-        this.baseBlock = block;
-        this.baseMeta = meta;
     }
 }
 

@@ -81,10 +81,10 @@ extends EntityAIBase {
     private Vec3 findPossibleShelter() {
         Random random = this.theTroll.getRNG();
         for (int l = 0; l < 32; ++l) {
-            int j;
             int k;
+            int j;
             int i = MathHelper.floor_double((double)this.theTroll.posX) - 24 + random.nextInt(49);
-            if (this.theWorld.canBlockSeeTheSky(i, j = MathHelper.floor_double((double)this.theTroll.boundingBox.minY) - 12 + random.nextInt(25), k = MathHelper.floor_double((double)this.theTroll.posZ) - 24 + random.nextInt(49)) || !(this.theTroll.getBlockPathWeight(i, j, k) < 0.0f)) continue;
+            if (this.theWorld.canBlockSeeTheSky(i, j = MathHelper.floor_double((double)this.theTroll.boundingBox.minY) - 12 + random.nextInt(25), k = MathHelper.floor_double((double)this.theTroll.posZ) - 24 + random.nextInt(49)) || this.theTroll.getBlockPathWeight(i, j, k) >= 0.0f) continue;
             return Vec3.createVectorHelper((double)i, (double)j, (double)k);
         }
         return null;

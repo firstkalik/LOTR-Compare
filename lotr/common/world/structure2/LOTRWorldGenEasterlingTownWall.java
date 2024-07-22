@@ -44,7 +44,7 @@ extends LOTRWorldGenEasterlingStructure {
         this.setOriginAndRotation(world, i, j, k, rotation, 0);
         this.setupRandomBlocks(random);
         for (int i1 = this.xMin; i1 <= this.xMax; ++i1) {
-            int i2 = Math.abs(i1);
+            Math.abs(i1);
             this.findSurface(world, i1, 0);
             for (int k1 = -1; k1 <= 1; ++k1) {
                 int j1;

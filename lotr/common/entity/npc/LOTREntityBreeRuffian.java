@@ -82,11 +82,13 @@ extends LOTREntityBreeMan {
     public final boolean canRuffianTarget(EntityPlayer player) {
         PotionEffect nausea = player.getActivePotionEffect(Potion.confusion);
         if (nausea != null) {
+            float f;
             int nauseaTime = nausea.getDuration() / 20;
             int minNauseaTime = 20;
             int fullNauseaTime = 120;
             float chance = (float)(nauseaTime - minNauseaTime) / (float)(fullNauseaTime - minNauseaTime);
-            return this.rand.nextFloat() < (chance *= 0.05f);
+            chance *= 0.05f;
+            return this.rand.nextFloat() < f;
         }
         return false;
     }

@@ -13,7 +13,6 @@ import java.util.Random;
 import lotr.common.LOTRFoods;
 import lotr.common.LOTRMod;
 import lotr.common.entity.npc.LOTREntityHarnedorWarrior;
-import lotr.common.entity.npc.LOTREntityNearHaradrimBase;
 import lotr.common.item.LOTRItemBanner;
 import lotr.common.world.structure.LOTRChestContents;
 import lotr.common.world.structure2.LOTRWorldGenHarnedorStructure;
@@ -30,9 +29,9 @@ extends LOTRWorldGenHarnedorStructure {
 
     @Override
     public boolean generateWithSetRotation(World world, Random random, int i, int j, int k, int rotation) {
-        int k1;
-        int i1;
         int j1;
+        int i1;
+        int k1;
         int j12;
         this.setOriginAndRotation(world, i, j, k, rotation, 4);
         this.setupRandomBlocks(random);
@@ -80,7 +79,7 @@ extends LOTRWorldGenHarnedorStructure {
                         this.setBlockAndMetadata(world, i1, j13, k1, this.fenceBlock, this.fenceMeta);
                     }
                 }
-                if ((i2 != 1 || k2 > 1) && (k2 != 1 || i2 > 1)) continue;
+                if (!(i2 == 1 && k2 <= 1 || k2 == 1 && i2 <= 1)) continue;
                 this.setBlockAndMetadata(world, i1, 6, k1, this.roofBlock, this.roofMeta);
                 this.setBlockAndMetadata(world, i1, 1, k1, Blocks.carpet, 14);
             }

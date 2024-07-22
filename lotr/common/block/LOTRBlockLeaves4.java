@@ -55,8 +55,7 @@ extends LOTRBlockLeavesBase {
 
     @Override
     protected void addSpecialLeafDrops(ArrayList drops, World world, int i, int j, int k, int meta, int fortune) {
-        int fruitChance;
-        if ((meta & 3) == 0 && world.rand.nextInt(fruitChance = this.calcFortuneModifiedDropChance(20, fortune)) == 0) {
+        if ((meta & 3) == 0 && world.rand.nextInt(this.calcFortuneModifiedDropChance(20, fortune)) == 0) {
             drops.add(new ItemStack(LOTRMod.chestnut));
         }
     }

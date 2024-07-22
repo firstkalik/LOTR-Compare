@@ -32,8 +32,7 @@ extends LOTREntityAINearestAttackableTargetBasic {
 
     @Override
     protected boolean isSuitableTarget(EntityLivingBase entity, boolean flag) {
-        BiomeGenBase biome;
-        return super.isSuitableTarget(entity, flag) && (biome = this.taskOwner.worldObj.getBiomeGenForCoords(MathHelper.floor_double((double)this.taskOwner.posX), MathHelper.floor_double((double)this.taskOwner.posZ))) instanceof LOTRBiomeGenShire;
+        return super.isSuitableTarget(entity, flag) && this.taskOwner.worldObj.getBiomeGenForCoords(MathHelper.floor_double((double)this.taskOwner.posX), MathHelper.floor_double((double)this.taskOwner.posZ)) instanceof LOTRBiomeGenShire;
     }
 }
 

@@ -60,7 +60,7 @@ public class LOTRStructureScan {
 
     public static void loadAllScans() {
         allLoadedScans.clear();
-        HashMap<Object, BufferedReader> scanNamesAndReaders = new HashMap<Object, BufferedReader>();
+        HashMap<String, BufferedReader> scanNamesAndReaders = new HashMap<String, BufferedReader>();
         ZipFile zip = null;
         try {
             ModContainer mc = LOTRMod.getModContainer();
@@ -68,19 +68,19 @@ public class LOTRStructureScan {
                 zip = new ZipFile(mc.getSource());
                 Enumeration<? extends ZipEntry> entries = zip.entries();
                 while (entries.hasMoreElements()) {
-                    String path;
                     ZipEntry entry = entries.nextElement();
-                    Object s = entry.getName();
-                    if (!((String)s).startsWith(path = "assets/lotr/strscan/") || !((String)s).endsWith(strscanFormat)) continue;
-                    s = ((String)s).substring(path.length());
-                    int i = ((String)s).indexOf(strscanFormat);
+                    String s = entry.getName();
+                    String path = "assets/lotr/strscan/";
+                    if (!s.startsWith("assets/lotr/strscan/") || !s.endsWith(strscanFormat)) continue;
+                    s = s.substring(path.length());
+                    int i = s.indexOf(strscanFormat);
                     try {
-                        s = ((String)s).substring(0, i);
+                        s = s.substring(0, i);
                         BufferedReader reader = new BufferedReader(new InputStreamReader((InputStream)new BOMInputStream(zip.getInputStream(entry)), Charsets.UTF_8.name()));
                         scanNamesAndReaders.put(s, reader);
                     }
                     catch (Exception e) {
-                        FMLLog.severe((String)("Failed to load LOTR structure scan " + (String)s + "from zip file"), (Object[])new Object[0]);
+                        FMLLog.severe((String)("Failed to load LOTR structure scan " + s + "from zip file"), (Object[])new Object[0]);
                         e.printStackTrace();
                     }
                 }
@@ -127,8 +127,8 @@ public class LOTRStructureScan {
                 }
                 LOTRStructureScan scan = new LOTRStructureScan(strName);
                 for (String line : lines) {
-                    String alias;
                     String s1;
+                    String alias;
                     ++curLine;
                     if (line.length() == 0) continue;
                     if (line.charAt(0) == LOTRScanAlias.Type.BLOCK.typeCode) {
@@ -322,10 +322,38 @@ public class LOTRStructureScan {
         this.aliases.add(alias);
     }
 
-    public static class ScanStepSkull
+    public static abstract class ScanStepBase {
+        public final int x;
+        public final int y;
+        public final int z;
+        public boolean fillDown = false;
+        public boolean findLowest = false;
+        public int lineNumber;
+
+        public ScanStepBase(int _x, int _y, int _z) {
+            this.x = _x;
+            this.y = _y;
+            this.z = _z;
+        }
+
+        public abstract boolean hasAlias();
+
+        public abstract String getAlias();
+
+        public abstract Block getBlock(Block var1);
+
+        public abstract int getMeta(int var1);
+    }
+
+    public static class ScanStep
     extends ScanStepBase {
-        public ScanStepSkull(int _x, int _y, int _z) {
+        public final Block block;
+        public final int meta;
+
+        public ScanStep(int _x, int _y, int _z, Block _block, int _meta) {
             super(_x, _y, _z);
+            this.block = _block;
+            this.meta = _meta;
         }
 
         @Override
@@ -340,42 +368,12 @@ public class LOTRStructureScan {
 
         @Override
         public Block getBlock(Block aliasBlock) {
-            return Blocks.skull;
+            return this.block;
         }
 
         @Override
         public int getMeta(int aliasMeta) {
-            return 1;
-        }
-    }
-
-    public static class ScanStepBlockMetaAlias
-    extends ScanStepBase {
-        public final String alias;
-
-        public ScanStepBlockMetaAlias(int _x, int _y, int _z, String _alias) {
-            super(_x, _y, _z);
-            this.alias = _alias;
-        }
-
-        @Override
-        public boolean hasAlias() {
-            return true;
-        }
-
-        @Override
-        public String getAlias() {
-            return this.alias;
-        }
-
-        @Override
-        public Block getBlock(Block aliasBlock) {
-            return aliasBlock;
-        }
-
-        @Override
-        public int getMeta(int aliasMeta) {
-            return aliasMeta;
+            return this.meta;
         }
     }
 
@@ -411,15 +409,40 @@ public class LOTRStructureScan {
         }
     }
 
-    public static class ScanStep
+    public static class ScanStepBlockMetaAlias
     extends ScanStepBase {
-        public final Block block;
-        public final int meta;
+        public final String alias;
 
-        public ScanStep(int _x, int _y, int _z, Block _block, int _meta) {
+        public ScanStepBlockMetaAlias(int _x, int _y, int _z, String _alias) {
             super(_x, _y, _z);
-            this.block = _block;
-            this.meta = _meta;
+            this.alias = _alias;
+        }
+
+        @Override
+        public boolean hasAlias() {
+            return true;
+        }
+
+        @Override
+        public String getAlias() {
+            return this.alias;
+        }
+
+        @Override
+        public Block getBlock(Block aliasBlock) {
+            return aliasBlock;
+        }
+
+        @Override
+        public int getMeta(int aliasMeta) {
+            return aliasMeta;
+        }
+    }
+
+    public static class ScanStepSkull
+    extends ScanStepBase {
+        public ScanStepSkull(int _x, int _y, int _z) {
+            super(_x, _y, _z);
         }
 
         @Override
@@ -434,36 +457,13 @@ public class LOTRStructureScan {
 
         @Override
         public Block getBlock(Block aliasBlock) {
-            return this.block;
+            return Blocks.skull;
         }
 
         @Override
         public int getMeta(int aliasMeta) {
-            return this.meta;
+            return 1;
         }
-    }
-
-    public static abstract class ScanStepBase {
-        public final int x;
-        public final int y;
-        public final int z;
-        public boolean fillDown = false;
-        public boolean findLowest = false;
-        public int lineNumber;
-
-        public ScanStepBase(int _x, int _y, int _z) {
-            this.x = _x;
-            this.y = _y;
-            this.z = _z;
-        }
-
-        public abstract boolean hasAlias();
-
-        public abstract String getAlias();
-
-        public abstract Block getBlock(Block var1);
-
-        public abstract int getMeta(int var1);
     }
 
 }

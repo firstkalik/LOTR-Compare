@@ -17,9 +17,9 @@
 package lotr.common.world.structure2;
 
 import java.lang.reflect.Constructor;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.Random;
 import lotr.common.LOTRFoods;
 import lotr.common.LOTRMod;
@@ -93,7 +93,7 @@ extends LOTRWorldGenGulfStructure {
                         this.setAir(world, i1, j1, k1);
                     }
                 }
-                if (!(k1 >= -6 && k1 <= -5 && i2 <= 4 || k1 == -5 && i2 >= 10 && i2 <= 12 || k2 == 4 && i2 <= 14 || k2 >= 2 && k2 <= 3 && i2 <= 15 || k2 <= 1 && i2 <= 16 || k1 == 5 && i2 <= 12 || k1 == 6 && i2 <= 9) && (k1 != 7 || i2 > 4)) continue;
+                if (!(k1 >= -6 && k1 <= -5 && i2 <= 4 || k1 == -5 && i2 >= 10 && i2 <= 12 || k2 == 4 && i2 <= 14 || k2 >= 2 && k2 <= 3 && i2 <= 15 || k2 <= 1 && i2 <= 16 || k1 == 5 && i2 <= 12 || k1 == 6 && i2 <= 9 || k1 == 7 && i2 <= 4)) continue;
                 for (j1 = 1; j1 <= 6; ++j1) {
                     this.setAir(world, i1, j1, k1);
                 }
@@ -146,16 +146,14 @@ extends LOTRWorldGenGulfStructure {
             guard.spawnRidingHorse = false;
             this.spawnNPCAndSetHome(guard, world, i1, j1, k1, 4);
         }
-        ArrayList<Class> stallClasses = new ArrayList<Class>(Arrays.asList(stalls));
-        while (stallClasses.size() > 5) {
-            stallClasses.remove(random.nextInt(stallClasses.size()));
-        }
+        List<Class> stallClasses = Arrays.asList(Arrays.copyOf(stalls, stalls.length));
+        Collections.shuffle(stallClasses, random);
         try {
-            LOTRWorldGenStructureBase2 stall0 = (LOTRWorldGenStructureBase2)((Object)((Class)stallClasses.get(0)).getConstructor(Boolean.TYPE).newInstance(this.notifyChanges));
-            LOTRWorldGenStructureBase2 stall1 = (LOTRWorldGenStructureBase2)((Object)((Class)stallClasses.get(1)).getConstructor(Boolean.TYPE).newInstance(this.notifyChanges));
-            LOTRWorldGenStructureBase2 stall2 = (LOTRWorldGenStructureBase2)((Object)((Class)stallClasses.get(2)).getConstructor(Boolean.TYPE).newInstance(this.notifyChanges));
-            LOTRWorldGenStructureBase2 stall3 = (LOTRWorldGenStructureBase2)((Object)((Class)stallClasses.get(3)).getConstructor(Boolean.TYPE).newInstance(this.notifyChanges));
-            LOTRWorldGenStructureBase2 stall4 = (LOTRWorldGenStructureBase2)((Object)((Class)stallClasses.get(4)).getConstructor(Boolean.TYPE).newInstance(this.notifyChanges));
+            LOTRWorldGenStructureBase2 stall0 = (LOTRWorldGenStructureBase2)((Object)stallClasses.get(0).getConstructor(Boolean.TYPE).newInstance(this.notifyChanges));
+            LOTRWorldGenStructureBase2 stall1 = (LOTRWorldGenStructureBase2)((Object)stallClasses.get(1).getConstructor(Boolean.TYPE).newInstance(this.notifyChanges));
+            LOTRWorldGenStructureBase2 stall2 = (LOTRWorldGenStructureBase2)((Object)stallClasses.get(2).getConstructor(Boolean.TYPE).newInstance(this.notifyChanges));
+            LOTRWorldGenStructureBase2 stall3 = (LOTRWorldGenStructureBase2)((Object)stallClasses.get(3).getConstructor(Boolean.TYPE).newInstance(this.notifyChanges));
+            LOTRWorldGenStructureBase2 stall4 = (LOTRWorldGenStructureBase2)((Object)stallClasses.get(4).getConstructor(Boolean.TYPE).newInstance(this.notifyChanges));
             this.generateSubstructure(stall0, world, random, -9, 1, 0, 3);
             this.generateSubstructure(stall1, world, random, -5, 1, 5, 1);
             this.generateSubstructure(stall2, world, random, 0, 1, 6, 1);
@@ -168,9 +166,67 @@ extends LOTRWorldGenGulfStructure {
         return true;
     }
 
-    private static class Farmer
+    private static class Mason
     extends LOTRWorldGenStructureBase2 {
-        public Farmer(boolean flag) {
+        public Mason(boolean flag) {
+            super(flag);
+        }
+
+        @Override
+        public boolean generateWithSetRotation(World world, Random random, int i, int j, int k, int rotation) {
+            this.setOriginAndRotation(world, i, j, k, rotation, 0);
+            this.setBlockAndMetadata(world, 2, 1, 2, LOTRMod.brick, 15);
+            this.setBlockAndMetadata(world, 2, 2, 2, LOTRMod.brick3, 13);
+            this.placeFlowerPot(world, 0, 2, 2, this.getRandomFlower(world, random));
+            this.placeWeaponRack(world, 3, 2, 2, 3, new ItemStack(LOTRMod.pickaxeBronze));
+            LOTREntityGulfMason trader = new LOTREntityGulfMason(world);
+            this.spawnNPCAndSetHome(trader, world, 2, 1, 1, 4);
+            return true;
+        }
+    }
+
+    private static class Butcher
+    extends LOTRWorldGenStructureBase2 {
+        public Butcher(boolean flag) {
+            super(flag);
+        }
+
+        @Override
+        public boolean generateWithSetRotation(World world, Random random, int i, int j, int k, int rotation) {
+            this.setOriginAndRotation(world, i, j, k, rotation, 0);
+            this.placePlate_item(world, random, 1, 2, 0, LOTRMod.woodPlateBlock, new ItemStack(LOTRMod.rabbitRaw, 1 + random.nextInt(3)), true);
+            this.placePlate_item(world, random, 0, 2, 2, LOTRMod.woodPlateBlock, new ItemStack(LOTRMod.camelRaw, 1 + random.nextInt(3)), true);
+            this.placePlate_item(world, random, 3, 2, 1, LOTRMod.woodPlateBlock, new ItemStack(LOTRMod.muttonRaw, 1 + random.nextInt(3)), true);
+            this.placeSkull(world, random, 2, 2, 3);
+            LOTREntityGulfButcher trader = new LOTREntityGulfButcher(world);
+            this.spawnNPCAndSetHome(trader, world, 2, 1, 1, 4);
+            return true;
+        }
+    }
+
+    private static class Brewer
+    extends LOTRWorldGenStructureBase2 {
+        public Brewer(boolean flag) {
+            super(flag);
+        }
+
+        @Override
+        public boolean generateWithSetRotation(World world, Random random, int i, int j, int k, int rotation) {
+            this.setOriginAndRotation(world, i, j, k, rotation, 0);
+            this.setBlockAndMetadata(world, 1, 1, 1, LOTRMod.barrel, 3);
+            this.placeMug(world, random, 1, 2, 0, 0, LOTRFoods.GULF_HARAD_DRINK);
+            this.placeMug(world, random, 0, 2, 2, 3, LOTRFoods.GULF_HARAD_DRINK);
+            this.placeMug(world, random, 3, 2, 1, 1, LOTRFoods.GULF_HARAD_DRINK);
+            this.placeFlowerPot(world, 2, 2, 3, this.getRandomFlower(world, random));
+            LOTREntityGulfBrewer trader = new LOTREntityGulfBrewer(world);
+            this.spawnNPCAndSetHome(trader, world, 2, 1, 1, 4);
+            return true;
+        }
+    }
+
+    private static class Fish
+    extends LOTRWorldGenStructureBase2 {
+        public Fish(boolean flag) {
             super(flag);
         }
 
@@ -178,29 +234,87 @@ extends LOTRWorldGenGulfStructure {
         public boolean generateWithSetRotation(World world, Random random, int i, int j, int k, int rotation) {
             this.setOriginAndRotation(world, i, j, k, rotation, 0);
             this.setBlockAndMetadata(world, 2, 1, 2, (Block)Blocks.cauldron, 3);
-            this.setBlockAndMetadata(world, 1, 2, 3, Blocks.hay_block, 0);
-            this.placePlate_item(world, random, 3, 2, 1, LOTRMod.woodPlateBlock, new ItemStack(LOTRMod.orange, 1 + random.nextInt(3)), true);
-            this.placeFlowerPot(world, 0, 2, 2, this.getRandomFlower(world, random));
-            LOTREntityGulfFarmer trader = new LOTREntityGulfFarmer(world);
+            this.placePlate_item(world, random, 1, 2, 0, LOTRMod.woodPlateBlock, new ItemStack(Items.fish, 1 + random.nextInt(3), 0), true);
+            this.placePlate_item(world, random, 0, 2, 2, LOTRMod.woodPlateBlock, new ItemStack(Items.fish, 1 + random.nextInt(3), 1), true);
+            this.placePlate_item(world, random, 3, 2, 1, LOTRMod.woodPlateBlock, new ItemStack(Items.fish, 1 + random.nextInt(3), 0), true);
+            this.placeWeaponRack(world, 1, 2, 3, 0, new ItemStack((Item)Items.fishing_rod));
+            LOTREntityGulfFishmonger trader = new LOTREntityGulfFishmonger(world);
             this.spawnNPCAndSetHome(trader, world, 2, 1, 1, 4);
             return true;
         }
     }
 
-    private static class Blacksmith
+    private static class Baker
     extends LOTRWorldGenStructureBase2 {
-        public Blacksmith(boolean flag) {
+        public Baker(boolean flag) {
             super(flag);
         }
 
         @Override
         public boolean generateWithSetRotation(World world, Random random, int i, int j, int k, int rotation) {
             this.setOriginAndRotation(world, i, j, k, rotation, 0);
-            this.setBlockAndMetadata(world, 2, 1, 2, Blocks.anvil, 3);
-            this.placeArmorStand(world, 1, 1, 2, 0, new ItemStack[]{null, new ItemStack(LOTRMod.bodyGulfHarad), null, null});
-            this.placeWeaponRack(world, 0, 2, 2, 1, new LOTRWorldGenGulfBazaar(false).getRandomGulfWeapon(random));
-            this.placeWeaponRack(world, 3, 2, 2, 3, new LOTRWorldGenGulfBazaar(false).getRandomGulfWeapon(random));
-            LOTREntityGulfBlacksmith trader = new LOTREntityGulfBlacksmith(world);
+            this.setBlockAndMetadata(world, 2, 1, 2, Blocks.furnace, 2);
+            this.setBlockAndMetadata(world, 1, 1, 2, LOTRMod.chestBasket, 2);
+            this.placePlate_item(world, random, 1, 2, 0, LOTRMod.ceramicPlateBlock, new ItemStack(Items.bread, 1 + random.nextInt(3)), true);
+            this.setBlockAndMetadata(world, 3, 2, 2, LOTRMod.bananaCake, 0);
+            this.placeWeaponRack(world, 0, 2, 2, 1, new ItemStack(LOTRMod.rollingPin));
+            LOTREntityGulfBaker trader = new LOTREntityGulfBaker(world);
+            this.spawnNPCAndSetHome(trader, world, 2, 1, 1, 4);
+            return true;
+        }
+    }
+
+    private static class Miner
+    extends LOTRWorldGenStructureBase2 {
+        public Miner(boolean flag) {
+            super(flag);
+        }
+
+        @Override
+        public boolean generateWithSetRotation(World world, Random random, int i, int j, int k, int rotation) {
+            this.setOriginAndRotation(world, i, j, k, rotation, 0);
+            this.setBlockAndMetadata(world, 1, 1, 2, LOTRMod.chestBasket, 2);
+            this.setBlockAndMetadata(world, 2, 1, 2, LOTRMod.oreTin, 0);
+            this.setBlockAndMetadata(world, 2, 2, 2, LOTRMod.oreCopper, 0);
+            this.placeWeaponRack(world, 0, 2, 2, 1, new ItemStack(LOTRMod.pickaxeBronze));
+            LOTREntityGulfMiner trader = new LOTREntityGulfMiner(world);
+            this.spawnNPCAndSetHome(trader, world, 2, 1, 1, 4);
+            return true;
+        }
+    }
+
+    private static class Goldsmith
+    extends LOTRWorldGenStructureBase2 {
+        public Goldsmith(boolean flag) {
+            super(flag);
+        }
+
+        @Override
+        public boolean generateWithSetRotation(World world, Random random, int i, int j, int k, int rotation) {
+            this.setOriginAndRotation(world, i, j, k, rotation, 0);
+            this.setBlockAndMetadata(world, 2, 2, 2, LOTRMod.birdCage, 3);
+            this.setBlockAndMetadata(world, 2, 3, 2, LOTRMod.goldBars, 0);
+            this.placeFlowerPot(world, 0, 2, 1, this.getRandomFlower(world, random));
+            LOTREntityGulfGoldsmith trader = new LOTREntityGulfGoldsmith(world);
+            this.spawnNPCAndSetHome(trader, world, 2, 1, 1, 4);
+            return true;
+        }
+    }
+
+    private static class Lumber
+    extends LOTRWorldGenStructureBase2 {
+        public Lumber(boolean flag) {
+            super(flag);
+        }
+
+        @Override
+        public boolean generateWithSetRotation(World world, Random random, int i, int j, int k, int rotation) {
+            this.setOriginAndRotation(world, i, j, k, rotation, 0);
+            this.setBlockAndMetadata(world, 2, 1, 2, LOTRMod.wood8, 3);
+            this.setBlockAndMetadata(world, 2, 2, 2, LOTRMod.wood8, 3);
+            this.placeFlowerPot(world, 0, 2, 2, new ItemStack(Blocks.sapling, 1, 4));
+            this.placeFlowerPot(world, 3, 2, 1, new ItemStack(LOTRMod.sapling8, 1, 3));
+            LOTREntityGulfLumberman trader = new LOTREntityGulfLumberman(world);
             this.spawnNPCAndSetHome(trader, world, 2, 1, 1, 4);
             return true;
         }
@@ -228,85 +342,28 @@ extends LOTRWorldGenGulfStructure {
         }
     }
 
-    private static class Lumber
+    private static class Blacksmith
     extends LOTRWorldGenStructureBase2 {
-        public Lumber(boolean flag) {
+        public Blacksmith(boolean flag) {
             super(flag);
         }
 
         @Override
         public boolean generateWithSetRotation(World world, Random random, int i, int j, int k, int rotation) {
             this.setOriginAndRotation(world, i, j, k, rotation, 0);
-            this.setBlockAndMetadata(world, 2, 1, 2, LOTRMod.wood8, 3);
-            this.setBlockAndMetadata(world, 2, 2, 2, LOTRMod.wood8, 3);
-            this.placeFlowerPot(world, 0, 2, 2, new ItemStack(Blocks.sapling, 1, 4));
-            this.placeFlowerPot(world, 3, 2, 1, new ItemStack(LOTRMod.sapling8, 1, 3));
-            LOTREntityGulfLumberman trader = new LOTREntityGulfLumberman(world);
+            this.setBlockAndMetadata(world, 2, 1, 2, Blocks.anvil, 3);
+            this.placeArmorStand(world, 1, 1, 2, 0, new ItemStack[]{null, new ItemStack(LOTRMod.bodyGulfHarad), null, null});
+            this.placeWeaponRack(world, 0, 2, 2, 1, new LOTRWorldGenGulfBazaar(false).getRandomGulfWeapon(random));
+            this.placeWeaponRack(world, 3, 2, 2, 3, new LOTRWorldGenGulfBazaar(false).getRandomGulfWeapon(random));
+            LOTREntityGulfBlacksmith trader = new LOTREntityGulfBlacksmith(world);
             this.spawnNPCAndSetHome(trader, world, 2, 1, 1, 4);
             return true;
         }
     }
 
-    private static class Goldsmith
+    private static class Farmer
     extends LOTRWorldGenStructureBase2 {
-        public Goldsmith(boolean flag) {
-            super(flag);
-        }
-
-        @Override
-        public boolean generateWithSetRotation(World world, Random random, int i, int j, int k, int rotation) {
-            this.setOriginAndRotation(world, i, j, k, rotation, 0);
-            this.setBlockAndMetadata(world, 2, 2, 2, LOTRMod.birdCage, 3);
-            this.setBlockAndMetadata(world, 2, 3, 2, LOTRMod.goldBars, 0);
-            this.placeFlowerPot(world, 0, 2, 1, this.getRandomFlower(world, random));
-            LOTREntityGulfGoldsmith trader = new LOTREntityGulfGoldsmith(world);
-            this.spawnNPCAndSetHome(trader, world, 2, 1, 1, 4);
-            return true;
-        }
-    }
-
-    private static class Miner
-    extends LOTRWorldGenStructureBase2 {
-        public Miner(boolean flag) {
-            super(flag);
-        }
-
-        @Override
-        public boolean generateWithSetRotation(World world, Random random, int i, int j, int k, int rotation) {
-            this.setOriginAndRotation(world, i, j, k, rotation, 0);
-            this.setBlockAndMetadata(world, 1, 1, 2, LOTRMod.chestBasket, 2);
-            this.setBlockAndMetadata(world, 2, 1, 2, LOTRMod.oreTin, 0);
-            this.setBlockAndMetadata(world, 2, 2, 2, LOTRMod.oreCopper, 0);
-            this.placeWeaponRack(world, 0, 2, 2, 1, new ItemStack(LOTRMod.pickaxeBronze));
-            LOTREntityGulfMiner trader = new LOTREntityGulfMiner(world);
-            this.spawnNPCAndSetHome(trader, world, 2, 1, 1, 4);
-            return true;
-        }
-    }
-
-    private static class Baker
-    extends LOTRWorldGenStructureBase2 {
-        public Baker(boolean flag) {
-            super(flag);
-        }
-
-        @Override
-        public boolean generateWithSetRotation(World world, Random random, int i, int j, int k, int rotation) {
-            this.setOriginAndRotation(world, i, j, k, rotation, 0);
-            this.setBlockAndMetadata(world, 2, 1, 2, Blocks.furnace, 2);
-            this.setBlockAndMetadata(world, 1, 1, 2, LOTRMod.chestBasket, 2);
-            this.placePlate_item(world, random, 1, 2, 0, LOTRMod.ceramicPlateBlock, new ItemStack(Items.bread, 1 + random.nextInt(3)), true);
-            this.setBlockAndMetadata(world, 3, 2, 2, LOTRMod.bananaCake, 0);
-            this.placeWeaponRack(world, 0, 2, 2, 1, new ItemStack(LOTRMod.rollingPin));
-            LOTREntityGulfBaker trader = new LOTREntityGulfBaker(world);
-            this.spawnNPCAndSetHome(trader, world, 2, 1, 1, 4);
-            return true;
-        }
-    }
-
-    private static class Fish
-    extends LOTRWorldGenStructureBase2 {
-        public Fish(boolean flag) {
+        public Farmer(boolean flag) {
             super(flag);
         }
 
@@ -314,69 +371,10 @@ extends LOTRWorldGenGulfStructure {
         public boolean generateWithSetRotation(World world, Random random, int i, int j, int k, int rotation) {
             this.setOriginAndRotation(world, i, j, k, rotation, 0);
             this.setBlockAndMetadata(world, 2, 1, 2, (Block)Blocks.cauldron, 3);
-            this.placePlate_item(world, random, 1, 2, 0, LOTRMod.woodPlateBlock, new ItemStack(Items.fish, 1 + random.nextInt(3), 0), true);
-            this.placePlate_item(world, random, 0, 2, 2, LOTRMod.woodPlateBlock, new ItemStack(Items.fish, 1 + random.nextInt(3), 1), true);
-            this.placePlate_item(world, random, 3, 2, 1, LOTRMod.woodPlateBlock, new ItemStack(Items.fish, 1 + random.nextInt(3), 0), true);
-            this.placeWeaponRack(world, 1, 2, 3, 0, new ItemStack((Item)Items.fishing_rod));
-            LOTREntityGulfFishmonger trader = new LOTREntityGulfFishmonger(world);
-            this.spawnNPCAndSetHome(trader, world, 2, 1, 1, 4);
-            return true;
-        }
-    }
-
-    private static class Brewer
-    extends LOTRWorldGenStructureBase2 {
-        public Brewer(boolean flag) {
-            super(flag);
-        }
-
-        @Override
-        public boolean generateWithSetRotation(World world, Random random, int i, int j, int k, int rotation) {
-            this.setOriginAndRotation(world, i, j, k, rotation, 0);
-            this.setBlockAndMetadata(world, 1, 1, 1, LOTRMod.barrel, 3);
-            this.placeMug(world, random, 1, 2, 0, 0, LOTRFoods.GULF_HARAD_DRINK);
-            this.placeMug(world, random, 0, 2, 2, 3, LOTRFoods.GULF_HARAD_DRINK);
-            this.placeMug(world, random, 3, 2, 1, 1, LOTRFoods.GULF_HARAD_DRINK);
-            this.placeFlowerPot(world, 2, 2, 3, this.getRandomFlower(world, random));
-            LOTREntityGulfBrewer trader = new LOTREntityGulfBrewer(world);
-            this.spawnNPCAndSetHome(trader, world, 2, 1, 1, 4);
-            return true;
-        }
-    }
-
-    private static class Butcher
-    extends LOTRWorldGenStructureBase2 {
-        public Butcher(boolean flag) {
-            super(flag);
-        }
-
-        @Override
-        public boolean generateWithSetRotation(World world, Random random, int i, int j, int k, int rotation) {
-            this.setOriginAndRotation(world, i, j, k, rotation, 0);
-            this.placePlate_item(world, random, 1, 2, 0, LOTRMod.woodPlateBlock, new ItemStack(LOTRMod.rabbitRaw, 1 + random.nextInt(3)), true);
-            this.placePlate_item(world, random, 0, 2, 2, LOTRMod.woodPlateBlock, new ItemStack(LOTRMod.camelRaw, 1 + random.nextInt(3)), true);
-            this.placePlate_item(world, random, 3, 2, 1, LOTRMod.woodPlateBlock, new ItemStack(LOTRMod.muttonRaw, 1 + random.nextInt(3)), true);
-            this.placeSkull(world, random, 2, 2, 3);
-            LOTREntityGulfButcher trader = new LOTREntityGulfButcher(world);
-            this.spawnNPCAndSetHome(trader, world, 2, 1, 1, 4);
-            return true;
-        }
-    }
-
-    private static class Mason
-    extends LOTRWorldGenStructureBase2 {
-        public Mason(boolean flag) {
-            super(flag);
-        }
-
-        @Override
-        public boolean generateWithSetRotation(World world, Random random, int i, int j, int k, int rotation) {
-            this.setOriginAndRotation(world, i, j, k, rotation, 0);
-            this.setBlockAndMetadata(world, 2, 1, 2, LOTRMod.brick, 15);
-            this.setBlockAndMetadata(world, 2, 2, 2, LOTRMod.brick3, 13);
+            this.setBlockAndMetadata(world, 1, 2, 3, Blocks.hay_block, 0);
+            this.placePlate_item(world, random, 3, 2, 1, LOTRMod.woodPlateBlock, new ItemStack(LOTRMod.orange, 1 + random.nextInt(3)), true);
             this.placeFlowerPot(world, 0, 2, 2, this.getRandomFlower(world, random));
-            this.placeWeaponRack(world, 3, 2, 2, 3, new ItemStack(LOTRMod.pickaxeBronze));
-            LOTREntityGulfMason trader = new LOTREntityGulfMason(world);
+            LOTREntityGulfFarmer trader = new LOTREntityGulfFarmer(world);
             this.spawnNPCAndSetHome(trader, world, 2, 1, 1, 4);
             return true;
         }

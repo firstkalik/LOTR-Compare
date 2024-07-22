@@ -63,9 +63,9 @@ extends LOTRTileEntityForgeBase {
     }
 
     private boolean canSmelt(int i) {
-        int resultSize;
         ItemStack alloyResult;
         ItemStack result;
+        int resultSize;
         if (this.inventory[i] == null) {
             return false;
         }
@@ -135,7 +135,7 @@ extends LOTRTileEntityForgeBase {
             if (material == Material.rock || material == Material.sand || material == Material.clay) {
                 isStoneMaterial = true;
             }
-        } else if (item == Items.clay_ball || item == LOTRMod.clayMug || item == LOTRMod.clayPlate || item == LOTRMod.ceramicPlate) {
+        } else if (item == Items.clay_ball || item == LOTRMod.clayMug || item == LOTRMod.goldRaw || item == LOTRMod.ironRaw || item == LOTRMod.clayPlate || item == LOTRMod.ceramicPlate) {
             isStoneMaterial = true;
         }
         if (isStoneMaterial || this.isWood(itemstack)) {
@@ -167,20 +167,60 @@ extends LOTRTileEntityForgeBase {
         return LOTRMod.isOreNameEqual(itemstack, "oreGold") || LOTRMod.isOreNameEqual(itemstack, "ingotGold");
     }
 
+    protected boolean isGold1(ItemStack itemstack) {
+        return itemstack.getItem() == Item.getItemFromBlock((Block)LOTRMod.oreGold) || itemstack.getItem() == LOTRMod.goldRaw;
+    }
+
+    protected boolean isIronRaw(ItemStack itemstack) {
+        return itemstack.getItem() == LOTRMod.ironRaw;
+    }
+
+    protected boolean isIron1(ItemStack itemstack) {
+        return itemstack.getItem() == Item.getItemFromBlock((Block)LOTRMod.oreIron) || itemstack.getItem() == LOTRMod.ironRaw;
+    }
+
     protected boolean isGoldNugget(ItemStack itemstack) {
         return LOTRMod.isOreNameEqual(itemstack, "nuggetGold");
+    }
+
+    protected boolean isGoldOre(ItemStack itemstack) {
+        return LOTRMod.isOreNameEqual(itemstack, "oreGold");
+    }
+
+    protected boolean isIronOre(ItemStack itemstack) {
+        return LOTRMod.isOreNameEqual(itemstack, "oreIron");
+    }
+
+    protected boolean isIronNugget(ItemStack itemstack) {
+        return itemstack.getItem() == LOTRMod.ironNugget;
+    }
+
+    protected boolean isDwarvenNugget(ItemStack itemstack) {
+        return itemstack.getItem() == LOTRMod.dwarvenNugget;
     }
 
     protected boolean isSilver(ItemStack itemstack) {
         return LOTRMod.isOreNameEqual(itemstack, "oreSilver") || LOTRMod.isOreNameEqual(itemstack, "ingotSilver");
     }
 
+    protected boolean isSilverOre(ItemStack itemstack) {
+        return LOTRMod.isOreNameEqual(itemstack, "oreSilver");
+    }
+
     protected boolean isSilverNugget(ItemStack itemstack) {
-        return LOTRMod.isOreNameEqual(itemstack, "nuggetSilver");
+        return itemstack.getItem() == LOTRMod.silverNugget;
     }
 
     protected boolean isMithril(ItemStack itemstack) {
         return itemstack.getItem() == Item.getItemFromBlock((Block)LOTRMod.oreMithril) || itemstack.getItem() == LOTRMod.mithril;
+    }
+
+    protected boolean isMithril1(ItemStack itemstack) {
+        return itemstack.getItem() == Item.getItemFromBlock((Block)LOTRMod.oreMithril);
+    }
+
+    protected boolean isMithrilOre(ItemStack itemstack) {
+        return LOTRMod.isOreNameEqual(itemstack, "oreMithril");
     }
 
     protected boolean isMithrilNugget(ItemStack itemstack) {

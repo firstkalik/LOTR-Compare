@@ -128,9 +128,7 @@ extends LOTRBlockFlower {
                 boolean canGenerate = true;
                 block2: for (int i2 = -1; i2 <= 1; ++i2) {
                     for (int k2 = -1; k2 <= 1; ++k2) {
-                        int i3;
-                        int k3;
-                        if (Math.abs(i2) != 0 && Math.abs(k2) != 0 || LOTRBlockSaplingBase.isSameSapling(world, i3 = i + i1 + i2, j, k3 = k + k1 + k2, block, meta)) continue;
+                        if (Math.abs(i2) != 0 && Math.abs(k2) != 0 || LOTRBlockSaplingBase.isSameSapling(world, i + i1 + i2, j, k + k1 + k2, block, meta)) continue;
                         canGenerate = false;
                         break block2;
                     }

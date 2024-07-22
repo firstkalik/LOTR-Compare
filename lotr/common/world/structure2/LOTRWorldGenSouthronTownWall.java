@@ -39,10 +39,10 @@ extends LOTRWorldGenSouthronStructure {
         this.setOriginAndRotation(world, i, j, k, rotation, 0);
         this.setupRandomBlocks(random);
         for (int i1 = -this.leftExtent; i1 <= this.rightExtent; ++i1) {
-            int pillarOffset;
-            int k3;
             int j1;
-            int i2 = Math.abs(i1);
+            int k3;
+            int pillarOffset;
+            Math.abs(i1);
             int k1 = 0;
             this.findSurface(world, i1, k1);
             for (int k32 = k1; k32 <= k1 + 1; ++k32) {
@@ -93,12 +93,22 @@ extends LOTRWorldGenSouthronStructure {
         return true;
     }
 
-    public static class Extra
+    public static class Short
     extends LOTRWorldGenSouthronTownWall {
-        public Extra(boolean flag) {
+        public Short(boolean flag) {
             super(flag);
             this.centrePillar = true;
             this.leftExtent = 1;
+            this.rightExtent = 1;
+        }
+    }
+
+    public static class Long
+    extends LOTRWorldGenSouthronTownWall {
+        public Long(boolean flag) {
+            super(flag);
+            this.centrePillar = true;
+            this.leftExtent = 2;
             this.rightExtent = 2;
         }
     }
@@ -113,23 +123,13 @@ extends LOTRWorldGenSouthronStructure {
         }
     }
 
-    public static class Long
+    public static class Extra
     extends LOTRWorldGenSouthronTownWall {
-        public Long(boolean flag) {
-            super(flag);
-            this.centrePillar = true;
-            this.leftExtent = 2;
-            this.rightExtent = 2;
-        }
-    }
-
-    public static class Short
-    extends LOTRWorldGenSouthronTownWall {
-        public Short(boolean flag) {
+        public Extra(boolean flag) {
             super(flag);
             this.centrePillar = true;
             this.leftExtent = 1;
-            this.rightExtent = 1;
+            this.rightExtent = 2;
         }
     }
 

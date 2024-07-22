@@ -38,8 +38,7 @@ extends RenderLiving {
         this.bindEntityTexture((Entity)entity);
         this.mainModel.setRotationAngles(f, f1, f2, f3, f4, f5, (Entity)entity);
         LOTREntityMidges midges = (LOTREntityMidges)entity;
-        for (int l = 0; l < midges.midges.length; ++l) {
-            LOTREntityMidges.Midge midge = midges.midges[l];
+        for (LOTREntityMidges.Midge midge : midges.midges) {
             GL11.glPushMatrix();
             GL11.glTranslatef((float)(midge.midge_prevPosX + (midge.midge_posX - midge.midge_prevPosX) * this.renderTick), (float)(midge.midge_prevPosY + (midge.midge_posY - midge.midge_prevPosY) * this.renderTick), (float)(midge.midge_prevPosZ + (midge.midge_posZ - midge.midge_prevPosZ) * this.renderTick));
             GL11.glRotatef((float)midge.midge_rotation, (float)0.0f, (float)1.0f, (float)0.0f);

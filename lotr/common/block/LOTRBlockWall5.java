@@ -19,7 +19,7 @@ import net.minecraft.util.IIcon;
 public class LOTRBlockWall5
 extends LOTRBlockWallBase {
     public LOTRBlockWall5() {
-        super(LOTRMod.brick, 5);
+        super(LOTRMod.brick, 3);
     }
 
     @SideOnly(value=Side.CLIENT)
@@ -32,12 +32,6 @@ extends LOTRBlockWallBase {
         }
         if (j == 2) {
             return LOTRMod.brick6.getIcon(i, 10);
-        }
-        if (j == 3) {
-            return LOTRMod.brick6.getIcon(i, 11);
-        }
-        if (j == 4) {
-            return LOTRMod.brick6.getIcon(i, 13);
         }
         return super.getIcon(i, j);
     }

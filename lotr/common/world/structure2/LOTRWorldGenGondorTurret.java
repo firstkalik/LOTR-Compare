@@ -30,16 +30,16 @@ extends LOTRWorldGenStructureBase2 {
 
     @Override
     public boolean generateWithSetRotation(World world, Random random, int i, int j, int k, int rotation) {
-        int k1;
-        int i1;
         int j1;
         int j12;
+        int k1;
+        int i1;
         this.setOriginAndRotation(world, i, j, k, rotation, 3);
         if (this.restrictions) {
             for (i1 = -2; i1 <= 2; ++i1) {
                 for (k1 = -2; k1 <= 2; ++k1) {
-                    j1 = this.getTopBlock(world, i1, k1);
-                    Block block = this.getBlock(world, i1, j1 - 1, k1);
+                    j12 = this.getTopBlock(world, i1, k1);
+                    Block block = this.getBlock(world, i1, j12 - 1, k1);
                     if (block == Blocks.grass) continue;
                     return false;
                 }
@@ -48,22 +48,22 @@ extends LOTRWorldGenStructureBase2 {
         for (i1 = -2; i1 <= 2; ++i1) {
             for (k1 = -2; k1 <= 2; ++k1) {
                 this.setBlockAndMetadata(world, i1, 0, k1, LOTRMod.slabDouble, 2);
-                j1 = -1;
-                while (!this.isOpaque(world, i1, j1, k1) && this.getY(j1) >= 0) {
-                    this.setBlockAndMetadata(world, i1, j1, k1, LOTRMod.slabDouble, 2);
-                    this.setGrassToDirt(world, i1, j1 - 1, k1);
-                    --j1;
+                j12 = -1;
+                while (!this.isOpaque(world, i1, j12, k1) && this.getY(j12) >= 0) {
+                    this.setBlockAndMetadata(world, i1, j12, k1, LOTRMod.slabDouble, 2);
+                    this.setGrassToDirt(world, i1, j12 - 1, k1);
+                    --j12;
                 }
             }
         }
-        for (j12 = 1; j12 <= 4; ++j12) {
+        for (j1 = 1; j1 <= 4; ++j1) {
             for (int i12 = -1; i12 <= 1; ++i12) {
                 for (int k12 = -1; k12 <= 1; ++k12) {
                     if (Math.abs(i12) == 1 && Math.abs(k12) == 1) {
-                        this.setBlockAndMetadata(world, i12, j12, k12, LOTRMod.brick, 5);
+                        this.setBlockAndMetadata(world, i12, j1, k12, LOTRMod.brick, 5);
                         continue;
                     }
-                    this.setBlockAndMetadata(world, i12, j12, k12, LOTRMod.rock, 1);
+                    this.setBlockAndMetadata(world, i12, j1, k12, LOTRMod.rock, 1);
                 }
             }
         }
@@ -71,11 +71,11 @@ extends LOTRWorldGenStructureBase2 {
         this.setBlockAndMetadata(world, -2, 1, 2, LOTRMod.slabDouble, 2);
         this.setBlockAndMetadata(world, 2, 1, -2, LOTRMod.slabDouble, 2);
         this.setBlockAndMetadata(world, 2, 1, 2, LOTRMod.slabDouble, 2);
-        for (j12 = 2; j12 <= 4; ++j12) {
-            this.setBlockAndMetadata(world, -2, j12, -2, LOTRMod.wall, 2);
-            this.setBlockAndMetadata(world, -2, j12, 2, LOTRMod.wall, 2);
-            this.setBlockAndMetadata(world, 2, j12, -2, LOTRMod.wall, 2);
-            this.setBlockAndMetadata(world, 2, j12, 2, LOTRMod.wall, 2);
+        for (j1 = 2; j1 <= 4; ++j1) {
+            this.setBlockAndMetadata(world, -2, j1, -2, LOTRMod.wall, 2);
+            this.setBlockAndMetadata(world, -2, j1, 2, LOTRMod.wall, 2);
+            this.setBlockAndMetadata(world, 2, j1, -2, LOTRMod.wall, 2);
+            this.setBlockAndMetadata(world, 2, j1, 2, LOTRMod.wall, 2);
         }
         this.setBlockAndMetadata(world, -2, 5, -2, Blocks.log, 0);
         this.setBlockAndMetadata(world, -2, 5, 2, Blocks.log, 0);
@@ -100,8 +100,8 @@ extends LOTRWorldGenStructureBase2 {
             this.setBlockAndMetadata(world, i1, 4, 2, Blocks.log, 0);
             this.setBlockAndMetadata(world, i1, 5, 2, Blocks.log, 0);
         }
-        for (j12 = 1; j12 <= 4; ++j12) {
-            this.setBlockAndMetadata(world, 0, j12, 0, Blocks.ladder, 2);
+        for (j1 = 1; j1 <= 4; ++j1) {
+            this.setBlockAndMetadata(world, 0, j1, 0, Blocks.ladder, 2);
         }
         this.setBlockAndMetadata(world, 0, 1, -1, LOTRMod.doorLebethron, 1);
         this.setBlockAndMetadata(world, 0, 2, -1, LOTRMod.doorLebethron, 8);

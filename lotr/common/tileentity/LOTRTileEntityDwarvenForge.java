@@ -26,7 +26,7 @@ extends LOTRTileEntityAlloyForgeBase {
     @Override
     public ItemStack getSmeltingResult(ItemStack itemstack) {
         if (itemstack.getItem() == Item.getItemFromBlock((Block)LOTRMod.oreMithril)) {
-            return new ItemStack(LOTRMod.mithril);
+            return new ItemStack(LOTRMod.mithril, 1);
         }
         return super.getSmeltingResult(itemstack);
     }

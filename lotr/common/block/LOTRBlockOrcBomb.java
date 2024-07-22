@@ -158,7 +158,7 @@ extends Block {
     }
 
     public boolean canDropFromExplosion(Explosion explosion) {
-        return false;
+        return true;
     }
 
     public int damageDropped(int i) {

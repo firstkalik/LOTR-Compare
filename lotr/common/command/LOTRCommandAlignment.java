@@ -43,6 +43,7 @@ extends CommandBase {
 
     public void processCommand(ICommandSender sender, String[] args) {
         if (args.length >= 2) {
+            EntityPlayerMP entityplayer;
             List<Object> factions = new ArrayList();
             if (args[1].equalsIgnoreCase("all")) {
                 factions = LOTRFaction.getPlayableAlignmentFactions();
@@ -54,30 +55,28 @@ extends CommandBase {
                 factions.add((Object)faction);
             }
             if (args[0].equals("set")) {
-                EntityPlayerMP entityplayer;
-                float alignment = (float)LOTRCommandAlignment.parseDoubleBounded((ICommandSender)sender, (String)args[2], (double)-10000.0, (double)10000.0);
+                float alignment = (float)CommandBase.parseDoubleBounded((ICommandSender)sender, (String)args[2], (double)-1.0E7, (double)1.0E7);
                 if (args.length >= 4) {
-                    entityplayer = LOTRCommandAlignment.getPlayer((ICommandSender)sender, (String)args[3]);
+                    entityplayer = CommandBase.getPlayer((ICommandSender)sender, (String)args[3]);
                 } else {
-                    entityplayer = LOTRCommandAlignment.getCommandSenderAsPlayer((ICommandSender)sender);
+                    entityplayer = CommandBase.getCommandSenderAsPlayer((ICommandSender)sender);
                     if (entityplayer == null) {
                         throw new PlayerNotFoundException();
                     }
                 }
                 for (LOTRFaction f : factions) {
                     LOTRLevelData.getData((EntityPlayer)entityplayer).setAlignmentFromCommand(f, alignment);
-                    LOTRCommandAlignment.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.alignment.set", (Object[])new Object[]{entityplayer.getCommandSenderName(), f.factionName(), Float.valueOf(alignment)});
+                    CommandBase.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.alignment.set", (Object[])new Object[]{entityplayer.getCommandSenderName(), f.factionName(), Float.valueOf(alignment)});
                 }
                 return;
             }
             if (args[0].equals("add")) {
                 float newAlignment;
-                EntityPlayerMP entityplayer;
-                float alignment = (float)LOTRCommandAlignment.parseDouble((ICommandSender)sender, (String)args[2]);
+                float alignment = (float)CommandBase.parseDouble((ICommandSender)sender, (String)args[2]);
                 if (args.length >= 4) {
-                    entityplayer = LOTRCommandAlignment.getPlayer((ICommandSender)sender, (String)args[3]);
+                    entityplayer = CommandBase.getPlayer((ICommandSender)sender, (String)args[3]);
                 } else {
-                    entityplayer = LOTRCommandAlignment.getCommandSenderAsPlayer((ICommandSender)sender);
+                    entityplayer = CommandBase.getCommandSenderAsPlayer((ICommandSender)sender);
                     if (entityplayer == null) {
                         throw new PlayerNotFoundException();
                     }
@@ -85,18 +84,18 @@ extends CommandBase {
                 HashMap<LOTRFaction, Float> newAlignments = new HashMap<LOTRFaction, Float>();
                 for (LOTRFaction f : factions) {
                     newAlignment = LOTRLevelData.getData((EntityPlayer)entityplayer).getAlignment(f) + alignment;
-                    if (newAlignment < -10000.0f) {
-                        throw new WrongUsageException("commands.lotr.alignment.tooLow", new Object[]{Float.valueOf(-10000.0f)});
+                    if (newAlignment < -1.0E7f) {
+                        throw new WrongUsageException("commands.lotr.alignment.tooLow", new Object[]{Float.valueOf(-1.0E7f)});
                     }
-                    if (newAlignment > 10000.0f) {
-                        throw new WrongUsageException("commands.lotr.alignment.tooHigh", new Object[]{Float.valueOf(10000.0f)});
+                    if (newAlignment > 1.0E7f) {
+                        throw new WrongUsageException("commands.lotr.alignment.tooHigh", new Object[]{Float.valueOf(1.0E7f)});
                     }
                     newAlignments.put(f, Float.valueOf(newAlignment));
                 }
                 for (LOTRFaction f : factions) {
                     newAlignment = ((Float)newAlignments.get((Object)f)).floatValue();
                     LOTRLevelData.getData((EntityPlayer)entityplayer).addAlignmentFromCommand(f, alignment);
-                    LOTRCommandAlignment.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.alignment.add", (Object[])new Object[]{Float.valueOf(alignment), entityplayer.getCommandSenderName(), f.factionName()});
+                    CommandBase.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.alignment.add", (Object[])new Object[]{Float.valueOf(alignment), entityplayer.getCommandSenderName(), f.factionName()});
                 }
                 return;
             }
@@ -106,15 +105,15 @@ extends CommandBase {
 
     public List addTabCompletionOptions(ICommandSender sender, String[] args) {
         if (args.length == 1) {
-            return LOTRCommandAlignment.getListOfStringsMatchingLastWord((String[])args, (String[])new String[]{"set", "add"});
+            return CommandBase.getListOfStringsMatchingLastWord((String[])args, (String[])new String[]{"set", "add"});
         }
         if (args.length == 2) {
             List<String> list = LOTRFaction.getPlayableAlignmentFactionNames();
             list.add("all");
-            return LOTRCommandAlignment.getListOfStringsMatchingLastWord((String[])args, (String[])list.toArray(new String[0]));
+            return CommandBase.getListOfStringsMatchingLastWord((String[])args, (String[])list.toArray(new String[0]));
         }
         if (args.length == 4) {
-            return LOTRCommandAlignment.getListOfStringsMatchingLastWord((String[])args, (String[])MinecraftServer.getServer().getAllUsernames());
+            return CommandBase.getListOfStringsMatchingLastWord((String[])args, (String[])MinecraftServer.getServer().getAllUsernames());
         }
         return null;
     }

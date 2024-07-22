@@ -96,7 +96,7 @@ extends Item {
 
     public float getRangedDamageMultiplier(ItemStack itemstack, Entity shooter, Entity hit) {
         float damage = this.axeMaterial.getDamageVsEntity() + 4.0f;
-        damage = shooter instanceof EntityLivingBase && hit instanceof EntityLivingBase ? (damage += EnchantmentHelper.getEnchantmentModifierLiving((EntityLivingBase)((EntityLivingBase)shooter), (EntityLivingBase)((EntityLivingBase)hit))) : (damage += EnchantmentHelper.func_152377_a((ItemStack)itemstack, (EnumCreatureAttribute)EnumCreatureAttribute.UNDEFINED));
+        damage = shooter instanceof EntityLivingBase && hit instanceof EntityLivingBase ? (damage = damage + EnchantmentHelper.getEnchantmentModifierLiving((EntityLivingBase)((EntityLivingBase)shooter), (EntityLivingBase)((EntityLivingBase)hit))) : (damage = damage + EnchantmentHelper.func_152377_a((ItemStack)itemstack, (EnumCreatureAttribute)EnumCreatureAttribute.UNDEFINED));
         return damage * 0.5f;
     }
 }

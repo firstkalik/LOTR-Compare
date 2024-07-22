@@ -102,9 +102,8 @@ public class LOTRLang {
                     BufferedReader reader = new BufferedReader(new InputStreamReader((InputStream)new BOMInputStream((InputStream)new FileInputStream(oldLang_temp)), Charsets.UTF_8.name()));
                     String line = "";
                     while ((line = reader.readLine()) != null) {
-                        String key;
                         int i2 = line.indexOf("=");
-                        if (i2 < 0 || !(key = line.substring(0, i2)).equals(en_US_key)) continue;
+                        if (i2 < 0 || !line.substring(0, i2).equals(en_US_key)) continue;
                         foundKey = true;
                         writer.println(line);
                         break;

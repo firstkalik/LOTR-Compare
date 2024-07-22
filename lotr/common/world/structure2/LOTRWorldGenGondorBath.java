@@ -30,10 +30,10 @@ extends LOTRWorldGenGondorStructure {
 
     @Override
     public boolean generateWithSetRotation(World world, Random random, int i, int j, int k, int rotation) {
-        int i1;
-        int k1;
         int j1;
         int k2;
+        int k1;
+        int i1;
         int i2;
         this.setOriginAndRotation(world, i, j, k, rotation, 10);
         this.setupRandomBlocks(random);
@@ -116,23 +116,25 @@ extends LOTRWorldGenGondorStructure {
             }
         }
         for (int step = 0; step <= 3; ++step) {
+            int i22;
+            int k22;
             int j13 = 5 + step;
             int i12 = 11 - step;
             int k12 = 9 - step;
-            for (int i22 = -i12; i22 <= i12; ++i22) {
+            for (i22 = -i12; i22 <= i12; ++i22) {
                 this.setBlockAndMetadata(world, i22, j13, -k12, this.brick2StairBlock, 2);
                 this.setBlockAndMetadata(world, i22, j13, k12, this.brick2StairBlock, 3);
             }
-            for (int k22 = -k12 + 1; k22 <= k12 - 1; ++k22) {
+            for (k22 = -k12 + 1; k22 <= k12 - 1; ++k22) {
                 this.setBlockAndMetadata(world, -i12, j13, k22, this.brick2StairBlock, 1);
                 this.setBlockAndMetadata(world, i12, j13, k22, this.brick2StairBlock, 0);
             }
             if (step < 2) continue;
-            for (int i22 = -i12 + 1; i22 <= i12 - 1; ++i22) {
+            for (i22 = -i12 + 1; i22 <= i12 - 1; ++i22) {
                 this.setBlockAndMetadata(world, i22, j13 - 1, -k12, this.brick2StairBlock, 7);
                 this.setBlockAndMetadata(world, i22, j13 - 1, k12, this.brick2StairBlock, 6);
             }
-            for (int k22 = -k12; k22 <= k12; ++k22) {
+            for (k22 = -k12; k22 <= k12; ++k22) {
                 this.setBlockAndMetadata(world, -i12, j13 - 1, k22, this.brick2StairBlock, 4);
                 this.setBlockAndMetadata(world, i12, j13 - 1, k22, this.brick2StairBlock, 5);
             }
@@ -146,7 +148,7 @@ extends LOTRWorldGenGondorStructure {
             for (k1 = -7; k1 <= 7; ++k1) {
                 i2 = Math.abs(i1);
                 k2 = Math.abs(k1);
-                if ((i2 != 9 || k2 % 4 != 0) && (k2 != 7 || i2 % 4 != 2)) continue;
+                if (!(i2 == 9 && k2 % 4 == 0 || k2 == 7 && i2 % 4 == 2)) continue;
                 for (int j14 = 5; j14 <= 6; ++j14) {
                     this.setBlockAndMetadata(world, i1, j14, k1, this.brickBlock, this.brickMeta);
                 }

@@ -118,14 +118,14 @@ extends ModelBase {
     }
 
     public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
-        boolean showAntlers;
         LOTREntityElk elk = (LOTREntityElk)entity;
         this.setRotationAngles(f, f1, f2, f3, f4, f5, (Entity)elk);
         GL11.glPushMatrix();
         float scale = elk.getHorseSize();
         GL11.glTranslatef((float)0.0f, (float)(24.0f * (1.0f - scale) * f5), (float)0.0f);
         GL11.glScalef((float)scale, (float)scale, (float)scale);
-        this.antlersRight_1.showModel = showAntlers = scale > 0.75f;
+        boolean showAntlers = scale > 0.75f;
+        this.antlersRight_1.showModel = showAntlers;
         this.antlersRight_2.showModel = showAntlers;
         this.antlersRight_3.showModel = showAntlers;
         this.antlersRight_4.showModel = showAntlers;

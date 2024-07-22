@@ -22,6 +22,7 @@ import lotr.common.world.biome.LOTRBiomeGenBlueMountainsFoothills;
 import lotr.common.world.biome.LOTRBiomeGenErebor;
 import lotr.common.world.biome.LOTRBiomeGenGreyMountains;
 import lotr.common.world.biome.LOTRBiomeGenIronHills;
+import lotr.common.world.biome.LOTRBiomeGenWindMountains;
 import lotr.common.world.mapgen.dwarvenmine.LOTRComponentDwarvenMineCorridor;
 import lotr.common.world.mapgen.dwarvenmine.LOTRComponentDwarvenMineCrossing;
 import lotr.common.world.mapgen.dwarvenmine.LOTRComponentDwarvenMineEntrance;
@@ -57,6 +58,9 @@ extends MapGenStructure {
                     mine = true;
                 }
                 if (biome instanceof LOTRBiomeGenGreyMountains) {
+                    ruined = true;
+                }
+                if (biome instanceof LOTRBiomeGenWindMountains) {
                     ruined = true;
                 }
                 if (biome instanceof LOTRBiomeGenErebor) {

@@ -34,7 +34,7 @@ implements LOTRUnitTradeable {
     public LOTREntityDorwinionElfCaptain(World world) {
         super(world);
         this.addTargetTasks(false);
-        this.npcCape = LOTRCapes.DORWINION_ELF_CAPTAIN;
+        this.npcCape = LOTRCapes.DORWINION_ELF_CAPTAIN.capeTexture;
     }
 
     @Override
@@ -61,7 +61,7 @@ implements LOTRUnitTradeable {
     }
 
     @Override
-    public LOTRInvasions getWarhorn() {
+    public LOTRInvasions getConquestHorn() {
         return LOTRInvasions.DORWINION_ELF;
     }
 

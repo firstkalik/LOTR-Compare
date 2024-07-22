@@ -19,7 +19,6 @@ import org.lwjgl.opengl.GL11;
 public class LOTRModelHobbit
 extends LOTRModelBiped {
     public ModelRenderer bipedChest;
-    private static final float F_10_12 = 0.8333333f;
 
     public LOTRModelHobbit() {
         this(0.0f);

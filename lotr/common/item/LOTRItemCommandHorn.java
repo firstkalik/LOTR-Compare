@@ -17,6 +17,7 @@ package lotr.common.item;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import java.util.List;
+import lotr.common.LOTRBannerProtection;
 import lotr.common.LOTRCreativeTabs;
 import lotr.common.LOTRMod;
 import lotr.common.LOTRSquadrons;
@@ -41,11 +42,17 @@ implements LOTRSquadrons.SquadronItem {
     }
 
     public ItemStack onEaten(ItemStack itemstack, World world, EntityPlayer entityplayer) {
+        double posX = Math.floor(entityplayer.posX);
+        double posY = Math.floor(entityplayer.posY);
+        double posZ = Math.floor(entityplayer.posZ);
         if (!world.isRemote) {
+            if (LOTRBannerProtection.isProtected(world, (int)posX, (int)posY, (int)posZ, LOTRBannerProtection.forPlayer(entityplayer), true)) {
+                return itemstack;
+            }
             List entities = world.loadedEntityList;
-            for (int l = 0; l < entities.size(); ++l) {
-                if (!(entities.get(l) instanceof LOTREntityNPC)) continue;
-                LOTREntityNPC npc = (LOTREntityNPC)entities.get(l);
+            for (Entity entity : entities) {
+                if (!(entity instanceof LOTREntityNPC)) continue;
+                LOTREntityNPC npc = (LOTREntityNPC)entity;
                 if (!npc.hiredNPCInfo.isActive || npc.hiredNPCInfo.getHiringPlayer() != entityplayer || !LOTRSquadrons.areSquadronsCompatible(npc, itemstack)) continue;
                 if (itemstack.getItemDamage() == 1 && npc.hiredNPCInfo.getObeyHornHaltReady()) {
                     npc.hiredNPCInfo.halt();

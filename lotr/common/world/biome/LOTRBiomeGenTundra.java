@@ -30,6 +30,8 @@ import lotr.common.LOTRMod;
 import lotr.common.entity.animal.LOTREntityBear;
 import lotr.common.entity.animal.LOTREntityDeer;
 import lotr.common.entity.animal.LOTREntityElk;
+import lotr.common.entity.npc.LOTREntityBandit;
+import lotr.common.entity.npc.LOTREntityBanditNorth;
 import lotr.common.world.biome.LOTRBiome;
 import lotr.common.world.biome.LOTRBiomeDecorator;
 import lotr.common.world.biome.LOTRMusicRegion;
@@ -73,12 +75,9 @@ extends LOTRBiome {
         this.spawnableCreatureList.add(new BiomeGenBase.SpawnListEntry(LOTREntityBear.class, 10, 1, 4));
         this.spawnableLOTRAmbientList.clear();
         this.npcSpawnList.clear();
-        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer = new LOTRBiomeSpawnList.SpawnListContainer[2];
-        arrspawnListContainer[0] = LOTRBiomeSpawnList.entry(LOTRSpawnList.GUNDABAD_ORCS, 10).setSpawnChance(1000);
-        arrspawnListContainer[1] = LOTRBiomeSpawnList.entry(LOTRSpawnList.GUNDABAD_WARGS, 5).setSpawnChance(1000);
+        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer = new LOTRBiomeSpawnList.SpawnListContainer[]{LOTRBiomeSpawnList.entry(LOTRSpawnList.GUNDABAD_ORCS, 10).setSpawnChance(1000), LOTRBiomeSpawnList.entry(LOTRSpawnList.GUNDABAD_WARGS, 5).setSpawnChance(1000), LOTRBiomeSpawnList.entry(LOTRSpawnList.TUNDRA_TROLLS, 5).setSpawnChance(1000)};
         this.npcSpawnList.newFactionList(100).add(arrspawnListContainer);
-        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer2 = new LOTRBiomeSpawnList.SpawnListContainer[1];
-        arrspawnListContainer2[0] = LOTRBiomeSpawnList.entry(LOTRSpawnList.RANGERS_NORTH, 10).setSpawnChance(5000);
+        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer2 = new LOTRBiomeSpawnList.SpawnListContainer[]{LOTRBiomeSpawnList.entry(LOTRSpawnList.RANGERS_NORTH, 10).setSpawnChance(5000)};
         this.npcSpawnList.newFactionList(10).add(arrspawnListContainer2);
         this.variantChance = 0.2f;
         this.addBiomeVariant(LOTRBiomeVariant.FOREST_LIGHT);
@@ -102,6 +101,7 @@ extends LOTRBiome {
         this.registerTaigaFlowers();
         this.decorator.addRandomStructure(new LOTRWorldGenRuinedHouse(false), 1500);
         this.decorator.addRandomStructure(new LOTRWorldGenSmallStoneRuin(false), 500);
+        this.setBanditEntityClass(LOTREntityBanditNorth.class);
         this.setBanditChance(LOTREventSpawner.EventChance.BANDIT_UNCOMMON);
     }
 
@@ -117,7 +117,6 @@ extends LOTRBiome {
 
     @Override
     public void generateBiomeTerrain(World world, Random random, Block[] blocks, byte[] meta, int i, int k, double stoneNoise, int height, LOTRBiomeVariant variant) {
-        double d4;
         Block topBlock_pre = this.topBlock;
         int topBlockMeta_pre = this.topBlockMeta;
         Block fillerBlock_pre = this.fillerBlock;
@@ -125,7 +124,7 @@ extends LOTRBiome {
         double d1 = noiseDirt.func_151601_a((double)i * 0.07, (double)k * 0.07);
         double d2 = noiseDirt.func_151601_a((double)i * 0.3, (double)k * 0.3);
         double d3 = noiseStone.func_151601_a((double)i * 0.07, (double)k * 0.07);
-        if (d3 + (d4 = noiseStone.func_151601_a((double)i * 0.3, (double)k * 0.3)) > 1.2) {
+        if (d3 + noiseStone.func_151601_a((double)i * 0.3, (double)k * 0.3) > 1.2) {
             this.topBlock = Blocks.stone;
             this.topBlockMeta = 0;
             this.fillerBlock = this.topBlock;
@@ -203,10 +202,14 @@ extends LOTRBiome {
     }
 
     public static boolean isTundraSnowy(int i, int k) {
+        double d;
+        double d2;
         double d1 = noiseSnow.func_151601_a((double)i * 0.002, (double)k * 0.002);
-        double d2 = noiseSnow.func_151601_a((double)i * 0.05, (double)k * 0.05);
+        double d22 = noiseSnow.func_151601_a((double)i * 0.05, (double)k * 0.05);
         double d3 = noiseSnow.func_151601_a((double)i * 0.3, (double)k * 0.3);
-        return d1 + (d2 *= 0.3) + (d3 *= 0.3) > 0.8;
+        d22 *= 0.3;
+        d3 *= 0.3;
+        return d1 + d + d2 > 0.8;
     }
 
     @Override

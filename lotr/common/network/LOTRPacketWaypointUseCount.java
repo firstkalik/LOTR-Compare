@@ -79,7 +79,7 @@ implements IMessage {
                 }
             } else {
                 UUID sharingPlayerID = packet.sharingPlayer;
-                waypoint = sharingPlayerID != null ? pd.getSharedCustomWaypointByID(sharingPlayerID, wpID) : pd.getCustomWaypointByID(wpID);
+                LOTRCustomWaypoint lOTRCustomWaypoint = waypoint = sharingPlayerID != null ? pd.getSharedCustomWaypointByID(sharingPlayerID, wpID) : pd.getCustomWaypointByID(wpID);
             }
             if (waypoint != null) {
                 pd.setWPUseCount(waypoint, packet.useCount);

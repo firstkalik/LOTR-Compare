@@ -28,8 +28,9 @@ extends LOTRBlockSaplingBase {
 
     @Override
     public void growTree(World world, int i, int j, int k, Random random) {
-        int i1;
         int k1;
+        int[] partyTree;
+        int i1;
         int meta = world.getBlockMetadata(i, j, k) & 7;
         WorldGenAbstractTree treeGen = null;
         int trunkNeg = 0;
@@ -42,7 +43,6 @@ extends LOTRBlockSaplingBase {
         }
         if (meta == 1) {
             int[] boughTree;
-            int[] partyTree;
             if (world.getBlock(i, j - 1, k) == LOTRMod.quenditeGrass) {
                 block0: for (i1 = -4; i1 <= 4; ++i1) {
                     for (k1 = -4; k1 <= 4; ++k1) {
@@ -90,7 +90,7 @@ extends LOTRBlockSaplingBase {
             }
         }
         if (meta == 2) {
-            int[] partyTree = LOTRBlockSaplingBase.findPartyTree(world, i, j, k, (Block)this, meta);
+            partyTree = LOTRBlockSaplingBase.findPartyTree(world, i, j, k, (Block)this, meta);
             if (partyTree != null) {
                 treeGen = LOTRTreeType.MIRK_OAK_LARGE.create(true, random);
                 trunkPos = 1;
@@ -107,7 +107,7 @@ extends LOTRBlockSaplingBase {
             }
         }
         if (meta == 3) {
-            int[] partyTree = LOTRBlockSaplingBase.findPartyTree(world, i, j, k, (Block)this, meta);
+            partyTree = LOTRBlockSaplingBase.findPartyTree(world, i, j, k, (Block)this, meta);
             if (partyTree != null) {
                 treeGen = LOTRTreeType.RED_OAK_LARGE.create(true, random);
                 trunkPos = 1;

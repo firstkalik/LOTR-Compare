@@ -30,15 +30,14 @@ extends LOTRWorldGenStructureBase {
     public boolean generate(World world, Random random, int i, int j, int k) {
         block47: {
             int k1;
-            int j1;
-            int j12;
             int rotation;
+            int j12;
             block49: {
                 int i1;
                 block48: {
                     block46: {
-                        int k12;
                         Block block;
+                        int k12;
                         int j13;
                         if (this.restrictions && (block = world.getBlock(i, j - 1, k)) != Blocks.grass && block != Blocks.dirt && block != Blocks.stone) {
                             return false;
@@ -153,7 +152,7 @@ extends LOTRWorldGenStructureBase {
                         this.placeRandomBrick(world, random, i, j + 3, k - 5);
                         this.placeRandomStairs(world, random, i + 1, j + 3, k - 5, 1);
                         for (i1 = i + 1; i1 <= i + 2; ++i1) {
-                            for (j1 = j + 1; j1 <= j + 7; ++j1) {
+                            for (int j1 = j + 1; j1 <= j + 7; ++j1) {
                                 this.placeRandomBrick(world, random, i1, j1, k + 3);
                             }
                         }
@@ -174,7 +173,7 @@ extends LOTRWorldGenStructureBase {
                     this.placeRandomBrick(world, random, i + 5, j + 3, k);
                     this.placeRandomStairs(world, random, i + 5, j + 3, k + 1, 3);
                     for (k1 = k - 1; k1 >= k - 2; --k1) {
-                        for (j1 = j + 1; j1 <= j + 7; ++j1) {
+                        for (int j1 = j + 1; j1 <= j + 7; ++j1) {
                             this.placeRandomBrick(world, random, i - 3, j1, k1);
                         }
                     }
@@ -195,7 +194,7 @@ extends LOTRWorldGenStructureBase {
                 this.placeRandomBrick(world, random, i, j + 3, k + 5);
                 this.placeRandomStairs(world, random, i + 1, j + 3, k + 5, 1);
                 for (i1 = i - 1; i1 >= i - 2; --i1) {
-                    for (j1 = j + 1; j1 <= j + 7; ++j1) {
+                    for (int j1 = j + 1; j1 <= j + 7; ++j1) {
                         this.placeRandomBrick(world, random, i1, j1, k - 3);
                     }
                 }
@@ -216,7 +215,7 @@ extends LOTRWorldGenStructureBase {
             this.placeRandomBrick(world, random, i - 5, j + 3, k);
             this.placeRandomStairs(world, random, i - 5, j + 3, k + 1, 3);
             for (k1 = k + 1; k1 <= k + 2; ++k1) {
-                for (j1 = j + 1; j1 <= j + 7; ++j1) {
+                for (int j1 = j + 1; j1 <= j + 7; ++j1) {
                     this.placeRandomBrick(world, random, i + 3, j1, k1);
                 }
             }

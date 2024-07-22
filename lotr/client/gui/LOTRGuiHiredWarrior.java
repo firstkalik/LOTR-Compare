@@ -5,6 +5,7 @@
  *  cpw.mods.fml.common.network.simpleimpl.IMessage
  *  cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper
  *  net.minecraft.client.gui.FontRenderer
+ *  net.minecraft.client.gui.Gui
  *  net.minecraft.client.gui.GuiButton
  *  net.minecraft.client.gui.GuiTextField
  *  net.minecraft.util.EnumChatFormatting
@@ -27,6 +28,7 @@ import lotr.common.entity.npc.LOTRHiredNPCInfo;
 import lotr.common.network.LOTRPacketHandler;
 import lotr.common.network.LOTRPacketNPCSquadron;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.util.EnumChatFormatting;
@@ -126,9 +128,9 @@ extends LOTRGuiHiredNPC {
             String nextLevel = (Object)EnumChatFormatting.BOLD + String.valueOf(this.theNPC.hiredNPCInfo.xpLevel + 1);
             String xpCurLevel = String.valueOf(this.theNPC.hiredNPCInfo.totalXPForLevel(this.theNPC.hiredNPCInfo.xpLevel));
             String xpNextLevel = String.valueOf(this.theNPC.hiredNPCInfo.totalXPForLevel(this.theNPC.hiredNPCInfo.xpLevel + 1));
-            LOTRGuiHiredWarrior.drawRect((int)(midX - 36), (int)(this.guiTop + 96), (int)(midX + 36), (int)(this.guiTop + 102), (int)-16777216);
-            LOTRGuiHiredWarrior.drawRect((int)(midX - 35), (int)(this.guiTop + 97), (int)(midX + 35), (int)(this.guiTop + 101), (int)-10658467);
-            LOTRGuiHiredWarrior.drawRect((int)(midX - 35), (int)(this.guiTop + 97), (int)(midX - 35 + (int)(lvlProgress * 70.0f)), (int)(this.guiTop + 101), (int)-43776);
+            Gui.drawRect((int)(midX - 36), (int)(this.guiTop + 96), (int)(midX + 36), (int)(this.guiTop + 102), (int)-16777216);
+            Gui.drawRect((int)(midX - 35), (int)(this.guiTop + 97), (int)(midX + 35), (int)(this.guiTop + 101), (int)-10658467);
+            Gui.drawRect((int)(midX - 35), (int)(this.guiTop + 97), (int)(midX - 35 + (int)(lvlProgress * 70.0f)), (int)(this.guiTop + 101), (int)-43776);
             GL11.glPushMatrix();
             float scale = 0.67f;
             GL11.glScalef((float)scale, (float)scale, (float)1.0f);

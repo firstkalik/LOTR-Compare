@@ -33,8 +33,8 @@ extends LOTRAchievement {
     }
 
     @Override
-    public String getTitle(EntityPlayer entityplayer) {
-        return this.theRank.getFullNameWithGender(LOTRLevelData.getData(entityplayer));
+    public String getUntranslatedTitle(EntityPlayer entityplayer) {
+        return this.theRank.getCodeFullNameWithGender(LOTRLevelData.getData(entityplayer));
     }
 
     @Override

@@ -29,7 +29,6 @@ extends LOTRTileEntityAlloyForgeBase {
 
     @Override
     public ItemStack getSmeltingResult(ItemStack itemstack) {
-        ItemFood food;
         if (this.isWood(itemstack)) {
             boolean isCharred;
             boolean bl = isCharred = itemstack.getItem() == Item.getItemFromBlock((Block)LOTRMod.wood) && itemstack.getItemDamage() == 3;
@@ -40,7 +39,7 @@ extends LOTRTileEntityAlloyForgeBase {
         if (itemstack.getItem() == Item.getItemFromBlock((Block)LOTRMod.oreMorgulIron)) {
             return new ItemStack(LOTRMod.orcSteel);
         }
-        if (itemstack.getItem() instanceof ItemFood && (food = (ItemFood)itemstack.getItem()).isWolfsFavoriteMeat()) {
+        if (itemstack.getItem() instanceof ItemFood && ((ItemFood)itemstack.getItem()).isWolfsFavoriteMeat()) {
             return new ItemStack(Items.rotten_flesh);
         }
         return super.getSmeltingResult(itemstack);

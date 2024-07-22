@@ -106,6 +106,7 @@ extends Gui {
                 } else {
                     this.updateWindowScale();
                     if (Minecraft.isGuiEnabled()) {
+                        double d;
                         GL11.glEnable((int)3008);
                         GL11.glDisable((int)2929);
                         GL11.glDepthMask((boolean)false);
@@ -114,7 +115,8 @@ extends Gui {
                             d1 = 2.0 - d1;
                         }
                         d1 *= 4.0;
-                        if ((d1 = 1.0 - d1) < 0.0) {
+                        d1 = 1.0 - d1;
+                        if (d < 0.0) {
                             d1 = 0.0;
                         }
                         d1 *= d1;
@@ -139,63 +141,21 @@ extends Gui {
         }
     }
 
-    private class NotificationConquest
-    extends Notification {
-        private LOTRFaction conqFac;
-        private float conqValue;
-        private boolean isCleansing;
+    private abstract class Notification {
+        private Long notificationTime = Minecraft.getSystemTime();
 
-        public NotificationConquest(LOTRFaction fac, float conq, boolean clean) {
-            this.conqFac = fac;
-            this.conqValue = conq;
-            this.isCleansing = clean;
+        private Notification() {
         }
 
-        @Override
-        public int getDurationMs() {
-            return 6000;
+        public Long getNotificationTime() {
+            return this.notificationTime;
         }
 
-        @Override
-        public void renderText(int x, int y) {
-            String conqS = LOTRAlignmentValues.formatConqForDisplay(this.conqValue, false);
-            LOTRTickHandlerClient.drawConquestText(LOTRGuiNotificationDisplay.access$100((LOTRGuiNotificationDisplay)LOTRGuiNotificationDisplay.this).fontRenderer, x + 1, y, conqS, this.isCleansing, 1.0f);
-            LOTRGuiNotificationDisplay.access$100((LOTRGuiNotificationDisplay)LOTRGuiNotificationDisplay.this).fontRenderer.drawString(StatCollector.translateToLocal((String)"lotr.gui.map.conquest.notif"), x + LOTRGuiNotificationDisplay.access$100((LOTRGuiNotificationDisplay)LOTRGuiNotificationDisplay.this).fontRenderer.getStringWidth(conqS + " ") + 2, y, 8019267);
-            LOTRGuiNotificationDisplay.access$100((LOTRGuiNotificationDisplay)LOTRGuiNotificationDisplay.this).fontRenderer.drawString((Object)EnumChatFormatting.ITALIC + this.conqFac.factionName(), x, y + 11, 9666921);
-        }
+        public abstract int getDurationMs();
 
-        @Override
-        public void renderIcon(int x, int y) {
-            LOTRGuiNotificationDisplay.this.mc.getTextureManager().bindTexture(LOTRClientProxy.alignmentTexture);
-            GL11.glColor4f((float)1.0f, (float)1.0f, (float)1.0f, (float)1.0f);
-            LOTRGuiNotificationDisplay.this.drawTexturedModalRect(x, y, this.isCleansing ? 16 : 0, 228, 16, 16);
-        }
-    }
+        public abstract void renderText(int var1, int var2);
 
-    private class NotificationFellowship
-    extends Notification {
-        private IChatComponent message;
-
-        public NotificationFellowship(IChatComponent msg) {
-            this.message = msg;
-        }
-
-        @Override
-        public int getDurationMs() {
-            return 6000;
-        }
-
-        @Override
-        public void renderText(int x, int y) {
-            LOTRGuiNotificationDisplay.access$100((LOTRGuiNotificationDisplay)LOTRGuiNotificationDisplay.this).fontRenderer.drawSplitString(this.message.getFormattedText(), x, y, 152, 8019267);
-        }
-
-        @Override
-        public void renderIcon(int x, int y) {
-            LOTRGuiNotificationDisplay.this.mc.getTextureManager().bindTexture(LOTRGuiFellowships.iconsTextures);
-            GL11.glColor4f((float)1.0f, (float)1.0f, (float)1.0f, (float)1.0f);
-            LOTRGuiNotificationDisplay.this.drawTexturedModalRect(x, y, 80, 0, 16, 16);
-        }
+        public abstract void renderIcon(int var1, int var2);
     }
 
     private class NotificationAchievement
@@ -235,21 +195,63 @@ extends Gui {
         }
     }
 
-    private abstract class Notification {
-        private Long notificationTime = Minecraft.getSystemTime();
+    private class NotificationFellowship
+    extends Notification {
+        private IChatComponent message;
 
-        private Notification() {
+        public NotificationFellowship(IChatComponent msg) {
+            this.message = msg;
         }
 
-        public Long getNotificationTime() {
-            return this.notificationTime;
+        @Override
+        public int getDurationMs() {
+            return 6000;
         }
 
-        public abstract int getDurationMs();
+        @Override
+        public void renderText(int x, int y) {
+            LOTRGuiNotificationDisplay.access$100((LOTRGuiNotificationDisplay)LOTRGuiNotificationDisplay.this).fontRenderer.drawSplitString(this.message.getFormattedText(), x, y, 152, 8019267);
+        }
 
-        public abstract void renderText(int var1, int var2);
+        @Override
+        public void renderIcon(int x, int y) {
+            LOTRGuiNotificationDisplay.this.mc.getTextureManager().bindTexture(LOTRGuiFellowships.iconsTextures);
+            GL11.glColor4f((float)1.0f, (float)1.0f, (float)1.0f, (float)1.0f);
+            LOTRGuiNotificationDisplay.this.drawTexturedModalRect(x, y, 80, 0, 16, 16);
+        }
+    }
 
-        public abstract void renderIcon(int var1, int var2);
+    private class NotificationConquest
+    extends Notification {
+        private LOTRFaction conqFac;
+        private float conqValue;
+        private boolean isCleansing;
+
+        public NotificationConquest(LOTRFaction fac, float conq, boolean clean) {
+            this.conqFac = fac;
+            this.conqValue = conq;
+            this.isCleansing = clean;
+        }
+
+        @Override
+        public int getDurationMs() {
+            return 6000;
+        }
+
+        @Override
+        public void renderText(int x, int y) {
+            String conqS = LOTRAlignmentValues.formatConqForDisplay(this.conqValue, false);
+            LOTRTickHandlerClient.drawConquestText(LOTRGuiNotificationDisplay.access$100((LOTRGuiNotificationDisplay)LOTRGuiNotificationDisplay.this).fontRenderer, x + 1, y, conqS, this.isCleansing, 1.0f);
+            LOTRGuiNotificationDisplay.access$100((LOTRGuiNotificationDisplay)LOTRGuiNotificationDisplay.this).fontRenderer.drawString(StatCollector.translateToLocal((String)"lotr.gui.map.conquest.notif"), x + LOTRGuiNotificationDisplay.access$100((LOTRGuiNotificationDisplay)LOTRGuiNotificationDisplay.this).fontRenderer.getStringWidth(conqS + " ") + 2, y, 8019267);
+            LOTRGuiNotificationDisplay.access$100((LOTRGuiNotificationDisplay)LOTRGuiNotificationDisplay.this).fontRenderer.drawString((Object)EnumChatFormatting.ITALIC + this.conqFac.factionName(), x, y + 11, 9666921);
+        }
+
+        @Override
+        public void renderIcon(int x, int y) {
+            LOTRGuiNotificationDisplay.this.mc.getTextureManager().bindTexture(LOTRClientProxy.alignmentTexture);
+            GL11.glColor4f((float)1.0f, (float)1.0f, (float)1.0f, (float)1.0f);
+            LOTRGuiNotificationDisplay.this.drawTexturedModalRect(x, y, this.isCleansing ? 16 : 0, 228, 16, 16);
+        }
     }
 
 }

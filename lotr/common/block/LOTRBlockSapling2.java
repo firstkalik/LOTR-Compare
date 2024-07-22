@@ -29,7 +29,7 @@ extends LOTRBlockSaplingBase {
         int k1;
         int meta = world.getBlockMetadata(i, j, k) & 7;
         WorldGenAbstractTree treeGen = null;
-        int trunkNeg = 0;
+        boolean trunkNeg = false;
         int trunkPos = 0;
         int xOffset = 0;
         int zOffset = 0;
@@ -38,14 +38,14 @@ extends LOTRBlockSaplingBase {
             if (partyTree != null) {
                 treeGen = LOTRTreeType.LEBETHRON_PARTY.create(true, random);
                 trunkPos = 1;
-                trunkNeg = 1;
+                trunkNeg = true;
                 xOffset = partyTree[0];
                 zOffset = partyTree[1];
             }
             if (treeGen == null) {
                 treeGen = random.nextInt(10) == 0 ? LOTRTreeType.LEBETHRON_LARGE.create(true, random) : LOTRTreeType.LEBETHRON.create(true, random);
                 trunkPos = 0;
-                trunkNeg = 0;
+                trunkNeg = false;
                 xOffset = 0;
                 zOffset = 0;
             }
@@ -54,14 +54,14 @@ extends LOTRBlockSaplingBase {
             if (partyTree != null) {
                 treeGen = LOTRTreeType.BEECH_PARTY.create(true, random);
                 trunkPos = 1;
-                trunkNeg = 1;
+                trunkNeg = true;
                 xOffset = partyTree[0];
                 zOffset = partyTree[1];
             }
             if (treeGen == null) {
                 treeGen = random.nextInt(10) == 0 ? LOTRTreeType.BEECH_LARGE.create(true, random) : LOTRTreeType.BEECH.create(true, random);
                 trunkPos = 0;
-                trunkNeg = 0;
+                trunkNeg = false;
                 xOffset = 0;
                 zOffset = 0;
             }
@@ -70,7 +70,7 @@ extends LOTRBlockSaplingBase {
                 for (k1 = 0; k1 >= -1; --k1) {
                     if (!this.isSameSapling(world, i + i12, j, k + k1, meta) || !this.isSameSapling(world, i + i12 + 1, j, k + k1, meta) || !this.isSameSapling(world, i + i12, j, k + k1 + 1, meta) || !this.isSameSapling(world, i + i12 + 1, j, k + k1 + 1, meta)) continue;
                     treeGen = LOTRTreeType.HOLLY_LARGE.create(true, random);
-                    trunkNeg = 0;
+                    trunkNeg = false;
                     trunkPos = 1;
                     xOffset = i12;
                     zOffset = k1;

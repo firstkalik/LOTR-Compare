@@ -11,8 +11,6 @@
  *  net.minecraft.entity.player.EntityPlayerMP
  *  net.minecraft.server.MinecraftServer
  *  net.minecraft.server.management.ServerConfigurationManager
- *  net.minecraft.util.ChatComponentText
- *  net.minecraft.util.EnumChatFormatting
  *  net.minecraft.util.IChatComponent
  *  net.minecraft.world.World
  *  org.apache.commons.io.FileUtils
@@ -55,8 +53,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.ServerConfigurationManager;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
 import net.minecraft.world.World;
 import org.apache.commons.io.FileUtils;
@@ -67,7 +63,7 @@ public class LOTRSpeech {
     private static Random rand = new Random();
 
     public static void loadAllSpeechBanks() {
-        HashMap<Object, BufferedReader> speechBankNamesAndReaders = new HashMap<Object, BufferedReader>();
+        HashMap<String, BufferedReader> speechBankNamesAndReaders = new HashMap<String, BufferedReader>();
         ZipFile zip = null;
         try {
             ModContainer mc = LOTRMod.getModContainer();
@@ -75,19 +71,19 @@ public class LOTRSpeech {
                 zip = new ZipFile(mc.getSource());
                 Enumeration<? extends ZipEntry> entries = zip.entries();
                 while (entries.hasMoreElements()) {
-                    String path;
                     ZipEntry entry = entries.nextElement();
-                    Object s = entry.getName();
-                    if (!((String)s).startsWith(path = "assets/lotr/speech/") || !((String)s).endsWith(".txt")) continue;
-                    s = ((String)s).substring(path.length());
-                    int i = ((String)s).indexOf(".txt");
+                    String s = entry.getName();
+                    String path = "assets/lotr/speech/";
+                    if (!s.startsWith("assets/lotr/speech/") || !s.endsWith(".txt")) continue;
+                    s = s.substring(path.length());
+                    int i = s.indexOf(".txt");
                     try {
-                        s = ((String)s).substring(0, i);
+                        s = s.substring(0, i);
                         BufferedReader reader = new BufferedReader(new InputStreamReader((InputStream)new BOMInputStream(zip.getInputStream(entry)), Charsets.UTF_8.name()));
                         speechBankNamesAndReaders.put(s, reader);
                     }
                     catch (Exception e) {
-                        FMLLog.severe((String)("Failed to load LOTR speech bank " + (String)s + "from zip file"), (Object[])new Object[0]);
+                        FMLLog.severe((String)("Failed to load LOTR speech bank " + s + "from zip file"), (Object[])new Object[0]);
                         e.printStackTrace();
                     }
                 }
@@ -214,17 +210,17 @@ public class LOTRSpeech {
     }
 
     public static void sendSpeech(EntityPlayer entityplayer, LOTREntityNPC entity, String speech) {
-        LOTRPacketNPCSpeech packet = new LOTRPacketNPCSpeech(entity.getEntityId(), speech);
+        LOTRSpeech.sendSpeech(entityplayer, entity, speech, false);
+    }
+
+    public static void sendSpeech(EntityPlayer entityplayer, LOTREntityNPC entity, String speech, boolean forceChatMsg) {
+        LOTRPacketNPCSpeech packet = new LOTRPacketNPCSpeech(entity.getEntityId(), speech, forceChatMsg);
         LOTRPacketHandler.networkWrapper.sendTo((IMessage)packet, (EntityPlayerMP)entityplayer);
     }
 
-    public static void sendSpeechAndChatMessage(EntityPlayer entityplayer, LOTREntityNPC entity, String speechBankName) {
-        String name = entity.getCommandSenderName();
+    public static void sendSpeechBankWithChatMsg(EntityPlayer entityplayer, LOTREntityNPC entity, String speechBankName) {
         String speech = LOTRSpeech.getRandomSpeechForPlayer(entity, speechBankName, entityplayer, null, null);
-        String message = (Object)EnumChatFormatting.YELLOW + "<" + name + ">" + (Object)EnumChatFormatting.WHITE + " " + speech;
-        ChatComponentText component = new ChatComponentText(message);
-        entityplayer.addChatMessage((IChatComponent)component);
-        LOTRSpeech.sendSpeech(entityplayer, entity, speech);
+        LOTRSpeech.sendSpeech(entityplayer, entity, speech, true);
     }
 
     public static void messageAllPlayers(IChatComponent message) {

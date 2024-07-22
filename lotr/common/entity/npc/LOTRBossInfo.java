@@ -32,14 +32,12 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import lotr.common.LOTRAchievement;
-import lotr.common.LOTRDimension;
 import lotr.common.LOTRLevelData;
 import lotr.common.LOTRMod;
 import lotr.common.entity.ai.LOTRNPCTargetSelector;
 import lotr.common.entity.npc.LOTRBoss;
 import lotr.common.entity.npc.LOTREntityNPC;
 import lotr.common.fac.LOTRFaction;
-import lotr.common.world.LOTRWorldProviderUtumno;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.command.IEntitySelector;
@@ -82,9 +80,9 @@ public class LOTRBossInfo {
     public List getNearbyEnemies() {
         ArrayList<EntityPlayer> enemies = new ArrayList<EntityPlayer>();
         List players = this.theNPC.worldObj.getEntitiesWithinAABB(EntityPlayer.class, this.theNPC.boundingBox.expand(12.0, 6.0, 12.0));
-        for (int i = 0; i < players.size(); ++i) {
-            EntityPlayer entityplayer = (EntityPlayer)players.get(i);
-            if (entityplayer.capabilities.isCreativeMode || !(LOTRLevelData.getData(entityplayer).getAlignment(this.theNPC.getFaction()) < 0.0f)) continue;
+        for (Object player : players) {
+            EntityPlayer entityplayer = (EntityPlayer)player;
+            if (entityplayer.capabilities.isCreativeMode || LOTRLevelData.getData(entityplayer).getAlignment(this.theNPC.getFaction()) >= 0.0f) continue;
             enemies.add(entityplayer);
         }
         enemies.addAll(this.theNPC.worldObj.selectEntitiesWithinAABB(EntityLiving.class, this.theNPC.boundingBox.expand(12.0, 6.0, 12.0), (IEntitySelector)new LOTRNPCTargetSelector((EntityLiving)this.theNPC)));
@@ -120,8 +118,8 @@ public class LOTRBossInfo {
             this.jumpAttack = false;
             List enemies = this.getNearbyEnemies();
             float attackDamage = (float)this.theNPC.getEntityAttribute(LOTREntityNPC.npcAttackDamage).getAttributeValue();
-            for (int i = 0; i < enemies.size(); ++i) {
-                EntityLivingBase entity = (EntityLivingBase)enemies.get(i);
+            for (Object enemie : enemies) {
+                EntityLivingBase entity = (EntityLivingBase)enemie;
                 float strength = 12.0f - this.theNPC.getDistanceToEntity((Entity)entity) / 3.0f;
                 entity.attackEntityFrom(DamageSource.causeMobDamage((EntityLivingBase)this.theNPC), (strength /= 12.0f) * attackDamage * 3.0f);
                 float knockback = strength * 3.0f;
@@ -143,16 +141,14 @@ public class LOTRBossInfo {
             for (int i1 = i - xzRange; i1 <= i + xzRange; ++i1) {
                 for (int j1 = j; j1 <= j + yRange; ++j1) {
                     for (int k1 = k - xzRange; k1 <= k + xzRange; ++k1) {
+                        float f;
                         Block block;
                         int i2 = i1 - i;
                         int k2 = k1 - k;
                         int dist = i2 * i2 + k2 * k2;
                         if (dist >= xzDist || (block = this.theNPC.worldObj.getBlock(i1, j1, k1)) == null || block.getMaterial().isLiquid()) continue;
                         float resistance = block.getExplosionResistance((Entity)this.theNPC, this.theNPC.worldObj, i1, j1, k1, this.theNPC.posX, this.theNPC.boundingBox.minY + (double)(this.theNPC.height / 2.0f), this.theNPC.posZ);
-                        if (block instanceof LOTRWorldProviderUtumno.UtumnoBlock && LOTRDimension.getCurrentDimension(this.theNPC.worldObj) != LOTRDimension.UTUMNO) {
-                            resistance = 100.0f;
-                        }
-                        if (!(resistance < 2000.0f)) continue;
+                        if (f >= 2000.0f) continue;
                         block.dropBlockAsItemWithChance(this.theNPC.worldObj, i1, j1, k1, this.theNPC.worldObj.getBlockMetadata(i1, j1, k1), resistance / 100.0f, 0);
                         this.theNPC.worldObj.setBlockToAir(i1, j1, k1);
                     }
@@ -210,7 +206,7 @@ public class LOTRBossInfo {
                 UUID player = e.getKey();
                 Pair<Integer, Float> pair = e.getValue();
                 float damage = ((Float)pair.getRight()).floatValue();
-                if (!(damage >= PLAYER_DAMAGE_THRESHOLD)) continue;
+                if (damage < PLAYER_DAMAGE_THRESHOLD) continue;
                 LOTRLevelData.getData(player).addAchievement(this.theBoss.getBossKillAchievement());
             }
         }

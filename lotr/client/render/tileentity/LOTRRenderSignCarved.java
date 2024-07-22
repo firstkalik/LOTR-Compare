@@ -98,7 +98,7 @@ extends TileEntitySpecialRenderer {
         float h = hsb[0];
         float s = hsb[1];
         float b = hsb[2];
-        b = b > 0.5f ? (b -= 0.5f) : (b += 0.5f);
+        b = b > 0.5f ? (b = b - 0.5f) : (b = b + 0.5f);
         b = MathHelper.clamp_float((float)b, (float)0.0f, (float)1.0f);
         return Color.HSBtoRGB(h, s *= 0.5f, b);
     }

@@ -35,9 +35,9 @@ extends LOTRWorldGenMoredainHut {
     @Override
     public boolean generateWithSetRotation(World world, Random random, int i, int j, int k, int rotation) {
         int k1;
+        int k2;
         int i1;
         int i2;
-        int k2;
         if (!super.generateWithSetRotation(world, random, i, j, k, rotation)) {
             return false;
         }

@@ -89,7 +89,6 @@ extends LOTREntityNPC {
     public static final IAttribute balrogChargeDamage = new RangedAttribute("lotr.balrogChargeDamage", 2.0, 0.0, Double.MAX_VALUE).setDescription("Balrog Charge Damage");
     private int chargeLean;
     private int prevChargeLean;
-    private static final int chargeLeanTime = 10;
     public int chargeFrustration = 0;
 
     public LOTREntityBalrog(World world) {
@@ -174,13 +173,12 @@ extends LOTREntityNPC {
     @Override
     public void onLivingUpdate() {
         block12: {
-            int l;
             super.onLivingUpdate();
             if (this.getHealth() < this.getMaxHealth() && this.ticksExisted % 10 == 0) {
                 this.heal(1.0f);
             }
             if (!this.worldObj.isRemote) {
-                this.chargeFrustration = this.getAttackTarget() == null ? 0 : (this.isBalrogCharging() ? 0 : ++this.chargeFrustration);
+                this.chargeFrustration = this.getAttackTarget() == null ? 0 : (this.isBalrogCharging() ? 0 : (this.chargeFrustration = this.chargeFrustration + 1));
             }
             this.prevChargeLean = this.chargeLean;
             if (this.isBalrogCharging()) {
@@ -199,12 +197,12 @@ extends LOTREntityNPC {
                     int k = MathHelper.floor_double((double)this.posZ);
                     Block block = this.worldObj.getBlock(i += MathHelper.getRandomIntegerInRange((Random)this.rand, (int)-8, (int)8), j += MathHelper.getRandomIntegerInRange((Random)this.rand, (int)-4, (int)8), k += MathHelper.getRandomIntegerInRange((Random)this.rand, (int)-8, (int)8));
                     float maxResistance = Blocks.obsidian.getExplosionResistance((Entity)this);
-                    if (!block.isReplaceable((IBlockAccess)this.worldObj, i, j, k) && (!isUtumno || !(block.getExplosionResistance((Entity)this) <= maxResistance)) || !Blocks.fire.canPlaceBlockAt(this.worldObj, i, j, k)) continue;
+                    if (!block.isReplaceable((IBlockAccess)this.worldObj, i, j, k) && (!isUtumno || block.getExplosionResistance((Entity)this) > maxResistance) || !Blocks.fire.canPlaceBlockAt(this.worldObj, i, j, k)) continue;
                     this.worldObj.setBlock(i, j, k, (Block)Blocks.fire, 0, 3);
                 }
             }
             if (this.isBalrogCharging()) {
-                for (l = 0; l < 10; ++l) {
+                for (int l = 0; l < 10; ++l) {
                     String s = this.rand.nextInt(3) == 0 ? "flame" : "largesmoke";
                     double d0 = this.posX + (this.rand.nextDouble() - 0.5) * (double)this.width * 1.5;
                     double d1 = this.posY + (double)this.height * MathHelper.getRandomDoubleInRange((Random)this.rand, (double)0.5, (double)1.5);
@@ -215,7 +213,7 @@ extends LOTREntityNPC {
                     this.worldObj.spawnParticle(s, d0, d1, d2, d3, d4, d5);
                 }
             } else {
-                for (l = 0; l < 3; ++l) {
+                for (int l = 0; l < 3; ++l) {
                     String s = this.rand.nextInt(3) == 0 ? "flame" : "largesmoke";
                     double d0 = this.posX + (this.rand.nextDouble() - 0.5) * (double)this.width * 2.0;
                     double d1 = this.posY + 0.5 + this.rand.nextDouble() * (double)this.height * 1.5;

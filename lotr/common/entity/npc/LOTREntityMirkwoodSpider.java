@@ -30,7 +30,7 @@ extends LOTREntitySpiderBase {
 
     @Override
     protected int getRandomSpiderType() {
-        return this.rand.nextBoolean() ? 0 : 1 + this.rand.nextInt(2);
+        return this.rand.nextBoolean() ? 0 : 1 + this.rand.nextInt(5);
     }
 
     @Override

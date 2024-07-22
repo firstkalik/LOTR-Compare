@@ -41,14 +41,9 @@ extends LOTRBiomeGenRhunLand {
         this.spawnableCreatureList.add(new BiomeGenBase.SpawnListEntry(LOTREntityDeer.class, 20, 4, 6));
         this.spawnableCreatureList.add(new BiomeGenBase.SpawnListEntry(LOTREntityBear.class, 10, 1, 4));
         this.npcSpawnList.clear();
-        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer = new LOTRBiomeSpawnList.SpawnListContainer[3];
-        arrspawnListContainer[0] = LOTRBiomeSpawnList.entry(LOTRSpawnList.EASTERLING_WARRIORS, 10).setSpawnChance(1000);
-        arrspawnListContainer[1] = LOTRBiomeSpawnList.entry(LOTRSpawnList.EASTERLING_WARRIORS, 8).setConquestOnly();
-        arrspawnListContainer[2] = LOTRBiomeSpawnList.entry(LOTRSpawnList.EASTERLING_GOLD_WARRIORS, 1).setConquestOnly();
+        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer = new LOTRBiomeSpawnList.SpawnListContainer[]{LOTRBiomeSpawnList.entry(LOTRSpawnList.AVARI_ELF_WARRIORS, 10).setSpawnChance(1000), LOTRBiomeSpawnList.entry(LOTRSpawnList.AVARI_ELF_WARRIORS, 8).setConquestOnly()};
         this.npcSpawnList.newFactionList(100).add(arrspawnListContainer);
-        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer2 = new LOTRBiomeSpawnList.SpawnListContainer[2];
-        arrspawnListContainer2[0] = LOTRBiomeSpawnList.entry(LOTRSpawnList.DORWINION_ELVES, 10);
-        arrspawnListContainer2[1] = LOTRBiomeSpawnList.entry(LOTRSpawnList.DORWINION_ELF_WARRIORS, 3);
+        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer2 = new LOTRBiomeSpawnList.SpawnListContainer[]{LOTRBiomeSpawnList.entry(LOTRSpawnList.EASTERLING_WARRIORS, 10), LOTRBiomeSpawnList.entry(LOTRSpawnList.EASTERLING_GOLD_WARRIORS, 3)};
         this.npcSpawnList.newFactionList(0).add(arrspawnListContainer2);
         this.npcSpawnList.conquestGainRate = 0.5f;
         this.clearBiomeVariants();
@@ -81,14 +76,12 @@ extends LOTRBiomeGenRhunLand {
 
     @Override
     public void generateBiomeTerrain(World world, Random random, Block[] blocks, byte[] meta, int i, int k, double stoneNoise, int height, LOTRBiomeVariant variant) {
-        double d2;
-        double d1;
         super.generateBiomeTerrain(world, random, blocks, meta, i, k, stoneNoise, height, variant);
         int chunkX = i & 0xF;
         int chunkZ = k & 0xF;
         int xzIndex = chunkX * 16 + chunkZ;
         int ySize = blocks.length / 256;
-        if (variant.treeFactor >= 1.0f && (d1 = biomeTerrainNoise.func_151601_a((double)i * 0.05, (double)k * 0.05)) + (d2 = biomeTerrainNoise.func_151601_a((double)i * 0.4, (double)k * 0.4)) > -0.8) {
+        if (variant.treeFactor >= 1.0f && biomeTerrainNoise.func_151601_a((double)i * 0.05, (double)k * 0.05) + biomeTerrainNoise.func_151601_a((double)i * 0.4, (double)k * 0.4) > -0.8) {
             int index = xzIndex * ySize + height;
             if (random.nextFloat() < 0.75f) {
                 blocks[index] = Blocks.dirt;

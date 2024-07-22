@@ -110,6 +110,9 @@ extends LOTREntityMordorOrc {
             if (this.rand.nextInt(shinyShirtChance = Math.max(shinyShirtChance, 1)) == 0) {
                 this.dropItem(LOTRMod.bodyMithril, 1);
             }
+            if (this.rand.nextInt(shinyShirtChance = Math.max(shinyShirtChance, 1)) == 0) {
+                this.dropItem(LOTRMod.bodyBilbo, 1);
+            }
         }
     }
 

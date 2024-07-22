@@ -20,7 +20,6 @@ public class LOTREntityMallornEntSummonFX
 extends EntityDiggingFX {
     private Entity summoner;
     private Entity summoned;
-    private int summonedID;
     private float arcParam;
 
     public LOTREntityMallornEntSummonFX(World world, double d, double d1, double d2, double d3, double d4, double d5, int summonerID, int summonedID, float t, Block block, int meta, int color) {

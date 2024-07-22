@@ -118,7 +118,7 @@ extends WorldGenAbstractTree {
                                 rootX += xWay;
                                 rootZ += zWay;
                             }
-                            if (++roots <= 4 + random.nextInt(3)) continue;
+                            if (++roots > 4 + random.nextInt(3)) continue;
                         }
                     }
                 }
@@ -131,12 +131,9 @@ extends WorldGenAbstractTree {
 
     private void growVines(World world, Random random, int i, int j, int k, int meta) {
         this.setBlockAndNotifyAdequately(world, i, j, k, Blocks.vine, meta);
-        int vines = 0;
-        while (world.getBlock(i, --j, k).isAir((IBlockAccess)world, i, j, k) && vines < 2 + random.nextInt(3)) {
+        for (int vines = 0; world.getBlock(i, --j, k).isAir((IBlockAccess)world, i, j, k) && vines < 2 + random.nextInt(3); ++vines) {
             this.setBlockAndNotifyAdequately(world, i, j, k, Blocks.vine, meta);
-            ++vines;
         }
-        return;
     }
 }
 

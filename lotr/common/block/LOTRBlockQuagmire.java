@@ -12,7 +12,6 @@
 package lotr.common.block;
 
 import lotr.common.LOTRCreativeTabs;
-import lotr.common.entity.npc.LOTREntitySpiderBase;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
@@ -28,11 +27,7 @@ extends Block {
     }
 
     public void onEntityCollidedWithBlock(World world, int i, int j, int k, Entity entity) {
-        if (entity instanceof LOTREntitySpiderBase) {
-            ((LOTREntitySpiderBase)entity).setInQuag();
-        } else {
-            entity.setInWeb();
-        }
+        entity.setInWeb();
     }
 
     public boolean isOpaqueCube() {

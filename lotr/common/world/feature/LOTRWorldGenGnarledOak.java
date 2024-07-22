@@ -55,6 +55,7 @@ extends WorldGenAbstractTree {
     }
 
     public boolean generate(World world, Random random, int i, int j, int k) {
+        int length;
         int height = MathHelper.getRandomIntegerInRange((Random)random, (int)this.minHeight, (int)this.maxHeight);
         boolean flag = true;
         if (j >= 1 && height + 1 <= 256) {
@@ -100,9 +101,9 @@ extends WorldGenAbstractTree {
             float cos = MathHelper.cos((float)angle);
             float sin = MathHelper.sin((float)angle);
             float angleY = random.nextFloat() * (float)Math.toRadians(40.0);
-            float cosY = MathHelper.cos((float)angleY);
+            MathHelper.cos((float)angleY);
             float sinY = MathHelper.sin((float)angleY);
-            int length = 2 + random.nextInt(3);
+            length = 2 + random.nextInt(3);
             int i1 = i;
             int k1 = k;
             int j1 = j + height - 1 - random.nextInt(3);
@@ -126,13 +127,13 @@ extends WorldGenAbstractTree {
         }
         int lastDir = -1;
         for (int j1 = j + 2; j1 < j + height; ++j1) {
-            int k1;
             int i1;
             int dir;
+            int k1;
             Block block;
             if (random.nextInt(3) != 0 || (dir = random.nextInt(4)) == lastDir) continue;
             lastDir = dir;
-            int length = 1;
+            length = 1;
             for (int l = 1; l <= length && ((block = world.getBlock(i1 = i + Direction.offsetX[dir] * l, j1, k1 = k + Direction.offsetZ[dir] * l)).isReplaceable((IBlockAccess)world, i1, j1, k1) || block.isLeaves((IBlockAccess)world, i1, j1, k1)); ++l) {
                 if (dir == 0 || dir == 2) {
                     this.setBlockAndNotifyAdequately(world, i1, j1, k1, this.woodBlock, this.woodMeta | 8);
@@ -152,7 +153,7 @@ extends WorldGenAbstractTree {
                     this.setBlockAndNotifyAdequately(world, rootX, rootY, rootZ, this.woodBlock, this.woodMeta | 0xC);
                     world.getBlock(rootX, rootY - 1, rootZ).onPlantGrow(world, rootX, rootY - 1, rootZ, rootX, rootY, rootZ);
                     --rootY;
-                    if (++roots <= 4 + random.nextInt(3)) continue;
+                    if (++roots > 4 + random.nextInt(3)) continue;
                 }
             }
         }

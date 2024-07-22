@@ -28,7 +28,6 @@ implements IMessage {
     private LOTRFaction conqFac;
     private List<LOTRConquestZone> allZones;
     private long worldTime;
-    private static final short END_OF_PACKET = -15000;
 
     public LOTRPacketConquestGrid() {
     }
@@ -44,7 +43,7 @@ implements IMessage {
         data.writeByte(facID);
         for (LOTRConquestZone zone : this.allZones) {
             float str = zone.getConquestStrength(this.conqFac, this.worldTime);
-            if (!(str > 0.0f)) continue;
+            if (str <= 0.0f) continue;
             float strRaw = zone.getConquestStrengthRaw(this.conqFac);
             data.writeShort(zone.gridX);
             data.writeShort(zone.gridZ);

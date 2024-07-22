@@ -8,6 +8,7 @@
  *  net.minecraft.client.Minecraft
  *  net.minecraft.client.entity.EntityClientPlayerMP
  *  net.minecraft.client.gui.FontRenderer
+ *  net.minecraft.client.gui.Gui
  *  net.minecraft.client.gui.GuiButton
  *  net.minecraft.client.gui.GuiScreen
  *  net.minecraft.client.multiplayer.WorldClient
@@ -61,6 +62,7 @@ import lotr.common.network.LOTRPacketPledgeSet;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.multiplayer.WorldClient;
@@ -88,7 +90,6 @@ extends LOTRGuiMenuBase {
     private int currentFactionIndex = 0;
     private int prevFactionIndex = 0;
     private LOTRFaction currentFaction;
-    private static final int maxAlignmentsDisplayed = 1;
     private static Page currentPage;
     private int pageY = 46;
     private int pageWidth = 256;
@@ -118,7 +119,6 @@ extends LOTRGuiMenuBase {
     private int scrollWidgetHeight;
     private LOTRGuiScrollPane scrollPaneAlliesEnemies;
     private int scrollAlliesEnemiesX;
-    private static final int maxDisplayedAlliesEnemies = 10;
     private int numDisplayedAlliesEnemies;
     private List currentAlliesEnemies;
     private boolean isOtherPlayer;
@@ -247,8 +247,7 @@ extends LOTRGuiMenuBase {
         if (!this.isPledging && !this.isUnpledging) {
             this.buttonPagePrev.enabled = currentPage.prev() != null;
             this.buttonPageNext.enabled = currentPage.next() != null;
-            this.buttonFactionMap.enabled = currentPage != Page.RANKS && this.currentFaction.isPlayableAlignmentFaction() && LOTRDimension.getCurrentDimensionWithFallback((World)this.mc.theWorld) == this.currentFaction.factionDimension;
-            this.buttonFactionMap.visible = this.buttonFactionMap.enabled;
+            this.buttonFactionMap.visible = this.buttonFactionMap.enabled = currentPage != Page.RANKS && this.currentFaction.isPlayableAlignmentFaction() && LOTRDimension.getCurrentDimensionWithFallback((World)this.mc.theWorld) == this.currentFaction.factionDimension;
             if (!LOTRFaction.controlZonesEnabled((World)this.mc.theWorld)) {
                 this.buttonFactionMap.enabled = false;
                 this.buttonFactionMap.visible = false;
@@ -339,7 +338,7 @@ extends LOTRGuiMenuBase {
                     int yMin = this.guiTop + this.pageY + this.pageMapY;
                     int yMax = yMin + this.pageMapSize;
                     int mapBorder = 1;
-                    LOTRGuiFactions.drawRect((int)(xMin - mapBorder), (int)(yMin - mapBorder), (int)(xMax + mapBorder), (int)(yMax + mapBorder), (int)-16777216);
+                    Gui.drawRect((int)(xMin - mapBorder), (int)(yMin - mapBorder), (int)(xMax + mapBorder), (int)(yMax + mapBorder), (int)-16777216);
                     float zoom = (float)this.pageMapSize / (float)(mapR * 2);
                     float zoomExp = (float)Math.log(zoom) / (float)Math.log(2.0);
                     this.mapDrawGui.setFakeMapProperties(mapX, mapY, zoom, zoomExp, zoom);

@@ -19,7 +19,6 @@ import lotr.common.entity.npc.LOTREntityBreeHobbitInnkeeper;
 import lotr.common.entity.npc.LOTREntityBreeInnkeeper;
 import lotr.common.entity.npc.LOTREntityBreeMan;
 import lotr.common.entity.npc.LOTREntityMan;
-import lotr.common.entity.npc.LOTREntityNPC;
 import lotr.common.entity.npc.LOTREntityRuffianSpy;
 import lotr.common.entity.npc.LOTRFamilyInfo;
 import lotr.common.entity.npc.LOTRNames;
@@ -54,10 +53,10 @@ extends LOTRWorldGenBreeStructure {
 
     @Override
     public boolean generateWithSetRotation(World world, Random random, int i, int j, int k, int rotation) {
-        int k1;
-        int i1;
-        LOTREntityMan innkeeper;
         int j1;
+        int i1;
+        int k1;
+        LOTREntityMan innkeeper;
         this.setOriginAndRotation(world, i, j, k, rotation, 5, -2);
         this.setupRandomBlocks(random);
         if (this.restrictions) {
@@ -108,7 +107,7 @@ extends LOTRWorldGenBreeStructure {
         this.plantFlower(world, random, -8, 6, 1);
         this.plantFlower(world, random, 8, 6, 1);
         this.placeChest(world, random, -5, 1, -3, 3, LOTRChestContents.BREE_HOUSE);
-        this.setBlockAndMetadata(world, -6, 2, -3, LOTRWorldGenBreeInn.getRandomPieBlock(random), 0);
+        this.setBlockAndMetadata(world, -6, 2, -3, LOTRWorldGenBreeStructure.getRandomPieBlock(random), 0);
         this.placeBarrel(world, random, -6, 2, 1, 4, LOTRFoods.BREE_DRINK);
         this.placeBarrel(world, random, -4, 2, 4, 2, LOTRFoods.BREE_DRINK);
         this.placeFoodOrDrink(world, random, 6, 2, -3);
@@ -167,6 +166,9 @@ extends LOTRWorldGenBreeStructure {
         innkeeper.setSpecificLocationName(innNameNPC);
         this.spawnNPCAndSetHome(innkeeper, world, -5, 1, 0, 4);
         String[] innkeeperNameParts = innkeeper.getNPCName().split(" ");
+        if (innkeeperNameParts.length < 2) {
+            innkeeperNameParts = new String[]{innkeeperNameParts[0], ""};
+        }
         this.placeSign(world, -2, 3, -5, Blocks.wall_sign, 2, new String[]{"", "by " + innkeeperNameParts[0], innkeeperNameParts[1], ""});
         int men = 8 + random.nextInt(6);
         for (int l = 0; l < men; ++l) {

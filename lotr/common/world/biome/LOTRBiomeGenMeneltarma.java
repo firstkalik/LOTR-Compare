@@ -7,6 +7,7 @@
  *  net.minecraft.world.World
  *  net.minecraft.world.gen.NoiseGeneratorPerlin
  *  net.minecraft.world.gen.feature.WorldGenFlowers
+ *  net.minecraft.world.gen.feature.WorldGenMinable
  *  net.minecraft.world.gen.feature.WorldGenerator
  */
 package lotr.common.world.biome;
@@ -30,6 +31,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.NoiseGeneratorPerlin;
 import net.minecraft.world.gen.feature.WorldGenFlowers;
+import net.minecraft.world.gen.feature.WorldGenMinable;
 import net.minecraft.world.gen.feature.WorldGenerator;
 
 public class LOTRBiomeGenMeneltarma
@@ -59,6 +61,7 @@ extends LOTRBiomeGenOcean {
         this.decorator.addTree(LOTRTreeType.BIRCH_LARGE, 400);
         this.decorator.addTree(LOTRTreeType.BEECH, 200);
         this.decorator.addTree(LOTRTreeType.BEECH_LARGE, 400);
+        this.decorator.addOre((WorldGenerator)new WorldGenMinable(LOTRMod.oreMithril, 9), 1.0f, 0, 16);
         ArrayList flowerDupes = new ArrayList();
         for (int l = 0; l < 10; ++l) {
             this.flowers.clear();

@@ -73,7 +73,7 @@ public class LOTRTravellingTraderSpawner {
             LOTRTravellingTrader trader = (LOTRTravellingTrader)((Object)entityTrader);
             block0: for (int players = 0; players < world.playerEntities.size(); ++players) {
                 EntityPlayer entityplayer = (EntityPlayer)world.playerEntities.get(players);
-                if (!(LOTRLevelData.getData(entityplayer).getAlignment(entityTrader.getFaction()) >= 0.0f)) continue;
+                if (LOTRLevelData.getData(entityplayer).getAlignment(entityTrader.getFaction()) < 0.0f) continue;
                 for (int attempts = 0; attempts < 16; ++attempts) {
                     int k;
                     float angle = world.rand.nextFloat() * 360.0f;

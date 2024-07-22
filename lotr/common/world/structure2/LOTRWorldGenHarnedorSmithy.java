@@ -55,9 +55,9 @@ extends LOTRWorldGenHarnedorStructure {
         }
         for (int i1 = -10; i1 <= 6; ++i1) {
             for (int k1 = -6; k1 <= 6; ++k1) {
-                int i2 = Math.abs(i1);
+                Math.abs(i1);
                 int k2 = Math.abs(k1);
-                if ((i1 < -8 || i1 > 4 || k2 != 4) && (i1 < -10 || i1 > 6 || k2 > 3)) continue;
+                if (!(i1 >= -8 && i1 <= 4 && k2 == 4 || i1 >= -10 && i1 <= 6 && k2 <= 3)) continue;
                 j1 = -1;
                 while (!this.isOpaque(world, i1, j1, k1) && this.getY(j1) >= 0) {
                     this.setBlockAndMetadata(world, i1, j1, k1, this.plank2Block, this.plank2Meta);

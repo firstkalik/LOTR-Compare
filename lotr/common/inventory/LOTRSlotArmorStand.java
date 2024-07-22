@@ -40,8 +40,11 @@ extends Slot {
     }
 
     public boolean isItemValid(ItemStack itemstack) {
-        Item item = itemstack.getItem();
-        return item.isValidArmor(itemstack, this.armorSlot, this.armorTestEntity);
+        if (itemstack != null) {
+            Item item = itemstack.getItem();
+            return item.isValidArmor(itemstack, this.armorSlot, this.armorTestEntity);
+        }
+        return true;
     }
 
     @SideOnly(value=Side.CLIENT)

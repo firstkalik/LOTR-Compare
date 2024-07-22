@@ -56,7 +56,6 @@ extends GuiContainer {
     }
 
     protected void drawGuiContainerBackgroundLayer(float f, int i, int j) {
-        ItemStack bonemeal;
         GL11.glColor4f((float)1.0f, (float)1.0f, (float)1.0f, (float)1.0f);
         this.mc.getTextureManager().bindTexture(guiTexture);
         this.drawTexturedModalRect(this.guiLeft, this.guiTop, 0, 0, this.xSize, this.ySize);
@@ -64,7 +63,7 @@ extends GuiContainer {
         if (seeds == null) {
             this.drawTexturedModalRect(this.guiLeft + 80, this.guiTop + 21, 176, 0, 16, 16);
         }
-        if ((bonemeal = this.inventorySlots.getSlot(3).getStack()) == null) {
+        if (this.inventorySlots.getSlot(3).getStack() == null) {
             this.drawTexturedModalRect(this.guiLeft + 123, this.guiTop + 34, 176, 16, 16, 16);
         }
     }

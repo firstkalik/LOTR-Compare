@@ -57,11 +57,9 @@ extends TileEntityDispenser {
             if (this.fireCooldown > 0) {
                 --this.fireCooldown;
             } else {
-                AxisAlignedBB range;
-                List entities;
                 ItemStack itemstack;
                 int slot = this.func_146017_i();
-                if (slot >= 0 && (itemstack = this.getStackInSlot(slot)).getItem() instanceof LOTRItemDart && !(entities = this.worldObj.selectEntitiesWithinAABB(EntityLivingBase.class, range = this.getTriggerRange(), LOTRMod.selectLivingExceptCreativePlayers())).isEmpty()) {
+                if (slot >= 0 && (itemstack = this.getStackInSlot(slot)).getItem() instanceof LOTRItemDart && !this.worldObj.selectEntitiesWithinAABB(EntityLivingBase.class, this.getTriggerRange(), LOTRMod.selectLivingExceptCreativePlayers()).isEmpty()) {
                     IBehaviorDispenseItem dispense = (IBehaviorDispenseItem)BlockDispenser.dispenseBehaviorRegistry.getObject((Object)itemstack.getItem());
                     ItemStack result = dispense.dispense((IBlockSource)new BlockSourceImpl(this.worldObj, this.xCoord, this.yCoord, this.zCoord), itemstack);
                     this.setInventorySlotContents(slot, result.stackSize == 0 ? null : result);
@@ -72,14 +70,14 @@ extends TileEntityDispenser {
     }
 
     public AxisAlignedBB getTriggerRange() {
-        Vec3 vecTarget;
-        BlockSourceImpl blocksource = new BlockSourceImpl(this.worldObj, this.xCoord, this.yCoord, this.zCoord);
+        new BlockSourceImpl(this.worldObj, this.xCoord, this.yCoord, this.zCoord);
         EnumFacing facing = BlockDispenser.func_149937_b((int)this.getBlockMetadata());
         float front = 0.55f;
         float range = 16.0f;
         Vec3 vecPos = Vec3.createVectorHelper((double)((double)this.xCoord + 0.5), (double)((double)this.yCoord + 0.5), (double)((double)this.zCoord + 0.5));
         Vec3 vecFront = vecPos.addVector((double)((float)facing.getFrontOffsetX() * front), (double)((float)facing.getFrontOffsetY() * front), (double)((float)facing.getFrontOffsetZ() * front));
-        MovingObjectPosition hitBlock = this.worldObj.func_147447_a(vecFront, vecTarget = vecPos.addVector((double)((float)facing.getFrontOffsetX() * range), (double)((float)facing.getFrontOffsetY() * range), (double)((float)facing.getFrontOffsetZ() * range)), true, true, false);
+        Vec3 vecTarget = vecPos.addVector((double)((float)facing.getFrontOffsetX() * range), (double)((float)facing.getFrontOffsetY() * range), (double)((float)facing.getFrontOffsetZ() * range));
+        MovingObjectPosition hitBlock = this.worldObj.func_147447_a(vecFront, vecTarget, true, true, false);
         if (hitBlock != null) {
             vecTarget = Vec3.createVectorHelper((double)((double)hitBlock.blockX + 0.5 - (double)facing.getFrontOffsetX()), (double)((double)hitBlock.blockY + 0.5 - (double)facing.getFrontOffsetY()), (double)((double)hitBlock.blockZ + 0.5 - (double)facing.getFrontOffsetZ()));
         }

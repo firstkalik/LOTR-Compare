@@ -36,9 +36,7 @@ extends EntityAIBase {
     private double moveSpeed;
     private World theWorld;
     private int pathingTick;
-    private static final int maxPathingTick = 200;
     private int eatingTick;
-    private static final int maxEatingTick = 60;
     private int rePathDelay;
 
     public LOTREntityAIRabbitEatCrops(LOTREntityRabbit rabbit, double d) {
@@ -107,8 +105,8 @@ extends EntityAIBase {
     private Vec3 findCropsLocation() {
         Random random = this.theRabbit.getRNG();
         for (int l = 0; l < 32; ++l) {
-            int j;
             int k;
+            int j;
             int i = MathHelper.floor_double((double)this.theRabbit.posX) + MathHelper.getRandomIntegerInRange((Random)random, (int)-16, (int)16);
             if (!this.canEatBlock(i, j = MathHelper.floor_double((double)this.theRabbit.boundingBox.minY) + MathHelper.getRandomIntegerInRange((Random)random, (int)-8, (int)8), k = MathHelper.floor_double((double)this.theRabbit.posZ) + MathHelper.getRandomIntegerInRange((Random)random, (int)-16, (int)16))) continue;
             return Vec3.createVectorHelper((double)((double)i + 0.5), (double)j, (double)((double)k + 0.5));

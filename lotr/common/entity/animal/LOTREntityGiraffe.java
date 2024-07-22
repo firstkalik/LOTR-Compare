@@ -92,6 +92,7 @@ extends LOTREntityHorse {
         return Items.leather;
     }
 
+    @Override
     protected void dropFewItems(boolean flag, int i) {
         super.dropFewItems(flag, i);
         if (flag) {
@@ -99,6 +100,10 @@ extends LOTREntityHorse {
             if (this.rand.nextInt(rugChance = Math.max(rugChance, 1)) == 0) {
                 this.entityDropItem(new ItemStack(LOTRMod.giraffeRug), 0.0f);
             }
+        }
+        int k = 1 + this.rand.nextInt(2) + this.rand.nextInt(i + 1);
+        for (int j = 0; j < k; ++j) {
+            this.dropItem(Items.bone, 1);
         }
     }
 }

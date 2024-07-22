@@ -30,6 +30,7 @@ extends LOTRWorldGenGondorStructure {
     @Override
     public boolean generateWithSetRotation(World world, Random random, int i, int j, int k, int rotation) {
         int i1;
+        int j1;
         int k1;
         int i12;
         this.setOriginAndRotation(world, i, j, k, rotation, 0);
@@ -39,15 +40,15 @@ extends LOTRWorldGenGondorStructure {
             int maxHeight = 0;
             for (int i13 = -4; i13 <= 4; ++i13) {
                 for (int k12 = 1; k12 <= 11; ++k12) {
-                    int j1 = this.getTopBlock(world, i13, k12) - 1;
-                    if (!this.isSurface(world, i13, j1, k12)) {
+                    int j12 = this.getTopBlock(world, i13, k12) - 1;
+                    if (!this.isSurface(world, i13, j12, k12)) {
                         return false;
                     }
-                    if (j1 < minHeight) {
-                        minHeight = j1;
+                    if (j12 < minHeight) {
+                        minHeight = j12;
                     }
-                    if (j1 > maxHeight) {
-                        maxHeight = j1;
+                    if (j12 > maxHeight) {
+                        maxHeight = j12;
                     }
                     if (maxHeight - minHeight <= 8) continue;
                     return false;
@@ -57,7 +58,6 @@ extends LOTRWorldGenGondorStructure {
         for (k1 = 1; k1 <= 11; ++k1) {
             for (i12 = -4; i12 <= 4; ++i12) {
                 boolean pillar;
-                int j1;
                 boolean bl = pillar = Math.abs(i12) == 4 && (k1 == 1 || k1 == 11);
                 if (pillar) {
                     for (j1 = 4; !(j1 < 0 && this.isOpaque(world, i12, j1, k1) || this.getY(j1) < 0); --j1) {
@@ -92,7 +92,7 @@ extends LOTRWorldGenGondorStructure {
             }
         }
         for (i1 = -1; i1 <= 1; ++i1) {
-            for (int j1 = 1; j1 <= 3; ++j1) {
+            for (j1 = 1; j1 <= 3; ++j1) {
                 this.setBlockAndMetadata(world, i1, j1, 1, this.rockBlock, this.rockMeta);
             }
         }

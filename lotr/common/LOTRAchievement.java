@@ -10,6 +10,7 @@
  *  net.minecraft.block.BlockSand
  *  net.minecraft.block.BlockTallGrass
  *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.entity.player.EntityPlayerMP
  *  net.minecraft.event.HoverEvent
  *  net.minecraft.event.HoverEvent$Action
  *  net.minecraft.init.Blocks
@@ -27,6 +28,7 @@
  *  net.minecraft.util.EnumChatFormatting
  *  net.minecraft.util.IChatComponent
  *  net.minecraft.util.StatCollector
+ *  net.minecraft.world.WorldServer
  */
 package lotr.common;
 
@@ -56,6 +58,7 @@ import net.minecraft.block.BlockLeaves;
 import net.minecraft.block.BlockSand;
 import net.minecraft.block.BlockTallGrass;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.event.HoverEvent;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -72,6 +75,7 @@ import net.minecraft.util.ChatStyle;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
 import net.minecraft.util.StatCollector;
+import net.minecraft.world.WorldServer;
 
 public class LOTRAchievement {
     public Category category;
@@ -84,6 +88,15 @@ public class LOTRAchievement {
     public List<LOTRFaction> enemyFactions = new ArrayList<LOTRFaction>();
     public List<LOTRFaction> allyFactions = new ArrayList<LOTRFaction>();
     public static LOTRAchievement enterMiddleEarth;
+    public static LOTRAchievement enterMoria;
+    public static LOTRAchievement Thorin;
+    public static LOTRAchievement engraveOwnership;
+    public static LOTRAchievement mod;
+    public static LOTRAchievement translator;
+    public static LOTRAchievement lore;
+    public static LOTRAchievement tester;
+    public static LOTRAchievement dovakin;
+    public static LOTRAchievement ogre;
     public static LOTRAchievement doGreyQuest;
     public static LOTRAchievement killOrc;
     public static LOTRAchievement mineMithril;
@@ -108,6 +121,9 @@ public class LOTRAchievement {
     public static LOTRAchievement hitByOrcSpear;
     public static LOTRAchievement killBombardier;
     public static LOTRAchievement earnManyCoins;
+    public static LOTRAchievement earnManyCoins1;
+    public static LOTRAchievement earnManyCoins2;
+    public static LOTRAchievement earnManyCoins3;
     public static LOTRAchievement craftAppleCrumble;
     public static LOTRAchievement killButterfly;
     public static LOTRAchievement fishRing;
@@ -147,6 +163,7 @@ public class LOTRAchievement {
     public static LOTRAchievement factionConquest;
     public static LOTRAchievement defeatInvasion;
     public static LOTRAchievement pickpocket;
+    public static LOTRAchievement combineSmithScrolls;
     public static LOTRAchievement killHobbit;
     public static LOTRAchievement sellPipeweedLeaf;
     public static LOTRAchievement marryHobbit;
@@ -154,6 +171,7 @@ public class LOTRAchievement {
     public static LOTRAchievement useMagicPipe;
     public static LOTRAchievement rideShirePony;
     public static LOTRAchievement tradeBartender;
+    public static LOTRAchievement tradeHobbit;
     public static LOTRAchievement speakToDrunkard;
     public static LOTRAchievement tradeHobbitShirriff;
     public static LOTRAchievement killDarkHuorn;
@@ -254,6 +272,7 @@ public class LOTRAchievement {
     public static LOTRAchievement killAngmarHillman;
     public static LOTRAchievement tradeAngmarHillmanChieftain;
     public static LOTRAchievement killSnowTroll;
+    public static LOTRAchievement killMountainSnowTroll;
     public static LOTRAchievement enterEregion;
     public static LOTRAchievement enterEnedwaith;
     public static LOTRAchievement enterNanCurunir;
@@ -267,6 +286,7 @@ public class LOTRAchievement {
     public static LOTRAchievement enterDunland;
     public static LOTRAchievement doMiniquestDunland;
     public static LOTRAchievement climbMistyMountains;
+    public static LOTRAchievement leapoffaith;
     public static LOTRAchievement enterMistyMountains;
     public static LOTRAchievement tameGollum;
     public static LOTRAchievement enterForodwaith;
@@ -281,10 +301,12 @@ public class LOTRAchievement {
     public static LOTRAchievement enterLongMarshes;
     public static LOTRAchievement enterEastBight;
     public static LOTRAchievement killMirkwoodSpider;
+    public static LOTRAchievement killDesertSpider;
     public static LOTRAchievement killWoodElf;
     public static LOTRAchievement useWoodElvenTable;
     public static LOTRAchievement wearFullWoodElvenScout;
     public static LOTRAchievement tradeWoodElfCaptain;
+    public static LOTRAchievement tradeAvariElfCaptain;
     public static LOTRAchievement rideBarrelMirkwood;
     public static LOTRAchievement enterMirkwood;
     public static LOTRAchievement enterWoodlandRealm;
@@ -296,6 +318,7 @@ public class LOTRAchievement {
     public static LOTRAchievement killMirkTroll;
     public static LOTRAchievement wearFullDolGuldur;
     public static LOTRAchievement doMiniquestWoodElf;
+    public static LOTRAchievement doMiniquestAvariElf;
     public static LOTRAchievement doMiniquestDolGuldur;
     public static LOTRAchievement tradeDolGuldurTrader;
     public static LOTRAchievement tradeWoodElfSmith;
@@ -327,7 +350,9 @@ public class LOTRAchievement {
     public static LOTRAchievement doMiniquestDwarf;
     public static LOTRAchievement tradeIronHillsMerchant;
     public static LOTRAchievement tradeDwarfSmith;
+    public static LOTRAchievement tradeEreborDwarfSmith;
     public static LOTRAchievement killElf;
+    public static LOTRAchievement killAvariElf;
     public static LOTRAchievement useElvenPortal;
     public static LOTRAchievement wearFullElven;
     public static LOTRAchievement useElvenTable;
@@ -433,6 +458,7 @@ public class LOTRAchievement {
     public static LOTRAchievement eatMorgulShroom;
     public static LOTRAchievement craftOrcBomb;
     public static LOTRAchievement hireOlogHai;
+    public static LOTRAchievement hireBerserk;
     public static LOTRAchievement mineGulduril;
     public static LOTRAchievement useMorgulPortal;
     public static LOTRAchievement wearFullMorgul;
@@ -440,6 +466,7 @@ public class LOTRAchievement {
     public static LOTRAchievement enterNurn;
     public static LOTRAchievement enterNanUngol;
     public static LOTRAchievement killMordorSpider;
+    public static LOTRAchievement killMorgulSpider;
     public static LOTRAchievement tradeOrcSpiderKeeper;
     public static LOTRAchievement killMordorOrc;
     public static LOTRAchievement doMiniquestMordor;
@@ -518,6 +545,7 @@ public class LOTRAchievement {
     public static LOTRAchievement tradeGulfWarlord;
     public static LOTRAchievement hireHaradSlave;
     public static LOTRAchievement hireMoredainMercenary;
+    public static LOTRAchievement hireEreborMercenary;
     public static LOTRAchievement tradeHarnedorBlacksmith;
     public static LOTRAchievement tradeUmbarBlacksmith;
     public static LOTRAchievement tradeGulfBlacksmith;
@@ -554,6 +582,8 @@ public class LOTRAchievement {
     public static LOTRAchievement wearFullTaurethrimGold;
     public static LOTRAchievement enterPertorogwaith;
     public static LOTRAchievement killHalfTroll;
+    public static LOTRAchievement playerRespawn;
+    public static LOTRAchievement playerDeath;
     public static LOTRAchievement wearFullHalfTroll;
     public static LOTRAchievement tradeHalfTrollWarlord;
     public static LOTRAchievement useHalfTrollTable;
@@ -570,9 +600,149 @@ public class LOTRAchievement {
     public static LOTRAchievement killUtumnoWarg;
     public static LOTRAchievement killBalrog;
     public static LOTRAchievement killTormentedElf;
+    public static LOTRAchievement killDarkElf;
     public static LOTRAchievement killUtumnoTroll;
+    public static LOTRAchievement killObsidianTroll;
+    public static LOTRAchievement killFireTroll;
+    public static LOTRAchievement killObsidianSpider;
+    public static LOTRAchievement killFireSpider;
     public static LOTRAchievement craftUtumnoKey;
     public static LOTRAchievement leaveUtumno;
+    public static LOTRAchievement useAngbandTable;
+    public static LOTRAchievement useEreborTable;
+    public static LOTRAchievement useWindTable;
+    public static LOTRAchievement useRedDwarfTable;
+    public static LOTRAchievement enterHarnaugrim;
+    public static LOTRAchievement enterStiffbeard;
+    public static LOTRAchievement marryMornaugrimDwarf;
+    public static LOTRAchievement marryHarnaugrimDwarf;
+    public static LOTRAchievement tradeAngbandSpiderUrukCaptain;
+    public static LOTRAchievement tradeAngbandWargUrukCaptain;
+    public static LOTRAchievement enterLotr;
+    public static LOTRAchievement killCaveTroll;
+    public static LOTRAchievement useRedMountainsTable1;
+    public static LOTRAchievement killRoyal;
+    public static LOTRAchievement killAngband;
+    public static LOTRAchievement enterAngband;
+    public static LOTRAchievement enterAngbandMountains;
+    public static LOTRAchievement tradeAngbandUrukCaptain;
+    public static LOTRAchievement hireErebor;
+    public static LOTRAchievement hireWind;
+    public static LOTRAchievement tradeRedDwarfSmith;
+    public static LOTRAchievement tradeUtumnoUrukTrader;
+    public static LOTRAchievement doMiniquestRedDwarf;
+    public static LOTRAchievement doMiniquestWind;
+    public static LOTRAchievement doMiniquestRedDwarf1;
+    public static LOTRAchievement craftgoldRing;
+    public static LOTRAchievement craftironPan;
+    public static LOTRAchievement killDurmethOrc;
+    public static LOTRAchievement killDurmethWarg;
+    public static LOTRAchievement doMiniquestAngband;
+    public static LOTRAchievement doMiniquestDurmeth;
+    public static LOTRAchievement tradeBlacklock;
+    public static LOTRAchievement tradeStiffbeard;
+    public static LOTRAchievement tradeStonefoot;
+    public static LOTRAchievement tradeIronfist;
+    public static LOTRAchievement tradeDurmethOrc;
+    public static LOTRAchievement enterDurmeth;
+    public static LOTRAchievement enterDurmethMountains;
+    public static LOTRAchievement enterKhand;
+    public static LOTRAchievement enterHildorien;
+    public static LOTRAchievement enterWastelandRhun;
+    public static LOTRAchievement enterRhunTaiga;
+    public static LOTRAchievement enterWildRhun;
+    public static LOTRAchievement enterHarhudor;
+    public static LOTRAchievement enterRedMountainsSnow;
+    public static LOTRAchievement enterRedMountainsCentre;
+    public static LOTRAchievement smeltMithril;
+    public static LOTRAchievement wearMoriaMithril;
+    public static LOTRAchievement wearFullMoriaMithril;
+    public static LOTRAchievement wearFullMoria;
+    public static LOTRAchievement wearFullDwarvenMithril;
+    public static LOTRAchievement wearFullErebor;
+    public static LOTRAchievement wearFullGuldur;
+    public static LOTRAchievement wearAngband;
+    public static LOTRAchievement wearAngbandu;
+    public static LOTRAchievement wearBerserk;
+    public static LOTRAchievement wearWind;
+    public static LOTRAchievement enterEasternCoasts;
+    public static LOTRAchievement enterSun;
+    public static LOTRAchievement getOne;
+    public static LOTRAchievement getSeven;
+    public static LOTRAchievement getNine;
+    public static LOTRAchievement getThree;
+    public static LOTRAchievement getArcenstone;
+    public static LOTRAchievement getBilbo;
+    public static LOTRAchievement wearBilbo;
+    public static LOTRAchievement enterDimrill;
+    public static LOTRAchievement enterBizar;
+    public static LOTRAchievement wearAngbande;
+    public static LOTRAchievement wearBoldog;
+    public static LOTRAchievement getSilmaril;
+    public static LOTRAchievement useRing;
+    public static LOTRAchievement feelBannerProtection;
+    public static LOTRAchievement useBandage;
+    public static LOTRAchievement enterForestShelter;
+    public static LOTRAchievement enterSouthMirkwood;
+    public static LOTRAchievement enterBeornsDomain;
+    public static LOTRAchievement enterHarhudorJungle;
+    public static LOTRAchievement enterRohanGate;
+    public static LOTRAchievement burnCampfire;
+    public static LOTRAchievement wearFullIstari;
+    public static LOTRAchievement useOneRing;
+    public static LOTRAchievement killSauron;
+    public static LOTRAchievement killBoldog;
+    public static LOTRAchievement tradePallando;
+    public static LOTRAchievement wearFullSauron;
+    public static LOTRAchievement craftMithril;
+    public static LOTRAchievement wearFullBronze;
+    public static LOTRAchievement wearFullBone;
+    public static LOTRAchievement enterFallForodwaith;
+    public static LOTRAchievement tradeRedDwarfMerchant;
+    public static LOTRAchievement enterIceUgol;
+    public static LOTRAchievement enterRhunSemiDesert;
+    public static LOTRAchievement enterAnfalas;
+    public static LOTRAchievement wearFullGrey;
+    public static LOTRAchievement wearFullDark;
+    public static LOTRAchievement wearFullAvari;
+    public static LOTRAchievement wearFullAvariScout;
+    public static LOTRAchievement tradeRedDwarfMiner;
+    public static LOTRAchievement killMoriaOrc;
+    public static LOTRAchievement tradeMoriaOrc;
+    public static LOTRAchievement useWickedDwarfTable;
+    public static LOTRAchievement killMountainUtumnoSnowTroll;
+    public static LOTRAchievement drinkUrukDraught;
+    public static LOTRAchievement eatKham;
+    public static LOTRAchievement drinkKhamBrew;
+    public static LOTRAchievement drinkRedDwarvenTonic;
+    public static LOTRAchievement eatlembasNugget;
+    public static LOTRAchievement drinkFire;
+    public static LOTRAchievement drinkSalt;
+    public static LOTRAchievement minesusSand;
+    public static LOTRAchievement wearFullGondorMithril;
+    public static LOTRAchievement insearchofyourself;
+    public static LOTRAchievement tradeAvariElfSmith;
+    public static LOTRAchievement enterAvariForest;
+    public static LOTRAchievement useAvariTable;
+    public static LOTRAchievement useWickedElfTable;
+    public static LOTRAchievement wearFullDarkElf;
+    public static LOTRAchievement wearFullDarkElfRanger;
+    public static LOTRAchievement getKham;
+    public static LOTRAchievement earnManyCoins4;
+    public static LOTRAchievement wearFullChainmailBronze;
+    public static LOTRAchievement wearFullChainmailDwarf;
+    public static LOTRAchievement wearFullChainmailOrc;
+    public static LOTRAchievement wearFullChainmailUruk;
+    public static LOTRAchievement wearFullChainmailBlackUruk;
+    public static LOTRAchievement wearFullWhite;
+    public static LOTRAchievement wearFullBrown;
+    public static LOTRAchievement wearFullBlue;
+    public static LOTRAchievement wearFullStonefoot;
+    public static LOTRAchievement wearFullStiffbeard;
+    public static LOTRAchievement wearFullIronfist;
+    public static LOTRAchievement wearFullBlacklock;
+    public static LOTRAchievement notenough;
+    public static LOTRAchievement killIceSpider;
 
     public LOTRAchievement(Category c, int i, Block block, String s) {
         this(c, i, new ItemStack(block), s);
@@ -643,12 +813,12 @@ public class LOTRAchievement {
         return this.name;
     }
 
-    public String getUntranslatedTitle() {
+    public String getUntranslatedTitle(EntityPlayer entityplayer) {
         return "lotr.achievement." + this.name + ".title";
     }
 
-    public String getTitle(EntityPlayer entityplayer) {
-        return StatCollector.translateToLocal((String)this.getUntranslatedTitle());
+    public final String getTitle(EntityPlayer entityplayer) {
+        return StatCollector.translateToLocal((String)this.getUntranslatedTitle(entityplayer));
     }
 
     public String getDescription(EntityPlayer entityplayer) {
@@ -690,14 +860,12 @@ public class LOTRAchievement {
     public static Comparator<LOTRAchievement> sortForDisplay(final EntityPlayer entityplayer) {
         return new Comparator<LOTRAchievement>(){
 
-            /*
-             * Enabled force condition propagation
-             * Lifted jumps to return sites
-             */
             @Override
             public int compare(LOTRAchievement ach1, LOTRAchievement ach2) {
                 if (ach1.isSpecial) {
-                    if (!ach2.isSpecial) return -1;
+                    if (!ach2.isSpecial) {
+                        return -1;
+                    }
                     if (ach2.ID < ach1.ID) {
                         return 1;
                     }
@@ -711,10 +879,14 @@ public class LOTRAchievement {
                     return 1;
                 }
                 if (ach1.isBiomeAchievement) {
-                    if (ach2.isBiomeAchievement) return ach1.getTitle(entityplayer).compareTo(ach2.getTitle(entityplayer));
+                    if (ach2.isBiomeAchievement) {
+                        return ach1.getTitle(entityplayer).compareTo(ach2.getTitle(entityplayer));
+                    }
                     return -1;
                 }
-                if (!ach2.isBiomeAchievement) return ach1.getTitle(entityplayer).compareTo(ach2.getTitle(entityplayer));
+                if (!ach2.isBiomeAchievement) {
+                    return ach1.getTitle(entityplayer).compareTo(ach2.getTitle(entityplayer));
+                }
                 return 1;
             }
         };
@@ -785,6 +957,8 @@ public class LOTRAchievement {
         factionConquest = new LOTRAchievement(Category.GENERAL, 73, LOTRMod.commandTable, "factionConquest");
         defeatInvasion = new LOTRAchievement(Category.GENERAL, 74, Items.iron_sword, "defeatInvasion");
         pickpocket = new LOTRAchievement(Category.GENERAL, 75, LOTRMiniQuestPickpocket.createPickpocketIcon(), "pickpocket").createTitle("pickpocket");
+        combineSmithScrolls = new LOTRAchievement(Category.GENERAL, 76, LOTRMod.modTemplate, "combineSmithScrolls");
+        engraveOwnership = new LOTRAchievement(Category.GENERAL, 77, LOTRMod.LOTRRingOne, "engraveOwnership");
         killHobbit = new LOTRAchievement(Category.SHIRE, 0, LOTRMod.hobbitBone, "killHobbit").setRequiresEnemy(LOTRFaction.HOBBIT).createTitle();
         sellPipeweedLeaf = new LOTRAchievement(Category.SHIRE, 1, LOTRMod.pipeweedLeaf, "sellPipeweedLeaf").setRequiresAlly(LOTRFaction.HOBBIT);
         marryHobbit = new LOTRAchievement(Category.SHIRE, 2, LOTRMod.hobbitRing, "marryHobbit").setRequiresAlly(LOTRFaction.HOBBIT);
@@ -803,6 +977,8 @@ public class LOTRAchievement {
         enterWhiteDowns = new LOTRAchievement(Category.SHIRE, 18, new ItemStack(LOTRMod.rock, 1, 5), "enterWhiteDowns").setBiomeAchievement();
         useHobbitTable = new LOTRAchievement(Category.SHIRE, 19, LOTRMod.hobbitTable, "useHobbitTable").setRequiresAlly(LOTRFaction.HOBBIT);
         hireHobbitFarmer = new LOTRAchievement(Category.SHIRE, 20, Items.iron_hoe, "hireHobbitFarmer").setRequiresAlly(LOTRFaction.HOBBIT);
+        craftironPan = new LOTRAchievement(Category.SHIRE, 21, LOTRMod.ironPan, "craftironPan");
+        tradeHobbit = new LOTRAchievement(Category.SHIRE, 22, LOTRMod.silverCoin, "tradeHobbit").setRequiresAlly(LOTRFaction.HOBBIT);
         enterBlueMountains = new LOTRAchievement(Category.BLUE_MOUNTAINS, 0, new ItemStack(LOTRMod.rock, 1, 3), "enterBlueMountains").setBiomeAchievement();
         smeltBlueDwarfSteel = new LOTRAchievement(Category.BLUE_MOUNTAINS, 4, LOTRMod.blueDwarfSteel, "smeltBlueDwarfSteel");
         killBlueDwarf = new LOTRAchievement(Category.BLUE_MOUNTAINS, 5, LOTRMod.dwarfBone, "killBlueDwarf").setRequiresEnemy(LOTRFaction.BLUE_MOUNTAINS).createTitle();
@@ -843,12 +1019,12 @@ public class LOTRAchievement {
         hireBreeFarmer = new LOTRAchievement(Category.BREE_LAND, 15, Items.iron_hoe, "hireBreeFarmer").setRequiresAlly(LOTRFaction.BREE);
         killRangerNorth = new LOTRAchievement(Category.ERIADOR, 0, LOTRMod.rangerBow, "killRangerNorth").setRequiresEnemy(LOTRFaction.RANGER_NORTH).createTitle();
         wearFullRanger = new LOTRAchievement(Category.ERIADOR, 1, LOTRMod.bodyRanger, "wearFullRanger");
-        killTroll = new LOTRAchievement(Category.ERIADOR, 2, LOTRMod.trollBone, "killTroll").setRequiresEnemy(LOTRFaction.ANGMAR).createTitle();
+        killTroll = new LOTRAchievement(Category.ERIADOR, 2, LOTRMod.trollBone, "killTroll").setRequiresEnemy(LOTRFaction.GUNDABAD).createTitle();
         getTrollStatue = new LOTRAchievement(Category.ERIADOR, 3, LOTRMod.trollStatue, "getTrollStatue").createTitle();
-        makeTrollSneeze = new LOTRAchievement(Category.ERIADOR, 4, Items.slime_ball, "makeTrollSneeze").setRequiresAlly(LOTRFaction.ANGMAR);
-        killMountainTroll = new LOTRAchievement(Category.ERIADOR, 5, LOTRMod.trollBone, "killMountainTroll").setRequiresEnemy(LOTRFaction.ANGMAR).createTitle();
-        killTrollFleeingSun = new LOTRAchievement(Category.ERIADOR, 6, Items.feather, "killTrollFleeingSun").setRequiresEnemy(LOTRFaction.ANGMAR).createTitle();
-        killMountainTrollChieftain = new LOTRAchievement(Category.ERIADOR, 7, new ItemStack(LOTRMod.bossTrophy, 1, 0), "killMountainTrollChieftain").setRequiresEnemy(LOTRFaction.ANGMAR).createTitle("trollSlayer");
+        makeTrollSneeze = new LOTRAchievement(Category.ERIADOR, 4, Items.slime_ball, "makeTrollSneeze").setRequiresAlly(LOTRFaction.GUNDABAD);
+        killMountainTroll = new LOTRAchievement(Category.ERIADOR, 5, LOTRMod.trollBone, "killMountainTroll").setRequiresEnemy(LOTRFaction.GUNDABAD).createTitle();
+        killTrollFleeingSun = new LOTRAchievement(Category.ERIADOR, 6, Items.feather, "killTrollFleeingSun").setRequiresEnemy(LOTRFaction.GUNDABAD).createTitle();
+        killMountainTrollChieftain = new LOTRAchievement(Category.ERIADOR, 7, new ItemStack(LOTRMod.bossTrophy, 1, 0), "killMountainTrollChieftain").setRequiresEnemy(LOTRFaction.GUNDABAD).createTitle("trollSlayer");
         shootDownMidges = new LOTRAchievement(Category.ERIADOR, 8, Items.arrow, "shootDownMidges");
         enterTrollshaws = new LOTRAchievement(Category.ERIADOR, 9, LOTRMod.muttonCooked, "enterTrollshaws").setBiomeAchievement();
         enterMidgewater = new LOTRAchievement(Category.ERIADOR, 10, LOTRMod.quagmire, "enterMidgewater").setBiomeAchievement();
@@ -882,16 +1058,16 @@ public class LOTRAchievement {
         doMiniquestRivendell = new LOTRAchievement(Category.ERIADOR, 44, LOTRMod.redBook, "doMiniquestRivendell").setRequiresAlly(LOTRFaction.HIGH_ELF);
         killRivendellElf = new LOTRAchievement(Category.ERIADOR, 45, LOTRMod.elfBone, "killRivendellElf").setRequiresEnemy(LOTRFaction.HIGH_ELF);
         tradeGundabadTrader = new LOTRAchievement(Category.ERIADOR, 46, LOTRMod.silverCoin, "tradeGundabadTrader").setRequiresAlly(LOTRFaction.GUNDABAD);
-        tradeAngmarCaptain = new LOTRAchievement(Category.ANGMAR, 0, LOTRMod.silverCoin, "tradeAngmarCaptain").setRequiresAlly(LOTRFaction.ANGMAR);
-        killAngmarOrc = new LOTRAchievement(Category.ANGMAR, 1, LOTRMod.orcBone, "killAngmarOrc").setRequiresEnemy(LOTRFaction.ANGMAR).createTitle();
+        tradeAngmarCaptain = new LOTRAchievement(Category.ANGMAR, 0, LOTRMod.silverCoin, "tradeAngmarCaptain").setRequiresAlly(LOTRFaction.GUNDABAD);
+        killAngmarOrc = new LOTRAchievement(Category.ANGMAR, 1, LOTRMod.orcBone, "killAngmarOrc").setRequiresEnemy(LOTRFaction.GUNDABAD).createTitle();
         enterAngmar = new LOTRAchievement(Category.ANGMAR, 2, new ItemStack(LOTRMod.brick2, 1, 0), "enterAngmar").setBiomeAchievement();
-        useAngmarTable = new LOTRAchievement(Category.ANGMAR, 3, LOTRMod.angmarTable, "useAngmarTable").setRequiresAlly(LOTRFaction.ANGMAR);
+        useAngmarTable = new LOTRAchievement(Category.ANGMAR, 3, LOTRMod.angmarTable, "useAngmarTable").setRequiresAlly(LOTRFaction.GUNDABAD);
         wearFullAngmar = new LOTRAchievement(Category.ANGMAR, 4, LOTRMod.bodyAngmar, "wearFullAngmar");
-        doMiniquestAngmar = new LOTRAchievement(Category.ANGMAR, 8, LOTRMod.redBook, "doMiniquestAngmar").setRequiresAlly(LOTRFaction.ANGMAR);
-        tradeAngmarTrader = new LOTRAchievement(Category.ANGMAR, 9, LOTRMod.silverCoin, "tradeAngmarTrader").setRequiresAlly(LOTRFaction.ANGMAR);
-        killAngmarHillman = new LOTRAchievement(Category.ANGMAR, 10, Items.bone, "killAngmarHillman").setRequiresEnemy(LOTRFaction.ANGMAR).createTitle();
-        tradeAngmarHillmanChieftain = new LOTRAchievement(Category.ANGMAR, 11, LOTRMod.silverCoin, "tradeAngmarHillmanChieftain").setRequiresAlly(LOTRFaction.ANGMAR);
-        killSnowTroll = new LOTRAchievement(Category.ANGMAR, 12, LOTRMod.trollBone, "killSnowTroll").setRequiresEnemy(LOTRFaction.ANGMAR).createTitle();
+        doMiniquestAngmar = new LOTRAchievement(Category.ANGMAR, 8, LOTRMod.redBook, "doMiniquestAngmar").setRequiresAlly(LOTRFaction.GUNDABAD);
+        tradeAngmarTrader = new LOTRAchievement(Category.ANGMAR, 9, LOTRMod.silverCoin, "tradeAngmarTrader").setRequiresAlly(LOTRFaction.GUNDABAD);
+        killAngmarHillman = new LOTRAchievement(Category.ANGMAR, 10, Items.bone, "killAngmarHillman").setRequiresEnemy(LOTRFaction.GUNDABAD).createTitle();
+        tradeAngmarHillmanChieftain = new LOTRAchievement(Category.ANGMAR, 11, LOTRMod.silverCoin, "tradeAngmarHillmanChieftain").setRequiresAlly(LOTRFaction.GUNDABAD);
+        killSnowTroll = new LOTRAchievement(Category.ANGMAR, 12, LOTRMod.trollBone, "killSnowTroll").setRequiresEnemy(LOTRFaction.GUNDABAD).createTitle();
         enterEregion = new LOTRAchievement(Category.EREGION, 0, new ItemStack(LOTRMod.sapling2, 1, 2), "enterEregion").setBiomeAchievement();
         enterEnedwaith = new LOTRAchievement(Category.ENEDWAITH, 0, (Block)Blocks.grass, "enterEnedwaith").setBiomeAchievement();
         enterNanCurunir = new LOTRAchievement(Category.ENEDWAITH, 1, LOTRMod.scimitarUruk, "enterNanCurunir").setBiomeAchievement();
@@ -1166,6 +1342,8 @@ public class LOTRAchievement {
         hireHarnedorFarmer = new LOTRAchievement(Category.NEAR_HARAD, 42, LOTRMod.hoeBronze, "hireHarnedorFarmer").setRequiresAlly(LOTRFaction.NEAR_HARAD);
         tradeHaradFarmer = new LOTRAchievement(Category.NEAR_HARAD, 43, LOTRMod.silverCoin, "tradeHaradFarmer").setRequiresAlly(LOTRFaction.NEAR_HARAD);
         wearFullBlackNumenorean = new LOTRAchievement(Category.NEAR_HARAD, 44, LOTRMod.bodyBlackNumenorean, "wearFullBlackNumenorean");
+        killDesertSpider = new LOTRAchievement(Category.NEAR_HARAD, 45, Blocks.web, "killDesertSpider");
+        minesusSand = new LOTRAchievement(Category.NEAR_HARAD, 46, LOTRMod.susSand, "minesusSand");
         enterFarHaradSavannah = new LOTRAchievement(Category.FAR_HARAD_SAVANNAH, 0, LOTRMod.lionFur, "enterFarHaradSavannah").setBiomeAchievement();
         pickBanana = new LOTRAchievement(Category.FAR_HARAD_SAVANNAH, 1, LOTRMod.banana, "pickBanana");
         growBaobab = new LOTRAchievement(Category.FAR_HARAD_SAVANNAH, 5, new ItemStack(LOTRMod.sapling4, 1, 1), "growBaobab");
@@ -1211,6 +1389,161 @@ public class LOTRAchievement {
         killUtumnoTroll = new LOTRAchievement(Category.UTUMNO, 8, LOTRMod.trollBone, "killUtumnoTroll");
         craftUtumnoKey = new LOTRAchievement(Category.UTUMNO, 9, LOTRMod.utumnoKey, "craftUtumnoKey");
         leaveUtumno = new LOTRAchievement(Category.UTUMNO, 10, LOTRMod.swordUtumno, "leaveUtumno").createTitle();
+        mod = new LOTRAchievement(Category.UTUMNO, 12, new ItemStack(LOTRMod.goldRing, 1, 1), "mod");
+        translator = new LOTRAchievement(Category.UTUMNO, 13, new ItemStack(LOTRMod.goldRing, 1, 1), "translator");
+        ogre = new LOTRAchievement(Category.UTUMNO, 14, new ItemStack(LOTRMod.goldRing, 1, 1), "ogre");
+        tester = new LOTRAchievement(Category.UTUMNO, 15, LOTRMod.mithrilRing, "tester");
+        dovakin = new LOTRAchievement(Category.UTUMNO, 16, LOTRMod.mithrilRing, "dovakin");
+        lore = new LOTRAchievement(Category.UTUMNO, 17, new ItemStack(LOTRMod.goldRing, 1, 1), "lore");
+        doMiniquestRedDwarf = new LOTRAchievement(Category.OROCARNI, 3, LOTRMod.redBook, "doMiniquestRedDwarf").setRequiresAlly(LOTRFaction.RED_MOUNTAINS);
+        killAngband = new LOTRAchievement(Category.FORODWAITH, 11, LOTRMod.orcBone, "killAngband").setRequiresEnemy(LOTRFaction.UTUMNO);
+        useAngbandTable = new LOTRAchievement(Category.FORODWAITH, 12, LOTRMod.angbandtable, "useAngbandTable").setRequiresAlly(LOTRFaction.UTUMNO);
+        useEreborTable = new LOTRAchievement(Category.IRON_HILLS, 20, LOTRMod.erebortable, "useEreborTable").setRequiresAlly(LOTRFaction.DURINS_FOLK);
+        useWindTable = new LOTRAchievement(Category.OROCARNI, 7, LOTRMod.windtable, "useWindTable").setRequiresAlly(LOTRFaction.WIND);
+        useRedDwarfTable = new LOTRAchievement(Category.OROCARNI, 4, LOTRMod.reddwarvenTable, "useRedMountainsTable").setRequiresAlly(LOTRFaction.RED_MOUNTAINS);
+        hireErebor = new LOTRAchievement(Category.IRON_HILLS, 21, LOTRMod.swordDwarven, "hireErebor").setRequiresAlly(LOTRFaction.DURINS_FOLK);
+        tradeRedDwarfSmith = new LOTRAchievement(Category.OROCARNI, 5, LOTRMod.silverCoin, "tradeRedDwarfSmith").setRequiresAlly(LOTRFaction.RED_MOUNTAINS);
+        tradeAngbandUrukCaptain = new LOTRAchievement(Category.FORODWAITH, 13, LOTRMod.silverCoin, "tradeAngbandCaptain").setRequiresAlly(LOTRFaction.UTUMNO);
+        tradeAngbandSpiderUrukCaptain = new LOTRAchievement(Category.FORODWAITH, 14, LOTRMod.silverCoin, "tradeAngbandSpiderCaptain").setRequiresAlly(LOTRFaction.UTUMNO);
+        tradeAngbandWargUrukCaptain = new LOTRAchievement(Category.FORODWAITH, 15, LOTRMod.silverCoin, "tradeAngbandWargCaptain").setRequiresAlly(LOTRFaction.UTUMNO);
+        hireWind = new LOTRAchievement(Category.OROCARNI, 6, LOTRMod.battleaxeDwarven, "hireWind").setRequiresAlly(LOTRFaction.WIND);
+        enterStiffbeard = new LOTRAchievement(Category.OROCARNI, 8, LOTRMod.helmetStiffbeard, "enterMornaugrim").setBiomeAchievement();
+        enterHarnaugrim = new LOTRAchievement(Category.OROCARNI, 9, LOTRMod.helmetIronfist, "enterHarnaugrim").setBiomeAchievement();
+        marryMornaugrimDwarf = new LOTRAchievement(Category.OROCARNI, 10, LOTRMod.dwarvenRing, "marryMornaugrimDwarf").setRequiresAlly(LOTRFaction.RED_MOUNTAINS);
+        enterLotr = new LOTRAchievement(Category.GENERAL, 78, LOTRMod.goldRing, "enterLotr").setSpecial();
+        killRoyal = new LOTRAchievement(Category.IRON_HILLS, 22, LOTRMod.hammerDwarven, "killRoyal").setRequiresAlly(LOTRFaction.DURINS_FOLK);
+        tradeUtumnoUrukTrader = new LOTRAchievement(Category.FORODWAITH, 17, LOTRMod.silverCoin, "tradeUtumnoUrukTrader").setRequiresAlly(LOTRFaction.UTUMNO);
+        enterAngband = new LOTRAchievement(Category.FORODWAITH, 18, LOTRMod.helmetangbande, "enterAngband").setBiomeAchievement();
+        enterAngbandMountains = new LOTRAchievement(Category.FORODWAITH, 19, Items.bone, "enterAngbandMountains").setBiomeAchievement();
+        craftgoldRing = new LOTRAchievement(Category.GENERAL, 79, LOTRMod.goldRing, "craftgoldRing");
+        doMiniquestAngband = new LOTRAchievement(Category.FORODWAITH, 10, LOTRMod.redBook, "doMiniquestAngband").setRequiresAlly(LOTRFaction.UTUMNO);
+        doMiniquestDurmeth = new LOTRAchievement(Category.ERIADOR, 47, LOTRMod.redBook, "doMiniquestDurmeth").setRequiresAlly(LOTRFaction.GUNDABAD);
+        tradeBlacklock = new LOTRAchievement(Category.OROCARNI, 15, LOTRMod.silverCoin, "tradeBlacklock").setRequiresAlly(LOTRFaction.RED_MOUNTAINS);
+        tradeStiffbeard = new LOTRAchievement(Category.OROCARNI, 16, LOTRMod.silverCoin, "tradeStiffbeard").setRequiresAlly(LOTRFaction.RED_MOUNTAINS);
+        tradeStonefoot = new LOTRAchievement(Category.OROCARNI, 17, LOTRMod.silverCoin, "tradeStonefoot").setRequiresAlly(LOTRFaction.RED_MOUNTAINS);
+        tradeIronfist = new LOTRAchievement(Category.OROCARNI, 18, LOTRMod.silverCoin, "tradeIronfist").setRequiresAlly(LOTRFaction.RED_MOUNTAINS);
+        tradeDurmethOrc = new LOTRAchievement(Category.RHUN, 23, LOTRMod.silverCoin, "tradeDurmethOrc").setRequiresAlly(LOTRFaction.GUNDABAD);
+        enterDurmeth = new LOTRAchievement(Category.RHUN, 21, LOTRMod.axeOrc, "enterDurmeth").setBiomeAchievement();
+        enterDurmethMountains = new LOTRAchievement(Category.OROCARNI, 25, LOTRMod.dwarfBone, "enterDurmethMountains").setBiomeAchievement();
+        enterKhand = new LOTRAchievement(Category.RHUN, 25, LOTRMod.daggerRhun, "enterKhand").setBiomeAchievement();
+        enterHildorien = new LOTRAchievement(Category.RHUN, 27, LOTRMod.tallGrass, "enterHildorien").setBiomeAchievement();
+        enterWastelandRhun = new LOTRAchievement(Category.RHUN, 29, Items.skull, "enterWastelandRhun").setBiomeAchievement();
+        enterRhunTaiga = new LOTRAchievement(Category.RHUN, 30, (Block)Blocks.grass, "enterRhunTaiga").setBiomeAchievement();
+        enterWildRhun = new LOTRAchievement(Category.RHUN, 31, LOTRMod.daggerUruk, "enterWildRhun").setBiomeAchievement();
+        enterHarhudor = new LOTRAchievement(Category.RHUN, 32, LOTRMod.flax, "enterHarhudor").setBiomeAchievement();
+        enterRedMountainsSnow = new LOTRAchievement(Category.OROCARNI, 19, LOTRMod.helmetIronfist, "enterRedMountainsSnow").setBiomeAchievement();
+        enterRedMountainsCentre = new LOTRAchievement(Category.OROCARNI, 20, LOTRMod.helmetStonefoot, "enterRedMountainsCentre").setBiomeAchievement();
+        enterEasternCoasts = new LOTRAchievement(Category.RHUN, 33, LOTRMod.swordRhun, "enterEasternCoasts").setBiomeAchievement();
+        smeltMithril = new LOTRAchievement(Category.GENERAL, 80, LOTRMod.mithrilNugget, "smeltMithril");
+        wearFullDwarvenMithril = new LOTRAchievement(Category.IRON_HILLS, 24, LOTRMod.bodyDMithril, "wearFullDwarvenMithril");
+        wearFullErebor = new LOTRAchievement(Category.IRON_HILLS, 26, LOTRMod.bodyErebor, "wearFullErebor");
+        wearFullGuldur = new LOTRAchievement(Category.MIRKWOOD, 27, LOTRMod.bodyguldururuk, "wearFullGuldur");
+        wearAngband = new LOTRAchievement(Category.FORODWAITH, 20, LOTRMod.bodyAngband, "wearAngband");
+        wearAngbandu = new LOTRAchievement(Category.FORODWAITH, 21, LOTRMod.bodyAngbandu, "wearAngbandu");
+        wearBerserk = new LOTRAchievement(Category.FORODWAITH, 22, LOTRMod.bodyBerserk, "wearBerserk");
+        wearWind = new LOTRAchievement(Category.OROCARNI, 22, LOTRMod.bodyWind, "wearWind");
+        killDurmethOrc = new LOTRAchievement(Category.RHUN, 34, LOTRMod.orcBone, "killDurmethOrc").setRequiresEnemy(LOTRFaction.GUNDABAD);
+        killDurmethWarg = new LOTRAchievement(Category.RHUN, 35, LOTRMod.wargBone, "killDurmethWarg").setRequiresEnemy(LOTRFaction.GUNDABAD);
+        enterRhunSemiDesert = new LOTRAchievement(Category.RHUN, 37, (Block)Blocks.sand, "enterRhunSemiDesert").setBiomeAchievement();
+        enterSun = new LOTRAchievement(Category.GENERAL, 81, (Block)Blocks.sand, "enterSun").setBiomeAchievement();
+        getOne = new LOTRAchievement(Category.GENERAL, 82, LOTRMod.LOTRRingOne, "getOne");
+        getThree = new LOTRAchievement(Category.GENERAL, 83, LOTRMod.nenia, "getThree");
+        getSeven = new LOTRAchievement(Category.GENERAL, 84, LOTRMod.d1, "getSeven");
+        getNine = new LOTRAchievement(Category.GENERAL, 85, LOTRMod.h1, "getNine");
+        getArcenstone = new LOTRAchievement(Category.GENERAL, 86, LOTRMod.arcenstone, "getArcenstone");
+        getBilbo = new LOTRAchievement(Category.GENERAL, 87, LOTRMod.bodyBilbo, "getBilbo");
+        enterDimrill = new LOTRAchievement(Category.RHOVANION, 11, LOTRMod.dwarvenDoorIthildin, "enterDimrill").setBiomeAchievement();
+        enterBizar = new LOTRAchievement(Category.OROCARNI, 23, new ItemStack(LOTRMod.brick2, 0, 2), "enterBizar").setBiomeAchievement();
+        wearAngbande = new LOTRAchievement(Category.FORODWAITH, 23, LOTRMod.bodyangbande, "wearAngbande");
+        wearBoldog = new LOTRAchievement(Category.FORODWAITH, 24, LOTRMod.bodyboldog, "wearBoldog");
+        getSilmaril = new LOTRAchievement(Category.GENERAL, 88, LOTRMod.silmaril_fire, "getSilmaril");
+        useRing = new LOTRAchievement(Category.GENERAL, 89, LOTRMod.LOTRRingOne, "useRing");
+        playerRespawn = new LOTRAchievement(Category.GENERAL, 90, LOTRMod.gandalfStaffWhite, "playerRespawn");
+        playerDeath = new LOTRAchievement(Category.GENERAL, 91, LOTRMod.gandalfStaffGrey, "playerDeath");
+        enterForestShelter = new LOTRAchievement(Category.ANDUIN_VALLEY, 4, new ItemStack(LOTRMod.sapling7, 1, 1), "enterForestShelter").setBiomeAchievement();
+        enterSouthMirkwood = new LOTRAchievement(Category.MIRKWOOD, 28, new ItemStack(LOTRMod.guldurilBrick, 1, 4), "enterSouthMirkwood").setBiomeAchievement();
+        enterBeornsDomain = new LOTRAchievement(Category.ANDUIN_VALLEY, 5, Blocks.sapling, "enterBeornsDomain").setBiomeAchievement();
+        enterHarhudorJungle = new LOTRAchievement(Category.RHUN, 36, new ItemStack(LOTRMod.leaves6, 1, 0), "enterHarhudorJungle").setBiomeAchievement();
+        enterRohanGate = new LOTRAchievement(Category.DUNLAND, 11, Items.stone_sword, "enterRohanGate").setBiomeAchievement();
+        wearFullIstari = new LOTRAchievement(Category.GENERAL, 92, LOTRMod.gandalfhat, "wearIstari");
+        doMiniquestWind = new LOTRAchievement(Category.OROCARNI, 24, LOTRMod.redBook, "doMiniquestWind").setRequiresAlly(LOTRFaction.WIND);
+        useOneRing = new LOTRAchievement(Category.GENERAL, 93, LOTRMod.LOTRRingOne, "useOneRing");
+        killSauron = new LOTRAchievement(Category.MORDOR, 31, LOTRMod.sauronMace, "killSauron");
+        killBoldog = new LOTRAchievement(Category.FORODWAITH, 25, LOTRMod.hammerBoldog, "killBoldog");
+        tradePallando = new LOTRAchievement(Category.GENERAL, 94, LOTRMod.pallandostaff, "tradePallando");
+        wearFullSauron = new LOTRAchievement(Category.MORDOR, 32, LOTRMod.sauronbody, "wearSauron");
+        craftMithril = new LOTRAchievement(Category.GENERAL, 95, LOTRMod.mithril, "craftMithril");
+        wearFullBronze = new LOTRAchievement(Category.GENERAL, 96, LOTRMod.bodyBronze, "wearFullBronze");
+        wearFullBone = new LOTRAchievement(Category.GENERAL, 97, LOTRMod.bodyBone, "wearFullBone");
+        enterFallForodwaith = new LOTRAchievement(Category.FORODWAITH, 26, new ItemStack(LOTRMod.wargskinRug, 0, 7), "enterFallForodwaith").setBiomeAchievement();
+        tradeRedDwarfMerchant = new LOTRAchievement(Category.OROCARNI, 26, LOTRMod.silverCoin, "tradeRedDwarfMerchant").setRequiresAlly(LOTRFaction.RED_MOUNTAINS);
+        enterIceUgol = new LOTRAchievement(Category.FORODWAITH, 27, Blocks.web, "enterIceUgol").setBiomeAchievement();
+        enterAnfalas = new LOTRAchievement(Category.GONDOR, 48, LOTRMod.axeBronze, "enterAnfalas").setBiomeAchievement();
+        wearFullGrey = new LOTRAchievement(Category.RHOVANION, 12, LOTRMod.gdbody, "wearFullGrey");
+        wearFullDark = new LOTRAchievement(Category.OROCARNI, 27, LOTRMod.wdbody, "wearFullDark");
+        tradeRedDwarfMiner = new LOTRAchievement(Category.OROCARNI, 28, LOTRMod.silverCoin, "tradeRedDwarfMiner").setRequiresAlly(LOTRFaction.RED_MOUNTAINS);
+        enterMoria = new LOTRAchievement(Category.MISTY_MOUNTAINS, 3, Blocks.stone, "enterMoria").setBiomeAchievement();
+        killMoriaOrc = new LOTRAchievement(Category.MISTY_MOUNTAINS, 4, LOTRMod.orcBone, "killMoriaOrc").setRequiresEnemy(LOTRFaction.GUNDABAD);
+        killCaveTroll = new LOTRAchievement(Category.FORODWAITH, 5, LOTRMod.trollBone, "killCaveTroll").setRequiresEnemy(LOTRFaction.GUNDABAD);
+        tradeMoriaOrc = new LOTRAchievement(Category.MISTY_MOUNTAINS, 6, LOTRMod.silverCoin, "tradeMoriaOrc").setRequiresAlly(LOTRFaction.GUNDABAD);
+        wearMoriaMithril = new LOTRAchievement(Category.MISTY_MOUNTAINS, 7, LOTRMod.helmetMoriaMithril, "wearMoriaMithril");
+        wearFullMoria = new LOTRAchievement(Category.MISTY_MOUNTAINS, 8, LOTRMod.moriahelmet, "wearFullMoria");
+        wearFullMoriaMithril = new LOTRAchievement(Category.MISTY_MOUNTAINS, 9, LOTRMod.bodyMoriaMithril, "wearFullMoriaMithril");
+        useWickedDwarfTable = new LOTRAchievement(Category.OROCARNI, 29, LOTRMod.wickedDwarvenTable, "useWickedDwarfTable").setRequiresAlly(LOTRFaction.MORDOR);
+        killMountainSnowTroll = new LOTRAchievement(Category.ANGMAR, 13, LOTRMod.trollBone, "killMountainSnowTroll").setRequiresEnemy(LOTRFaction.GUNDABAD).createTitle();
+        drinkUrukDraught = new LOTRAchievement(Category.FORODWAITH, 28, LOTRMod.mugUrukDraught, "drinkUrukDraught");
+        eatKham = new LOTRAchievement(Category.GENERAL, 98, LOTRMod.kham, "eatKham");
+        drinkKhamBrew = new LOTRAchievement(Category.GENERAL, 99, LOTRMod.mugKhamBrew, "drinkKhamBrew");
+        drinkRedDwarvenTonic = new LOTRAchievement(Category.OROCARNI, 21, LOTRMod.mugRedDwarvenTonic, "drinkRedDwarvenTonic");
+        eatlembasNugget = new LOTRAchievement(Category.GENERAL, 100, LOTRMod.lembasNugget, "eatlembasNugget");
+        drinkFire = new LOTRAchievement(Category.GENERAL, 101, LOTRMod.mugKhamBrew, "drinkFire");
+        Thorin = new LOTRAchievement(Category.IRON_HILLS, 27, LOTRMod.ereborHorn, "Thorin").setRequiresAlly(LOTRFaction.DURINS_FOLK);
+        tradeEreborDwarfSmith = new LOTRAchievement(Category.IRON_HILLS, 28, LOTRMod.silverCoin, "tradeEreborDwarfSmith").setRequiresAlly(LOTRFaction.DURINS_FOLK);
+        wearFullGondorMithril = new LOTRAchievement(Category.GONDOR, 49, LOTRMod.gondormithrilbody, "wearFullGondorMithril");
+        leapoffaith = new LOTRAchievement(Category.GENERAL, 102, Blocks.hay_block, "leapoffaith");
+        insearchofyourself = new LOTRAchievement(Category.GENERAL, 103, LOTRMod.bootsFur, "insearchofyourself");
+        useBandage = new LOTRAchievement(Category.GENERAL, 104, LOTRMod.cloth, "useBandage");
+        doMiniquestAvariElf = new LOTRAchievement(Category.OROCARNI, 31, LOTRMod.redBook, "doMiniquestAvariElf").setRequiresAlly(LOTRFaction.AVARI);
+        killAvariElf = new LOTRAchievement(Category.OROCARNI, 32, LOTRMod.elfBone, "killAvariElf").setRequiresEnemy(LOTRFaction.AVARI);
+        tradeAvariElfCaptain = new LOTRAchievement(Category.OROCARNI, 33, LOTRMod.silverCoin, "tradeAvariElfCaptain").setRequiresAlly(LOTRFaction.AVARI);
+        tradeWoodElfSmith = new LOTRAchievement(Category.OROCARNI, 34, LOTRMod.silverCoin, "tradeAvariElfSmith").setRequiresAlly(LOTRFaction.AVARI);
+        enterAvariForest = new LOTRAchievement(Category.OROCARNI, 35, LOTRMod.helmetAvariElf, "enterAvariForest").setBiomeAchievement();
+        wearFullAvari = new LOTRAchievement(Category.OROCARNI, 36, LOTRMod.bodyAvariElf, "wearFullAvari");
+        wearFullAvariScout = new LOTRAchievement(Category.OROCARNI, 37, LOTRMod.bodyAvariElfScout, "wearFullAvariScout");
+        useAvariTable = new LOTRAchievement(Category.OROCARNI, 38, LOTRMod.avariTable, "useAvariTable").setRequiresAlly(LOTRFaction.AVARI);
+        killDarkElf = new LOTRAchievement(Category.FORODWAITH, 29, LOTRMod.elfBone, "killDarkElf");
+        wearFullStonefoot = new LOTRAchievement(Category.OROCARNI, 39, LOTRMod.bodyStonefoot, "wearFullStonefoot");
+        wearFullStiffbeard = new LOTRAchievement(Category.OROCARNI, 40, LOTRMod.bodyStiffbeard, "wearFullStiffbeard");
+        wearFullIronfist = new LOTRAchievement(Category.OROCARNI, 41, LOTRMod.bodyIronfist, "wearFullIronfist");
+        wearFullBlacklock = new LOTRAchievement(Category.OROCARNI, 42, LOTRMod.bodyBlacklock, "wearFullBlacklock");
+        useWickedElfTable = new LOTRAchievement(Category.FORODWAITH, 30, LOTRMod.darkElfTable, "useWickedElfTable").setRequiresAlly(LOTRFaction.UTUMNO);
+        wearFullDarkElf = new LOTRAchievement(Category.FORODWAITH, 31, LOTRMod.bodyWickedElf, "wearFullDarkElf");
+        wearFullDarkElfRanger = new LOTRAchievement(Category.FORODWAITH, 32, LOTRMod.bodyWickedElfRanger, "wearFullDarkElfRanger");
+        getKham = new LOTRAchievement(Category.GENERAL, 105, LOTRMod.khamRaw, "getKham");
+        earnManyCoins1 = new LOTRAchievement(Category.GENERAL, 106, LOTRMod.silverCoin, "earnManyCoins1").createTitle();
+        earnManyCoins2 = new LOTRAchievement(Category.GENERAL, 107, LOTRMod.silverCoin, "earnManyCoins2").createTitle();
+        earnManyCoins3 = new LOTRAchievement(Category.GENERAL, 108, LOTRMod.silverCoin, "earnManyCoins3").createTitle();
+        earnManyCoins4 = new LOTRAchievement(Category.GENERAL, 109, LOTRMod.silverCoin, "earnManyCoins4").createTitle();
+        wearFullChainmailBronze = new LOTRAchievement(Category.GENERAL, 110, LOTRMod.bodyBronzeChainmail, "wearFullChainmailBronze");
+        wearFullChainmailDwarf = new LOTRAchievement(Category.GENERAL, 111, LOTRMod.bodyDwarvenChainmail, "wearFullChainmailDwarf");
+        wearFullChainmailOrc = new LOTRAchievement(Category.GENERAL, 112, LOTRMod.bodyOrcChainmail, "wearFullChainmailOrc");
+        wearFullChainmailUruk = new LOTRAchievement(Category.GENERAL, 113, LOTRMod.bodyUrukChainmail, "wearFullChainmailUruk");
+        wearFullChainmailBlackUruk = new LOTRAchievement(Category.GENERAL, 114, LOTRMod.bodyBlackUrukChainmail, "wearFullChainmailBlackUruk");
+        wearFullWhite = new LOTRAchievement(Category.GENERAL, 115, LOTRMod.sarumanhat, "wearFullWhite");
+        wearFullBrown = new LOTRAchievement(Category.GENERAL, 116, LOTRMod.radagasthat, "wearFullBrown");
+        wearFullBlue = new LOTRAchievement(Category.GENERAL, 117, LOTRMod.alatarhat, "wearFullBlue");
+        wearBilbo = new LOTRAchievement(Category.GENERAL, 118, LOTRMod.bodyBilbo, "wearBilbo");
+        drinkSalt = new LOTRAchievement(Category.GENERAL, 119, LOTRMod.mugPickleJuice, "drinkSalt");
+        notenough = new LOTRAchievement(Category.GENERAL, 120, LOTRMod.bootsMithril, "notenough");
+        killMorgulSpider = new LOTRAchievement(Category.MORDOR, 33, Items.string, "killMorgulSpider").setRequiresEnemy(LOTRFaction.MORDOR).createTitle();
+        killObsidianTroll = new LOTRAchievement(Category.FORODWAITH, 33, LOTRMod.trollBone, "killObsidianTroll");
+        killFireTroll = new LOTRAchievement(Category.FORODWAITH, 34, LOTRMod.trollBone, "killFireTroll");
+        killIceSpider = new LOTRAchievement(Category.FORODWAITH, 35, Items.string, "killIceSpider");
+        killObsidianSpider = new LOTRAchievement(Category.FORODWAITH, 36, Items.string, "killObsidianSpider");
+        killFireSpider = new LOTRAchievement(Category.FORODWAITH, 37, Items.string, "killFireSpider");
+        feelBannerProtection = new LOTRAchievement(Category.GENERAL, 121, LOTRMod.gandalfhat, "feelBannerProtection");
+        hireEreborMercenary = new LOTRAchievement(Category.IRON_HILLS, 29, LOTRMod.silverCoin, "hireEreborMercenary").setRequiresAlly(LOTRFaction.DURINS_FOLK);
+        hireBerserk = new LOTRAchievement(Category.IRON_HILLS, 30, LOTRMod.hammerDwarven, "hireBerserk").setRequiresAlly(LOTRFaction.DURINS_FOLK);
     }
 
     public static Category categoryForName(String name) {
@@ -1253,7 +1586,7 @@ public class LOTRAchievement {
     }
 
     public IChatComponent getAchievementChatComponent(EntityPlayer entityplayer) {
-        ChatComponentTranslation component = new ChatComponentTranslation(this.getTitle(entityplayer), new Object[0]).createCopy();
+        ChatComponentTranslation component = new ChatComponentTranslation(this.getUntranslatedTitle(entityplayer), new Object[0]).createCopy();
         component.getChatStyle().setColor(EnumChatFormatting.YELLOW);
         component.getChatStyle().setChatHoverEvent(new HoverEvent(LOTRChatEvents.SHOW_LOTR_ACHIEVEMENT, (IChatComponent)new ChatComponentText(this.category.name() + "$" + this.ID)));
         return component;
@@ -1270,10 +1603,15 @@ public class LOTRAchievement {
         if (LOTRConfig.protectHobbitKillers && this == killHobbit) {
             return;
         }
-        String dimName = this.getDimension().getDimensionName();
+        ChatComponentTranslation dimName = new ChatComponentTranslation(this.getDimension().getUntranslatedDimensionName(), new Object[0]);
         IChatComponent earnName = this.getChatComponentForEarn(entityplayer);
         ChatComponentTranslation msg = new ChatComponentTranslation("chat.lotr.achievement", new Object[]{entityplayer.func_145748_c_(), dimName, earnName});
         MinecraftServer.getServer().getConfigurationManager().sendChatMsg((IChatComponent)msg);
+        if (entityplayer instanceof EntityPlayerMP) {
+            EntityPlayerMP playerMP = (EntityPlayerMP)entityplayer;
+            WorldServer worldServer = playerMP.getServerForPlayer();
+            worldServer.playSoundEffect(playerMP.posX, playerMP.posY, playerMP.posZ, "lotr:item.achievement", 0.5f, 1.0f);
+        }
     }
 
     public static enum Category {
@@ -1307,6 +1645,7 @@ public class LOTRAchievement {
         FAR_HARAD_JUNGLE(LOTRBiome.farHaradJungle),
         PERDOROGWAITH(LOTRBiome.pertorogwaith),
         OCEAN(LOTRBiome.ocean),
+        ANDUIN_VALLEY(LOTRBiome.anduinVale),
         UTUMNO(LOTRDimension.UTUMNO, LOTRFaction.UTUMNO.getFactionColor());
 
         private String codeName;

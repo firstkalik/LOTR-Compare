@@ -66,7 +66,6 @@ public class LOTREntityNPCRespawner
 extends Entity {
     public float spawnerSpin;
     public float prevSpawnerSpin;
-    private static final int spawnInterval_default = 3600;
     public int spawnInterval = 3600;
     public int noPlayerRange = 24;
     public Class spawnClass1;
@@ -244,19 +243,16 @@ extends Entity {
     }
 
     public void onUpdate() {
-        int i;
-        int maxZ;
-        int j;
-        int maxY;
-        IEntitySelector checkSelector;
-        int maxX;
-        int entities;
-        int k;
-        AxisAlignedBB checkAABB;
-        int minZ;
         int minY;
+        int entities;
+        int maxZ;
+        int k;
+        int maxX;
+        int minZ;
+        int j;
+        int i;
+        int maxY;
         int minX;
-        List nearbyEntities;
         this.prevPosX = this.posX;
         this.prevPosY = this.posY;
         this.prevPosZ = this.posZ;
@@ -268,7 +264,7 @@ extends Entity {
         this.motionY = 0.0;
         this.motionZ = 0.0;
         this.moveEntity(this.motionX, this.motionY, this.motionZ);
-        if (!this.worldObj.isRemote && this.ticksExisted % this.spawnInterval == 0 && (this.spawnClass1 != null || this.spawnClass2 != null) && this.worldObj.checkChunksExist(minX = (i = MathHelper.floor_double((double)this.posX)) - this.checkHorizontalRange, minY = (j = MathHelper.floor_double((double)this.boundingBox.minY)) + this.checkVerticalMin, minZ = (k = MathHelper.floor_double((double)this.posZ)) - this.checkHorizontalRange, maxX = i + this.checkHorizontalRange, maxY = j + this.checkVerticalMax, maxZ = k + this.checkHorizontalRange) && this.worldObj.getClosestPlayer((double)i + 0.5, (double)j + 0.5, (double)k + 0.5, (double)this.noPlayerRange) == null && (entities = (nearbyEntities = this.worldObj.selectEntitiesWithinAABB(EntityLiving.class, checkAABB = AxisAlignedBB.getBoundingBox((double)minX, (double)minY, (double)minZ, (double)(maxX + 1), (double)(maxY + 1), (double)(maxZ + 1)), checkSelector = new IEntitySelector(){
+        if (!this.worldObj.isRemote && this.ticksExisted % this.spawnInterval == 0 && (this.spawnClass1 != null || this.spawnClass2 != null) && this.worldObj.checkChunksExist(minX = (i = MathHelper.floor_double((double)this.posX)) - this.checkHorizontalRange, minY = (j = MathHelper.floor_double((double)this.boundingBox.minY)) + this.checkVerticalMin, minZ = (k = MathHelper.floor_double((double)this.posZ)) - this.checkHorizontalRange, maxX = i + this.checkHorizontalRange, maxY = j + this.checkVerticalMax, maxZ = k + this.checkHorizontalRange) && this.worldObj.getClosestPlayer((double)i + 0.5, (double)j + 0.5, (double)k + 0.5, (double)this.noPlayerRange) == null && (entities = this.worldObj.selectEntitiesWithinAABB(EntityLiving.class, AxisAlignedBB.getBoundingBox((double)minX, (double)minY, (double)minZ, (double)(maxX + 1), (double)(maxY + 1), (double)(maxZ + 1)), new IEntitySelector(){
 
             public boolean isEntityApplicable(Entity entity) {
                 if (!entity.isEntityAlive()) {
@@ -277,14 +273,14 @@ extends Entity {
                 Class<?> entityClass = entity.getClass();
                 return LOTREntityNPCRespawner.this.spawnClass1 != null && LOTREntityNPCRespawner.this.spawnClass1.isAssignableFrom(entityClass) || LOTREntityNPCRespawner.this.spawnClass2 != null && LOTREntityNPCRespawner.this.spawnClass2.isAssignableFrom(entityClass);
             }
-        })).size()) < this.spawnCap) {
+        }).size()) < this.spawnCap) {
             int attempts = 16;
             for (int l = 0; l < attempts; ++l) {
                 int spawnX = i + MathHelper.getRandomIntegerInRange((Random)this.rand, (int)(-this.spawnHorizontalRange), (int)this.spawnHorizontalRange);
                 int spawnY = j + MathHelper.getRandomIntegerInRange((Random)this.rand, (int)this.spawnVerticalMin, (int)this.spawnVerticalMax);
                 int spawnZ = k + MathHelper.getRandomIntegerInRange((Random)this.rand, (int)(-this.spawnHorizontalRange), (int)this.spawnHorizontalRange);
                 Block belowBlock = this.worldObj.getBlock(spawnX, spawnY - 1, spawnZ);
-                int belowMeta = this.worldObj.getBlockMetadata(spawnX, spawnY - 1, spawnZ);
+                this.worldObj.getBlockMetadata(spawnX, spawnY - 1, spawnZ);
                 boolean belowSolid = belowBlock.isSideSolid((IBlockAccess)this.worldObj, spawnX, spawnY - 1, spawnZ, ForgeDirection.UP);
                 if (!belowSolid || this.worldObj.getBlock(spawnX, spawnY, spawnZ).isNormalCube() || this.worldObj.getBlock(spawnX, spawnY + 1, spawnZ).isNormalCube()) continue;
                 Class entityClass = null;
@@ -381,13 +377,13 @@ extends Entity {
     }
 
     public static boolean isSpawnBlocked(Entity entity, LOTRFaction spawnFaction) {
-        int range;
         int j;
+        int range;
         int k;
         World world = entity.worldObj;
         int i = MathHelper.floor_double((double)entity.posX);
         AxisAlignedBB originBB = AxisAlignedBB.getBoundingBox((double)i, (double)(j = MathHelper.floor_double((double)entity.boundingBox.minY)), (double)(k = MathHelper.floor_double((double)entity.posZ)), (double)(i + 1), (double)(j + 1), (double)(k + 1));
-        AxisAlignedBB searchBB = originBB.expand((double)(range = 64), (double)range, (double)range);
+        AxisAlignedBB searchBB = originBB.expand((double)64, (double)(range = 64), (double)range);
         List spawners = world.getEntitiesWithinAABB(LOTREntityNPCRespawner.class, searchBB);
         if (!spawners.isEmpty()) {
             for (Object obj : spawners) {

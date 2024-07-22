@@ -48,13 +48,10 @@ import org.apache.commons.lang3.StringUtils;
 
 public class LOTRTileEntityBeacon
 extends TileEntity {
-    private static final float beaconRange = 80.0f;
-    private static final float beaconRangeSq = 6400.0f;
     private int ticksExisted;
     private boolean isLit;
     private int litCounter;
     private int unlitCounter;
-    private static final int lightingTime = 100;
     private long stateChangeTime = -1L;
     private String beaconName;
     private UUID beaconFellowshipID;
@@ -126,7 +123,7 @@ extends TileEntity {
                                 TileEntity te = (TileEntity)obj;
                                 if (te.isInvalid() || !(te instanceof LOTRTileEntityBeacon)) continue;
                                 LOTRTileEntityBeacon beacon = (LOTRTileEntityBeacon)te;
-                                if (!(coordsThis.getDistanceSquared(beacon.xCoord, beacon.yCoord, beacon.zCoord) <= 6400.0f)) continue;
+                                if (coordsThis.getDistanceSquared(beacon.xCoord, beacon.yCoord, beacon.zCoord) > 6400.0f) continue;
                                 nearbyTiles.add(beacon);
                             }
                         }

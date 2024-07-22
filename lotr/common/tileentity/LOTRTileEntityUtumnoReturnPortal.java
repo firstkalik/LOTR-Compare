@@ -96,7 +96,7 @@ extends TileEntity {
                     entityplayermp.playerNetServerHandler.sendPacket((Packet)new S12PacketEntityVelocity((Entity)entityplayer));
                 }
             }
-            if (this.worldObj.isRemote || !(entity.posY >= (double)PORTAL_TOP - 5.0)) continue;
+            if (this.worldObj.isRemote || entity.posY < (double)PORTAL_TOP - 5.0) continue;
             int dimension = LOTRDimension.MIDDLE_EARTH.dimensionID;
             LOTRTeleporterUtumno teleporter = LOTRTeleporterUtumno.newTeleporter(dimension);
             if (entity instanceof EntityPlayerMP) {

@@ -43,20 +43,22 @@ extends LOTRWorldGenTauredainHouse {
 
     @Override
     public boolean generateWithSetRotation(World world, Random random, int i, int j, int k, int rotation) {
-        int i1;
-        int i12;
-        int k2;
+        int j1;
         int i2;
-        int k1;
+        int k2;
         int k12;
+        int j12;
+        int k1;
+        int i12;
+        int i1;
         if (!super.generateWithSetRotation(world, random, i, j, k, rotation)) {
             return false;
         }
         for (i12 = -10; i12 <= 10; ++i12) {
             for (k12 = -10; k12 <= 10; ++k12) {
                 this.layFoundation(world, i12, k12);
-                for (int j1 = 1; j1 <= 14; ++j1) {
-                    this.setAir(world, i12, j1, k12);
+                for (j12 = 1; j12 <= 14; ++j12) {
+                    this.setAir(world, i12, j12, k12);
                 }
             }
         }
@@ -73,13 +75,13 @@ extends LOTRWorldGenTauredainHouse {
                     this.setBlockAndMetadata(world, i12, 0, k12, LOTRMod.brick4, 4);
                     continue;
                 }
-                for (int j1 = 1; j1 <= 4; ++j1) {
-                    this.setBlockAndMetadata(world, i12, j1, k12, this.brickBlock, this.brickMeta);
+                for (j12 = 1; j12 <= 4; ++j12) {
+                    this.setBlockAndMetadata(world, i12, j12, k12, this.brickBlock, this.brickMeta);
                 }
                 if (i2 <= 1 && k12 <= 0) {
                     int step = 4 - (-3 - k12);
                     if (step < 0 || step > 4) continue;
-                    for (int j1 = step + 1; j1 <= 4; ++j1) {
+                    for (j1 = step + 1; j1 <= 4; ++j1) {
                         this.setAir(world, i12, j1, k12);
                     }
                     if (step == 0) {
@@ -94,7 +96,7 @@ extends LOTRWorldGenTauredainHouse {
                     this.setBlockAndMetadata(world, 1, step, k12, this.brickStairBlock, 2);
                     continue;
                 }
-                if ((i2 != 7 || k12 % 2 != 0) && (k2 != 7 || i12 % 2 != 0)) continue;
+                if (!(i2 == 7 && k12 % 2 == 0 || k2 == 7 && i12 % 2 == 0)) continue;
                 this.setBlockAndMetadata(world, i12, 1, k12, this.brickWallBlock, this.brickWallMeta);
                 this.placeTauredainTorch(world, i12, 2, k12);
             }
@@ -127,13 +129,13 @@ extends LOTRWorldGenTauredainHouse {
         }
         for (int i13 : new int[]{-3, 3}) {
             this.setBlockAndMetadata(world, i13, 5, -6, this.brickWallBlock, this.brickWallMeta);
-            for (int j1 = 5; j1 <= 7; ++j1) {
+            for (int j13 = 5; j13 <= 7; ++j13) {
                 for (int k15 = -5; k15 <= -3; ++k15) {
-                    this.setBlockAndMetadata(world, i13, j1, k15, this.brickBlock, this.brickMeta);
+                    this.setBlockAndMetadata(world, i13, j13, k15, this.brickBlock, this.brickMeta);
                 }
-                this.setBlockAndMetadata(world, i13, j1, -1, this.brickBlock, this.brickMeta);
-                this.setBlockAndMetadata(world, i13, j1, 1, this.brickBlock, this.brickMeta);
-                this.setBlockAndMetadata(world, i13, j1, 3, this.brickBlock, this.brickMeta);
+                this.setBlockAndMetadata(world, i13, j13, -1, this.brickBlock, this.brickMeta);
+                this.setBlockAndMetadata(world, i13, j13, 1, this.brickBlock, this.brickMeta);
+                this.setBlockAndMetadata(world, i13, j13, 3, this.brickBlock, this.brickMeta);
             }
             this.setBlockAndMetadata(world, i13, 5, 4, this.brickBlock, this.brickMeta);
             this.setBlockAndMetadata(world, i13, 7, 0, this.brickSlabBlock, this.brickSlabMeta | 8);
@@ -149,12 +151,16 @@ extends LOTRWorldGenTauredainHouse {
                 this.setBlockAndMetadata(world, i13, 8, k16, this.brickSlabBlock, this.brickSlabMeta);
             }
         }
-        for (int i13 : new int[]{-4, 4}) {
-            for (int j1 = 5; j1 <= 7; ++j1) {
-                this.setBlockAndMetadata(world, i13, j1, -4, this.brickBlock, this.brickMeta);
-                this.setBlockAndMetadata(world, i13, j1, -2, this.brickBlock, this.brickMeta);
-                this.setBlockAndMetadata(world, i13, j1, 2, this.brickBlock, this.brickMeta);
-                this.setBlockAndMetadata(world, i13, j1, 4, this.brickBlock, this.brickMeta);
+        int[] k13 = new int[]{-4, 4};
+        j1 = k13.length;
+        for (int i3 = 0; i3 < j1; ++i3) {
+            int i13;
+            i13 = k13[i3];
+            for (int j14 = 5; j14 <= 7; ++j14) {
+                this.setBlockAndMetadata(world, i13, j14, -4, this.brickBlock, this.brickMeta);
+                this.setBlockAndMetadata(world, i13, j14, -2, this.brickBlock, this.brickMeta);
+                this.setBlockAndMetadata(world, i13, j14, 2, this.brickBlock, this.brickMeta);
+                this.setBlockAndMetadata(world, i13, j14, 4, this.brickBlock, this.brickMeta);
             }
             this.setBlockAndMetadata(world, i13, 5, -3, this.brickBlock, this.brickMeta);
             this.setBlockAndMetadata(world, i13, 5, 3, this.brickBlock, this.brickMeta);
@@ -171,8 +177,7 @@ extends LOTRWorldGenTauredainHouse {
         int[] i14 = new int[]{-2, 2};
         k12 = i14.length;
         for (i2 = 0; i2 < k12; ++i2) {
-            int i13;
-            i13 = i14[i2];
+            int i13 = i14[i2];
             this.setBlockAndMetadata(world, i13, 5, -6, this.brickWallBlock, this.brickWallMeta);
             this.placeTauredainTorch(world, i13, 6, -6);
             this.setBlockAndMetadata(world, i13, 5, -5, this.brickBlock, this.brickMeta);
@@ -181,7 +186,7 @@ extends LOTRWorldGenTauredainHouse {
             this.setBlockAndMetadata(world, i13, 8, -3, this.brickSlabBlock, this.brickSlabMeta);
             this.placeArmorStand(world, i13, 5, 2, 0, new ItemStack[]{new ItemStack(LOTRMod.helmetTauredain), new ItemStack(LOTRMod.bodyTauredain), new ItemStack(LOTRMod.legsTauredain), new ItemStack(LOTRMod.bootsTauredain)});
         }
-        for (int j1 = 5; j1 <= 7; ++j1) {
+        for (j1 = 5; j1 <= 7; ++j1) {
             this.setBlockAndMetadata(world, -2, j1, 4, this.brickBlock, this.brickMeta);
             this.setBlockAndMetadata(world, 2, j1, 4, this.brickBlock, this.brickMeta);
             this.setBlockAndMetadata(world, -1, j1, 3, this.brickBlock, this.brickMeta);
@@ -220,7 +225,6 @@ extends LOTRWorldGenTauredainHouse {
         }
         for (i1 = -2; i1 <= 2; ++i1) {
             for (k12 = -2; k12 <= 2; ++k12) {
-                int j1;
                 i2 = Math.abs(i1);
                 k2 = Math.abs(k12);
                 for (j1 = 8; j1 <= 9; ++j1) {

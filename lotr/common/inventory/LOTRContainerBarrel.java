@@ -40,8 +40,8 @@ extends Container {
     private int brewingTime = 0;
 
     public LOTRContainerBarrel(InventoryPlayer inv, LOTRTileEntityBarrel barrel) {
-        int i;
         int j;
+        int i;
         this.theBarrel = barrel;
         for (i = 0; i < 3; ++i) {
             for (j = 0; j < 3; ++j) {
@@ -52,7 +52,7 @@ extends Container {
                 this.addSlotToContainer((Slot)slot);
             }
         }
-        this.addSlotToContainer((Slot)new LOTRSlotBarrelResult((IInventory)barrel, 9, 108, 52));
+        this.addSlotToContainer((Slot)new LOTRSlotBarrelResult(barrel, 9, 108, 52));
         for (i = 0; i < 3; ++i) {
             for (j = 0; j < 9; ++j) {
                 this.addSlotToContainer(new Slot((IInventory)inv, j + i * 9 + 9, 25 + j * 18, 139 + i * 18));
@@ -74,8 +74,8 @@ extends Container {
 
     public void detectAndSendChanges() {
         super.detectAndSendChanges();
-        for (int i = 0; i < this.crafters.size(); ++i) {
-            ICrafting crafting = (ICrafting)this.crafters.get(i);
+        for (Object element : this.crafters) {
+            ICrafting crafting = (ICrafting)element;
             if (this.barrelMode != this.theBarrel.barrelMode) {
                 crafting.sendProgressBarUpdate((Container)this, 0, this.theBarrel.barrelMode);
             }
@@ -121,7 +121,7 @@ extends Container {
                 boolean flag = false;
                 Slot aBarrelSlot = (Slot)this.inventorySlots.get(0);
                 if (aBarrelSlot.isItemValid(itemstack1)) {
-                    flag = LOTRBrewingRecipes.isWaterSource(itemstack1) ? this.mergeItemStack(itemstack1, 6, 9, false) : this.mergeItemStack(itemstack1, 0, 6, false);
+                    boolean bl = flag = LOTRBrewingRecipes.isWaterSource(itemstack1) ? this.mergeItemStack(itemstack1, 6, 9, false) : this.mergeItemStack(itemstack1, 0, 6, false);
                 }
                 if (!flag && (i >= 10 && i < 37 ? !this.mergeItemStack(itemstack1, 37, 46, false) : !this.mergeItemStack(itemstack1, 10, 37, false))) {
                     return null;

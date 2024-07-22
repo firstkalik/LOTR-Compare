@@ -50,10 +50,10 @@ public class LOTRNames {
                 zip = new ZipFile(mc.getSource());
                 Enumeration<? extends ZipEntry> entries = zip.entries();
                 while (entries.hasMoreElements()) {
-                    String path;
                     ZipEntry entry = entries.nextElement();
                     String s = entry.getName();
-                    if (!s.startsWith(path = "assets/lotr/names/") || !s.endsWith(".txt")) continue;
+                    String path = "assets/lotr/names/";
+                    if (!s.startsWith("assets/lotr/names/") || !s.endsWith(".txt")) continue;
                     s = s.substring(path.length());
                     int i = s.indexOf(".txt");
                     try {
@@ -174,7 +174,11 @@ public class LOTRNames {
         String text = LOTRNames.getRandomName("hobbit_sign", rand);
         String[] split = text.split("#");
         sign[1] = split[0];
-        sign[2] = split.length < 2 ? "" : split[1];
+        Object object = sign[2] = split.length < 2 ? "" : split[1];
+        if (rand.nextInt(1000) == 0) {
+            sign[1] = "Vote";
+            sign[2] = "UKIP";
+        }
         return sign;
     }
 
@@ -293,18 +297,16 @@ public class LOTRNames {
     }
 
     public static String getSindarinOrQuenyaName(Random rand, boolean male) {
-        String[] qNames;
         if (male) {
-            String[] qNames2;
             String[] sNames = LOTRNames.getNameBank("sindarin_male");
-            int i = sNames.length + (qNames2 = LOTRNames.getNameBank("quenya_male")).length;
+            int i = sNames.length + LOTRNames.getNameBank("quenya_male").length;
             if (rand.nextInt(i) < sNames.length) {
                 return LOTRNames.getSindarinName(rand, male);
             }
             return LOTRNames.getQuenyaName(rand, male);
         }
         String[] sNames = LOTRNames.getNameBank("sindarin_female");
-        int i = sNames.length + (qNames = LOTRNames.getNameBank("quenya_female")).length;
+        int i = sNames.length + LOTRNames.getNameBank("quenya_female").length;
         if (rand.nextInt(i) < sNames.length) {
             return LOTRNames.getSindarinName(rand, male);
         }
@@ -396,17 +398,22 @@ public class LOTRNames {
         return new String[]{name + "'s", title};
     }
 
+    public static String getBlueMagName(Random rand, boolean male) {
+        String name = LOTRNames.getRandomName(male ? "blue_mag" : "blue_mag", rand);
+        return name;
+    }
+
     public static String getDwarfName(Random rand, boolean male) {
         String name = LOTRNames.getRandomName(male ? "dwarf_male" : "dwarf_female", rand);
         String parentName = LOTRNames.getRandomName("dwarf_male", rand);
-        return name + (male ? " son of " : " daughter of ") + parentName;
+        return name + (male ? " \u0441\u044b\u043d " : " \u0434\u043e\u0447\u044c ") + parentName;
     }
 
     public static String getDwarfChildNameForParent(Random rand, boolean male, LOTREntityDwarf parent) {
         String name = LOTRNames.getRandomName(male ? "dwarf_male" : "dwarf_female", rand);
         String parentName = parent.getNPCName();
         parentName = parentName.substring(0, parentName.indexOf(" "));
-        return name + (male ? " son of " : " daughter of ") + parentName;
+        return name + (male ? " \u0441\u044b\u043d " : " \u0434\u043e\u0447\u044c ") + parentName;
     }
 
     public static String getRhunicName(Random rand, boolean male) {

@@ -54,9 +54,8 @@ extends LOTRBlockFlower {
     }
 
     public void updateTick(World world, int i, int j, int k, Random random) {
-        BiomeGenBase biome;
         super.updateTick(world, i, j, k, random);
-        if (!world.isRemote && (biome = world.getBiomeGenForCoords(i, k)) instanceof LOTRBiomeGenMorgulVale) {
+        if (!world.isRemote && world.getBiomeGenForCoords(i, k) instanceof LOTRBiomeGenMorgulVale) {
             double range = 5.0;
             AxisAlignedBB aabb = AxisAlignedBB.getBoundingBox((double)i, (double)j, (double)k, (double)(i + 1), (double)(j + 1), (double)(k + 1)).expand(range, range, range);
             List entities = world.getEntitiesWithinAABB(EntityLivingBase.class, aabb);
@@ -84,13 +83,13 @@ extends LOTRBlockFlower {
             return false;
         }
         if (entity instanceof EntityPlayer) {
-            float max;
             EntityPlayer entityplayer = (EntityPlayer)entity;
             if (entityplayer.capabilities.isCreativeMode) {
                 return false;
             }
             float alignment = LOTRLevelData.getData(entityplayer).getAlignment(LOTRFaction.MORDOR);
-            if (alignment >= (max = 250.0f)) {
+            float max = 250.0f;
+            if (alignment >= 250.0f) {
                 return false;
             }
             if (alignment > 0.0f) {

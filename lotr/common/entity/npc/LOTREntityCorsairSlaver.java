@@ -52,7 +52,7 @@ implements LOTRUnitTradeable {
     }
 
     @Override
-    public LOTRInvasions getWarhorn() {
+    public LOTRInvasions getConquestHorn() {
         return null;
     }
 
@@ -74,9 +74,12 @@ implements LOTRUnitTradeable {
     @Override
     public String getSpeechBank(EntityPlayer entityplayer) {
         if (this.isFriendly(entityplayer)) {
-            return "nearHarad/umbar/corsairSlaver/friendly";
+            if (this.canTradeWith(entityplayer)) {
+                return "nearHarad/umbar/corsairSlaver/friendly";
+            }
+            return "nearHarad/umbar/corsairSlaver/neutral";
         }
-        return "nearHarad/umbar/corsairSlaver/hostile";
+        return "nearHarad/umbar/corsair/hostile";
     }
 }
 

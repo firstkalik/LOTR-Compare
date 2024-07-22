@@ -82,7 +82,6 @@ import lotr.common.LOTRConfig;
 import lotr.common.LOTRDimension;
 import lotr.common.LOTRLevelData;
 import lotr.common.LOTRMod;
-import lotr.common.LOTRPlayerData;
 import lotr.common.LOTRShields;
 import lotr.common.entity.LOTREntities;
 import lotr.common.entity.LOTREntityInvasionSpawner;
@@ -348,9 +347,8 @@ LOTRRandomSkinEntity {
 
     @SideOnly(value=Side.CLIENT)
     public boolean isInRangeToRenderDist(double dist) {
-        LOTRPlayerData data;
         EntityPlayer entityplayer = LOTRMod.proxy.getClientPlayer();
-        if (entityplayer != null && !(data = LOTRLevelData.getData(entityplayer)).getMiniQuestsForEntity(this, true).isEmpty()) {
+        if (entityplayer != null && !LOTRLevelData.getData(entityplayer).getMiniQuestsForEntity(this, true).isEmpty()) {
             return true;
         }
         return super.isInRangeToRenderDist(dist);
@@ -399,7 +397,7 @@ LOTRRandomSkinEntity {
     public void setRidingHorse(boolean flag) {
         this.ridingMount = flag;
         double d = this.getEntityAttribute(SharedMonsterAttributes.followRange).getAttributeValue();
-        d = flag ? (d *= 1.5) : (d /= 1.5);
+        d = flag ? (d = d * 1.5) : (d = d / 1.5);
         this.getEntityAttribute(SharedMonsterAttributes.followRange).setBaseValue(d);
     }
 
@@ -477,7 +475,7 @@ LOTRRandomSkinEntity {
         this.npcTalkTick = 0;
     }
 
-    public final void setAttackTarget(EntityLivingBase target) {
+    public void setAttackTarget(EntityLivingBase target) {
         boolean speak = target != null && this.getEntitySenses().canSee((Entity)target) && this.rand.nextInt(3) == 0;
         this.setAttackTarget(target, speak);
     }
@@ -555,7 +553,6 @@ LOTRRandomSkinEntity {
     }
 
     public void onLivingUpdate() {
-        double speedSq;
         super.onLivingUpdate();
         this.rescaleNPC(this.getNPCScale());
         this.updateCombat();
@@ -573,7 +570,6 @@ LOTRRandomSkinEntity {
         }
         if ((this instanceof LOTRTradeable || this instanceof LOTRUnitTradeable) && !this.worldObj.isRemote) {
             int preventKidnap;
-            double dSqToInitHome;
             if (!this.setInitialHome) {
                 if (this.hasHome()) {
                     this.initHomeX = this.getHomePosition().posX;
@@ -583,7 +579,7 @@ LOTRRandomSkinEntity {
                 }
                 this.setInitialHome = true;
             }
-            if ((preventKidnap = LOTRConfig.preventTraderKidnap) > 0 && this.setInitialHome && this.initHomeRange > 0 && (dSqToInitHome = this.getDistanceSq((double)this.initHomeX + 0.5, (double)this.initHomeY + 0.5, (double)this.initHomeZ + 0.5)) > (double)(preventKidnap * preventKidnap)) {
+            if ((preventKidnap = LOTRConfig.preventTraderKidnap) > 0 && this.setInitialHome && this.initHomeRange > 0 && this.getDistanceSq((double)this.initHomeX + 0.5, (double)this.initHomeY + 0.5, (double)this.initHomeZ + 0.5) > (double)(preventKidnap * preventKidnap)) {
                 if (this.ridingEntity != null) {
                     this.mountEntity(null);
                 }
@@ -602,12 +598,11 @@ LOTRRandomSkinEntity {
             this.addedBurningPanic = true;
         }
         if (!this.worldObj.isRemote && this.isEntityAlive() && (this.isTrader() || this.hiredNPCInfo.isActive) && this.getAttackTarget() == null) {
-            int bannerInterval;
             float healAmount = 0.0f;
             if (this.ticksExisted % 40 == 0) {
                 healAmount += 1.0f;
             }
-            if (this.hiredNPCInfo.isActive && this.nearbyBannerFactor > 0 && this.ticksExisted % (bannerInterval = 240 - this.nearbyBannerFactor * 40) == 0) {
+            if (this.hiredNPCInfo.isActive && this.nearbyBannerFactor > 0 && this.ticksExisted % (240 - this.nearbyBannerFactor * 40) == 0) {
                 healAmount += 1.0f;
             }
             if (healAmount > 0.0f) {
@@ -620,8 +615,8 @@ LOTRRandomSkinEntity {
         if (!this.worldObj.isRemote && this.isEntityAlive() && this.getAttackTarget() == null) {
             boolean guiOpen = false;
             if (this instanceof LOTRTradeable || this instanceof LOTRUnitTradeable || this instanceof LOTRMercenary) {
-                for (int i = 0; i < this.worldObj.playerEntities.size(); ++i) {
-                    EntityPlayer entityplayer = (EntityPlayer)this.worldObj.playerEntities.get(i);
+                for (Object element : this.worldObj.playerEntities) {
+                    EntityPlayer entityplayer = (EntityPlayer)element;
                     Container container = entityplayer.openContainer;
                     if (container instanceof LOTRContainerTrade && ((LOTRContainerTrade)container).theTraderNPC == this) {
                         guiOpen = true;
@@ -670,7 +665,7 @@ LOTRRandomSkinEntity {
                 this.detachHome();
                 boolean goDirectlyHome = false;
                 if (this.worldObj.blockExists(homeX, homeY, homeZ) && this.hiredNPCInfo.isGuardMode()) {
-                    int guardRange = this.hiredNPCInfo.getGuardRange();
+                    this.hiredNPCInfo.getGuardRange();
                     goDirectlyHome = distToHome < 16.0;
                 }
                 double homeSpeed = 1.3;
@@ -688,7 +683,7 @@ LOTRRandomSkinEntity {
                 this.setHomeArea(homeX, homeY, homeZ, homeRange);
             }
         }
-        if (this.isChilly && (speedSq = this.motionX * this.motionX + this.motionY * this.motionY + this.motionZ * this.motionZ) >= 0.01) {
+        if (this.isChilly && this.motionX * this.motionX + this.motionY * this.motionY + this.motionZ * this.motionZ >= 0.01) {
             double d = this.posX + (double)(MathHelper.randomFloatClamp((Random)this.rand, (float)-0.3f, (float)0.3f) * this.width);
             double d1 = this.boundingBox.minY + (double)(MathHelper.randomFloatClamp((Random)this.rand, (float)0.2f, (float)0.7f) * this.height);
             double d2 = this.posZ + (double)(MathHelper.randomFloatClamp((Random)this.rand, (float)-0.3f, (float)0.3f) * this.width);
@@ -995,11 +990,12 @@ LOTRRandomSkinEntity {
     }
 
     protected void npcArrowAttack(EntityLivingBase target, float f) {
+        LOTREntityArrowPoisoned arrow;
         ItemStack heldItem = this.getHeldItem();
         float str = 1.3f + this.getDistanceToEntity((Entity)target) / 80.0f;
         float accuracy = (float)this.getEntityAttribute(npcRangedAccuracy).getAttributeValue();
         float poisonChance = this.getPoisonedArrowChance();
-        LOTREntityArrowPoisoned arrow = this.rand.nextFloat() < poisonChance ? new LOTREntityArrowPoisoned(this.worldObj, (EntityLivingBase)this, target, str, accuracy) : new EntityArrow(this.worldObj, (EntityLivingBase)this, target, str *= LOTRItemBow.getLaunchSpeedFactor(heldItem), accuracy);
+        LOTREntityArrowPoisoned lOTREntityArrowPoisoned = arrow = this.rand.nextFloat() < poisonChance ? new LOTREntityArrowPoisoned(this.worldObj, (EntityLivingBase)this, target, str, accuracy) : new EntityArrow(this.worldObj, (EntityLivingBase)this, target, str * LOTRItemBow.getLaunchSpeedFactor(heldItem), accuracy);
         if (heldItem != null) {
             LOTRItemBow.applyBowModifiers(arrow, heldItem);
         }
@@ -1105,9 +1101,10 @@ LOTRRandomSkinEntity {
         if (this.getFaction() == LOTRFaction.UTUMNO && LOTRDimension.getCurrentDimensionWithFallback(this.worldObj) == LOTRDimension.UTUMNO) {
             LOTRUtumnoLevel level = LOTRUtumnoLevel.forY((int)this.posY);
             if (this.rand.nextInt(12) == 0) {
+                ItemStack keypart;
                 int l;
                 if (level == LOTRUtumnoLevel.ICE) {
-                    ItemStack keypart = new ItemStack(LOTRMod.utumnoKey);
+                    keypart = new ItemStack(LOTRMod.utumnoKey);
                     l = this.rand.nextInt(3);
                     if (l == 0) {
                         keypart.setItemDamage(2);
@@ -1118,7 +1115,7 @@ LOTRRandomSkinEntity {
                     }
                     this.entityDropItem(keypart, 0.0f);
                 } else if (level == LOTRUtumnoLevel.OBSIDIAN) {
-                    ItemStack keypart = new ItemStack(LOTRMod.utumnoKey);
+                    keypart = new ItemStack(LOTRMod.utumnoKey);
                     l = this.rand.nextInt(3);
                     if (l == 0) {
                         keypart.setItemDamage(5);
@@ -1152,8 +1149,8 @@ LOTRRandomSkinEntity {
             }
             if (level == LOTRUtumnoLevel.FIRE && this.canDropRares()) {
                 int pickChance = 100;
-                pickChance -= i * 20;
-                if (this.rand.nextInt(pickChance = Math.max(pickChance, 1)) == 0) {
+                pickChance = Math.max(pickChance -= i * 20, 1);
+                if (this.rand.nextInt(pickChance) == 0) {
                     this.entityDropItem(new ItemStack(LOTRMod.utumnoPickaxe), 0.0f);
                 }
             }
@@ -1266,9 +1263,6 @@ LOTRRandomSkinEntity {
         this.enpouchNPCDrops = false;
         this.dropItemList(this.enpouchedDrops);
         if (!this.worldObj.isRemote && damagesource.getEntity() instanceof EntityPlayer) {
-            float size;
-            LOTREntityPebble pebble;
-            float alignment;
             entityplayer = (EntityPlayer)damagesource.getEntity();
             if (this.hurtOnlyByPlates && damagesource.getSourceOfDamage() instanceof LOTREntityPlate) {
                 if (LOTRLevelData.getData(entityplayer).getAlignment(this.getFaction()) < 0.0f) {
@@ -1276,7 +1270,7 @@ LOTRRandomSkinEntity {
                 }
                 LOTRLevelData.getData(entityplayer).addAchievement(LOTRAchievement.killUsingOnlyPlates);
             }
-            if (damagesource.getSourceOfDamage() instanceof LOTREntityPebble && (pebble = (LOTREntityPebble)damagesource.getSourceOfDamage()).isSling() && (size = this.width * this.width * this.height) > 5.0f && (alignment = LOTRLevelData.getData(entityplayer).getAlignment(this.getFaction())) < 0.0f) {
+            if (damagesource.getSourceOfDamage() instanceof LOTREntityPebble && ((LOTREntityPebble)damagesource.getSourceOfDamage()).isSling() && this.width * this.width * this.height > 5.0f && LOTRLevelData.getData(entityplayer).getAlignment(this.getFaction()) < 0.0f) {
                 LOTRLevelData.getData(entityplayer).addAchievement(LOTRAchievement.killLargeMobWithSlingshot);
             }
             if (this instanceof LOTREntityOrc) {
@@ -1326,7 +1320,7 @@ LOTRRandomSkinEntity {
         ArrayList<ItemStack> pouchContents = new ArrayList<ItemStack>();
         while (!items.isEmpty()) {
             pouchContents.add(items.remove(0));
-            if (pouchContents.size() < LOTRItemPouch.getCapacity(pouch)) continue;
+            if (pouchContents.size() >= LOTRItemPouch.getCapacity(pouch)) continue;
         }
         for (ItemStack itemstack : pouchContents) {
             if (LOTRItemPouch.tryAddItemToPouch(pouch, itemstack, false)) continue;
@@ -1457,7 +1451,7 @@ LOTRRandomSkinEntity {
         String location = null;
         String objective = null;
         if (this.npcLocationName != null) {
-            location = !this.hasSpecificLocationName ? StatCollector.translateToLocalFormatted((String)this.npcLocationName, (Object[])new Object[]{this.getNPCName()}) : this.npcLocationName;
+            String string = !this.hasSpecificLocationName ? StatCollector.translateToLocalFormatted((String)this.npcLocationName, (Object[])new Object[]{this.getNPCName()}) : (location = this.npcLocationName);
         }
         if (miniquest != null) {
             objective = miniquest.getProgressedObjectiveInSpeech();
@@ -1695,9 +1689,7 @@ LOTRRandomSkinEntity {
         }
         if (this.isTrader()) {
             boolean showCoin = false;
-            if (this.npcShield == null) {
-                showCoin = true;
-            } else if (!this.clientCombatStance && this.hiredNPCInfo.getHiringPlayerUUID() == null) {
+            if (this.npcShield == null || !this.clientCombatStance && this.hiredNPCInfo.getHiringPlayerUUID() == null) {
                 showCoin = true;
             }
             if (showCoin) {

@@ -30,11 +30,11 @@ extends GuiButton {
 
     public void drawButton(Minecraft mc, int i, int j) {
         if (this.visible) {
-            boolean highlighted;
             mc.getTextureManager().bindTexture(LOTRGuiAchievements.iconsTexture);
             int texU = this.leftOrRight ? 0 : this.width * 3;
             int texV = 124;
-            boolean bl = highlighted = i >= this.xPosition && j >= this.yPosition && i < this.xPosition + this.width && j < this.yPosition + this.height;
+            boolean highlighted = i >= this.xPosition && j >= this.yPosition && i < this.xPosition + this.width && j < this.yPosition + this.height;
+            boolean bl = highlighted;
             if (!this.enabled) {
                 texU += this.width * 2;
             } else if (highlighted) {

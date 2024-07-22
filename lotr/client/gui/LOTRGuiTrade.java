@@ -6,6 +6,7 @@
  *  cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper
  *  net.minecraft.client.Minecraft
  *  net.minecraft.client.gui.FontRenderer
+ *  net.minecraft.client.gui.Gui
  *  net.minecraft.client.gui.GuiButton
  *  net.minecraft.client.gui.inventory.GuiContainer
  *  net.minecraft.client.renderer.texture.TextureManager
@@ -36,6 +37,7 @@ import lotr.common.network.LOTRPacketHandler;
 import lotr.common.network.LOTRPacketSell;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.texture.TextureManager;
@@ -56,9 +58,6 @@ extends GuiContainer {
     public LOTREntityNPC theEntity;
     private LOTRContainerTrade containerTrade;
     private GuiButton buttonSell;
-    private static int sellQueryX;
-    private static int sellQueryY;
-    private static int sellQueryWidth;
 
     public LOTRGuiTrade(InventoryPlayer inv, LOTRTradeable trader, World world) {
         super((Container)new LOTRContainerTrade(inv, trader, world));
@@ -75,6 +74,10 @@ extends GuiContainer {
     }
 
     protected void drawGuiContainerForegroundLayer(int i, int j) {
+        int cost;
+        LOTRTradeEntry trade;
+        int x;
+        int y;
         int l;
         this.drawCenteredString(this.theEntity.getNPCName(), 89, 11, 4210752);
         this.fontRendererObj.drawString(StatCollector.translateToLocal((String)"container.lotr.trade.buy"), 8, 28, 4210752);
@@ -83,11 +86,37 @@ extends GuiContainer {
         this.fontRendererObj.drawString(StatCollector.translateToLocal((String)"container.inventory"), 8, 176, 4210752);
         for (l = 0; l < this.containerTrade.tradeInvBuy.getSizeInventory(); ++l) {
             LOTRSlotTrade slotBuy = (LOTRSlotTrade)this.containerTrade.getSlotFromInventory(this.containerTrade.tradeInvBuy, l);
-            this.renderTradeSlot(slotBuy);
+            trade = slotBuy.getTrade();
+            if (trade == null) continue;
+            if (trade.isAvailable()) {
+                cost = slotBuy.cost();
+                if (cost <= 0) continue;
+                this.renderCost(Integer.toString(cost), slotBuy.xDisplayPosition + 8, slotBuy.yDisplayPosition + 22);
+                continue;
+            }
+            GL11.glTranslatef((float)0.0f, (float)0.0f, (float)200.0f);
+            x = slotBuy.xDisplayPosition;
+            y = slotBuy.yDisplayPosition;
+            Gui.drawRect((int)x, (int)y, (int)(x + 16), (int)(y + 16), (int)lockedTradeColor);
+            GL11.glTranslatef((float)0.0f, (float)0.0f, (float)-200.0f);
+            this.drawCenteredString(StatCollector.translateToLocal((String)"container.lotr.trade.locked"), slotBuy.xDisplayPosition + 8, slotBuy.yDisplayPosition + 22, 4210752);
         }
         for (l = 0; l < this.containerTrade.tradeInvSell.getSizeInventory(); ++l) {
             LOTRSlotTrade slotSell = (LOTRSlotTrade)this.containerTrade.getSlotFromInventory(this.containerTrade.tradeInvSell, l);
-            this.renderTradeSlot(slotSell);
+            trade = slotSell.getTrade();
+            if (trade == null) continue;
+            if (trade.isAvailable()) {
+                cost = slotSell.cost();
+                if (cost <= 0) continue;
+                this.renderCost(Integer.toString(cost), slotSell.xDisplayPosition + 8, slotSell.yDisplayPosition + 22);
+                continue;
+            }
+            GL11.glTranslatef((float)0.0f, (float)0.0f, (float)200.0f);
+            x = slotSell.xDisplayPosition;
+            y = slotSell.yDisplayPosition;
+            Gui.drawRect((int)x, (int)y, (int)(x + 16), (int)(y + 16), (int)lockedTradeColor);
+            GL11.glTranslatef((float)0.0f, (float)0.0f, (float)-200.0f);
+            this.drawCenteredString(StatCollector.translateToLocal((String)"container.lotr.trade.locked"), slotSell.xDisplayPosition + 8, slotSell.yDisplayPosition + 22, 4210752);
         }
         int totalSellPrice = 0;
         for (int l2 = 0; l2 < this.containerTrade.tradeInvSellOffer.getSizeInventory(); ++l2) {
@@ -101,39 +130,6 @@ extends GuiContainer {
             this.fontRendererObj.drawString(StatCollector.translateToLocalFormatted((String)"container.lotr.trade.sellPrice", (Object[])new Object[]{totalSellPrice}), 100, 169, 4210752);
         }
         this.buttonSell.enabled = totalSellPrice > 0;
-    }
-
-    private void renderTradeSlot(LOTRSlotTrade slot) {
-        LOTRTradeEntry trade = slot.getTrade();
-        if (trade != null) {
-            int lockedPixels = 0;
-            boolean inFront = false;
-            if (!trade.isAvailable()) {
-                lockedPixels = 16;
-                inFront = true;
-            } else {
-                lockedPixels = trade.getLockedProgressSlot();
-                inFront = false;
-            }
-            if (lockedPixels > 0) {
-                GL11.glPushMatrix();
-                if (inFront) {
-                    GL11.glTranslatef((float)0.0f, (float)0.0f, (float)200.0f);
-                }
-                int x = slot.xDisplayPosition;
-                int y = slot.yDisplayPosition;
-                LOTRGuiTrade.drawRect((int)x, (int)y, (int)(x + lockedPixels), (int)(y + 16), (int)lockedTradeColor);
-                GL11.glPopMatrix();
-            }
-            if (trade.isAvailable()) {
-                int cost = slot.cost();
-                if (cost > 0) {
-                    this.renderCost(Integer.toString(cost), slot.xDisplayPosition + 8, slot.yDisplayPosition + 22);
-                }
-            } else {
-                this.drawCenteredString(StatCollector.translateToLocal((String)"container.lotr.trade.locked"), slot.xDisplayPosition + 8, slot.yDisplayPosition + 22, 4210752);
-            }
-        }
     }
 
     private void renderCost(String s, int x, int y) {
@@ -156,7 +152,7 @@ extends GuiContainer {
     protected void drawGuiContainerBackgroundLayer(float f, int i, int j) {
         GL11.glColor4f((float)1.0f, (float)1.0f, (float)1.0f, (float)1.0f);
         this.mc.getTextureManager().bindTexture(guiTexture);
-        LOTRGuiTrade.func_146110_a((int)this.guiLeft, (int)this.guiTop, (float)0.0f, (float)0.0f, (int)this.xSize, (int)this.ySize, (float)512.0f, (float)512.0f);
+        Gui.func_146110_a((int)this.guiLeft, (int)this.guiTop, (float)0.0f, (float)0.0f, (int)this.xSize, (int)this.ySize, (float)512.0f, (float)512.0f);
     }
 
     protected void actionPerformed(GuiButton button) {
@@ -168,10 +164,6 @@ extends GuiContainer {
 
     private void drawCenteredString(String s, int i, int j, int k) {
         this.fontRendererObj.drawString(s, i - this.fontRendererObj.getStringWidth(s) / 2, j, k);
-    }
-
-    static {
-        sellQueryWidth = 12;
     }
 }
 

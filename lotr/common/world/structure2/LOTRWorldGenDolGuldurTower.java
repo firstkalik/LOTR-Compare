@@ -30,18 +30,18 @@ extends LOTRWorldGenStructureBase2 {
 
     @Override
     public boolean generateWithSetRotation(World world, Random random, int i, int j, int k, int rotation) {
-        int k1;
-        int j2;
-        int j1;
-        int i1;
+        int step;
+        int j13;
         int k12;
+        int k13;
+        int k14;
+        int i1;
         int distSq;
         int j12;
-        int k13;
-        int j13;
-        int step;
-        int k14;
+        int j1;
+        int j2;
         int i12;
+        int k1;
         int i13;
         int radius = 6;
         int radiusPlusOne = radius + 1;
@@ -56,12 +56,12 @@ extends LOTRWorldGenStructureBase2 {
         if (this.restrictions) {
             int minHeight = 0;
             int maxHeight = 0;
-            for (i1 = -radiusPlusOne; i1 <= radiusPlusOne; ++i1) {
-                for (k1 = -radiusPlusOne; k1 <= radiusPlusOne; ++k1) {
-                    int distSq2 = i1 * i1 + k1 * k1;
+            for (i12 = -radiusPlusOne; i12 <= radiusPlusOne; ++i12) {
+                for (k12 = -radiusPlusOne; k12 <= radiusPlusOne; ++k12) {
+                    int distSq2 = i12 * i12 + k12 * k12;
                     if (distSq2 >= wallThresholdMax) continue;
-                    int j14 = this.getTopBlock(world, i1, k1) - 1;
-                    Block block = this.getBlock(world, i1, j14, k1);
+                    int j14 = this.getTopBlock(world, i12, k12) - 1;
+                    Block block = this.getBlock(world, i12, j14, k12);
                     if (block != Blocks.grass && block != Blocks.dirt && block != Blocks.stone) {
                         return false;
                     }
@@ -76,17 +76,17 @@ extends LOTRWorldGenStructureBase2 {
                 }
             }
         }
-        for (i13 = -radius; i13 <= radius; ++i13) {
-            for (k14 = -radius; k14 <= radius; ++k14) {
-                distSq = i13 * i13 + k14 * k14;
+        for (i1 = -radius; i1 <= radius; ++i1) {
+            for (k1 = -radius; k1 <= radius; ++k1) {
+                distSq = i1 * i1 + k1 * k1;
                 if (distSq >= wallThresholdMax) continue;
-                for (j1 = 0; !(j1 != 0 && this.isOpaque(world, i13, j1, k14) || this.getY(j1) < 0); --j1) {
+                for (j1 = 0; !(j1 != 0 && this.isOpaque(world, i1, j1, k1) || this.getY(j1) < 0); --j1) {
                     if (distSq >= wallThresholdMin) {
-                        this.placeRandomBrick(world, random, i13, j1, k14);
+                        this.placeRandomBrick(world, random, i1, j1, k1);
                     } else {
-                        this.setBlockAndMetadata(world, i13, j1, k14, Blocks.stonebrick, 0);
+                        this.setBlockAndMetadata(world, i1, j1, k1, Blocks.stonebrick, 0);
                     }
-                    this.setGrassToDirt(world, i13, j1 - 1, k14);
+                    this.setGrassToDirt(world, i1, j1 - 1, k1);
                 }
             }
         }
@@ -94,60 +94,60 @@ extends LOTRWorldGenStructureBase2 {
             int step2;
             int sectionBase = l * sectionHeight;
             for (j12 = sectionBase + 1; j12 <= sectionBase + sectionHeight; ++j12) {
-                for (i12 = -radius; i12 <= radius; ++i12) {
+                for (i13 = -radius; i13 <= radius; ++i13) {
                     for (int k15 = -radius; k15 <= radius; ++k15) {
-                        int distSq3 = i12 * i12 + k15 * k15;
+                        int distSq3 = i13 * i13 + k15 * k15;
                         if (distSq3 >= wallThresholdMax) continue;
                         if (distSq3 >= wallThresholdMin) {
-                            this.placeRandomBrick(world, random, i12, j12, k15);
+                            this.placeRandomBrick(world, random, i13, j12, k15);
                             continue;
                         }
                         if (j12 == sectionBase + sectionHeight) {
-                            this.setBlockAndMetadata(world, i12, j12, k15, Blocks.stonebrick, 0);
+                            this.setBlockAndMetadata(world, i13, j12, k15, Blocks.stonebrick, 0);
                             continue;
                         }
-                        this.setAir(world, i12, j12, k15);
+                        this.setAir(world, i13, j12, k15);
                     }
                 }
             }
             for (j12 = sectionBase + 2; j12 <= sectionBase + 3; ++j12) {
-                for (k1 = -1; k1 <= 1; ++k1) {
-                    this.setBlockAndMetadata(world, -radius, j12, k1, LOTRMod.orcSteelBars, 0);
-                    this.setBlockAndMetadata(world, radius, j12, k1, LOTRMod.orcSteelBars, 0);
+                for (k12 = -1; k12 <= 1; ++k12) {
+                    this.setBlockAndMetadata(world, -radius, j12, k12, LOTRMod.orcSteelBars, 0);
+                    this.setBlockAndMetadata(world, radius, j12, k12, LOTRMod.orcSteelBars, 0);
                 }
-                for (i12 = -1; i12 <= 1; ++i12) {
-                    this.setBlockAndMetadata(world, i12, j12, -radius, LOTRMod.orcSteelBars, 0);
+                for (i13 = -1; i13 <= 1; ++i13) {
+                    this.setBlockAndMetadata(world, i13, j12, -radius, LOTRMod.orcSteelBars, 0);
                 }
             }
             if (l > 0) {
                 this.setAir(world, 0, sectionBase, 0);
-                for (i1 = -1; i1 <= 1; ++i1) {
-                    for (k1 = -1; k1 <= 1; ++k1) {
-                        int i2 = Math.abs(i1);
-                        int k2 = Math.abs(k1);
+                for (i12 = -1; i12 <= 1; ++i12) {
+                    for (k12 = -1; k12 <= 1; ++k12) {
+                        int i2 = Math.abs(i12);
+                        int k2 = Math.abs(k12);
                         if (i2 == 1 || k2 == 1) {
-                            this.setBlockAndMetadata(world, i1, sectionBase + 1, k1, LOTRMod.wall2, 8);
+                            this.setBlockAndMetadata(world, i12, sectionBase + 1, k12, LOTRMod.wall2, 8);
                         }
                         if (i2 != 1 || k2 != 1) continue;
-                        this.setBlockAndMetadata(world, i1, sectionBase + 2, k1, LOTRMod.wall2, 8);
-                        this.placeSkull(world, random, i1, sectionBase + 2, k1);
+                        this.setBlockAndMetadata(world, i12, sectionBase + 2, k12, LOTRMod.wall2, 8);
+                        this.placeSkull(world, random, i12, sectionBase + 2, k12);
                     }
                 }
             } else {
-                for (i1 = -1; i1 <= 1; ++i1) {
+                for (i12 = -1; i12 <= 1; ++i12) {
                     for (j1 = sectionBase + 1; j1 <= sectionBase + 3; ++j1) {
-                        this.setAir(world, i1, j1, -radius);
+                        this.setAir(world, i12, j1, -radius);
                     }
-                    this.setBlockAndMetadata(world, i1, sectionBase, -radius, Blocks.stonebrick, 0);
+                    this.setBlockAndMetadata(world, i12, sectionBase, -radius, Blocks.stonebrick, 0);
                 }
                 this.placeRandomStairs(world, random, -1, sectionBase + 3, -radius, 4);
                 this.placeRandomStairs(world, random, 1, sectionBase + 3, -radius, 5);
                 this.placeWallBanner(world, 0, sectionBase + 6, -radius, LOTRItemBanner.BannerType.DOL_GULDUR, 2);
-                for (i1 = -5; i1 <= 5; ++i1) {
-                    this.setBlockAndMetadata(world, i1, sectionBase, 0, LOTRMod.guldurilBrick, 4);
+                for (i12 = -5; i12 <= 5; ++i12) {
+                    this.setBlockAndMetadata(world, i12, sectionBase, 0, LOTRMod.guldurilBrick, 4);
                 }
-                for (k12 = -6; k12 <= 3; ++k12) {
-                    this.setBlockAndMetadata(world, 0, sectionBase, k12, LOTRMod.guldurilBrick, 4);
+                for (k14 = -6; k14 <= 3; ++k14) {
+                    this.setBlockAndMetadata(world, 0, sectionBase, k14, LOTRMod.guldurilBrick, 4);
                 }
                 this.setBlockAndMetadata(world, 0, sectionBase + 1, 0, LOTRMod.guldurilBrick, 4);
                 this.setBlockAndMetadata(world, 0, sectionBase + 2, 0, LOTRMod.wall2, 8);
@@ -191,13 +191,13 @@ extends LOTRWorldGenStructureBase2 {
                     this.setBlockAndMetadata(world, 1 - step2, j1, 4, Blocks.stonebrick, 0);
                 }
             }
-            for (k12 = 4; k12 <= 5; ++k12) {
+            for (k14 = 4; k14 <= 5; ++k14) {
                 for (j1 = sectionBase + 1; j1 <= sectionBase + 3; ++j1) {
-                    this.setBlockAndMetadata(world, -2, j1, k12, Blocks.stonebrick, 0);
+                    this.setBlockAndMetadata(world, -2, j1, k14, Blocks.stonebrick, 0);
                 }
             }
-            for (i1 = -2; i1 <= 0; ++i1) {
-                this.setAir(world, i1, sectionBase + sectionHeight, 5);
+            for (i12 = -2; i12 <= 0; ++i12) {
+                this.setAir(world, i12, sectionBase + sectionHeight, 5);
             }
             for (step2 = 0; step2 <= 2; ++step2) {
                 this.setBlockAndMetadata(world, -1 + step2, sectionBase + 4 + step2, 5, Blocks.stone_brick_stairs, 1);
@@ -219,91 +219,91 @@ extends LOTRWorldGenStructureBase2 {
                 }
             }
         }
-        for (i13 = -3; i13 <= 3; i13 += 6) {
+        for (i1 = -3; i1 <= 3; i1 += 6) {
             for (step = 0; step <= 3; ++step) {
-                this.placeBrickSupports(world, random, i13, -9 + step);
-                this.placeBrickSupports(world, random, i13, 9 - step);
-                this.placeRandomStairs(world, random, i13, 1 + step * 2, -9 + step, 2);
-                this.placeRandomStairs(world, random, i13, 1 + step * 2, 9 - step, 3);
+                this.placeBrickSupports(world, random, i1, -9 + step);
+                this.placeBrickSupports(world, random, i1, 9 - step);
+                this.placeRandomStairs(world, random, i1, 1 + step * 2, -9 + step, 2);
+                this.placeRandomStairs(world, random, i1, 1 + step * 2, 9 - step, 3);
                 for (j12 = 1; j12 <= step * 2; ++j12) {
-                    this.placeRandomBrick(world, random, i13, j12, -9 + step);
-                    this.placeRandomBrick(world, random, i13, j12, 9 - step);
+                    this.placeRandomBrick(world, random, i1, j12, -9 + step);
+                    this.placeRandomBrick(world, random, i1, j12, 9 - step);
                 }
             }
         }
-        for (i13 = -radius; i13 <= radius; ++i13) {
-            for (k14 = -radius; k14 <= radius; ++k14) {
-                distSq = i13 * i13 + k14 * k14;
+        for (i1 = -radius; i1 <= radius; ++i1) {
+            for (k1 = -radius; k1 <= radius; ++k1) {
+                distSq = i1 * i1 + k1 * k1;
                 if (distSq >= wallThresholdMax || distSq < (int)Math.pow(radiusD - 0.25, 2.0)) continue;
-                int i2 = Math.abs(i13);
-                int k2 = Math.abs(k14);
-                this.setBlockAndMetadata(world, i13, topHeight + 1, k14, LOTRMod.wall2, 8);
+                int i2 = Math.abs(i1);
+                int k2 = Math.abs(k1);
+                this.setBlockAndMetadata(world, i1, topHeight + 1, k1, LOTRMod.wall2, 8);
                 if (i2 < 3 || k2 < 3) continue;
-                this.setBlockAndMetadata(world, i13, topHeight + 2, k14, LOTRMod.wall2, 8);
+                this.setBlockAndMetadata(world, i1, topHeight + 2, k1, LOTRMod.wall2, 8);
                 if (i2 != 4 || k2 != 4) continue;
-                this.setBlockAndMetadata(world, i13, topHeight + 3, k14, LOTRMod.wall2, 8);
-                this.setBlockAndMetadata(world, i13, topHeight + 4, k14, LOTRMod.wall2, 8);
-                this.setBlockAndMetadata(world, i13, topHeight + 5, k14, LOTRMod.morgulTorch, 5);
+                this.setBlockAndMetadata(world, i1, topHeight + 3, k1, LOTRMod.wall2, 8);
+                this.setBlockAndMetadata(world, i1, topHeight + 4, k1, LOTRMod.wall2, 8);
+                this.setBlockAndMetadata(world, i1, topHeight + 5, k1, LOTRMod.morgulTorch, 5);
             }
         }
         this.setAir(world, -2, topHeight + 1, 5);
-        for (i13 = -2; i13 <= 2; i13 += 4) {
+        for (i1 = -2; i1 <= 2; i1 += 4) {
             for (step = 0; step <= 4; ++step) {
                 j12 = topHeight + 1 + step * 2;
-                k1 = -9 + step;
-                this.placeRandomStairs(world, random, i13, j12 - 2, k1, 7);
+                k12 = -9 + step;
+                this.placeRandomStairs(world, random, i1, j12 - 2, k12, 7);
                 for (j2 = j12 - 1; j2 <= j12 + 1; ++j2) {
-                    this.placeRandomBrick(world, random, i13, j2, k1);
+                    this.placeRandomBrick(world, random, i1, j2, k12);
                 }
-                this.placeRandomStairs(world, random, i13, j12 + 2, k1, 2);
-                k1 = 9 - step;
-                this.placeRandomStairs(world, random, i13, j12 - 2, k1, 6);
+                this.placeRandomStairs(world, random, i1, j12 + 2, k12, 2);
+                k12 = 9 - step;
+                this.placeRandomStairs(world, random, i1, j12 - 2, k12, 6);
                 for (j2 = j12 - 1; j2 <= j12 + 1; ++j2) {
-                    this.placeRandomBrick(world, random, i13, j2, k1);
+                    this.placeRandomBrick(world, random, i1, j2, k12);
                 }
-                this.placeRandomStairs(world, random, i13, j12 + 2, k1, 3);
+                this.placeRandomStairs(world, random, i1, j12 + 2, k12, 3);
             }
             for (j13 = topHeight - 4; j13 <= topHeight + 2; ++j13) {
-                for (k12 = -9; k12 <= -8; ++k12) {
-                    this.placeRandomBrick(world, random, i13, j13, k12);
+                for (k14 = -9; k14 <= -8; ++k14) {
+                    this.placeRandomBrick(world, random, i1, j13, k14);
                 }
-                for (k12 = 8; k12 <= 9; ++k12) {
-                    this.placeRandomBrick(world, random, i13, j13, k12);
+                for (k14 = 8; k14 <= 9; ++k14) {
+                    this.placeRandomBrick(world, random, i1, j13, k14);
                 }
             }
-            this.placeRandomBrick(world, random, i13, topHeight - 1, -7);
-            this.placeRandomBrick(world, random, i13, topHeight, -7);
-            this.setBlockAndMetadata(world, i13, topHeight + 1, -7, LOTRMod.wall2, 8);
-            this.placeRandomBrick(world, random, i13, topHeight - 1, 7);
-            this.placeRandomBrick(world, random, i13, topHeight, 7);
-            this.setBlockAndMetadata(world, i13, topHeight + 1, 7, LOTRMod.wall2, 8);
-            this.placeRandomStairs(world, random, i13, topHeight - 4, -9, 6);
-            this.placeRandomStairs(world, random, i13, topHeight - 5, -8, 6);
-            this.placeRandomStairs(world, random, i13, topHeight - 4, 9, 7);
-            this.placeRandomStairs(world, random, i13, topHeight - 5, 8, 7);
+            this.placeRandomBrick(world, random, i1, topHeight - 1, -7);
+            this.placeRandomBrick(world, random, i1, topHeight, -7);
+            this.setBlockAndMetadata(world, i1, topHeight + 1, -7, LOTRMod.wall2, 8);
+            this.placeRandomBrick(world, random, i1, topHeight - 1, 7);
+            this.placeRandomBrick(world, random, i1, topHeight, 7);
+            this.setBlockAndMetadata(world, i1, topHeight + 1, 7, LOTRMod.wall2, 8);
+            this.placeRandomStairs(world, random, i1, topHeight - 4, -9, 6);
+            this.placeRandomStairs(world, random, i1, topHeight - 5, -8, 6);
+            this.placeRandomStairs(world, random, i1, topHeight - 4, 9, 7);
+            this.placeRandomStairs(world, random, i1, topHeight - 5, 8, 7);
         }
         for (k13 = -2; k13 <= 2; k13 += 4) {
             for (step = 0; step <= 4; ++step) {
                 j12 = topHeight + 1 + step * 2;
-                i12 = -9 + step;
-                this.placeRandomStairs(world, random, i12, j12 - 2, k13, 4);
+                i13 = -9 + step;
+                this.placeRandomStairs(world, random, i13, j12 - 2, k13, 4);
                 for (j2 = j12 - 1; j2 <= j12 + 1; ++j2) {
-                    this.placeRandomBrick(world, random, i12, j2, k13);
+                    this.placeRandomBrick(world, random, i13, j2, k13);
                 }
-                this.placeRandomStairs(world, random, i12, j12 + 2, k13, 1);
-                i12 = 9 - step;
-                this.placeRandomStairs(world, random, i12, j12 - 2, k13, 5);
+                this.placeRandomStairs(world, random, i13, j12 + 2, k13, 1);
+                i13 = 9 - step;
+                this.placeRandomStairs(world, random, i13, j12 - 2, k13, 5);
                 for (j2 = j12 - 1; j2 <= j12 + 1; ++j2) {
-                    this.placeRandomBrick(world, random, i12, j2, k13);
+                    this.placeRandomBrick(world, random, i13, j2, k13);
                 }
-                this.placeRandomStairs(world, random, i12, j12 + 2, k13, 0);
+                this.placeRandomStairs(world, random, i13, j12 + 2, k13, 0);
             }
             for (j13 = topHeight - 4; j13 <= topHeight + 2; ++j13) {
-                for (i1 = -9; i1 <= -8; ++i1) {
-                    this.placeRandomBrick(world, random, i1, j13, k13);
+                for (i12 = -9; i12 <= -8; ++i12) {
+                    this.placeRandomBrick(world, random, i12, j13, k13);
                 }
-                for (i1 = 8; i1 <= 9; ++i1) {
-                    this.placeRandomBrick(world, random, i1, j13, k13);
+                for (i12 = 8; i12 <= 9; ++i12) {
+                    this.placeRandomBrick(world, random, i12, j13, k13);
                 }
             }
             this.placeRandomBrick(world, random, -7, topHeight - 1, k13);

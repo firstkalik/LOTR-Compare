@@ -44,15 +44,16 @@ public class LOTRDrinkIcons {
         TextureMap textureMap = (TextureMap)iconregister;
         String baseIconName = itemName.substring("lotr:".length());
         try {
+            ResourceLocation res;
             BufferedImage liquidIcon;
             BufferedImage vesselIcon = vesselIcons.get(vessel);
             if (vesselIcon == null) {
-                ResourceLocation res = new ResourceLocation("lotr", "textures/items/drink_" + vessel + ".png");
+                res = new ResourceLocation("lotr", "textures/items/drink_" + vessel + ".png");
                 vesselIcon = ImageIO.read(resourceManager.getResource(res).getInputStream());
                 vesselIcons.put(vessel, vesselIcon);
             }
             if ((liquidIcon = liquidIcons.get((Object)item)) == null) {
-                ResourceLocation res = new ResourceLocation("lotr", "textures/items/" + baseIconName + "_liquid.png");
+                res = new ResourceLocation("lotr", "textures/items/" + baseIconName + "_liquid.png");
                 liquidIcon = ImageIO.read(resourceManager.getResource(res).getInputStream());
                 liquidIcons.put(item, liquidIcon);
             }

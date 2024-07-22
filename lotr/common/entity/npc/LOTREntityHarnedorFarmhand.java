@@ -81,7 +81,7 @@ implements LOTRFarmhand {
     @Override
     public String getSpeechBank(EntityPlayer entityplayer) {
         if (this.hiredNPCInfo.getHiringPlayer() == entityplayer) {
-            return "nearHarad/harnennor/farmhand/hired";
+            return "nearHarad/harnedor/farmhand/hired";
         }
         return super.getSpeechBank(entityplayer);
     }

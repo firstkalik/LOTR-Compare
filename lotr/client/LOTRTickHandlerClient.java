@@ -46,7 +46,6 @@
  *  net.minecraft.item.Item
  *  net.minecraft.item.ItemBow
  *  net.minecraft.item.ItemStack
- *  net.minecraft.nbt.NBTTagCompound
  *  net.minecraft.potion.Potion
  *  net.minecraft.potion.PotionEffect
  *  net.minecraft.profiler.Profiler
@@ -150,6 +149,7 @@ import lotr.common.item.LOTRItemBanner;
 import lotr.common.item.LOTRItemBlowgun;
 import lotr.common.item.LOTRItemBow;
 import lotr.common.item.LOTRItemCrossbow;
+import lotr.common.item.LOTRItemOwnership;
 import lotr.common.item.LOTRItemSpear;
 import lotr.common.item.LOTRPoisonedDrinks;
 import lotr.common.item.LOTRWeaponStats;
@@ -203,7 +203,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.profiler.Profiler;
@@ -249,7 +248,6 @@ public class LOTRTickHandlerClient {
     private GuiScreen lastGuiOpen;
     private int mistTick;
     private int prevMistTick;
-    private static final int mistTickMax = 80;
     private float mistFactor;
     private float sunGlare;
     private float prevSunGlare;
@@ -261,7 +259,6 @@ public class LOTRTickHandlerClient {
     private int alignmentYCurrent;
     private int alignmentXPrev;
     private int alignmentYPrev;
-    private static final int alignmentYOffscreen = -20;
     private boolean firstAlignmentRender = true;
     public static int alignDrainTick;
     public static final int alignDrainTickMax = 200;
@@ -271,14 +268,10 @@ public class LOTRTickHandlerClient {
     public static LOTRGuiMiniquestTracker miniquestTracker;
     private boolean wasHoldingBannerWithExistingProtection;
     private int bannerRepossessDisplayTick;
-    private static final int bannerRepossessDisplayTickMax = 60;
     private int frostTick;
-    private static final int frostTickMax = 80;
     private int burnTick;
-    private static final int burnTickMax = 40;
     private int drunkennessDirection = 1;
     private int newDate = 0;
-    private static final int newDateMax = 200;
     private float utumnoCamRoll = 0.0f;
     public boolean inUtumnoReturnPortal = false;
     public int utumnoReturnX;
@@ -286,14 +279,11 @@ public class LOTRTickHandlerClient {
     private double lastUtumnoReturnY = -1.0;
     private int prevWightLookTick = 0;
     private int wightLookTick = 0;
-    private static final int wightLookTickMax = 100;
     public static boolean anyWightsViewed;
     private int prevWightNearTick = 0;
     private int wightNearTick = 0;
-    private static final int wightNearTickMax = 100;
     private int prevBalrogNearTick = 0;
     private int balrogNearTick = 0;
-    private static final int balrogNearTickMax = 100;
     private float balrogFactor;
     public static int scrapTraderMisbehaveTick;
     private float[] storedLightTable;
@@ -301,8 +291,6 @@ public class LOTRTickHandlerClient {
     private boolean addedClientPoisonEffect = false;
     private LOTRMusicTrack lastTrack = null;
     private int musicTrackTick = 0;
-    private static final int musicTrackTickMax = 200;
-    private static final int musicTrackTickFadeTime = 60;
     public boolean cancelItemHighlight = false;
     private ItemStack lastHighlightedItemstack;
     private String highlightedItemstackName;
@@ -318,11 +306,11 @@ public class LOTRTickHandlerClient {
     @SubscribeEvent
     public void onClientTick(TickEvent.ClientTickEvent event) {
         block74: {
-            GuiScreen guiscreen;
             Minecraft minecraft;
+            GuiScreen guiscreen;
             block75: {
-                EntityClientPlayerMP entityplayer;
                 int i;
+                EntityClientPlayerMP entityplayer;
                 WorldClient world;
                 block76: {
                     block77: {
@@ -335,7 +323,8 @@ public class LOTRTickHandlerClient {
                                 GameSettings gs = Minecraft.getMinecraft().gameSettings;
                                 int renderDistance = gs.renderDistanceChunks;
                                 if (renderDistance > 16) {
-                                    gs.renderDistanceChunks = renderDistance = 16;
+                                    renderDistance = 16;
+                                    gs.renderDistanceChunks = 16;
                                     gs.saveOptions();
                                     LOTRLog.logger.info("LOTR: Render distance was above 16 - set to 16 to prevent a vanilla crash");
                                 }
@@ -379,7 +368,7 @@ public class LOTRTickHandlerClient {
                         }
                         watchedInvasion.tick();
                         boolean isHoldingBannerWithExistingProtection = LOTRItemBanner.isHoldingBannerWithExistingProtection((EntityPlayer)entityplayer);
-                        this.bannerRepossessDisplayTick = isHoldingBannerWithExistingProtection && !this.wasHoldingBannerWithExistingProtection ? 60 : --this.bannerRepossessDisplayTick;
+                        this.bannerRepossessDisplayTick = isHoldingBannerWithExistingProtection && !this.wasHoldingBannerWithExistingProtection ? 60 : (this.bannerRepossessDisplayTick = this.bannerRepossessDisplayTick - 1);
                         this.wasHoldingBannerWithExistingProtection = isHoldingBannerWithExistingProtection;
                         EntityLivingBase viewer = minecraft.renderViewEntity;
                         i = MathHelper.floor_double((double)viewer.posX);
@@ -438,7 +427,6 @@ public class LOTRTickHandlerClient {
                             --this.balrogNearTick;
                         }
                         if (LOTRConfig.enableSunFlare && world.provider instanceof LOTRWorldProvider && !world.provider.hasNoSky) {
-                            float celestialAngle;
                             this.prevSunGlare = this.sunGlare;
                             MovingObjectPosition look = viewer.rayTrace(10000.0, renderTick);
                             boolean lookingAtSky = look == null || look.typeOfHit == MovingObjectPosition.MovingObjectType.MISS;
@@ -446,7 +434,7 @@ public class LOTRTickHandlerClient {
                             if (biome instanceof LOTRBiome) {
                                 biomeHasSun = ((LOTRBiome)biome).hasSky();
                             }
-                            float sunPitch = celestialAngle = world.getCelestialAngle(renderTick) * 360.0f - 90.0f;
+                            float sunPitch = world.getCelestialAngle(renderTick) * 360.0f - 90.0f;
                             float sunYaw = 90.0f;
                             float yc = MathHelper.cos((float)((float)Math.toRadians(-sunYaw - 180.0f)));
                             float ys = MathHelper.sin((float)((float)Math.toRadians(-sunYaw - 180.0f)));
@@ -500,8 +488,10 @@ public class LOTRTickHandlerClient {
                         }
                         LOTRClientProxy.customEffectRenderer.updateEffects();
                         if (minecraft.renderViewEntity.isPotionActive(Potion.confusion.id)) {
+                            float f;
                             float drunkenness = minecraft.renderViewEntity.getActivePotionEffect(Potion.confusion).getDuration();
-                            if ((drunkenness /= 20.0f) > 100.0f) {
+                            drunkenness /= 20.0f;
+                            if (f > 100.0f) {
                                 drunkenness = 100.0f;
                             }
                             minecraft.renderViewEntity.rotationYaw += (float)this.drunkennessDirection * drunkenness / 20.0f;
@@ -636,9 +626,8 @@ public class LOTRTickHandlerClient {
         WorldClient world = minecraft.theWorld;
         if (event.phase == TickEvent.Phase.START) {
             GuiIngame guiIngame;
-            int highlightTicks;
             renderTick = event.renderTickTime;
-            if (this.cancelItemHighlight && (highlightTicks = LOTRReflectionClient.getHighlightedItemTicks(guiIngame = minecraft.ingameGUI)) > 0) {
+            if (this.cancelItemHighlight && LOTRReflectionClient.getHighlightedItemTicks(guiIngame = minecraft.ingameGUI) > 0) {
                 LOTRReflectionClient.setHighlightedItemTicks(guiIngame, 0);
                 this.cancelItemHighlight = false;
             }
@@ -658,7 +647,7 @@ public class LOTRTickHandlerClient {
                         GL11.glPushMatrix();
                         resolution = new ScaledResolution(minecraft, minecraft.displayWidth, minecraft.displayHeight);
                         int i = resolution.getScaledWidth();
-                        int j = resolution.getScaledHeight();
+                        resolution.getScaledHeight();
                         int compassX = i - 60;
                         int compassY = 40;
                         GL11.glTranslatef((float)compassX, (float)compassY, (float)0.0f);
@@ -777,7 +766,6 @@ public class LOTRTickHandlerClient {
         int k = MathHelper.floor_double((double)entityplayer.posZ);
         int range = 16;
         for (int l = 0; l < 1000; ++l) {
-            Block below;
             int i1 = i + world.rand.nextInt(range) - world.rand.nextInt(range);
             int j1 = j + world.rand.nextInt(range) - world.rand.nextInt(range);
             int k1 = k + world.rand.nextInt(range) - world.rand.nextInt(range);
@@ -795,7 +783,7 @@ public class LOTRTickHandlerClient {
                     world.spawnEntityInWorld((Entity)new LOTREntityDeadMarshFace(world, (float)i1 + world.rand.nextFloat(), (double)j1 + 0.25 - (double)world.rand.nextFloat(), (float)k1 + world.rand.nextFloat()));
                 }
             }
-            if (block.getMaterial() != Material.water || meta == 0 || (below = world.getBlock(i1, j1 - 1, k1)).getMaterial() != Material.water) continue;
+            if (block.getMaterial() != Material.water || meta == 0 || world.getBlock(i1, j1 - 1, k1).getMaterial() != Material.water) continue;
             for (int i2 = i1 - 1; i2 <= i1 + 1; ++i2) {
                 for (int k2 = k1 - 1; k2 <= k1 + 1; ++k2) {
                     Block adjBlock = world.getBlock(i2, j1 - 1, k2);
@@ -828,15 +816,14 @@ public class LOTRTickHandlerClient {
         float partialTicks = event.partialTicks;
         GuiIngame guiIngame = mc.ingameGUI;
         if (world != null && entityplayer != null) {
-            ScaledResolution resolution;
             int width;
             int height;
+            ScaledResolution resolution;
             boolean enchantingDisabled;
             if (event.type == RenderGameOverlayEvent.ElementType.ALL) {
-                List<LOTREnchantment> enchants;
                 mc.theWorld.theProfiler.startSection("lotr_fixHighlightedItemName");
                 ItemStack itemstack = LOTRReflectionClient.getHighlightedItemStack(guiIngame);
-                if (itemstack != null && !itemstack.hasDisplayName() && !(enchants = LOTREnchantmentHelper.getEnchantList(itemstack)).isEmpty()) {
+                if (itemstack != null && !itemstack.hasDisplayName() && !LOTREnchantmentHelper.getEnchantList(itemstack).isEmpty()) {
                     this.lastHighlightedItemstack = itemstack;
                     this.highlightedItemstackName = itemstack.hasDisplayName() ? itemstack.getDisplayName() : null;
                     itemstack.setStackDisplayName(LOTREnchantmentHelper.getFullEnchantedName(itemstack, itemstack.getDisplayName()));
@@ -884,7 +871,7 @@ public class LOTRTickHandlerClient {
                     LOTRAttackTiming.renderAttackMeter(event.resolution, partialTicks);
                 }
                 if (entityplayer.ridingEntity instanceof LOTREntitySpiderBase && (spider = (LOTREntitySpiderBase)entityplayer.ridingEntity).shouldRenderClimbingMeter()) {
-                    mc.getTextureManager().bindTexture(GuiIngame.icons);
+                    mc.getTextureManager().bindTexture(Gui.icons);
                     GL11.glColor4f((float)1.0f, (float)1.0f, (float)1.0f, (float)1.0f);
                     GL11.glDisable((int)3042);
                     mc.mcProfiler.startSection("spiderClimb");
@@ -892,7 +879,6 @@ public class LOTRTickHandlerClient {
                     width = resolution.getScaledWidth();
                     height = resolution.getScaledHeight();
                     float charge = spider.getClimbFractionRemaining();
-                    int barWidth = 182;
                     int x = width / 2 - 91;
                     int filled = (int)(charge * 183.0f);
                     int top = height - 32 + 3;
@@ -1057,16 +1043,19 @@ public class LOTRTickHandlerClient {
 
     @SubscribeEvent
     public void getItemTooltip(ItemTooltipEvent event) {
-        int armorProtect;
+        String name;
+        List<String> previousOwners;
         String squadron;
-        String owner;
+        int armorProtect;
         int i;
+        String currentOwner;
         ItemStack itemstack = event.itemStack;
         List tooltip = event.toolTip;
         EntityPlayer entityplayer = event.entityPlayer;
+        FontRenderer fontRenderer = Minecraft.getMinecraft().fontRenderer;
         List<LOTREnchantment> enchantments = LOTREnchantmentHelper.getEnchantList(itemstack);
         if (!itemstack.hasDisplayName() && !enchantments.isEmpty()) {
-            String name = (String)tooltip.get(0);
+            name = (String)tooltip.get(0);
             name = LOTREnchantmentHelper.getFullEnchantedName(itemstack, name);
             tooltip.set(0, name);
         }
@@ -1113,15 +1102,16 @@ public class LOTRTickHandlerClient {
             }
         }
         if (LOTRWeaponStats.isRangedWeapon(itemstack)) {
+            float f;
             int kb;
-            float damage;
             tooltip.add("");
             float drawSpeed = LOTRWeaponStats.getRangedSpeed(itemstack);
             if (drawSpeed > 0.0f) {
                 int pcSpeed = Math.round(drawSpeed * 100.0f);
                 tooltip.add((Object)EnumChatFormatting.DARK_GREEN + StatCollector.translateToLocalFormatted((String)"lotr.weaponstat.rangedSpeed", (Object[])new Object[]{pcSpeed}));
             }
-            if ((damage = LOTRWeaponStats.getRangedDamageFactor(itemstack, false)) > 0.0f) {
+            float damage = LOTRWeaponStats.getRangedDamageFactor(itemstack, false);
+            if (f > 0.0f) {
                 int pcDamage = Math.round(damage * 100.0f);
                 tooltip.add((Object)EnumChatFormatting.DARK_GREEN + StatCollector.translateToLocalFormatted((String)"lotr.weaponstat.rangedDamage", (Object[])new Object[]{pcDamage}));
                 if (itemstack.getItem() instanceof ItemBow || itemstack.getItem() instanceof LOTRItemCrossbow) {
@@ -1136,6 +1126,21 @@ public class LOTRTickHandlerClient {
         }
         if (LOTRWeaponStats.isPoisoned(itemstack)) {
             tooltip.add((Object)EnumChatFormatting.DARK_GREEN + StatCollector.translateToLocalFormatted((String)"lotr.weaponstat.poison", (Object[])new Object[0]));
+        }
+        if (LOTRWeaponStats.isPoisoned2(itemstack)) {
+            tooltip.add((Object)EnumChatFormatting.DARK_GREEN + StatCollector.translateToLocalFormatted((String)"lotr.weaponstat.poison", (Object[])new Object[0]));
+        }
+        if (LOTRWeaponStats.isPoisoned3(itemstack)) {
+            tooltip.add((Object)EnumChatFormatting.DARK_GREEN + StatCollector.translateToLocalFormatted((String)"lotr.weaponstat.poison", (Object[])new Object[0]));
+        }
+        if (LOTRWeaponStats.isPoisoned4(itemstack)) {
+            tooltip.add((Object)EnumChatFormatting.DARK_GREEN + StatCollector.translateToLocalFormatted((String)"lotr.weaponstat.poison", (Object[])new Object[0]));
+        }
+        if (LOTRWeaponStats.isPoisoned5(itemstack)) {
+            tooltip.add((Object)EnumChatFormatting.DARK_GREEN + StatCollector.translateToLocalFormatted((String)"lotr.weaponstat.poison", (Object[])new Object[0]));
+        }
+        if (LOTRWeaponStats.isPoisoned1(itemstack)) {
+            tooltip.add((Object)EnumChatFormatting.DARK_GRAY + StatCollector.translateToLocalFormatted((String)"lotr.weaponstat.wither", (Object[])new Object[0]));
         }
         if ((armorProtect = LOTRWeaponStats.getArmorProtection(itemstack)) > 0) {
             tooltip.add("");
@@ -1160,11 +1165,10 @@ public class LOTRTickHandlerClient {
         if (LOTRPoisonedDrinks.isDrinkPoisoned(itemstack) && LOTRPoisonedDrinks.canPlayerSeePoisoned(itemstack, entityplayer)) {
             tooltip.add((Object)EnumChatFormatting.DARK_GREEN + StatCollector.translateToLocal((String)"item.lotr.drink.poison"));
         }
-        if (itemstack.getTagCompound() != null && itemstack.getTagCompound().hasKey("LOTROwner")) {
+        if ((currentOwner = LOTRItemOwnership.getCurrentOwner(itemstack)) != null) {
             tooltip.add("");
-            owner = itemstack.getTagCompound().getString("LOTROwner");
-            owner = StatCollector.translateToLocalFormatted((String)"item.lotr.generic.owner", (Object[])new Object[]{owner});
-            List ownerLines = Minecraft.getMinecraft().fontRenderer.listFormattedStringToWidth(owner, 150);
+            String ownerFormatted = (Object)EnumChatFormatting.RED + StatCollector.translateToLocalFormatted((String)"item.lotr.generic.currentOwner", (Object[])new Object[]{currentOwner});
+            List ownerLines = fontRenderer.listFormattedStringToWidth(ownerFormatted, 150);
             for (int i4 = 0; i4 < ownerLines.size(); ++i4) {
                 String line = (String)ownerLines.get(i4);
                 if (i4 > 0) {
@@ -1173,18 +1177,40 @@ public class LOTRTickHandlerClient {
                 tooltip.add(line);
             }
         }
+        if (!(previousOwners = LOTRItemOwnership.getPreviousOwners(itemstack)).isEmpty()) {
+            tooltip.add("");
+            ArrayList<String> ownerLines = new ArrayList<String>();
+            if (previousOwners.size() == 1) {
+                String ownerFormatted = (Object)EnumChatFormatting.ITALIC + StatCollector.translateToLocalFormatted((String)"item.lotr.generic.previousOwner", (Object[])new Object[]{previousOwners.get(0)});
+                ownerLines.addAll(fontRenderer.listFormattedStringToWidth(ownerFormatted, 150));
+            } else {
+                String beginList = (Object)EnumChatFormatting.ITALIC + StatCollector.translateToLocal((String)"item.lotr.generic.previousOwnerList");
+                ownerLines.add(beginList);
+                for (String previousOwner : previousOwners) {
+                    previousOwner = (Object)EnumChatFormatting.ITALIC + previousOwner;
+                    ownerLines.addAll(fontRenderer.listFormattedStringToWidth(previousOwner, 150));
+                }
+            }
+            for (int i5 = 0; i5 < ownerLines.size(); ++i5) {
+                String line = (String)ownerLines.get(i5);
+                if (i5 > 0) {
+                    line = "  " + line;
+                }
+                tooltip.add(line);
+            }
+        }
         if (IPickpocketable.Helper.isPickpocketed(itemstack)) {
             tooltip.add("");
-            owner = IPickpocketable.Helper.getOwner(itemstack);
+            String owner = IPickpocketable.Helper.getOwner(itemstack);
             owner = StatCollector.translateToLocalFormatted((String)"item.lotr.generic.stolen", (Object[])new Object[]{owner});
             String wanter = IPickpocketable.Helper.getWanter(itemstack);
             wanter = StatCollector.translateToLocalFormatted((String)"item.lotr.generic.stolenWanted", (Object[])new Object[]{wanter});
             ArrayList robbedLines = new ArrayList();
-            robbedLines.addAll(Minecraft.getMinecraft().fontRenderer.listFormattedStringToWidth(owner, 200));
-            robbedLines.addAll(Minecraft.getMinecraft().fontRenderer.listFormattedStringToWidth(wanter, 200));
-            for (int i5 = 0; i5 < robbedLines.size(); ++i5) {
-                String line = (String)robbedLines.get(i5);
-                if (i5 > 0) {
+            robbedLines.addAll(fontRenderer.listFormattedStringToWidth(owner, 200));
+            robbedLines.addAll(fontRenderer.listFormattedStringToWidth(wanter, 200));
+            for (int i6 = 0; i6 < robbedLines.size(); ++i6) {
+                String line = (String)robbedLines.get(i6);
+                if (i6 > 0) {
                     line = "  " + line;
                 }
                 tooltip.add(line);
@@ -1194,7 +1220,7 @@ public class LOTRTickHandlerClient {
             tooltip.set(0, (Object)EnumChatFormatting.RED + (String)tooltip.get(0));
         }
         if (LOTRMod.isAprilFools()) {
-            String name = (String)tooltip.get(0);
+            name = (String)tooltip.get(0);
             name = name.replace("kebab", "gyros");
             name = name.replace("Kebab", "Gyros");
             tooltip.set(0, name);
@@ -1222,7 +1248,7 @@ public class LOTRTickHandlerClient {
             if (maxDrawTime > 0.0f) {
                 int i = entityplayer.getItemInUseDuration();
                 usage = (float)i / maxDrawTime;
-                usage = usage > 1.0f ? 1.0f : (usage *= usage);
+                float f = usage = usage > 1.0f ? 1.0f : (usage = usage * usage);
             }
         }
         if (LOTRItemCrossbow.isLoaded(itemstack)) {
@@ -1247,16 +1273,20 @@ public class LOTRTickHandlerClient {
         float farPlane = event.farPlaneDistance;
         int fogMode = event.fogMode;
         if (provider instanceof LOTRWorldProvider) {
-            float rain;
+            float f;
             LOTRBiome lotrbiome = (LOTRBiome)biome;
             float[] fogStartEnd = ((LOTRWorldProvider)provider).modifyFogIntensity(farPlane, fogMode);
             float fogStart = fogStartEnd[0];
             float fogEnd = fogStartEnd[1];
-            if (LOTRConfig.newWeather && (lotrbiome.getEnableRain() || lotrbiome.getEnableSnow()) && (rain = this.prevRainFactor + (this.rainFactor - this.prevRainFactor) * renderTick) > 0.0f) {
-                float rainOpacityStart = 0.95f;
-                float rainOpacityEnd = 0.2f;
-                fogStart -= fogStart * (rain * rainOpacityStart);
-                fogEnd -= fogEnd * (rain * rainOpacityEnd);
+            if (LOTRConfig.newWeather && (lotrbiome.getEnableRain() || lotrbiome.getEnableSnow())) {
+                float f2;
+                float rain = this.prevRainFactor + (this.rainFactor - this.prevRainFactor) * renderTick;
+                if (f2 > 0.0f) {
+                    float rainOpacityStart = 0.95f;
+                    float rainOpacityEnd = 0.2f;
+                    fogStart -= fogStart * (rain * rainOpacityStart);
+                    fogEnd -= fogEnd * (rain * rainOpacityEnd);
+                }
             }
             if (this.mistFactor > 0.0f) {
                 float mistOpacityStart = 0.95f;
@@ -1265,7 +1295,8 @@ public class LOTRTickHandlerClient {
                 fogEnd -= fogEnd * (this.mistFactor * mistOpacityEnd);
             }
             float wightFactor = (float)this.prevWightNearTick + (float)(this.wightNearTick - this.prevWightNearTick) * renderTick;
-            if ((wightFactor /= 100.0f) > 0.0f) {
+            wightFactor /= 100.0f;
+            if (f > 0.0f) {
                 float wightOpacityStart = 0.97f;
                 float wightOpacityEnd = 0.75f;
                 fogStart -= fogStart * (wightFactor * wightOpacityStart);
@@ -1368,7 +1399,7 @@ public class LOTRTickHandlerClient {
         LOTRFaction viewingFac = pd.getViewingFaction();
         ScaledResolution resolution = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight);
         int width = resolution.getScaledWidth();
-        int height = resolution.getScaledHeight();
+        resolution.getScaledHeight();
         this.alignmentXBase = width / 2 + LOTRConfig.alignmentXOffset;
         this.alignmentYBase = 4 + LOTRConfig.alignmentYOffset;
         if (LOTRTickHandlerClient.isBossActive()) {
@@ -1410,7 +1441,6 @@ public class LOTRTickHandlerClient {
         float alignMax = 0.0f;
         LOTRFactionRank rankMin = null;
         LOTRFactionRank rankMax = null;
-        float pastRankMultiplier = 10.0f;
         if (!rank.isDummyRank()) {
             alignMin = rank.alignment;
             rankMin = rank;
@@ -1427,8 +1457,9 @@ public class LOTRTickHandlerClient {
                 }
             }
         } else {
+            float firstRankAlign;
             LOTRFactionRank firstRank = faction.getFirstRank();
-            float firstRankAlign = firstRank != null && !firstRank.isDummyRank() ? firstRank.alignment : 10.0f;
+            float f = firstRankAlign = firstRank != null && !firstRank.isDummyRank() ? firstRank.alignment : 10.0f;
             if (Math.abs(alignment) < firstRankAlign) {
                 alignMin = -firstRankAlign;
                 alignMax = firstRankAlign;
@@ -1521,8 +1552,8 @@ public class LOTRTickHandlerClient {
             LOTRTickHandlerClient.drawAlignmentText(fr, textX - fr.getStringWidth(name) / 2, textY, name, 1.0f);
         }
         if (renderValue) {
-            String alignS;
             float alignAlpha;
+            String alignS;
             int numericalTick = ticker.numericalTick;
             if (numericalTick > 0) {
                 alignS = LOTRAlignmentValues.formatAlignForDisplay(alignment);

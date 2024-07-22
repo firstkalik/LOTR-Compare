@@ -108,11 +108,11 @@ implements LOTRTradeable.Smith {
     public String getSpeechBank(EntityPlayer entityplayer) {
         if (this.isFriendly(entityplayer)) {
             if (this.canTradeWith(entityplayer)) {
-                return "nearHarad/harnennor/blacksmith/friendly";
+                return "nearHarad/harnedor/blacksmith/friendly";
             }
-            return "nearHarad/harnennor/blacksmith/neutral";
+            return "nearHarad/harnedor/blacksmith/neutral";
         }
-        return "nearHarad/harnennor/blacksmith/hostile";
+        return "nearHarad/harnedor/blacksmith/hostile";
     }
 }
 

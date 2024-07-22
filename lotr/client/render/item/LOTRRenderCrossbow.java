@@ -102,7 +102,7 @@ implements IItemRenderer {
             GL11.glPopMatrix();
             return;
         }
-        TextureManager texturemanager = Minecraft.getMinecraft().getTextureManager();
+        Minecraft.getMinecraft().getTextureManager();
         Tessellator tessellator = Tessellator.instance;
         float f = icon.getMinU();
         float f1 = icon.getMaxU();

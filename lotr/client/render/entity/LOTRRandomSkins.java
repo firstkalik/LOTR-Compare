@@ -191,7 +191,7 @@ implements IResourceManagerReloadListener {
                                     int opaqueTest;
                                     int baseRGB = baseImage.getRGB(i, j);
                                     int overlayRGB = overlayImage.getRGB(i, j);
-                                    if ((overlayRGB & (opaqueTest = -16777216)) == opaqueTest) {
+                                    if ((overlayRGB & 0xFF000000) == (opaqueTest = -16777216)) {
                                         newImage.setRGB(i, j, overlayRGB);
                                         continue;
                                     }

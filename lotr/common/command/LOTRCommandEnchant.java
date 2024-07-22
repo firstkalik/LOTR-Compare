@@ -40,7 +40,7 @@ extends CommandBase {
 
     public void processCommand(ICommandSender sender, String[] args) {
         if (args.length >= 2) {
-            EntityPlayerMP entityplayer = LOTRCommandEnchant.getPlayer((ICommandSender)sender, (String)args[0]);
+            EntityPlayerMP entityplayer = CommandBase.getPlayer((ICommandSender)sender, (String)args[0]);
             ItemStack itemstack = entityplayer.getHeldItem();
             if (itemstack == null) {
                 throw new WrongUsageException("commands.lotr.lotrEnchant.noItem", new Object[0]);
@@ -52,7 +52,7 @@ extends CommandBase {
                 if (ench != null) {
                     if (!LOTREnchantmentHelper.hasEnchant(itemstack, ench) && ench.canApply(itemstack, false) && LOTREnchantmentHelper.checkEnchantCompatible(itemstack, ench)) {
                         LOTREnchantmentHelper.setHasEnchant(itemstack, ench);
-                        LOTRCommandEnchant.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.lotrEnchant.add", (Object[])new Object[]{enchName, entityplayer.getCommandSenderName(), itemstack.getDisplayName()});
+                        CommandBase.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.lotrEnchant.add", (Object[])new Object[]{enchName, entityplayer.getCommandSenderName(), itemstack.getDisplayName()});
                         return;
                     }
                     throw new WrongUsageException("commands.lotr.lotrEnchant.cannotAdd", new Object[]{enchName, itemstack.getDisplayName()});
@@ -65,7 +65,7 @@ extends CommandBase {
                 if (ench != null) {
                     if (LOTREnchantmentHelper.hasEnchant(itemstack, ench)) {
                         LOTREnchantmentHelper.removeEnchant(itemstack, ench);
-                        LOTRCommandEnchant.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.lotrEnchant.remove", (Object[])new Object[]{enchName, entityplayer.getCommandSenderName(), itemstack.getDisplayName()});
+                        CommandBase.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.lotrEnchant.remove", (Object[])new Object[]{enchName, entityplayer.getCommandSenderName(), itemstack.getDisplayName()});
                         return;
                     }
                     throw new WrongUsageException("commands.lotr.lotrEnchant.cannotRemove", new Object[]{enchName, itemstack.getDisplayName()});
@@ -74,7 +74,7 @@ extends CommandBase {
             }
             if (option.equals("clear")) {
                 LOTREnchantmentHelper.clearEnchantsAndProgress(itemstack);
-                LOTRCommandEnchant.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.lotrEnchant.clear", (Object[])new Object[]{entityplayer.getCommandSenderName(), itemstack.getDisplayName()});
+                CommandBase.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.lotrEnchant.clear", (Object[])new Object[]{entityplayer.getCommandSenderName(), itemstack.getDisplayName()});
                 return;
             }
         }
@@ -83,16 +83,15 @@ extends CommandBase {
 
     public List addTabCompletionOptions(ICommandSender sender, String[] args) {
         if (args.length == 1) {
-            return LOTRCommandEnchant.getListOfStringsMatchingLastWord((String[])args, (String[])MinecraftServer.getServer().getAllUsernames());
+            return CommandBase.getListOfStringsMatchingLastWord((String[])args, (String[])MinecraftServer.getServer().getAllUsernames());
         }
         if (args.length == 2) {
-            return LOTRCommandEnchant.getListOfStringsMatchingLastWord((String[])args, (String[])new String[]{"add", "remove", "clear"});
+            return CommandBase.getListOfStringsMatchingLastWord((String[])args, (String[])new String[]{"add", "remove", "clear"});
         }
         if (args.length == 3) {
             ItemStack itemstack;
-            EntityPlayerMP entityplayer;
             if (args[1].equals("add")) {
-                EntityPlayerMP entityplayer2 = LOTRCommandEnchant.getPlayer((ICommandSender)sender, (String)args[0]);
+                EntityPlayerMP entityplayer2 = CommandBase.getPlayer((ICommandSender)sender, (String)args[0]);
                 ItemStack itemstack2 = entityplayer2.getHeldItem();
                 if (itemstack2 != null) {
                     ArrayList<String> enchNames = new ArrayList<String>();
@@ -100,15 +99,15 @@ extends CommandBase {
                         if (LOTREnchantmentHelper.hasEnchant(itemstack2, ench) || !ench.canApply(itemstack2, false) || !LOTREnchantmentHelper.checkEnchantCompatible(itemstack2, ench)) continue;
                         enchNames.add(ench.enchantName);
                     }
-                    return LOTRCommandEnchant.getListOfStringsMatchingLastWord((String[])args, (String[])enchNames.toArray(new String[0]));
+                    return CommandBase.getListOfStringsMatchingLastWord((String[])args, (String[])enchNames.toArray(new String[0]));
                 }
-            } else if (args[1].equals("remove") && (itemstack = (entityplayer = LOTRCommandEnchant.getPlayer((ICommandSender)sender, (String)args[0])).getHeldItem()) != null) {
+            } else if (args[1].equals("remove") && (itemstack = CommandBase.getPlayer((ICommandSender)sender, (String)args[0]).getHeldItem()) != null) {
                 ArrayList<String> enchNames = new ArrayList<String>();
                 for (LOTREnchantment ench : LOTREnchantment.allEnchantments) {
                     if (!LOTREnchantmentHelper.hasEnchant(itemstack, ench)) continue;
                     enchNames.add(ench.enchantName);
                 }
-                return LOTRCommandEnchant.getListOfStringsMatchingLastWord((String[])args, (String[])enchNames.toArray(new String[0]));
+                return CommandBase.getListOfStringsMatchingLastWord((String[])args, (String[])enchNames.toArray(new String[0]));
             }
         }
         return null;

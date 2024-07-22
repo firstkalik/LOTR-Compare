@@ -66,8 +66,8 @@ extends LOTRWorldGenSouthronStructure {
                         this.setAir(world, i1, j1, k1);
                     }
                 }
-                if ((i2 > 3 || k2 > 6) && (i1 < 4 || i1 > 7 || k2 > 5)) continue;
-                int randomGround = random.nextInt(2);
+                if (!(i2 <= 3 && k2 <= 6 || i1 >= 4 && i1 <= 7 && k2 <= 5)) continue;
+                random.nextInt(2);
                 if (random.nextBoolean()) {
                     this.setBlockAndMetadata(world, i1, 0, k1, (Block)Blocks.sand, 0);
                 } else {

@@ -95,31 +95,31 @@ extends LOTRWorldGenStructureBase2 {
 
     @Override
     public boolean generateWithSetRotation(World world, Random random, int i, int j, int k, int rotation) {
-        int k1;
-        int i1;
         int j2;
-        int k12;
         int j1;
+        int k1;
+        int k12;
         int j12;
         int step;
         int i12;
+        int i1;
         this.setOriginAndRotation(world, i, j, k, rotation, 8, -10);
         this.originY -= 4;
         this.setupRandomBlocks(random);
         if (this.restrictions) {
             int minHeight = 0;
             int maxHeight = 0;
-            for (i1 = -13; i1 <= 12; ++i1) {
+            for (i12 = -13; i12 <= 12; ++i12) {
                 for (k1 = -12; k1 <= 14; ++k1) {
-                    j1 = this.getTopBlock(world, i1, k1) - 1;
-                    if (!this.isSurface(world, i1, j1, k1)) {
+                    j12 = this.getTopBlock(world, i12, k1) - 1;
+                    if (!this.isSurface(world, i12, j12, k1)) {
                         return false;
                     }
-                    if (j1 < minHeight) {
-                        minHeight = j1;
+                    if (j12 < minHeight) {
+                        minHeight = j12;
                     }
-                    if (j1 <= maxHeight) continue;
-                    maxHeight = j1;
+                    if (j12 <= maxHeight) continue;
+                    maxHeight = j12;
                 }
             }
             if (maxHeight - minHeight > 12) {
@@ -136,40 +136,40 @@ extends LOTRWorldGenStructureBase2 {
             }
         }
         int r2 = 12;
-        for (i1 = -r2; i1 <= r2; ++i1) {
+        for (i12 = -r2; i12 <= r2; ++i12) {
             for (k1 = -r2; k1 <= r2; ++k1) {
-                if (i1 * i1 + k1 * k1 >= r2 * r2 || k1 < -4 || i1 > 4) continue;
-                for (j1 = 0; j1 <= 12; ++j1) {
-                    this.setAir(world, i1, j1, k1);
+                if (i12 * i12 + k1 * k1 >= r2 * r2 || k1 < -4 || i12 > 4) continue;
+                for (j12 = 0; j12 <= 12; ++j12) {
+                    this.setAir(world, i12, j12, k1);
                 }
             }
         }
-        for (i1 = -12; i1 <= -8; ++i1) {
+        for (i12 = -12; i12 <= -8; ++i12) {
             for (k1 = -7; k1 <= -4; ++k1) {
-                if (k1 == -7 && (i1 == -12 || i1 == -8)) continue;
-                for (j1 = 5; j1 <= 12; ++j1) {
-                    this.setAir(world, i1, j1, k1);
+                if (k1 == -7 && (i12 == -12 || i12 == -8)) continue;
+                for (j12 = 5; j12 <= 12; ++j12) {
+                    this.setAir(world, i12, j12, k1);
                 }
             }
         }
-        for (i1 = -3; i1 <= 3; ++i1) {
+        for (i12 = -3; i12 <= 3; ++i12) {
             for (k1 = 8; k1 <= 12; ++k1) {
-                for (j1 = 7; j1 <= 11; ++j1) {
-                    this.setAir(world, i1, j1, k1);
+                for (j12 = 7; j12 <= 11; ++j12) {
+                    this.setAir(world, i12, j12, k1);
                 }
             }
         }
-        for (i1 = -1; i1 <= 1; ++i1) {
+        for (i12 = -1; i12 <= 1; ++i12) {
             for (k1 = -11; k1 <= -6; ++k1) {
-                for (j1 = 0; j1 <= 3; ++j1) {
-                    this.setAir(world, i1, j1, k1);
+                for (j12 = 0; j12 <= 3; ++j12) {
+                    this.setAir(world, i12, j12, k1);
                 }
             }
         }
-        for (i1 = 6; i1 <= 11; ++i1) {
+        for (i12 = 6; i12 <= 11; ++i12) {
             for (k1 = -1; k1 <= 1; ++k1) {
-                for (j1 = 0; j1 <= 3; ++j1) {
-                    this.setAir(world, i1, j1, k1);
+                for (j12 = 0; j12 <= 3; ++j12) {
+                    this.setAir(world, i12, j12, k1);
                 }
             }
         }
@@ -226,26 +226,26 @@ extends LOTRWorldGenStructureBase2 {
         this.placeMug(world, random, 3, 8, 10, 1, LOTRFoods.ORC_DRINK);
         this.placePlateWithCertainty(world, random, 3, 8, 9, LOTRMod.woodPlateBlock, LOTRFoods.ORC);
         int maxStep = 12;
-        for (i12 = -1; i12 <= 1; ++i12) {
-            for (step = 0; step < 2 && !this.isSideSolid(world, i12, j12 = 5 - step, k12 = -9 - step, ForgeDirection.UP); ++step) {
-                this.setBlockAndMetadata(world, i12, j12, k12, this.brickStairBlock, 2);
-                this.setGrassToDirt(world, i12, j12 - 1, k12);
-                j2 = j12 - 1;
-                while (!this.isSideSolid(world, i12, j2, k12, ForgeDirection.UP) && this.getY(j2) >= 0) {
-                    this.setBlockAndMetadata(world, i12, j2, k12, this.brickBlock, this.brickMeta);
-                    this.setGrassToDirt(world, i12, j2 - 1, k12);
+        for (i1 = -1; i1 <= 1; ++i1) {
+            for (step = 0; step < 2 && !this.isSideSolid(world, i1, j1 = 5 - step, k12 = -9 - step, ForgeDirection.UP); ++step) {
+                this.setBlockAndMetadata(world, i1, j1, k12, this.brickStairBlock, 2);
+                this.setGrassToDirt(world, i1, j1 - 1, k12);
+                j2 = j1 - 1;
+                while (!this.isSideSolid(world, i1, j2, k12, ForgeDirection.UP) && this.getY(j2) >= 0) {
+                    this.setBlockAndMetadata(world, i1, j2, k12, this.brickBlock, this.brickMeta);
+                    this.setGrassToDirt(world, i1, j2 - 1, k12);
                     --j2;
                 }
             }
         }
-        for (i12 = -1; i12 <= 1; ++i12) {
-            for (step = 0; step < maxStep && !this.isOpaque(world, i12, j12 = 3 - step, k12 = -13 - step); ++step) {
-                this.setBlockAndMetadata(world, i12, j12, k12, this.brickStairBlock, 2);
-                this.setGrassToDirt(world, i12, j12 - 1, k12);
-                j2 = j12 - 1;
-                while (!this.isOpaque(world, i12, j2, k12) && this.getY(j2) >= 0) {
-                    this.setBlockAndMetadata(world, i12, j2, k12, this.brickBlock, this.brickMeta);
-                    this.setGrassToDirt(world, i12, j2 - 1, k12);
+        for (i1 = -1; i1 <= 1; ++i1) {
+            for (step = 0; step < maxStep && !this.isOpaque(world, i1, j1 = 3 - step, k12 = -13 - step); ++step) {
+                this.setBlockAndMetadata(world, i1, j1, k12, this.brickStairBlock, 2);
+                this.setGrassToDirt(world, i1, j1 - 1, k12);
+                j2 = j1 - 1;
+                while (!this.isOpaque(world, i1, j2, k12) && this.getY(j2) >= 0) {
+                    this.setBlockAndMetadata(world, i1, j2, k12, this.brickBlock, this.brickMeta);
+                    this.setGrassToDirt(world, i1, j2 - 1, k12);
                     --j2;
                 }
             }

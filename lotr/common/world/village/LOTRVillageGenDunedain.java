@@ -43,17 +43,16 @@ extends LOTRVillageGen {
         return new Instance(this, world, i, k, random, loc);
     }
 
+    public static enum VillageType {
+        VILLAGE;
+
+    }
+
     public static class Instance
     extends LOTRVillageGen.AbstractInstance<LOTRVillageGenDunedain> {
         public VillageType villageType;
         private int innerSize;
-        private static final int innerSizeMin = 12;
-        private static final int innerSizeMax = 20;
-        private static final int roadWidth = 2;
-        private static final int pathFuzz = 3;
-        private static final int outerGap = 12;
         private boolean palisade;
-        private static final int palisadeGap = 16;
 
         public Instance(LOTRVillageGenDunedain village, World world, int i, int k, Random random, LocationInfo loc) {
             super(village, world, i, k, random, loc);
@@ -112,7 +111,6 @@ extends LOTRVillageGen {
             while (turn < 1.0f) {
                 int k;
                 int l;
-                int i;
                 float turnR = (float)Math.toRadians((turn += frac) * 360.0f);
                 float sin = MathHelper.sin((float)turnR);
                 float cos = MathHelper.cos((float)turnR);
@@ -133,7 +131,7 @@ extends LOTRVillageGen {
                     if (random.nextInt(3) == 0) {
                         l += 12;
                     }
-                    i = Math.round((float)l * cos);
+                    int i = Math.round((float)l * cos);
                     k = Math.round((float)l * sin);
                     this.addStructure(this.getRandomHouse(random), i, k, r);
                     continue;
@@ -143,7 +141,7 @@ extends LOTRVillageGen {
                 if (random.nextInt(3) == 0) {
                     l += 12;
                 }
-                i = Math.round((float)l * cos);
+                int i = Math.round((float)l * cos);
                 k = Math.round((float)l * sin);
                 this.addStructure(new LOTRWorldGenHayBales(false), i, k, r);
             }
@@ -202,11 +200,6 @@ extends LOTRVillageGen {
         public boolean isVillageSpecificSurface(World world, int i, int j, int k) {
             return false;
         }
-
-    }
-
-    public static enum VillageType {
-        VILLAGE;
 
     }
 

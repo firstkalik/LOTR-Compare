@@ -33,7 +33,6 @@ import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -71,6 +70,7 @@ public class LOTRLore {
     public final String loreText;
     public final List<LoreCategory> loreCategories;
     public final boolean isRewardable;
+    public static HashMap<String, LOTRLore> loreAndNames = new HashMap();
 
     public static LOTRLore getMultiRandomLore(List<LoreCategory> categories, Random random, boolean rewardsOnly) {
         ArrayList<LOTRLore> allLore = new ArrayList<LOTRLore>();
@@ -86,6 +86,13 @@ public class LOTRLore {
         return null;
     }
 
+    public static LOTRLore getLoreAsTitle(String title) {
+        if (!loreAndNames.isEmpty()) {
+            return loreAndNames.get(title);
+        }
+        return null;
+    }
+
     public static void loadAllLore() {
         HashMap<String, BufferedReader> loreReaders = new HashMap<String, BufferedReader>();
         ZipFile zip = null;
@@ -95,10 +102,10 @@ public class LOTRLore {
                 zip = new ZipFile(mc.getSource());
                 Enumeration<? extends ZipEntry> entries = zip.entries();
                 while (entries.hasMoreElements()) {
-                    String path;
                     ZipEntry entry = entries.nextElement();
                     String s = entry.getName();
-                    if (!s.startsWith(path = "assets/lotr/lore/") || !s.endsWith(".txt")) continue;
+                    String path = "assets/lotr/lore/";
+                    if (!s.startsWith("assets/lotr/lore/") || !s.endsWith(".txt")) continue;
                     s = s.substring(path.length());
                     int i = s.indexOf(".txt");
                     try {
@@ -140,11 +147,10 @@ public class LOTRLore {
             String loreName = (String)entry.getKey();
             BufferedReader reader = (BufferedReader)entry.getValue();
             try {
-                Object categoryString;
                 String line;
                 String title = "";
-                String author = "";
-                ArrayList categories = new ArrayList();
+                Object author = "";
+                ArrayList<LoreCategory> categories = new ArrayList<LoreCategory>();
                 String text = "";
                 boolean reward = false;
                 while ((line = reader.readLine()) != null) {
@@ -159,7 +165,7 @@ public class LOTRLore {
                             continue;
                         }
                         if (metadata.startsWith(codeCategory)) {
-                            categoryString = metadata.substring(codeCategory.length());
+                            Object categoryString = metadata.substring(codeCategory.length());
                             while (((String)categoryString).length() > 0) {
                                 Object categoryName = null;
                                 int indexOf = ((String)categoryString).indexOf(codeCategorySeparator);
@@ -196,10 +202,8 @@ public class LOTRLore {
                     text = text + newline;
                 }
                 reader.close();
-                LOTRLore lore = new LOTRLore(loreName, title, author, text, categories, reward);
-                categoryString = categories.iterator();
-                while (categoryString.hasNext()) {
-                    LoreCategory category = (LoreCategory)((Object)categoryString.next());
+                LOTRLore lore = new LOTRLore(loreName, title, (String)author, text, categories, reward);
+                for (LoreCategory category : categories) {
                     category.addLore(lore);
                 }
             }
@@ -212,6 +216,7 @@ public class LOTRLore {
             int num = category.loreList.size();
             int numReward = 0;
             for (LOTRLore lore : category.loreList) {
+                loreAndNames.put(lore.loreName, lore);
                 if (!lore.isRewardable) continue;
                 ++numReward;
             }
@@ -338,13 +343,12 @@ public class LOTRLore {
                     }
                 } else if (formatted.startsWith("name:")) {
                     try {
-                        String name;
                         String namebank = s1 = formatted.substring("name:".length());
                         if (!LOTRNames.nameBankExists(namebank)) {
                             LOTRLog.logger.error("LOTRLore: No namebank exists for " + namebank + "!");
                             break block16;
                         }
-                        formatted = name = LOTRNames.getRandomName(namebank, random);
+                        formatted = LOTRNames.getRandomName(namebank, random);
                     }
                     catch (Exception e) {
                         LOTRLog.logger.error("LOTRLore: Error formatting name " + unformatted + " in text: " + this.loreName);
@@ -410,6 +414,7 @@ public class LOTRLore {
         GUNDABAD("gundabad"),
         ANGMAR("angmar"),
         WOODLAND_REALM("woodland_realm"),
+        AVARI("avari"),
         DOL_GULDUR("dol_guldur"),
         DALE("dale"),
         DURIN("durins_folk"),
@@ -427,7 +432,11 @@ public class LOTRLore {
         GULF("gulf"),
         FAR_HARAD("far_harad"),
         FAR_HARAD_JUNGLE("far_harad_jungle"),
-        HALF_TROLL("half_troll");
+        HALF_TROLL("half_troll"),
+        RED_MOUNTAINS("red_mountains"),
+        WIND_MOUNTAINS("wind_mountains"),
+        DURMETH("durmeth"),
+        UTUMNO("utumno");
 
         public static final String allCode = "all";
         public final String categoryName;

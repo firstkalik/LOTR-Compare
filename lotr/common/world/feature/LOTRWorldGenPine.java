@@ -46,7 +46,6 @@ extends WorldGenAbstractTree {
     }
 
     public boolean generate(World world, Random random, int i, int j, int k) {
-        boolean isSoil;
         Block below;
         int height = MathHelper.getRandomIntegerInRange((Random)random, (int)this.minHeight, (int)this.maxHeight);
         boolean flag = true;
@@ -73,7 +72,7 @@ extends WorldGenAbstractTree {
         } else {
             flag = false;
         }
-        if (!(isSoil = (below = world.getBlock(i, j - 1, k)).canSustainPlant((IBlockAccess)world, i, j - 1, k, ForgeDirection.UP, (IPlantable)Blocks.sapling))) {
+        if (!(below = world.getBlock(i, j - 1, k)).canSustainPlant((IBlockAccess)world, i, j - 1, k, ForgeDirection.UP, (IPlantable)Blocks.sapling)) {
             flag = false;
         }
         if (!flag) {
@@ -108,8 +107,8 @@ extends WorldGenAbstractTree {
         int lastDir = -1;
         for (int j1 = j; j1 < j + height; ++j1) {
             int k1;
-            int i1;
             int dir;
+            int i1;
             this.setBlockAndNotifyAdequately(world, i, j1, k, this.woodBlock, this.woodMeta);
             if (j1 < j + 3 || j1 >= minLeafHeight || random.nextInt(3) != 0 || (dir = random.nextInt(4)) == lastDir) continue;
             lastDir = dir;
@@ -129,9 +128,8 @@ extends WorldGenAbstractTree {
         for (int i1 = i - range; i1 <= i + range; ++i1) {
             for (int k1 = k - range; k1 <= k + range; ++k1) {
                 Block block;
-                int k2;
                 int i2 = Math.abs(i1 - i);
-                if (i2 + (k2 = Math.abs(k1 - k)) > range || !(block = world.getBlock(i1, j, k1)).isReplaceable((IBlockAccess)world, i1, j, k1) && !block.isLeaves((IBlockAccess)world, i1, j, k1)) continue;
+                if (i2 + Math.abs(k1 - k) > range || !(block = world.getBlock(i1, j, k1)).isReplaceable((IBlockAccess)world, i1, j, k1) && !block.isLeaves((IBlockAccess)world, i1, j, k1)) continue;
                 this.setBlockAndNotifyAdequately(world, i1, j, k1, this.leafBlock, this.leafMeta);
             }
         }

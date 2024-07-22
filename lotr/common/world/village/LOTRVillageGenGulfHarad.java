@@ -55,21 +55,18 @@ extends LOTRVillageGen {
         return new Instance(this, world, i, k, random, loc);
     }
 
+    public static enum VillageType {
+        VILLAGE,
+        TOWN,
+        FORT;
+
+    }
+
     public static class Instance
     extends LOTRVillageGen.AbstractInstance<LOTRVillageGenGulfHarad> {
         public VillageType villageType;
         public String[] villageName;
         private int numOuterHouses;
-        private static final int pathInner = 16;
-        private static final int roadWidth = 5;
-        private static final int pathFuzz = 3;
-        private static final int rHouses = 24;
-        private static final int rFarms = 52;
-        private static final int rEdge = 68;
-        private static final int rTownInner = 24;
-        private static final int rTownRoadEnd = 74;
-        private static final int rTownWall = 98;
-        private static final int townRoadWidth = 7;
         private boolean townWall = true;
         int rTownTower = 90;
 
@@ -357,13 +354,6 @@ extends LOTRVillageGen {
             }
             return false;
         }
-
-    }
-
-    public static enum VillageType {
-        VILLAGE,
-        TOWN,
-        FORT;
 
     }
 

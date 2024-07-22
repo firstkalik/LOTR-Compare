@@ -35,6 +35,8 @@ public class LOTRMillstoneRecipes {
         LOTRMillstoneRecipes.addRecipe(LOTRMod.mordorGravel, new ItemStack(Items.flint), 0.25f);
         LOTRMillstoneRecipes.addRecipe(LOTRMod.obsidianGravel, new ItemStack(LOTRMod.obsidianShard), 1.0f);
         LOTRMillstoneRecipes.addRecipe(LOTRMod.oreSalt, new ItemStack(LOTRMod.salt));
+        LOTRMillstoneRecipes.addRecipe(Items.rotten_flesh, new ItemStack(Items.leather), 0.25f);
+        LOTRMillstoneRecipes.addRecipe(LOTRMod.oreMithril, new ItemStack(LOTRMod.mithrilNugget), 0.75f);
         LOTRMillstoneRecipes.addRecipe(new ItemStack(Blocks.sandstone, 1, 0), new ItemStack((Block)Blocks.sand, 2, 0));
         LOTRMillstoneRecipes.addRecipe(new ItemStack(LOTRMod.redSandstone, 1, 0), new ItemStack((Block)Blocks.sand, 2, 1));
         LOTRMillstoneRecipes.addRecipe(new ItemStack(LOTRMod.whiteSandstone, 1, 0), new ItemStack(LOTRMod.whiteSand, 2, 0));
@@ -50,7 +52,6 @@ public class LOTRMillstoneRecipes {
         LOTRMillstoneRecipes.addCrackedBricks(new ItemStack(LOTRMod.brick2, 1, 8), new ItemStack(LOTRMod.brick2, 1, 9));
         LOTRMillstoneRecipes.addCrackedBricks(new ItemStack(LOTRMod.brick3, 1, 2), new ItemStack(LOTRMod.brick3, 1, 4));
         LOTRMillstoneRecipes.addCrackedBricks(new ItemStack(LOTRMod.brick3, 1, 5), new ItemStack(LOTRMod.brick3, 1, 7));
-        LOTRMillstoneRecipes.addCrackedBricks(new ItemStack(LOTRMod.brick3, 1, 10), new ItemStack(LOTRMod.brick6, 1, 13));
         LOTRMillstoneRecipes.addCrackedBricks(new ItemStack(LOTRMod.brick3, 1, 13), new ItemStack(LOTRMod.brick3, 1, 14));
         LOTRMillstoneRecipes.addCrackedBricks(new ItemStack(LOTRMod.brick4, 1, 0), new ItemStack(LOTRMod.brick4, 1, 2));
         LOTRMillstoneRecipes.addCrackedBricks(new ItemStack(LOTRMod.brick5, 1, 1), new ItemStack(LOTRMod.brick6, 1, 4));
@@ -58,11 +59,20 @@ public class LOTRMillstoneRecipes {
         LOTRMillstoneRecipes.addCrackedBricks(new ItemStack(LOTRMod.brick5, 1, 8), new ItemStack(LOTRMod.brick5, 1, 10));
         LOTRMillstoneRecipes.addCrackedBricks(new ItemStack(LOTRMod.brick5, 1, 11), new ItemStack(LOTRMod.brick5, 1, 14));
         LOTRMillstoneRecipes.addCrackedBricks(new ItemStack(LOTRMod.brick6, 1, 6), new ItemStack(LOTRMod.brick6, 1, 7));
+        LOTRMillstoneRecipes.addCrackedBricks(new ItemStack(LOTRMod.brick9, 1, 0), new ItemStack(LOTRMod.brick9, 1, 3));
+        LOTRMillstoneRecipes.addCrackedBricks(new ItemStack(LOTRMod.brick9, 1, 4), new ItemStack(LOTRMod.brick9, 1, 12));
+        LOTRMillstoneRecipes.addCrackedBricks(new ItemStack(LOTRMod.brick9, 1, 5), new ItemStack(LOTRMod.brick9, 1, 6));
+        LOTRMillstoneRecipes.addCrackedBricks(new ItemStack(LOTRMod.brick2, 1, 2), new ItemStack(LOTRMod.brick9, 1, 1));
+        LOTRMillstoneRecipes.addCrackedBricks(new ItemStack(LOTRMod.brick10, 1, 1), new ItemStack(LOTRMod.brick10, 1, 2));
+        LOTRMillstoneRecipes.addCrackedBricks(new ItemStack(LOTRMod.pillar4, 1, 6), new ItemStack(LOTRMod.pillar4, 1, 7));
+        LOTRMillstoneRecipes.addCrackedBricks(new ItemStack(LOTRMod.pillar4, 1, 1), new ItemStack(LOTRMod.pillar4, 1, 2));
+        LOTRMillstoneRecipes.addCrackedBricks(new ItemStack(LOTRMod.pillar4, 1, 4), new ItemStack(LOTRMod.pillar4, 1, 5));
         LOTRMillstoneRecipes.addCrackedBricks(new ItemStack(LOTRMod.pillar, 1, 0), new ItemStack(LOTRMod.pillar2, 1, 0));
         LOTRMillstoneRecipes.addCrackedBricks(new ItemStack(LOTRMod.pillar, 1, 1), new ItemStack(LOTRMod.pillar, 1, 2));
         LOTRMillstoneRecipes.addCrackedBricks(new ItemStack(LOTRMod.pillar, 1, 10), new ItemStack(LOTRMod.pillar, 1, 11));
         LOTRMillstoneRecipes.addCrackedBricks(new ItemStack(LOTRMod.pillar, 1, 12), new ItemStack(LOTRMod.pillar, 1, 13));
         LOTRMillstoneRecipes.addCrackedBricks(new ItemStack(LOTRMod.pillar2, 1, 13), new ItemStack(LOTRMod.pillar2, 1, 14));
+        LOTRMillstoneRecipes.addCrackedBricks(new ItemStack(LOTRMod.pillar, 1, 4), new ItemStack(LOTRMod.pillar4, 1, 0));
     }
 
     public static void addRecipe(Block block, ItemStack result) {
@@ -98,7 +108,6 @@ public class LOTRMillstoneRecipes {
         for (Map.Entry<ItemStack, MillstoneResult> e : recipeList.entrySet()) {
             ItemStack target = e.getKey();
             MillstoneResult result = e.getValue();
-            ItemStack resultItem = result.resultItem;
             if (!LOTRMillstoneRecipes.matches(itemstack, target)) continue;
             return result;
         }

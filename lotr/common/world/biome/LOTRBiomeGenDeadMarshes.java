@@ -87,10 +87,10 @@ extends LOTRBiome {
 
     @Override
     public void decorate(World world, Random random, int i, int k) {
+        int j1;
+        int l;
         int k1;
         int i1;
-        int l;
-        int j1;
         super.decorate(world, random, i, k);
         for (l = 0; l < 6; ++l) {
             i1 = i + random.nextInt(16) + 8;

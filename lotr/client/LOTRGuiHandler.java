@@ -22,6 +22,7 @@
  *  net.minecraft.client.gui.GuiNewChat
  *  net.minecraft.client.gui.GuiOptionButton
  *  net.minecraft.client.gui.GuiOptions
+ *  net.minecraft.client.gui.GuiRepair
  *  net.minecraft.client.gui.GuiScreen
  *  net.minecraft.client.gui.inventory.GuiContainer
  *  net.minecraft.client.gui.inventory.GuiContainerCreative
@@ -87,6 +88,8 @@ import java.util.List;
 import java.util.Set;
 import lotr.client.LOTRReflectionClient;
 import lotr.client.gui.LOTRGuiAchievementHoverEvent;
+import lotr.client.gui.LOTRGuiAnvil;
+import lotr.client.gui.LOTRGuiBarrel;
 import lotr.client.gui.LOTRGuiButtonLock;
 import lotr.client.gui.LOTRGuiButtonRestockPouch;
 import lotr.client.gui.LOTRGuiChestWithPouch;
@@ -107,6 +110,7 @@ import lotr.common.network.LOTRPacketHandler;
 import lotr.common.network.LOTRPacketMountOpenInv;
 import lotr.common.network.LOTRPacketRestockPouches;
 import lotr.common.world.LOTRWorldProvider;
+import lotr.compatibility.LOTRModChecker;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.client.gui.FontRenderer;
@@ -118,6 +122,7 @@ import net.minecraft.client.gui.GuiMainMenu;
 import net.minecraft.client.gui.GuiNewChat;
 import net.minecraft.client.gui.GuiOptionButton;
 import net.minecraft.client.gui.GuiOptions;
+import net.minecraft.client.gui.GuiRepair;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.gui.inventory.GuiContainerCreative;
@@ -163,6 +168,8 @@ public class LOTRGuiHandler {
     public static final Set<String> coinCount_excludedContainers_clsNames = new HashSet<String>();
     public static final Set<String> coinCount_excludedGUIs_clsNames = new HashSet<String>();
     public static final Set<String> coinCount_excludedInvTypes_clsNames = new HashSet<String>();
+    public static final Set<Class<? extends GuiContainer>> pouchRestock_leftPositionGUIs = new HashSet<Class<? extends GuiContainer>>();
+    public static final Set<Class<? extends GuiContainer>> pouchRestock_sidePositionGUIs = new HashSet<Class<? extends GuiContainer>>();
     private int descScrollIndex = -1;
 
     public LOTRGuiHandler() {
@@ -187,12 +194,11 @@ public class LOTRGuiHandler {
 
     @SubscribeEvent
     public void preInitGui(GuiScreenEvent.InitGuiEvent.Pre event) {
-        LOTREntityNPCRideable mount;
         GuiScreen gui = event.gui;
         Minecraft mc = Minecraft.getMinecraft();
         EntityClientPlayerMP entityplayer = mc.thePlayer;
         WorldClient world = mc.theWorld;
-        if ((gui instanceof GuiInventory || gui instanceof GuiContainerCreative) && entityplayer != null && world != null && entityplayer.ridingEntity instanceof LOTREntityNPCRideable && (mount = (LOTREntityNPCRideable)entityplayer.ridingEntity).getMountInventory() != null) {
+        if ((gui instanceof GuiInventory || gui instanceof GuiContainerCreative) && entityplayer != null && world != null && entityplayer.ridingEntity instanceof LOTREntityNPCRideable && ((LOTREntityNPCRideable)entityplayer.ridingEntity).getMountInventory() != null) {
             entityplayer.closeScreen();
             LOTRPacketMountOpenInv packet = new LOTRPacketMountOpenInv();
             LOTRPacketHandler.networkWrapper.sendToServer((IMessage)packet);
@@ -218,9 +224,11 @@ public class LOTRGuiHandler {
     private void addPouchRestockButton(GuiScreen gui, List buttons) {
         if (gui instanceof GuiContainer && !(gui instanceof LOTRGuiPouch) && !(gui instanceof LOTRGuiChestWithPouch)) {
             GuiContainer guiContainer = (GuiContainer)gui;
-            InventoryPlayer playerInv = guiContainer.mc.thePlayer.inventory;
+            EntityClientPlayerMP thePlayer = guiContainer.mc.thePlayer;
+            InventoryPlayer playerInv = thePlayer.inventory;
             boolean containsPlayer = false;
             Slot topRightPlayerSlot = null;
+            Slot topLeftPlayerSlot = null;
             Container container = guiContainer.inventorySlots;
             for (Object obj : container.inventorySlots) {
                 boolean acceptableSlotIndex;
@@ -231,23 +239,36 @@ public class LOTRGuiHandler {
                 }
                 if (slot.inventory != playerInv || !acceptableSlotIndex) continue;
                 containsPlayer = true;
-                boolean topRight = false;
-                if (topRightPlayerSlot == null) {
-                    topRight = true;
-                } else if (slot.yDisplayPosition < topRightPlayerSlot.yDisplayPosition) {
-                    topRight = true;
-                } else if (slot.yDisplayPosition == topRightPlayerSlot.yDisplayPosition && slot.xDisplayPosition > topRightPlayerSlot.xDisplayPosition) {
-                    topRight = true;
+                boolean isTopRight = false;
+                if (topRightPlayerSlot == null || slot.yDisplayPosition < topRightPlayerSlot.yDisplayPosition || slot.yDisplayPosition == topRightPlayerSlot.yDisplayPosition && slot.xDisplayPosition > topRightPlayerSlot.xDisplayPosition) {
+                    isTopRight = true;
                 }
-                if (!topRight) continue;
-                topRightPlayerSlot = slot;
+                if (isTopRight) {
+                    topRightPlayerSlot = slot;
+                }
+                boolean isTopLeft = false;
+                if (topLeftPlayerSlot == null || slot.yDisplayPosition < topLeftPlayerSlot.yDisplayPosition || slot.yDisplayPosition == topLeftPlayerSlot.yDisplayPosition && slot.xDisplayPosition < topLeftPlayerSlot.xDisplayPosition) {
+                    isTopLeft = true;
+                }
+                if (!isTopLeft) continue;
+                topLeftPlayerSlot = slot;
             }
             if (containsPlayer) {
                 int guiLeft = LOTRReflectionClient.getGuiLeft(guiContainer);
                 int guiTop = LOTRReflectionClient.getGuiTop(guiContainer);
-                int guiXSize = LOTRReflectionClient.getGuiXSize(guiContainer);
+                LOTRReflectionClient.getGuiXSize(guiContainer);
                 int buttonX = topRightPlayerSlot.xDisplayPosition + 7;
                 int buttonY = topRightPlayerSlot.yDisplayPosition - 14;
+                if (pouchRestock_leftPositionGUIs.contains(gui.getClass())) {
+                    buttonX = topLeftPlayerSlot.xDisplayPosition - 1;
+                    buttonY = topLeftPlayerSlot.yDisplayPosition - 14;
+                } else if (pouchRestock_sidePositionGUIs.contains(gui.getClass())) {
+                    buttonX = topRightPlayerSlot.xDisplayPosition + 21;
+                    buttonY = topRightPlayerSlot.yDisplayPosition - 1;
+                }
+                if (LOTRModChecker.hasNEI() && guiContainer instanceof InventoryEffectRenderer && LOTRReflectionClient.hasGuiPotionEffects((InventoryEffectRenderer)guiContainer)) {
+                    buttonX -= 60;
+                }
                 buttons.add(new LOTRGuiButtonRestockPouch(guiContainer, 2000, guiLeft + buttonX, guiTop + buttonY));
             }
         }
@@ -287,8 +308,6 @@ public class LOTRGuiHandler {
     public void preDrawScreen(GuiScreenEvent.DrawScreenEvent.Pre event) {
         Minecraft mc = Minecraft.getMinecraft();
         GuiScreen gui = event.gui;
-        int mouseX = event.mouseX;
-        int mouseY = event.mouseY;
         if (gui instanceof GuiModList) {
             ModContainer mod = LOTRMod.getModContainer();
             ModMetadata meta = mod.getMetadata();
@@ -307,7 +326,6 @@ public class LOTRGuiHandler {
         }
         if (gui instanceof GuiContainer && LOTRConfig.displayCoinCounts) {
             boolean excludeGui;
-            int creativeTabIndex;
             mc.theWorld.theProfiler.startSection("invCoinCount");
             GuiContainer guiContainer = (GuiContainer)gui;
             Container container = guiContainer.inventorySlots;
@@ -315,7 +333,7 @@ public class LOTRGuiHandler {
             Class<?> guiCls = guiContainer.getClass();
             boolean excludeContainer = coinCount_excludedContainers.contains(containerCls) || coinCount_excludedContainers_clsNames.contains(containerCls.getName());
             boolean bl = excludeGui = coinCount_excludedGUIs.contains(guiCls) || coinCount_excludedGUIs_clsNames.contains(guiCls.getName());
-            if (guiContainer instanceof GuiContainerCreative && (creativeTabIndex = LOTRReflectionClient.getCreativeTabIndex((GuiContainerCreative)guiContainer)) != CreativeTabs.tabInventory.getTabIndex()) {
+            if (guiContainer instanceof GuiContainerCreative && LOTRReflectionClient.getCreativeTabIndex((GuiContainerCreative)guiContainer) != CreativeTabs.tabInventory.getTabIndex()) {
                 excludeGui = true;
             }
             if (!excludeContainer && !excludeGui) {
@@ -355,8 +373,7 @@ public class LOTRGuiHandler {
                         guiTop = LOTRReflectionClient.getGuiTop(guiContainer);
                         guiXSize = LOTRReflectionClient.getGuiXSize(guiContainer);
                         guiLeft = gui.width / 2 - guiXSize / 2;
-                        if (guiContainer instanceof InventoryEffectRenderer && LOTRReflectionClient.hasGuiPotionEffects((InventoryEffectRenderer)gui)) {
-                            int potionExtraX = 60;
+                        if (guiContainer instanceof InventoryEffectRenderer && LOTRReflectionClient.hasGuiPotionEffects((InventoryEffectRenderer)gui) && !LOTRModChecker.hasNEI()) {
                             guiLeft += 60;
                         }
                     }
@@ -412,8 +429,8 @@ public class LOTRGuiHandler {
 
     @SubscribeEvent
     public void postDrawScreen(GuiScreenEvent.DrawScreenEvent.Post event) {
-        HoverEvent hoverevent;
         IChatComponent component;
+        HoverEvent hoverevent;
         Minecraft mc = Minecraft.getMinecraft();
         EntityClientPlayerMP entityplayer = mc.thePlayer;
         GuiScreen gui = event.gui;
@@ -447,6 +464,9 @@ public class LOTRGuiHandler {
         coinCount_excludedInvTypes.add(LOTRContainerCoinExchange.InventoryCoinExchangeSlot.class);
         coinCount_excludedInvTypes.add(InventoryCraftResult.class);
         coinCount_excludedInvTypes_clsNames.add("thaumcraft.common.entities.InventoryMob");
+        pouchRestock_leftPositionGUIs.add(LOTRGuiAnvil.class);
+        pouchRestock_leftPositionGUIs.add(GuiRepair.class);
+        pouchRestock_sidePositionGUIs.add(LOTRGuiBarrel.class);
     }
 }
 

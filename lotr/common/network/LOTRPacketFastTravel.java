@@ -85,7 +85,7 @@ implements IMessage {
                     }
                 } else {
                     UUID sharingPlayer = packet.sharingPlayer;
-                    waypoint = sharingPlayer != null ? playerData.getSharedCustomWaypointByID(sharingPlayer, waypointID) : playerData.getCustomWaypointByID(waypointID);
+                    LOTRAbstractWaypoint lOTRAbstractWaypoint = waypoint = sharingPlayer != null ? playerData.getSharedCustomWaypointByID(sharingPlayer, waypointID) : playerData.getCustomWaypointByID(waypointID);
                 }
                 if (waypoint != null && waypoint.hasPlayerUnlocked((EntityPlayer)entityplayer)) {
                     if (playerData.getTimeSinceFT() < playerData.getWaypointFTTime(waypoint, (EntityPlayer)entityplayer)) {

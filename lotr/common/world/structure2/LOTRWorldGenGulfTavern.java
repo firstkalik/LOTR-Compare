@@ -35,28 +35,28 @@ extends LOTRWorldGenGulfStructure {
     @Override
     public boolean generateWithSetRotation(World world, Random random, int i, int j, int k, int rotation) {
         int i1;
-        int j1;
-        int i12;
+        int step;
         int k1;
         int j2;
+        int j1;
         int j12;
-        int step;
+        int i12;
         this.setOriginAndRotation(world, i, j, k, rotation, 10);
         this.setupRandomBlocks(random);
         if (this.restrictions) {
             int minHeight = 0;
             int maxHeight = 0;
-            for (i1 = -10; i1 <= 10; ++i1) {
+            for (i12 = -10; i12 <= 10; ++i12) {
                 for (int k12 = -10; k12 <= 10; ++k12) {
-                    j1 = this.getTopBlock(world, i1, k12) - 1;
-                    if (!this.isSurface(world, i1, j1, k12)) {
+                    j12 = this.getTopBlock(world, i12, k12) - 1;
+                    if (!this.isSurface(world, i12, j12, k12)) {
                         return false;
                     }
-                    if (j1 < minHeight) {
-                        minHeight = j1;
+                    if (j12 < minHeight) {
+                        minHeight = j12;
                     }
-                    if (j1 > maxHeight) {
-                        maxHeight = j1;
+                    if (j12 > maxHeight) {
+                        maxHeight = j12;
                     }
                     if (maxHeight - minHeight <= 8) continue;
                     return false;
@@ -68,8 +68,8 @@ extends LOTRWorldGenGulfStructure {
                 int k2;
                 int i2 = Math.abs(i13);
                 if (i2 * i2 + (k2 = Math.abs(k13)) * k2 >= 100) continue;
-                for (j1 = 1; j1 <= 6; ++j1) {
-                    this.setAir(world, i13, j1, k13);
+                for (j12 = 1; j12 <= 6; ++j12) {
+                    this.setAir(world, i13, j12, k13);
                 }
             }
         }
@@ -129,9 +129,9 @@ extends LOTRWorldGenGulfStructure {
         this.placeFoodOrDrink(world, random, 6, 2, 6);
         this.placeFoodOrDrink(world, random, 6, 2, 5);
         this.placeFoodOrDrink(world, random, 7, 2, 5);
-        for (i1 = -2; i1 <= 2; ++i1) {
-            this.placeFoodOrDrink(world, random, i1, 2, -3);
-            this.placeFoodOrDrink(world, random, i1, 2, 3);
+        for (i12 = -2; i12 <= 2; ++i12) {
+            this.placeFoodOrDrink(world, random, i12, 2, -3);
+            this.placeFoodOrDrink(world, random, i12, 2, 3);
         }
         LOTREntityGulfBartender bartender = new LOTREntityGulfBartender(world);
         bartender.setSpecificLocationName(tavernNameNPC);
@@ -141,27 +141,26 @@ extends LOTRWorldGenGulfStructure {
             LOTREntityGulfHaradrim haradrim = new LOTREntityGulfHaradrim(world);
             this.spawnNPCAndSetHome(haradrim, world, random.nextBoolean() ? -5 : 5, 1, 0, 16);
         }
-        int maxSteps = 12;
-        for (i12 = -1; i12 <= 1; ++i12) {
-            for (step = 0; step < 12 && !this.isOpaque(world, i12, j12 = 0 - step, k1 = -10 - step); ++step) {
-                this.setBlockAndMetadata(world, i12, j12, k1, LOTRMod.stairsRedSandstone, 2);
-                this.setGrassToDirt(world, i12, j12 - 1, k1);
-                j2 = j12 - 1;
-                while (!this.isOpaque(world, i12, j2, k1) && this.getY(j2) >= 0) {
-                    this.setBlockAndMetadata(world, i12, j2, k1, LOTRMod.redSandstone, 0);
-                    this.setGrassToDirt(world, i12, j2 - 1, k1);
+        for (i1 = -1; i1 <= 1; ++i1) {
+            for (step = 0; step < 12 && !this.isOpaque(world, i1, j1 = 0 - step, k1 = -10 - step); ++step) {
+                this.setBlockAndMetadata(world, i1, j1, k1, LOTRMod.stairsRedSandstone, 2);
+                this.setGrassToDirt(world, i1, j1 - 1, k1);
+                j2 = j1 - 1;
+                while (!this.isOpaque(world, i1, j2, k1) && this.getY(j2) >= 0) {
+                    this.setBlockAndMetadata(world, i1, j2, k1, LOTRMod.redSandstone, 0);
+                    this.setGrassToDirt(world, i1, j2 - 1, k1);
                     --j2;
                 }
             }
         }
-        for (i12 = -1; i12 <= 1; ++i12) {
-            for (step = 0; step < 12 && !this.isOpaque(world, i12, j12 = 0 - step, k1 = 10 + step); ++step) {
-                this.setBlockAndMetadata(world, i12, j12, k1, LOTRMod.stairsRedSandstone, 3);
-                this.setGrassToDirt(world, i12, j12 - 1, k1);
-                j2 = j12 - 1;
-                while (!this.isOpaque(world, i12, j2, k1) && this.getY(j2) >= 0) {
-                    this.setBlockAndMetadata(world, i12, j2, k1, LOTRMod.redSandstone, 0);
-                    this.setGrassToDirt(world, i12, j2 - 1, k1);
+        for (i1 = -1; i1 <= 1; ++i1) {
+            for (step = 0; step < 12 && !this.isOpaque(world, i1, j1 = 0 - step, k1 = 10 + step); ++step) {
+                this.setBlockAndMetadata(world, i1, j1, k1, LOTRMod.stairsRedSandstone, 3);
+                this.setGrassToDirt(world, i1, j1 - 1, k1);
+                j2 = j1 - 1;
+                while (!this.isOpaque(world, i1, j2, k1) && this.getY(j2) >= 0) {
+                    this.setBlockAndMetadata(world, i1, j2, k1, LOTRMod.redSandstone, 0);
+                    this.setGrassToDirt(world, i1, j2 - 1, k1);
                     --j2;
                 }
             }

@@ -38,7 +38,7 @@ public class LOTRItemCoin
 extends Item {
     @SideOnly(value=Side.CLIENT)
     private IIcon[] coinIcons;
-    public static int[] values = new int[]{1, 10, 100};
+    public static int[] values = new int[]{1, 10, 100, 1000, 10000, 100000, 1000000};
 
     public LOTRItemCoin() {
         this.setHasSubtypes(true);
@@ -88,12 +88,12 @@ extends Item {
     }
 
     public static void takeCoins(int coins, EntityPlayer entityplayer) {
-        int slot;
-        int i;
+        ItemStack itemstack;
         ItemStack coin;
         int value;
         ItemStack is;
-        ItemStack itemstack;
+        int slot;
+        int i;
         InventoryPlayer inv = entityplayer.inventory;
         int invValue = LOTRItemCoin.getInventoryValue(entityplayer, false);
         if (invValue < coins) {
@@ -117,8 +117,7 @@ extends Item {
                     } else {
                         inv.decrStackSize(slot, 1);
                     }
-                    if ((coins -= value) >= value) continue;
-                    continue block0;
+                    if ((coins -= value) < value) continue block0;
                 }
             }
         }
@@ -140,8 +139,7 @@ extends Item {
                         } else {
                             inv.decrStackSize(slot, 1);
                         }
-                        if ((coins -= value) >= 0) continue;
-                        break block4;
+                        if ((coins -= value) < 0) break block4;
                     }
                 }
                 if (coins < 0) break;
@@ -153,9 +151,9 @@ extends Item {
     }
 
     public static void giveCoins(int coins, EntityPlayer entityplayer) {
+        int value;
         int i;
         ItemStack coin;
-        int value;
         InventoryPlayer inv = entityplayer.inventory;
         if (coins <= 0) {
             FMLLog.warning((String)("Attempted to give a non-positive value of coins " + coins + " to player " + entityplayer.getCommandSenderName()), (Object[])new Object[0]);

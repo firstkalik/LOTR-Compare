@@ -18,7 +18,6 @@ import lotr.common.LOTRFoods;
 import lotr.common.LOTRMod;
 import lotr.common.entity.LOTREntityNPCRespawner;
 import lotr.common.entity.animal.LOTREntityHorse;
-import lotr.common.entity.npc.LOTREntityHarnedhrim;
 import lotr.common.entity.npc.LOTREntityHarnedorArcher;
 import lotr.common.entity.npc.LOTREntityHarnedorWarlord;
 import lotr.common.entity.npc.LOTREntityHarnedorWarrior;
@@ -42,8 +41,8 @@ extends LOTRWorldGenHarnedorStructure {
 
     @Override
     public boolean generateWithSetRotation(World world, Random random, int i, int j, int k, int rotation) {
-        int i1;
         int j1;
+        int i1;
         this.setOriginAndRotation(world, i, j, k, rotation, 12);
         this.setupRandomBlocks(random);
         if (this.restrictions) {
@@ -70,13 +69,13 @@ extends LOTRWorldGenHarnedorStructure {
             for (int k1 = -15; k1 <= 15; ++k1) {
                 int i2 = Math.abs(i1);
                 int k2 = Math.abs(k1);
-                int bedRegion = i2 <= 3 && k1 >= 5 && k1 <= 9 || i2 <= 2 && k1 == 4 || i2 <= 1 && k1 == 3 ? 1 : 0;
+                boolean bedRegion = i2 <= 3 && k1 >= 5 && k1 <= 9 || i2 <= 2 && k1 == 4 || i2 <= 1 && k1 == 3;
                 int airHeight = 7;
                 for (j1 = 0; j1 <= airHeight; ++j1) {
                     this.setAir(world, i1, j1, k1);
                 }
                 for (j1 = 0; !(j1 < -1 && this.isOpaque(world, i1, j1, k1) || this.getY(j1) < 0); --j1) {
-                    if (bedRegion != 0 && j1 == 0) continue;
+                    if (bedRegion && j1 == 0) continue;
                     if (j1 == 0) {
                         int randomGround;
                         if (i2 <= 11 && k2 <= 11) {
@@ -107,7 +106,7 @@ extends LOTRWorldGenHarnedorStructure {
                     }
                     this.setGrassToDirt(world, i1, j1 - 1, k1);
                 }
-                if (bedRegion != 0 || i2 > 10 || k2 > 10 || random.nextInt(5) != 0) continue;
+                if (bedRegion || i2 > 10 || k2 > 10 || random.nextInt(5) != 0) continue;
                 this.setBlockAndMetadata(world, i1, 1, k1, LOTRMod.thatchFloor, 0);
             }
         }
@@ -200,7 +199,23 @@ extends LOTRWorldGenHarnedorStructure {
     }
 
     private void placeHarnedorArmor(World world, Random random, int i, int j, int k, int meta) {
-        ItemStack[] armor = random.nextInt(3) != 0 ? new ItemStack[]{null, null, null, null} : new ItemStack[]{new ItemStack(LOTRMod.helmetHarnedor), new ItemStack(LOTRMod.bodyHarnedor), new ItemStack(LOTRMod.legsHarnedor), new ItemStack(LOTRMod.bootsHarnedor)};
+        ItemStack[] arritemStack;
+        if (random.nextInt(3) != 0) {
+            ItemStack[] arritemStack2 = new ItemStack[4];
+            arritemStack2[0] = null;
+            arritemStack2[1] = null;
+            arritemStack2[2] = null;
+            arritemStack = arritemStack2;
+            arritemStack2[3] = null;
+        } else {
+            ItemStack[] arritemStack3 = new ItemStack[4];
+            arritemStack3[0] = new ItemStack(LOTRMod.helmetHarnedor);
+            arritemStack3[1] = new ItemStack(LOTRMod.bodyHarnedor);
+            arritemStack3[2] = new ItemStack(LOTRMod.legsHarnedor);
+            arritemStack = arritemStack3;
+            arritemStack3[3] = new ItemStack(LOTRMod.bootsHarnedor);
+        }
+        ItemStack[] armor = arritemStack;
         this.placeArmorStand(world, i, j, k, meta, armor);
     }
 }

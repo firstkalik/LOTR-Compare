@@ -54,8 +54,8 @@ extends LOTRWorldGenDunlandStructure {
         }
         for (int i1 = -4; i1 <= 4; ++i1) {
             for (int k1 = -6; k1 <= 5; ++k1) {
-                int i2 = Math.abs(i1);
-                int k2 = Math.abs(k1);
+                Math.abs(i1);
+                Math.abs(k1);
                 if (k1 >= -5) {
                     j1 = -1;
                     while (!this.isOpaque(world, i1, j1, k1) && this.getY(j1) >= 0) {

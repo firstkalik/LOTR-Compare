@@ -28,14 +28,16 @@ public class LOTRInventoryPouch
 extends InventoryBasic {
     private LOTRContainerPouch theContainer;
     private EntityPlayer thePlayer;
+    private int playerSlot;
     private boolean isTemporary;
     private ItemStack tempPouchItem;
 
-    public LOTRInventoryPouch(EntityPlayer entityplayer, LOTRContainerPouch container) {
-        super(entityplayer.inventory.getCurrentItem().getDisplayName(), true, LOTRItemPouch.getCapacity(entityplayer.inventory.getCurrentItem()));
+    public LOTRInventoryPouch(EntityPlayer entityplayer, LOTRContainerPouch container, int slot) {
+        super(entityplayer.inventory.getStackInSlot(slot).getDisplayName(), true, LOTRItemPouch.getCapacity(entityplayer.inventory.getStackInSlot(slot)));
         this.isTemporary = false;
         this.thePlayer = entityplayer;
         this.theContainer = container;
+        this.playerSlot = slot;
         if (!this.thePlayer.worldObj.isRemote) {
             this.loadPouchContents();
         }
@@ -52,7 +54,7 @@ extends InventoryBasic {
         if (this.isTemporary) {
             return this.tempPouchItem;
         }
-        return this.thePlayer.inventory.getCurrentItem();
+        return this.thePlayer.inventory.getStackInSlot(this.playerSlot);
     }
 
     public String getInventoryName() {

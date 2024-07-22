@@ -46,11 +46,13 @@ import lotr.common.LOTRPlayerData;
 import lotr.common.entity.ai.LOTREntityAIAttackOnCollide;
 import lotr.common.entity.ai.LOTREntityAIGandalfSmoke;
 import lotr.common.entity.ai.LOTREntityAINearestAttackableTargetBasic;
+import lotr.common.entity.animal.LOTREntityHorse;
 import lotr.common.entity.npc.LOTREntityBalrog;
 import lotr.common.entity.npc.LOTREntityNPC;
 import lotr.common.entity.npc.LOTREntityQuestInfo;
 import lotr.common.entity.npc.LOTREntitySaruman;
 import lotr.common.entity.npc.LOTRInventoryNPCItems;
+import lotr.common.entity.npc.LOTRNPCMount;
 import lotr.common.entity.npc.LOTRSpeech;
 import lotr.common.fac.LOTRFaction;
 import lotr.common.quest.LOTRMiniQuest;
@@ -83,8 +85,6 @@ import net.minecraft.world.World;
 
 public class LOTREntityGandalf
 extends LOTREntityNPC {
-    private static final double msgRange = 64.0;
-
     public LOTREntityGandalf(World world) {
         super(world);
         this.setSize(0.6f, 1.8f);
@@ -103,6 +103,14 @@ extends LOTREntityNPC {
         this.targetTasks.addTask(target + 1, (EntityAIBase)new LOTREntityAINearestAttackableTargetBasic(this, LOTREntityBalrog.class, 0, true));
         this.targetTasks.addTask(target + 2, (EntityAIBase)new LOTREntityAINearestAttackableTargetBasic(this, LOTREntitySaruman.class, 0, true));
         this.npcCape = LOTRCapes.GANDALF;
+        this.spawnRidingHorse = this.rand.nextInt(4) == 0;
+    }
+
+    @Override
+    public LOTRNPCMount createMountToRide() {
+        LOTREntityHorse horse = (LOTREntityHorse)super.createMountToRide();
+        horse.setMountArmor(null);
+        return horse;
     }
 
     @Override
@@ -206,11 +214,11 @@ extends LOTREntityNPC {
             if (msgPlayers.contains((Object)player)) continue;
             double d = 64.0;
             double dSq = d * d;
-            if (!(this.getDistanceSqToEntity((Entity)player) < dSq)) continue;
+            if (this.getDistanceSqToEntity((Entity)player) >= dSq) continue;
             msgPlayers.add(player);
         }
         for (EntityPlayer player : msgPlayers) {
-            LOTRSpeech.sendSpeechAndChatMessage(player, this, "char/gandalf/arrive");
+            LOTRSpeech.sendSpeechBankWithChatMsg(player, this, "char/gandalf/arrive");
         }
         this.doGandalfFX();
     }
@@ -223,11 +231,11 @@ extends LOTREntityNPC {
             if (msgPlayers.contains((Object)player)) continue;
             double d = 64.0;
             double dSq = d * d;
-            if (!(this.getDistanceSqToEntity((Entity)player) < dSq)) continue;
+            if (this.getDistanceSqToEntity((Entity)player) >= dSq) continue;
             msgPlayers.add(player);
         }
         for (EntityPlayer player : msgPlayers) {
-            LOTRSpeech.sendSpeechAndChatMessage(player, this, "char/gandalf/depart");
+            LOTRSpeech.sendSpeechBankWithChatMsg(player, this, "char/gandalf/depart");
         }
         this.doGandalfFX();
         this.setDead();
@@ -265,11 +273,6 @@ extends LOTREntityNPC {
             return true;
         }
         return false;
-    }
-
-    @Override
-    public int getMiniquestColor() {
-        return 10526880;
     }
 }
 

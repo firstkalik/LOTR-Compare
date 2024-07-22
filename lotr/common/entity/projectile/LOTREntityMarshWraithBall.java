@@ -66,8 +66,6 @@ extends EntityThrowable {
         if (d3 >= 1.0E-7) {
             float f2 = (float)(Math.atan2(d2, d) * 180.0 / 3.141592653589793) - 90.0f;
             float f3 = (float)(-(Math.atan2(d1, d3) * 180.0 / 3.141592653589793));
-            double d4 = d / d3;
-            double d5 = d2 / d3;
             this.setLocationAndAngles(this.posX, this.posY, this.posZ, f2, f3);
             this.setThrowableHeading(d, d1, d2, this.func_70182_d(), 1.0f);
         }

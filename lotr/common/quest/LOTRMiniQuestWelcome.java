@@ -211,10 +211,7 @@ extends LOTRMiniQuest {
             this.quotesStages.add(line);
             this.stage = 8;
             this.updateQuest();
-        } else if (this.stage == 8) {
-            String line = LOTRSpeech.getSpeechAtLine(SPEECHBANK, 8);
-            this.sendQuoteSpeech(entityplayer, npc, line);
-        } else if (this.stage == 9) {
+        } else if (this.stage == 8 || this.stage == 9) {
             String line = LOTRSpeech.getSpeechAtLine(SPEECHBANK, 8);
             this.sendQuoteSpeech(entityplayer, npc, line);
         } else if (this.stage == 10) {
@@ -235,9 +232,12 @@ extends LOTRMiniQuest {
         } else if (this.stage == 13) {
             ArrayList<ItemStack> dropItems = new ArrayList<ItemStack>();
             if (!pd.getQuestData().getGivenFirstPouches()) {
+                dropItems.add(new ItemStack(LOTRMod.pouch, 1, 2));
+                dropItems.add(new ItemStack(LOTRMod.pouch, 1, 1));
                 dropItems.add(new ItemStack(LOTRMod.pouch, 1, 0));
-                dropItems.add(new ItemStack(LOTRMod.pouch, 1, 0));
-                dropItems.add(new ItemStack(LOTRMod.pouch, 1, 0));
+                dropItems.add(new ItemStack(LOTRMod.eru, 1, 0));
+                dropItems.add(new ItemStack(LOTRMod.ring_lesser_speed, 1, 0));
+                dropItems.add(new ItemStack(LOTRMod.ring_lesser_mining, 1, 0));
                 pd.getQuestData().setGivenFirstPouches(true);
             }
             npc.dropItemList(dropItems);

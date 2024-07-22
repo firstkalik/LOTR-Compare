@@ -224,9 +224,7 @@ extends Entity {
     }
 
     public void onUpdate() {
-        int k;
         double d4;
-        int i;
         double d5;
         super.onUpdate();
         if (!this.worldObj.isRemote) {
@@ -298,8 +296,8 @@ extends Entity {
                 this.motionZ *= 0.99;
             }
         } else {
-            double d12;
-            double d11;
+            double d;
+            double d2;
             if (d0 < 1.0) {
                 d4 = d0 * 2.0 - 1.0;
                 this.motionY += 0.04 * d4;
@@ -309,13 +307,18 @@ extends Entity {
                 }
                 this.motionY += 0.007;
             }
-            if (this.riddenByEntity != null && this.riddenByEntity instanceof EntityLivingBase && (d4 = (double)((EntityLivingBase)this.riddenByEntity).moveForward) > 0.0) {
-                d5 = -Math.sin(this.riddenByEntity.rotationYaw * 3.1415927f / 180.0f);
-                d11 = Math.cos(this.riddenByEntity.rotationYaw * 3.1415927f / 180.0f);
-                this.motionX += d5 * this.speedMultiplier * 0.05;
-                this.motionZ += d11 * this.speedMultiplier * 0.05;
+            if (this.riddenByEntity != null && this.riddenByEntity instanceof EntityLivingBase) {
+                double d6;
+                d4 = ((EntityLivingBase)this.riddenByEntity).moveForward;
+                if (d6 > 0.0) {
+                    d5 = -Math.sin(this.riddenByEntity.rotationYaw * 3.1415927f / 180.0f);
+                    double d11 = Math.cos(this.riddenByEntity.rotationYaw * 3.1415927f / 180.0f);
+                    this.motionX += d5 * this.speedMultiplier * 0.05;
+                    this.motionZ += d11 * this.speedMultiplier * 0.05;
+                }
             }
-            if ((d4 = Math.sqrt(this.motionX * this.motionX + this.motionZ * this.motionZ)) > maxSpeedMultiplier) {
+            d4 = Math.sqrt(this.motionX * this.motionX + this.motionZ * this.motionZ);
+            if (d > maxSpeedMultiplier) {
                 d5 = maxSpeedMultiplier / d4;
                 this.motionX *= d5;
                 this.motionZ *= d5;
@@ -343,12 +346,13 @@ extends Entity {
             this.motionZ *= 0.99;
             this.rotationPitch = 0.0f;
             d5 = this.rotationYaw;
-            d11 = this.prevPosX - this.posX;
+            double d11 = this.prevPosX - this.posX;
             double d10 = this.prevPosZ - this.posZ;
             if (d11 * d11 + d10 * d10 > 0.001) {
                 d5 = (float)(Math.atan2(d10, d11) * 180.0 / 3.141592653589793);
             }
-            if ((d12 = MathHelper.wrapAngleTo180_double((double)(d5 - (double)this.rotationYaw))) > 20.0) {
+            double d12 = MathHelper.wrapAngleTo180_double((double)(d5 - (double)this.rotationYaw));
+            if (d2 > 20.0) {
                 d12 = 20.0;
             }
             if (d12 < -20.0) {
@@ -359,8 +363,8 @@ extends Entity {
             if (!this.worldObj.isRemote) {
                 List nearbyEntities = this.worldObj.getEntitiesWithinAABBExcludingEntity((Entity)this, this.boundingBox.expand(0.2, 0.0, 0.2));
                 if (nearbyEntities != null && !nearbyEntities.isEmpty()) {
-                    for (int l = 0; l < nearbyEntities.size(); ++l) {
-                        Entity entity = (Entity)nearbyEntities.get(l);
+                    for (Object nearbyEntitie : nearbyEntities) {
+                        Entity entity = (Entity)nearbyEntitie;
                         if (entity == this.riddenByEntity || !entity.canBePushed() || !(entity instanceof LOTREntityBarrel)) continue;
                         entity.applyEntityCollision((Entity)this);
                     }
@@ -370,7 +374,7 @@ extends Entity {
                 }
             }
         }
-        if (!this.worldObj.isRemote && this.riddenByEntity instanceof EntityPlayer && this.worldObj.isAABBInMaterial(this.boundingBox, Material.water) && this.worldObj.getBiomeGenForCoords(i = MathHelper.floor_double((double)this.posX), k = MathHelper.floor_double((double)this.posZ)) instanceof LOTRBiomeGenMirkwood) {
+        if (!this.worldObj.isRemote && this.riddenByEntity instanceof EntityPlayer && this.worldObj.isAABBInMaterial(this.boundingBox, Material.water) && this.worldObj.getBiomeGenForCoords(MathHelper.floor_double((double)this.posX), MathHelper.floor_double((double)this.posZ)) instanceof LOTRBiomeGenMirkwood) {
             LOTRLevelData.getData((EntityPlayer)this.riddenByEntity).addAchievement(LOTRAchievement.rideBarrelMirkwood);
         }
     }

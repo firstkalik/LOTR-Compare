@@ -11,6 +11,8 @@
 package lotr.client.render.entity;
 
 import lotr.client.model.LOTRModelCrocodile;
+import lotr.client.render.entity.LOTRRandomSkins;
+import lotr.common.entity.LOTRRandomSkinEntity;
 import lotr.common.entity.animal.LOTREntityCrocodile;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.entity.RenderLiving;
@@ -20,14 +22,11 @@ import net.minecraft.util.ResourceLocation;
 
 public class LOTRRenderCrocodile
 extends RenderLiving {
-    private static ResourceLocation texture = new ResourceLocation("lotr:mob/crocodile.png");
+    private static LOTRRandomSkins crocoSkins;
 
     public LOTRRenderCrocodile() {
         super((ModelBase)new LOTRModelCrocodile(), 0.75f);
-    }
-
-    public ResourceLocation getEntityTexture(Entity entity) {
-        return texture;
+        crocoSkins = LOTRRandomSkins.loadSkinsList("lotr:mob/croco");
     }
 
     public float handleRotationFloat(EntityLivingBase entity, float f) {
@@ -36,6 +35,12 @@ extends RenderLiving {
             snapTime -= f;
         }
         return snapTime / 20.0f;
+    }
+
+    public ResourceLocation getEntityTexture(Entity entity) {
+        LOTREntityCrocodile croco = (LOTREntityCrocodile)entity;
+        ResourceLocation crocoSkin = crocoSkins.getRandomSkin(croco);
+        return crocoSkin;
     }
 }
 

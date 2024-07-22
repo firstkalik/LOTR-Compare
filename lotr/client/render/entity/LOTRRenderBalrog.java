@@ -2,6 +2,7 @@
  * Decompiled with CFR 0.148.
  * 
  * Could not load the following classes:
+ *  net.minecraft.client.Minecraft
  *  net.minecraft.client.model.ModelBase
  *  net.minecraft.client.model.ModelRenderer
  *  net.minecraft.client.renderer.ItemRenderer
@@ -11,6 +12,7 @@
  *  net.minecraft.entity.Entity
  *  net.minecraft.entity.EntityLiving
  *  net.minecraft.entity.EntityLivingBase
+ *  net.minecraft.entity.player.EntityPlayer
  *  net.minecraft.item.Item
  *  net.minecraft.item.ItemStack
  *  net.minecraft.util.MathHelper
@@ -19,10 +21,15 @@
  */
 package lotr.client.render.entity;
 
+import lotr.client.LOTRSpeechClient;
 import lotr.client.model.LOTRModelBalrog;
+import lotr.client.render.entity.LOTRNPCRendering;
 import lotr.client.render.entity.LOTRRandomSkins;
 import lotr.common.entity.LOTRRandomSkinEntity;
 import lotr.common.entity.npc.LOTREntityBalrog;
+import lotr.common.entity.npc.LOTREntityNPC;
+import lotr.common.entity.npc.LOTRHiredNPCInfo;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.ItemRenderer;
@@ -32,6 +39,7 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
@@ -61,11 +69,19 @@ extends RenderLiving {
         return balrogSkins.getRandomSkin((LOTREntityBalrog)entity);
     }
 
-    public void doRender(Entity entity, double d, double d1, double d2, float f, float f1) {
+    public void doRender(EntityLiving entity, double d, double d1, double d2, float f, float f1) {
         LOTREntityBalrog balrog = (LOTREntityBalrog)entity;
         ItemStack heldItem = balrog.getHeldItem();
-        this.fireModel.heldItemRight = heldItem == null ? 0 : 2;
-        this.balrogModel.heldItemRight = this.fireModel.heldItemRight;
+        this.balrogModel.heldItemRight = this.fireModel.heldItemRight = heldItem == null ? 0 : 2;
+        if (Minecraft.isGuiEnabled() && ((LOTREntityNPC)entity).hiredNPCInfo.getHiringPlayer() == this.renderManager.livingPlayer) {
+            LOTRNPCRendering.renderHiredIcon((EntityLivingBase)entity, d, d1 + 2.0, d2);
+            LOTRNPCRendering.renderNPCHealthBar((EntityLivingBase)entity, d, d1 + 2.0, d2);
+        }
+        LOTREntityNPC legend = (LOTREntityNPC)entity;
+        super.doRender((EntityLiving)legend, d, d1, d2, f, f1);
+        if (Minecraft.isGuiEnabled() && !LOTRSpeechClient.hasSpeech(legend)) {
+            this.func_147906_a((Entity)legend, legend.getCommandSenderName(), d, d1 + 1.0, d2, 64);
+        }
         super.doRender((EntityLiving)balrog, d, d1, d2, f, f1);
     }
 
@@ -80,9 +96,9 @@ extends RenderLiving {
     }
 
     private void setupFullBright() {
-        int light = 15728880;
-        int lx = light % 65536;
-        int ly = light / 65536;
+        int light2 = 15728880;
+        int lx = light2 % 65536;
+        int ly = light2 / 65536;
         OpenGlHelper.setLightmapTextureCoords((int)OpenGlHelper.lightmapTexUnit, (float)((float)lx / 1.0f), (float)((float)ly / 1.0f));
         GL11.glColor4f((float)1.0f, (float)1.0f, (float)1.0f, (float)1.0f);
         GL11.glColor4f((float)1.0f, (float)1.0f, (float)1.0f, (float)1.0f);

@@ -3,6 +3,7 @@
  * 
  * Could not load the following classes:
  *  net.minecraft.client.Minecraft
+ *  net.minecraft.client.gui.Gui
  *  net.minecraft.client.gui.GuiScreen
  *  net.minecraft.client.renderer.OpenGlHelper
  *  net.minecraft.client.renderer.Tessellator
@@ -18,6 +19,7 @@ import lotr.client.gui.LOTRGuiMap;
 import lotr.common.world.map.LOTRAbstractWaypoint;
 import lotr.common.world.map.LOTRWaypoint;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
@@ -26,23 +28,14 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
 public class LOTRGuiRendererMap {
-    private static final ResourceLocation vignetteTexture = new ResourceLocation("textures/misc/vignette.png");
-    public float prevMapX;
-    public float mapX;
-    public float prevMapY;
-    public float mapY;
+    public static ResourceLocation vignetteTexture = new ResourceLocation("textures/misc/vignette.png");
+    public double prevMapX;
+    public double mapX;
+    public double prevMapY;
+    public double mapY;
     public float zoomExp;
     public float zoomStable;
-    private boolean sepia = false;
-
-    public void setSepia(boolean flag) {
-        this.sepia = flag;
-    }
-
-    public void updateTick() {
-        this.prevMapX = this.mapX;
-        this.prevMapY = this.mapY;
-    }
+    public boolean sepia = false;
 
     public void renderMap(GuiScreen gui, LOTRGuiMap mapGui, float f) {
         this.renderMap(gui, mapGui, f, 0, 0, gui.width, gui.height);
@@ -51,11 +44,11 @@ public class LOTRGuiRendererMap {
     public void renderMap(GuiScreen gui, LOTRGuiMap mapGui, float f, int x0, int y0, int x1, int y1) {
         GL11.glColor4f((float)1.0f, (float)1.0f, (float)1.0f, (float)1.0f);
         int oceanColor = LOTRTextures.getMapOceanColor(this.sepia);
-        GuiScreen.drawRect((int)x0, (int)y0, (int)x1, (int)y1, (int)oceanColor);
+        Gui.drawRect((int)x0, (int)y0, (int)x1, (int)y1, (int)oceanColor);
         float zoom = (float)Math.pow(2.0, this.zoomExp);
-        float mapPosX = this.prevMapX + (this.mapX - this.prevMapX) * f;
-        float mapPosY = this.prevMapY + (this.mapY - this.prevMapY) * f;
-        mapGui.setFakeMapProperties(mapPosX, mapPosY, zoom, this.zoomExp, this.zoomStable);
+        double mapPosX = this.prevMapX + (this.mapX - this.prevMapX) * (double)f;
+        double mapPosY = this.prevMapY + (this.mapY - this.prevMapY) * (double)f;
+        mapGui.setFakeMapProperties((float)mapPosX, (float)mapPosY, zoom, this.zoomExp, this.zoomStable);
         int[] statics = LOTRGuiMap.setFakeStaticProperties(x1 - x0, y1 - y0, x0, x1, y0, y1);
         mapGui.enableZoomOutWPFading = false;
         mapGui.renderMapAndOverlay(this.sepia, 1.0f, true);
@@ -100,6 +93,15 @@ public class LOTRGuiRendererMap {
         for (int l = 0; l < count; ++l) {
             this.renderVignette(gui, zLevel, x0, y0, x1, y1);
         }
+    }
+
+    public void setSepia(boolean flag) {
+        this.sepia = flag;
+    }
+
+    public void updateTick() {
+        this.prevMapX = this.mapX;
+        this.prevMapY = this.mapY;
     }
 }
 

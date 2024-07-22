@@ -57,24 +57,23 @@ extends LOTRWorldGenStructureBase2 {
 
     @Override
     public boolean generateWithSetRotation(World world, Random random, int i, int j, int k, int rotation) {
+        int k12;
         int k1;
+        int j1;
+        int k2;
+        int i12;
+        int k13;
+        int i13;
         int i1;
         int i2;
-        int i12;
-        int k12;
-        int i13;
-        int randomWood1;
-        int j1;
-        int k13;
-        int k2;
         this.setOriginAndRotation(world, i, j, k, rotation, 6);
         if (this.restrictions) {
             int minHeight = 0;
             int maxHeight = 0;
-            for (i13 = -6; i13 <= 6; ++i13) {
-                for (k1 = -6; k1 <= 6; ++k1) {
-                    j1 = this.getTopBlock(world, i13, k1);
-                    Block block = this.getBlock(world, i13, j1 - 1, k1);
+            for (i12 = -6; i12 <= 6; ++i12) {
+                for (k13 = -6; k13 <= 6; ++k13) {
+                    j1 = this.getTopBlock(world, i12, k13);
+                    Object block = this.getBlock(world, i12, j1 - 1, k13);
                     if (block != Blocks.grass) {
                         return false;
                     }
@@ -89,7 +88,7 @@ extends LOTRWorldGenStructureBase2 {
                 }
             }
         }
-        if ((randomWood1 = random.nextInt(2)) == 0) {
+        if (random.nextInt(2) == 0) {
             this.plank1Block = LOTRMod.planks2;
             this.plank1Meta = 13;
             this.wood1Block = LOTRMod.wood7;
@@ -122,82 +121,82 @@ extends LOTRWorldGenStructureBase2 {
         }
         this.barsBlock = LOTRMod.woodElfWoodBars;
         this.plateBlock = LOTRMod.woodPlateBlock;
-        for (i13 = -6; i13 <= 6; ++i13) {
-            for (k1 = -6; k1 <= 6; ++k1) {
+        for (i12 = -6; i12 <= 6; ++i12) {
+            for (k13 = -6; k13 <= 6; ++k13) {
                 for (j1 = 1; j1 <= 7; ++j1) {
-                    this.setAir(world, i13, j1, k1);
+                    this.setAir(world, i12, j1, k13);
                 }
-                for (j1 = 0; !(j1 != 0 && this.isOpaque(world, i13, j1, k1) || this.getY(j1) < 0); --j1) {
-                    if (this.getBlock(world, i13, j1 + 1, k1).isOpaqueCube()) {
-                        this.setBlockAndMetadata(world, i13, j1, k1, Blocks.dirt, 0);
+                for (j1 = 0; !(j1 != 0 && this.isOpaque(world, i12, j1, k13) || this.getY(j1) < 0); --j1) {
+                    if (this.getBlock(world, i12, j1 + 1, k13).isOpaqueCube()) {
+                        this.setBlockAndMetadata(world, i12, j1, k13, Blocks.dirt, 0);
                     } else {
-                        this.setBlockAndMetadata(world, i13, j1, k1, (Block)Blocks.grass, 0);
+                        this.setBlockAndMetadata(world, i12, j1, k13, (Block)Blocks.grass, 0);
                     }
-                    this.setGrassToDirt(world, i13, j1 - 1, k1);
+                    this.setGrassToDirt(world, i12, j1 - 1, k13);
                 }
             }
         }
-        for (i13 = -4; i13 <= 4; ++i13) {
-            for (k1 = -4; k1 <= 4; ++k1) {
-                this.setBlockAndMetadata(world, i13, 0, k1, LOTRMod.brick3, 5);
+        for (i12 = -4; i12 <= 4; ++i12) {
+            for (k13 = -4; k13 <= 4; ++k13) {
+                this.setBlockAndMetadata(world, i12, 0, k13, LOTRMod.brick3, 5);
             }
         }
-        for (i13 = -4; i13 <= 4; ++i13) {
-            for (k1 = -4; k1 <= 4; ++k1) {
-                i2 = Math.abs(i13);
-                k2 = Math.abs(k1);
+        for (i12 = -4; i12 <= 4; ++i12) {
+            for (k13 = -4; k13 <= 4; ++k13) {
+                i2 = Math.abs(i12);
+                k2 = Math.abs(k13);
                 for (int j12 = 1; j12 <= 3; ++j12) {
                     if (i2 == 4 && k2 == 4) {
-                        this.setBlockAndMetadata(world, i13, j12, k1, this.wood1Block, this.wood1Meta);
+                        this.setBlockAndMetadata(world, i12, j12, k13, this.wood1Block, this.wood1Meta);
                         continue;
                     }
                     if (i2 == 4 || k2 == 4) {
-                        this.setBlockAndMetadata(world, i13, j12, k1, this.plank1Block, this.plank1Meta);
+                        this.setBlockAndMetadata(world, i12, j12, k13, this.plank1Block, this.plank1Meta);
                         continue;
                     }
-                    this.setAir(world, i13, j12, k1);
+                    this.setAir(world, i12, j12, k13);
                 }
                 if (i2 != 4 && k2 != 4) continue;
-                this.setBlockAndMetadata(world, i13, 4, k1, this.plank2Block, this.plank2Meta);
+                this.setBlockAndMetadata(world, i12, 4, k13, this.plank2Block, this.plank2Meta);
             }
         }
-        for (i13 = -5; i13 <= 5; ++i13) {
-            this.setBlockAndMetadata(world, i13, 4, -5, this.stair2Block, 6);
-            this.setBlockAndMetadata(world, i13, 4, 5, this.stair2Block, 7);
+        for (i12 = -5; i12 <= 5; ++i12) {
+            this.setBlockAndMetadata(world, i12, 4, -5, this.stair2Block, 6);
+            this.setBlockAndMetadata(world, i12, 4, 5, this.stair2Block, 7);
             for (int k14 : new int[]{-5, 5}) {
-                if (this.getBlock(world, i13, 1, k14).isOpaqueCube()) continue;
-                this.setBlockAndMetadata(world, i13, 1, k14, LOTRMod.leaves7, 5);
+                if (this.getBlock(world, i12, 1, k14).isOpaqueCube()) continue;
+                this.setBlockAndMetadata(world, i12, 1, k14, LOTRMod.leaves7, 5);
             }
         }
-        for (k13 = -4; k13 <= 4; ++k13) {
-            this.setBlockAndMetadata(world, -5, 4, k13, this.stair2Block, 5);
-            this.setBlockAndMetadata(world, 5, 4, k13, this.stair2Block, 4);
+        for (k12 = -4; k12 <= 4; ++k12) {
+            this.setBlockAndMetadata(world, -5, 4, k12, this.stair2Block, 5);
+            this.setBlockAndMetadata(world, 5, 4, k12, this.stair2Block, 4);
             for (int i14 : new int[]{-5, 5}) {
-                if (this.getBlock(world, i14, 1, k13).isOpaqueCube()) continue;
-                this.setBlockAndMetadata(world, i14, 1, k13, LOTRMod.leaves7, 5);
+                if (this.getBlock(world, i14, 1, k12).isOpaqueCube()) continue;
+                this.setBlockAndMetadata(world, i14, 1, k12, LOTRMod.leaves7, 5);
             }
         }
-        for (i13 = -3; i13 <= 3; ++i13) {
-            this.setBlockAndMetadata(world, i13, 4, -3, this.stair2Block, 7);
-            this.setBlockAndMetadata(world, i13, 4, 3, this.stair2Block, 6);
+        for (i12 = -3; i12 <= 3; ++i12) {
+            this.setBlockAndMetadata(world, i12, 4, -3, this.stair2Block, 7);
+            this.setBlockAndMetadata(world, i12, 4, 3, this.stair2Block, 6);
         }
-        for (k13 = -2; k13 <= 2; ++k13) {
-            this.setBlockAndMetadata(world, -3, 4, k13, this.stair2Block, 4);
-            this.setBlockAndMetadata(world, 3, 4, k13, this.stair2Block, 5);
+        for (k12 = -2; k12 <= 2; ++k12) {
+            this.setBlockAndMetadata(world, -3, 4, k12, this.stair2Block, 4);
+            this.setBlockAndMetadata(world, 3, 4, k12, this.stair2Block, 5);
         }
-        for (i13 = -5; i13 <= 5; ++i13) {
+        for (i12 = -5; i12 <= 5; ++i12) {
             for (int k15 = -5; k15 <= 5; ++k15) {
-                i2 = Math.abs(i13);
+                i2 = Math.abs(i12);
                 k2 = Math.abs(k15);
                 if (i2 == 5 || k2 == 5) {
-                    this.setBlockAndMetadata(world, i13, 5, k15, this.fence1Block, this.fence1Meta);
+                    this.setBlockAndMetadata(world, i12, 5, k15, this.fence1Block, this.fence1Meta);
                 }
                 if (i2 == 5 && k2 == 5) {
-                    this.setBlockAndMetadata(world, i13, 6, k15, LOTRMod.woodElvenTorch, 5);
+                    this.setBlockAndMetadata(world, i12, 6, k15, LOTRMod.woodElvenTorch, 5);
                 }
-                if ((i2 != 5 || k2 != 0) && (k2 != 5 || i2 != 0)) continue;
-                this.setBlockAndMetadata(world, i13, 6, k15, this.fence1Block, this.fence1Meta);
-                this.setBlockAndMetadata(world, i13, 7, k15, LOTRMod.woodElvenTorch, 5);
+                if (!(i2 == 5 && k2 == 0 || k2 == 5 && i2 == 0)) continue;
+                this.setBlockAndMetadata(world, i12, 6, k15, this.fence1Block, this.fence1Meta);
+                this.setBlockAndMetadata(world, i12, 7, k15, LOTRMod.woodElvenTorch, 5);
             }
         }
         this.setBlockAndMetadata(world, -3, 2, -1, LOTRMod.woodElvenTorch, 2);
@@ -210,24 +209,24 @@ extends LOTRWorldGenStructureBase2 {
         this.setBlockAndMetadata(world, 1, 2, 3, LOTRMod.woodElvenTorch, 4);
         int[] carpets = new int[]{12, 13, 14, 15};
         int carpetType = carpets[random.nextInt(carpets.length)];
-        for (i1 = -4; i1 <= 4; ++i1) {
+        for (i13 = -4; i13 <= 4; ++i13) {
             for (int k16 = -4; k16 <= 4; ++k16) {
-                int i22 = Math.abs(i1);
+                int i22 = Math.abs(i13);
                 int k22 = Math.abs(k16);
-                this.setBlockAndMetadata(world, i1, -5, k16, LOTRMod.brick3, 5);
+                this.setBlockAndMetadata(world, i13, -5, k16, LOTRMod.brick3, 5);
                 for (int j13 = -4; j13 <= -1; ++j13) {
                     if (i22 == 4 || k22 == 4) {
                         if (j13 >= -3 && j13 <= -2) {
-                            this.setBlockAndMetadata(world, i1, j13, k16, Blocks.stonebrick, 0);
+                            this.setBlockAndMetadata(world, i13, j13, k16, Blocks.stonebrick, 0);
                             continue;
                         }
-                        this.setBlockAndMetadata(world, i1, j13, k16, this.plank1Block, this.plank1Meta);
+                        this.setBlockAndMetadata(world, i13, j13, k16, this.plank1Block, this.plank1Meta);
                         continue;
                     }
-                    this.setAir(world, i1, j13, k16);
+                    this.setAir(world, i13, j13, k16);
                 }
                 if (i22 > 2 || k22 > 2) continue;
-                this.setBlockAndMetadata(world, i1, -4, k16, Blocks.carpet, carpetType);
+                this.setBlockAndMetadata(world, i13, -4, k16, Blocks.carpet, carpetType);
             }
         }
         for (j1 = -3; j1 <= -2; ++j1) {
@@ -237,17 +236,17 @@ extends LOTRWorldGenStructureBase2 {
             this.setBlockAndMetadata(world, 1, j1, -4, Blocks.bookshelf, 0);
             this.setBlockAndMetadata(world, 1, j1, -4, this.wood1Block, this.wood1Meta);
         }
-        for (k12 = 2; k12 <= 3; ++k12) {
-            for (i12 = -2; i12 <= 2; ++i12) {
-                this.setAir(world, i12, 0, k12);
-                int stairHeight = i12 - -2;
+        for (k1 = 2; k1 <= 3; ++k1) {
+            for (i1 = -2; i1 <= 2; ++i1) {
+                this.setAir(world, i1, 0, k1);
+                int stairHeight = i1 - -2;
                 for (int j14 = -4; j14 < -4 + stairHeight; ++j14) {
-                    this.setBlockAndMetadata(world, i12, j14, k12, LOTRMod.brick3, 5);
+                    this.setBlockAndMetadata(world, i1, j14, k1, LOTRMod.brick3, 5);
                 }
-                this.setBlockAndMetadata(world, i12, -4 + stairHeight, k12, LOTRMod.stairsWoodElvenBrick, 1);
+                this.setBlockAndMetadata(world, i1, -4 + stairHeight, k1, LOTRMod.stairsWoodElvenBrick, 1);
             }
             for (int j15 = -4; j15 <= -1; ++j15) {
-                this.setBlockAndMetadata(world, 3, j15, k12, LOTRMod.brick3, 5);
+                this.setBlockAndMetadata(world, 3, j15, k1, LOTRMod.brick3, 5);
             }
         }
         this.setBlockAndMetadata(world, -3, -2, -3, LOTRMod.woodElvenTorch, 3);
@@ -256,18 +255,18 @@ extends LOTRWorldGenStructureBase2 {
         this.setBlockAndMetadata(world, 3, -2, 1, LOTRMod.woodElvenTorch, 4);
         this.setBlockAndMetadata(world, 3, -4, 0, LOTRMod.woodElvenBed, 0);
         this.setBlockAndMetadata(world, 3, -4, 1, LOTRMod.woodElvenBed, 8);
-        for (i1 = -3; i1 <= 3; ++i1) {
-            this.setBlockAndMetadata(world, i1, -1, -3, this.barsBlock, 0);
+        for (i13 = -3; i13 <= 3; ++i13) {
+            this.setBlockAndMetadata(world, i13, -1, -3, this.barsBlock, 0);
         }
-        for (k12 = -2; k12 <= 3; ++k12) {
-            this.setBlockAndMetadata(world, -3, -1, k12, this.barsBlock, 0);
+        for (k1 = -2; k1 <= 3; ++k1) {
+            this.setBlockAndMetadata(world, -3, -1, k1, this.barsBlock, 0);
         }
-        for (k12 = -2; k12 <= 1; ++k12) {
-            this.setBlockAndMetadata(world, 3, -1, k12, this.barsBlock, 0);
+        for (k1 = -2; k1 <= 1; ++k1) {
+            this.setBlockAndMetadata(world, 3, -1, k1, this.barsBlock, 0);
         }
         for (j1 = 1; j1 <= 3; ++j1) {
-            for (i12 = -1; i12 <= 1; ++i12) {
-                this.setBlockAndMetadata(world, i12, j1, -4, this.wood1Block, this.wood1Meta);
+            for (i1 = -1; i1 <= 1; ++i1) {
+                this.setBlockAndMetadata(world, i1, j1, -4, this.wood1Block, this.wood1Meta);
             }
         }
         this.setBlockAndMetadata(world, 0, 0, -2, LOTRMod.brick2, 14);

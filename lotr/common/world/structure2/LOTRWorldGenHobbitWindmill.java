@@ -69,23 +69,23 @@ extends LOTRWorldGenStructureBase2 {
 
     @Override
     public boolean generateWithSetRotation(World world, Random random, int i, int j, int k, int rotation) {
-        int k1;
-        int i1;
         int j1;
-        TileEntity te;
-        int j12;
-        int fillMeta;
-        int j13;
         Block fillBlock;
+        int i1;
         int i2;
+        TileEntity te;
+        int fillMeta;
+        int j12;
+        int k1;
+        int j13;
         int k2;
         this.setOriginAndRotation(world, i, j, k, rotation, 5);
         this.setupRandomBlocks(random);
         if (this.restrictions) {
             for (i1 = -4; i1 <= 4; ++i1) {
                 for (k1 = -4; k1 <= 4; ++k1) {
-                    j13 = this.getTopBlock(world, i1, k1) - 1;
-                    if (this.isSurface(world, i1, j13, k1)) continue;
+                    j12 = this.getTopBlock(world, i1, k1) - 1;
+                    if (this.isSurface(world, i1, j12, k1)) continue;
                     return false;
                 }
             }
@@ -109,18 +109,18 @@ extends LOTRWorldGenStructureBase2 {
                 } else {
                     fillBlock = Blocks.air;
                 }
-                for (j12 = 4; !(j12 < 0 && this.isOpaque(world, i1, j12, k1) || this.getY(j12) < 0); --j12) {
+                for (j13 = 4; !(j13 < 0 && this.isOpaque(world, i1, j13, k1) || this.getY(j13) < 0); --j13) {
                     if (fillBlock == Blocks.air) {
-                        if (j12 == 4 || j12 <= 0) {
-                            this.setBlockAndMetadata(world, i1, j12, k1, this.plankBlock, this.plankMeta);
-                            this.setGrassToDirt(world, i1, j12 - 1, k1);
+                        if (j13 == 4 || j13 <= 0) {
+                            this.setBlockAndMetadata(world, i1, j13, k1, this.plankBlock, this.plankMeta);
+                            this.setGrassToDirt(world, i1, j13 - 1, k1);
                             continue;
                         }
-                        this.setAir(world, i1, j12, k1);
+                        this.setAir(world, i1, j13, k1);
                         continue;
                     }
-                    this.setBlockAndMetadata(world, i1, j12, k1, fillBlock, fillMeta);
-                    this.setGrassToDirt(world, i1, j12 - 1, k1);
+                    this.setBlockAndMetadata(world, i1, j13, k1, fillBlock, fillMeta);
+                    this.setGrassToDirt(world, i1, j13 - 1, k1);
                 }
             }
         }
@@ -143,12 +143,12 @@ extends LOTRWorldGenStructureBase2 {
                 } else {
                     fillBlock = Blocks.air;
                 }
-                for (j12 = 5; j12 <= 8; ++j12) {
+                for (j13 = 5; j13 <= 8; ++j13) {
                     if (fillBlock == Blocks.air) {
-                        this.setAir(world, i1, j12, k1);
+                        this.setAir(world, i1, j13, k1);
                         continue;
                     }
-                    this.setBlockAndMetadata(world, i1, j12, k1, fillBlock, fillMeta);
+                    this.setBlockAndMetadata(world, i1, j13, k1, fillBlock, fillMeta);
                 }
             }
         }
@@ -171,8 +171,8 @@ extends LOTRWorldGenStructureBase2 {
         }
         for (i1 = -1; i1 <= 1; ++i1) {
             for (k1 = -1; k1 <= 1; ++k1) {
-                for (j13 = 11; j13 <= 12; ++j13) {
-                    this.setBlockAndMetadata(world, i1, j13, k1, this.plankBlock, this.plankMeta);
+                for (j12 = 11; j12 <= 12; ++j12) {
+                    this.setBlockAndMetadata(world, i1, j12, k1, this.plankBlock, this.plankMeta);
                 }
             }
         }
@@ -248,9 +248,8 @@ extends LOTRWorldGenStructureBase2 {
         this.setBlockAndMetadata(world, 0, 10, -4, Blocks.wool, 15);
         for (j1 = 7; j1 <= 13; ++j1) {
             for (int i13 = -3; i13 <= 3; ++i13) {
-                int i23;
                 int j2 = Math.abs(j1 - 10);
-                if (j2 != (i23 = Math.abs(i13)) || j2 == 0) continue;
+                if (j2 != Math.abs(i13) || j2 == 0) continue;
                 this.setBlockAndMetadata(world, i13, j1, -4, Blocks.wool, 0);
             }
         }

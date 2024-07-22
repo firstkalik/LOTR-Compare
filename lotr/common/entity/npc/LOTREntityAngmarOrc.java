@@ -81,7 +81,7 @@ extends LOTREntityOrc {
 
     @Override
     public LOTRFaction getFaction() {
-        return LOTRFaction.ANGMAR;
+        return LOTRFaction.GUNDABAD;
     }
 
     @Override

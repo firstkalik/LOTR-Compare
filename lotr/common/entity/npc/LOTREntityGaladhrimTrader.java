@@ -25,8 +25,10 @@ import lotr.common.LOTRCommonProxy;
 import lotr.common.LOTRLevelData;
 import lotr.common.LOTRMod;
 import lotr.common.entity.ai.LOTREntityAIAttackOnCollide;
+import lotr.common.entity.animal.LOTREntityHorse;
 import lotr.common.entity.npc.LOTREntityGaladhrimElf;
 import lotr.common.entity.npc.LOTREntityNPC;
+import lotr.common.entity.npc.LOTRNPCMount;
 import lotr.common.entity.npc.LOTRTradeEntries;
 import lotr.common.entity.npc.LOTRTravellingTrader;
 import lotr.common.entity.npc.LOTRTravellingTraderInfo;
@@ -48,7 +50,15 @@ implements LOTRTravellingTrader {
         super(world);
         this.tasks.addTask(2, (EntityAIBase)new LOTREntityAIAttackOnCollide(this, 1.6, false));
         this.addTargetTasks(false);
-        this.npcCape = LOTRCapes.GALADHRIM_TRADER;
+        this.npcCape = LOTRCapes.ALIGNMENT_GALADHRIM.capeTexture;
+        this.spawnRidingHorse = this.rand.nextInt(4) == 0;
+    }
+
+    @Override
+    public LOTRNPCMount createMountToRide() {
+        LOTREntityHorse horse = (LOTREntityHorse)super.createMountToRide();
+        horse.setMountArmor(null);
+        return horse;
     }
 
     @Override

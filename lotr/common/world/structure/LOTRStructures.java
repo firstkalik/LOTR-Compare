@@ -17,10 +17,13 @@ import java.util.LinkedHashMap;
 import java.util.Random;
 import lotr.common.LOTRConfig;
 import lotr.common.world.biome.LOTRBiome;
+import lotr.common.world.mapgen.bluedwarvenmine.LOTRMapGenBlueDwarvenMine;
 import lotr.common.world.mapgen.dwarvenmine.LOTRMapGenDwarvenMine;
+import lotr.common.world.mapgen.reddwarvenmine.LOTRMapGenRedDwarvenMine;
 import lotr.common.world.mapgen.tpyr.LOTRMapGenTauredainPyramid;
 import lotr.common.world.structure.LOTRWorldGenAngmarShrine;
 import lotr.common.world.structure.LOTRWorldGenAngmarTower;
+import lotr.common.world.structure.LOTRWorldGenAvariElfTower;
 import lotr.common.world.structure.LOTRWorldGenBlueMountainsStronghold;
 import lotr.common.world.structure.LOTRWorldGenDunlendingCampfire;
 import lotr.common.world.structure.LOTRWorldGenElfLordHouse;
@@ -30,11 +33,15 @@ import lotr.common.world.structure.LOTRWorldGenHighElvenHall;
 import lotr.common.world.structure.LOTRWorldGenHighElvenTurret;
 import lotr.common.world.structure.LOTRWorldGenHobbitPicnicBench;
 import lotr.common.world.structure.LOTRWorldGenMordorTower;
+import lotr.common.world.structure.LOTRWorldGenMoredainMercCamp2;
+import lotr.common.world.structure.LOTRWorldGenMoredainMercTent2;
 import lotr.common.world.structure.LOTRWorldGenNurnWheatFarm;
 import lotr.common.world.structure.LOTRWorldGenOrcDungeon;
 import lotr.common.world.structure.LOTRWorldGenOrcSlaverTower;
+import lotr.common.world.structure.LOTRWorldGenRAngbandBarrow;
 import lotr.common.world.structure.LOTRWorldGenRivendellHall;
 import lotr.common.world.structure.LOTRWorldGenRohanBarrow;
+import lotr.common.world.structure.LOTRWorldGenRuinedAvariElfTower;
 import lotr.common.world.structure.LOTRWorldGenRuinedDunedainTower;
 import lotr.common.world.structure.LOTRWorldGenRuinedGondorTower;
 import lotr.common.world.structure.LOTRWorldGenRuinedHighElvenTurret;
@@ -42,18 +49,27 @@ import lotr.common.world.structure.LOTRWorldGenRuinedRohanWatchtower;
 import lotr.common.world.structure.LOTRWorldGenRuinedWoodElfTower;
 import lotr.common.world.structure.LOTRWorldGenStructureBase;
 import lotr.common.world.structure.LOTRWorldGenUnderwaterElvenRuin;
+import lotr.common.world.structure.LOTRWorldGenUrukWargPit;
 import lotr.common.world.structure.LOTRWorldGenWoodElfPlatform;
 import lotr.common.world.structure.LOTRWorldGenWoodElfTower;
 import lotr.common.world.structure2.LOTRStructureTimelapse;
+import lotr.common.world.structure2.LOTRWorldGenAngbandForge;
+import lotr.common.world.structure2.LOTRWorldGenAngbandFort;
+import lotr.common.world.structure2.LOTRWorldGenAngbandTent;
+import lotr.common.world.structure2.LOTRWorldGenAngbandTower;
+import lotr.common.world.structure2.LOTRWorldGenAngbandTower2;
 import lotr.common.world.structure2.LOTRWorldGenAngmarCamp;
 import lotr.common.world.structure2.LOTRWorldGenAngmarForgeTent;
 import lotr.common.world.structure2.LOTRWorldGenAngmarHillmanChieftainHouse;
 import lotr.common.world.structure2.LOTRWorldGenAngmarHillmanHouse;
 import lotr.common.world.structure2.LOTRWorldGenAngmarTent;
 import lotr.common.world.structure2.LOTRWorldGenAngmarWargPit;
+import lotr.common.world.structure2.LOTRWorldGenAvariElfHouse;
+import lotr.common.world.structure2.LOTRWorldGenAvariElvenForge;
 import lotr.common.world.structure2.LOTRWorldGenBDBarrow;
 import lotr.common.world.structure2.LOTRWorldGenBeaconTower;
 import lotr.common.world.structure2.LOTRWorldGenBlackUrukFort;
+import lotr.common.world.structure2.LOTRWorldGenBlackUrukFort2;
 import lotr.common.world.structure2.LOTRWorldGenBlackrootFortress;
 import lotr.common.world.structure2.LOTRWorldGenBlackrootWatchfort;
 import lotr.common.world.structure2.LOTRWorldGenBlackrootWatchtower;
@@ -103,10 +119,17 @@ import lotr.common.world.structure2.LOTRWorldGenDorwinionTent;
 import lotr.common.world.structure2.LOTRWorldGenDunlandHillFort;
 import lotr.common.world.structure2.LOTRWorldGenDunlendingHouse;
 import lotr.common.world.structure2.LOTRWorldGenDunlendingTavern;
+import lotr.common.world.structure2.LOTRWorldGenDurmethCamp;
+import lotr.common.world.structure2.LOTRWorldGenDurmethForge;
+import lotr.common.world.structure2.LOTRWorldGenDurmethTent;
 import lotr.common.world.structure2.LOTRWorldGenDwarfHouse;
 import lotr.common.world.structure2.LOTRWorldGenDwarfSmithy;
 import lotr.common.world.structure2.LOTRWorldGenDwarvenMineEntrance;
+import lotr.common.world.structure2.LOTRWorldGenDwarvenMineEntrance2;
+import lotr.common.world.structure2.LOTRWorldGenDwarvenMineEntrance3;
 import lotr.common.world.structure2.LOTRWorldGenDwarvenMineEntranceRuined;
+import lotr.common.world.structure2.LOTRWorldGenDwarvenMineEntranceRuined2;
+import lotr.common.world.structure2.LOTRWorldGenDwarvenMineEntranceRuined3;
 import lotr.common.world.structure2.LOTRWorldGenDwarvenTower;
 import lotr.common.world.structure2.LOTRWorldGenEasterlingFortress;
 import lotr.common.world.structure2.LOTRWorldGenEasterlingGarden;
@@ -126,6 +149,8 @@ import lotr.common.world.structure2.LOTRWorldGenEasterlingVillageFarm;
 import lotr.common.world.structure2.LOTRWorldGenEasterlingVillageSign;
 import lotr.common.world.structure2.LOTRWorldGenEasterlingWell;
 import lotr.common.world.structure2.LOTRWorldGenElfHouse;
+import lotr.common.world.structure2.LOTRWorldGenEreborSmithy;
+import lotr.common.world.structure2.LOTRWorldGenEreborTower;
 import lotr.common.world.structure2.LOTRWorldGenGaladhrimForge;
 import lotr.common.world.structure2.LOTRWorldGenGondorBarn;
 import lotr.common.world.structure2.LOTRWorldGenGondorBath;
@@ -213,7 +238,6 @@ import lotr.common.world.structure2.LOTRWorldGenMoredainHutHunter;
 import lotr.common.world.structure2.LOTRWorldGenMoredainHutTrader;
 import lotr.common.world.structure2.LOTRWorldGenMoredainHutVillage;
 import lotr.common.world.structure2.LOTRWorldGenMoredainMercCamp;
-import lotr.common.world.structure2.LOTRWorldGenMoredainMercTent;
 import lotr.common.world.structure2.LOTRWorldGenMumakSkeleton;
 import lotr.common.world.structure2.LOTRWorldGenNearHaradTent;
 import lotr.common.world.structure2.LOTRWorldGenNomadBazaarTent;
@@ -237,6 +261,15 @@ import lotr.common.world.structure2.LOTRWorldGenRangerTent;
 import lotr.common.world.structure2.LOTRWorldGenRangerVillageLight;
 import lotr.common.world.structure2.LOTRWorldGenRangerWatchtower;
 import lotr.common.world.structure2.LOTRWorldGenRangerWell;
+import lotr.common.world.structure2.LOTRWorldGenRedDwarvenFort;
+import lotr.common.world.structure2.LOTRWorldGenRedDwarvenTower;
+import lotr.common.world.structure2.LOTRWorldGenRedDwarvenTower2;
+import lotr.common.world.structure2.LOTRWorldGenRedMountainsHouseBlacklock;
+import lotr.common.world.structure2.LOTRWorldGenRedMountainsHouseStiffbeard;
+import lotr.common.world.structure2.LOTRWorldGenRedMountainsHouseStonefoot;
+import lotr.common.world.structure2.LOTRWorldGenRedMountainsHouseWickedDwarf;
+import lotr.common.world.structure2.LOTRWorldGenRedMountainsSmithy;
+import lotr.common.world.structure2.LOTRWorldGenRedMountainsSmithy2;
 import lotr.common.world.structure2.LOTRWorldGenRhudaurCastle;
 import lotr.common.world.structure2.LOTRWorldGenRivendellForge;
 import lotr.common.world.structure2.LOTRWorldGenRivendellHouse;
@@ -258,6 +291,10 @@ import lotr.common.world.structure2.LOTRWorldGenRuinedBeaconTower;
 import lotr.common.world.structure2.LOTRWorldGenRuinedDwarvenTower;
 import lotr.common.world.structure2.LOTRWorldGenRuinedEregionForge;
 import lotr.common.world.structure2.LOTRWorldGenRuinedHouse;
+import lotr.common.world.structure2.LOTRWorldGenRuinedMoriaDwarvenTower;
+import lotr.common.world.structure2.LOTRWorldGenRuinedRedDwarvenTower;
+import lotr.common.world.structure2.LOTRWorldGenRuinedRedDwarvenTower2;
+import lotr.common.world.structure2.LOTRWorldGenRuinedRedDwarvenTower3;
 import lotr.common.world.structure2.LOTRWorldGenSouthronBarracks;
 import lotr.common.world.structure2.LOTRWorldGenSouthronBazaar;
 import lotr.common.world.structure2.LOTRWorldGenSouthronFarm;
@@ -315,7 +352,10 @@ import lotr.common.world.structure2.LOTRWorldGenUmbarWell;
 import lotr.common.world.structure2.LOTRWorldGenUrukCamp;
 import lotr.common.world.structure2.LOTRWorldGenUrukForgeTent;
 import lotr.common.world.structure2.LOTRWorldGenUrukTent;
-import lotr.common.world.structure2.LOTRWorldGenUrukWargPit;
+import lotr.common.world.structure2.LOTRWorldGenUtumnoSpiderPit;
+import lotr.common.world.structure2.LOTRWorldGenUtumnoWargPit;
+import lotr.common.world.structure2.LOTRWorldGenWindDwarvenTower;
+import lotr.common.world.structure2.LOTRWorldGenWindMountainsHouse;
 import lotr.common.world.structure2.LOTRWorldGenWoodElfHouse;
 import lotr.common.world.structure2.LOTRWorldGenWoodElvenForge;
 import lotr.common.world.village.LOTRVillageGen;
@@ -897,7 +937,7 @@ public class LOTRStructures {
         });
         LOTRStructures.registerStructure(1122, LOTRWorldGenSouthronTownGate.class, "SouthronTownGate", 15063989, 10052655);
         LOTRStructures.registerStructure(1123, LOTRWorldGenSouthronTownCorner.class, "SouthronTownCorner", 15063989, 10052655);
-        LOTRStructures.registerStructure(1140, LOTRWorldGenMoredainMercTent.class, "MoredainMercTent", 12845056, 2949120);
+        LOTRStructures.registerStructure(1140, LOTRWorldGenMoredainMercTent2.class, "MoredainMercTent", 12845056, 2949120);
         LOTRStructures.registerStructure(1141, LOTRWorldGenMoredainMercCamp.class, "MoredainMercCamp", 12845056, 2949120);
         LOTRStructures.registerStructure(1150, LOTRWorldGenUmbarHouse.class, "UmbarHouse", 14407104, 3354926);
         LOTRStructures.registerStructure(1151, LOTRWorldGenUmbarTavern.class, "UmbarTavern", 14407104, 3354926);
@@ -1019,7 +1059,49 @@ public class LOTRStructures {
         LOTRStructures.registerStructure(1700, LOTRWorldGenHalfTrollHouse.class, "HalfTrollHouse", 10058344, 5325111);
         LOTRStructures.registerStructure(1701, LOTRWorldGenHalfTrollWarlordHouse.class, "HalfTrollWarlordHouse", 10058344, 5325111);
         LOTRStructures.registerStructure(1994, LOTRWorldGenTicketBooth.class, "TicketBooth", 15313961, 1118481, true);
+        LOTRStructures.registerStructure(1995, LOTRWorldGenRedDwarvenTower.class, "RedDwarvenTower", 10713966, 15357473);
+        LOTRStructures.registerStructure(1996, LOTRWorldGenRedMountainsSmithy.class, "RedMountainsSmithy", 10713966, 15357473);
+        LOTRStructures.registerStructure(1997, LOTRWorldGenBlackUrukFort2.class, "AngbandCamp", 10713966, 15357473);
+        LOTRStructures.registerStructure(1999, LOTRWorldGenAngbandTent.class, "AngbandTent", 10713966, 15357473);
+        LOTRStructures.registerStructure(2000, LOTRWorldGenAngbandForge.class, "AngbandForge", 10713966, 15357473);
+        LOTRStructures.registerStructure(2001, LOTRWorldGenEreborTower.class, "EreborTower", 10713966, 15357473);
+        LOTRStructures.registerStructure(2002, LOTRWorldGenEreborSmithy.class, "EreborSmithy", 10713966, 15357473);
+        LOTRStructures.registerStructure(2003, LOTRWorldGenRedMountainsHouseBlacklock.class, "RedMountainsHouse", 10713966, 15357473);
+        LOTRStructures.registerStructure(2004, LOTRWorldGenRedDwarvenTower2.class, "OrocarniTower", 10713966, 15357473);
+        LOTRStructures.registerStructure(2006, LOTRWorldGenRedMountainsHouseStiffbeard.class, "OrocarniHouse", 10713966, 15357473);
+        LOTRStructures.registerStructure(2007, LOTRWorldGenWindMountainsHouse.class, "WindHouse", 7557508, 7108730);
+        LOTRStructures.registerStructure(2008, LOTRWorldGenWindDwarvenTower.class, "WindTower", 7557508, 7108730);
+        LOTRStructures.registerStructure(2009, LOTRWorldGenUtumnoSpiderPit.class, "UtumnoSpiderPit", 10713966, 15357473);
+        LOTRStructures.registerStructure(2010, LOTRWorldGenAngbandTower.class, "UtumnoTower", 10713966, 15357473);
+        LOTRStructures.registerStructure(2011, LOTRWorldGenUtumnoWargPit.class, "UtumnoWargPit", 10713966, 15357473);
+        LOTRStructures.registerStructure(2012, LOTRWorldGenDwarvenMineEntrance2.class, "RedDwarfMine", 10713966, 15357473);
+        LOTRStructures.registerStructure(2013, LOTRWorldGenRedDwarvenFort.class, "TowerStonefoot", 10713966, 15357473);
+        LOTRStructures.registerStructure(2015, LOTRWorldGenRuinedRedDwarvenTower.class, "RedDwarvenTowerStiffBeards", 10713966, 15357473);
+        LOTRStructures.registerStructure(2016, LOTRWorldGenDurmethForge.class, "DurmethForge", 11837263, 11449194);
+        LOTRStructures.registerStructure(2017, LOTRWorldGenDurmethTent.class, "DurmethTent", 11837263, 11449194);
+        LOTRStructures.registerStructure(2018, LOTRWorldGenDurmethCamp.class, "DurmethCamp", 11837263, 11449194);
+        LOTRStructures.registerStructure(2019, LOTRWorldGenRuinedRedDwarvenTower2.class, "RedDwarvenTowerStoneFoots", 7482144, 16772268);
+        LOTRStructures.registerStructure(2020, LOTRWorldGenRuinedMoriaDwarvenTower.class, "RuinedMoriaDwarvenTower", 11837263, 11449194);
+        LOTRStructures.registerStructure(2022, LOTRWorldGenAngbandFort.class, "AngbandFort", 10713966, 15357473);
+        LOTRStructures.registerStructure(2023, LOTRWorldGenRAngbandBarrow.class, "AngbandBarrow", 10713966, 15357473);
+        LOTRStructures.registerStructure(2024, LOTRWorldGenAngbandTower2.class, "UtumnoTowerRuined", 10713966, 15357473);
+        LOTRStructures.registerStructure(2025, LOTRWorldGenDwarvenMineEntranceRuined2.class, "DwarvenMineEntranceRuined2", 10713966, 15357473);
+        LOTRStructures.registerStructure(2026, LOTRWorldGenRedMountainsHouseStonefoot.class, "OrocarniHouse", 10713966, 15357473);
+        LOTRStructures.registerStructure(2027, LOTRWorldGenRedMountainsHouseWickedDwarf.class, "RuinedRedDwarfHouse", 10713966, 15357473);
+        LOTRStructures.registerStructure(2028, LOTRWorldGenRedMountainsSmithy2.class, "RuinedRedDwarfSmithy", 10713966, 15357473);
+        LOTRStructures.registerStructure(2029, LOTRWorldGenRuinedRedDwarvenTower3.class, "RuinedRedDwarvenTower3", 11837263, 11449194);
+        LOTRStructures.registerStructure(2031, LOTRWorldGenUrukWargPit.class, "UtumnoPit", 3025185, 1972756);
+        LOTRStructures.registerStructure(2032, LOTRWorldGenDwarvenMineEntrance3.class, "WindDwarfMine", 10713966, 15357473);
+        LOTRStructures.registerStructure(2033, LOTRWorldGenDwarvenMineEntranceRuined3.class, "WindDwarfMineRuined", 10713966, 15357473);
+        LOTRStructures.registerStructure(2034, LOTRWorldGenAvariElfHouse.class, "AvariElfHouse", 10056783, 16764574);
+        LOTRStructures.registerStructure(2035, LOTRWorldGenAvariElfTower.class, "AvariElfTower", 10056783, 16764574);
+        LOTRStructures.registerStructure(2036, LOTRWorldGenRuinedAvariElfTower.class, "RuinedAvariElfTower", 10056783, 16764574);
+        LOTRStructures.registerStructure(2037, LOTRWorldGenAvariElvenForge.class, "AvariElvenForge", 10056783, 16764574);
+        LOTRStructures.registerStructure(2038, LOTRWorldGenMoredainMercTent2.class, "DarkElfMercTent", 10713966, 15357473);
+        LOTRStructures.registerStructure(2039, LOTRWorldGenMoredainMercCamp2.class, "DarkElfMercCamp", 10713966, 15357473);
         LOTRMapGenDwarvenMine.register();
+        LOTRMapGenBlueDwarvenMine.register();
+        LOTRMapGenRedDwarvenMine.register();
         LOTRMapGenTauredainPyramid.register();
     }
 
@@ -1098,8 +1180,10 @@ public class LOTRStructures {
         return MathHelper.floor_double((double)((double)(entityplayer.rotationYaw * 4.0f / 360.0f) + 0.5)) & 3;
     }
 
-    private static interface IVillageProperties<V> {
-        public void apply(V var1);
+    public static interface IStructureProvider {
+        public boolean generateStructure(World var1, EntityPlayer var2, int var3, int var4, int var5);
+
+        public boolean isVillage();
     }
 
     public static class StructureColorInfo {
@@ -1118,10 +1202,8 @@ public class LOTRStructures {
         }
     }
 
-    public static interface IStructureProvider {
-        public boolean generateStructure(World var1, EntityPlayer var2, int var3, int var4, int var5);
-
-        public boolean isVillage();
+    private static interface IVillageProperties<V> {
+        public void apply(V var1);
     }
 
 }

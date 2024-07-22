@@ -14,7 +14,6 @@ import lotr.common.LOTRMod;
 import lotr.common.entity.LOTREntityNPCRespawner;
 import lotr.common.entity.npc.LOTREntityGulfHaradArcher;
 import lotr.common.entity.npc.LOTREntityGulfHaradWarrior;
-import lotr.common.entity.npc.LOTREntityGulfHaradrim;
 import lotr.common.item.LOTRItemBanner;
 import lotr.common.world.structure.LOTRChestContents;
 import lotr.common.world.structure2.LOTRWorldGenGulfStructure;
@@ -30,9 +29,9 @@ extends LOTRWorldGenGulfStructure {
 
     @Override
     public boolean generateWithSetRotation(World world, Random random, int i, int j, int k, int rotation) {
-        int k1;
-        int i1;
         int j1;
+        int i1;
+        int k1;
         this.setOriginAndRotation(world, i, j, k, rotation, 4);
         this.setupRandomBlocks(random);
         if (this.restrictions) {

@@ -34,7 +34,6 @@ extends WorldGenAbstractTree {
     private int heightLimit;
     private int height;
     private double heightAttenuation = 0.618;
-    private double branchDensity = 1.0;
     private double branchSlope = 0.381;
     private double scaleWidth = 1.0;
     private double leafDensity = 1.0;
@@ -111,7 +110,7 @@ extends WorldGenAbstractTree {
                 int[] aint3 = new int[]{this.basePos[0], this.basePos[1], this.basePos[2]};
                 double d3 = Math.sqrt(Math.pow(Math.abs(this.basePos[0] - aint1[0]), 2.0) + Math.pow(Math.abs(this.basePos[2] - aint1[2]), 2.0));
                 double d4 = d3 * this.branchSlope;
-                aint3[1] = (double)aint1[1] - d4 > (double)l ? l : (int)((double)aint1[1] - d4);
+                int n = aint3[1] = (double)aint1[1] - d4 > (double)l ? l : (int)((double)aint1[1] - d4);
                 if (this.checkBlockLine(aint3, aint1) != -1) continue;
                 aint[k][0] = k1;
                 aint[k][1] = j;

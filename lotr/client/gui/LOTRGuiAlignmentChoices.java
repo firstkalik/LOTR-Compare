@@ -7,6 +7,7 @@
  *  net.minecraft.client.Minecraft
  *  net.minecraft.client.entity.EntityClientPlayerMP
  *  net.minecraft.client.gui.FontRenderer
+ *  net.minecraft.client.gui.Gui
  *  net.minecraft.client.gui.GuiButton
  *  net.minecraft.client.renderer.Tessellator
  *  net.minecraft.client.renderer.texture.TextureManager
@@ -38,6 +39,7 @@ import lotr.common.network.LOTRPacketHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureManager;
@@ -59,8 +61,6 @@ extends LOTRGuiScreenBase {
     private Map<LOTRFaction, LOTRGuiButtonRedBook> facButtons = new HashMap<LOTRFaction, LOTRGuiButtonRedBook>();
     private Map<LOTRGuiButtonRedBook, LOTRFaction> buttonFacs = new HashMap<LOTRGuiButtonRedBook, LOTRFaction>();
     private Set<LOTRFaction> setZeroFacs = new HashSet<LOTRFaction>();
-    private static final int colorConflict = -62464;
-    private static final int colorSelected = -1;
 
     public void initGui() {
         super.initGui();
@@ -80,8 +80,8 @@ extends LOTRGuiScreenBase {
 
     public void drawScreen(int i, int j, float f) {
         this.drawDefaultBackground();
-        LOTRGuiAlignmentChoices.drawRect((int)this.guiLeft, (int)this.guiTop, (int)(this.guiLeft + this.xSize), (int)(this.guiTop + this.ySize), (int)-5756117);
-        LOTRGuiAlignmentChoices.drawRect((int)(this.guiLeft + 2), (int)(this.guiTop + 2), (int)(this.guiLeft + this.xSize - 2), (int)(this.guiTop + this.ySize - 2), (int)-1847889);
+        Gui.drawRect((int)this.guiLeft, (int)this.guiTop, (int)(this.guiLeft + this.xSize), (int)(this.guiTop + this.ySize), (int)-5756117);
+        Gui.drawRect((int)(this.guiLeft + 2), (int)(this.guiTop + 2), (int)(this.guiLeft + this.xSize - 2), (int)(this.guiTop + this.ySize - 2), (int)-1847889);
         GL11.glColor4f((float)1.0f, (float)1.0f, (float)1.0f, (float)1.0f);
         this.mc.getTextureManager().bindTexture(LOTRClientProxy.alignmentTexture);
         int warnIconSize = 32;
@@ -142,11 +142,11 @@ extends LOTRGuiScreenBase {
                         if (this.setZeroFacs.contains((Object)fac)) {
                             status = "Setting to zero";
                             button.enabled = true;
-                            LOTRGuiAlignmentChoices.drawRect((int)(button.xPosition - 1), (int)(button.yPosition - 1), (int)(button.xPosition + button.width + 1), (int)(button.yPosition + button.height + 1), (int)-1);
+                            Gui.drawRect((int)(button.xPosition - 1), (int)(button.yPosition - 1), (int)(button.xPosition + button.width + 1), (int)(button.yPosition + button.height + 1), (int)-1);
                         } else if (willDrain) {
                             status = "Draining";
                             button.enabled = true;
-                            LOTRGuiAlignmentChoices.drawRect((int)(button.xPosition - 1), (int)(button.yPosition - 1), (int)(button.xPosition + button.width + 1), (int)(button.yPosition + button.height + 1), (int)-62464);
+                            Gui.drawRect((int)(button.xPosition - 1), (int)(button.yPosition - 1), (int)(button.xPosition + button.width + 1), (int)(button.yPosition + button.height + 1), (int)-62464);
                         } else {
                             status = "Will not drain after CONFIRM";
                             button.enabled = false;
@@ -163,11 +163,11 @@ extends LOTRGuiScreenBase {
                 this.drawCenteredString(alignS, buttonTextX, buttonTextY += this.fontRendererObj.FONT_HEIGHT, textColor);
                 this.drawCenteredString(status, buttonTextX, buttonTextY += this.fontRendererObj.FONT_HEIGHT, textColor);
                 GL11.glPopMatrix();
-                if (!button.func_146115_a() || !(align > 0.0f) || this.setZeroFacs.contains((Object)fac) || !this.isFactionConflicting(pd, fac, true)) continue;
+                if (!button.func_146115_a() || align <= 0.0f || this.setZeroFacs.contains((Object)fac) || !this.isFactionConflicting(pd, fac, true)) continue;
                 GL11.glPushMatrix();
                 GL11.glTranslatef((float)0.0f, (float)0.0f, (float)100.0f);
                 for (LOTRFaction otherFac : LOTRFaction.getPlayableAlignmentFactions()) {
-                    if (fac == otherFac || this.setZeroFacs.contains((Object)otherFac) || !pd.doFactionsDrain(fac, otherFac) || !(pd.getAlignment(otherFac) > 0.0f)) continue;
+                    if (fac == otherFac || this.setZeroFacs.contains((Object)otherFac) || !pd.doFactionsDrain(fac, otherFac) || pd.getAlignment(otherFac) <= 0.0f) continue;
                     LOTRGuiButtonRedBook otherButton = this.facButtons.get((Object)otherFac);
                     int x1 = button.xPosition + button.width / 2;
                     int x2 = otherButton.xPosition + otherButton.width / 2;
@@ -197,7 +197,7 @@ extends LOTRGuiScreenBase {
 
     private boolean isFactionConflicting(LOTRPlayerData pd, LOTRFaction fac, boolean accountForSelection) {
         for (LOTRFaction otherFac : LOTRFaction.getPlayableAlignmentFactions()) {
-            if (fac == otherFac || accountForSelection && this.setZeroFacs.contains((Object)otherFac) || !pd.doFactionsDrain(fac, otherFac) || !(pd.getAlignment(otherFac) > 0.0f)) continue;
+            if (fac == otherFac || accountForSelection && this.setZeroFacs.contains((Object)otherFac) || !pd.doFactionsDrain(fac, otherFac) || pd.getAlignment(otherFac) <= 0.0f) continue;
             return true;
         }
         return false;

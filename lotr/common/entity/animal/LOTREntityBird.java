@@ -47,7 +47,6 @@ import java.util.Random;
 import java.util.UUID;
 import lotr.common.LOTRMod;
 import lotr.common.block.LOTRBlockBerryBush;
-import lotr.common.entity.AnimalJarUpdater;
 import lotr.common.entity.LOTREntities;
 import lotr.common.entity.LOTRRandomSkinEntity;
 import lotr.common.entity.LOTRScarecrows;
@@ -96,18 +95,14 @@ import net.minecraftforge.common.util.ForgeDirection;
 public class LOTREntityBird
 extends EntityLiving
 implements LOTRAmbientCreature,
-LOTRRandomSkinEntity,
-AnimalJarUpdater {
+LOTRRandomSkinEntity {
     private ChunkCoordinates currentFlightTarget;
     private int flightTargetTime = 0;
-    private static final int flightTargetTimeMax = 400;
     public int flapTime = 0;
     private LOTREntityInventory birdInv = new LOTREntityInventory("BirdItems", (EntityLivingBase)this, 9);
     private EntityItem stealTargetItem;
     private EntityPlayer stealTargetPlayer;
-    private static final int maxStealAmount = 4;
     private int stolenTime = 0;
-    private static final int stolenTimeMax = 200;
     private boolean stealingCrops = false;
 
     public LOTREntityBird(World world) {
@@ -161,7 +156,7 @@ AnimalJarUpdater {
     public IEntityLivingData onSpawnWithEgg(IEntityLivingData data) {
         data = super.onSpawnWithEgg(data);
         int i = MathHelper.floor_double((double)this.posX);
-        int j = MathHelper.floor_double((double)this.posY);
+        MathHelper.floor_double((double)this.posY);
         int k = MathHelper.floor_double((double)this.posZ);
         BiomeGenBase biome = this.worldObj.getBiomeGenForCoords(i, k);
         if (biome instanceof LOTRBiomeGenFarHarad) {
@@ -249,11 +244,6 @@ AnimalJarUpdater {
         }
     }
 
-    @Override
-    public void updateInAnimalJar() {
-        this.setBirdStill(false);
-    }
-
     protected void updateAITasks() {
         super.updateAITasks();
         if (this.getStolenItem() != null) {
@@ -264,9 +254,7 @@ AnimalJarUpdater {
             }
         }
         if (this.isBirdStill()) {
-            if (!this.canBirdSit()) {
-                this.setBirdStill(false);
-            } else if (this.rand.nextInt(400) == 0 || this.worldObj.getClosestPlayerToEntity((Entity)this, 6.0) != null) {
+            if (!this.canBirdSit() || this.rand.nextInt(400) == 0 || this.worldObj.getClosestPlayerToEntity((Entity)this, 6.0) != null) {
                 this.setBirdStill(false);
             }
         } else {
@@ -309,9 +297,7 @@ AnimalJarUpdater {
             if (this.stealTargetItem != null || this.stealTargetPlayer != null) {
                 if (this.birdInv.isFull() || this.currentFlightTarget == null || !this.isValidFlightTarget(this.currentFlightTarget)) {
                     this.cancelFlight();
-                } else if (this.stealTargetItem != null && !this.canStealItem(this.stealTargetItem)) {
-                    this.cancelFlight();
-                } else if (this.stealTargetPlayer != null && !this.canStealPlayer(this.stealTargetPlayer)) {
+                } else if (this.stealTargetItem != null && !this.canStealItem(this.stealTargetItem) || this.stealTargetPlayer != null && !this.canStealPlayer(this.stealTargetPlayer)) {
                     this.cancelFlight();
                 } else {
                     if (this.stealTargetItem != null) {
@@ -372,24 +358,22 @@ AnimalJarUpdater {
                             this.playSound("random.eat", 1.0f, (this.worldObj.rand.nextFloat() - this.worldObj.rand.nextFloat()) * 0.2f + 1.0f);
                         }
                         this.cancelFlight();
-                    } else if (!this.canStealCrops(i, j, k)) {
-                        this.cancelFlight();
-                    } else if (this.flightTargetTime % 100 == 0 && LOTRScarecrows.anyScarecrowsNearby(this.worldObj, i, j, k)) {
+                    } else if (!this.canStealCrops(i, j, k) || this.flightTargetTime % 100 == 0 && LOTRScarecrows.anyScarecrowsNearby(this.worldObj, i, j, k)) {
                         this.cancelFlight();
                     }
                 }
             } else {
-                int j;
+                int i;
                 if (LOTRMod.canGrief(this.worldObj) && !this.stealingCrops && this.rand.nextInt(100) == 0) {
-                    int i = MathHelper.floor_double((double)this.posX);
-                    j = MathHelper.floor_double((double)this.posY);
+                    i = MathHelper.floor_double((double)this.posX);
+                    int j = MathHelper.floor_double((double)this.posY);
                     int k = MathHelper.floor_double((double)this.posZ);
                     int range = 16;
                     int yRange = 8;
                     int attempts = 32;
                     for (int l = 0; l < attempts; ++l) {
-                        int j1;
                         int k1;
+                        int j1;
                         int i1 = i + MathHelper.getRandomIntegerInRange((Random)this.rand, (int)(-range), (int)range);
                         if (!this.canStealCrops(i1, j1 = j + MathHelper.getRandomIntegerInRange((Random)this.rand, (int)(-yRange), (int)yRange), k1 = k + MathHelper.getRandomIntegerInRange((Random)this.rand, (int)(-range), (int)range)) || LOTRScarecrows.anyScarecrowsNearby(this.worldObj, i1, j1, k1)) continue;
                         this.stealingCrops = true;
@@ -403,8 +387,8 @@ AnimalJarUpdater {
                         this.cancelFlight();
                     }
                     if (this.currentFlightTarget == null || this.rand.nextInt(50) == 0 || this.getDistanceSqToFlightTarget() < 4.0) {
-                        int i = MathHelper.floor_double((double)this.posX);
-                        j = MathHelper.floor_double((double)this.posY);
+                        i = MathHelper.floor_double((double)this.posX);
+                        int j = MathHelper.floor_double((double)this.posY);
                         int k = MathHelper.floor_double((double)this.posZ);
                         this.currentFlightTarget = new ChunkCoordinates(i += this.rand.nextInt(16) - this.rand.nextInt(16), j += MathHelper.getRandomIntegerInRange((Random)this.rand, (int)-2, (int)3), k += this.rand.nextInt(16) - this.rand.nextInt(16));
                         this.newFlight();
@@ -559,6 +543,10 @@ AnimalJarUpdater {
         int feathers = this.rand.nextInt(3) + this.rand.nextInt(i + 1);
         for (int l = 0; l < feathers; ++l) {
             this.dropItem(Items.feather, 1);
+        }
+        int bones = this.rand.nextInt(2) + this.rand.nextInt(i + 1);
+        for (int l = 0; l < bones; ++l) {
+            this.dropItem(Items.bone, 1);
         }
     }
 

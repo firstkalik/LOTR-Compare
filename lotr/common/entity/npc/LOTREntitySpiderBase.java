@@ -37,8 +37,10 @@
 package lotr.common.entity.npc;
 
 import java.util.Random;
+import lotr.common.LOTRBannerProtection;
 import lotr.common.LOTRLevelData;
 import lotr.common.LOTRMod;
+import lotr.common.LOTRPotions;
 import lotr.common.entity.LOTRMountFunctions;
 import lotr.common.entity.ai.LOTREntityAIAttackOnCollide;
 import lotr.common.entity.ai.LOTREntityAIFollowHiringPlayer;
@@ -86,7 +88,9 @@ extends LOTREntityNPCRideable {
     public static int VENOM_NONE = 0;
     public static int VENOM_SLOWNESS = 1;
     public static int VENOM_POISON = 2;
-    private static final int CLIMB_TIME = 100;
+    public static int VENOM_BLINDNESS = 3;
+    public static int VENOM_NAUSEA = 4;
+    public static int VENOM_WEAKNESS = 5;
 
     public LOTREntitySpiderBase(World world) {
         super(world);
@@ -250,9 +254,16 @@ extends LOTREntityNPCRideable {
             } else {
                 this.setSpiderClimbing(this.isCollidedHorizontally);
             }
-        }
-        if (!this.worldObj.isRemote && this.riddenByEntity instanceof EntityPlayer && LOTRLevelData.getData((EntityPlayer)this.riddenByEntity).getAlignment(this.getFaction()) < 50.0f) {
-            this.riddenByEntity.mountEntity(null);
+            if (this.riddenByEntity instanceof EntityPlayer) {
+                EntityPlayer player = (EntityPlayer)this.riddenByEntity;
+                if (LOTRBannerProtection.isProtected(this.worldObj, (int)this.posX, (int)this.posY, (int)this.posZ, LOTRBannerProtection.forPlayer(player), true)) {
+                    this.riddenByEntity.mountEntity(null);
+                    return;
+                }
+                if (LOTRLevelData.getData(player).getAlignment(this.getFaction()) < 50.0f) {
+                    this.riddenByEntity.mountEntity(null);
+                }
+            }
         }
     }
 
@@ -266,6 +277,9 @@ extends LOTREntityNPCRideable {
             } else if (!entityplayer.inventory.addItemStackToInventory(new ItemStack(LOTRMod.bottlePoison)) && !entityplayer.capabilities.isCreativeMode) {
                 entityplayer.dropPlayerItemWithRandomChoice(new ItemStack(LOTRMod.bottlePoison), false);
             }
+            return true;
+        }
+        if (!this.worldObj.isRemote && LOTRBannerProtection.isProtected(this.worldObj, (int)this.posX, (int)this.posY, (int)this.posZ, LOTRBannerProtection.forPlayer(entityplayer), true)) {
             return true;
         }
         if (this.worldObj.isRemote || this.hiredNPCInfo.isActive) {
@@ -317,10 +331,16 @@ extends LOTREntityNPCRideable {
             int difficulty;
             int duration;
             if (entity instanceof EntityLivingBase && (duration = (difficulty = this.worldObj.difficultySetting.getDifficultyId()) * (difficulty + 5) / 2) > 0) {
-                if (this.getSpiderType() == VENOM_SLOWNESS) {
+                if (this.getSpiderType() == VENOM_SLOWNESS && !((EntityLivingBase)entity).isPotionActive(LOTRPotions.frostResistance)) {
                     ((EntityLivingBase)entity).addPotionEffect(new PotionEffect(Potion.moveSlowdown.id, duration * 20, 0));
                 } else if (this.getSpiderType() == VENOM_POISON) {
                     ((EntityLivingBase)entity).addPotionEffect(new PotionEffect(Potion.poison.id, duration * 20, 0));
+                } else if (this.getSpiderType() == VENOM_BLINDNESS) {
+                    ((EntityLivingBase)entity).addPotionEffect(new PotionEffect(Potion.blindness.id, duration * 20, 0));
+                } else if (this.getSpiderType() == VENOM_NAUSEA) {
+                    ((EntityLivingBase)entity).addPotionEffect(new PotionEffect(Potion.confusion.id, duration * 20, 0));
+                } else if (this.getSpiderType() == VENOM_WEAKNESS) {
+                    ((EntityLivingBase)entity).addPotionEffect(new PotionEffect(Potion.weakness.id, duration * 20, 0));
                 }
             }
             return true;
@@ -395,6 +415,15 @@ extends LOTREntityNPCRideable {
             return false;
         }
         if (this.getSpiderType() == VENOM_POISON && effect.getPotionID() == Potion.poison.id) {
+            return false;
+        }
+        if (this.getSpiderType() == VENOM_BLINDNESS && effect.getPotionID() == Potion.blindness.id) {
+            return false;
+        }
+        if (this.getSpiderType() == VENOM_NAUSEA && effect.getPotionID() == Potion.confusion.id) {
+            return false;
+        }
+        if (this.getSpiderType() == VENOM_WEAKNESS && effect.getPotionID() == Potion.weakness.id) {
             return false;
         }
         return super.isPotionApplicable(effect);

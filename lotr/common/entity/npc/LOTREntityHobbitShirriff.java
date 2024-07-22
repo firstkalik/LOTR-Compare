@@ -54,11 +54,6 @@ implements LOTRUnitTradeable {
     }
 
     @Override
-    public LOTRInvasions getWarhorn() {
-        return LOTRInvasions.HOBBIT;
-    }
-
-    @Override
     public boolean canTradeWith(EntityPlayer entityplayer) {
         return LOTRLevelData.getData(entityplayer).getAlignment(this.getFaction()) >= 50.0f && this.isFriendly(entityplayer);
     }
@@ -82,6 +77,11 @@ implements LOTRUnitTradeable {
             return "hobbit/shirriff/neutral";
         }
         return "hobbit/bounder/hostile";
+    }
+
+    @Override
+    public LOTRInvasions getConquestHorn() {
+        return LOTRInvasions.HOBBIT;
     }
 }
 

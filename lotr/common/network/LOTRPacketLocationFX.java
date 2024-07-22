@@ -15,7 +15,6 @@ import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import io.netty.buffer.ByteBuf;
-import java.util.Random;
 import lotr.client.fx.LOTREntitySwordCommandMarker;
 import lotr.common.LOTRCommonProxy;
 import lotr.common.LOTRMod;
@@ -54,6 +53,11 @@ implements IMessage {
         this.posZ = data.readDouble();
     }
 
+    public static enum Type {
+        SWORD_COMMAND;
+
+    }
+
     public static class Handler
     implements IMessageHandler<LOTRPacketLocationFX, IMessage> {
         public IMessage onMessage(LOTRPacketLocationFX packet, MessageContext context) {
@@ -61,18 +65,12 @@ implements IMessage {
             double x = packet.posX;
             double y = packet.posY;
             double z = packet.posZ;
-            Random rand = world.rand;
             if (packet.type == Type.SWORD_COMMAND) {
                 LOTREntitySwordCommandMarker marker = new LOTREntitySwordCommandMarker(world, x, y + 6.0, z);
                 world.spawnEntityInWorld((Entity)marker);
             }
             return null;
         }
-    }
-
-    public static enum Type {
-        SWORD_COMMAND;
-
     }
 
 }

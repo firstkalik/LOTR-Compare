@@ -99,9 +99,8 @@ extends BlockContainer {
 
     public void breakBlock(World world, int i, int j, int k, Block block, int meta) {
         ItemStack foodItem;
-        LOTRTileEntityPlate plate;
         TileEntity tileentity = world.getTileEntity(i, j, k);
-        if (!world.isRemote && tileentity instanceof LOTRTileEntityPlate && (foodItem = (plate = (LOTRTileEntityPlate)tileentity).getFoodItem()) != null) {
+        if (!world.isRemote && tileentity instanceof LOTRTileEntityPlate && (foodItem = ((LOTRTileEntityPlate)tileentity).getFoodItem()) != null) {
             this.dropBlockAsItem(world, i, j, k, foodItem);
         }
         super.breakBlock(world, i, j, k, block, meta);

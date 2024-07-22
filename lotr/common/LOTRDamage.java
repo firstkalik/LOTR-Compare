@@ -5,15 +5,18 @@
  *  cpw.mods.fml.common.network.simpleimpl.IMessage
  *  cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper
  *  net.minecraft.entity.player.EntityPlayerMP
+ *  net.minecraft.potion.Potion
  *  net.minecraft.util.DamageSource
  */
 package lotr.common;
 
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
+import lotr.common.LOTRPotions;
 import lotr.common.network.LOTRPacketEnvironmentOverlay;
 import lotr.common.network.LOTRPacketHandler;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.potion.Potion;
 import net.minecraft.util.DamageSource;
 
 public class LOTRDamage {
@@ -22,8 +25,10 @@ public class LOTRDamage {
     public static DamageSource plantHurt = new DamageSource("lotr.plantHurt").setDamageBypassesArmor();
 
     public static void doFrostDamage(EntityPlayerMP entityplayer) {
-        LOTRPacketEnvironmentOverlay packet = new LOTRPacketEnvironmentOverlay(LOTRPacketEnvironmentOverlay.Overlay.FROST);
-        LOTRPacketHandler.networkWrapper.sendTo((IMessage)packet, entityplayer);
+        if (!entityplayer.isPotionActive(LOTRPotions.frostResistance)) {
+            LOTRPacketEnvironmentOverlay packet = new LOTRPacketEnvironmentOverlay(LOTRPacketEnvironmentOverlay.Overlay.FROST);
+            LOTRPacketHandler.networkWrapper.sendTo((IMessage)packet, entityplayer);
+        }
     }
 
     public static void doBurnDamage(EntityPlayerMP entityplayer) {

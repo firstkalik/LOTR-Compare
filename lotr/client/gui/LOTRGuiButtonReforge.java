@@ -19,8 +19,13 @@ import org.lwjgl.opengl.GL11;
 
 public class LOTRGuiButtonReforge
 extends GuiButton {
-    public LOTRGuiButtonReforge(int i, int x, int y) {
+    private final int minU;
+    private final int minV;
+
+    public LOTRGuiButtonReforge(int i, int x, int y, int u, int v) {
         super(i, x, y, 20, 20, "");
+        this.minU = u;
+        this.minV = v;
     }
 
     public void drawButton(Minecraft mc, int i, int j) {
@@ -28,7 +33,7 @@ extends GuiButton {
             mc.getTextureManager().bindTexture(LOTRGuiAnvil.anvilTexture);
             GL11.glColor4f((float)1.0f, (float)1.0f, (float)1.0f, (float)1.0f);
             this.field_146123_n = i >= this.xPosition && j >= this.yPosition && i < this.xPosition + this.width && j < this.yPosition + this.height;
-            this.drawTexturedModalRect(this.xPosition, this.yPosition, 176 + (this.field_146123_n ? this.width : 0), 39, this.width, this.height);
+            this.drawTexturedModalRect(this.xPosition, this.yPosition, this.minU + (this.field_146123_n ? this.width : 0), this.minV, this.width, this.height);
             this.mouseDragged(mc, i, j);
         }
     }

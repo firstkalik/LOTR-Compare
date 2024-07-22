@@ -111,7 +111,7 @@ IGrowable {
 
     @SideOnly(value=Side.CLIENT)
     public void registerBlockIcons(IIconRegister iconregister) {
-        this.postIcon = !this.hasGrapes ? iconregister.registerIcon(this.getTextureName()) : LOTRMod.grapevine.getIcon(0, 0);
+        IIcon iIcon = this.postIcon = !this.hasGrapes ? iconregister.registerIcon(this.getTextureName()) : LOTRMod.grapevine.getIcon(0, 0);
         if (this.hasGrapes) {
             this.vineIcons = new IIcon[2];
             this.vineIcons[0] = iconregister.registerIcon(this.getTextureName() + "_vine");
@@ -211,13 +211,16 @@ IGrowable {
 
     public void updateTick(World world, int i, int j, int k, Random random) {
         int meta;
-        float growth;
         super.updateTick(world, i, j, k, random);
         if (!this.checkCanStay(world, i, j, k)) {
             return;
         }
-        if (this.hasGrapes && world.getBlockLightValue(i, j + 1, k) >= 9 && (meta = world.getBlockMetadata(i, j, k)) < 7 && (growth = this.getGrowthFactor(world, i, j, k)) > 0.0f && random.nextInt((int)(80.0f / growth) + 1) == 0) {
-            world.setBlockMetadataWithNotify(i, j, k, ++meta, 2);
+        if (this.hasGrapes && world.getBlockLightValue(i, j + 1, k) >= 9 && (meta = world.getBlockMetadata(i, j, k)) < 7) {
+            float f;
+            float growth = this.getGrowthFactor(world, i, j, k);
+            if (f > 0.0f && random.nextInt((int)(80.0f / growth) + 1) == 0) {
+                world.setBlockMetadataWithNotify(i, j, k, ++meta, 2);
+            }
         }
     }
 

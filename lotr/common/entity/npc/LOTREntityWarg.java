@@ -21,29 +21,31 @@
  *  net.minecraft.entity.item.EntityItem
  *  net.minecraft.entity.player.EntityPlayer
  *  net.minecraft.entity.player.InventoryPlayer
- *  net.minecraft.entity.player.PlayerCapabilities
  *  net.minecraft.init.Items
  *  net.minecraft.inventory.AnimalChest
  *  net.minecraft.inventory.IInvBasic
  *  net.minecraft.inventory.IInventory
  *  net.minecraft.inventory.InventoryBasic
  *  net.minecraft.item.Item
- *  net.minecraft.item.ItemFood
  *  net.minecraft.item.ItemStack
  *  net.minecraft.nbt.NBTBase
  *  net.minecraft.nbt.NBTTagCompound
  *  net.minecraft.pathfinding.PathNavigate
+ *  net.minecraft.potion.Potion
+ *  net.minecraft.potion.PotionEffect
+ *  net.minecraft.util.AxisAlignedBB
  *  net.minecraft.util.DamageSource
  *  net.minecraft.util.MathHelper
  *  net.minecraft.world.World
+ *  net.minecraft.world.biome.BiomeGenBase
  */
 package lotr.common.entity.npc;
 
 import java.util.Random;
 import lotr.common.LOTRAchievement;
+import lotr.common.LOTRBannerProtection;
 import lotr.common.LOTRLevelData;
 import lotr.common.LOTRMod;
-import lotr.common.entity.LOTRMountFunctions;
 import lotr.common.entity.ai.LOTREntityAIAttackOnCollide;
 import lotr.common.entity.ai.LOTREntityAIFollowHiringPlayer;
 import lotr.common.entity.ai.LOTREntityAIHiredRemainStill;
@@ -54,10 +56,13 @@ import lotr.common.entity.animal.LOTREntityRabbit;
 import lotr.common.entity.npc.LOTREntityNPC;
 import lotr.common.entity.npc.LOTREntityNPCRideable;
 import lotr.common.entity.npc.LOTREntityWargBombardier;
+import lotr.common.entity.npc.LOTREntityWargBombardier2;
+import lotr.common.entity.npc.LOTREntityWargBombardier4;
 import lotr.common.entity.npc.LOTRHiredNPCInfo;
 import lotr.common.fac.LOTRAlignmentValues;
 import lotr.common.fac.LOTRFaction;
 import lotr.common.item.LOTRItemMountArmor;
+import lotr.common.world.biome.LOTRBiome;
 import net.minecraft.entity.DataWatcher;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
@@ -77,27 +82,30 @@ import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.entity.player.PlayerCapabilities;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.AnimalChest;
 import net.minecraft.inventory.IInvBasic;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.InventoryBasic;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.pathfinding.PathNavigate;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.BiomeGenBase;
 
 public abstract class LOTREntityWarg
 extends LOTREntityNPCRideable
 implements IInvBasic {
     private int eatingTick;
     private AnimalChest wargInventory;
+    public boolean isStrongOrc = false;
 
     public LOTREntityWarg(World world) {
         super(world);
@@ -115,6 +123,14 @@ implements IInvBasic {
         this.tasks.addTask(8, (EntityAIBase)new EntityAILookIdle((EntityLiving)this));
         int target = this.addTargetTasks(true);
         if (!(this instanceof LOTREntityWargBombardier)) {
+            this.targetTasks.addTask(target + 1, (EntityAIBase)new LOTREntityAINearestAttackableTargetBasic(this, LOTREntityRabbit.class, 500, false));
+            this.targetTasks.addTask(target + 1, (EntityAIBase)new LOTREntityAINearestAttackableTargetBasic(this, LOTREntityDeer.class, 1000, false));
+        }
+        if (!(this instanceof LOTREntityWargBombardier2)) {
+            this.targetTasks.addTask(target + 1, (EntityAIBase)new LOTREntityAINearestAttackableTargetBasic(this, LOTREntityRabbit.class, 500, false));
+            this.targetTasks.addTask(target + 1, (EntityAIBase)new LOTREntityAINearestAttackableTargetBasic(this, LOTREntityDeer.class, 1000, false));
+        }
+        if (!(this instanceof LOTREntityWargBombardier4)) {
             this.targetTasks.addTask(target + 1, (EntityAIBase)new LOTREntityAINearestAttackableTargetBasic(this, LOTREntityRabbit.class, 500, false));
             this.targetTasks.addTask(target + 1, (EntityAIBase)new LOTREntityAINearestAttackableTargetBasic(this, LOTREntityDeer.class, 1000, false));
         }
@@ -137,6 +153,10 @@ implements IInvBasic {
             this.setWargType(WargType.WHITE);
         } else if (this.rand.nextInt(20) == 0) {
             this.setWargType(WargType.BLACK);
+        } else if (this.rand.nextInt(15) == 0) {
+            this.setWargType(WargType.BROWNDARK);
+        } else if (this.rand.nextInt(3) == 0) {
+            this.setWargType(WargType.GREYDARK);
         } else if (this.rand.nextInt(3) == 0) {
             this.setWargType(WargType.GREY);
         } else {
@@ -325,13 +345,32 @@ implements IInvBasic {
 
     @Override
     public void onLivingUpdate() {
+        boolean isRiderInPrivateArea;
+        EntityPlayer entityplayer;
         super.onLivingUpdate();
         if (!this.worldObj.isRemote && this.riddenByEntity instanceof EntityPlayer) {
-            EntityPlayer entityplayer = (EntityPlayer)this.riddenByEntity;
+            entityplayer = (EntityPlayer)this.riddenByEntity;
             if (LOTRLevelData.getData(entityplayer).getAlignment(this.getFaction()) < 50.0f) {
                 entityplayer.mountEntity(null);
             } else if (this.isNPCTamed() && this.isMountSaddled()) {
                 LOTRLevelData.getData(entityplayer).addAchievement(LOTRAchievement.rideWarg);
+            }
+        }
+        if (!this.worldObj.isRemote && this.isStrongOrc) {
+            boolean flag;
+            int i = MathHelper.floor_double((double)this.posX);
+            int j = MathHelper.floor_double((double)this.boundingBox.minY);
+            int k = MathHelper.floor_double((double)this.posZ);
+            BiomeGenBase biome = this.worldObj.getBiomeGenForCoords(i, k);
+            boolean bl = flag = this.worldObj.isDaytime() && this.worldObj.canBlockSeeTheSky(i, j, k);
+            if (biome instanceof LOTRBiome && ((LOTRBiome)biome).canSpawnHostilesInDay()) {
+                flag = true;
+            }
+            if (flag && this.ticksExisted % 20 == 0) {
+                this.addPotionEffect(new PotionEffect(Potion.resistance.id, 200, 0));
+                this.addPotionEffect(new PotionEffect(Potion.moveSpeed.id, 200, 0));
+                this.addPotionEffect(new PotionEffect(Potion.invisibility.id, 200, 0));
+                this.addPotionEffect(new PotionEffect(Potion.damageBoost.id, 200, 0));
             }
         }
         if (this.eatingTick > 0) {
@@ -340,62 +379,49 @@ implements IInvBasic {
             }
             --this.eatingTick;
         }
+        if (!this.worldObj.isRemote && this.riddenByEntity instanceof EntityPlayer) {
+            entityplayer = (EntityPlayer)this.riddenByEntity;
+            if (LOTRLevelData.getData(entityplayer).getAlignment(this.getFaction()) < 50.0f) {
+                entityplayer.mountEntity(null);
+            } else if (this.isNPCTamed() && this.isMountSaddled()) {
+                LOTRLevelData.getData(entityplayer).addAchievement(LOTRAchievement.rideWarg);
+            }
+        } else if ((this.worldObj.isRemote || !(this.riddenByEntity instanceof LOTREntityNPC)) && !this.worldObj.isRemote && this.riddenByEntity != null && (isRiderInPrivateArea = LOTRBannerProtection.isProtected(this.worldObj, (int)this.posX, (int)this.posY, (int)this.posZ, LOTRBannerProtection.forPlayer((EntityPlayer)this.riddenByEntity), true))) {
+            this.riddenByEntity.mountEntity(null);
+        }
     }
 
     @Override
     public boolean interact(EntityPlayer entityplayer) {
-        if (this.worldObj.isRemote || this.hiredNPCInfo.isActive) {
-            return false;
-        }
-        if (LOTRMountFunctions.interact(this, entityplayer)) {
+        boolean hasRequiredAlignment;
+        if (!this.worldObj.isRemote && LOTRBannerProtection.isProtected(this.worldObj, (int)this.posX, (int)this.posY, (int)this.posZ, LOTRBannerProtection.forPlayer(entityplayer), true)) {
             return true;
         }
-        if (this.getAttackTarget() != entityplayer) {
-            boolean hasRequiredAlignment = LOTRLevelData.getData(entityplayer).getAlignment(this.getFaction()) >= 50.0f;
-            boolean notifyNotEnoughAlignment = false;
-            ItemStack itemstack = entityplayer.inventory.getCurrentItem();
-            if (!notifyNotEnoughAlignment && this.isNPCTamed() && entityplayer.isSneaking()) {
+        if (this.hiredNPCInfo.isActive) {
+            return true;
+        }
+        boolean bl = hasRequiredAlignment = LOTRLevelData.getData(entityplayer).getAlignment(this.getFaction()) >= 50.0f;
+        if (!this.isChild() && this.canWargBeRidden()) {
+            if (this.riddenByEntity == null) {
                 if (hasRequiredAlignment) {
-                    this.openGUI(entityplayer);
-                    return true;
-                }
-                notifyNotEnoughAlignment = true;
-            }
-            if (!notifyNotEnoughAlignment && this.isNPCTamed() && itemstack != null && itemstack.getItem() instanceof ItemFood && ((ItemFood)itemstack.getItem()).isWolfsFavoriteMeat() && this.getHealth() < this.getMaxHealth()) {
-                if (hasRequiredAlignment) {
-                    if (!entityplayer.capabilities.isCreativeMode) {
-                        --itemstack.stackSize;
-                        if (itemstack.stackSize == 0) {
-                            entityplayer.inventory.setInventorySlotContents(entityplayer.inventory.currentItem, null);
-                        }
+                    ItemStack itemstack = entityplayer.inventory.getCurrentItem();
+                    if (itemstack != null && itemstack.interactWithEntity(entityplayer, (EntityLivingBase)this)) {
+                        return true;
                     }
-                    this.heal((float)((ItemFood)itemstack.getItem()).func_150905_g(itemstack));
-                    this.eatingTick = 20;
-                    return true;
-                }
-                notifyNotEnoughAlignment = true;
-            }
-            if (!notifyNotEnoughAlignment && this.isNPCTamed() && !this.isMountSaddled() && this.canWargBeRidden() && this.riddenByEntity == null && itemstack != null && itemstack.getItem() == Items.saddle) {
-                if (hasRequiredAlignment) {
-                    this.openGUI(entityplayer);
-                    return true;
-                }
-                notifyNotEnoughAlignment = true;
-            }
-            if (!notifyNotEnoughAlignment && !this.isChild() && this.canWargBeRidden() && this.riddenByEntity == null) {
-                if (itemstack != null && itemstack.interactWithEntity(entityplayer, (EntityLivingBase)this)) {
-                    return true;
-                }
-                if (hasRequiredAlignment) {
-                    entityplayer.mountEntity((Entity)this);
+                    if (!this.worldObj.isRemote) {
+                        entityplayer.mountEntity((Entity)this);
+                    }
                     this.setAttackTarget(null);
                     this.getNavigator().clearPathEntity();
                     return true;
                 }
-                notifyNotEnoughAlignment = true;
-            }
-            if (notifyNotEnoughAlignment) {
                 LOTRAlignmentValues.notifyAlignmentNotHighEnough(entityplayer, 50.0f, this.getFaction());
+                return true;
+            }
+            if (this.riddenByEntity == entityplayer) {
+                if (!this.worldObj.isRemote) {
+                    entityplayer.mountEntity(null);
+                }
                 return true;
             }
         }
@@ -485,7 +511,10 @@ implements IInvBasic {
         WHITE(3),
         ICE(4),
         OBSIDIAN(5),
-        FIRE(6);
+        FIRE(6),
+        WHICE(7),
+        BROWNDARK(8),
+        GREYDARK(9);
 
         public final int wargID;
 

@@ -205,15 +205,14 @@ public class LOTRTickHandlerServer {
                                 int launches = 1 + world.rand.nextInt(7 + world.playerEntities.size() / 2);
                                 int range = 64;
                                 for (int l = 0; l < launches; ++l) {
-                                    int j;
                                     int k;
                                     EntityPlayer entityplayer = (EntityPlayer)world.playerEntities.get(world.rand.nextInt(world.playerEntities.size()));
                                     int i = MathHelper.floor_double((double)entityplayer.posX) + MathHelper.getRandomIntegerInRange((Random)world.rand, (int)(-range), (int)range);
-                                    if (!world.getBlock(i, (j = world.getHeightValue(i, k = MathHelper.floor_double((double)entityplayer.posZ) + MathHelper.getRandomIntegerInRange((Random)world.rand, (int)(-range), (int)range))) - 1, k).isNormalCube()) continue;
+                                    if (!world.getBlock(i, world.getHeightValue(i, k = MathHelper.floor_double((double)entityplayer.posZ) + MathHelper.getRandomIntegerInRange((Random)world.rand, (int)(-range), (int)range)) - 1, k).isNormalCube()) continue;
                                     int fireworks = 1 + world.rand.nextInt(4);
                                     for (int l1 = 0; l1 < fireworks; ++l1) {
-                                        int j1;
                                         int k1;
+                                        int j1;
                                         int groupRange = 8;
                                         int i1 = i - world.rand.nextInt(groupRange) + world.rand.nextInt(groupRange);
                                         if (!world.getBlock(i1, (j1 = world.getHeightValue(i1, k1 = k - world.rand.nextInt(groupRange) + world.rand.nextInt(groupRange))) - 1, k1).isNormalCube()) continue;
@@ -255,8 +254,8 @@ public class LOTRTickHandlerServer {
                         }
                     }
                     if (world.getTotalWorldTime() % 20L == 0L) {
-                        for (int i = 0; i < world.playerEntities.size(); ++i) {
-                            EntityPlayer entityplayer = (EntityPlayer)world.playerEntities.get(i);
+                        for (Object element : world.playerEntities) {
+                            EntityPlayer entityplayer = (EntityPlayer)element;
                             LOTRLevelData.sendPlayerLocationsToPlayer(entityplayer, world);
                         }
                     }
@@ -284,9 +283,9 @@ public class LOTRTickHandlerServer {
                 entityplayer.playerNetServerHandler = new LOTRNetHandlerPlayServer(MinecraftServer.getServer(), entityplayer.playerNetServerHandler.netManager, entityplayer);
             }
             if (event.phase == TickEvent.Phase.END) {
-                List items;
                 EntityItem item;
                 ItemStack heldItem;
+                List items;
                 LOTRLevelData.getData((EntityPlayer)entityplayer).onUpdate(entityplayer, (WorldServer)world);
                 NetHandlerPlayServer netHandler = entityplayer.playerNetServerHandler;
                 if (netHandler instanceof LOTRNetHandlerPlayServer) {
@@ -314,8 +313,8 @@ public class LOTRTickHandlerServer {
                     for (Object obj : items) {
                         int[] portalLocation;
                         int k1;
-                        boolean foundPortalLocation;
                         int i1;
+                        boolean foundPortalLocation;
                         item = (EntityItem)obj;
                         if (item.getEntityItem() == null) continue;
                         int i = MathHelper.floor_double((double)item.posX);
@@ -341,7 +340,7 @@ public class LOTRTickHandlerServer {
                                 }
                             }
                         }
-                        if (!(LOTRLevelData.getData((EntityPlayer)entityplayer).getAlignment(LOTRFaction.MORDOR) >= 1.0f) && !(LOTRLevelData.getData((EntityPlayer)entityplayer).getAlignment(LOTRFaction.ANGMAR) >= 1.0f) && !(LOTRLevelData.getData((EntityPlayer)entityplayer).getAlignment(LOTRFaction.DOL_GULDUR) >= 1.0f) || !LOTRMod.isOreNameEqual(itemstack, "bone")) continue;
+                        if (LOTRLevelData.getData((EntityPlayer)entityplayer).getAlignment(LOTRFaction.MORDOR) < 1.0f && LOTRLevelData.getData((EntityPlayer)entityplayer).getAlignment(LOTRFaction.GUNDABAD) < 1.0f && LOTRLevelData.getData((EntityPlayer)entityplayer).getAlignment(LOTRFaction.DOL_GULDUR) < 1.0f || !LOTRMod.isOreNameEqual(itemstack, "bone")) continue;
                         foundPortalLocation = false;
                         portalLocation = new int[3];
                         for (i1 = i - 2; !foundPortalLocation && i1 <= i + 2; ++i1) {

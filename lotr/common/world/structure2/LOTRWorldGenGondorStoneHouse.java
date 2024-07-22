@@ -51,8 +51,9 @@ extends LOTRWorldGenGondorStructure {
 
     @Override
     public boolean generateWithSetRotation(World world, Random random, int i, int j, int k, int rotation) {
-        int k1;
         int i1;
+        int k14;
+        int k1;
         int j1;
         int k12;
         this.setOriginAndRotation(world, i, j, k, rotation, 8);
@@ -80,10 +81,10 @@ extends LOTRWorldGenGondorStructure {
         for (i1 = -5; i1 <= 4; ++i1) {
             for (k1 = -7; k1 <= 5; ++k1) {
                 int i2 = Math.abs(i1);
-                int k2 = Math.abs(k1);
+                Math.abs(k1);
                 if (i1 == -5) {
-                    for (j1 = 1; j1 <= 8; ++j1) {
-                        this.setAir(world, i1, j1, k1);
+                    for (int j12 = 1; j12 <= 8; ++j12) {
+                        this.setAir(world, i1, j12, k1);
                     }
                     this.setBlockAndMetadata(world, i1, 0, k1, (Block)Blocks.grass, 0);
                     j1 = -1;
@@ -170,8 +171,8 @@ extends LOTRWorldGenGondorStructure {
         }
         for (i1 = -5; i1 <= -3; ++i1) {
             for (k1 = -1; k1 <= 2; ++k1) {
-                for (int j12 = 1; j12 <= 11; ++j12) {
-                    this.setBlockAndMetadata(world, i1, j12, k1, this.brickBlock, this.brickMeta);
+                for (int j13 = 1; j13 <= 11; ++j13) {
+                    this.setBlockAndMetadata(world, i1, j13, k1, this.brickBlock, this.brickMeta);
                 }
                 this.setGrassToDirt(world, i1, 0, k1);
             }
@@ -268,9 +269,9 @@ extends LOTRWorldGenGondorStructure {
             this.setBlockAndMetadata(world, -1, 5, k13, this.bedBlock, 3);
             this.spawnItemFrame(world, -3, 7, k13, 1, this.getGondorFramedItem(random));
         }
-        for (int k14 = 0; k14 <= 1; ++k14) {
-            for (int j13 = 7; j13 <= 8; ++j13) {
-                this.setBlockAndMetadata(world, -3, j13, k14, this.pillarBlock, this.pillarMeta);
+        for (k14 = 0; k14 <= 1; ++k14) {
+            for (int j14 = 7; j14 <= 8; ++j14) {
+                this.setBlockAndMetadata(world, -3, j14, k14, this.pillarBlock, this.pillarMeta);
             }
         }
         this.placeChest(world, random, -3, 5, -3, 4, LOTRChestContents.GONDOR_HOUSE);
@@ -285,7 +286,7 @@ extends LOTRWorldGenGondorStructure {
         this.setBlockAndMetadata(world, -3, 7, 3, Blocks.torch, 2);
         this.setBlockAndMetadata(world, 3, 7, -2, Blocks.torch, 1);
         this.setBlockAndMetadata(world, 3, 7, 3, Blocks.torch, 1);
-        for (int k14 = -1; k14 <= 2; ++k14) {
+        for (k14 = -1; k14 <= 2; ++k14) {
             this.setBlockAndMetadata(world, -5, 12, k14, this.brickStairBlock, 1);
             this.setBlockAndMetadata(world, -3, 12, k14, this.brickStairBlock, 0);
         }

@@ -13,7 +13,6 @@ package lotr.common.world.structure2;
 import java.util.Random;
 import lotr.common.LOTRMod;
 import lotr.common.entity.LOTREntityNPCRespawner;
-import lotr.common.entity.npc.LOTREntityEasterling;
 import lotr.common.entity.npc.LOTREntityEasterlingArcher;
 import lotr.common.entity.npc.LOTREntityEasterlingWarrior;
 import lotr.common.item.LOTRItemBanner;
@@ -70,17 +69,18 @@ extends LOTRWorldGenEasterlingStructureTown {
 
     @Override
     public boolean generateWithSetRotation(World world, Random random, int i, int j, int k, int rotation) {
-        int i1;
+        int i2;
         int k1;
         int i12;
+        int i1;
+        int j1;
         int k2;
-        int i2;
         this.setOriginAndRotation(world, i, j, k, rotation, 3);
         this.setupRandomBlocks(random);
         if (this.restrictions) {
             for (i12 = -3; i12 <= 3; ++i12) {
                 for (k1 = -3; k1 <= 3; ++k1) {
-                    int j1 = this.getTopBlock(world, i12, k1) - 1;
+                    j1 = this.getTopBlock(world, i12, k1) - 1;
                     if (this.isSurface(world, i12, j1, k1)) continue;
                     return false;
                 }
@@ -88,7 +88,6 @@ extends LOTRWorldGenEasterlingStructureTown {
         }
         for (i12 = -2; i12 <= 2; ++i12) {
             for (k1 = -2; k1 <= 2; ++k1) {
-                int j1;
                 i2 = Math.abs(i12);
                 k2 = Math.abs(k1);
                 for (j1 = 1; j1 <= 15; ++j1) {
@@ -163,16 +162,16 @@ extends LOTRWorldGenEasterlingStructureTown {
         this.setBlockAndMetadata(world, 1, 3, 1, Blocks.torch, 4);
         this.placeWeaponRack(world, -1, 2, 0, 5, this.getEasterlingWeaponItem(random));
         this.placeArmorStand(world, 1, 1, 0, 1, null);
-        for (int j1 = 1; j1 <= 9; ++j1) {
+        for (j1 = 1; j1 <= 9; ++j1) {
             this.setBlockAndMetadata(world, 0, j1, 1, Blocks.ladder, 2);
         }
-        this.setBlockAndMetadata(world, 0, 10, 1, this.trapdoorBlock, 9);
+        this.setBlockAndMetadata(world, 0, 10, 1, Blocks.trapdoor, 9);
         this.setBlockAndMetadata(world, -1, 6, -1, this.plankSlabBlock, this.plankSlabMeta | 8);
         this.setBlockAndMetadata(world, 0, 6, -1, this.plankSlabBlock, this.plankSlabMeta | 8);
-        int[] j1 = new int[]{5, 7};
-        k1 = j1.length;
+        int[] j12 = new int[]{5, 7};
+        k1 = j12.length;
         for (i2 = 0; i2 < k1; ++i2) {
-            int j13 = j1[i2];
+            int j13 = j12[i2];
             this.setBlockAndMetadata(world, 0, j13, -1, this.bedBlock, 3);
             this.setBlockAndMetadata(world, -1, j13, -1, this.bedBlock, 11);
         }

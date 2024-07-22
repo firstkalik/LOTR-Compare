@@ -3,7 +3,6 @@
  * 
  * Could not load the following classes:
  *  net.minecraft.client.Minecraft
- *  net.minecraft.client.gui.FontRenderer
  *  net.minecraft.client.gui.GuiButton
  *  net.minecraft.client.renderer.texture.TextureManager
  *  net.minecraft.util.ResourceLocation
@@ -12,7 +11,6 @@
 package lotr.client.gui;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.util.ResourceLocation;
@@ -28,7 +26,6 @@ extends GuiButton {
 
     public void drawButton(Minecraft mc, int i, int j) {
         if (this.visible) {
-            FontRenderer fontrenderer = mc.fontRenderer;
             mc.getTextureManager().bindTexture(texture);
             GL11.glColor4f((float)1.0f, (float)1.0f, (float)1.0f, (float)1.0f);
             this.field_146123_n = i >= this.xPosition && j >= this.yPosition && i < this.xPosition + this.width && j < this.yPosition + this.height;

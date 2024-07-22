@@ -29,8 +29,6 @@ import net.minecraft.world.World;
 public class LOTRTileEntityCommandTable
 extends TileEntity {
     private int zoomExp;
-    private static final int MIN_ZOOM = -2;
-    private static final int MAX_ZOOM = 2;
 
     public int getZoomExp() {
         return this.zoomExp;

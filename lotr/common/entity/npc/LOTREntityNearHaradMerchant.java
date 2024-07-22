@@ -14,9 +14,11 @@ import java.util.Random;
 import lotr.common.LOTRAchievement;
 import lotr.common.LOTRLevelData;
 import lotr.common.LOTRMod;
+import lotr.common.entity.animal.LOTREntityCamel;
 import lotr.common.entity.npc.LOTREntityNPC;
 import lotr.common.entity.npc.LOTREntityNearHaradrim;
 import lotr.common.entity.npc.LOTRInventoryNPCItems;
+import lotr.common.entity.npc.LOTRNPCMount;
 import lotr.common.entity.npc.LOTRTradeEntries;
 import lotr.common.entity.npc.LOTRTravellingTrader;
 import lotr.common.fac.LOTRFaction;
@@ -36,11 +38,23 @@ implements LOTRTravellingTrader {
     public LOTREntityNearHaradMerchant(World world) {
         super(world);
         this.addTargetTasks(false);
+        this.spawnRidingHorse = this.rand.nextInt(4) == 0;
+    }
+
+    @Override
+    public LOTRNPCMount createMountToRide() {
+        LOTREntityCamel horse = (LOTREntityCamel)super.createMountToRide();
+        horse.setMountArmor(null);
+        return horse;
     }
 
     @Override
     public LOTRTradeEntries getBuyPool() {
         return LOTRTradeEntries.NEAR_HARAD_MERCHANT_BUY;
+    }
+
+    public int getTotalArmorValue() {
+        return 12;
     }
 
     @Override

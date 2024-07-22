@@ -42,17 +42,6 @@ import net.minecraft.world.World;
 
 public class LOTRVillageGenRohan
 extends LOTRVillageGen {
-    private static final int INNER_MAX = 20;
-    private static final int OUTER_MIN = 50;
-    private static final int OUTER_MAX = 56;
-    private static final int PALISADE_GAP = 25;
-    private static final int SPOKE_WIDTH = 2;
-    private static final int PATH_FUZZ = 4;
-    private static final int FORT_WALL_X = 51;
-    private static final int FORT_STABLE_X = 35;
-    private static final int FORT_STABLE_Z = 14;
-    private static final int FORT_BACK_ROAD_Z = 20;
-
     public LOTRVillageGenRohan(LOTRBiome biome, float f) {
         super(biome);
         this.gridScale = 14;
@@ -64,6 +53,12 @@ extends LOTRVillageGen {
     @Override
     protected LOTRVillageGen.AbstractInstance<?> createVillageInstance(World world, int i, int k, Random random, LocationInfo loc) {
         return new Instance(this, world, i, k, random, loc);
+    }
+
+    public static enum VillageType {
+        VILLAGE,
+        FORT;
+
     }
 
     public static class Instance
@@ -124,8 +119,8 @@ extends LOTRVillageGen {
             float turn = 0.0f;
             while (turn < 1.0f) {
                 int l;
-                int i;
                 int k;
+                int i;
                 float turnR = (float)Math.toRadians((turn += frac) * 360.0f);
                 float sin = MathHelper.sin((float)turnR);
                 float cos = MathHelper.cos((float)turnR);
@@ -226,10 +221,10 @@ extends LOTRVillageGen {
 
         private void setupFort(Random random) {
             int wallZ;
-            int farmX;
-            int l;
             int l2;
+            int farmX;
             int wallX;
+            int l;
             this.addStructure(new LOTRWorldGenRohanFortress(false), 0, -13, 0, true);
             this.addStructure(new LOTRWorldGenNPCRespawner(false){
 
@@ -287,7 +282,6 @@ extends LOTRVillageGen {
             int i1 = Math.abs(i);
             int k1 = Math.abs(k);
             if (this.villageType == VillageType.VILLAGE) {
-                int d1;
                 int dSq = i * i + k * k;
                 int imn = 20 + random.nextInt(4);
                 if (dSq < imn * imn) {
@@ -298,7 +292,7 @@ extends LOTRVillageGen {
                 if (dSq > omn * omn && dSq < omx * omx) {
                     return LOTRRoadType.PATH;
                 }
-                if (dSq < 2500 && (d1 = Math.abs(i1 - k1)) <= 2 + random.nextInt(4)) {
+                if (dSq < 2500 && Math.abs(i1 - k1) <= 2 + random.nextInt(4)) {
                     return LOTRRoadType.PATH;
                 }
                 if (this.palisade && k < -56 && k > -81 && i1 <= 2 + random.nextInt(4)) {
@@ -326,12 +320,6 @@ extends LOTRVillageGen {
         public boolean isVillageSpecificSurface(World world, int i, int j, int k) {
             return false;
         }
-
-    }
-
-    public static enum VillageType {
-        VILLAGE,
-        FORT;
 
     }
 

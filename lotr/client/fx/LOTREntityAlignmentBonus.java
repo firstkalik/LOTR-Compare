@@ -47,7 +47,7 @@ extends Entity {
         float highestBonus = 0.0f;
         for (LOTRFaction fac : this.factionBonusMap.getChangedFactions()) {
             float bonus = Math.abs(((Float)this.factionBonusMap.get((Object)fac)).floatValue());
-            if (!(bonus > highestBonus)) continue;
+            if (bonus <= highestBonus) continue;
             highestBonus = bonus;
         }
         float conq = Math.abs(this.conquestBonus);

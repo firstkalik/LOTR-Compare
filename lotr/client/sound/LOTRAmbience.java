@@ -78,13 +78,9 @@ import net.minecraftforge.client.event.sound.PlaySoundEvent17;
 import net.minecraftforge.common.MinecraftForge;
 
 public class LOTRAmbience {
-    private int tallGrassCount;
-    private int leafCount;
     private int ticksSinceWight;
     private List<ISound> playingWindSounds = new ArrayList<ISound>();
-    private static final int maxWindSounds = 4;
     private List<ISound> playingSeaSounds = new ArrayList<ISound>();
-    private static final int maxSeaSounds = 3;
     private ISound playingJazzMusic;
     private int jazzPlayerID;
     private static final ResourceLocation jazzMusicPath = new ResourceLocation("lotr:music.jazzelf");
@@ -188,12 +184,14 @@ public class LOTRAmbience {
                         }
                     }
                     for (int l = 0; l < 2; ++l) {
+                        float f;
                         int i1 = i + MathHelper.getRandomIntegerInRange((Random)rand, (int)(-xzRange), (int)xzRange);
                         int k1 = k + MathHelper.getRandomIntegerInRange((Random)rand, (int)(-xzRange), (int)xzRange);
                         int j1 = j + MathHelper.getRandomIntegerInRange((Random)rand, (int)-16, (int)16);
                         if (j1 < minWindHeight || !world.canBlockSeeTheSky(i1, j1, k1)) continue;
                         float windiness = (float)(j1 - minWindHeight) / (float)(fullWindHeight - minWindHeight);
-                        if ((windiness = MathHelper.clamp_float((float)windiness, (float)0.0f, (float)1.0f)) < rand.nextFloat()) continue;
+                        windiness = MathHelper.clamp_float((float)windiness, (float)0.0f, (float)1.0f);
+                        if (f < rand.nextFloat()) continue;
                         float x1 = (float)i1 + 0.5f;
                         float y1 = (float)j1 + 0.5f;
                         float z1 = (float)k1 + 0.5f;
@@ -216,9 +214,8 @@ public class LOTRAmbience {
             if (enableAmbience) {
                 if (this.playingSeaSounds.size() < 3) {
                     if (biome instanceof LOTRBiomeGenOcean || biome instanceof LOTRBiomeGenBeach || biome instanceof LOTRBiomeGenLindonCoast || biome instanceof LOTRBiomeGenFarHaradCoast) {
-                        float[] rangeChecks;
                         xzRange = 64;
-                        for (float fr : rangeChecks = new float[]{0.25f, 0.5f, 0.75f, 1.0f}) {
+                        for (float fr : new float[]{0.25f, 0.5f, 0.75f, 1.0f}) {
                             int range = (int)((float)xzRange * fr);
                             for (int l = 0; l < 8; ++l) {
                                 int i1 = i + MathHelper.getRandomIntegerInRange((Random)rand, (int)(-range), (int)range);

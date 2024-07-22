@@ -24,7 +24,6 @@ import java.util.List;
 import lotr.common.LOTRMod;
 import lotr.common.entity.npc.LOTREntityNPC;
 import lotr.common.item.LOTRItemCoin;
-import lotr.common.quest.IPickpocketable;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -41,18 +40,16 @@ public class LOTRContainerCoinExchange
 extends Container {
     public IInventory coinInputInv = new InventoryCoinExchangeSlot(1);
     public IInventory exchangeInv = new InventoryCoinExchangeSlot(2);
-    private World theWorld;
     public LOTREntityNPC theTraderNPC;
     public boolean exchanged = false;
 
     public LOTRContainerCoinExchange(EntityPlayer entityplayer, LOTREntityNPC npc) {
         int i;
-        this.theWorld = entityplayer.worldObj;
         this.theTraderNPC = npc;
         this.addSlotToContainer(new Slot(this.coinInputInv, 0, 80, 46){
 
             public boolean isItemValid(ItemStack itemstack) {
-                return super.isItemValid(itemstack) && itemstack != null && LOTRContainerCoinExchange.isValidCoin(itemstack);
+                return super.isItemValid(itemstack) && itemstack != null && itemstack.getItem() == LOTRMod.silverCoin;
             }
         });
         class SlotCoinResult
@@ -80,10 +77,6 @@ extends Container {
             this.addSlotToContainer(new Slot((IInventory)entityplayer.inventory, i, 8 + i * 18, 164));
         }
         this.onCraftMatrixChanged(this.coinInputInv);
-    }
-
-    public static boolean isValidCoin(ItemStack item) {
-        return item.getItem() == LOTRMod.silverCoin && !IPickpocketable.Helper.isPickpocketed(item);
     }
 
     public boolean canInteractWith(EntityPlayer entityplayer) {
@@ -116,8 +109,8 @@ extends Container {
     }
 
     public void detectAndSendChanges() {
-        for (int i = 0; i < this.crafters.size(); ++i) {
-            ICrafting crafting = (ICrafting)this.crafters.get(i);
+        for (Object element : this.crafters) {
+            ICrafting crafting = (ICrafting)element;
             this.sendClientExchangedData(crafting);
         }
         super.detectAndSendChanges();
@@ -138,7 +131,7 @@ extends Container {
         if (inv == this.coinInputInv) {
             if (!this.exchanged) {
                 ItemStack coin = this.coinInputInv.getStackInSlot(0);
-                if (coin != null && coin.stackSize > 0 && LOTRContainerCoinExchange.isValidCoin(coin)) {
+                if (coin != null && coin.getItem() == LOTRMod.silverCoin && coin.stackSize > 0) {
                     int coins = coin.stackSize;
                     int coinType = coin.getItemDamage();
                     if (coinType > 0) {
@@ -177,8 +170,8 @@ extends Container {
     public void onContainerClosed(EntityPlayer entityplayer) {
         super.onContainerClosed(entityplayer);
         if (!entityplayer.worldObj.isRemote) {
-            ItemStack itemstack;
             int i;
+            ItemStack itemstack;
             for (i = 0; i < this.coinInputInv.getSizeInventory(); ++i) {
                 itemstack = this.coinInputInv.getStackInSlotOnClosing(i);
                 if (itemstack == null) continue;
@@ -208,7 +201,7 @@ extends Container {
             } else {
                 boolean flag = false;
                 Slot coinSlot = (Slot)this.inventorySlots.get(0);
-                ItemStack coinStack = coinSlot.getStack();
+                coinSlot.getStack();
                 if (coinSlot.isItemValid(itemstack1) && this.mergeItemStack(itemstack1, 0, 1, true)) {
                     flag = true;
                 }

@@ -4,8 +4,6 @@
  * Could not load the following classes:
  *  cpw.mods.fml.common.FMLLog
  *  cpw.mods.fml.common.ObfuscationReflectionHelper
- *  cpw.mods.fml.common.registry.RegistryDelegate
- *  cpw.mods.fml.common.registry.RegistryDelegate$Delegate
  *  net.minecraft.block.Block
  *  net.minecraft.init.Blocks
  *  net.minecraft.init.Items
@@ -34,8 +32,6 @@ package lotr.common.block;
 
 import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.ObfuscationReflectionHelper;
-import cpw.mods.fml.common.registry.RegistryDelegate;
-import io.gitlab.dwarfyassassin.lotrucp.core.hooks.GenericModHooks;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.List;
@@ -78,10 +74,8 @@ public class LOTRBlockReplacement {
             if (oldItem != null) {
                 itemblockName = Reflect.getItemName(oldItem);
             }
-            GenericModHooks.removeBlockFromOreDictionary(oldBlock);
             newBlock.setBlockName(blockName);
             Reflect.overwriteBlockList(oldBlock, newBlock);
-            Reflect.setDelegateName(newBlock.delegate, oldBlock.delegate.name());
             Reflect.getUnderlyingIntMap(Block.blockRegistry).func_148746_a((Object)newBlock, id);
             Reflect.getUnderlyingObjMap(Block.blockRegistry).put(registryName, newBlock);
             if (!initForgeHooks) {
@@ -92,16 +86,14 @@ public class LOTRBlockReplacement {
                 newBlock.setHarvestLevel(oldBlock.getHarvestTool(meta), oldBlock.getHarvestLevel(meta), meta);
             }
             if (itemClass != null) {
-                Constructor<?>[] itemCtors;
                 Constructor<?> itemCtor = null;
-                for (Constructor<?> ct : itemCtors = itemClass.getConstructors()) {
+                for (Constructor<?> ct : itemClass.getConstructors()) {
                     Class<?>[] params = ct.getParameterTypes();
                     if (params.length != 1 || !Block.class.isAssignableFrom(params[0])) continue;
                     itemCtor = ct;
                     break;
                 }
                 ItemBlock itemblock = ((ItemBlock)itemCtor.newInstance(new Object[]{newBlock})).setUnlocalizedName(itemblockName);
-                Reflect.setDelegateName(itemblock.delegate, oldItem.delegate.name());
                 Reflect.getUnderlyingIntMap(Item.itemRegistry).func_148746_a((Object)itemblock, id);
                 Reflect.getUnderlyingObjMap(Item.itemRegistry).put(registryName, itemblock);
                 LOTRBlockReplacement.replaceBlockStats(id, newBlock, itemblock);
@@ -125,10 +117,8 @@ public class LOTRBlockReplacement {
             int id = Item.itemRegistry.getIDForObject((Object)oldItem);
             String itemName = Reflect.getItemName(oldItem);
             String registryName = Item.itemRegistry.getNameForObject((Object)oldItem);
-            GenericModHooks.removeItemFromOreDictionary(oldItem);
             newItem.setUnlocalizedName(itemName);
             Reflect.overwriteItemList(oldItem, newItem);
-            Reflect.setDelegateName(newItem.delegate, oldItem.delegate.name());
             Reflect.getUnderlyingIntMap(Item.itemRegistry).func_148746_a((Object)newItem, id);
             Reflect.getUnderlyingObjMap(Item.itemRegistry).put(registryName, newItem);
             LOTRBlockReplacement.replaceItemStats(id, newItem);
@@ -169,18 +159,17 @@ public class LOTRBlockReplacement {
         String newItemName = newItem.getUnlocalizedName();
         List craftingRecipes = CraftingManager.getInstance().getRecipeList();
         for (Object obj : craftingRecipes) {
-            ShapedRecipes recipe;
             ItemStack output;
-            if (obj instanceof ShapedRecipes && (output = (recipe = (ShapedRecipes)obj).getRecipeOutput()) != null && output.getItem() != null && output.getItem().getUnlocalizedName().equals(newItemName)) {
+            if (obj instanceof ShapedRecipes && (output = ((ShapedRecipes)obj).getRecipeOutput()) != null && output.getItem() != null && output.getItem().getUnlocalizedName().equals(newItemName)) {
                 LOTRBlockReplacement.injectReplacementItem(output, newItem);
             }
-            if (obj instanceof ShapelessRecipes && (output = (recipe = (ShapelessRecipes)obj).getRecipeOutput()) != null && output.getItem() != null && output.getItem().getUnlocalizedName().equals(newItemName)) {
+            if (obj instanceof ShapelessRecipes && (output = ((ShapelessRecipes)obj).getRecipeOutput()) != null && output.getItem() != null && output.getItem().getUnlocalizedName().equals(newItemName)) {
                 LOTRBlockReplacement.injectReplacementItem(output, newItem);
             }
-            if (obj instanceof ShapedOreRecipe && (output = (recipe = (ShapedOreRecipe)obj).getRecipeOutput()) != null && output.getItem() != null && output.getItem().getUnlocalizedName().equals(newItemName)) {
+            if (obj instanceof ShapedOreRecipe && (output = ((ShapedOreRecipe)obj).getRecipeOutput()) != null && output.getItem() != null && output.getItem().getUnlocalizedName().equals(newItemName)) {
                 LOTRBlockReplacement.injectReplacementItem(output, newItem);
             }
-            if (!(obj instanceof ShapelessOreRecipe) || (output = (recipe = (ShapelessOreRecipe)obj).getRecipeOutput()) == null || output.getItem() == null || !output.getItem().getUnlocalizedName().equals(newItemName)) continue;
+            if (!(obj instanceof ShapelessOreRecipe) || (output = ((ShapelessOreRecipe)obj).getRecipeOutput()) == null || output.getItem() == null || !output.getItem().getUnlocalizedName().equals(newItemName)) continue;
             LOTRBlockReplacement.injectReplacementItem(output, newItem);
         }
         for (Object obj : AchievementList.achievementList) {
@@ -203,9 +192,8 @@ public class LOTRBlockReplacement {
 
         private static void overwriteBlockList(Block oldBlock, Block newBlock) {
             try {
-                Field[] declaredFields;
                 Field field = null;
-                for (Field f : declaredFields = Blocks.class.getDeclaredFields()) {
+                for (Field f : Blocks.class.getDeclaredFields()) {
                     LOTRReflection.unlockFinalField(f);
                     if (f.get(null) != oldBlock) continue;
                     field = f;
@@ -220,9 +208,8 @@ public class LOTRBlockReplacement {
 
         private static void overwriteItemList(Item oldItem, Item newItem) {
             try {
-                Field[] declaredFields;
                 Field field = null;
-                for (Field f : declaredFields = Items.class.getDeclaredFields()) {
+                for (Field f : Items.class.getDeclaredFields()) {
                     LOTRReflection.unlockFinalField(f);
                     if (f.get(null) != oldItem) continue;
                     field = f;
@@ -272,16 +259,6 @@ public class LOTRBlockReplacement {
             catch (Exception e) {
                 LOTRReflection.logFailure(e);
                 return null;
-            }
-        }
-
-        private static void setDelegateName(RegistryDelegate rd, String name) {
-            RegistryDelegate.Delegate delegate = (RegistryDelegate.Delegate)rd;
-            try {
-                ObfuscationReflectionHelper.setPrivateValue(RegistryDelegate.Delegate.class, (Object)delegate, (Object)name, (String[])new String[]{"name"});
-            }
-            catch (Exception e) {
-                LOTRReflection.logFailure(e);
             }
         }
 

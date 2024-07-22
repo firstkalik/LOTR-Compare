@@ -40,9 +40,11 @@ import net.minecraft.world.World;
 public class LOTRItemGandalfStaffWhite
 extends LOTRItemSword
 implements LOTRStoryItem {
+    protected float lotrWeaponDamage;
+
     public LOTRItemGandalfStaffWhite() {
         super(LOTRMaterial.HIGH_ELVEN);
-        this.setMaxDamage(1500);
+        this.setMaxDamage(2000);
         this.setCreativeTab((CreativeTabs)LOTRCreativeTabs.tabStory);
         this.lotrWeaponDamage = 8.0f;
     }
@@ -60,7 +62,7 @@ implements LOTRStoryItem {
     }
 
     public int getMaxItemUseDuration(ItemStack itemstack) {
-        return 40;
+        return 30;
     }
 
     public EnumAction getItemUseAction(ItemStack itemstack) {

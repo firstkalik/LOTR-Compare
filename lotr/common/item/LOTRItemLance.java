@@ -16,7 +16,7 @@ import net.minecraft.item.Item;
 
 public class LOTRItemLance
 extends LOTRItemPolearmLong {
-    public static final UUID lanceSpeedBoost_id = UUID.fromString("4da96302-7457-42ed-9709-f1be0c465ec3");
+    public static final UUID lanceSpeedBoost_id = UUID.fromString("cffdd9e5-bdd4-4127-8097-c8cafbf56c63");
     public static final AttributeModifier lanceSpeedBoost = new AttributeModifier(lanceSpeedBoost_id, "Lance speed boost", -0.2, 2).setSaved(false);
 
     public LOTRItemLance(LOTRMaterial material) {

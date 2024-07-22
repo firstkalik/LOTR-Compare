@@ -40,7 +40,7 @@ implements LOTRUnitTradeable {
     public LOTREntityTauredainChieftain(World world) {
         super(world);
         this.addTargetTasks(false);
-        this.npcCape = LOTRCapes.TAURETHRIM;
+        this.npcCape = LOTRCapes.ALIGNMENT_TAURETHRIM.capeTexture;
     }
 
     @Override
@@ -72,7 +72,7 @@ implements LOTRUnitTradeable {
     }
 
     @Override
-    public LOTRInvasions getWarhorn() {
+    public LOTRInvasions getConquestHorn() {
         return LOTRInvasions.TAUREDAIN;
     }
 

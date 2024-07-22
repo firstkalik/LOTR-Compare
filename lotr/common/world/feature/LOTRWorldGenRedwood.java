@@ -55,8 +55,8 @@ extends WorldGenAbstractTree {
         }
         boolean flag = true;
         if (j >= 1 && j + height + 1 <= 256) {
-            int k1;
             int i1;
+            int k1;
             for (int j1 = j; j1 <= j + 1 + height; ++j1) {
                 int range = 1;
                 if (j1 == j) {
@@ -91,11 +91,11 @@ extends WorldGenAbstractTree {
                 }
             }
             if (canGrow) {
-                int k2;
-                int i2;
-                int j1;
-                int i13;
                 int k13;
+                int i13;
+                int i2;
+                int k2;
+                int j1;
                 int trunkWidthHere;
                 for (i1 = i - this.trunkWidth; i1 <= i + this.trunkWidth + this.extraTrunkWidth; ++i1) {
                     for (k1 = k - this.trunkWidth; k1 <= k + this.trunkWidth + this.extraTrunkWidth; ++k1) {
@@ -167,7 +167,7 @@ extends WorldGenAbstractTree {
                             int j3 = j + j1;
                             int k3 = k + k13;
                             if (narrowHeight > -1 && j3 < narrowHeight && j3 > j + 15 && j3 < leafStart && i2 == trunkWidthHere && k2 == trunkWidthHere) continue;
-                            Block block = world.getBlock(i3, j3, k3);
+                            world.getBlock(i3, j3, k3);
                             if (!this.isReplaceable(world, i3, j3, k3)) continue;
                             this.setBlockAndNotifyAdequately(world, i3, j3, k3, this.woodBlock, this.woodMeta);
                         }
@@ -192,7 +192,7 @@ extends WorldGenAbstractTree {
                         while (world.getBlock(rootX, rootY, k14).isReplaceable((IBlockAccess)world, rootX, rootY, rootZ)) {
                             this.setBlockAndNotifyAdequately(world, rootX, rootY, rootZ, this.woodBlock, this.woodMeta | 0xC);
                             world.getBlock(rootX, rootY - 1, rootZ).onPlantGrow(world, rootX, rootY - 1, rootZ, rootX, rootY, rootZ);
-                            if (--rootY >= j - 3 - random.nextInt(3)) continue;
+                            if (--rootY < j - 3 - random.nextInt(3)) continue;
                         }
                     }
                 }
@@ -201,13 +201,6 @@ extends WorldGenAbstractTree {
             return false;
         }
         return false;
-    }
-
-    private void growLeaves(World world, int i, int j, int k) {
-        Block block = world.getBlock(i, j, k);
-        if (block.isReplaceable((IBlockAccess)world, i, j, k) || block.isLeaves((IBlockAccess)world, i, j, k)) {
-            this.setBlockAndNotifyAdequately(world, i, j, k, this.leafBlock, this.leafMeta);
-        }
     }
 }
 

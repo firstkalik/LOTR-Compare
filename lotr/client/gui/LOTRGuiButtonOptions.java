@@ -4,6 +4,7 @@
  * Could not load the following classes:
  *  net.minecraft.client.Minecraft
  *  net.minecraft.client.gui.FontRenderer
+ *  net.minecraft.client.gui.Gui
  *  net.minecraft.client.gui.GuiButton
  *  net.minecraft.util.StatCollector
  */
@@ -12,6 +13,7 @@ package lotr.client.gui;
 import java.util.List;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.util.StatCollector;
 
@@ -43,7 +45,7 @@ extends GuiButton {
             int stringWidth = 200;
             int stringHeight = mc.fontRenderer.listFormattedStringToWidth(s, stringWidth).size() * mc.fontRenderer.FONT_HEIGHT;
             int offset = 10;
-            LOTRGuiButtonOptions.drawRect((int)(i += offset), (int)(j += offset), (int)(i + stringWidth + border * 2), (int)(j + stringHeight + border * 2), (int)-1073741824);
+            Gui.drawRect((int)(i += offset), (int)(j += offset), (int)(i + stringWidth + border * 2), (int)(j + stringHeight + border * 2), (int)-1073741824);
             mc.fontRenderer.drawSplitString(s, i + border, j + border, stringWidth, 16777215);
         }
     }

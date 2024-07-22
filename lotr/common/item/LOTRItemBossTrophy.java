@@ -104,7 +104,7 @@ extends Item {
                 return false;
             }
             Block block = world.getBlock(i, j - 1, k);
-            int meta = world.getBlockMetadata(i, j - 1, k);
+            world.getBlockMetadata(i, j - 1, k);
             if (block.isSideSolid((IBlockAccess)world, i, j - 1, k, ForgeDirection.UP) && !world.isRemote) {
                 LOTREntityBossTrophy trophy = new LOTREntityBossTrophy(world);
                 trophy.setLocationAndAngles((double)((float)i + 0.5f), (double)j, (double)((float)k + 0.5f), 180.0f - entityplayer.rotationYaw % 360.0f, 0.0f);

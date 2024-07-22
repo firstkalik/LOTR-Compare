@@ -34,15 +34,15 @@ extends CommandBase {
         if (args.length >= 2) {
             if (args[0].equals("set")) {
                 long time = 0L;
-                time = args[1].equals("day") ? Math.round((double)LOTRTime.DAY_LENGTH * 0.03) : (args[1].equals("night") ? Math.round((double)LOTRTime.DAY_LENGTH * 0.6) : (long)LOTRCommandTime.parseIntWithMin((ICommandSender)sender, (String)args[1], (int)0));
+                time = args[1].equals("day") ? Math.round((double)LOTRTime.DAY_LENGTH * 0.03) : (args[1].equals("night") ? Math.round((double)LOTRTime.DAY_LENGTH * 0.6) : (long)CommandBase.parseIntWithMin((ICommandSender)sender, (String)args[1], (int)0));
                 LOTRTime.setWorldTime(time);
-                LOTRCommandTime.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.time.set", (Object[])new Object[]{time});
+                CommandBase.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.time.set", (Object[])new Object[]{time});
                 return;
             }
             if (args[0].equals("add")) {
-                int time = LOTRCommandTime.parseIntWithMin((ICommandSender)sender, (String)args[1], (int)0);
+                int time = CommandBase.parseIntWithMin((ICommandSender)sender, (String)args[1], (int)0);
                 LOTRTime.addWorldTime(time);
-                LOTRCommandTime.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.time.add", (Object[])new Object[]{time});
+                CommandBase.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.time.add", (Object[])new Object[]{time});
                 return;
             }
         }
@@ -51,10 +51,10 @@ extends CommandBase {
 
     public List addTabCompletionOptions(ICommandSender sender, String[] args) {
         if (args.length == 1) {
-            return LOTRCommandTime.getListOfStringsMatchingLastWord((String[])args, (String[])new String[]{"set", "add"});
+            return CommandBase.getListOfStringsMatchingLastWord((String[])args, (String[])new String[]{"set", "add"});
         }
         if (args.length == 2 && args[0].equals("set")) {
-            return LOTRCommandTime.getListOfStringsMatchingLastWord((String[])args, (String[])new String[]{"day", "night"});
+            return CommandBase.getListOfStringsMatchingLastWord((String[])args, (String[])new String[]{"day", "night"});
         }
         return null;
     }

@@ -16,10 +16,7 @@ import lotr.client.LOTRSpeechClient;
 import lotr.client.model.LOTRModelHuman;
 import lotr.client.model.LOTRModelWizardHat;
 import lotr.client.render.entity.LOTRRenderBiped;
-import lotr.common.LOTRCapes;
-import lotr.common.LOTRMod;
 import lotr.common.entity.npc.LOTREntityGandalf;
-import lotr.common.entity.npc.LOTREntityNPC;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelBiped;
@@ -33,9 +30,6 @@ extends LOTRRenderBiped {
     private static ResourceLocation skin = new ResourceLocation("lotr:mob/char/gandalf.png");
     private static ResourceLocation hat = new ResourceLocation("lotr:mob/char/gandalf_hat.png");
     private static ResourceLocation cloak = new ResourceLocation("lotr:mob/char/gandalf_cloak.png");
-    private static ResourceLocation skin_santa = new ResourceLocation("lotr:mob/char/santa.png");
-    private static ResourceLocation hat_santa = new ResourceLocation("lotr:mob/char/santa_hat.png");
-    private static ResourceLocation cloak_santa = new ResourceLocation("lotr:mob/char/santa_cloak.png");
     private ModelBiped hatModel = new LOTRModelWizardHat(1.0f);
     private ModelBiped cloakModel = new LOTRModelHuman(0.6f, false);
 
@@ -45,9 +39,6 @@ extends LOTRRenderBiped {
 
     @Override
     public ResourceLocation getEntityTexture(Entity entity) {
-        if (LOTRMod.isChristmas()) {
-            return skin_santa;
-        }
         return skin;
     }
 
@@ -65,31 +56,15 @@ extends LOTRRenderBiped {
         LOTREntityGandalf gandalf = (LOTREntityGandalf)entity;
         if (pass == 0 && gandalf.getEquipmentInSlot(4) == null) {
             this.setRenderPassModel((ModelBase)this.hatModel);
-            if (LOTRMod.isChristmas()) {
-                this.bindTexture(hat_santa);
-            } else {
-                this.bindTexture(hat);
-            }
+            this.bindTexture(hat);
             return 1;
         }
         if (pass == 1 && gandalf.getEquipmentInSlot(3) == null) {
             this.setRenderPassModel((ModelBase)this.cloakModel);
-            if (LOTRMod.isChristmas()) {
-                this.bindTexture(cloak_santa);
-            } else {
-                this.bindTexture(cloak);
-            }
+            this.bindTexture(cloak);
             return 1;
         }
         return super.shouldRenderPass((EntityLiving)gandalf, pass, f);
-    }
-
-    @Override
-    protected ResourceLocation getCapeToRender(LOTREntityNPC entity) {
-        if (LOTRMod.isChristmas()) {
-            return LOTRCapes.GANDALF_SANTA;
-        }
-        return super.getCapeToRender(entity);
     }
 }
 

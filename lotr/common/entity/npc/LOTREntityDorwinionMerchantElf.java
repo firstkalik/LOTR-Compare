@@ -14,10 +14,12 @@ import java.util.Random;
 import lotr.common.LOTRAchievement;
 import lotr.common.LOTRLevelData;
 import lotr.common.LOTRMod;
+import lotr.common.entity.animal.LOTREntityHorse;
 import lotr.common.entity.npc.LOTREntityDorwinionElf;
 import lotr.common.entity.npc.LOTREntityDorwinionGuard;
 import lotr.common.entity.npc.LOTREntityDorwinionMerchantMan;
 import lotr.common.entity.npc.LOTREntityNPC;
+import lotr.common.entity.npc.LOTRNPCMount;
 import lotr.common.entity.npc.LOTRTradeEntries;
 import lotr.common.entity.npc.LOTRTravellingTrader;
 import lotr.common.fac.LOTRFaction;
@@ -34,11 +36,23 @@ implements LOTRTravellingTrader {
     public LOTREntityDorwinionMerchantElf(World world) {
         super(world);
         this.addTargetTasks(false);
+        this.spawnRidingHorse = this.rand.nextInt(4) == 0;
+    }
+
+    @Override
+    public LOTRNPCMount createMountToRide() {
+        LOTREntityHorse horse = (LOTREntityHorse)super.createMountToRide();
+        horse.setMountArmor(null);
+        return horse;
     }
 
     @Override
     public LOTRTradeEntries getBuyPool() {
         return LOTRTradeEntries.DORWINION_MERCHANT_BUY;
+    }
+
+    public int getTotalArmorValue() {
+        return 12;
     }
 
     @Override

@@ -57,10 +57,10 @@ extends LOTRWorldGenBreeStructure {
 
     @Override
     public boolean generateWithSetRotation(World world, Random random, int i, int j, int k, int rotation) {
+        int step;
         int k1;
         int i1;
         int j2;
-        int step;
         int j1;
         this.setOriginAndRotation(world, i, j, k, rotation, 13);
         this.setupRandomBlocks(random);
@@ -113,7 +113,6 @@ extends LOTRWorldGenBreeStructure {
         this.associateBlockMetaAlias("LEAF_FLOOR", LOTRMod.fallenLeaves, 0);
         this.setBlockAliasChance("LEAF_FLOOR", 0.5f);
         this.generateStrScan(world, random, 0, 0, 0);
-        int maxSteps = 12;
         for (int i12 = -1; i12 <= 1; ++i12) {
             int k12;
             for (step = 0; step < 12 && !this.isOpaque(world, i12, j1 = -1 - step, k12 = -13 - step); ++step) {

@@ -69,11 +69,13 @@ extends EntityAIBase {
         List players = this.theBanditAsNPC.worldObj.getEntitiesWithinAABB(EntityPlayer.class, this.theBanditAsNPC.boundingBox.expand(this.range, this.range, this.range));
         double distance = this.range;
         EntityPlayer ret = null;
-        for (int i = 0; i < players.size(); ++i) {
+        for (Object player : players) {
             double d;
-            EntityPlayer entityplayer = (EntityPlayer)players.get(i);
-            if (entityplayer.capabilities.isCreativeMode || !((d = (double)this.theBanditAsNPC.getDistanceToEntity((Entity)entityplayer)) < distance)) continue;
-            distance = d;
+            EntityPlayer entityplayer = (EntityPlayer)player;
+            if (entityplayer.capabilities.isCreativeMode) continue;
+            double d2 = this.theBanditAsNPC.getDistanceToEntity((Entity)entityplayer);
+            if (d >= distance) continue;
+            distance = d2;
             ret = entityplayer;
         }
         return ret;

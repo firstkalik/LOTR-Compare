@@ -32,8 +32,8 @@ extends LOTRWorldGenRohanStructure {
     @Override
     public boolean generateWithSetRotation(World world, Random random, int i, int j, int k, int rotation) {
         int k1;
-        int i1;
         int j1;
+        int i1;
         this.setOriginAndRotation(world, i, j, k, rotation, 2);
         this.setupRandomBlocks(random);
         if (this.restrictions) {
@@ -84,7 +84,7 @@ extends LOTRWorldGenRohanStructure {
                     }
                     this.setBlockAndMetadata(world, i1, 9, k1, this.plankBlock, this.plankMeta);
                 }
-                if (i2 >= 5 && i2 <= 7 && k2 == 2 || i2 == 4 | i2 == 8 && k2 <= 1) {
+                if (i2 >= 5 && i2 <= 7 && k2 == 2 || i2 == 4 || i2 == 8 && k2 <= 1) {
                     this.setBlockAndMetadata(world, i1, 9, k1, this.plankSlabBlock, this.plankSlabMeta | 8);
                 }
                 if (i2 == 9 && k2 <= 1) {
@@ -131,7 +131,7 @@ extends LOTRWorldGenRohanStructure {
         this.setBlockAndMetadata(world, 0, 6, 0, this.fenceBlock, this.fenceMeta);
         for (int i12 : new int[]{-1, 1}) {
             this.setBlockAndMetadata(world, i12, 6, 0, this.woodBeamBlock, this.woodBeamMeta);
-            this.setBlockAndMetadata(world, i12, 7, 0, Blocks.lever, 13);
+            this.setBlockAndMetadata(world, i12, 7, 0, Blocks.lever, 5);
         }
         for (int i12 : new int[]{-3, 3}) {
             this.placeWallBanner(world, i12, 5, -2, this.bannerType, 2);
@@ -181,9 +181,9 @@ extends LOTRWorldGenRohanStructure {
             this.spawnNPCAndSetHome(guard, world, i12, j1, k14, 8);
         }
         for (int k15 = 3; k15 <= 4; ++k15) {
-            int j2;
             int i12;
             int step;
+            int j2;
             int maxStep = 16;
             for (step = 0; step < maxStep && !this.isOpaque(world, i12 = -6 - step, j1 = 5 - (step <= 1 ? 0 : step - 2), k15); ++step) {
                 if (step <= 1) {

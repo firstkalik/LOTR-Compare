@@ -45,6 +45,13 @@ implements IMessage {
         this.type = FXType.values()[typeID];
     }
 
+    public static enum FXType {
+        HEARTS,
+        EATING,
+        SMOKE;
+
+    }
+
     public static class Handler
     implements IMessageHandler<LOTRPacketNPCFX, IMessage> {
         public IMessage onMessage(LOTRPacketNPCFX packet, MessageContext context) {
@@ -62,13 +69,6 @@ implements IMessage {
             }
             return null;
         }
-    }
-
-    public static enum FXType {
-        HEARTS,
-        EATING,
-        SMOKE;
-
     }
 
 }

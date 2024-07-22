@@ -21,6 +21,7 @@
  *  net.minecraft.entity.ai.EntityAIWatchClosest
  *  net.minecraft.entity.ai.attributes.IAttribute
  *  net.minecraft.entity.ai.attributes.IAttributeInstance
+ *  net.minecraft.entity.item.EntityItem
  *  net.minecraft.entity.passive.EntityAnimal
  *  net.minecraft.entity.player.EntityPlayer
  *  net.minecraft.init.Blocks
@@ -58,6 +59,7 @@ import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -97,6 +99,22 @@ extends EntityAnimal {
         this.tasks.addTask(7, (EntityAIBase)new EntityAILookIdle((EntityLiving)this));
     }
 
+    protected void dropFewItems(boolean flag, int i) {
+        int k;
+        int feathers = this.rand.nextInt(3) + this.rand.nextInt(i + 1);
+        for (int l = 0; l < feathers; ++l) {
+            this.dropItem(Items.feather, 1);
+        }
+        int j3 = this.rand.nextInt(4) + this.rand.nextInt(1 + i);
+        for (k = 0; k < j3; ++k) {
+            this.dropItem(Items.bone, 1);
+        }
+        k = 1 + this.rand.nextInt(4) + this.rand.nextInt(i + 1);
+        for (int j1 = 0; j1 < k; ++j1) {
+            this.dropItem(Items.leather, 1);
+        }
+    }
+
     public void entityInit() {
         super.entityInit();
         this.dataWatcher.addObject(16, (Object)0);
@@ -131,7 +149,6 @@ extends EntityAnimal {
     }
 
     public void onLivingUpdate() {
-        Block block;
         super.onLivingUpdate();
         this.field_756_e = this.field_752_b;
         this.field_757_d = this.destPos;
@@ -150,7 +167,7 @@ extends EntityAnimal {
             this.motionY *= 0.6;
         }
         this.field_752_b += this.field_755_h * 2.0f;
-        if (!(this.worldObj.isRemote || this.isChild() || this.isInLove() || this.getFishingTickCur() != 0 || this.rand.nextInt(600) != 0 || (block = this.worldObj.getBlock(MathHelper.floor_double((double)this.posX), MathHelper.floor_double((double)this.boundingBox.minY), MathHelper.floor_double((double)this.posZ))) != Blocks.water)) {
+        if (!(this.worldObj.isRemote || this.isChild() || this.isInLove() || this.getFishingTickCur() != 0 || this.rand.nextInt(600) != 0 || this.worldObj.getBlock(MathHelper.floor_double((double)this.posX), MathHelper.floor_double((double)this.boundingBox.minY), MathHelper.floor_double((double)this.posZ)) != Blocks.water)) {
             this.setFishingTick(200, 200);
         }
         if (this.getFishingTickCur() > 0) {

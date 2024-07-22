@@ -16,7 +16,13 @@ import lotr.client.render.entity.LOTRGlowingEyes;
 import lotr.client.render.entity.LOTRRandomSkins;
 import lotr.client.render.entity.LOTRRenderBiped;
 import lotr.common.entity.LOTRRandomSkinEntity;
+import lotr.common.entity.npc.LOTREntityAngbandBerserk;
+import lotr.common.entity.npc.LOTREntityAngbandBerserk2;
+import lotr.common.entity.npc.LOTREntityAngbandCap;
+import lotr.common.entity.npc.LOTREntityAngmarOrcWarrior;
 import lotr.common.entity.npc.LOTREntityBlackUruk;
+import lotr.common.entity.npc.LOTREntityBlackUrukBerserk;
+import lotr.common.entity.npc.LOTREntityDolGuldurUrukBerserk;
 import lotr.common.entity.npc.LOTREntityOrc;
 import lotr.common.entity.npc.LOTREntityUrukHai;
 import lotr.common.entity.npc.LOTREntityUrukHaiBerserker;
@@ -72,6 +78,24 @@ extends LOTRRenderBiped {
             GL11.glScalef((float)0.85f, (float)0.85f, (float)0.85f);
         } else if (orc instanceof LOTREntityUrukHaiBerserker) {
             float scale = LOTREntityUrukHaiBerserker.BERSERKER_SCALE;
+            GL11.glScalef((float)scale, (float)scale, (float)scale);
+        } else if (orc instanceof LOTREntityBlackUrukBerserk) {
+            float scale = LOTREntityBlackUrukBerserk.BERSERKER_SCALE;
+            GL11.glScalef((float)scale, (float)scale, (float)scale);
+        } else if (orc instanceof LOTREntityAngbandCap) {
+            float scale = LOTREntityAngbandCap.BERSERKER_SCALE;
+            GL11.glScalef((float)scale, (float)scale, (float)scale);
+        } else if (orc instanceof LOTREntityDolGuldurUrukBerserk) {
+            float scale = LOTREntityDolGuldurUrukBerserk.BERSERKER_SCALE;
+            GL11.glScalef((float)scale, (float)scale, (float)scale);
+        } else if (orc instanceof LOTREntityAngbandBerserk) {
+            float scale = LOTREntityAngbandBerserk.BERSERKER_SCALE;
+            GL11.glScalef((float)scale, (float)scale, (float)scale);
+        } else if (orc instanceof LOTREntityAngmarOrcWarrior) {
+            float scale = LOTREntityAngmarOrcWarrior.BERSERKER_SCALE;
+            GL11.glScalef((float)scale, (float)scale, (float)scale);
+        } else if (orc instanceof LOTREntityAngbandBerserk2) {
+            float scale = LOTREntityAngbandBerserk2.BERSERKER_SCALE;
             GL11.glScalef((float)scale, (float)scale, (float)scale);
         }
     }

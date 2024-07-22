@@ -10,12 +10,15 @@
  *  net.minecraft.util.IChatComponent
  *  net.minecraft.util.MathHelper
  *  net.minecraft.util.StatCollector
+ *  org.apache.logging.log4j.Logger
  */
 package lotr.common.fac;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
+import java.text.ParseException;
 import lotr.common.fac.LOTRFaction;
+import lotr.common.util.LOTRLog;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatComponentTranslation;
@@ -24,6 +27,7 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.StatCollector;
+import org.apache.logging.log4j.Logger;
 
 public class LOTRAlignmentValues {
     public static final float MAX_ALIGNMENT = 10000.0f;
@@ -53,6 +57,15 @@ public class LOTRAlignmentValues {
     }
 
     private static String formatAlignForDisplay(float alignment, DecimalFormat dFormat, boolean prefixPlus) {
+        LOTRAlignmentValues.setupDecimalFormat(dFormat);
+        String s = dFormat.format(alignment);
+        if (prefixPlus && !s.startsWith("-")) {
+            s = "+" + s;
+        }
+        return s;
+    }
+
+    private static DecimalFormat setupDecimalFormat(DecimalFormat dFormat) {
         String groupSeparator;
         char decimalSeparatorChar = '.';
         char groupSeparatorChar = ',';
@@ -66,29 +79,41 @@ public class LOTRAlignmentValues {
         alignFormatSymbols.setDecimalSeparator(decimalSeparatorChar);
         alignFormatSymbols.setGroupingSeparator(groupSeparatorChar);
         dFormat.setDecimalFormatSymbols(alignFormatSymbols);
-        String s = dFormat.format(alignment);
-        if (prefixPlus && !s.startsWith("-")) {
-            s = "+" + s;
+        return dFormat;
+    }
+
+    public static float parseDisplayedAlign(String alignmentText) {
+        DecimalFormat dFormat = alignFormat;
+        LOTRAlignmentValues.setupDecimalFormat(dFormat);
+        if (alignmentText.startsWith("+")) {
+            alignmentText = alignmentText.substring("+".length());
         }
-        return s;
+        try {
+            return dFormat.parse(alignmentText).floatValue();
+        }
+        catch (ParseException e) {
+            LOTRLog.logger.error("Could not parse alignment value from display string " + alignmentText);
+            e.printStackTrace();
+            return 0.0f;
+        }
     }
 
     public static void notifyAlignmentNotHighEnough(EntityPlayer entityplayer, float alignmentRequired, LOTRFaction faction) {
-        ChatComponentText componentAlignReq = new ChatComponentText(LOTRAlignmentValues.formatAlignForDisplay(alignmentRequired));
-        componentAlignReq.getChatStyle().setColor(EnumChatFormatting.YELLOW);
-        entityplayer.addChatMessage((IChatComponent)new ChatComponentTranslation("chat.lotr.insufficientAlignment", new Object[]{componentAlignReq, faction.factionName()}));
+        ChatComponentText chatComponentText = new ChatComponentText(LOTRAlignmentValues.formatAlignForDisplay(alignmentRequired));
+        chatComponentText.getChatStyle().setColor(EnumChatFormatting.YELLOW);
+        entityplayer.addChatMessage((IChatComponent)new ChatComponentTranslation("chat.lotr.insufficientAlignment", new Object[]{chatComponentText, faction.factionName()}));
     }
 
     public static void notifyAlignmentNotHighEnough(EntityPlayer entityplayer, float alignmentRequired, LOTRFaction faction1, LOTRFaction faction2) {
-        ChatComponentText componentAlignReq = new ChatComponentText(LOTRAlignmentValues.formatAlignForDisplay(alignmentRequired));
-        componentAlignReq.getChatStyle().setColor(EnumChatFormatting.YELLOW);
-        entityplayer.addChatMessage((IChatComponent)new ChatComponentTranslation("chat.lotr.insufficientAlignment2", new Object[]{componentAlignReq, faction1.factionName(), faction2.factionName()}));
+        ChatComponentText chatComponentText = new ChatComponentText(LOTRAlignmentValues.formatAlignForDisplay(alignmentRequired));
+        chatComponentText.getChatStyle().setColor(EnumChatFormatting.YELLOW);
+        entityplayer.addChatMessage((IChatComponent)new ChatComponentTranslation("chat.lotr.insufficientAlignment2", new Object[]{chatComponentText, faction1.factionName(), faction2.factionName()}));
     }
 
     public static void notifyAlignmentNotHighEnough(EntityPlayer entityplayer, float alignmentRequired, LOTRFaction faction1, LOTRFaction faction2, LOTRFaction faction3) {
-        ChatComponentText componentAlignReq = new ChatComponentText(LOTRAlignmentValues.formatAlignForDisplay(alignmentRequired));
-        componentAlignReq.getChatStyle().setColor(EnumChatFormatting.YELLOW);
-        entityplayer.addChatMessage((IChatComponent)new ChatComponentTranslation("chat.lotr.insufficientAlignment3", new Object[]{componentAlignReq, faction1.factionName(), faction2.factionName(), faction3.factionName()}));
+        ChatComponentText chatComponentText = new ChatComponentText(LOTRAlignmentValues.formatAlignForDisplay(alignmentRequired));
+        chatComponentText.getChatStyle().setColor(EnumChatFormatting.YELLOW);
+        entityplayer.addChatMessage((IChatComponent)new ChatComponentTranslation("chat.lotr.insufficientAlignment3", new Object[]{chatComponentText, faction1.factionName(), faction2.factionName(), faction3.factionName()}));
     }
 
     public static void notifyMiniQuestsNeeded(EntityPlayer entityplayer, LOTRFaction faction) {

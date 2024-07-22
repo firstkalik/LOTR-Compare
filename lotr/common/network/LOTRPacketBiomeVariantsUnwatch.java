@@ -49,8 +49,8 @@ implements IMessage {
     public static class Handler
     implements IMessageHandler<LOTRPacketBiomeVariantsUnwatch, IMessage> {
         public IMessage onMessage(LOTRPacketBiomeVariantsUnwatch packet, MessageContext context) {
-            int chunkZ;
             int chunkX;
+            int chunkZ;
             World world = LOTRMod.proxy.getClientWorld();
             if (world.blockExists((chunkX = packet.chunkX) << 4, 0, (chunkZ = packet.chunkZ) << 4)) {
                 LOTRBiomeVariantStorage.clearChunkBiomeVariants(world, new ChunkCoordIntPair(chunkX, chunkZ));

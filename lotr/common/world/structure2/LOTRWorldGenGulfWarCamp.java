@@ -41,8 +41,8 @@ extends LOTRWorldGenGulfStructure {
 
     @Override
     public boolean generateWithSetRotation(World world, Random random, int i, int j, int k, int rotation) {
-        int i1;
         int j1;
+        int i1;
         this.setOriginAndRotation(world, i, j, k, rotation, 15);
         this.setupRandomBlocks(random);
         if (this.restrictions) {
@@ -191,7 +191,23 @@ extends LOTRWorldGenGulfStructure {
     }
 
     private void placeGulfArmor(World world, Random random, int i, int j, int k, int meta) {
-        ItemStack[] armor = random.nextInt(3) != 0 ? new ItemStack[]{null, null, null, null} : new ItemStack[]{new ItemStack(LOTRMod.helmetGulfHarad), new ItemStack(LOTRMod.bodyGulfHarad), new ItemStack(LOTRMod.legsGulfHarad), new ItemStack(LOTRMod.bootsGulfHarad)};
+        ItemStack[] arritemStack;
+        if (random.nextInt(3) != 0) {
+            ItemStack[] arritemStack2 = new ItemStack[4];
+            arritemStack2[0] = null;
+            arritemStack2[1] = null;
+            arritemStack2[2] = null;
+            arritemStack = arritemStack2;
+            arritemStack2[3] = null;
+        } else {
+            ItemStack[] arritemStack3 = new ItemStack[4];
+            arritemStack3[0] = new ItemStack(LOTRMod.helmetGulfHarad);
+            arritemStack3[1] = new ItemStack(LOTRMod.bodyGulfHarad);
+            arritemStack3[2] = new ItemStack(LOTRMod.legsGulfHarad);
+            arritemStack = arritemStack3;
+            arritemStack3[3] = new ItemStack(LOTRMod.bootsGulfHarad);
+        }
+        ItemStack[] armor = arritemStack;
         this.placeArmorStand(world, i, j, k, meta, armor);
     }
 }

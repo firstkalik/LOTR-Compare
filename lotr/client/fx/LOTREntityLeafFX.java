@@ -16,7 +16,6 @@ import net.minecraft.world.World;
 public class LOTREntityLeafFX
 extends EntityFX {
     private int[] texIndices;
-    private static final int animationRate = 4;
 
     public LOTREntityLeafFX(World world, double d, double d1, double d2, double d3, double d4, double d5, int[] tex) {
         super(world, d, d1, d2, d3, d4, d5);

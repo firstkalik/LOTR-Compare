@@ -50,12 +50,12 @@ extends LOTRWorldGenEasterlingStructureTown {
 
     @Override
     public boolean generateWithSetRotation(World world, Random random, int i, int j, int k, int rotation) {
-        int k1;
         int i1;
-        int j1;
-        int i12;
-        int j12;
         int j13;
+        int j1;
+        int j12;
+        int k1;
+        int i12;
         this.setOriginAndRotation(world, i, j, k, rotation, 3, 3);
         this.setupRandomBlocks(random);
         int woolType = 14;
@@ -66,61 +66,61 @@ extends LOTRWorldGenEasterlingStructureTown {
         Block seatBlock = Blocks.oak_stairs;
         Block fillerBlock = this.getBiome((World)world, (int)0, (int)0).fillerBlock;
         for (k1 = -2; k1 <= 15; ++k1) {
-            for (i1 = -2; i1 <= 9; ++i1) {
-                if (i1 >= 5 && k1 <= 1) continue;
-                this.setBlockAndMetadata(world, i1, 0, k1, Blocks.cobblestone, 0);
-                j12 = -1;
-                while (!this.isOpaque(world, i1, j12, k1) && this.getY(j12) >= 0) {
-                    this.setBlockAndMetadata(world, i1, j12, k1, fillerBlock, 0);
-                    this.setGrassToDirt(world, i1, j12 - 1, k1);
-                    --j12;
+            for (i12 = -2; i12 <= 9; ++i12) {
+                if (i12 >= 5 && k1 <= 1) continue;
+                this.setBlockAndMetadata(world, i12, 0, k1, Blocks.cobblestone, 0);
+                j13 = -1;
+                while (!this.isOpaque(world, i12, j13, k1) && this.getY(j13) >= 0) {
+                    this.setBlockAndMetadata(world, i12, j13, k1, fillerBlock, 0);
+                    this.setGrassToDirt(world, i12, j13 - 1, k1);
+                    --j13;
                 }
-                for (j12 = 1; j12 <= 3; ++j12) {
-                    this.setBlockAndMetadata(world, i1, j12, k1, woodBlock, woodMeta);
+                for (j13 = 1; j13 <= 3; ++j13) {
+                    this.setBlockAndMetadata(world, i12, j13, k1, woodBlock, woodMeta);
                 }
                 if (k1 > 2) {
-                    for (j12 = 4; j12 <= 5; ++j12) {
-                        this.setBlockAndMetadata(world, i1, j12, k1, woodBlock, woodMeta);
+                    for (j13 = 4; j13 <= 5; ++j13) {
+                        this.setBlockAndMetadata(world, i12, j13, k1, woodBlock, woodMeta);
                     }
                 }
-                this.setBlockAndMetadata(world, i1, 2, k1, Blocks.stonebrick, 0);
+                this.setBlockAndMetadata(world, i12, 2, k1, Blocks.stonebrick, 0);
             }
         }
         for (k1 = 3; k1 <= 14; ++k1) {
-            for (i1 = -1; i1 <= 8; ++i1) {
-                for (j12 = 1; j12 <= 4; ++j12) {
-                    this.setAir(world, i1, j12, k1);
+            for (i12 = -1; i12 <= 8; ++i12) {
+                for (j13 = 1; j13 <= 4; ++j13) {
+                    this.setAir(world, i12, j13, k1);
                 }
                 if (k1 > 9 || IntMath.mod((int)k1, (int)2) != 1) {
-                    this.setBlockAndMetadata(world, i1, 0, k1, Blocks.wool, woolType);
+                    this.setBlockAndMetadata(world, i12, 0, k1, Blocks.wool, woolType);
                 }
-                if (k1 <= 9 && IntMath.mod((int)k1, (int)2) == 1 && i1 != 3 && i1 != 4) {
-                    this.setBlockAndMetadata(world, i1, 1, k1, seatBlock, 3);
+                if (k1 <= 9 && IntMath.mod((int)k1, (int)2) == 1 && i12 != 3 && i12 != 4) {
+                    this.setBlockAndMetadata(world, i12, 1, k1, seatBlock, 3);
                 }
-                if (i1 != 3 && i1 != 4) continue;
-                this.setBlockAndMetadata(world, i1, 0, k1, Blocks.cobblestone, 0);
+                if (i12 != 3 && i12 != 4) continue;
+                this.setBlockAndMetadata(world, i12, 0, k1, Blocks.cobblestone, 0);
             }
         }
-        for (j1 = 0; j1 <= 4; ++j1) {
-            for (i1 = 2; i1 <= 5; ++i1) {
-                if (j1 >= 1 && j1 <= 3 && i1 >= 3 && i1 <= 4) {
-                    this.setBlockAndMetadata(world, i1, j1, 14, Blocks.stained_hardened_clay, 15);
+        for (j12 = 0; j12 <= 4; ++j12) {
+            for (i12 = 2; i12 <= 5; ++i12) {
+                if (j12 >= 1 && j12 <= 3 && i12 >= 3 && i12 <= 4) {
+                    this.setBlockAndMetadata(world, i12, j12, 14, Blocks.stained_hardened_clay, 15);
                     continue;
                 }
-                this.setBlockAndMetadata(world, i1, j1, 14, Blocks.hardened_clay, 0);
+                this.setBlockAndMetadata(world, i12, j12, 14, Blocks.hardened_clay, 0);
             }
         }
         for (k1 = -2; k1 <= 2; ++k1) {
-            for (j13 = 1; j13 <= 2; ++j13) {
-                this.setAir(world, 3, j13, k1);
+            for (j1 = 1; j1 <= 2; ++j1) {
+                this.setAir(world, 3, j1, k1);
             }
         }
         for (k1 = -1; k1 <= 0; ++k1) {
-            for (j13 = 1; j13 <= 2; ++j13) {
+            for (j1 = 1; j1 <= 2; ++j1) {
                 for (int i13 = -1; i13 <= 1; ++i13) {
-                    this.setAir(world, i13, j13, k1);
-                    if (k1 != -1 || j13 != 2) continue;
-                    this.setAir(world, i13, j13, k1 - 1);
+                    this.setAir(world, i13, j1, k1);
+                    if (k1 != -1 || j1 != 2) continue;
+                    this.setAir(world, i13, j1, k1 - 1);
                 }
             }
         }
@@ -133,29 +133,29 @@ extends LOTRWorldGenEasterlingStructureTown {
             this.setBlockAndMetadata(world, -1, 4, k1, stairBlock, 4);
             this.setBlockAndMetadata(world, 8, 4, k1, stairBlock, 5);
         }
-        for (i12 = 0; i12 <= 7; ++i12) {
-            this.setBlockAndMetadata(world, i12, 4, 3, stairBlock, 7);
-            if (i12 > 1 && i12 < 6) continue;
-            this.setBlockAndMetadata(world, i12, 4, 14, stairBlock, 6);
+        for (i1 = 0; i1 <= 7; ++i1) {
+            this.setBlockAndMetadata(world, i1, 4, 3, stairBlock, 7);
+            if (i1 > 1 && i1 < 6) continue;
+            this.setBlockAndMetadata(world, i1, 4, 14, stairBlock, 6);
         }
-        for (j1 = 0; j1 <= 4; ++j1) {
+        for (j12 = 0; j12 <= 4; ++j12) {
             Block block = woodBlock;
             int meta = woodMeta;
-            if (j1 == 2) {
+            if (j12 == 2) {
                 block = Blocks.glowstone;
                 meta = 0;
             }
-            this.setBlockAndMetadata(world, -1, j1, 3, block, meta);
-            this.setBlockAndMetadata(world, -1, j1, 14, block, meta);
-            this.setBlockAndMetadata(world, 8, j1, 3, block, meta);
-            this.setBlockAndMetadata(world, 8, j1, 14, block, meta);
+            this.setBlockAndMetadata(world, -1, j12, 3, block, meta);
+            this.setBlockAndMetadata(world, -1, j12, 14, block, meta);
+            this.setBlockAndMetadata(world, 8, j12, 3, block, meta);
+            this.setBlockAndMetadata(world, 8, j12, 14, block, meta);
         }
-        for (i12 = -2; i12 <= 4; ++i12) {
-            if (i12 == 3) {
-                this.setBlockAndMetadata(world, i12, 3, -3, woodBlock, woodMeta);
+        for (i1 = -2; i1 <= 4; ++i1) {
+            if (i1 == 3) {
+                this.setBlockAndMetadata(world, i1, 3, -3, woodBlock, woodMeta);
                 continue;
             }
-            this.setBlockAndMetadata(world, i12, 3, -3, stairBlock, 2);
+            this.setBlockAndMetadata(world, i1, 3, -3, stairBlock, 2);
         }
         for (k1 = -2; k1 <= 3; ++k1) {
             this.setBlockAndMetadata(world, -3, 3, k1, stairBlock, 1);
@@ -164,12 +164,12 @@ extends LOTRWorldGenEasterlingStructureTown {
             this.setBlockAndMetadata(world, 5, 3, k1, stairBlock, 0);
         }
         this.generateSupports(world, 5, 3, 1, stairBlock, 2, woodBlock, woodMeta);
-        for (i12 = 6; i12 <= 9; ++i12) {
-            this.setBlockAndMetadata(world, i12, 3, 1, stairBlock, 2);
+        for (i1 = 6; i1 <= 9; ++i1) {
+            this.setBlockAndMetadata(world, i1, 3, 1, stairBlock, 2);
         }
-        for (i12 = -2; i12 <= 9; ++i12) {
-            this.setBlockAndMetadata(world, i12, 5, 2, stairBlock, 2);
-            this.setBlockAndMetadata(world, i12, 5, 16, stairBlock, 3);
+        for (i1 = -2; i1 <= 9; ++i1) {
+            this.setBlockAndMetadata(world, i1, 5, 2, stairBlock, 2);
+            this.setBlockAndMetadata(world, i1, 5, 16, stairBlock, 3);
         }
         for (k1 = 3; k1 <= 15; ++k1) {
             this.setBlockAndMetadata(world, -3, 5, k1, stairBlock, 1);
@@ -193,12 +193,12 @@ extends LOTRWorldGenEasterlingStructureTown {
             this.setBlockAndMetadata(world, -1, 2, k1, Blocks.torch, 2);
             this.setBlockAndMetadata(world, 8, 2, k1, Blocks.torch, 1);
         }
-        for (i12 = 1; i12 <= 6; ++i12) {
-            if (i12 <= 1 || i12 >= 6) {
-                this.setBlockAndMetadata(world, i12, 2, 14, Blocks.torch, 4);
+        for (i1 = 1; i1 <= 6; ++i1) {
+            if (i1 <= 1 || i1 >= 6) {
+                this.setBlockAndMetadata(world, i1, 2, 14, Blocks.torch, 4);
             }
-            if (i12 > 2 && i12 < 5) continue;
-            this.setBlockAndMetadata(world, i12, 2, 3, Blocks.torch, 3);
+            if (i1 > 2 && i1 < 5) continue;
+            this.setBlockAndMetadata(world, i1, 2, 3, Blocks.torch, 3);
         }
         this.setBlockAndMetadata(world, -2, 2, -3, Blocks.torch, 4);
         this.setBlockAndMetadata(world, 2, 2, -3, Blocks.torch, 4);

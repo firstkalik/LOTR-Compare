@@ -11,7 +11,6 @@ package lotr.common.world.structure2;
 
 import java.util.Random;
 import lotr.common.LOTRMod;
-import lotr.common.entity.npc.LOTREntityMoredain;
 import lotr.common.entity.npc.LOTREntityMoredainWarrior;
 import lotr.common.world.structure.LOTRChestContents;
 import lotr.common.world.structure2.LOTRWorldGenMoredainHut;
@@ -34,9 +33,9 @@ extends LOTRWorldGenMoredainHut {
     @Override
     public boolean generateWithSetRotation(World world, Random random, int i, int j, int k, int rotation) {
         int k1;
+        int k2;
         int i1;
         int i2;
-        int k2;
         if (!super.generateWithSetRotation(world, random, i, j, k, rotation)) {
             return false;
         }

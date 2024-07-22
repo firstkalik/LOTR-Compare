@@ -68,8 +68,8 @@ extends LOTRBiomeGenMirkwood {
 
     @Override
     public void decorate(World world, Random random, int i, int k) {
-        int i1;
         int l;
+        int i1;
         super.decorate(world, random, i, k);
         if (this.decorator.treesPerChunk > 2) {
             for (l = 0; l < this.decorator.treesPerChunk / 2; ++l) {

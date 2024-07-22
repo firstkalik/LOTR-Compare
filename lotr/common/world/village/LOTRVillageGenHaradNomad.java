@@ -41,6 +41,12 @@ extends LOTRVillageGen {
         return new Instance(this, world, i, k, random, loc);
     }
 
+    public static enum VillageType {
+        SMALL,
+        BIG;
+
+    }
+
     public static class Instance
     extends LOTRVillageGen.AbstractInstance<LOTRVillageGenHaradNomad> {
         public VillageType villageType;
@@ -160,12 +166,6 @@ extends LOTRVillageGen {
         public boolean isVillageSpecificSurface(World world, int i, int j, int k) {
             return false;
         }
-
-    }
-
-    public static enum VillageType {
-        SMALL,
-        BIG;
 
     }
 

@@ -160,8 +160,9 @@ IProjectile {
 
     @SideOnly(value=Side.CLIENT)
     public boolean isInRangeToRenderDist(double d) {
+        double d2;
         double d1 = this.boundingBox.getAverageEdgeLength() * 4.0;
-        return d < (d1 *= 64.0) * d1;
+        return d < d2 * (d1 *= 64.0);
     }
 
     protected void entityInit() {
@@ -258,12 +259,13 @@ IProjectile {
             List list = this.worldObj.getEntitiesWithinAABBExcludingEntity((Entity)this, this.boundingBox.addCoord(this.motionX, this.motionY, this.motionZ).expand(1.0, 1.0, 1.0));
             double d = 0.0;
             for (l = 0; l < list.size(); ++l) {
-                AxisAlignedBB axisalignedbb1;
                 float f5;
-                double d1;
+                double d2;
                 MovingObjectPosition movingobjectposition1;
                 Entity entity1 = (Entity)list.get(l);
-                if (!entity1.canBeCollidedWith() || entity1 == this.shootingEntity && this.ticksInAir < 5 || (movingobjectposition1 = (axisalignedbb1 = entity1.boundingBox.expand((double)(f5 = 0.3f), (double)f5, (double)f5)).calculateIntercept(vec3d, vec3d1)) == null || !((d1 = vec3d.distanceTo(movingobjectposition1.hitVec)) < d) && d != 0.0) continue;
+                if (!entity1.canBeCollidedWith() || entity1 == this.shootingEntity && this.ticksInAir < 5 || (movingobjectposition1 = entity1.boundingBox.expand((double)0.3f, (double)(f5 = 0.3f), (double)f5).calculateIntercept(vec3d, vec3d1)) == null) continue;
+                double d1 = vec3d.distanceTo(movingobjectposition1.hitVec);
+                if (d2 >= d && d != 0.0) continue;
                 entity = entity1;
                 d = d1;
             }
@@ -283,7 +285,7 @@ IProjectile {
                     int damageInt = MathHelper.ceiling_double_int((double)this.getBaseImpactDamage(hitEntity, itemstack));
                     int fireAspect = 0;
                     if (itemstack != null) {
-                        this.knockbackStrength = this.shootingEntity instanceof EntityLivingBase && hitEntity instanceof EntityLivingBase ? (this.knockbackStrength += EnchantmentHelper.getKnockbackModifier((EntityLivingBase)((EntityLivingBase)this.shootingEntity), (EntityLivingBase)((EntityLivingBase)hitEntity))) : (this.knockbackStrength += LOTRWeaponStats.getTotalKnockback(itemstack));
+                        int n = this.knockbackStrength = this.shootingEntity instanceof EntityLivingBase && hitEntity instanceof EntityLivingBase ? (this.knockbackStrength = this.knockbackStrength + EnchantmentHelper.getKnockbackModifier((EntityLivingBase)((EntityLivingBase)this.shootingEntity), (EntityLivingBase)((EntityLivingBase)hitEntity))) : (this.knockbackStrength = this.knockbackStrength + LOTRWeaponStats.getTotalKnockback(itemstack));
                     }
                     if (this.getIsCritical()) {
                         damageInt += this.rand.nextInt(damageInt / 2 + 2);
@@ -300,10 +302,13 @@ IProjectile {
                             hitEntity.setFire(5);
                         }
                         if (hitEntity instanceof EntityLivingBase) {
-                            float knockback;
                             EntityLivingBase hitEntityLiving = (EntityLivingBase)hitEntity;
-                            if (this.knockbackStrength > 0 && (knockback = MathHelper.sqrt_double((double)(this.motionX * this.motionX + this.motionZ * this.motionZ))) > 0.0f) {
-                                hitEntityLiving.addVelocity(this.motionX * (double)this.knockbackStrength * 0.6 / (double)knockback, 0.1, this.motionZ * (double)this.knockbackStrength * 0.6 / (double)knockback);
+                            if (this.knockbackStrength > 0) {
+                                float f;
+                                float knockback = MathHelper.sqrt_double((double)(this.motionX * this.motionX + this.motionZ * this.motionZ));
+                                if (f > 0.0f) {
+                                    hitEntityLiving.addVelocity(this.motionX * (double)this.knockbackStrength * 0.6 / (double)knockback, 0.1, this.motionZ * (double)this.knockbackStrength * 0.6 / (double)knockback);
+                                }
                             }
                             if (fireAspect > 0) {
                                 hitEntityLiving.setFire(fireAspect * 4);

@@ -138,9 +138,10 @@ extends EntityAITarget {
 
         @Override
         public int compare(Entity e1, Entity e2) {
-            double d2;
+            double d;
             double d1 = this.distanceMetricSq(e1);
-            if (d1 < (d2 = this.distanceMetricSq(e2))) {
+            double d2 = this.distanceMetricSq(e2);
+            if (d1 < d) {
                 return -1;
             }
             if (d1 > d2) {

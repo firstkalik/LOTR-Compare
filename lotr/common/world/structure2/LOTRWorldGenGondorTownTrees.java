@@ -28,9 +28,9 @@ extends LOTRWorldGenGondorStructure {
 
     @Override
     public boolean generateWithSetRotation(World world, Random random, int i, int j, int k, int rotation) {
-        int k1;
-        int i1;
         int j1;
+        int i1;
+        int k1;
         this.setOriginAndRotation(world, i, j, k, rotation, 2);
         this.setupRandomBlocks(random);
         if (this.restrictions) {
@@ -63,10 +63,9 @@ extends LOTRWorldGenGondorStructure {
         }
         for (int i12 : new int[]{-4, 0, 4}) {
             WorldGenAbstractTree treeGen;
-            LOTRTreeType tree;
             j1 = 1;
             int k12 = 0;
-            for (int l = 0; !(l >= 16 || (treeGen = (tree = LOTRWorldGenGondorTownTrees.getRandomTree(random)).create(this.notifyChanges, random)) != null && treeGen.generate(world, random, this.getX(i12, k12), this.getY(j1), this.getZ(i12, k12))); ++l) {
+            for (int l = 0; !(l >= 16 || (treeGen = LOTRWorldGenGondorTownTrees.getRandomTree(random).create(this.notifyChanges, random)) != null && treeGen.generate(world, random, this.getX(i12, k12), this.getY(j1), this.getZ(i12, k12))); ++l) {
             }
         }
         return true;

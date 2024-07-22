@@ -30,8 +30,8 @@ extends Container {
     private int numRows;
 
     public LOTRContainerBookshelf(IInventory player, LOTRTileEntityBookshelf shelf) {
-        int i;
         int j;
+        int i;
         this.shelfInv = shelf;
         this.numRows = this.shelfInv.getSizeInventory() / 9;
         this.shelfInv.openInventory();

@@ -90,14 +90,12 @@ extends GuiButton {
         if (this.overrideStateString != null) {
             this.displayString = this.overrideStateString;
         } else if (this.isTime) {
-            String s;
             int value = this.getSliderValue();
             int seconds = value % 60;
             int minutes = value / 60;
-            this.displayString = s = String.format("%d:%02d", minutes, seconds);
+            this.displayString = String.format("%d:%02d", minutes, seconds);
         } else if (this.isFloat) {
-            String s;
-            this.displayString = s = String.format("%.2f", Float.valueOf(this.getSliderValue_F()));
+            this.displayString = String.format("%.2f", Float.valueOf(this.getSliderValue_F()));
         } else {
             int value = this.getSliderValue();
             this.displayString = String.valueOf(value);

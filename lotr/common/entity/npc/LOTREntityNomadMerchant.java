@@ -14,9 +14,11 @@ import java.util.Random;
 import lotr.common.LOTRAchievement;
 import lotr.common.LOTRLevelData;
 import lotr.common.LOTRMod;
+import lotr.common.entity.animal.LOTREntityCamel;
 import lotr.common.entity.npc.LOTREntityNPC;
 import lotr.common.entity.npc.LOTREntityNomad;
 import lotr.common.entity.npc.LOTRInventoryNPCItems;
+import lotr.common.entity.npc.LOTRNPCMount;
 import lotr.common.entity.npc.LOTRTradeEntries;
 import lotr.common.entity.npc.LOTRTravellingTrader;
 import lotr.common.fac.LOTRFaction;
@@ -36,11 +38,23 @@ implements LOTRTravellingTrader {
     public LOTREntityNomadMerchant(World world) {
         super(world);
         this.addTargetTasks(false);
+        this.spawnRidingHorse = this.rand.nextInt(4) == 0;
+    }
+
+    @Override
+    public LOTRNPCMount createMountToRide() {
+        LOTREntityCamel horse = (LOTREntityCamel)super.createMountToRide();
+        horse.setMountArmor(null);
+        return horse;
     }
 
     @Override
     public LOTRTradeEntries getBuyPool() {
         return LOTRTradeEntries.NOMAD_MERCHANT_BUY;
+    }
+
+    public int getTotalArmorValue() {
+        return 12;
     }
 
     @Override
@@ -60,11 +74,11 @@ implements LOTRTravellingTrader {
 
     @Override
     public IEntityLivingData onSpawnWithEgg(IEntityLivingData data) {
-        ItemStack[] robe;
         data = super.onSpawnWithEgg(data);
         this.npcItemsInv.setIdleItem(new ItemStack(LOTRMod.pouch, 1, 3));
         int robeColor = robeColors[this.rand.nextInt(robeColors.length)];
-        for (ItemStack item : robe = new ItemStack[]{new ItemStack(LOTRMod.bootsHaradRobes), new ItemStack(LOTRMod.legsHaradRobes), new ItemStack(LOTRMod.bodyHaradRobes), new ItemStack(LOTRMod.helmetHaradRobes)}) {
+        ItemStack[] robe = new ItemStack[]{new ItemStack(LOTRMod.bootsHaradRobes), new ItemStack(LOTRMod.legsHaradRobes), new ItemStack(LOTRMod.bodyHaradRobes), new ItemStack(LOTRMod.helmetHaradRobes)};
+        for (ItemStack item : robe) {
             LOTRItemHaradRobes.setRobesColor(item, robeColor);
         }
         if (this.rand.nextBoolean()) {

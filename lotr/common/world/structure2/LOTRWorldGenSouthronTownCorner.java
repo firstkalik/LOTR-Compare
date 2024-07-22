@@ -30,9 +30,9 @@ extends LOTRWorldGenSouthronStructure {
 
     @Override
     public boolean generateWithSetRotation(World world, Random random, int i, int j, int k, int rotation) {
-        int k1;
         int i1;
         int j1;
+        int k1;
         this.setOriginAndRotation(world, i, j, k, rotation, 4);
         this.setupRandomBlocks(random);
         if (this.restrictions) {

@@ -81,8 +81,7 @@ extends ModelBase {
 
     public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
         this.setRotationAngles(f, f1, f2, f3, f4, f5, entity);
-        this.horn2.showModel = !this.isChild;
-        this.horn1.showModel = this.horn2.showModel;
+        this.horn1.showModel = this.horn2.showModel = !this.isChild;
         if (this.isChild) {
             float f6 = 2.0f;
             GL11.glPushMatrix();

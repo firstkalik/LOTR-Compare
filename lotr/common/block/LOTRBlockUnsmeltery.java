@@ -81,7 +81,7 @@ extends LOTRBlockForgeBase {
     @Override
     public void randomDisplayTick(World world, int i, int j, int k, Random random) {
         super.randomDisplayTick(world, i, j, k, random);
-        if (LOTRBlockUnsmeltery.isForgeActive((IBlockAccess)world, i, j, k)) {
+        if (LOTRBlockForgeBase.isForgeActive((IBlockAccess)world, i, j, k)) {
             for (int l = 0; l < 3; ++l) {
                 float f = (float)i + 0.25f + random.nextFloat() * 0.5f;
                 float f1 = (float)j + 0.5f + random.nextFloat() * 0.5f;

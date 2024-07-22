@@ -46,7 +46,6 @@ extends BlockLeaves {
     @SideOnly(value=Side.CLIENT)
     private IIcon[][] leafIcons;
     private String[] leafNames;
-    private boolean[] seasonal;
     private String vanillaTextureName;
 
     public LOTRBlockLeavesBase() {
@@ -80,7 +79,6 @@ extends BlockLeaves {
         if (b.length != this.leafNames.length) {
             throw new IllegalArgumentException("Leaf seasons length must match number of types");
         }
-        this.seasonal = b;
     }
 
     @SideOnly(value=Side.CLIENT)
@@ -94,24 +92,21 @@ extends BlockLeaves {
     }
 
     protected static int getBiomeLeafColor(IBlockAccess world, int i, int j, int k) {
-        int totalR = 0;
-        int totalG = 0;
-        int totalB = 0;
+        int r = 0;
+        int g = 0;
+        int b = 0;
         int count = 0;
         int range = 1;
         for (int i1 = -range; i1 <= range; ++i1) {
             for (int k1 = -range; k1 <= range; ++k1) {
                 int biomeColor = world.getBiomeGenForCoords(i + i1, k + k1).getBiomeFoliageColor(i + i1, j, k + k1);
-                totalR += (biomeColor & 0xFF0000) >> 16;
-                totalG += (biomeColor & 0xFF00) >> 8;
-                totalB += biomeColor & 0xFF;
+                r += (biomeColor & 0xFF0000) >> 16;
+                g += (biomeColor & 0xFF00) >> 8;
+                b += biomeColor & 0xFF;
                 ++count;
             }
         }
-        int avgR = totalR / count & 0xFF;
-        int avgG = totalG / count & 0xFF;
-        int avgB = totalB / count & 0xFF;
-        return avgR << 16 | avgG << 8 | avgB;
+        return (r / count & 0xFF) << 16 | (g / count & 0xFF) << 8 | b / count & 0xFF;
     }
 
     protected boolean shouldOakUseBiomeColor() {
@@ -182,8 +177,8 @@ extends BlockLeaves {
     }
 
     public static void setAllGraphicsLevels(boolean flag) {
-        for (int i = 0; i < allLeafBlocks.size(); ++i) {
-            ((LOTRBlockLeavesBase)((Object)allLeafBlocks.get(i))).setGraphicsLevel(flag);
+        for (Object allLeafBlock : allLeafBlocks) {
+            ((LOTRBlockLeavesBase)((Object)allLeafBlock)).setGraphicsLevel(flag);
         }
     }
 }

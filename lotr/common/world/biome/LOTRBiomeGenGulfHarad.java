@@ -74,15 +74,11 @@ extends LOTRBiome {
         this.spawnableCreatureList.add(new BiomeGenBase.SpawnListEntry(LOTREntityWhiteOryx.class, 12, 4, 4));
         this.spawnableCreatureList.add(new BiomeGenBase.SpawnListEntry(LOTREntityCamel.class, 2, 4, 4));
         this.spawnableCreatureList.add(new BiomeGenBase.SpawnListEntry(LOTREntityHorse.class, 10, 4, 4));
-        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer = new LOTRBiomeSpawnList.SpawnListContainer[2];
-        arrspawnListContainer[0] = LOTRBiomeSpawnList.entry(LOTRSpawnList.GULF_HARADRIM, 20).setSpawnChance(100);
-        arrspawnListContainer[1] = LOTRBiomeSpawnList.entry(LOTRSpawnList.GULF_WARRIORS, 5).setSpawnChance(100);
+        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer = new LOTRBiomeSpawnList.SpawnListContainer[]{LOTRBiomeSpawnList.entry(LOTRSpawnList.GULF_HARADRIM, 20).setSpawnChance(100), LOTRBiomeSpawnList.entry(LOTRSpawnList.GULF_WARRIORS, 5).setSpawnChance(100)};
         this.npcSpawnList.newFactionList(100, 0.0f).add(arrspawnListContainer);
-        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer2 = new LOTRBiomeSpawnList.SpawnListContainer[1];
-        arrspawnListContainer2[0] = LOTRBiomeSpawnList.entry(LOTRSpawnList.GULF_WARRIORS, 10);
+        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer2 = new LOTRBiomeSpawnList.SpawnListContainer[]{LOTRBiomeSpawnList.entry(LOTRSpawnList.GULF_WARRIORS, 10)};
         this.npcSpawnList.newFactionList(0).add(arrspawnListContainer2);
-        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer3 = new LOTRBiomeSpawnList.SpawnListContainer[1];
-        arrspawnListContainer3[0] = LOTRBiomeSpawnList.entry(LOTRSpawnList.GONDOR_SOLDIERS, 10);
+        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer3 = new LOTRBiomeSpawnList.SpawnListContainer[]{LOTRBiomeSpawnList.entry(LOTRSpawnList.GONDOR_SOLDIERS, 10)};
         this.npcSpawnList.newFactionList(0).add(arrspawnListContainer3);
         this.addBiomeVariant(LOTRBiomeVariant.FLOWERS);
         this.addBiomeVariant(LOTRBiomeVariant.FOREST);
@@ -160,8 +156,6 @@ extends LOTRBiome {
         Block fillerBlock_pre = this.fillerBlock;
         int fillerBlockMeta_pre = this.fillerBlockMeta;
         if (this.hasMixedHaradSoils()) {
-            double d8;
-            double d9;
             double d1 = noiseDirt.func_151601_a((double)i * 0.002, (double)k * 0.002);
             double d2 = noiseDirt.func_151601_a((double)i * 0.07, (double)k * 0.07);
             double d3 = noiseDirt.func_151601_a((double)i * 0.25, (double)k * 0.25);
@@ -169,7 +163,7 @@ extends LOTRBiome {
             double d5 = noiseSand.func_151601_a((double)i * 0.07, (double)k * 0.07);
             double d6 = noiseSand.func_151601_a((double)i * 0.25, (double)k * 0.25);
             double d7 = noiseRedSand.func_151601_a((double)i * 0.002, (double)k * 0.002);
-            if (d7 + (d8 = noiseRedSand.func_151601_a((double)i * 0.07, (double)k * 0.07)) + (d9 = noiseRedSand.func_151601_a((double)i * 0.25, (double)k * 0.25)) > 0.9) {
+            if (d7 + noiseRedSand.func_151601_a((double)i * 0.07, (double)k * 0.07) + noiseRedSand.func_151601_a((double)i * 0.25, (double)k * 0.25) > 0.9) {
                 this.topBlock = Blocks.sand;
                 this.topBlockMeta = 1;
                 this.fillerBlock = this.topBlock;

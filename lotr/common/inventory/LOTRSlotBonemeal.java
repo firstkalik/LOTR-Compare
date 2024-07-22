@@ -20,11 +20,8 @@ import net.minecraft.world.World;
 
 public class LOTRSlotBonemeal
 extends Slot {
-    private World worldObj;
-
     public LOTRSlotBonemeal(IInventory inv, int i, int j, int k, World world) {
         super(inv, i, j, k);
-        this.worldObj = world;
     }
 
     public boolean isItemValid(ItemStack itemstack) {

@@ -28,7 +28,6 @@
  *  net.minecraft.util.WeightedRandom
  *  net.minecraft.util.WeightedRandom$Item
  *  net.minecraft.world.World
- *  net.minecraft.world.WorldProvider
  */
 package lotr.common.enchant;
 
@@ -62,10 +61,10 @@ import lotr.common.enchant.LOTREnchantmentRangedKnockback;
 import lotr.common.enchant.LOTREnchantmentToolSpeed;
 import lotr.common.enchant.LOTREnchantmentType;
 import lotr.common.enchant.LOTREnchantmentWeaponSpecial;
+import lotr.common.item.LOTRItemHammerAule;
 import lotr.common.item.LOTRMaterial;
 import lotr.common.network.LOTRPacketCancelItemHighlight;
 import lotr.common.network.LOTRPacketHandler;
-import lotr.common.world.LOTRWorldProviderUtumno;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
@@ -87,11 +86,9 @@ import net.minecraft.util.IChatComponent;
 import net.minecraft.util.StatCollector;
 import net.minecraft.util.WeightedRandom;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldProvider;
 
 public class LOTREnchantmentHelper {
     private static Map<UUID, ItemStack[]> lastKnownPlayerInventories = new HashMap<UUID, ItemStack[]>();
-    private static Random backupRand;
 
     private static NBTTagList getItemEnchantTags(ItemStack itemstack, boolean create) {
         NBTTagCompound itemData = itemstack.getTagCompound();
@@ -271,8 +268,7 @@ public class LOTREnchantmentHelper {
     public static void onEntityUpdate(EntityLivingBase entity) {
         Random rand = entity.getRNG();
         if (LOTRConfig.enchantingLOTR) {
-            boolean init;
-            if (entity instanceof EntityLiving && !(init = entity.getEntityData().getBoolean("LOTREnchantInit"))) {
+            if (entity instanceof EntityLiving && !entity.getEntityData().getBoolean("LOTREnchantInit")) {
                 for (int i = 0; i < entity.getLastActiveItems().length; ++i) {
                     ItemStack itemstack = entity.getEquipmentInSlot(i);
                     LOTREnchantmentHelper.tryApplyRandomEnchantsForEntity(itemstack, rand);
@@ -288,11 +284,10 @@ public class LOTREnchantmentHelper {
                     lastKnownInv = new ItemStack[inv.getSizeInventory()];
                 }
                 for (int i = 0; i < inv.getSizeInventory(); ++i) {
-                    ItemStack lastKnownItem;
                     ItemStack itemstack = inv.getStackInSlot(i);
-                    if (ItemStack.areItemStacksEqual((ItemStack)itemstack, (ItemStack)(lastKnownItem = lastKnownInv[i]))) continue;
+                    if (ItemStack.areItemStacksEqual((ItemStack)itemstack, (ItemStack)lastKnownInv[i])) continue;
                     LOTREnchantmentHelper.tryApplyRandomEnchantsForEntity(itemstack, rand);
-                    lastKnownInv[i] = lastKnownItem = itemstack == null ? null : itemstack.copy();
+                    lastKnownInv[i] = itemstack == null ? null : itemstack.copy();
                 }
                 if (LOTREnchantmentHelper.tryApplyRandomEnchantsForEntity(inv.getItemStack(), rand)) {
                     entityplayer.updateHeldItem();
@@ -342,6 +337,15 @@ public class LOTREnchantmentHelper {
         if (itemstack.getItem() instanceof ItemSword && LOTRMaterial.getToolMaterialByName(((ItemSword)itemstack.getItem()).getToolMaterialName()) == LOTRMaterial.BARROW.toToolMaterial() && (ench = LOTREnchantment.baneWight).canApply(itemstack, false)) {
             LOTREnchantmentHelper.setHasEnchant(itemstack, ench);
         }
+        if (itemstack.getItem() instanceof LOTRItemHammerAule && LOTRMaterial.getToolMaterialByName(((LOTRItemHammerAule)itemstack.getItem()).getToolMaterialName()) == LOTRMaterial.AULE.toToolMaterial() && (ench = LOTREnchantment.durable5).canApply(itemstack, false)) {
+            LOTREnchantmentHelper.setHasEnchant(itemstack, ench);
+        }
+        if (itemstack.getItem() instanceof LOTRItemHammerAule && LOTRMaterial.getToolMaterialByName(((LOTRItemHammerAule)itemstack.getItem()).getToolMaterialName()) == LOTRMaterial.AULE.toToolMaterial() && (ench = LOTREnchantment.looting4).canApply(itemstack, false)) {
+            LOTREnchantmentHelper.setHasEnchant(itemstack, ench);
+        }
+        if (itemstack.getItem() instanceof LOTRItemHammerAule && LOTRMaterial.getToolMaterialByName(((LOTRItemHammerAule)itemstack.getItem()).getToolMaterialName()) == LOTRMaterial.AULE.toToolMaterial() && (ench = LOTREnchantment.toolSpeed5).canApply(itemstack, false)) {
+            LOTREnchantmentHelper.setHasEnchant(itemstack, ench);
+        }
         if (itemstack.getItem() == LOTRMod.sting && (ench = LOTREnchantment.baneSpider).canApply(itemstack, false)) {
             LOTREnchantmentHelper.setHasEnchant(itemstack, ench);
         }
@@ -362,7 +366,7 @@ public class LOTREnchantmentHelper {
         for (LOTREnchantment ench3 : LOTREnchantment.allEnchantments) {
             int weight;
             if (!ench3.canApply(itemstack, true) || ench3.isSkilful() && !skilful || (weight = ench3.getEnchantWeight()) <= 0) continue;
-            weight = skilful ? LOTREnchantmentHelper.getSkilfulWeight(ench3) : (weight *= 100);
+            int n = weight = skilful ? LOTREnchantmentHelper.getSkilfulWeight(ench3) : (weight = weight * 100);
             if (weight > 0 && itemstack.getItem() instanceof ItemTool && !ench3.itemTypes.contains((Object)LOTREnchantmentType.TOOL) && !ench3.itemTypes.contains((Object)LOTREnchantmentType.BREAKABLE)) {
                 weight /= 3;
                 weight = Math.max(weight, 1);
@@ -468,18 +472,14 @@ public class LOTREnchantmentHelper {
 
     public static boolean negateDamage(ItemStack itemstack, Random random) {
         if (itemstack != null) {
-            if (random == null) {
-                if (backupRand == null) {
-                    backupRand = new Random();
-                }
-                random = backupRand;
-            }
             List<LOTREnchantment> enchants = LOTREnchantmentHelper.getEnchantList(itemstack);
             for (LOTREnchantment ench : enchants) {
-                float durability;
-                if (!(ench instanceof LOTREnchantmentDurability) || !((durability = ((LOTREnchantmentDurability)ench).durabilityFactor) > 1.0f)) continue;
+                float f;
+                if (!(ench instanceof LOTREnchantmentDurability)) continue;
+                float durability = ((LOTREnchantmentDurability)ench).durabilityFactor;
+                if (f <= 1.0f) continue;
                 float inv = 1.0f / durability;
-                if (!(random.nextFloat() > inv)) continue;
+                if (random.nextFloat() <= inv) continue;
                 return true;
             }
         }
@@ -611,7 +611,7 @@ public class LOTREnchantmentHelper {
                     boolean compatible;
                     if (!ench.canApply(weapon, false) || !(ench instanceof LOTREnchantmentBane)) continue;
                     LOTREnchantmentBane enchBane = (LOTREnchantmentBane)ench;
-                    if (!enchBane.isAchievable || !enchBane.isEntityType(target) || entityplayer.worldObj.provider instanceof LOTRWorldProviderUtumno) continue;
+                    if (!enchBane.isAchievable || !enchBane.doesEntityKillCountTowardsBane(target, entityplayer.worldObj)) continue;
                     NBTTagCompound nbt = LOTREnchantmentHelper.getItemEnchantProgress(weapon, ench, true);
                     int killed = 0;
                     if (nbt.hasKey("Kills")) {

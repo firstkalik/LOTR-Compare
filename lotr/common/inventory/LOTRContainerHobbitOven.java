@@ -68,8 +68,8 @@ extends Container {
 
     public void detectAndSendChanges() {
         super.detectAndSendChanges();
-        for (int i = 0; i < this.crafters.size(); ++i) {
-            ICrafting crafting = (ICrafting)this.crafters.get(i);
+        for (Object element : this.crafters) {
+            ICrafting crafting = (ICrafting)element;
             if (this.currentCookTime != this.theOven.currentCookTime) {
                 crafting.sendProgressBarUpdate((Container)this, 0, this.theOven.currentCookTime);
             }

@@ -2,33 +2,35 @@
  * Decompiled with CFR 0.148.
  * 
  * Could not load the following classes:
- *  com.google.common.base.Function
  *  com.mojang.authlib.GameProfile
  *  cpw.mods.fml.common.network.simpleimpl.IMessage
  *  cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper
  *  net.minecraft.client.Minecraft
  *  net.minecraft.client.audio.SoundHandler
  *  net.minecraft.client.gui.FontRenderer
+ *  net.minecraft.client.gui.Gui
  *  net.minecraft.client.gui.GuiButton
  *  net.minecraft.client.gui.GuiTextField
  *  net.minecraft.client.renderer.texture.TextureManager
  *  net.minecraft.client.settings.GameSettings
  *  net.minecraft.client.settings.KeyBinding
+ *  net.minecraft.util.MathHelper
  *  net.minecraft.util.ResourceLocation
  *  net.minecraft.util.StatCollector
- *  net.minecraft.util.StringUtils
+ *  org.apache.commons.lang3.StringUtils
  *  org.lwjgl.input.Mouse
  *  org.lwjgl.opengl.GL11
  */
 package lotr.client.gui;
 
-import com.google.common.base.Function;
 import com.mojang.authlib.GameProfile;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+import java.util.function.Function;
+import lotr.client.gui.LOTRGuiButton;
 import lotr.client.gui.LOTRGuiButtonBanner;
 import lotr.client.gui.LOTRGuiButtonBannerWhitelistSlots;
 import lotr.client.gui.LOTRGuiScreenBase;
@@ -45,154 +47,140 @@ import lotr.common.network.LOTRPacketHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.client.settings.KeyBinding;
+import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
-import net.minecraft.util.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
 public class LOTRGuiBanner
 extends LOTRGuiScreenBase {
-    public static ResourceLocation bannerTexture = new ResourceLocation("lotr:gui/banner_edit.png");
-    public final LOTREntityBanner theBanner;
+    public static ResourceLocation bannerTexture = new ResourceLocation("lotr:textures/gui/banner_edit.png");
+    public LOTREntityBanner theBanner;
     public int xSize = 200;
     public int ySize = 250;
-    private int guiLeft;
-    private int guiTop;
-    private GuiButton buttonMode;
-    private LOTRGuiButtonBanner buttonSelfProtection;
-    private GuiButton buttonAddSlot;
-    private GuiButton buttonRemoveSlot;
-    private LOTRGuiButtonBanner buttonDefaultPermissions;
-    private GuiTextField alignmentField;
-    private static final int displayedPlayers = 6;
-    private GuiTextField[] allowedPlayers = new GuiTextField[0];
-    private boolean[] invalidUsernames = new boolean[0];
-    private boolean[] validatedUsernames = new boolean[0];
-    private boolean[] checkUsernames = new boolean[0];
-    private static final int textboxInvalid = 16711680;
-    private static final int textboxValid = 65280;
-    private static final int textboxDefault = 16777215;
-    private float currentScroll = 0.0f;
-    private boolean isScrolling = false;
-    private boolean wasMouseDown;
-    private int scrollBarWidth = 12;
-    private int scrollBarHeight = 132;
-    private int scrollBarX = 181;
-    private int scrollBarY = 68;
-    private int scrollBarBorder = 1;
-    private int scrollWidgetWidth = 10;
-    private int scrollWidgetHeight = 17;
-    private int permIconX = 3;
-    private int permIconY = 0;
-    private int permIconWidth = 10;
-    private int permissionsMouseoverIndex = -1;
-    private int permissionsMouseoverY = -1;
-    private int permWindowBorder = 4;
-    private int permWindowWidth = 150;
-    private int permWindowHeight = 70;
-    private int permissionsOpenIndex = -1;
-    private int permissionsOpenY = -1;
-    private LOTRBannerProtection.Permission mouseOverPermission = null;
-    private boolean defaultPermissionsOpen = false;
+    public int guiLeft;
+    public int guiTop;
+    public GuiButton buttonMode;
+    public LOTRGuiButtonBanner buttonSelfProtection;
+    public GuiButton buttonAddSlot;
+    public GuiButton buttonRemoveSlot;
+    public LOTRGuiButtonBanner buttonDefaultPermissions;
+    public GuiTextField alignmentField;
+    public GuiTextField[] allowedPlayers = new GuiTextField[0];
+    public boolean[] invalidUsernames = new boolean[0];
+    public boolean[] validatedUsernames = new boolean[0];
+    public boolean[] checkUsernames = new boolean[0];
+    public float currentScroll;
+    public boolean isScrolling;
+    public boolean wasMouseDown;
+    public int scrollBarWidth = 12;
+    public int scrollBarHeight = 132;
+    public int scrollBarX = 181;
+    public int scrollBarY = 68;
+    public int scrollBarBorder = 1;
+    public int scrollWidgetWidth = 10;
+    public int scrollWidgetHeight = 17;
+    public int permIconX = 3;
+    public int permIconY;
+    public int permIconWidth = 10;
+    public int permissionsMouseoverIndex = -1;
+    public int permissionsMouseoverY = -1;
+    public int permWindowBorder = 4;
+    public int permWindowWidth = 150;
+    public int permWindowHeight = 70;
+    public int permissionsOpenIndex = -1;
+    public int permissionsOpenY = -1;
+    public LOTRBannerProtection.Permission mouseOverPermission;
+    public boolean defaultPermissionsOpen;
 
     public LOTRGuiBanner(LOTREntityBanner banner) {
         this.theBanner = banner;
     }
 
-    public void initGui() {
-        this.guiLeft = (this.width - this.xSize) / 2;
-        this.guiTop = (this.height - this.ySize) / 2;
-        this.buttonMode = new GuiButton(0, this.guiLeft + this.xSize / 2 - 80, this.guiTop + 20, 160, 20, "");
-        this.buttonList.add(this.buttonMode);
-        this.buttonSelfProtection = new LOTRGuiButtonBanner(1, this.guiLeft + this.xSize / 2 - 24, this.guiTop + 224, 212, 100);
-        this.buttonList.add(this.buttonSelfProtection);
-        this.buttonAddSlot = new LOTRGuiButtonBannerWhitelistSlots(0, this.guiLeft + 179, this.guiTop + 202);
-        this.buttonList.add(this.buttonAddSlot);
-        this.buttonRemoveSlot = new LOTRGuiButtonBannerWhitelistSlots(1, this.guiLeft + 187, this.guiTop + 202);
-        this.buttonList.add(this.buttonRemoveSlot);
-        this.buttonDefaultPermissions = new LOTRGuiButtonBanner(2, this.guiLeft + this.xSize / 2 + 8, this.guiTop + 224, 200, 134);
-        this.buttonList.add(this.buttonDefaultPermissions);
-        this.buttonDefaultPermissions.activated = true;
-        this.alignmentField = new GuiTextField(this.fontRendererObj, this.guiLeft + this.xSize / 2 - 70, this.guiTop + 100, 130, 18);
-        this.alignmentField.setText(String.valueOf(this.theBanner.getAlignmentProtection()));
-        this.alignmentField.setEnabled(false);
-        this.refreshWhitelist();
-        for (int i = 0; i < this.allowedPlayers.length; ++i) {
-            String name;
-            GuiTextField textBox = this.allowedPlayers[i];
-            textBox.setTextColor(16777215);
-            GameProfile profile = this.theBanner.getWhitelistedPlayer(i);
-            if (profile != null && !StringUtils.isNullOrEmpty((String)(name = profile.getName()))) {
-                textBox.setText(name);
-                textBox.setTextColor(65280);
-                this.validatedUsernames[i] = true;
+    public void actionPerformed(GuiButton button) {
+        if (button.enabled) {
+            if (button == this.buttonMode) {
+                this.theBanner.setPlayerSpecificProtection(!this.theBanner.isPlayerSpecificProtection());
             }
-            this.allowedPlayers[i] = textBox;
-        }
-        this.allowedPlayers[0].setEnabled(false);
-        Arrays.fill(this.checkUsernames, false);
-    }
-
-    private void updateWhitelistedPlayer(int index, String username) {
-        LOTRBannerWhitelistEntry prevEntry = this.theBanner.getWhitelistEntry(index);
-        int prevPerms = -1;
-        if (prevEntry != null) {
-            prevPerms = prevEntry.encodePermBitFlags();
-        }
-        if (StringUtils.isNullOrEmpty((String)username)) {
-            this.theBanner.whitelistPlayer(index, null);
-        } else {
-            if (LOTRFellowshipProfile.hasFellowshipCode(username)) {
-                this.theBanner.whitelistPlayer(index, new LOTRFellowshipProfile(this.theBanner, null, LOTRFellowshipProfile.stripFellowshipCode(username)));
-            } else {
-                this.theBanner.whitelistPlayer(index, new GameProfile(null, username));
+            if (button == this.buttonSelfProtection) {
+                this.theBanner.setSelfProtection(!this.theBanner.isSelfProtection());
             }
-            if (prevPerms >= 0) {
-                this.theBanner.getWhitelistEntry(index).decodePermBitFlags(prevPerms);
+            if (button == this.buttonAddSlot) {
+                this.theBanner.resizeWhitelist(this.theBanner.getWhitelistLength() + 1);
+                this.refreshWhitelist();
+            }
+            if (button == this.buttonRemoveSlot) {
+                this.theBanner.resizeWhitelist(this.theBanner.getWhitelistLength() - 1);
+                this.refreshWhitelist();
+            }
+            if (button == this.buttonDefaultPermissions) {
+                this.defaultPermissionsOpen = true;
             }
         }
     }
 
-    private void refreshWhitelist() {
-        int length = this.theBanner.getWhitelistLength();
-        GuiTextField[] allowedPlayers_new = new GuiTextField[length];
-        boolean[] invalidUsernames_new = new boolean[length];
-        boolean[] validatedUsernames_new = new boolean[length];
-        boolean[] checkUsernames_new = new boolean[length];
-        for (int i = 0; i < length; ++i) {
-            allowedPlayers_new[i] = i < this.allowedPlayers.length ? this.allowedPlayers[i] : new GuiTextField(this.fontRendererObj, 0, 0, 130, 18);
-            if (i < this.invalidUsernames.length) {
-                invalidUsernames_new[i] = this.invalidUsernames[i];
-            }
-            if (i < this.validatedUsernames.length) {
-                validatedUsernames_new[i] = this.validatedUsernames[i];
-            }
-            if (i >= this.checkUsernames.length) continue;
-            checkUsernames_new[i] = this.checkUsernames[i];
+    public void buttonSound() {
+        this.buttonMode.func_146113_a(this.mc.getSoundHandler());
+    }
+
+    public boolean canScroll() {
+        return true;
+    }
+
+    public void checkUsernameValid(int index) {
+        GuiTextField textBox = this.allowedPlayers[index];
+        String username = textBox.getText();
+        if (!StringUtils.isBlank((CharSequence)username) && !this.invalidUsernames[index]) {
+            LOTRPacketBannerRequestInvalidName packet = new LOTRPacketBannerRequestInvalidName(this.theBanner, index, username);
+            LOTRPacketHandler.networkWrapper.sendToServer((IMessage)packet);
         }
-        this.allowedPlayers = allowedPlayers_new;
-        this.invalidUsernames = invalidUsernames_new;
-        this.validatedUsernames = validatedUsernames_new;
-        this.checkUsernames = checkUsernames_new;
+    }
+
+    public void drawPermissionsWindow(int i, int j, int windowX, int windowY, String boxTitle, String boxSubtitle, Function<LOTRBannerProtection.Permission, Boolean> getEnabled, boolean includeFull) {
+        Gui.drawRect((int)windowX, (int)windowY, (int)(windowX + this.permWindowWidth), (int)(windowY + this.permWindowHeight), (int)-1442840576);
+        GL11.glColor4f((float)1.0f, (float)1.0f, (float)1.0f, (float)1.0f);
+        this.fontRendererObj.drawString(boxTitle, windowX + 4, windowY + 4, 16777215);
+        this.fontRendererObj.drawString(boxSubtitle, windowX + 4, windowY + 14, 11184810);
+        this.mc.getTextureManager().bindTexture(bannerTexture);
+        GL11.glColor4f((float)1.0f, (float)1.0f, (float)1.0f, (float)1.0f);
+        this.mouseOverPermission = null;
+        int y = windowY + 32;
+        int x = windowX + 4;
+        for (LOTRBannerProtection.Permission p : LOTRBannerProtection.Permission.values()) {
+            if (!includeFull && p == LOTRBannerProtection.Permission.FULL) continue;
+            if (i >= x && i < x + 10 && j >= y && j < y + 10) {
+                this.mouseOverPermission = p;
+            }
+            this.drawTexturedModalRect(x, y, 200 + (getEnabled.apply(p) != false ? 0 : 20) + (this.mouseOverPermission == p ? 10 : 0), 160 + p.ordinal() * 10, 10, 10);
+            x += 14;
+            if (p != LOTRBannerProtection.Permission.FULL) continue;
+            x += 4;
+        }
+        if (this.mouseOverPermission != null) {
+            String permName = StatCollector.translateToLocal((String)("lotr.gui.bannerEdit.perm." + this.mouseOverPermission.codeName));
+            this.fontRendererObj.drawSplitString(permName, windowX + 4, windowY + 47, this.permWindowWidth - this.permWindowBorder * 2, 16777215);
+        }
     }
 
     public void drawScreen(int i, int j, float f) {
-        String s;
         int windowY;
+        int windowX;
+        boolean isFellowship;
         this.permissionsMouseoverIndex = -1;
         this.permissionsMouseoverY = -1;
         this.mouseOverPermission = null;
         this.setupScrollBar(i, j);
         this.alignmentField.setVisible(false);
         this.alignmentField.setEnabled(false);
-        for (int l = 0; l < this.allowedPlayers.length; ++l) {
-            GuiTextField textBox = this.allowedPlayers[l];
+        for (GuiTextField textBox : this.allowedPlayers) {
             textBox.setVisible(false);
             textBox.setEnabled(false);
         }
@@ -204,13 +192,13 @@ extends LOTRGuiScreenBase {
         this.fontRendererObj.drawString(title, this.guiLeft + this.xSize / 2 - this.fontRendererObj.getStringWidth(title) / 2, this.guiTop + 6, 4210752);
         if (this.theBanner.isPlayerSpecificProtection()) {
             this.buttonMode.displayString = StatCollector.translateToLocal((String)"lotr.gui.bannerEdit.protectionMode.playerSpecific");
-            s = StatCollector.translateToLocal((String)"lotr.gui.bannerEdit.protectionMode.playerSpecific.desc.1");
+            String s = StatCollector.translateToLocal((String)"lotr.gui.bannerEdit.protectionMode.playerSpecific.desc.1");
             this.fontRendererObj.drawString(s, this.guiLeft + this.xSize / 2 - this.fontRendererObj.getStringWidth(s) / 2, this.guiTop + 46, 4210752);
             s = StatCollector.translateToLocal((String)"lotr.gui.bannerEdit.protectionMode.playerSpecific.desc.2");
             this.fontRendererObj.drawString(s, this.guiLeft + this.xSize / 2 - this.fontRendererObj.getStringWidth(s) / 2, this.guiTop + 46 + this.fontRendererObj.FONT_HEIGHT, 4210752);
             s = LOTRFellowshipProfile.getFellowshipCodeHint();
             this.fontRendererObj.drawString(s, this.guiLeft + this.xSize / 2 - this.fontRendererObj.getStringWidth(s) / 2, this.guiTop + 206, 4210752);
-            int start = 0 + Math.round(this.currentScroll * (float)(this.allowedPlayers.length - 6));
+            int start = Math.round(this.currentScroll * (float)(this.allowedPlayers.length - 6));
             int end = start + 6 - 1;
             start = Math.max(start, 0);
             end = Math.min(end, this.allowedPlayers.length - 1);
@@ -248,7 +236,7 @@ extends LOTRGuiScreenBase {
             this.permissionsOpenY = -1;
             this.permissionsOpenIndex = -1;
             this.buttonMode.displayString = StatCollector.translateToLocal((String)"lotr.gui.bannerEdit.protectionMode.faction");
-            s = StatCollector.translateToLocalFormatted((String)"lotr.gui.bannerEdit.protectionMode.faction.desc.1", (Object[])new Object[0]);
+            String s = StatCollector.translateToLocalFormatted((String)"lotr.gui.bannerEdit.protectionMode.faction.desc.1", (Object[])new Object[0]);
             this.fontRendererObj.drawString(s, this.guiLeft + this.xSize / 2 - this.fontRendererObj.getStringWidth(s) / 2, this.guiTop + 46, 4210752);
             s = StatCollector.translateToLocalFormatted((String)"lotr.gui.bannerEdit.protectionMode.faction.desc.2", (Object[])new Object[]{Float.valueOf(this.theBanner.getAlignmentProtection()), this.theBanner.getBannerType().faction.factionName()});
             this.fontRendererObj.drawString(s, this.guiLeft + this.xSize / 2 - this.fontRendererObj.getStringWidth(s) / 2, this.guiTop + 46 + this.fontRendererObj.FONT_HEIGHT, 4210752);
@@ -261,34 +249,24 @@ extends LOTRGuiScreenBase {
             this.alignmentField.drawTextBox();
         }
         if (this.permissionsOpenIndex >= 0) {
-            int windowX = this.guiLeft + this.xSize + this.permWindowBorder;
+            windowX = this.guiLeft + this.xSize + this.permWindowBorder;
             windowY = this.permissionsOpenY;
             String username = this.allowedPlayers[this.permissionsOpenIndex].getText();
-            boolean isFellowship = LOTRFellowshipProfile.hasFellowshipCode(username);
+            isFellowship = LOTRFellowshipProfile.hasFellowshipCode(username);
             if (isFellowship) {
                 username = LOTRFellowshipProfile.stripFellowshipCode(username);
             }
             String boxTitle = StatCollector.translateToLocal((String)(isFellowship ? "lotr.gui.bannerEdit.perms.fellowship" : "lotr.gui.bannerEdit.perms.player"));
             String boxSubtitle = StatCollector.translateToLocalFormatted((String)"lotr.gui.bannerEdit.perms.name", (Object[])new Object[]{username});
-            Function<LOTRBannerProtection.Permission, Boolean> getEnabled = new Function<LOTRBannerProtection.Permission, Boolean>(){
-
-                public Boolean apply(LOTRBannerProtection.Permission p) {
-                    return LOTRGuiBanner.this.theBanner.getWhitelistEntry(LOTRGuiBanner.this.permissionsOpenIndex).isPermissionEnabled(p);
-                }
-            };
+            Function<LOTRBannerProtection.Permission, Boolean> getEnabled = p -> this.theBanner.getWhitelistEntry(this.permissionsOpenIndex).isPermissionEnabled((LOTRBannerProtection.Permission)((Object)p));
             this.drawPermissionsWindow(i, j, windowX, windowY, boxTitle, boxSubtitle, getEnabled, true);
         }
         if (this.defaultPermissionsOpen) {
-            int windowX = this.guiLeft + this.xSize + this.permWindowBorder;
+            windowX = this.guiLeft + this.xSize + this.permWindowBorder;
             windowY = this.guiTop + this.ySize - this.permWindowHeight;
             String boxTitle = StatCollector.translateToLocal((String)"lotr.gui.bannerEdit.perms.default");
             String boxSubtitle = StatCollector.translateToLocalFormatted((String)"lotr.gui.bannerEdit.perms.allPlayers", (Object[])new Object[0]);
-            Function<LOTRBannerProtection.Permission, Boolean> getEnabled = new Function<LOTRBannerProtection.Permission, Boolean>(){
-
-                public Boolean apply(LOTRBannerProtection.Permission p) {
-                    return LOTRGuiBanner.this.theBanner.hasDefaultPermission(p);
-                }
-            };
+            Function<LOTRBannerProtection.Permission, Boolean> getEnabled = p -> this.theBanner.hasDefaultPermission((LOTRBannerProtection.Permission)((Object)p));
             this.drawPermissionsWindow(i, j, windowX, windowY, boxTitle, boxSubtitle, getEnabled, false);
         }
         super.drawScreen(i, j, f);
@@ -311,7 +289,7 @@ extends LOTRGuiScreenBase {
         if (this.permissionsMouseoverIndex >= 0) {
             float z = this.zLevel;
             String username = this.allowedPlayers[this.permissionsMouseoverIndex].getText();
-            boolean isFellowship = LOTRFellowshipProfile.hasFellowshipCode(username);
+            isFellowship = LOTRFellowshipProfile.hasFellowshipCode(username);
             String tooltip = StatCollector.translateToLocal((String)(isFellowship ? "lotr.gui.bannerEdit.perms.fellowship" : "lotr.gui.bannerEdit.perms.player"));
             this.drawCreativeTabHoveringText(tooltip, i, j);
             GL11.glDisable((int)2896);
@@ -320,81 +298,18 @@ extends LOTRGuiScreenBase {
         }
     }
 
-    private void drawPermissionsWindow(int i, int j, int windowX, int windowY, String boxTitle, String boxSubtitle, Function<LOTRBannerProtection.Permission, Boolean> getEnabled, boolean includeFull) {
-        LOTRGuiBanner.drawRect((int)windowX, (int)windowY, (int)(windowX + this.permWindowWidth), (int)(windowY + this.permWindowHeight), (int)-1442840576);
-        GL11.glColor4f((float)1.0f, (float)1.0f, (float)1.0f, (float)1.0f);
-        this.fontRendererObj.drawString(boxTitle, windowX + 4, windowY + 4, 16777215);
-        this.fontRendererObj.drawString(boxSubtitle, windowX + 4, windowY + 14, 11184810);
-        this.mc.getTextureManager().bindTexture(bannerTexture);
-        GL11.glColor4f((float)1.0f, (float)1.0f, (float)1.0f, (float)1.0f);
-        int x = windowX + 4;
-        int y = windowY + 32;
-        this.mouseOverPermission = null;
-        for (LOTRBannerProtection.Permission p : LOTRBannerProtection.Permission.values()) {
-            boolean enabled;
-            if (!includeFull && p == LOTRBannerProtection.Permission.FULL) continue;
-            if (i >= x && i < x + 10 && j >= y && j < y + 10) {
-                this.mouseOverPermission = p;
+    public void handleMouseInput() {
+        super.handleMouseInput();
+        int i = Mouse.getEventDWheel();
+        if (i != 0 && this.canScroll()) {
+            int j = this.allowedPlayers.length - 6;
+            if (i > 0) {
+                i = 1;
             }
-            this.drawTexturedModalRect(x, y, 200 + ((enabled = ((Boolean)getEnabled.apply((Object)p)).booleanValue()) ? 0 : 20) + (this.mouseOverPermission == p ? 10 : 0), 160 + p.ordinal() * 10, 10, 10);
-            x += 14;
-            if (p != LOTRBannerProtection.Permission.FULL) continue;
-            x += 4;
-        }
-        if (this.mouseOverPermission != null) {
-            String permName = StatCollector.translateToLocal((String)("lotr.gui.bannerEdit.perm." + this.mouseOverPermission.codeName));
-            this.fontRendererObj.drawSplitString(permName, windowX + 4, windowY + 47, this.permWindowWidth - this.permWindowBorder * 2, 16777215);
-        }
-    }
-
-    @Override
-    public void updateScreen() {
-        super.updateScreen();
-        this.buttonSelfProtection.activated = this.theBanner.isSelfProtection();
-        this.buttonAddSlot.visible = this.buttonRemoveSlot.visible = this.theBanner.isPlayerSpecificProtection();
-        this.buttonAddSlot.enabled = this.theBanner.getWhitelistLength() < LOTREntityBanner.WHITELIST_MAX;
-        this.buttonRemoveSlot.enabled = this.theBanner.getWhitelistLength() > LOTREntityBanner.WHITELIST_MIN;
-        this.alignmentField.updateCursorCounter();
-        this.alignmentField.setVisible(!this.theBanner.isPlayerSpecificProtection());
-        this.alignmentField.setEnabled(this.alignmentField.getVisible());
-        if (this.alignmentField.getVisible() && !this.alignmentField.isFocused()) {
-            float alignment;
-            float prevAlignment = this.theBanner.getAlignmentProtection();
-            try {
-                alignment = Float.parseFloat(this.alignmentField.getText());
+            if (i < 0) {
+                i = -1;
             }
-            catch (NumberFormatException e) {
-                alignment = 0.0f;
-            }
-            alignment = Math.max(alignment, LOTREntityBanner.ALIGNMENT_PROTECTION_MIN);
-            alignment = Math.min(alignment, LOTREntityBanner.ALIGNMENT_PROTECTION_MAX);
-            this.theBanner.setAlignmentProtection(alignment);
-            this.alignmentField.setText(LOTRAlignmentValues.formatAlignForDisplay(alignment));
-            if (alignment != prevAlignment) {
-                this.sendBannerData(false);
-            }
-        }
-        for (int l = 0; l < this.allowedPlayers.length; ++l) {
-            GuiTextField textBox = this.allowedPlayers[l];
-            textBox.updateCursorCounter();
-        }
-    }
-
-    private void setupScrollBar(int i, int j) {
-        boolean isMouseDown = Mouse.isButtonDown((int)0);
-        int i1 = this.guiLeft + this.scrollBarX;
-        int j1 = this.guiTop + this.scrollBarY;
-        int i2 = i1 + this.scrollBarWidth;
-        int j2 = j1 + this.scrollBarHeight;
-        if (!this.wasMouseDown && isMouseDown && i >= i1 && j >= j1 && i < i2 && j < j2) {
-            this.isScrolling = this.canScroll();
-        }
-        if (!isMouseDown) {
-            this.isScrolling = false;
-        }
-        this.wasMouseDown = isMouseDown;
-        if (this.isScrolling) {
-            this.currentScroll = ((float)(j - j1) - (float)this.scrollWidgetHeight / 2.0f) / ((float)(j2 - j1) - (float)this.scrollWidgetHeight);
+            this.currentScroll -= (float)((double)i / (double)j);
             if (this.currentScroll < 0.0f) {
                 this.currentScroll = 0.0f;
             }
@@ -404,16 +319,46 @@ extends LOTRGuiScreenBase {
         }
     }
 
-    private boolean hasScrollBar() {
+    public boolean hasScrollBar() {
         return this.theBanner.isPlayerSpecificProtection();
     }
 
-    private boolean canScroll() {
-        return true;
+    public void initGui() {
+        this.guiLeft = (this.width - this.xSize) / 2;
+        this.guiTop = (this.height - this.ySize) / 2;
+        this.buttonMode = new LOTRGuiButton(0, this.guiLeft + this.xSize / 2 - 80, this.guiTop + 20, 160, 20, "");
+        this.buttonList.add(this.buttonMode);
+        this.buttonSelfProtection = new LOTRGuiButtonBanner(1, this.guiLeft + this.xSize / 2 - 24, this.guiTop + 224, 212, 100);
+        this.buttonList.add(this.buttonSelfProtection);
+        this.buttonAddSlot = new LOTRGuiButtonBannerWhitelistSlots(0, this.guiLeft + 179, this.guiTop + 202);
+        this.buttonList.add(this.buttonAddSlot);
+        this.buttonRemoveSlot = new LOTRGuiButtonBannerWhitelistSlots(1, this.guiLeft + 187, this.guiTop + 202);
+        this.buttonList.add(this.buttonRemoveSlot);
+        this.buttonDefaultPermissions = new LOTRGuiButtonBanner(2, this.guiLeft + this.xSize / 2 + 8, this.guiTop + 224, 200, 134);
+        this.buttonList.add(this.buttonDefaultPermissions);
+        this.buttonDefaultPermissions.activated = true;
+        this.alignmentField = new GuiTextField(this.fontRendererObj, this.guiLeft + this.xSize / 2 - 70, this.guiTop + 100, 130, 18);
+        this.alignmentField.setText(String.valueOf(this.theBanner.getAlignmentProtection()));
+        this.alignmentField.setEnabled(false);
+        this.refreshWhitelist();
+        for (int i = 0; i < this.allowedPlayers.length; ++i) {
+            String name;
+            GuiTextField textBox = this.allowedPlayers[i];
+            textBox.setTextColor(16777215);
+            GameProfile profile = this.theBanner.getWhitelistedPlayer(i);
+            if (profile != null && !StringUtils.isBlank((CharSequence)(name = profile.getName()))) {
+                textBox.setText(name);
+                textBox.setTextColor(65280);
+                this.validatedUsernames[i] = true;
+            }
+            this.allowedPlayers[i] = textBox;
+        }
+        this.allowedPlayers[0].setEnabled(false);
+        Arrays.fill(this.checkUsernames, false);
     }
 
     @Override
-    protected void keyTyped(char c, int i) {
+    public void keyTyped(char c, int i) {
         if (this.alignmentField.getVisible() && this.alignmentField.textboxKeyTyped(c, i)) {
             return;
         }
@@ -438,7 +383,7 @@ extends LOTRGuiScreenBase {
         super.keyTyped(c, i);
     }
 
-    protected void mouseClicked(int i, int j, int k) {
+    public void mouseClicked(int i, int j, int k) {
         int dx;
         super.mouseClicked(i, j, k);
         if (this.alignmentField.getVisible()) {
@@ -510,82 +455,6 @@ extends LOTRGuiScreenBase {
                 }
                 this.sendBannerData(false);
                 this.buttonSound();
-                return;
-            }
-        }
-    }
-
-    private void buttonSound() {
-        this.buttonMode.func_146113_a(this.mc.getSoundHandler());
-    }
-
-    private void checkUsernameValid(int index) {
-        GuiTextField textBox = this.allowedPlayers[index];
-        String username = textBox.getText();
-        if (!StringUtils.isNullOrEmpty((String)username) && !this.invalidUsernames[index]) {
-            LOTRPacketBannerRequestInvalidName packet = new LOTRPacketBannerRequestInvalidName(this.theBanner, index, username);
-            LOTRPacketHandler.networkWrapper.sendToServer((IMessage)packet);
-        }
-    }
-
-    public void validateUsername(int index, String prevText, boolean valid) {
-        GuiTextField textBox = this.allowedPlayers[index];
-        String username = textBox.getText();
-        if (username.equals(prevText)) {
-            if (valid) {
-                this.validatedUsernames[index] = true;
-                this.invalidUsernames[index] = false;
-                textBox.setTextColor(65280);
-                this.updateWhitelistedPlayer(index, username);
-            } else {
-                this.invalidUsernames[index] = true;
-                this.validatedUsernames[index] = false;
-                textBox.setTextColor(16711680);
-                textBox.setText(StatCollector.translateToLocal((String)"lotr.gui.bannerEdit.invalidUsername"));
-                this.updateWhitelistedPlayer(index, null);
-            }
-        }
-    }
-
-    public void handleMouseInput() {
-        super.handleMouseInput();
-        int i = Mouse.getEventDWheel();
-        if (i != 0 && this.canScroll()) {
-            int j = this.allowedPlayers.length - 6;
-            if (i > 0) {
-                i = 1;
-            }
-            if (i < 0) {
-                i = -1;
-            }
-            this.currentScroll = (float)((double)this.currentScroll - (double)i / (double)j);
-            if (this.currentScroll < 0.0f) {
-                this.currentScroll = 0.0f;
-            }
-            if (this.currentScroll > 1.0f) {
-                this.currentScroll = 1.0f;
-            }
-        }
-    }
-
-    protected void actionPerformed(GuiButton button) {
-        if (button.enabled) {
-            if (button == this.buttonMode) {
-                this.theBanner.setPlayerSpecificProtection(!this.theBanner.isPlayerSpecificProtection());
-            }
-            if (button == this.buttonSelfProtection) {
-                this.theBanner.setSelfProtection(!this.theBanner.isSelfProtection());
-            }
-            if (button == this.buttonAddSlot) {
-                this.theBanner.resizeWhitelist(this.theBanner.getWhitelistLength() + 1);
-                this.refreshWhitelist();
-            }
-            if (button == this.buttonRemoveSlot) {
-                this.theBanner.resizeWhitelist(this.theBanner.getWhitelistLength() - 1);
-                this.refreshWhitelist();
-            }
-            if (button == this.buttonDefaultPermissions) {
-                this.defaultPermissionsOpen = true;
             }
         }
     }
@@ -595,7 +464,30 @@ extends LOTRGuiScreenBase {
         this.sendBannerData(true);
     }
 
-    private void sendBannerData(boolean sendWhitelist) {
+    public void refreshWhitelist() {
+        int length = this.theBanner.getWhitelistLength();
+        GuiTextField[] allowedPlayers_new = new GuiTextField[length];
+        boolean[] invalidUsernames_new = new boolean[length];
+        boolean[] validatedUsernames_new = new boolean[length];
+        boolean[] checkUsernames_new = new boolean[length];
+        for (int i = 0; i < length; ++i) {
+            GuiTextField guiTextField = allowedPlayers_new[i] = i < this.allowedPlayers.length ? this.allowedPlayers[i] : new GuiTextField(this.fontRendererObj, 0, 0, 130, 18);
+            if (i < this.invalidUsernames.length) {
+                invalidUsernames_new[i] = this.invalidUsernames[i];
+            }
+            if (i < this.validatedUsernames.length) {
+                validatedUsernames_new[i] = this.validatedUsernames[i];
+            }
+            if (i >= this.checkUsernames.length) continue;
+            checkUsernames_new[i] = this.checkUsernames[i];
+        }
+        this.allowedPlayers = allowedPlayers_new;
+        this.invalidUsernames = invalidUsernames_new;
+        this.validatedUsernames = validatedUsernames_new;
+        this.checkUsernames = checkUsernames_new;
+    }
+
+    public void sendBannerData(boolean sendWhitelist) {
         LOTRPacketEditBanner packet = new LOTRPacketEditBanner(this.theBanner);
         packet.playerSpecificProtection = this.theBanner.isPlayerSpecificProtection();
         packet.selfProtection = this.theBanner.isSelfProtection();
@@ -618,7 +510,7 @@ extends LOTRGuiScreenBase {
                     continue;
                 }
                 String username = profile.getName();
-                if (StringUtils.isNullOrEmpty((String)username)) {
+                if (StringUtils.isBlank((CharSequence)username)) {
                     whitelistSlots[index] = null;
                     continue;
                 }
@@ -632,5 +524,97 @@ extends LOTRGuiScreenBase {
         LOTRPacketHandler.networkWrapper.sendToServer((IMessage)packet);
     }
 
+    public void setupScrollBar(int i, int j) {
+        boolean isMouseDown = Mouse.isButtonDown((int)0);
+        int i1 = this.guiLeft + this.scrollBarX;
+        int j1 = this.guiTop + this.scrollBarY;
+        int i2 = i1 + this.scrollBarWidth;
+        int j2 = j1 + this.scrollBarHeight;
+        if (!this.wasMouseDown && isMouseDown && i >= i1 && j >= j1 && i < i2 && j < j2) {
+            this.isScrolling = this.canScroll();
+        }
+        if (!isMouseDown) {
+            this.isScrolling = false;
+        }
+        this.wasMouseDown = isMouseDown;
+        if (this.isScrolling) {
+            this.currentScroll = ((float)(j - j1) - (float)this.scrollWidgetHeight / 2.0f) / ((float)(j2 - j1) - (float)this.scrollWidgetHeight);
+            if (this.currentScroll < 0.0f) {
+                this.currentScroll = 0.0f;
+            }
+            if (this.currentScroll > 1.0f) {
+                this.currentScroll = 1.0f;
+            }
+        }
+    }
+
+    @Override
+    public void updateScreen() {
+        super.updateScreen();
+        this.buttonSelfProtection.activated = this.theBanner.isSelfProtection();
+        this.buttonAddSlot.visible = this.buttonRemoveSlot.visible = this.theBanner.isPlayerSpecificProtection();
+        this.buttonAddSlot.enabled = this.theBanner.getWhitelistLength() < LOTREntityBanner.WHITELIST_MAX;
+        this.buttonRemoveSlot.enabled = this.theBanner.getWhitelistLength() > LOTREntityBanner.WHITELIST_MIN;
+        this.alignmentField.updateCursorCounter();
+        this.alignmentField.setVisible(!this.theBanner.isPlayerSpecificProtection());
+        this.alignmentField.setEnabled(this.alignmentField.getVisible());
+        if (this.alignmentField.getVisible() && !this.alignmentField.isFocused()) {
+            float prevAlignment = this.theBanner.getAlignmentProtection();
+            float alignment = LOTRAlignmentValues.parseDisplayedAlign(this.alignmentField.getText());
+            alignment = MathHelper.clamp_float((float)alignment, (float)LOTREntityBanner.ALIGNMENT_PROTECTION_MIN, (float)LOTREntityBanner.ALIGNMENT_PROTECTION_MAX);
+            this.theBanner.setAlignmentProtection(alignment);
+            this.alignmentField.setText(LOTRAlignmentValues.formatAlignForDisplay(alignment));
+            if (alignment != prevAlignment) {
+                this.sendBannerData(false);
+            }
+        }
+        for (GuiTextField textBox : this.allowedPlayers) {
+            textBox.updateCursorCounter();
+        }
+    }
+
+    public void updateWhitelistedPlayer(int index, String username) {
+        LOTRBannerWhitelistEntry prevEntry = this.theBanner.getWhitelistEntry(index);
+        int prevPerms = -1;
+        if (prevEntry != null) {
+            prevPerms = prevEntry.encodePermBitFlags();
+        }
+        if (StringUtils.isBlank((CharSequence)username)) {
+            this.theBanner.whitelistPlayer(index, null);
+        } else {
+            if (LOTRFellowshipProfile.hasFellowshipCode(username)) {
+                String fsName = LOTRFellowshipProfile.stripFellowshipCode(username);
+                if (StringUtils.isBlank((CharSequence)fsName)) {
+                    this.theBanner.whitelistPlayer(index, null);
+                } else {
+                    this.theBanner.whitelistPlayer(index, new LOTRFellowshipProfile(this.theBanner, null, fsName));
+                }
+            } else {
+                this.theBanner.whitelistPlayer(index, new GameProfile(null, username));
+            }
+            if (prevPerms >= 0) {
+                this.theBanner.getWhitelistEntry(index).decodePermBitFlags(prevPerms);
+            }
+        }
+    }
+
+    public void validateUsername(int index, String prevText, boolean valid) {
+        GuiTextField textBox = this.allowedPlayers[index];
+        String username = textBox.getText();
+        if (username.equals(prevText)) {
+            if (valid) {
+                this.validatedUsernames[index] = true;
+                this.invalidUsernames[index] = false;
+                textBox.setTextColor(65280);
+                this.updateWhitelistedPlayer(index, username);
+            } else {
+                this.invalidUsernames[index] = true;
+                this.validatedUsernames[index] = false;
+                textBox.setTextColor(16711680);
+                textBox.setText(StatCollector.translateToLocal((String)"lotr.gui.bannerEdit.invalidUsername"));
+                this.updateWhitelistedPlayer(index, null);
+            }
+        }
+    }
 }
 

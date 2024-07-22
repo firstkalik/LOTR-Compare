@@ -79,8 +79,8 @@ extends EntityAIBase {
         double range = 32.0;
         List players = this.theBanditAsNPC.worldObj.getEntitiesWithinAABB(EntityPlayer.class, this.theBanditAsNPC.boundingBox.expand(range, range, range));
         ArrayList<EntityPlayer> validTargets = new ArrayList<EntityPlayer>();
-        for (int i = 0; i < players.size(); ++i) {
-            EntityPlayer entityplayer = (EntityPlayer)players.get(i);
+        for (Object player : players) {
+            EntityPlayer entityplayer = (EntityPlayer)player;
             if (entityplayer.capabilities.isCreativeMode || !this.theBandit.canTargetPlayerForTheft(entityplayer) || !IBandit.Helper.canStealFromPlayerInv(this.theBandit, entityplayer)) continue;
             validTargets.add(entityplayer);
         }
@@ -177,16 +177,6 @@ extends EntityAIBase {
         }
     }
 
-    private boolean tryStealItem(InventoryPlayer inv, final Item item) {
-        return this.tryStealItem_do(inv, new BanditItemFilter(){
-
-            @Override
-            public boolean isApplicable(ItemStack itemstack) {
-                return itemstack.getItem() == item;
-            }
-        });
-    }
-
     private boolean tryStealItem(InventoryPlayer inv, final Class itemclass) {
         return this.tryStealItem_do(inv, new BanditItemFilter(){
 
@@ -228,7 +218,8 @@ extends EntityAIBase {
         }
         List<Integer> slotsAsList = Arrays.asList(inventorySlots);
         Collections.shuffle(slotsAsList);
-        Integer[] arrinteger = inventorySlots = slotsAsList.toArray(inventorySlots);
+        inventorySlots = slotsAsList.toArray(inventorySlots);
+        Integer[] arrinteger = inventorySlots;
         int n = arrinteger.length;
         for (int i = 0; i < n; ++i) {
             ItemStack itemstack;

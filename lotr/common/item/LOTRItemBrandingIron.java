@@ -65,7 +65,6 @@ extends Item {
     private IIcon iconCool;
     @SideOnly(value=Side.CLIENT)
     private IIcon iconHot;
-    private static final int HEAT_USES = 5;
 
     public LOTRItemBrandingIron() {
         this.setCreativeTab((CreativeTabs)LOTRCreativeTabs.tabTools);
@@ -129,9 +128,7 @@ extends Item {
             if (entity instanceof EntityLiving) {
                 EntityLiving entityliving = (EntityLiving)entity;
                 boolean acceptableEntity = false;
-                if (entityliving instanceof EntityAnimal) {
-                    acceptableEntity = true;
-                } else if (entityliving instanceof LOTREntityNPC && ((LOTREntityNPC)entityliving).canRenameNPC()) {
+                if (entityliving instanceof EntityAnimal || entityliving instanceof LOTREntityNPC && ((LOTREntityNPC)entityliving).canRenameNPC()) {
                     acceptableEntity = true;
                 }
                 if (acceptableEntity && !entityliving.getCustomNameTag().equals(brandName)) {
@@ -162,9 +159,7 @@ extends Item {
         if (LOTRItemBrandingIron.hasBrandName(itemstack) && !LOTRItemBrandingIron.isHeated(itemstack)) {
             boolean isHotBlock = false;
             TileEntity te = world.getTileEntity(i, j, k);
-            if (te instanceof TileEntityFurnace && ((TileEntityFurnace)te).isBurning()) {
-                isHotBlock = true;
-            } else if (te instanceof LOTRTileEntityForgeBase && ((LOTRTileEntityForgeBase)te).isSmelting()) {
+            if (te instanceof TileEntityFurnace && ((TileEntityFurnace)te).isBurning() || te instanceof LOTRTileEntityForgeBase && ((LOTRTileEntityForgeBase)te).isSmelting()) {
                 isHotBlock = true;
             } else if (te instanceof LOTRTileEntityHobbitOven && ((LOTRTileEntityHobbitOven)te).isCooking()) {
                 isHotBlock = true;

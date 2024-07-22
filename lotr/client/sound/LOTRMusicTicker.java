@@ -9,7 +9,6 @@
  *  net.minecraft.client.entity.EntityClientPlayerMP
  *  net.minecraft.client.multiplayer.WorldClient
  *  net.minecraft.client.settings.GameSettings
- *  net.minecraft.entity.player.EntityPlayer
  *  net.minecraft.util.AxisAlignedBB
  *  net.minecraft.util.MathHelper
  *  net.minecraft.world.World
@@ -34,7 +33,6 @@ import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.settings.GameSettings;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
@@ -43,9 +41,7 @@ import net.minecraft.world.biome.BiomeGenBase;
 public class LOTRMusicTicker {
     public static LOTRMusicTrack currentTrack;
     private static boolean wasPlayingMenu;
-    private static final int firstTiming = 100;
     private static int timing;
-    private static final int nullTrackResetTiming = 400;
 
     public static void update(Random rand) {
         Minecraft mc = Minecraft.getMinecraft();
@@ -106,8 +102,8 @@ public class LOTRMusicTicker {
     }
 
     private static LOTRMusicRegion.Sub getCurrentRegion(Minecraft mc, Random rand) {
-        int i;
         BiomeGenBase biome;
+        int i;
         int k;
         WorldClient world = mc.theWorld;
         EntityClientPlayerMP entityplayer = mc.thePlayer;
@@ -126,10 +122,8 @@ public class LOTRMusicTicker {
         WorldClient world = mc.theWorld;
         EntityClientPlayerMP entityplayer = mc.thePlayer;
         if (world != null && entityplayer != null) {
-            int j;
-            int k;
             int i = MathHelper.floor_double((double)entityplayer.posX);
-            if (LOTRMusicCategory.isCave((World)world, i, j = MathHelper.floor_double((double)entityplayer.boundingBox.minY), k = MathHelper.floor_double((double)entityplayer.posZ))) {
+            if (LOTRMusicCategory.isCave((World)world, i, MathHelper.floor_double((double)entityplayer.boundingBox.minY), MathHelper.floor_double((double)entityplayer.posZ))) {
                 return LOTRMusicCategory.CAVE;
             }
             if (LOTRMusicCategory.isDay((World)world)) {

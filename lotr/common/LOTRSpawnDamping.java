@@ -52,10 +52,13 @@ public class LOTRSpawnDamping {
     }
 
     public static int getSpawnCap(String type, int baseCap, int players) {
-        float stationaryPointValue;
+        float f;
+        float f2;
         float damp = LOTRSpawnDamping.getSpawnDamping(type);
         float dampFraction = (float)(players - 1) * damp;
-        if ((dampFraction = MathHelper.clamp_float((float)dampFraction, (float)0.0f, (float)1.0f)) > (stationaryPointValue = 0.5f + damp / 2.0f)) {
+        dampFraction = MathHelper.clamp_float((float)dampFraction, (float)0.0f, (float)1.0f);
+        float stationaryPointValue = 0.5f + damp / 2.0f;
+        if (f2 > f) {
             dampFraction = stationaryPointValue;
         }
         int capPerPlayer = Math.round((float)baseCap * (1.0f - dampFraction));

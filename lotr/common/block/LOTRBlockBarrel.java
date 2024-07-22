@@ -17,7 +17,6 @@
  *  net.minecraft.entity.player.InventoryPlayer
  *  net.minecraft.entity.player.PlayerCapabilities
  *  net.minecraft.inventory.Container
- *  net.minecraft.inventory.IInventory
  *  net.minecraft.item.Item
  *  net.minecraft.item.ItemStack
  *  net.minecraft.tileentity.TileEntity
@@ -51,7 +50,6 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.entity.player.PlayerCapabilities;
 import net.minecraft.inventory.Container;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -212,7 +210,7 @@ extends BlockContainer {
         if (barrel != null) {
             ItemStack brewing = barrel.getStackInSlot(9);
             barrel.setInventorySlotContents(9, null);
-            LOTRMod.dropContainerItems((IInventory)barrel, world, i, j, k);
+            LOTRMod.dropContainerItems(barrel, world, i, j, k);
             for (int slot = 0; slot < barrel.getSizeInventory(); ++slot) {
                 barrel.setInventorySlotContents(slot, null);
             }

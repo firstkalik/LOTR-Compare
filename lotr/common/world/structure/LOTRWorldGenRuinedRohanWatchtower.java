@@ -74,8 +74,8 @@ extends LOTRWorldGenStructureBase {
 
     private void generateBasicStructure(World world, Random random, int i, int j, int k) {
         int k1;
-        int i1;
         int j1;
+        int i1;
         for (j1 = j + 3 - random.nextInt(8); !LOTRMod.isOpaque(world, i - 3, j1, k - 3) && j1 >= 0; --j1) {
             this.setBlockAndNotifyAdequately(world, i - 3, j1, k - 3, this.plankBlock, this.plankMeta);
         }
@@ -125,17 +125,17 @@ extends LOTRWorldGenStructureBase {
             this.setBlockAndNotifyAdequately(world, i, j1, k + 3, this.plankBlock, this.plankMeta);
         }
         for (int k1 = k - 2; k1 <= k + 2; ++k1) {
-            int j1;
             int j2;
+            int j1;
             int k2 = Math.abs(k - k1);
             for (j1 = j - 1; !LOTRMod.isOpaque(world, i - 3, j1, k1) && j1 >= 0; --j1) {
                 j2 = j - j1;
-                if (!(k2 == 2 && j2 % 4 == 1 || k2 == 1 && j2 % 2 == 0) && (k2 != 0 || j2 % 4 != 3 || random.nextInt(3) != 0)) continue;
+                if (!(k2 == 2 && j2 % 4 == 1 || k2 == 1 && j2 % 2 == 0 || k2 == 0 && j2 % 4 == 3 && random.nextInt(3) == 0)) continue;
                 this.setBlockAndNotifyAdequately(world, i - 3, j1, k1, this.woodBlock, this.woodMeta);
             }
             for (j1 = j - 1; !LOTRMod.isOpaque(world, i + 3, j1, k1) && j1 >= 0; --j1) {
                 j2 = j - j1;
-                if (!(k2 == 2 && j2 % 4 == 1 || k2 == 1 && j2 % 2 == 0) && (k2 != 0 || j2 % 4 != 3 || random.nextInt(3) != 0)) continue;
+                if (!(k2 == 2 && j2 % 4 == 1 || k2 == 1 && j2 % 2 == 0 || k2 == 0 && j2 % 4 == 3 && random.nextInt(3) == 0)) continue;
                 this.setBlockAndNotifyAdequately(world, i + 3, j1, k1, this.woodBlock, this.woodMeta);
             }
         }
@@ -147,17 +147,17 @@ extends LOTRWorldGenStructureBase {
             this.setBlockAndNotifyAdequately(world, i - 3, j1, k, this.plankBlock, this.plankMeta);
         }
         for (int i1 = i - 2; i1 <= i + 2; ++i1) {
-            int j1;
             int j2;
+            int j1;
             int i2 = Math.abs(i - i1);
             for (j1 = j - 1; !LOTRMod.isOpaque(world, i1, j1, k - 3) && j1 >= 0; --j1) {
                 j2 = j - j1;
-                if (!(i2 == 2 && j2 % 4 == 1 || i2 == 1 && j2 % 2 == 0) && (i2 != 0 || j2 % 4 != 3 || random.nextInt(3) != 0)) continue;
+                if (!(i2 == 2 && j2 % 4 == 1 || i2 == 1 && j2 % 2 == 0 || i2 == 0 && j2 % 4 == 3 && random.nextInt(3) == 0)) continue;
                 this.setBlockAndNotifyAdequately(world, i1, j1, k - 3, this.woodBlock, this.woodMeta);
             }
             for (j1 = j - 1; !LOTRMod.isOpaque(world, i1, j1, k + 3) && j1 >= 0; --j1) {
                 j2 = j - j1;
-                if (!(i2 == 2 && j2 % 4 == 1 || i2 == 1 && j2 % 2 == 0) && (i2 != 0 || j2 % 4 != 3 || random.nextInt(3) != 0)) continue;
+                if (!(i2 == 2 && j2 % 4 == 1 || i2 == 1 && j2 % 2 == 0 || i2 == 0 && j2 % 4 == 3 && random.nextInt(3) == 0)) continue;
                 this.setBlockAndNotifyAdequately(world, i1, j1, k + 3, this.woodBlock, this.woodMeta);
             }
         }
@@ -169,17 +169,17 @@ extends LOTRWorldGenStructureBase {
             this.setBlockAndNotifyAdequately(world, i, j1, k - 3, this.plankBlock, this.plankMeta);
         }
         for (int k1 = k - 2; k1 <= k + 2; ++k1) {
-            int j1;
             int j2;
+            int j1;
             int k2 = Math.abs(k - k1);
             for (j1 = j - 1; !LOTRMod.isOpaque(world, i - 3, j1, k1) && j1 >= 0; --j1) {
                 j2 = j - j1;
-                if (!(k2 == 2 && j2 % 4 == 1 || k2 == 1 && j2 % 2 == 0) && (k2 != 0 || j2 % 4 != 3 || random.nextInt(3) != 0)) continue;
+                if (!(k2 == 2 && j2 % 4 == 1 || k2 == 1 && j2 % 2 == 0 || k2 == 0 && j2 % 4 == 3 && random.nextInt(3) == 0)) continue;
                 this.setBlockAndNotifyAdequately(world, i - 3, j1, k1, this.woodBlock, this.woodMeta);
             }
             for (j1 = j - 1; !LOTRMod.isOpaque(world, i + 3, j1, k1) && j1 >= 0; --j1) {
                 j2 = j - j1;
-                if (!(k2 == 2 && j2 % 4 == 1 || k2 == 1 && j2 % 2 == 0) && (k2 != 0 || j2 % 4 != 3 || random.nextInt(3) != 0)) continue;
+                if (!(k2 == 2 && j2 % 4 == 1 || k2 == 1 && j2 % 2 == 0 || k2 == 0 && j2 % 4 == 3 && random.nextInt(3) == 0)) continue;
                 this.setBlockAndNotifyAdequately(world, i + 3, j1, k1, this.woodBlock, this.woodMeta);
             }
         }
@@ -191,17 +191,17 @@ extends LOTRWorldGenStructureBase {
             this.setBlockAndNotifyAdequately(world, i + 3, j1, k, this.plankBlock, this.plankMeta);
         }
         for (int i1 = i - 2; i1 <= i + 2; ++i1) {
-            int j1;
             int j2;
+            int j1;
             int i2 = Math.abs(i - i1);
             for (j1 = j - 1; !LOTRMod.isOpaque(world, i1, j1, k - 3) && j1 >= 0; --j1) {
                 j2 = j - j1;
-                if (!(i2 == 2 && j2 % 4 == 1 || i2 == 1 && j2 % 2 == 0) && (i2 != 0 || j2 % 4 != 3 || random.nextInt(3) != 0)) continue;
+                if (!(i2 == 2 && j2 % 4 == 1 || i2 == 1 && j2 % 2 == 0 || i2 == 0 && j2 % 4 == 3 && random.nextInt(3) == 0)) continue;
                 this.setBlockAndNotifyAdequately(world, i1, j1, k - 3, this.woodBlock, this.woodMeta);
             }
             for (j1 = j - 1; !LOTRMod.isOpaque(world, i1, j1, k + 3) && j1 >= 0; --j1) {
                 j2 = j - j1;
-                if (!(i2 == 2 && j2 % 4 == 1 || i2 == 1 && j2 % 2 == 0) && (i2 != 0 || j2 % 4 != 3 || random.nextInt(3) != 0)) continue;
+                if (!(i2 == 2 && j2 % 4 == 1 || i2 == 1 && j2 % 2 == 0 || i2 == 0 && j2 % 4 == 3 && random.nextInt(3) == 0)) continue;
                 this.setBlockAndNotifyAdequately(world, i1, j1, k + 3, this.woodBlock, this.woodMeta);
             }
         }

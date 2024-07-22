@@ -204,7 +204,7 @@ implements LOTRBoss {
         double range = 64.0;
         for (Object obj : players) {
             EntityPlayer entityplayer = (EntityPlayer)obj;
-            if (!(this.getDistanceSqToEntity((Entity)entityplayer) <= range * range)) continue;
+            if (this.getDistanceSqToEntity((Entity)entityplayer) > range * range) continue;
             this.sendSpeechBank(entityplayer, "ent/mallornEnt/" + speechBank);
         }
     }
@@ -263,7 +263,7 @@ implements LOTRBoss {
                 int leaves = 8;
                 for (int l = 0; l < leaves; ++l) {
                     int leafR = (int)((float)l / (float)leaves);
-                    float argBase = (float)this.getEntSpawnTick() + leafR;
+                    float argBase = (float)this.getEntSpawnTick() + (float)leafR;
                     double r = 3.5;
                     double up = 0.5;
                     for (float extra : new float[]{0.0f, 3.1415927f}) {
@@ -287,8 +287,7 @@ implements LOTRBoss {
             block3: for (LeafHealInfo healing : this.leafHealings) {
                 if (healing.active) continue;
                 float f = this.getBaseChanceModifier();
-                f *= 0.02f;
-                if (!(this.rand.nextFloat() < f)) continue;
+                if (this.rand.nextFloat() >= (f *= 0.02f)) continue;
                 int range = 16;
                 int i = MathHelper.floor_double((double)this.posX);
                 int j = MathHelper.floor_double((double)this.posY);
@@ -321,7 +320,7 @@ implements LOTRBoss {
                     if (this.ticksExisted % 20 != 0) continue;
                     this.heal(2.0f);
                     healing.healTime--;
-                    if (!(this.getHealth() >= this.getMaxHealth()) && healing.healTime > 0) continue;
+                    if (this.getHealth() < this.getMaxHealth() && healing.healTime > 0) continue;
                     healing.active = false;
                     this.sendHealInfoToWatchers(healing);
                     continue;
@@ -371,8 +370,8 @@ implements LOTRBoss {
             int j = MathHelper.floor_double((double)this.posY);
             int k = MathHelper.floor_double((double)this.posZ);
             for (int l = 0; l < 30; ++l) {
-                int k1;
                 int j1;
+                int k1;
                 int i1 = i + MathHelper.getRandomIntegerInRange((Random)this.rand, (int)(-range), (int)range);
                 if (!this.worldObj.getBlock(i1, (j1 = j + MathHelper.getRandomIntegerInRange((Random)this.rand, (int)(-range), (int)range)) - 1, k1 = k + MathHelper.getRandomIntegerInRange((Random)this.rand, (int)(-range), (int)range)).isNormalCube() || this.worldObj.getBlock(i1, j1, k1).isNormalCube() || this.worldObj.getBlock(i1, j1 + 1, k1).isNormalCube()) continue;
                 tree.setLocationAndAngles((double)i1 + 0.5, (double)j1, (double)k1 + 0.5, this.rand.nextFloat() * 360.0f, 0.0f);
@@ -485,8 +484,7 @@ implements LOTRBoss {
     public void writeEntityToNBT(NBTTagCompound nbt) {
         super.writeEntityToNBT(nbt);
         NBTTagList leafHealingTags = new NBTTagList();
-        for (int i = 0; i < this.leafHealings.length; ++i) {
-            LeafHealInfo healing = this.leafHealings[i];
+        for (LeafHealInfo healing : this.leafHealings) {
             NBTTagCompound healTag = new NBTTagCompound();
             healing.writeToNBT(healTag);
             leafHealingTags.appendTag((NBTBase)healTag);
@@ -540,7 +538,7 @@ implements LOTRBoss {
         super.damageEntity(damagesource, f);
         if (!this.worldObj.isRemote && !this.hasWeaponShield() && this.getHealth() <= 0.0f) {
             this.setHasWeaponShield(true);
-            this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(300.0);
+            this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue((double)MathHelper.getRandomIntegerInRange((Random)this.rand, (int)300, (int)600));
             this.setHealth(this.getMaxHealth());
             this.sendEntBossSpeech("shield");
         }
@@ -569,8 +567,8 @@ implements LOTRBoss {
 
     @Override
     public void dropFewItems(boolean flag, int i) {
-        int dropped;
         int dropped2;
+        int dropped;
         super.dropFewItems(flag, i);
         for (int wood = MathHelper.getRandomIntegerInRange((Random)this.rand, (int)20, (int)(30 + i * 20)); wood > 0; wood -= dropped2) {
             dropped2 = Math.min(20, wood);
@@ -585,6 +583,7 @@ implements LOTRBoss {
         maceChance += (float)i * 0.1f;
         if (this.rand.nextFloat() < maceChance) {
             this.dropItem(LOTRMod.maceMallornCharred, 1);
+            this.dropItem(LOTRMod.ringValarYavanna, 1);
         }
     }
 

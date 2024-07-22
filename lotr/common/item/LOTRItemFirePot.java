@@ -33,7 +33,7 @@ import net.minecraft.world.World;
 public class LOTRItemFirePot
 extends Item {
     public LOTRItemFirePot() {
-        this.setMaxStackSize(4);
+        this.setMaxStackSize(6);
         this.setCreativeTab((CreativeTabs)LOTRCreativeTabs.tabCombat);
         BlockDispenser.dispenseBehaviorRegistry.putObject((Object)this, (Object)new LOTRDispenseFirePot());
     }

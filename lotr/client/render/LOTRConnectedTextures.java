@@ -58,10 +58,7 @@ public class LOTRConnectedTextures {
                     int i1 = i;
                     int j1 = j;
                     int k1 = k;
-                    if (side == 0) {
-                        i1 += x;
-                        k1 += y;
-                    } else if (side == 1) {
+                    if (side == 0 || side == 1) {
                         i1 += x;
                         k1 += y;
                     } else if (side == 2) {
@@ -108,7 +105,6 @@ public class LOTRConnectedTextures {
             boolean top = adjacentFlags[0][1];
             boolean topRight = adjacentFlags[0][2];
             boolean left = adjacentFlags[1][0];
-            boolean mid = adjacentFlags[1][1];
             boolean right = adjacentFlags[1][2];
             boolean bottomLeft = adjacentFlags[2][0];
             boolean bottom = adjacentFlags[2][1];
@@ -202,7 +198,7 @@ public class LOTRConnectedTextures {
         String blockName = block.getConnectedName(meta);
         blockIconsMap.remove(blockName);
         Minecraft mc = Minecraft.getMinecraft();
-        IResourceManager resourceManager = mc.getResourceManager();
+        mc.getResourceManager();
         TextureMap textureMap = (TextureMap)iconregister;
         String baseIconName = LOTRConnectedTextures.getBaseIconName(blockName);
         String modID = LOTRConnectedTextures.getModID(blockName);
@@ -213,8 +209,7 @@ public class LOTRConnectedTextures {
             IconElement elemt = entry.getKey();
             BufferedImage img = entry.getValue();
             if (elemt == IconElement.BASE || img.getWidth() == iconWidth && img.getHeight() == iconHeight) continue;
-            FMLLog.severe((String)"LOTR: All connected texture icons for %s must have the same dimensions!", (Object[])new Object[]{baseIconName});
-            FMLLog.severe((String)"%s: base icon is %dx%d, but %s icon is %dx%d", (Object[])new Object[]{baseIconName, iconWidth, iconHeight, elemt.iconName, img.getWidth(), img.getHeight()});
+            FMLLog.severe((String)("LOTR: All connected texture icons for " + baseIconName + " must have the same dimensions!"), (Object[])new Object[0]);
             BufferedImage errored = new BufferedImage(iconWidth, iconHeight, 2);
             for (int i = 0; i < errored.getWidth(); ++i) {
                 for (int j = 0; j < errored.getHeight(); ++j) {
@@ -284,10 +279,10 @@ public class LOTRConnectedTextures {
             iconElementMap.put(IconElement.CORNER_TOPRIGHT, LOTRConnectedTextures.getSubImageIcon(blockIconImage, iconWidth - sideWidth, 0, sideWidth, sideHeight));
             iconElementMap.put(IconElement.CORNER_BOTTOMLEFT, LOTRConnectedTextures.getSubImageIcon(blockIconImage, 0, iconHeight - sideHeight, sideWidth, sideHeight));
             iconElementMap.put(IconElement.CORNER_BOTTOMRIGHT, LOTRConnectedTextures.getSubImageIcon(blockIconImage, iconWidth - sideWidth, iconHeight - sideHeight, sideWidth, sideHeight));
-            iconElementMap.put(IconElement.INVCORNER_TOPLEFT, (BufferedImage)iconElementMap.get((Object)IconElement.CORNER_TOPLEFT));
-            iconElementMap.put(IconElement.INVCORNER_TOPRIGHT, (BufferedImage)iconElementMap.get((Object)IconElement.CORNER_TOPRIGHT));
-            iconElementMap.put(IconElement.INVCORNER_BOTTOMLEFT, (BufferedImage)iconElementMap.get((Object)IconElement.CORNER_BOTTOMLEFT));
-            iconElementMap.put(IconElement.INVCORNER_BOTTOMRIGHT, (BufferedImage)iconElementMap.get((Object)IconElement.CORNER_BOTTOMRIGHT));
+            iconElementMap.put(IconElement.INVCORNER_TOPLEFT, iconElementMap.get((Object)IconElement.CORNER_TOPLEFT));
+            iconElementMap.put(IconElement.INVCORNER_TOPRIGHT, iconElementMap.get((Object)IconElement.CORNER_TOPRIGHT));
+            iconElementMap.put(IconElement.INVCORNER_BOTTOMLEFT, iconElementMap.get((Object)IconElement.CORNER_BOTTOMLEFT));
+            iconElementMap.put(IconElement.INVCORNER_BOTTOMRIGHT, iconElementMap.get((Object)IconElement.CORNER_BOTTOMRIGHT));
         }
         catch (IOException e) {
             FMLLog.severe((String)"Failed to load connected textures for %s", (Object[])new Object[]{modID + ":" + baseIconName});

@@ -48,7 +48,6 @@ implements IInventory {
     private ItemStack[] inventory = new ItemStack[8];
     private boolean[] cooked = new boolean[8];
     private int cookTime;
-    private static final int cookTimeMax = 200;
     private int fuelTime;
     private boolean cookedClient;
     private boolean cookingClient;
@@ -109,12 +108,11 @@ implements IInventory {
     }
 
     public boolean isMeat(ItemStack meat) {
-        ItemFood itemfood;
         if (meat == null) {
             return false;
         }
         Item item = meat.getItem();
-        if (item instanceof ItemFood && (itemfood = (ItemFood)item).isWolfsFavoriteMeat()) {
+        if (item instanceof ItemFood && ((ItemFood)item).isWolfsFavoriteMeat()) {
             ItemStack cookedFood = FurnaceRecipes.smelting().getSmeltingResult(meat);
             return cookedFood != null;
         }
@@ -376,7 +374,6 @@ implements IInventory {
         this.inventory = new ItemStack[this.getSizeInventory()];
         this.cooked = new boolean[this.inventory.length];
         for (int i = 0; i < items.tagCount(); ++i) {
-            boolean slotCooked;
             NBTTagCompound itemData = items.getCompoundTagAt(i);
             byte slot = itemData.getByte("Slot");
             if (slot < 0 || slot >= this.inventory.length) continue;
@@ -384,7 +381,7 @@ implements IInventory {
             if (slotItem) {
                 this.inventory[slot] = ItemStack.loadItemStackFromNBT((NBTTagCompound)itemData);
             }
-            this.cooked[i] = slotCooked = itemData.getBoolean("SlotCooked");
+            this.cooked[i] = itemData.getBoolean("SlotCooked");
         }
         this.cookTime = nbt.getShort("CookTime");
         this.fuelTime = nbt.getShort("FuelTime");

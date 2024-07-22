@@ -235,7 +235,7 @@ extends Entity {
                 double nearestDist = Double.MAX_VALUE;
                 for (LOTRFaction faction : invasionFaction.getBonusesForKilling()) {
                     double dist;
-                    if (faction.isolationist || !((dist = faction.distanceToNearestControlZoneInRange(this.posX, this.posY, this.posZ, nearestRange)) >= 0.0) || nearest != null && !(dist < nearestDist)) continue;
+                    if (faction.isolationist || (dist = faction.distanceToNearestControlZoneInRange(this.posX, this.posY, this.posZ, nearestRange)) < 0.0 || nearest != null && dist >= nearestDist) continue;
                     nearest = faction;
                     nearestDist = dist;
                 }
@@ -285,7 +285,6 @@ extends Entity {
         if (type == null || type.invasionMobs.isEmpty()) {
             this.setDead();
         } else {
-            int i;
             this.setInvasionType(type);
             if (nbt.hasKey("MobsRemaining")) {
                 this.invasionSize = this.invasionRemaining = nbt.getInteger("MobsRemaining");
@@ -298,7 +297,7 @@ extends Entity {
             this.recentPlayerContributors.clear();
             if (nbt.hasKey("RecentPlayers")) {
                 NBTTagList recentTags = nbt.getTagList("RecentPlayers", 10);
-                for (i = 0; i < recentTags.tagCount(); ++i) {
+                for (int i = 0; i < recentTags.tagCount(); ++i) {
                     NBTTagCompound playerData = recentTags.getCompoundTagAt(i);
                     String playerS = playerData.getString("Player");
                     try {
@@ -322,7 +321,7 @@ extends Entity {
             }
             if (nbt.hasKey("BonusFactions")) {
                 NBTTagList bonusTags = nbt.getTagList("BonusFactions", 8);
-                for (i = 0; i < bonusTags.tagCount(); ++i) {
+                for (int i = 0; i < bonusTags.tagCount(); ++i) {
                     String fName = bonusTags.getStringTagAt(i);
                     LOTRFaction f = LOTRFaction.forName(fName);
                     if (f == null) continue;
@@ -334,22 +333,31 @@ extends Entity {
 
     private void endInvasion(boolean completed) {
         if (completed) {
-            float conqBoost = 50.0f;
-            HashSet<EntityPlayer> rewardedPlayers = new HashSet<EntityPlayer>();
+            LOTRFaction invasionFac = this.getInvasionType().invasionFaction;
+            HashSet<EntityPlayer> achievementPlayers = new HashSet<EntityPlayer>();
+            HashSet<EntityPlayer> conqRewardPlayers = new HashSet<EntityPlayer>();
             for (UUID player : this.recentPlayerContributors.keySet()) {
                 LOTRFaction pledged;
-                LOTRPlayerData pd;
                 EntityPlayer entityplayer = this.worldObj.func_152378_a(player);
+                if (entityplayer == null) continue;
                 double range = 100.0;
-                if (entityplayer.dimension != this.dimension || !(entityplayer.getDistanceSqToEntity((Entity)this) < range * range) || (pledged = (pd = LOTRLevelData.getData(player)).getPledgeFaction()) == null || !pledged.isBadRelation(this.getInvasionType().invasionFaction)) continue;
-                rewardedPlayers.add(entityplayer);
+                if (entityplayer.dimension != this.dimension || entityplayer.getDistanceSqToEntity((Entity)this) >= range * range) continue;
+                LOTRPlayerData pd = LOTRLevelData.getData(player);
+                if (pd.getAlignment(invasionFac) <= 0.0f) {
+                    achievementPlayers.add(entityplayer);
+                }
+                if ((pledged = pd.getPledgeFaction()) == null || !pledged.isBadRelation(invasionFac)) continue;
+                conqRewardPlayers.add(entityplayer);
             }
-            if (!rewardedPlayers.isEmpty()) {
-                float boostPerPlayer = 50.0f / (float)rewardedPlayers.size();
-                for (EntityPlayer entityplayer : rewardedPlayers) {
+            for (EntityPlayer entityplayer : achievementPlayers) {
+                LOTRPlayerData pd = LOTRLevelData.getData(entityplayer);
+                pd.addAchievement(LOTRAchievement.defeatInvasion);
+            }
+            if (!conqRewardPlayers.isEmpty()) {
+                float boostPerPlayer = 50.0f / (float)conqRewardPlayers.size();
+                for (EntityPlayer entityplayer : conqRewardPlayers) {
                     LOTRPlayerData pd = LOTRLevelData.getData(entityplayer);
                     pd.givePureConquestBonus(entityplayer, pd.getPledgeFaction(), this.getInvasionType().invasionFaction, boostPerPlayer, "lotr.alignment.invasionDefeat", this.posX, this.posY, this.posZ);
-                    pd.addAchievement(LOTRAchievement.defeatInvasion);
                 }
             }
         }
@@ -399,10 +407,9 @@ extends Entity {
         }
         if (!this.worldObj.isRemote && LOTRMod.canSpawnMobs(this.worldObj)) {
             double nearbySearch;
-            List nearbyNPCs;
             LOTRInvasions invasionType = this.getInvasionType();
             EntityPlayer closePlayer = this.worldObj.getClosestPlayer(this.posX, this.posY, this.posZ, 80.0);
-            if (closePlayer != null && this.invasionRemaining > 0 && (nearbyNPCs = this.worldObj.selectEntitiesWithinAABB(LOTREntityNPC.class, this.boundingBox.expand(nearbySearch = INVASION_FOLLOW_RANGE * 2.0, nearbySearch, nearbySearch), this.selectThisInvasionMobs())).size() < 16 && this.rand.nextInt(160) == 0) {
+            if (closePlayer != null && this.invasionRemaining > 0 && this.worldObj.selectEntitiesWithinAABB(LOTREntityNPC.class, this.boundingBox.expand(nearbySearch = INVASION_FOLLOW_RANGE * 2.0, nearbySearch, nearbySearch), this.selectThisInvasionMobs()).size() < 16 && this.rand.nextInt(160) == 0) {
                 int spawnAttempts = MathHelper.getRandomIntegerInRange((Random)this.rand, (int)1, (int)6);
                 spawnAttempts = Math.min(spawnAttempts, this.invasionRemaining);
                 boolean spawnedAnyMobs = false;
@@ -473,6 +480,7 @@ extends Entity {
     }
 
     public void addPlayerKill(EntityPlayer entityplayer) {
+        --this.invasionRemaining;
         this.timeSincePlayerProgress = 0;
         this.recentPlayerContributors.put(entityplayer.getUniqueID(), 2400);
     }

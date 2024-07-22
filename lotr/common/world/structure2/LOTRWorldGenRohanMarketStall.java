@@ -54,6 +54,7 @@ extends LOTRWorldGenRohanStructure {
 
     @Override
     public boolean generateWithSetRotation(World world, Random random, int i, int j, int k, int rotation) {
+        int j1;
         int k1;
         int i1;
         this.setOriginAndRotation(world, i, j, k, rotation, 3);
@@ -61,7 +62,7 @@ extends LOTRWorldGenRohanStructure {
         if (this.restrictions) {
             for (i1 = -2; i1 <= 2; ++i1) {
                 for (k1 = -2; k1 <= 2; ++k1) {
-                    int j1 = this.getTopBlock(world, i1, k1) - 1;
+                    j1 = this.getTopBlock(world, i1, k1) - 1;
                     if (this.isSurface(world, i1, j1, k1)) continue;
                     return false;
                 }
@@ -69,7 +70,6 @@ extends LOTRWorldGenRohanStructure {
         }
         for (i1 = -2; i1 <= 2; ++i1) {
             for (k1 = -2; k1 <= 2; ++k1) {
-                int j1;
                 int i2 = Math.abs(i1);
                 int k2 = Math.abs(k1);
                 for (j1 = 0; !(j1 < 0 && this.isOpaque(world, i1, j1, k1) || this.getY(j1) < 0); --j1) {
@@ -131,32 +131,74 @@ extends LOTRWorldGenRohanStructure {
 
     protected abstract LOTREntityRohanMan createTrader(World var1);
 
-    public static class Orcharder
+    public static class Blacksmith
     extends LOTRWorldGenRohanMarketStall {
-        public Orcharder(boolean flag) {
+        public Blacksmith(boolean flag) {
             super(flag);
         }
 
         @Override
         protected void generateRoof(World world, Random random, int i1, int j1, int k1) {
-            int k2;
             int i2 = Math.abs(i1);
-            if (IntMath.mod((int)(i2 + (k2 = Math.abs(k1))), (int)2) == 0) {
-                this.setBlockAndMetadata(world, i1, j1, k1, Blocks.wool, 14);
+            if (i2 + Math.abs(k1) >= 3) {
+                this.setBlockAndMetadata(world, i1, j1, k1, Blocks.wool, 7);
             } else {
-                this.setBlockAndMetadata(world, i1, j1, k1, Blocks.wool, 5);
+                this.setBlockAndMetadata(world, i1, j1, k1, Blocks.wool, 15);
             }
         }
 
         @Override
         protected LOTREntityRohanMan createTrader(World world) {
-            return new LOTREntityRohanOrcharder(world);
+            return new LOTREntityRohanBlacksmith(world);
         }
     }
 
-    public static class Baker
+    public static class Farmer
     extends LOTRWorldGenRohanMarketStall {
-        public Baker(boolean flag) {
+        public Farmer(boolean flag) {
+            super(flag);
+        }
+
+        @Override
+        protected void generateRoof(World world, Random random, int i1, int j1, int k1) {
+            if (random.nextInt(3) == 0) {
+                this.setBlockAndMetadata(world, i1, j1, k1, Blocks.wool, 0);
+            } else {
+                this.setBlockAndMetadata(world, i1, j1, k1, Blocks.wool, 8);
+            }
+        }
+
+        @Override
+        protected LOTREntityRohanMan createTrader(World world) {
+            return new LOTREntityRohanFarmer(world);
+        }
+    }
+
+    public static class Lumber
+    extends LOTRWorldGenRohanMarketStall {
+        public Lumber(boolean flag) {
+            super(flag);
+        }
+
+        @Override
+        protected void generateRoof(World world, Random random, int i1, int j1, int k1) {
+            int i2 = Math.abs(i1);
+            if (i2 + Math.abs(k1) >= 3) {
+                this.setBlockAndMetadata(world, i1, j1, k1, Blocks.wool, 13);
+            } else {
+                this.setBlockAndMetadata(world, i1, j1, k1, Blocks.wool, 12);
+            }
+        }
+
+        @Override
+        protected LOTREntityRohanMan createTrader(World world) {
+            return new LOTREntityRohanLumberman(world);
+        }
+    }
+
+    public static class Builder
+    extends LOTRWorldGenRohanMarketStall {
+        public Builder(boolean flag) {
             super(flag);
         }
 
@@ -164,16 +206,60 @@ extends LOTRWorldGenRohanStructure {
         protected void generateRoof(World world, Random random, int i1, int j1, int k1) {
             int i2 = Math.abs(i1);
             int k2 = Math.abs(k1);
-            if (i2 % 2 == 0) {
+            if (k2 % 2 == 0 && i2 % 2 == k2 / 2 % 2) {
                 this.setBlockAndMetadata(world, i1, j1, k1, Blocks.wool, 12);
             } else {
-                this.setBlockAndMetadata(world, i1, j1, k1, Blocks.wool, 1);
+                this.setBlockAndMetadata(world, i1, j1, k1, Blocks.wool, 7);
             }
         }
 
         @Override
         protected LOTREntityRohanMan createTrader(World world) {
-            return new LOTREntityRohanBaker(world);
+            return new LOTREntityRohanBuilder(world);
+        }
+    }
+
+    public static class Brewer
+    extends LOTRWorldGenRohanMarketStall {
+        public Brewer(boolean flag) {
+            super(flag);
+        }
+
+        @Override
+        protected void generateRoof(World world, Random random, int i1, int j1, int k1) {
+            int i2 = Math.abs(i1);
+            Math.abs(k1);
+            if (i2 % 2 == 1) {
+                this.setBlockAndMetadata(world, i1, j1, k1, Blocks.wool, 12);
+            } else {
+                this.setBlockAndMetadata(world, i1, j1, k1, Blocks.wool, 4);
+            }
+        }
+
+        @Override
+        protected LOTREntityRohanMan createTrader(World world) {
+            return new LOTREntityRohanBrewer(world);
+        }
+    }
+
+    public static class Butcher
+    extends LOTRWorldGenRohanMarketStall {
+        public Butcher(boolean flag) {
+            super(flag);
+        }
+
+        @Override
+        protected void generateRoof(World world, Random random, int i1, int j1, int k1) {
+            if (random.nextInt(3) == 0) {
+                this.setBlockAndMetadata(world, i1, j1, k1, Blocks.wool, 14);
+            } else {
+                this.setBlockAndMetadata(world, i1, j1, k1, Blocks.wool, 6);
+            }
+        }
+
+        @Override
+        protected LOTREntityRohanMan createTrader(World world) {
+            return new LOTREntityRohanButcher(world);
         }
     }
 
@@ -202,137 +288,48 @@ extends LOTRWorldGenRohanStructure {
         }
     }
 
-    public static class Butcher
+    public static class Baker
     extends LOTRWorldGenRohanMarketStall {
-        public Butcher(boolean flag) {
+        public Baker(boolean flag) {
             super(flag);
         }
 
         @Override
         protected void generateRoof(World world, Random random, int i1, int j1, int k1) {
-            if (random.nextInt(3) == 0) {
+            int i2 = Math.abs(i1);
+            Math.abs(k1);
+            if (i2 % 2 == 0) {
+                this.setBlockAndMetadata(world, i1, j1, k1, Blocks.wool, 12);
+            } else {
+                this.setBlockAndMetadata(world, i1, j1, k1, Blocks.wool, 1);
+            }
+        }
+
+        @Override
+        protected LOTREntityRohanMan createTrader(World world) {
+            return new LOTREntityRohanBaker(world);
+        }
+    }
+
+    public static class Orcharder
+    extends LOTRWorldGenRohanMarketStall {
+        public Orcharder(boolean flag) {
+            super(flag);
+        }
+
+        @Override
+        protected void generateRoof(World world, Random random, int i1, int j1, int k1) {
+            int i2 = Math.abs(i1);
+            if (IntMath.mod((int)(i2 + Math.abs(k1)), (int)2) == 0) {
                 this.setBlockAndMetadata(world, i1, j1, k1, Blocks.wool, 14);
             } else {
-                this.setBlockAndMetadata(world, i1, j1, k1, Blocks.wool, 6);
+                this.setBlockAndMetadata(world, i1, j1, k1, Blocks.wool, 5);
             }
         }
 
         @Override
         protected LOTREntityRohanMan createTrader(World world) {
-            return new LOTREntityRohanButcher(world);
-        }
-    }
-
-    public static class Brewer
-    extends LOTRWorldGenRohanMarketStall {
-        public Brewer(boolean flag) {
-            super(flag);
-        }
-
-        @Override
-        protected void generateRoof(World world, Random random, int i1, int j1, int k1) {
-            int i2 = Math.abs(i1);
-            int k2 = Math.abs(k1);
-            if (i2 % 2 == 1) {
-                this.setBlockAndMetadata(world, i1, j1, k1, Blocks.wool, 12);
-            } else {
-                this.setBlockAndMetadata(world, i1, j1, k1, Blocks.wool, 4);
-            }
-        }
-
-        @Override
-        protected LOTREntityRohanMan createTrader(World world) {
-            return new LOTREntityRohanBrewer(world);
-        }
-    }
-
-    public static class Builder
-    extends LOTRWorldGenRohanMarketStall {
-        public Builder(boolean flag) {
-            super(flag);
-        }
-
-        @Override
-        protected void generateRoof(World world, Random random, int i1, int j1, int k1) {
-            int i2 = Math.abs(i1);
-            int k2 = Math.abs(k1);
-            if (k2 % 2 == 0 && i2 % 2 == k2 / 2 % 2) {
-                this.setBlockAndMetadata(world, i1, j1, k1, Blocks.wool, 12);
-            } else {
-                this.setBlockAndMetadata(world, i1, j1, k1, Blocks.wool, 7);
-            }
-        }
-
-        @Override
-        protected LOTREntityRohanMan createTrader(World world) {
-            return new LOTREntityRohanBuilder(world);
-        }
-    }
-
-    public static class Lumber
-    extends LOTRWorldGenRohanMarketStall {
-        public Lumber(boolean flag) {
-            super(flag);
-        }
-
-        @Override
-        protected void generateRoof(World world, Random random, int i1, int j1, int k1) {
-            int k2;
-            int i2 = Math.abs(i1);
-            if (i2 + (k2 = Math.abs(k1)) >= 3) {
-                this.setBlockAndMetadata(world, i1, j1, k1, Blocks.wool, 13);
-            } else {
-                this.setBlockAndMetadata(world, i1, j1, k1, Blocks.wool, 12);
-            }
-        }
-
-        @Override
-        protected LOTREntityRohanMan createTrader(World world) {
-            return new LOTREntityRohanLumberman(world);
-        }
-    }
-
-    public static class Farmer
-    extends LOTRWorldGenRohanMarketStall {
-        public Farmer(boolean flag) {
-            super(flag);
-        }
-
-        @Override
-        protected void generateRoof(World world, Random random, int i1, int j1, int k1) {
-            if (random.nextInt(3) == 0) {
-                this.setBlockAndMetadata(world, i1, j1, k1, Blocks.wool, 0);
-            } else {
-                this.setBlockAndMetadata(world, i1, j1, k1, Blocks.wool, 8);
-            }
-        }
-
-        @Override
-        protected LOTREntityRohanMan createTrader(World world) {
-            return new LOTREntityRohanFarmer(world);
-        }
-    }
-
-    public static class Blacksmith
-    extends LOTRWorldGenRohanMarketStall {
-        public Blacksmith(boolean flag) {
-            super(flag);
-        }
-
-        @Override
-        protected void generateRoof(World world, Random random, int i1, int j1, int k1) {
-            int k2;
-            int i2 = Math.abs(i1);
-            if (i2 + (k2 = Math.abs(k1)) >= 3) {
-                this.setBlockAndMetadata(world, i1, j1, k1, Blocks.wool, 7);
-            } else {
-                this.setBlockAndMetadata(world, i1, j1, k1, Blocks.wool, 15);
-            }
-        }
-
-        @Override
-        protected LOTREntityRohanMan createTrader(World world) {
-            return new LOTREntityRohanBlacksmith(world);
+            return new LOTREntityRohanOrcharder(world);
         }
     }
 

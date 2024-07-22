@@ -39,7 +39,6 @@ extends Container {
     public LOTRHireableBase theUnitTrader;
     public LOTREntityNPC theLivingTrader;
     private LOTRFaction traderFaction;
-    private World theWorld;
     private IInventory alignmentRewardInv;
     public int alignmentRewardSlots;
 
@@ -48,10 +47,9 @@ extends Container {
         this.theUnitTrader = trader;
         this.theLivingTrader = (LOTREntityNPC)((Object)this.theUnitTrader);
         this.traderFaction = this.theLivingTrader.getFaction();
-        this.theWorld = world;
         ItemStack reward = null;
         if (this.theUnitTrader instanceof LOTRUnitTradeable) {
-            LOTRInvasions conquestType = ((LOTRUnitTradeable)this.theUnitTrader).getWarhorn();
+            LOTRInvasions conquestType = ((LOTRUnitTradeable)this.theUnitTrader).getConquestHorn();
             reward = conquestType == null ? null : conquestType.createConquestHorn();
         }
         boolean hasReward = reward != null;

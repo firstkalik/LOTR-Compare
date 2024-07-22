@@ -51,8 +51,7 @@ extends LOTRBiomeGenFarHarad {
         this.spawnableMonsterList.clear();
         this.spawnableLOTRAmbientList.clear();
         this.npcSpawnList.clear();
-        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer = new LOTRBiomeSpawnList.SpawnListContainer[1];
-        arrspawnListContainer[0] = LOTRBiomeSpawnList.entry(LOTRSpawnList.HALF_TROLLS, 10).setSpawnChance(200);
+        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer = new LOTRBiomeSpawnList.SpawnListContainer[]{LOTRBiomeSpawnList.entry(LOTRSpawnList.HALF_TROLLS, 10).setSpawnChance(200)};
         this.npcSpawnList.newFactionList(100).add(arrspawnListContainer);
         this.decorator.treesPerChunk = 0;
         this.decorator.grassPerChunk = 0;
@@ -85,13 +84,12 @@ extends LOTRBiomeGenFarHarad {
 
     @Override
     public void generateBiomeTerrain(World world, Random random, Block[] blocks, byte[] meta, int i, int k, double stoneNoise, int height, LOTRBiomeVariant variant) {
-        double d2;
         Block topBlock_pre = this.topBlock;
         int topBlockMeta_pre = this.topBlockMeta;
         Block fillerBlock_pre = this.fillerBlock;
         int fillerBlockMeta_pre = this.fillerBlockMeta;
         double d1 = noiseDirt.func_151601_a((double)i * 0.09, (double)k * 0.09);
-        if (d1 + (d2 = noiseDirt.func_151601_a((double)i * 0.4, (double)k * 0.4)) > 0.2) {
+        if (d1 + noiseDirt.func_151601_a((double)i * 0.4, (double)k * 0.4) > 0.2) {
             this.topBlock = Blocks.dirt;
             this.topBlockMeta = 1;
             this.fillerBlock = this.topBlock;
@@ -107,10 +105,10 @@ extends LOTRBiomeGenFarHarad {
     @Override
     public void decorate(World world, Random random, int i, int k) {
         int i1;
+        int l;
         int k1;
         int i12;
         int j1;
-        int l;
         super.decorate(world, random, i, k);
         if (random.nextInt(32) == 0) {
             int boulders = 1 + random.nextInt(4);

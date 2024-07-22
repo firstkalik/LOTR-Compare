@@ -34,18 +34,18 @@ extends CommandBase {
         if (args.length == 1) {
             if (args[0].equals("on")) {
                 LOTRConfig.setStructureTimelapse(true);
-                LOTRCommandStructureTimelapse.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.strTimelapse.on", (Object[])new Object[0]);
-                LOTRCommandStructureTimelapse.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.strTimelapse.warn", (Object[])new Object[0]);
+                CommandBase.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.strTimelapse.on", (Object[])new Object[0]);
+                CommandBase.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.strTimelapse.warn", (Object[])new Object[0]);
                 return;
             }
             if (args[0].equals("off")) {
                 LOTRConfig.setStructureTimelapse(false);
-                LOTRCommandStructureTimelapse.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.strTimelapse.off", (Object[])new Object[0]);
+                CommandBase.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.strTimelapse.off", (Object[])new Object[0]);
                 return;
             }
-            int interval = LOTRCommandStructureTimelapse.parseIntWithMin((ICommandSender)sender, (String)args[0], (int)0);
+            int interval = CommandBase.parseIntWithMin((ICommandSender)sender, (String)args[0], (int)0);
             LOTRConfig.setStructureTimelapseInterval(interval);
-            LOTRCommandStructureTimelapse.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.strTimelapse.interval", (Object[])new Object[]{interval});
+            CommandBase.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.strTimelapse.interval", (Object[])new Object[]{interval});
             return;
         }
         throw new WrongUsageException(this.getCommandUsage(sender), new Object[0]);
@@ -53,7 +53,7 @@ extends CommandBase {
 
     public List addTabCompletionOptions(ICommandSender sender, String[] args) {
         if (args.length == 1) {
-            return LOTRCommandStructureTimelapse.getListOfStringsMatchingLastWord((String[])args, (String[])new String[]{"on", "off"});
+            return CommandBase.getListOfStringsMatchingLastWord((String[])args, (String[])new String[]{"on", "off"});
         }
         return null;
     }

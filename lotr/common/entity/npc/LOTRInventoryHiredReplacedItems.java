@@ -17,7 +17,6 @@ import net.minecraft.nbt.NBTTagCompound;
 
 public class LOTRInventoryHiredReplacedItems
 extends LOTRInventoryNPC {
-    private static final int REPLACED_SIZE = 7;
     private boolean[] hasReplacedEquipment = new boolean[7];
     public static final int HELMET = 0;
     public static final int BODY = 1;
@@ -46,8 +45,7 @@ extends LOTRInventoryNPC {
     public void readFromNBT(NBTTagCompound nbt) {
         super.readFromNBT(nbt);
         for (int i = 0; i < this.hasReplacedEquipment.length; ++i) {
-            boolean flag;
-            this.hasReplacedEquipment[i] = flag = nbt.getBoolean("ReplacedFlag_" + i);
+            this.hasReplacedEquipment[i] = nbt.getBoolean("ReplacedFlag_" + i);
         }
         this.replacedMeleeWeapons = nbt.getBoolean("ReplacedMelee");
     }

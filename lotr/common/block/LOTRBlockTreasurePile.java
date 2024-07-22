@@ -220,13 +220,12 @@ extends Block {
             boolean placedTreasure = false;
             int meta = world.getBlockMetadata(i, j, k);
             if (meta < 7) {
-                Block above;
                 int itemMeta;
                 for (itemMeta = itemstack.getItemDamage(); meta < 7 && itemMeta >= 0; ++meta, --itemMeta) {
                 }
                 world.setBlockMetadataWithNotify(i, j, k, meta, 3);
                 placedTreasure = true;
-                if (itemMeta >= 0 && (above = world.getBlock(i, j + 1, k)).isReplaceable((IBlockAccess)world, i, j + 1, k)) {
+                if (itemMeta >= 0 && world.getBlock(i, j + 1, k).isReplaceable((IBlockAccess)world, i, j + 1, k)) {
                     world.setBlock(i, j + 1, k, (Block)this, itemMeta, 3);
                     itemMeta = -1;
                     placedTreasure = true;

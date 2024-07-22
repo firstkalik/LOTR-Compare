@@ -17,6 +17,7 @@ package lotr.common.entity.npc;
 
 import java.util.Random;
 import lotr.common.LOTRMod;
+import lotr.common.LOTRShields;
 import lotr.common.entity.ai.LOTREntityAIAttackOnCollide;
 import lotr.common.entity.npc.LOTREntityBreeMan;
 import lotr.common.entity.npc.LOTRFamilyInfo;
@@ -42,6 +43,7 @@ extends LOTREntityBreeMan {
     public LOTREntityBreeGuard(World world) {
         super(world);
         this.addTargetTasks(true);
+        this.npcShield = LOTRShields.ALIGNMENT_BREE;
     }
 
     @Override
@@ -65,9 +67,21 @@ extends LOTREntityBreeMan {
         int i = this.rand.nextInt(guardWeapons.length);
         this.npcItemsInv.setMeleeWeapon(guardWeapons[i].copy());
         this.npcItemsInv.setIdleItem(this.npcItemsInv.getMeleeWeapon());
-        this.setCurrentItemOrArmor(1, LOTRColorUtil.dyeLeather(new ItemStack((Item)Items.leather_boots), 3354152));
-        this.setCurrentItemOrArmor(2, LOTRColorUtil.dyeLeather(new ItemStack((Item)Items.leather_leggings), leatherDyes, this.rand));
-        this.setCurrentItemOrArmor(3, LOTRColorUtil.dyeLeather(new ItemStack((Item)Items.leather_chestplate), leatherDyes, this.rand));
+        if (this.rand.nextInt(3) == 0) {
+            this.setCurrentItemOrArmor(1, new ItemStack((Item)Items.chainmail_boots));
+        } else {
+            this.setCurrentItemOrArmor(1, LOTRColorUtil.dyeLeather(new ItemStack((Item)Items.leather_boots), 3354152));
+        }
+        if (this.rand.nextInt(3) == 0) {
+            this.setCurrentItemOrArmor(2, new ItemStack((Item)Items.chainmail_leggings));
+        } else {
+            this.setCurrentItemOrArmor(2, LOTRColorUtil.dyeLeather(new ItemStack((Item)Items.leather_leggings), leatherDyes, this.rand));
+        }
+        if (this.rand.nextInt(3) == 0) {
+            this.setCurrentItemOrArmor(3, new ItemStack((Item)Items.chainmail_chestplate));
+        } else {
+            this.setCurrentItemOrArmor(3, LOTRColorUtil.dyeLeather(new ItemStack((Item)Items.leather_chestplate), leatherDyes, this.rand));
+        }
         this.setCurrentItemOrArmor(4, new ItemStack((Item)Items.iron_helmet));
         return data;
     }

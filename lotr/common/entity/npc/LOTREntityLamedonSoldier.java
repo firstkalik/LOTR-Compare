@@ -36,7 +36,7 @@ extends LOTREntityGondorSoldier {
         super(world);
         this.spawnRidingHorse = this.rand.nextInt(6) == 0;
         this.npcShield = LOTRShields.ALIGNMENT_LAMEDON;
-        this.npcCape = LOTRCapes.LAMEDON;
+        this.npcCape = LOTRCapes.LAMEDON.capeTexture;
     }
 
     @Override

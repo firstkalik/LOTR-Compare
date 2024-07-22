@@ -30,6 +30,11 @@ extends LOTREnchantmentProtectionSpecial {
     }
 
     @Override
+    public boolean isBeneficial() {
+        return this.protectLevel >= 0;
+    }
+
+    @Override
     protected int calcIntProtection() {
         return 1 + this.protectLevel;
     }

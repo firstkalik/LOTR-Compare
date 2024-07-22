@@ -36,7 +36,7 @@ extends LOTREntityGondorSoldier {
     public LOTREntityGondorTowerGuard(World world) {
         super(world);
         this.spawnRidingHorse = false;
-        this.npcCape = LOTRCapes.TOWER_GUARD;
+        this.npcCape = LOTRCapes.TOWER_GUARD.capeTexture;
     }
 
     @Override

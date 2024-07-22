@@ -6,7 +6,6 @@
  *  net.minecraft.block.BlockGrass
  *  net.minecraft.entity.EntityCreature
  *  net.minecraft.init.Blocks
- *  net.minecraft.init.Items
  *  net.minecraft.item.Item
  *  net.minecraft.item.ItemStack
  *  net.minecraft.tileentity.TileEntity
@@ -26,7 +25,6 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockGrass;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -89,10 +87,10 @@ extends LOTRWorldGenStructureBase2 {
     @Override
     public boolean generateWithSetRotation(World world, Random random, int i, int j, int k, int rotation) {
         int k1;
-        int i1;
-        int j1;
-        int k12;
         int i2;
+        int k12;
+        int j1;
+        int i1;
         int k2;
         this.setOriginAndRotation(world, i, j, k, rotation, 5);
         this.setupRandomBlocks(random);
@@ -118,21 +116,21 @@ extends LOTRWorldGenStructureBase2 {
             }
         }
         for (i1 = -4; i1 <= 4; ++i1) {
-            for (k1 = -4; k1 <= 4; ++k1) {
+            for (k12 = -4; k12 <= 4; ++k12) {
                 i2 = Math.abs(i1);
-                if (i2 + (k2 = Math.abs(k1)) > 6) continue;
-                this.layFoundation(world, i1, k1);
+                if (i2 + (k2 = Math.abs(k12)) > 6) continue;
+                this.layFoundation(world, i1, k12);
                 for (j1 = 1; j1 <= 5; ++j1) {
-                    this.setAir(world, i1, j1, k1);
+                    this.setAir(world, i1, j1, k12);
                 }
                 if (i2 == 4 || k2 == 4) {
-                    this.setBlockAndMetadata(world, i1, 1, k1, this.baseBrickBlock, this.baseBrickMeta);
-                    this.setBlockAndMetadata(world, i1, 2, k1, this.plankBlock, this.plankMeta);
-                    this.setBlockAndMetadata(world, i1, 3, k1, this.brickBlock, this.brickMeta);
+                    this.setBlockAndMetadata(world, i1, 1, k12, this.baseBrickBlock, this.baseBrickMeta);
+                    this.setBlockAndMetadata(world, i1, 2, k12, this.plankBlock, this.plankMeta);
+                    this.setBlockAndMetadata(world, i1, 3, k12, this.brickBlock, this.brickMeta);
                 }
                 if (i2 != 3 || k2 != 3) continue;
                 for (j1 = 1; j1 <= 3; ++j1) {
-                    this.setBlockAndMetadata(world, i1, j1, k1, this.pillarBlock, this.pillarMeta);
+                    this.setBlockAndMetadata(world, i1, j1, k12, this.pillarBlock, this.pillarMeta);
                 }
             }
         }
@@ -140,22 +138,22 @@ extends LOTRWorldGenStructureBase2 {
             this.setBlockAndMetadata(world, i1, 3, -3, this.brickStairBlock, 7);
             this.setBlockAndMetadata(world, i1, 3, 3, this.brickStairBlock, 6);
         }
-        for (k12 = -2; k12 <= 2; ++k12) {
-            this.setBlockAndMetadata(world, -3, 3, k12, this.brickStairBlock, 4);
-            this.setBlockAndMetadata(world, 3, 3, k12, this.brickStairBlock, 5);
+        for (k1 = -2; k1 <= 2; ++k1) {
+            this.setBlockAndMetadata(world, -3, 3, k1, this.brickStairBlock, 4);
+            this.setBlockAndMetadata(world, 3, 3, k1, this.brickStairBlock, 5);
         }
         for (i1 = -3; i1 <= 3; ++i1) {
-            for (k1 = -3; k1 <= 3; ++k1) {
-                this.setBlockAndMetadata(world, i1, 4, k1, this.brickBlock, this.brickMeta);
+            for (k12 = -3; k12 <= 3; ++k12) {
+                this.setBlockAndMetadata(world, i1, 4, k12, this.brickBlock, this.brickMeta);
             }
         }
         for (i1 = -2; i1 <= 2; ++i1) {
             this.setBlockAndMetadata(world, i1, 4, -4, this.brickStairBlock, 2);
             this.setBlockAndMetadata(world, i1, 4, 4, this.brickStairBlock, 3);
         }
-        for (k12 = -2; k12 <= 2; ++k12) {
-            this.setBlockAndMetadata(world, -4, 4, k12, this.brickStairBlock, 1);
-            this.setBlockAndMetadata(world, 4, 4, k12, this.brickStairBlock, 0);
+        for (k1 = -2; k1 <= 2; ++k1) {
+            this.setBlockAndMetadata(world, -4, 4, k1, this.brickStairBlock, 1);
+            this.setBlockAndMetadata(world, 4, 4, k1, this.brickStairBlock, 0);
         }
         this.setBlockAndMetadata(world, -4, 4, 2, this.brickStairBlock, 3);
         this.setBlockAndMetadata(world, -3, 4, 2, this.brickStairBlock, 1);
@@ -174,20 +172,20 @@ extends LOTRWorldGenStructureBase2 {
         this.setBlockAndMetadata(world, 3, 4, -3, this.brickStairBlock, 2);
         this.setBlockAndMetadata(world, 2, 4, -3, this.brickStairBlock, 0);
         for (i1 = -1; i1 <= 1; ++i1) {
-            for (k1 = 2; k1 <= 4; ++k1) {
+            for (k12 = 2; k12 <= 4; ++k12) {
                 i2 = Math.abs(i1 - 0);
-                k2 = Math.abs(k1 - 3);
+                k2 = Math.abs(k12 - 3);
                 if (i2 == 1 && k2 == 1) {
-                    this.setBlockAndMetadata(world, i1, 5, k1, this.brickSlabBlock, this.brickSlabMeta);
+                    this.setBlockAndMetadata(world, i1, 5, k12, this.brickSlabBlock, this.brickSlabMeta);
                     continue;
                 }
                 if (i2 == 1 || k2 == 1) {
-                    this.setBlockAndMetadata(world, i1, 5, k1, this.brickBlock, this.brickMeta);
+                    this.setBlockAndMetadata(world, i1, 5, k12, this.brickBlock, this.brickMeta);
                     continue;
                 }
                 if (i2 != 0 || k2 != 0) continue;
-                this.setAir(world, i1, 3, k1);
-                this.setAir(world, i1, 4, k1);
+                this.setAir(world, i1, 3, k12);
+                this.setAir(world, i1, 4, k12);
             }
             this.setBlockAndMetadata(world, i1, 4, 4, this.brickBlock, this.brickMeta);
             for (int j12 = 1; j12 <= 2; ++j12) {
@@ -244,7 +242,7 @@ extends LOTRWorldGenStructureBase2 {
             LOTRTileEntityDwarvenForge forge = (LOTRTileEntityDwarvenForge)tileentity;
             int fuelAmount = MathHelper.getRandomIntegerInRange((Random)random, (int)0, (int)4);
             if (fuelAmount > 0) {
-                ItemStack fuel = new ItemStack(Items.coal, fuelAmount, 0);
+                ItemStack fuel = new ItemStack(LOTRMod.lavaCoal, fuelAmount, 0);
                 forge.setInventorySlotContents(forge.fuelSlot, fuel);
             }
         }

@@ -41,6 +41,7 @@ import com.mojang.authlib.GameProfile;
 import com.mojang.authlib.minecraft.MinecraftSessionService;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -96,13 +97,14 @@ extends Entity {
     private int customRange;
     private boolean selfProtection = true;
     public static float ALIGNMENT_PROTECTION_MIN = 1.0f;
-    public static float ALIGNMENT_PROTECTION_MAX = 10000.0f;
+    public static float ALIGNMENT_PROTECTION_MAX = 1.0E7f;
     private float alignmentProtection = ALIGNMENT_PROTECTION_MIN;
     public static int WHITELIST_DEFAULT = 16;
     public static int WHITELIST_MIN = 1;
     public static int WHITELIST_MAX = 4000;
     private LOTRBannerWhitelistEntry[] allowedPlayers = new LOTRBannerWhitelistEntry[WHITELIST_DEFAULT];
     private Set<LOTRBannerProtection.Permission> defaultPermissions = new HashSet<LOTRBannerProtection.Permission>();
+    private boolean clientside_playerHasPermission;
 
     public LOTREntityBanner(World world) {
         super(world);
@@ -153,7 +155,7 @@ extends Entity {
         int j = MathHelper.floor_double((double)this.boundingBox.minY);
         int k = MathHelper.floor_double((double)this.posZ);
         int range = this.getProtectionRange();
-        return AxisAlignedBB.getBoundingBox((double)i, (double)j, (double)k, (double)(i + 1), (double)(j + 1), (double)(k + 1)).expand((double)range, (double)range, (double)range);
+        return AxisAlignedBB.getBoundingBox((double)i, (double)j, (double)k, (double)(i + 1), (double)(j + 256), (double)(k + 1)).expand((double)range, (double)range, (double)range);
     }
 
     public boolean isPlayerSpecificProtection() {
@@ -230,18 +232,30 @@ extends Entity {
     }
 
     public void whitelistPlayer(int index, GameProfile profile) {
+        ArrayList<LOTRBannerProtection.Permission> defaultPerms = new ArrayList<LOTRBannerProtection.Permission>();
+        defaultPerms.add(LOTRBannerProtection.Permission.FULL);
+        this.whitelistPlayer(index, profile, defaultPerms);
+    }
+
+    public void whitelistPlayer(int index, GameProfile profile, List<LOTRBannerProtection.Permission> perms) {
         if (index < 0 || index >= this.allowedPlayers.length) {
             return;
         }
-        this.allowedPlayers[index] = profile == null ? null : new LOTRBannerWhitelistEntry(profile).setFullPerms();
+        if (profile == null) {
+            this.allowedPlayers[index] = null;
+        } else {
+            LOTRBannerWhitelistEntry entry = new LOTRBannerWhitelistEntry(profile);
+            entry.setPermissions(perms);
+            this.allowedPlayers[index] = entry;
+        }
         if (!this.worldObj.isRemote) {
             this.updateForAllWatchers(this.worldObj);
         }
     }
 
-    public void whitelistFellowship(int index, LOTRFellowship fs) {
+    public void whitelistFellowship(int index, LOTRFellowship fs, List<LOTRBannerProtection.Permission> perms) {
         if (this.isValidFellowship(fs)) {
-            this.whitelistPlayer(index, new LOTRFellowshipProfile(this, fs.getFellowshipID(), ""));
+            this.whitelistPlayer(index, new LOTRFellowshipProfile(this, fs.getFellowshipID(), ""), perms);
         }
     }
 
@@ -470,7 +484,7 @@ extends Entity {
         this.structureProtection = nbt.getBoolean("StructureProtection");
         this.customRange = nbt.getShort("CustomRange");
         this.customRange = MathHelper.clamp_int((int)this.customRange, (int)0, (int)64);
-        this.selfProtection = nbt.hasKey("SelfProtection") ? nbt.getBoolean("SelfProtection") : true;
+        boolean bl = this.selfProtection = nbt.hasKey("SelfProtection") ? nbt.getBoolean("SelfProtection") : true;
         if (nbt.hasKey("AlignmentProtection")) {
             this.setAlignmentProtection(nbt.getInteger("AlignmentProtection"));
         } else {
@@ -684,7 +698,20 @@ extends Entity {
         packet.whitelistSlots = whitelistSlots;
         packet.whitelistPerms = whitelistPerms;
         packet.defaultPerms = this.getDefaultPermBitFlags();
+        packet.thisPlayerHasPermission = this.isPlayerPermittedInSurvival(entityplayer);
         LOTRPacketHandler.networkWrapper.sendTo((IMessage)packet, (EntityPlayerMP)entityplayer);
+    }
+
+    private boolean isPlayerPermittedInSurvival(EntityPlayer entityplayer) {
+        return new LOTRBannerProtection.FilterForPlayer(entityplayer, LOTRBannerProtection.Permission.FULL).ignoreCreativeMode().protects(this) == LOTRBannerProtection.ProtectType.NONE;
+    }
+
+    public boolean clientside_playerHasPermissionInSurvival() {
+        return this.clientside_playerHasPermission;
+    }
+
+    public void setClientside_playerHasPermissionInSurvival(boolean flag) {
+        this.clientside_playerHasPermission = flag;
     }
 }
 

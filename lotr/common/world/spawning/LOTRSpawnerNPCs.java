@@ -73,7 +73,6 @@ import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraftforge.event.ForgeEventFactory;
 
 public class LOTRSpawnerNPCs {
-    private static final int chunkRange = 7;
     public static final int expectedChunks = 196;
     private static Set<ChunkCoordIntPair> eligibleSpawnChunks = new HashSet<ChunkCoordIntPair>();
     private static Map<Integer, Integer> ticksSinceCycle = new HashMap<Integer, Integer>();
@@ -97,8 +96,8 @@ public class LOTRSpawnerNPCs {
 
     public static void getSpawnableChunks(World world, Set<ChunkCoordIntPair> set) {
         set.clear();
-        for (int l = 0; l < world.playerEntities.size(); ++l) {
-            EntityPlayer entityplayer = (EntityPlayer)world.playerEntities.get(l);
+        for (Object element : world.playerEntities) {
+            EntityPlayer entityplayer = (EntityPlayer)element;
             int i = MathHelper.floor_double((double)(entityplayer.posX / 16.0));
             int k = MathHelper.floor_double((double)(entityplayer.posZ / 16.0));
             for (int i1 = -7; i1 <= 7; ++i1) {
@@ -166,9 +165,9 @@ public class LOTRSpawnerNPCs {
             block2: for (int c = 0; c < cycles; ++c) {
                 List<ChunkCoordIntPair> shuffled = LOTRSpawnerNPCs.shuffle(eligibleSpawnChunks);
                 for (ChunkCoordIntPair chunkCoords : shuffled) {
-                    int i;
-                    int k;
                     int j;
+                    int k;
+                    int i;
                     ChunkPosition chunkposition = LOTRSpawnerNPCs.getRandomSpawningPointInChunk(world, chunkCoords);
                     if (chunkposition == null || world.getBlock(i = chunkposition.chunkPosX, j = chunkposition.chunkPosY, k = chunkposition.chunkPosZ).isNormalCube() || world.getBlock(i, j, k).getMaterial() != Material.air) continue;
                     int groups = 3;
@@ -191,16 +190,19 @@ public class LOTRSpawnerNPCs {
                         int spawned = 0;
                         int attempts = spawnCount * 8;
                         for (int a = 0; a < attempts; ++a) {
-                            float distSq;
-                            float f4;
+                            Event.Result canSpawn;
                             float f5;
-                            float f3;
                             float f;
                             float f2;
-                            float f1;
-                            Event.Result canSpawn;
+                            float f3;
+                            LOTREntityNPC npc;
+                            float f4;
+                            float f6;
+                            float f22;
                             EntityLiving entity;
-                            if (!world.blockExists(i1 += world.rand.nextInt(rangeP1) - world.rand.nextInt(rangeP1), j1 += world.rand.nextInt(yRangeP1) - world.rand.nextInt(yRangeP1), k1 += world.rand.nextInt(rangeP1) - world.rand.nextInt(rangeP1)) || !LOTRSpawnerNPCs.canNPCSpawnAtLocation(world, i1, j1, k1) || world.getClosestPlayer((double)(f = (float)i1 + 0.5f), (double)(f1 = (float)j1), (double)(f2 = (float)k1 + 0.5f), 24.0) != null || !((distSq = (f3 = f - (float)spawnPoint.posX) * f3 + (f4 = f1 - (float)spawnPoint.posY) * f4 + (f5 = f2 - (float)spawnPoint.posZ) * f5) >= 576.0f)) continue;
+                            float f32;
+                            float f1;
+                            if (!world.blockExists(i1 += world.rand.nextInt(rangeP1) - world.rand.nextInt(rangeP1), j1 += world.rand.nextInt(yRangeP1) - world.rand.nextInt(yRangeP1), k1 += world.rand.nextInt(rangeP1) - world.rand.nextInt(rangeP1)) || !LOTRSpawnerNPCs.canNPCSpawnAtLocation(world, i1, j1, k1) || world.getClosestPlayer((double)(f6 = (float)i1 + 0.5f), (double)(f1 = (float)j1), (double)(f22 = (float)k1 + 0.5f), 24.0) != null || f2 * (f32 = f6 - (float)spawnPoint.posX) + f * (f4 = f1 - (float)spawnPoint.posY) + f3 * (f5 = f22 - (float)spawnPoint.posZ) < 576.0f) continue;
                             try {
                                 entity = (EntityLiving)spawnEntry.entityClass.getConstructor(World.class).newInstance(new Object[]{world});
                             }
@@ -208,19 +210,19 @@ public class LOTRSpawnerNPCs {
                                 e.printStackTrace();
                                 return;
                             }
-                            entity.setLocationAndAngles((double)f, (double)f1, (double)f2, world.rand.nextFloat() * 360.0f, 0.0f);
+                            entity.setLocationAndAngles((double)f6, (double)f1, (double)f22, world.rand.nextFloat() * 360.0f, 0.0f);
                             if (entity instanceof LOTREntityNPC && isConquestSpawn) {
-                                LOTREntityNPC npc = (LOTREntityNPC)entity;
+                                npc = (LOTREntityNPC)entity;
                                 npc.setConquestSpawning(true);
                             }
-                            if ((canSpawn = ForgeEventFactory.canEntitySpawn((EntityLiving)entity, (World)world, (float)f, (float)f1, (float)f2)) != Event.Result.ALLOW && (canSpawn != Event.Result.DEFAULT || !entity.getCanSpawnHere())) continue;
+                            if ((canSpawn = ForgeEventFactory.canEntitySpawn((EntityLiving)entity, (World)world, (float)f6, (float)f1, (float)f22)) != Event.Result.ALLOW && (canSpawn != Event.Result.DEFAULT || !entity.getCanSpawnHere())) continue;
                             world.spawnEntityInWorld((Entity)entity);
                             if (entity instanceof LOTREntityNPC) {
-                                LOTREntityNPC npc = (LOTREntityNPC)entity;
+                                npc = (LOTREntityNPC)entity;
                                 npc.isNPCPersistent = false;
                                 npc.setConquestSpawning(false);
                             }
-                            if (!ForgeEventFactory.doSpecialSpawn((EntityLiving)entity, (World)world, (float)f, (float)f1, (float)f2)) {
+                            if (!ForgeEventFactory.doSpecialSpawn((EntityLiving)entity, (World)world, (float)f6, (float)f1, (float)f22)) {
                                 entityData = entity.onSpawnWithEgg(entityData);
                             }
                             if (c > 0 && (totalSpawnCount += entity instanceof LOTREntityNPC ? ((LOTREntityNPC)entity).getSpawnCountValue() : 1) > maxSpawnCount) break block2;
@@ -234,8 +236,8 @@ public class LOTRSpawnerNPCs {
 
     private static int countNPCs(World world) {
         int count = 0;
-        for (int i = 0; i < world.loadedEntityList.size(); ++i) {
-            Entity entity = (Entity)world.loadedEntityList.get(i);
+        for (Object element : world.loadedEntityList) {
+            Entity entity = (Entity)element;
             if (!(entity instanceof LOTREntityNPC)) continue;
             int spawnCountValue = ((LOTREntityNPC)entity).getSpawnCountValue();
             count += spawnCountValue;
@@ -248,7 +250,7 @@ public class LOTRSpawnerNPCs {
             return false;
         }
         Block block = world.getBlock(i, j - 1, k);
-        int l1 = world.getBlockMetadata(i, j - 1, k);
+        world.getBlockMetadata(i, j - 1, k);
         boolean spawnBlock = block.canCreatureSpawn(EnumCreatureType.monster, (IBlockAccess)world, i, j - 1, k);
         return spawnBlock && block != Blocks.bedrock && !world.getBlock(i, j, k).isNormalCube() && !world.getBlock(i, j, k).getMaterial().isLiquid() && !world.getBlock(i, j + 1, k).isNormalCube();
     }

@@ -31,7 +31,6 @@ extends WorldGenAbstractTree {
     private int minHeight;
     private int maxHeight;
     private int trunkWidth;
-    private boolean hasRoots = true;
     private Block woodBlock = LOTRMod.wood9;
     private int woodMeta = 0;
     private Block leafBlock = LOTRMod.leaves9;
@@ -48,9 +47,9 @@ extends WorldGenAbstractTree {
         int height = MathHelper.getRandomIntegerInRange((Random)random, (int)this.minHeight, (int)this.maxHeight);
         boolean flag = true;
         if (j >= 1 && j + height + 5 <= 256) {
+            int i1;
             int j1;
             int k1;
-            int i1;
             for (j1 = j; j1 <= j + height + 5; ++j1) {
                 int range = this.trunkWidth + 1;
                 if (j1 == j) {
@@ -100,7 +99,7 @@ extends WorldGenAbstractTree {
                     float cos = MathHelper.cos((float)angle);
                     float sin = MathHelper.sin((float)angle);
                     float angleY = random.nextFloat() * (float)Math.toRadians(40.0);
-                    float cosY = MathHelper.cos((float)angleY);
+                    MathHelper.cos((float)angleY);
                     float sinY = MathHelper.sin((float)angleY);
                     int length = 3 + random.nextInt(6);
                     int i14 = i;
@@ -138,7 +137,7 @@ extends WorldGenAbstractTree {
                         this.setBlockAndNotifyAdequately(world, rootX, rootY, rootZ, this.woodBlock, this.woodMeta | 0xC);
                         world.getBlock(rootX, rootY - 1, rootZ).onPlantGrow(world, rootX, rootY - 1, rootZ, rootX, rootY, rootZ);
                         --rootY;
-                        if (++roots <= 4 + random.nextInt(3)) continue;
+                        if (++roots > 4 + random.nextInt(3)) continue;
                     }
                 }
             }
@@ -158,8 +157,8 @@ extends WorldGenAbstractTree {
             int leafRangeSq = leafRange * leafRange;
             for (int i1 = i - leafRange; i1 <= i + leafRange; ++i1) {
                 for (int k1 = k - leafRange; k1 <= k + leafRange; ++k1) {
-                    int k2;
                     boolean grow;
+                    int k2;
                     int i2 = Math.abs(i1 - i);
                     int dist = i2 * i2 + (k2 = Math.abs(k1 - k)) * k2;
                     boolean bl = grow = dist < leafRangeSq;
@@ -183,7 +182,7 @@ extends WorldGenAbstractTree {
                     int i2 = Math.abs(i1 - i);
                     int k2 = Math.abs(k1 - k);
                     int j2 = j1 - j;
-                    if (!(i2 == 0 && k2 == 0 || i2 == k2 && i2 == j2) && (i2 != 0 && k2 != 0 || i2 == k2 || i2 != j2 + 1 && k2 != j2 + 1) || !(block = world.getBlock(i1, j1, k1)).isReplaceable((IBlockAccess)world, i1, j1, k1) && !block.isLeaves((IBlockAccess)world, i1, j1, k1)) continue;
+                    if ((i2 != 0 || k2 != 0) && (i2 != k2 || i2 != j2) && (i2 != 0 && k2 != 0 || i2 == k2 || i2 != j2 + 1 && k2 != j2 + 1) || !(block = world.getBlock(i1, j1, k1)).isReplaceable((IBlockAccess)world, i1, j1, k1) && !block.isLeaves((IBlockAccess)world, i1, j1, k1)) continue;
                     this.setBlockAndNotifyAdequately(world, i1, j1, k1, this.woodBlock, this.woodMeta | 0xC);
                 }
             }

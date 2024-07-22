@@ -14,7 +14,7 @@ import net.minecraft.util.ResourceLocation;
 
 public class LOTRRenderMirkwoodSpider
 extends LOTRRenderSpiderBase {
-    private static ResourceLocation[] spiderSkins = new ResourceLocation[]{new ResourceLocation("lotr:mob/spider/spider_mirkwood.png"), new ResourceLocation("lotr:mob/spider/spider_mirkwoodSlowness.png"), new ResourceLocation("lotr:mob/spider/spider_mirkwoodPoison.png")};
+    private static ResourceLocation[] spiderSkins = new ResourceLocation[]{new ResourceLocation("lotr:mob/spider/spider_mirkwood.png"), new ResourceLocation("lotr:mob/spider/spider_mirkwoodSlowness.png"), new ResourceLocation("lotr:mob/spider/spider_mirkwoodPoison.png"), new ResourceLocation("lotr:mob/spider/spider_mirkwoodBlindness.png"), new ResourceLocation("lotr:mob/spider/spider_mirkwoodNausea.png"), new ResourceLocation("lotr:mob/spider/spider_mirkwoodWeakness.png")};
 
     protected ResourceLocation getEntityTexture(Entity entity) {
         LOTREntityMirkwoodSpider spider = (LOTREntityMirkwoodSpider)entity;

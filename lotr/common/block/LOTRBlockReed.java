@@ -138,7 +138,7 @@ implements IPlantable {
         if (side == -1) {
             return this.blockIcon;
         }
-        Block below = world.getBlock(i, j - 1, k);
+        world.getBlock(i, j - 1, k);
         Block above = world.getBlock(i, j + 1, k);
         if (above != this) {
             return this.iconUpper;

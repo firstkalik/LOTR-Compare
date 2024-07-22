@@ -45,7 +45,7 @@ extends CommandBase {
     public void processCommand(ICommandSender sender, String[] args) {
         if (args.length >= 2) {
             String achName = args[1];
-            EntityPlayerMP entityplayer = args.length >= 3 ? LOTRCommandAchievement.getPlayer((ICommandSender)sender, (String)args[2]) : LOTRCommandAchievement.getCommandSenderAsPlayer((ICommandSender)sender);
+            EntityPlayerMP entityplayer = args.length >= 3 ? CommandBase.getPlayer((ICommandSender)sender, (String)args[2]) : CommandBase.getCommandSenderAsPlayer((ICommandSender)sender);
             LOTRPlayerData playerData = LOTRLevelData.getData((EntityPlayer)entityplayer);
             if (args[0].equalsIgnoreCase("give")) {
                 LOTRAchievement ach = this.findAchievementByName(achName);
@@ -53,7 +53,7 @@ extends CommandBase {
                     throw new WrongUsageException("commands.lotr.lotrAchievement.give.fail", new Object[]{entityplayer.getCommandSenderName(), ach.getTitle((EntityPlayer)entityplayer)});
                 }
                 playerData.addAchievement(ach);
-                LOTRCommandAchievement.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.lotrAchievement.give", (Object[])new Object[]{entityplayer.getCommandSenderName(), ach.getTitle((EntityPlayer)entityplayer)});
+                CommandBase.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.lotrAchievement.give", (Object[])new Object[]{entityplayer.getCommandSenderName(), ach.getTitle((EntityPlayer)entityplayer)});
                 return;
             }
             if (args[0].equalsIgnoreCase("remove")) {
@@ -62,7 +62,7 @@ extends CommandBase {
                     for (LOTRAchievement ach : allAchievements) {
                         playerData.removeAchievement(ach);
                     }
-                    LOTRCommandAchievement.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.lotrAchievement.removeAll", (Object[])new Object[]{entityplayer.getCommandSenderName()});
+                    CommandBase.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.lotrAchievement.removeAll", (Object[])new Object[]{entityplayer.getCommandSenderName()});
                     return;
                 }
                 LOTRAchievement ach = this.findAchievementByName(achName);
@@ -70,7 +70,7 @@ extends CommandBase {
                     throw new WrongUsageException("commands.lotr.lotrAchievement.remove.fail", new Object[]{entityplayer.getCommandSenderName(), ach.getTitle((EntityPlayer)entityplayer)});
                 }
                 playerData.removeAchievement(ach);
-                LOTRCommandAchievement.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.lotrAchievement.remove", (Object[])new Object[]{entityplayer.getCommandSenderName(), ach.getTitle((EntityPlayer)entityplayer)});
+                CommandBase.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.lotrAchievement.remove", (Object[])new Object[]{entityplayer.getCommandSenderName(), ach.getTitle((EntityPlayer)entityplayer)});
                 return;
             }
         }
@@ -87,7 +87,7 @@ extends CommandBase {
 
     public List addTabCompletionOptions(ICommandSender sender, String[] args) {
         if (args.length == 1) {
-            return LOTRCommandAchievement.getListOfStringsMatchingLastWord((String[])args, (String[])new String[]{"give", "remove"});
+            return CommandBase.getListOfStringsMatchingLastWord((String[])args, (String[])new String[]{"give", "remove"});
         }
         if (args.length == 2) {
             List<LOTRAchievement> achievements = LOTRAchievement.getAllAchievements();
@@ -98,10 +98,10 @@ extends CommandBase {
             if (args[0].equals("remove")) {
                 names.add("all");
             }
-            return LOTRCommandAchievement.getListOfStringsMatchingLastWord((String[])args, (String[])names.toArray(new String[0]));
+            return CommandBase.getListOfStringsMatchingLastWord((String[])args, (String[])names.toArray(new String[0]));
         }
         if (args.length == 3) {
-            return LOTRCommandAchievement.getListOfStringsMatchingLastWord((String[])args, (String[])MinecraftServer.getServer().getAllUsernames());
+            return CommandBase.getListOfStringsMatchingLastWord((String[])args, (String[])MinecraftServer.getServer().getAllUsernames());
         }
         return null;
     }

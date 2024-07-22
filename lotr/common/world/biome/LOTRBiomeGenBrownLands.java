@@ -79,13 +79,12 @@ extends LOTRBiome {
 
     @Override
     public void generateBiomeTerrain(World world, Random random, Block[] blocks, byte[] meta, int i, int k, double stoneNoise, int height, LOTRBiomeVariant variant) {
-        double d2;
         Block topBlock_pre = this.topBlock;
         int topBlockMeta_pre = this.topBlockMeta;
         Block fillerBlock_pre = this.fillerBlock;
         int fillerBlockMeta_pre = this.fillerBlockMeta;
         double d1 = biomeTerrainNoise.func_151601_a((double)i * 0.08, (double)k * 0.08);
-        if (d1 + (d2 = biomeTerrainNoise.func_151601_a((double)i * 0.7, (double)k * 0.7)) > 0.1) {
+        if (d1 + biomeTerrainNoise.func_151601_a((double)i * 0.7, (double)k * 0.7) > 0.1) {
             this.topBlock = Blocks.dirt;
             this.topBlockMeta = 1;
             this.fillerBlock = this.topBlock;

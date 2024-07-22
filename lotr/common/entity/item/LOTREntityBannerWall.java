@@ -113,10 +113,9 @@ extends EntityHanging {
 
     public void setDirection(int dir) {
         float xSize;
-        float edge;
-        float xEdge;
-        float zEdge;
         float zSize;
+        float zEdge;
+        float xEdge;
         if (dir < 0 || dir >= Direction.directions.length) {
             dir = 0;
         }
@@ -124,7 +123,8 @@ extends EntityHanging {
         this.prevRotationYaw = this.rotationYaw = (float)Direction.rotateOpposite[dir] * 90.0f;
         float width = 1.0f;
         float thickness = 0.0625f;
-        float yEdge = edge = 0.01f;
+        float edge = 0.01f;
+        float yEdge = 0.01f;
         if (dir == 0 || dir == 2) {
             xSize = width;
             zSize = thickness;
@@ -212,8 +212,7 @@ extends EntityHanging {
     }
 
     public boolean attackEntityFrom(DamageSource damagesource, float f) {
-        EntityPlayer entityplayer;
-        if (!this.worldObj.isRemote && damagesource.getEntity() instanceof EntityPlayer && LOTRBannerProtection.isProtected(this.worldObj, (Entity)this, LOTRBannerProtection.forPlayer(entityplayer = (EntityPlayer)damagesource.getEntity(), LOTRBannerProtection.Permission.FULL), true)) {
+        if (!this.worldObj.isRemote && damagesource.getEntity() instanceof EntityPlayer && LOTRBannerProtection.isProtected(this.worldObj, (Entity)this, LOTRBannerProtection.forPlayer((EntityPlayer)damagesource.getEntity(), LOTRBannerProtection.Permission.FULL), true)) {
             return false;
         }
         return super.attackEntityFrom(damagesource, f);

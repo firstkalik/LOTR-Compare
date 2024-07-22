@@ -84,9 +84,9 @@ extends WorldGenAbstractTree {
         int height = MathHelper.getRandomIntegerInRange((Random)random, (int)this.minHeight, (int)this.maxHeight);
         boolean flag = true;
         if (!this.restrictions || j >= 1 && j + height + 5 <= 256) {
-            int i1;
-            int j1;
             int k1;
+            int j1;
+            int i1;
             int i12;
             if (this.restrictions) {
                 for (j1 = j; j1 <= j + height + 5; ++j1) {
@@ -97,10 +97,10 @@ extends WorldGenAbstractTree {
                     if (j1 >= j + height + 2) {
                         range = this.trunkWidth + 2;
                     }
-                    for (i1 = i - range; i1 <= i + range && flag; ++i1) {
+                    for (i12 = i - range; i12 <= i + range && flag; ++i12) {
                         for (int k12 = k - range; k12 <= k + range && flag; ++k12) {
                             if (j1 >= 0 && j1 < 256) {
-                                if (this.isReplaceable(world, i1, j1, k12)) continue;
+                                if (this.isReplaceable(world, i12, j1, k12)) continue;
                                 flag = false;
                                 continue;
                             }
@@ -108,10 +108,10 @@ extends WorldGenAbstractTree {
                         }
                     }
                 }
-                for (i12 = i - this.trunkWidth; i12 <= i + this.trunkWidth && flag; ++i12) {
+                for (i1 = i - this.trunkWidth; i1 <= i + this.trunkWidth && flag; ++i1) {
                     for (k1 = k - this.trunkWidth; k1 <= k + this.trunkWidth && flag; ++k1) {
-                        Block block = world.getBlock(i12, j - 1, k1);
-                        boolean isSoil = block.canSustainPlant((IBlockAccess)world, i12, j - 1, k1, ForgeDirection.UP, (IPlantable)((BlockSapling)Blocks.sapling));
+                        Block block = world.getBlock(i1, j - 1, k1);
+                        boolean isSoil = block.canSustainPlant((IBlockAccess)world, i1, j - 1, k1, ForgeDirection.UP, (IPlantable)((BlockSapling)Blocks.sapling));
                         if (isSoil) continue;
                         flag = false;
                     }
@@ -121,9 +121,9 @@ extends WorldGenAbstractTree {
                 }
             }
             if (this.restrictions) {
-                for (i12 = i - this.trunkWidth; i12 <= i + this.trunkWidth; ++i12) {
+                for (i1 = i - this.trunkWidth; i1 <= i + this.trunkWidth; ++i1) {
                     for (k1 = k - this.trunkWidth; k1 <= k + this.trunkWidth; ++k1) {
-                        world.getBlock(i12, j - 1, k1).onPlantGrow(world, i12, j - 1, k1, i12, j, k1);
+                        world.getBlock(i1, j - 1, k1).onPlantGrow(world, i1, j - 1, k1, i1, j, k1);
                     }
                 }
             }
@@ -141,7 +141,7 @@ extends WorldGenAbstractTree {
                     float cos = MathHelper.cos((float)angle);
                     float sin = MathHelper.sin((float)angle);
                     float angleY = random.nextFloat() * (float)Math.toRadians(40.0);
-                    float cosY = MathHelper.cos((float)angleY);
+                    MathHelper.cos((float)angleY);
                     float sinY = MathHelper.sin((float)angleY);
                     int length = 3 + random.nextInt(6);
                     int i14 = i;
@@ -179,7 +179,7 @@ extends WorldGenAbstractTree {
             if (this.hasRoots) {
                 int roots = 4 + random.nextInt(5 * this.trunkWidth + 1);
                 for (int l = 0; l < roots; ++l) {
-                    i1 = i;
+                    i12 = i;
                     int j14 = j + 1 + random.nextInt(this.trunkWidth * 2 + 1);
                     int k15 = k;
                     int xDirection = 0;
@@ -187,10 +187,10 @@ extends WorldGenAbstractTree {
                     int rootLength = 1 + random.nextInt(4);
                     if (random.nextBoolean()) {
                         if (random.nextBoolean()) {
-                            i1 -= this.trunkWidth + 1;
+                            i12 -= this.trunkWidth + 1;
                             xDirection = -1;
                         } else {
-                            i1 += this.trunkWidth + 1;
+                            i12 += this.trunkWidth + 1;
                             xDirection = 1;
                         }
                         k15 -= this.trunkWidth + 1;
@@ -203,26 +203,26 @@ extends WorldGenAbstractTree {
                             k15 += this.trunkWidth + 1;
                             zDirection = 1;
                         }
-                        i1 -= this.trunkWidth + 1;
-                        i1 += random.nextInt(this.trunkWidth * 2 + 2);
+                        i12 -= this.trunkWidth + 1;
+                        i12 += random.nextInt(this.trunkWidth * 2 + 2);
                     }
                     for (int l1 = 0; l1 < rootLength; ++l1) {
                         int rootBlocks = 0;
                         int j2 = j14;
-                        while (!world.getBlock(i1, j2, k15).isOpaqueCube()) {
-                            this.setBlockAndNotifyAdequately(world, i1, j2, k15, this.woodBlock, this.woodMeta | 0xC);
-                            world.getBlock(i1, j2 - 1, k15).onPlantGrow(world, i1, j2 - 1, k15, i1, j2, k15);
+                        while (!world.getBlock(i12, j2, k15).isOpaqueCube()) {
+                            this.setBlockAndNotifyAdequately(world, i12, j2, k15, this.woodBlock, this.woodMeta | 0xC);
+                            world.getBlock(i12, j2 - 1, k15).onPlantGrow(world, i12, j2 - 1, k15, i12, j2, k15);
                             if (++rootBlocks > 5) break;
                             --j2;
                         }
                         --j14;
                         if (!random.nextBoolean()) continue;
                         if (xDirection == -1) {
-                            --i1;
+                            --i12;
                             continue;
                         }
                         if (xDirection == 1) {
-                            ++i1;
+                            ++i12;
                             continue;
                         }
                         if (zDirection == -1) {
@@ -251,8 +251,8 @@ extends WorldGenAbstractTree {
                 int leafRangeSq = leafRange * leafRange;
                 for (int i1 = i - leafRange; i1 <= i + leafRange; ++i1) {
                     for (int k1 = k - leafRange; k1 <= k + leafRange; ++k1) {
-                        int k2;
                         boolean grow;
+                        int k2;
                         int i2 = Math.abs(i1 - i);
                         int dist = i2 * i2 + (k2 = Math.abs(k1 - k)) * k2;
                         boolean bl = grow = dist < leafRangeSq;
@@ -292,7 +292,7 @@ extends WorldGenAbstractTree {
                     int i2 = Math.abs(i1 - i);
                     int k2 = Math.abs(k1 - k);
                     int j2 = j1 - j;
-                    if (!(i2 == 0 && k2 == 0 || i2 == k2 && i2 == j2) && (i2 != 0 && k2 != 0 || i2 == k2 || i2 != j2 + 1 && k2 != j2 + 1) || !(block = world.getBlock(i1, j1, k1)).isReplaceable((IBlockAccess)world, i1, j1, k1) && !block.isLeaves((IBlockAccess)world, i1, j1, k1)) continue;
+                    if ((i2 != 0 || k2 != 0) && (i2 != k2 || i2 != j2) && (i2 != 0 && k2 != 0 || i2 == k2 || i2 != j2 + 1 && k2 != j2 + 1) || !(block = world.getBlock(i1, j1, k1)).isReplaceable((IBlockAccess)world, i1, j1, k1) && !block.isLeaves((IBlockAccess)world, i1, j1, k1)) continue;
                     this.setBlockAndNotifyAdequately(world, i1, j1, k1, this.woodBlock, this.woodMeta);
                 }
             }
@@ -301,12 +301,9 @@ extends WorldGenAbstractTree {
 
     private void growVines(World world, Random random, int i, int j, int k, int meta) {
         this.setBlockAndNotifyAdequately(world, i, j, k, LOTRMod.mirkVines, meta);
-        int length = 4 + random.nextInt(8);
-        while (world.isAirBlock(i, --j, k) && length > 0) {
+        for (int length = 4 + random.nextInt(8); world.isAirBlock(i, --j, k) && length > 0; --length) {
             this.setBlockAndNotifyAdequately(world, i, j, k, LOTRMod.mirkVines, meta);
-            --length;
         }
-        return;
     }
 }
 

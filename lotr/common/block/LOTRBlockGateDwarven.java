@@ -50,7 +50,7 @@ extends LOTRBlockGate {
     @SideOnly(value=Side.CLIENT)
     @Override
     public IIcon getIcon(IBlockAccess world, int i, int j, int k, int side) {
-        boolean open = LOTRBlockGateDwarven.isGateOpen(world, i, j, k);
+        boolean open = LOTRBlockGate.isGateOpen(world, i, j, k);
         if (open) {
             return LOTRConnectedTextures.getConnectedIconBlock(this, world, i, j, k, side, false);
         }

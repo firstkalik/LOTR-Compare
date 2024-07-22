@@ -31,15 +31,15 @@ public class LOTRGollumSpawner {
             return;
         }
         if (world.getTotalWorldTime() % 20L == 0L) {
-            int j;
-            int checkRange;
             int k;
             LOTRWaypoint home = LOTRWaypoint.HIGH_PASS;
             int x = home.getXCoord();
             int z = home.getZCoord();
             int homeRange = 128;
             int i = MathHelper.getRandomIntegerInRange((Random)world.rand, (int)(x - homeRange), (int)(x + homeRange));
-            if (world.checkChunksExist(i - (checkRange = 16), (j = MathHelper.getRandomIntegerInRange((Random)world.rand, (int)16, (int)32)) - checkRange, (k = MathHelper.getRandomIntegerInRange((Random)world.rand, (int)(z - homeRange), (int)(z + homeRange))) - checkRange, i + checkRange, j + checkRange, k + checkRange)) {
+            int checkRange = 16;
+            int j = MathHelper.getRandomIntegerInRange((Random)world.rand, (int)16, (int)32);
+            if (world.checkChunksExist(i - 16, j - checkRange, (k = MathHelper.getRandomIntegerInRange((Random)world.rand, (int)(z - homeRange), (int)(z + homeRange))) - checkRange, i + checkRange, j + checkRange, k + checkRange)) {
                 AxisAlignedBB aabb = AxisAlignedBB.getBoundingBox((double)i, (double)j, (double)k, (double)(i + 1), (double)(j + 1), (double)(k + 1));
                 if (world.getEntitiesWithinAABB(EntityPlayer.class, aabb = aabb.expand((double)checkRange, (double)checkRange, (double)checkRange)).isEmpty()) {
                     Block block = world.getBlock(i, j, k);

@@ -51,6 +51,10 @@ public class LOTRFellowshipClient {
         this.adminNames = admins;
     }
 
+    public void setName(String name) {
+        this.fellowshipName = name;
+    }
+
     public void setIcon(ItemStack itemstack) {
         this.fellowshipIcon = itemstack;
     }

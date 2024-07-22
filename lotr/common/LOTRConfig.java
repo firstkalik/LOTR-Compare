@@ -43,6 +43,7 @@ public class LOTRConfig {
     public static boolean allowBountyQuests;
     public static boolean enableTitles;
     public static boolean enableFastTravel;
+    public static boolean enableFellowshipCreation;
     public static boolean alignmentDrain;
     public static boolean enableConquest;
     public static boolean removeGoldenAppleRecipes;
@@ -61,17 +62,20 @@ public class LOTRConfig {
     public static int MERMinRespawn;
     public static int MERMaxRespawn;
     public static boolean generateMapFeatures;
+    public static boolean generateFixedSettlements;
     public static boolean changedHunger;
     public static boolean canAlwaysEat;
     public static int forceMapLocations;
     public static boolean enableBandits;
     public static boolean enableInvasions;
+    public static boolean enableUnitLevelling;
     public static boolean removeDiamondArmorRecipes;
     public static boolean disableEnderChestsUtumno;
     public static int preventTraderKidnap;
     public static boolean disableLightningGrief;
     public static boolean disableFireSpread;
     public static boolean enableVillagerTrading;
+    public static boolean strictFactionTitleRequirements;
     public static boolean alwaysShowAlignment;
     public static int alignmentXOffset;
     public static int alignmentYOffset;
@@ -94,6 +98,7 @@ public class LOTRConfig {
     public static boolean fellowPlayerHealthBars;
     public static boolean displayCoinCounts;
     public static boolean balrogWings;
+    public static boolean showPermittedBannerSilhouettes;
     public static boolean enableLOTRSky;
     public static boolean enableMistyMountainsMist;
     public static boolean enableAmbience;
@@ -118,6 +123,13 @@ public class LOTRConfig {
     public static boolean fixRenderDistance;
     public static boolean preventMessageExploit;
     public static boolean cwpLog;
+    public static boolean changeMap;
+    public static boolean EnableUtumno;
+    public static boolean renderspecial;
+    public static boolean bMap;
+    public static boolean spawnElfFix;
+    public static boolean spawnDwarvenMine;
+    public static boolean hiredUnitKillsCountForBane;
 
     private static void setupCategories() {
         CATEGORY_DIMENSION = LOTRConfig.makeCategory("dimension");
@@ -142,12 +154,17 @@ public class LOTRConfig {
 
     public static void load() {
         LOTRDimension.configureDimensions(config, CATEGORY_DIMENSION);
+        spawnElfFix = config.get(CATEGORY_GAMEPLAY, "Enable Galadhrim elf Farm", true).getBoolean();
+        EnableUtumno = config.get(CATEGORY_GAMEPLAY, "Enable Utumno", true).getBoolean();
+        hiredUnitKillsCountForBane = config.get(CATEGORY_GAMEPLAY, "Hired units killed count towards x-bane modifiers", true, "").getBoolean();
+        spawnDwarvenMine = config.get(CATEGORY_GAMEPLAY, "Enable Dwarven mine", true).getBoolean();
         allowBannerProtection = config.get(CATEGORY_GAMEPLAY, "Allow Banner Protection", true).getBoolean();
         allowSelfProtectingBanners = config.get(CATEGORY_GAMEPLAY, "Allow Self-Protecting Banners", true).getBoolean();
         allowMiniquests = config.get(CATEGORY_GAMEPLAY, "NPCs give mini-quests", true).getBoolean();
         allowBountyQuests = config.get(CATEGORY_GAMEPLAY, "NPCs give bounty mini-quests", true, "Allow NPCs to generate mini-quests to kill enemy players").getBoolean();
         enableTitles = config.get(CATEGORY_GAMEPLAY, "Enable Titles", true).getBoolean();
         enableFastTravel = config.get(CATEGORY_GAMEPLAY, "Enable Fast Travel", true).getBoolean();
+        enableFellowshipCreation = config.get(CATEGORY_GAMEPLAY, "Enable Fellowship creation", true, "If disabled, admins can still create Fellowships using the command").getBoolean();
         alignmentDrain = config.get(CATEGORY_GAMEPLAY, "Enable alignment drain", true, "Factions dislike if a player has + alignment with enemy factions").getBoolean();
         enableConquest = config.get(CATEGORY_GAMEPLAY, "Enable Conquest", true).getBoolean();
         removeGoldenAppleRecipes = config.get(CATEGORY_GAMEPLAY, "Remove Golden Apple recipes", true).getBoolean();
@@ -165,18 +182,21 @@ public class LOTRConfig {
         MERWorldRespawnThreshold = config.get(CATEGORY_GAMEPLAY, "Middle-earth Respawning: World Threshold", 2000, "Threshold distance from spawn for applying Middle-earth respawning when the player's spawn point is the world spawn (no bed)").getInt();
         MERMinRespawn = config.get(CATEGORY_GAMEPLAY, "Middle-earth Respawning: Min Respawn Range", 500, "Minimum possible range to place the player from their death point").getInt();
         MERMaxRespawn = config.get(CATEGORY_GAMEPLAY, "Middle-earth Respawning: Max Respawn Range", 1500, "Maximum possible range to place the player from their death point").getInt();
-        generateMapFeatures = config.get(CATEGORY_GAMEPLAY, "Generate map features", true).getBoolean();
+        generateMapFeatures = config.get(CATEGORY_GAMEPLAY, "Generate map features", true, "Roads; fixed hills and mountains; fixed structures, such as the Utumno entrance").getBoolean();
+        generateFixedSettlements = config.get(CATEGORY_GAMEPLAY, "Generate fixed settlements", true, "Villages in fixed locations, such as Bree").getBoolean();
         changedHunger = config.get(CATEGORY_GAMEPLAY, "Hunger changes", true, "Food meter decreases more slowly").getBoolean();
         canAlwaysEat = config.get(CATEGORY_GAMEPLAY, "Feast Mode", true, "Food can always be eaten regardless of hunger").getBoolean();
-        forceMapLocations = config.get(CATEGORY_GAMEPLAY, "Force Hide/Show Map Locations", 0, "Force hide or show players' map locations. 0 = per-player (default), 1 = force hide, 2 = force show").getInt();
+        forceMapLocations = config.get(CATEGORY_GAMEPLAY, "Force Hide/Show Map Locations", 1, "Force hide or show players' map locations. 0 = per-player (default), 1 = force hide, 2 = force show").getInt();
         enableBandits = config.get(CATEGORY_GAMEPLAY, "Enable Bandits", true).getBoolean();
         enableInvasions = config.get(CATEGORY_GAMEPLAY, "Enable Invasions", true).getBoolean();
+        enableUnitLevelling = config.get(CATEGORY_GAMEPLAY, "Enable hired unit levelling", true).getBoolean();
         removeDiamondArmorRecipes = config.get(CATEGORY_GAMEPLAY, "Remove diamond armour recipes", false).getBoolean();
         disableEnderChestsUtumno = config.get(CATEGORY_GAMEPLAY, "Disable ender chests in Utumno", false).getBoolean();
         preventTraderKidnap = config.get(CATEGORY_GAMEPLAY, "Prevent trader transport range", 0, "Prevent transport of structure-bound traders beyond this distance outside their initial home range (0 = disabled)").getInt();
         disableLightningGrief = config.get(CATEGORY_GAMEPLAY, "Disable lightning grief", false, "Prevent lightning from placing fire blocks").getBoolean();
         disableFireSpread = config.get(CATEGORY_GAMEPLAY, "Disable fire spread", false, "Activate instead of gamerule doFireTick for finer control over fire behaviour. Fire will still die out and burn blocks, but will not spread").getBoolean();
         enableVillagerTrading = config.get(CATEGORY_GAMEPLAY, "Enable Villager trading", true, "Intended for servers. Enable or disable vanilla villager trading").getBoolean();
+        strictFactionTitleRequirements = config.get(CATEGORY_GAMEPLAY, "Strict faction title requirements", false, "Require a pledge to bear faction titles of alignment level equal to the faction's pledge level - not just those titles higher than pledge level").getBoolean();
         alwaysShowAlignment = config.get(CATEGORY_GUI, "Always show alignment", false, "If set to false, the alignment bar will only be shown in Middle-earth. If set to true, it will be shown in all dimensions").getBoolean();
         alignmentXOffset = config.get(CATEGORY_GUI, "Alignment x-offset", 0, "Configure the x-position of the alignment bar on-screen. Negative values move it left, positive values right").getInt();
         alignmentYOffset = config.get(CATEGORY_GUI, "Alignment y-offset", 0, "Configure the y-position of the alignment bar on-screen. Negative values move it up, positive values down").getInt();
@@ -199,6 +219,7 @@ public class LOTRConfig {
         fellowPlayerHealthBars = config.get(CATEGORY_GUI, "Fellow Player Health Bars", true).getBoolean();
         displayCoinCounts = config.get(CATEGORY_GUI, "Inventory coin counts", true).getBoolean();
         balrogWings = config.get(CATEGORY_GUI, "Balrog Wings", true, "Choose your side in the legendary debate...").getBoolean();
+        showPermittedBannerSilhouettes = config.get(CATEGORY_GUI, "Show permitted banner silhouettes", true, "In the debug screen, render any protection banners for which you have permission as a solid green shape, visible through blocks").getBoolean();
         enableLOTRSky = config.get(CATEGORY_ENVIRONMENT, "Middle-earth sky", true, "Toggle the new Middle-earth sky").getBoolean();
         enableMistyMountainsMist = config.get(CATEGORY_ENVIRONMENT, "Misty Misty Mountains", true, "Toggle mist overlay in the Misty Mountains").getBoolean();
         enableAmbience = config.get(CATEGORY_ENVIRONMENT, "Ambience", true).getBoolean();
@@ -226,6 +247,9 @@ public class LOTRConfig {
         fixRenderDistance = config.get(CATEGORY_MISC, "Fix render distance", true, "Fix a vanilla crash caused by having render distance > 16 in the options.txt. NOTE: This will not run if Optifine is installed").getBoolean();
         preventMessageExploit = config.get(CATEGORY_MISC, "Fix /msg exploit", true, "Disable usage of @a, @r, etc. in the /msg command, to prevent exploiting it as a player locator").getBoolean();
         cwpLog = config.get(CATEGORY_MISC, "Custom Waypoint logging", false).getBoolean();
+        changeMap = config.get(CATEGORY_GUI, "Change map", true, "Enables or disable alternative map image").getBoolean();
+        renderspecial = config.get(CATEGORY_MISC, "Special Render", true, "Disable renders to prevent crashes").getBoolean();
+        bMap = config.get(CATEGORY_GUI, "Beautiful map", true, "Enables or disable alternative map image").getBoolean();
         if (LOTRModChecker.isCauldronServer()) {
             FMLLog.info((String)"LOTR: Successfully detected Cauldron server and disabled: nothing! (Thanks, ASM!)", (Object[])new Object[0]);
         }
@@ -273,6 +297,13 @@ public class LOTRConfig {
         return list;
     }
 
+    public static boolean isFellowshipCreationEnabled(World world) {
+        if (!world.isRemote) {
+            return enableFellowshipCreation;
+        }
+        return LOTRLevelData.clientside_thisServer_fellowshipCreation;
+    }
+
     public static boolean isEnchantingEnabled(World world) {
         if (!world.isRemote) {
             return enchantingVanilla;
@@ -285,6 +316,25 @@ public class LOTRConfig {
             return enchantingLOTR;
         }
         return LOTRLevelData.clientside_thisServer_enchantingLOTR;
+    }
+
+    public static void toggleMap() {
+        changeMap = !changeMap;
+        config.getCategory(CATEGORY_GUI).get("Change map").set(changeMap);
+        config.save();
+    }
+
+    public static void togglebMap() {
+        bMap = !bMap;
+        config.getCategory(CATEGORY_GUI).get("Beautiful map").set(bMap);
+        config.save();
+    }
+
+    public static boolean areStrictFactionTitleRequirementsEnabled(World world) {
+        if (!world.isRemote) {
+            return strictFactionTitleRequirements;
+        }
+        return LOTRLevelData.clientside_thisServer_strictFactionTitleRequirements;
     }
 
     static {

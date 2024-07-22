@@ -47,6 +47,13 @@ public class LOTRBannerWhitelistEntry {
         this.perms.remove((Object)p);
     }
 
+    public void setPermissions(List<LOTRBannerProtection.Permission> perms) {
+        this.clearPermissions();
+        for (LOTRBannerProtection.Permission p : perms) {
+            this.addPermission(p);
+        }
+    }
+
     public void clearPermissions() {
         this.perms.clear();
     }
@@ -60,11 +67,7 @@ public class LOTRBannerWhitelistEntry {
     }
 
     public void decodePermBitFlags(int i) {
-        this.perms.clear();
-        List<LOTRBannerProtection.Permission> decoded = LOTRBannerWhitelistEntry.static_decodePermBitFlags(i);
-        for (LOTRBannerProtection.Permission p : decoded) {
-            this.addPermission(p);
-        }
+        this.setPermissions(LOTRBannerWhitelistEntry.static_decodePermBitFlags(i));
     }
 
     public static int static_encodePermBitFlags(Collection<LOTRBannerProtection.Permission> permList) {

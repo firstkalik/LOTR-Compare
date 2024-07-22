@@ -193,8 +193,7 @@ extends Item {
     }
 
     public static ItemStack getRealDrink(ItemStack itemstack) {
-        Item item;
-        if (itemstack != null && (item = itemstack.getItem()) == LOTRMod.mugWater && LOTRItemMug.getVessel(itemstack) == Vessel.BOTTLE) {
+        if (itemstack != null && itemstack.getItem() == LOTRMod.mugWater && LOTRItemMug.getVessel(itemstack) == Vessel.BOTTLE) {
             ItemStack water = itemstack.copy();
             water.func_150996_a((Item)Items.potionitem);
             water.setItemDamage(0);
@@ -302,8 +301,7 @@ extends Item {
 
     private List<PotionEffect> convertPotionEffectsForStrength(float strength) {
         ArrayList<PotionEffect> list = new ArrayList<PotionEffect>();
-        for (int i = 0; i < this.potionEffects.size(); ++i) {
-            PotionEffect base = this.potionEffects.get(i);
+        for (PotionEffect base : this.potionEffects) {
             PotionEffect modified = new PotionEffect(base.getPotionID(), (int)((float)base.getDuration() * strength));
             list.add(modified);
         }
@@ -349,8 +347,8 @@ extends Item {
             ItemStack potionEquivalent = new ItemStack((Item)Items.potionitem);
             potionEquivalent.setItemDamage(69);
             NBTTagList effectsData = new NBTTagList();
-            for (int l = 0; l < itemEffects.size(); ++l) {
-                PotionEffect effect = (PotionEffect)itemEffects.get(l);
+            for (Object itemEffect : itemEffects) {
+                PotionEffect effect = (PotionEffect)itemEffect;
                 NBTTagCompound nbt = new NBTTagCompound();
                 effect.writeCustomPotionEffectToNBT(nbt);
                 effectsData.appendTag((NBTBase)nbt);
@@ -504,8 +502,7 @@ extends Item {
         }
         if (!world.isRemote && this.shouldApplyPotionEffects(itemstack, entityplayer)) {
             List<PotionEffect> effects = this.convertPotionEffectsForStrength(strength);
-            for (int i = 0; i < effects.size(); ++i) {
-                PotionEffect effect = effects.get(i);
+            for (PotionEffect effect : effects) {
                 entityplayer.addPotionEffect(effect);
             }
         }
@@ -525,10 +522,18 @@ extends Item {
             if (this == LOTRMod.mugOrcDraught) {
                 LOTRLevelData.getData(entityplayer).addAchievement(LOTRAchievement.drinkOrcDraught);
             }
+            if (this == LOTRMod.mugKhamBrew) {
+                LOTRLevelData.getData(entityplayer).addAchievement(LOTRAchievement.drinkKhamBrew);
+            }
+            if (this == LOTRMod.mugRedDwarvenTonic) {
+                LOTRLevelData.getData(entityplayer).addAchievement(LOTRAchievement.drinkRedDwarvenTonic);
+            }
+            if (this == LOTRMod.mugUrukDraught) {
+                LOTRLevelData.getData(entityplayer).addAchievement(LOTRAchievement.drinkUrukDraught);
+            }
             if (this == LOTRMod.mugAthelasBrew) {
                 LOTRLevelData.getData(entityplayer).addAchievement(LOTRAchievement.drinkAthelasBrew);
-                for (int i = 0; i < Potion.potionTypes.length; ++i) {
-                    Potion potion = Potion.potionTypes[i];
+                for (Potion potion : Potion.potionTypes) {
                     if (potion == null || !LOTRReflection.isBadEffect(potion)) continue;
                     entityplayer.removePotionEffect(potion.id);
                 }
@@ -551,8 +556,7 @@ extends Item {
         float strength = LOTRItemMug.getStrength(itemstack);
         npc.heal((float)this.foodHealAmount * strength);
         List<PotionEffect> effects = this.convertPotionEffectsForStrength(strength);
-        for (int i = 0; i < effects.size(); ++i) {
-            PotionEffect effect = effects.get(i);
+        for (PotionEffect effect : effects) {
             npc.addPotionEffect(effect);
         }
         if (this.damageAmount > 0) {
@@ -582,7 +586,8 @@ extends Item {
         BOTTLE(8, "bottle", true, 2),
         SKIN(9, "skin", false, 0),
         HORN(10, "horn", true, 5),
-        HORN_GOLD(11, "hornGold", true, 8);
+        HORN_GOLD(11, "hornGold", true, 8),
+        GOBLET_MITHRIL(12, "gobletMithril", true, 10);
 
         public final String name;
         public final int id;
@@ -616,6 +621,9 @@ extends Item {
             }
             if (this == GOBLET_SILVER) {
                 return LOTRMod.gobletSilver;
+            }
+            if (this == GOBLET_MITHRIL) {
+                return LOTRMod.gobletMithril;
             }
             if (this == GOBLET_COPPER) {
                 return LOTRMod.gobletCopper;
@@ -660,6 +668,9 @@ extends Item {
             }
             if (this == GOBLET_SILVER) {
                 return LOTRMod.gobletSilverBlock;
+            }
+            if (this == GOBLET_MITHRIL) {
+                return LOTRMod.gobletMithrilBlock;
             }
             if (this == GOBLET_COPPER) {
                 return LOTRMod.gobletCopperBlock;

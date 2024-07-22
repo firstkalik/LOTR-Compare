@@ -67,12 +67,12 @@ implements IMessage {
             Entity entity = world.getEntityByID(packet.entityID);
             if (entity != null) {
                 int l;
+                double d2;
+                double d5;
+                double d;
                 double d1;
                 double d4;
-                double d5;
-                double d2;
                 double d3;
-                double d;
                 int i1 = packet.blockX;
                 int j1 = packet.blockY;
                 int k1 = packet.blockZ;

@@ -24,6 +24,7 @@ extends ItemSpade {
     public LOTRItemShovel(Item.ToolMaterial material) {
         super(material);
         this.setCreativeTab((CreativeTabs)LOTRCreativeTabs.tabTools);
+        this.setHarvestLevel("shovel", material.getHarvestLevel());
     }
 }
 

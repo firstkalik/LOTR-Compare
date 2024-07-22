@@ -35,7 +35,7 @@ extends WorldGenAbstractTree {
 
     public boolean generate(World world, Random random, int i, int j, int k) {
         Block below = world.getBlock(i, j - 1, k);
-        int meta = world.getBlockMetadata(i, j - 1, k);
+        world.getBlockMetadata(i, j - 1, k);
         if (!LOTRBiomeGenMordor.isSurfaceMordorBlock(world, i, j - 1, k) && below != Blocks.stone && below != Blocks.sand && below != Blocks.gravel && !below.canSustainPlant((IBlockAccess)world, i, j - 1, k, ForgeDirection.UP, (IPlantable)((BlockSapling)Blocks.sapling))) {
             return false;
         }

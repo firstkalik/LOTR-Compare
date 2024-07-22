@@ -34,7 +34,7 @@ implements LOTRUnitTradeable {
     public LOTREntityHighElfLord(World world) {
         super(world);
         this.addTargetTasks(false);
-        this.npcCape = LOTRCapes.HIGH_ELF;
+        this.npcCape = LOTRCapes.ALIGNMENT_HIGH_ELF.capeTexture;
     }
 
     @Override
@@ -60,7 +60,7 @@ implements LOTRUnitTradeable {
     }
 
     @Override
-    public LOTRInvasions getWarhorn() {
+    public LOTRInvasions getConquestHorn() {
         return LOTRInvasions.HIGH_ELF_LINDON;
     }
 

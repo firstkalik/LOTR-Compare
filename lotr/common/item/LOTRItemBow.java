@@ -44,7 +44,14 @@ import lotr.common.LOTRCreativeTabs;
 import lotr.common.LOTRMod;
 import lotr.common.enchant.LOTREnchantment;
 import lotr.common.enchant.LOTREnchantmentHelper;
+import lotr.common.entity.item.LOTREntityArrowAvari;
+import lotr.common.entity.item.LOTREntityArrowExplosion;
+import lotr.common.entity.item.LOTREntityArrowHunger;
+import lotr.common.entity.item.LOTREntityArrowMorgul;
 import lotr.common.entity.item.LOTREntityArrowPoisoned;
+import lotr.common.entity.item.LOTREntityArrowSlow;
+import lotr.common.entity.item.LOTREntityArrowWeak;
+import lotr.common.item.LOTREntityArrowFire;
 import lotr.common.item.LOTRMaterial;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
@@ -120,13 +127,14 @@ extends ItemBow {
             arrowItem = new ItemStack(Items.arrow);
         }
         if (arrowItem != null) {
+            EntityArrow arrow;
             float charge = (float)useTick / (float)this.getMaxDrawTime();
             if (charge < 0.65f) {
                 return;
             }
             charge = (charge * charge + charge * 2.0f) / 3.0f;
             charge = Math.min(charge, 1.0f);
-            LOTREntityArrowPoisoned arrow = arrowItem.getItem() == LOTRMod.arrowPoisoned ? new LOTREntityArrowPoisoned(world, (EntityLivingBase)entityplayer, charge * 2.0f * LOTRItemBow.getLaunchSpeedFactor(itemstack)) : new EntityArrow(world, (EntityLivingBase)entityplayer, charge * 2.0f * LOTRItemBow.getLaunchSpeedFactor(itemstack));
+            EntityArrow entityArrow = arrowItem.getItem() == LOTRMod.arrowPoisoned2 ? new LOTREntityArrowMorgul(world, (EntityLivingBase)entityplayer, charge * 2.0f * LOTRItemBow.getLaunchSpeedFactor(itemstack)) : (arrowItem.getItem() == LOTRMod.arrowPoisoned ? new LOTREntityArrowPoisoned(world, (EntityLivingBase)entityplayer, charge * 2.0f * LOTRItemBow.getLaunchSpeedFactor(itemstack)) : (arrowItem.getItem() == LOTRMod.arrowWeak ? new LOTREntityArrowWeak(world, (EntityLivingBase)entityplayer, charge * 2.0f * LOTRItemBow.getLaunchSpeedFactor(itemstack)) : (arrowItem.getItem() == LOTRMod.arrowSlow ? new LOTREntityArrowSlow(world, (EntityLivingBase)entityplayer, charge * 2.0f * LOTRItemBow.getLaunchSpeedFactor(itemstack)) : (arrowItem.getItem() == LOTRMod.arrowExplosion ? new LOTREntityArrowExplosion(world, (EntityLivingBase)entityplayer, charge * 2.0f * LOTRItemBow.getLaunchSpeedFactor(itemstack)) : (arrowItem.getItem() == LOTRMod.arrowAvari ? new LOTREntityArrowAvari(world, (EntityLivingBase)entityplayer, charge * 2.0f * LOTRItemBow.getLaunchSpeedFactor(itemstack)) : (arrowItem.getItem() == LOTRMod.arrowHunger ? new LOTREntityArrowHunger(world, (EntityLivingBase)entityplayer, charge * 2.0f * LOTRItemBow.getLaunchSpeedFactor(itemstack)) : (arrow = arrowItem.getItem() == LOTRMod.arrowFire ? new LOTREntityArrowFire(world, (EntityLivingBase)entityplayer, charge * 2.0f * LOTRItemBow.getLaunchSpeedFactor(itemstack)) : new EntityArrow(world, (EntityLivingBase)entityplayer, charge * 2.0f * LOTRItemBow.getLaunchSpeedFactor(itemstack)))))))));
             if (arrow.getDamage() < 1.0) {
                 arrow.setDamage(1.0);
             }
@@ -162,7 +170,6 @@ extends ItemBow {
     }
 
     public static void applyBowModifiers(EntityArrow arrow, ItemStack itemstack) {
-        int fireAspect;
         int power = EnchantmentHelper.getEnchantmentLevel((int)Enchantment.power.effectId, (ItemStack)itemstack);
         if (power > 0) {
             arrow.setDamage(arrow.getDamage() + (double)power * 0.5 + 0.5);
@@ -171,7 +178,7 @@ extends ItemBow {
         if ((punch += LOTREnchantmentHelper.calcRangedKnockback(itemstack)) > 0) {
             arrow.setKnockbackStrength(punch);
         }
-        if ((fireAspect = EnchantmentHelper.getEnchantmentLevel((int)Enchantment.flame.effectId, (ItemStack)itemstack) + LOTREnchantmentHelper.calcFireAspect(itemstack)) > 0) {
+        if (EnchantmentHelper.getEnchantmentLevel((int)Enchantment.flame.effectId, (ItemStack)itemstack) + LOTREnchantmentHelper.calcFireAspect(itemstack) > 0) {
             arrow.setFire(100);
         }
         for (LOTREnchantment ench : LOTREnchantment.allEnchantments) {
@@ -203,7 +210,7 @@ extends ItemBow {
     private int getInvArrowSlot(EntityPlayer entityplayer) {
         for (int slot = 0; slot < entityplayer.inventory.mainInventory.length; ++slot) {
             ItemStack invItem = entityplayer.inventory.mainInventory[slot];
-            if (invItem == null || invItem.getItem() != Items.arrow && invItem.getItem() != LOTRMod.arrowPoisoned) continue;
+            if (invItem == null || invItem.getItem() != Items.arrow && invItem.getItem() != LOTRMod.arrowPoisoned && invItem.getItem() != LOTRMod.arrowFire && invItem.getItem() != LOTRMod.arrowWeak && invItem.getItem() != LOTRMod.arrowSlow && invItem.getItem() != LOTRMod.arrowExplosion && invItem.getItem() != LOTRMod.arrowAvari && invItem.getItem() != LOTRMod.arrowHunger && invItem.getItem() != LOTRMod.arrowPoisoned2) continue;
             return slot;
         }
         return -1;

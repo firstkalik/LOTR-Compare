@@ -11,21 +11,9 @@ extends LOTRWorldGenSouthronTownWall {
         super(flag);
     }
 
-    public static class Extra
-    extends LOTRWorldGenSouthronTownWall.Extra {
-        public Extra(boolean flag) {
-            super(flag);
-        }
-
-        @Override
-        protected boolean isUmbar() {
-            return true;
-        }
-    }
-
-    public static class SideMid
-    extends LOTRWorldGenSouthronTownWall.SideMid {
-        public SideMid(boolean flag) {
+    public static class Short
+    extends LOTRWorldGenSouthronTownWall.Short {
+        public Short(boolean flag) {
             super(flag);
         }
 
@@ -47,9 +35,21 @@ extends LOTRWorldGenSouthronTownWall {
         }
     }
 
-    public static class Short
-    extends LOTRWorldGenSouthronTownWall.Short {
-        public Short(boolean flag) {
+    public static class SideMid
+    extends LOTRWorldGenSouthronTownWall.SideMid {
+        public SideMid(boolean flag) {
+            super(flag);
+        }
+
+        @Override
+        protected boolean isUmbar() {
+            return true;
+        }
+    }
+
+    public static class Extra
+    extends LOTRWorldGenSouthronTownWall.Extra {
+        public Extra(boolean flag) {
             super(flag);
         }
 

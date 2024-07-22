@@ -50,7 +50,7 @@ extends Block {
 
     @SideOnly(value=Side.CLIENT)
     public void registerBlockIcons(IIconRegister iconregister) {
-        this.randomIcons = new IIcon[8];
+        this.randomIcons = new IIcon[4];
         for (int l = 0; l < this.randomIcons.length; ++l) {
             this.randomIcons[l] = iconregister.registerIcon(this.getTextureName() + "_var" + l);
         }

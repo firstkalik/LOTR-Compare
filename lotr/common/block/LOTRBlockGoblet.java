@@ -26,25 +26,21 @@ extends LOTRBlockMug {
         this.setStepSound(Block.soundTypeMetal);
     }
 
-    public static class Wood
+    public static class Gold
     extends LOTRBlockGoblet {
-        public Wood() {
-            this.setStepSound(Block.soundTypeWood);
-        }
-
         @SideOnly(value=Side.CLIENT)
         @Override
         public IIcon getIcon(int i, int j) {
-            return Blocks.planks.getIcon(i, 0);
+            return Blocks.gold_block.getIcon(i, 0);
         }
     }
 
-    public static class Copper
+    public static class Mithril
     extends LOTRBlockGoblet {
         @SideOnly(value=Side.CLIENT)
         @Override
         public IIcon getIcon(int i, int j) {
-            return LOTRMod.blockOreStorage.getIcon(i, 0);
+            return LOTRMod.blockOreStorage.getIcon(i, 4);
         }
     }
 
@@ -57,12 +53,25 @@ extends LOTRBlockMug {
         }
     }
 
-    public static class Gold
+    public static class Copper
     extends LOTRBlockGoblet {
         @SideOnly(value=Side.CLIENT)
         @Override
         public IIcon getIcon(int i, int j) {
-            return Blocks.gold_block.getIcon(i, 0);
+            return LOTRMod.blockOreStorage.getIcon(i, 0);
+        }
+    }
+
+    public static class Wood
+    extends LOTRBlockGoblet {
+        public Wood() {
+            this.setStepSound(Block.soundTypeWood);
+        }
+
+        @SideOnly(value=Side.CLIENT)
+        @Override
+        public IIcon getIcon(int i, int j) {
+            return Blocks.planks.getIcon(i, 0);
         }
     }
 

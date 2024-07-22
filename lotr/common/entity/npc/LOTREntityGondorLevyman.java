@@ -21,7 +21,6 @@ import lotr.common.entity.npc.LOTREntityGondorMan;
 import lotr.common.entity.npc.LOTRFamilyInfo;
 import lotr.common.entity.npc.LOTRHiredNPCInfo;
 import lotr.common.entity.npc.LOTRInventoryNPCItems;
-import lotr.common.util.LOTRColorUtil;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.ai.EntityAIBase;
@@ -58,8 +57,8 @@ extends LOTREntityGondorMan {
         int i = this.rand.nextInt(militiaWeapons.length);
         this.npcItemsInv.setMeleeWeapon(militiaWeapons[i].copy());
         this.npcItemsInv.setIdleItem(this.npcItemsInv.getMeleeWeapon());
-        this.setCurrentItemOrArmor(1, LOTRColorUtil.dyeLeather(new ItemStack((Item)Items.leather_boots), leatherDyes, this.rand));
-        this.setCurrentItemOrArmor(2, LOTRColorUtil.dyeLeather(new ItemStack((Item)Items.leather_leggings), leatherDyes, this.rand));
+        this.setCurrentItemOrArmor(1, this.dyeLeather(new ItemStack((Item)Items.leather_boots)));
+        this.setCurrentItemOrArmor(2, this.dyeLeather(new ItemStack((Item)Items.leather_leggings)));
         this.setCurrentItemOrArmor(3, new ItemStack(LOTRMod.bodyGondorGambeson));
         if (this.rand.nextInt(3) != 0) {
             this.setCurrentItemOrArmor(4, null);
@@ -70,10 +69,17 @@ extends LOTREntityGondorMan {
             } else if (i == 1) {
                 this.setCurrentItemOrArmor(4, new ItemStack((Item)Items.iron_helmet));
             } else if (i == 2) {
-                this.setCurrentItemOrArmor(4, LOTRColorUtil.dyeLeather(new ItemStack((Item)Items.leather_helmet), leatherDyes, this.rand));
+                this.setCurrentItemOrArmor(4, this.dyeLeather(new ItemStack((Item)Items.leather_helmet)));
             }
         }
         return data;
+    }
+
+    private ItemStack dyeLeather(ItemStack itemstack) {
+        int i = this.rand.nextInt(leatherDyes.length);
+        int color = leatherDyes[i];
+        ((ItemArmor)itemstack.getItem()).func_82813_b(itemstack, color);
+        return itemstack;
     }
 
     @Override

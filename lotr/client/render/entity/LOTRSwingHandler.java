@@ -59,8 +59,8 @@ public class LOTRSwingHandler {
 
     @SubscribeEvent
     public void onEntityUpdate(LivingEvent.LivingUpdateEvent event) {
-        ItemStack item;
         SwingTime swt;
+        ItemStack item;
         EntityLivingBase entity = event.entityLiving;
         World world = entity.worldObj;
         if (world.isRemote && (swt = entitySwings.get((Object)entity)) == null && entity.isSwingInProgress && entity.swingProgressInt == 0 && LOTRWeaponStats.isMeleeWeapon(item = entity.getHeldItem())) {
@@ -86,7 +86,8 @@ public class LOTRSwingHandler {
                 for (Map.Entry<EntityLivingBase, SwingTime> e : entitySwings.entrySet()) {
                     EntityLivingBase entity = e.getKey();
                     SwingTime swt = e.getValue();
-                    swt.swingPrev = swt.swing++;
+                    ++swt.swing;
+                    swt.swingPrev = swt.swingPrev;
                     if (swt.swing <= swt.swingMax) continue;
                     removes.add(entity);
                 }

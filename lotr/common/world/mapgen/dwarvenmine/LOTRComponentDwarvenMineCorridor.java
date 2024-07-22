@@ -203,18 +203,18 @@ extends StructureComponent {
             this.generateStructureChestContents(world, structureBoundingBox, random, 0, 0, k + 1, LOTRChestContents.DWARVEN_MINE_CORRIDOR.items, LOTRChestContents.getRandomItemAmount(LOTRChestContents.DWARVEN_MINE_CORRIDOR, random));
         }
         for (int k = 0; k <= length; ++k) {
-            Block block;
             for (int i = -1; i <= 3; ++i) {
-                int j;
-                block = this.getBlockAtCurrentPosition(world, i, -1, k, structureBoundingBox);
+                Block block = this.getBlockAtCurrentPosition(world, i, -1, k, structureBoundingBox);
                 if (block.getMaterial().isReplaceable() || block.getMaterial() == Material.sand) {
                     this.placeBlockAtCurrentPosition(world, Blocks.stone, 0, i, -1, k, structureBoundingBox);
                 }
-                if (!(block = this.getBlockAtCurrentPosition(world, i, j = 3, k, structureBoundingBox)).getMaterial().isReplaceable() && block.getMaterial() != Material.sand) continue;
+                int j = 3;
+                block = this.getBlockAtCurrentPosition(world, i, 3, k, structureBoundingBox);
+                if (!block.getMaterial().isReplaceable() && block.getMaterial() != Material.sand) continue;
                 this.placeBlockAtCurrentPosition(world, Blocks.stone, 0, i, j, k, structureBoundingBox);
             }
             for (int j = 0; j <= 2; ++j) {
-                block = this.getBlockAtCurrentPosition(world, -1, j, k, structureBoundingBox);
+                Block block = this.getBlockAtCurrentPosition(world, -1, j, k, structureBoundingBox);
                 if (block.getMaterial().isReplaceable() || block.getMaterial() == Material.sand) {
                     this.placeBlockAtCurrentPosition(world, Blocks.stone, 0, -1, j, k, structureBoundingBox);
                 }

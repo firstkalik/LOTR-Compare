@@ -31,7 +31,7 @@ import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
 
 public enum LOTRDimension {
-    MIDDLE_EARTH("MiddleEarth", 100, LOTRWorldProviderMiddleEarth.class, true, 100, EnumSet.of(DimensionRegion.WEST, DimensionRegion.EAST, DimensionRegion.SOUTH)),
+    MIDDLE_EARTH("MiddleEarth", 100, LOTRWorldProviderMiddleEarth.class, true, 100, EnumSet.of(DimensionRegion.WEST, DimensionRegion.EAST, DimensionRegion.SOUTH, DimensionRegion.NORTH)),
     UTUMNO("Utumno", 101, LOTRWorldProviderUtumno.class, false, 500, EnumSet.of(DimensionRegion.REG_UTUMNO));
 
     public String dimensionName;
@@ -60,8 +60,12 @@ public enum LOTRDimension {
         }
     }
 
+    public String getUntranslatedDimensionName() {
+        return "lotr.dimension." + this.dimensionName;
+    }
+
     public String getDimensionName() {
-        return StatCollector.translateToLocal((String)("lotr.dimension." + this.dimensionName));
+        return StatCollector.translateToLocal((String)this.getUntranslatedDimensionName());
     }
 
     public static void configureDimensions(Configuration config, String category) {
@@ -105,6 +109,7 @@ public enum LOTRDimension {
         WEST("west"),
         EAST("east"),
         SOUTH("south"),
+        NORTH("north"),
         REG_UTUMNO("utumno");
 
         private String regionName;

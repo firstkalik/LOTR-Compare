@@ -217,9 +217,7 @@ extends LOTRWorldGenStructureBase2 {
             this.cropBlock = Blocks.wheat;
         } else {
             int randomCrop = random.nextInt(3);
-            if (randomCrop == 0) {
-                this.cropBlock = Blocks.carrots;
-            } else if (randomCrop == 1) {
+            if (randomCrop == 0 || randomCrop == 1) {
                 this.cropBlock = Blocks.carrots;
             } else if (randomCrop == 2) {
                 this.cropBlock = LOTRMod.lettuceCrop;
@@ -278,7 +276,8 @@ extends LOTRWorldGenStructureBase2 {
             this.plankSlabMeta = 2;
             this.plankStairBlock = LOTRMod.stairsUmbarBrick;
             this.woodBeamBlock = LOTRMod.pillar2;
-            this.woodBeamMeta4 = this.woodBeamMeta = 10;
+            this.woodBeamMeta = 10;
+            this.woodBeamMeta4 = 10;
             this.woodBeamMeta8 = this.woodBeamMeta;
             if (random.nextBoolean() && !this.forceCedarWood()) {
                 this.fenceBlock = LOTRMod.fence3;

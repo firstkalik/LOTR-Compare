@@ -12,7 +12,6 @@
  *  net.minecraft.inventory.Container
  *  net.minecraft.network.NetHandlerPlayServer
  *  net.minecraft.util.StringUtils
- *  net.minecraft.world.World
  *  org.apache.logging.log4j.Logger
  */
 package lotr.common.network;
@@ -37,7 +36,6 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.Container;
 import net.minecraft.network.NetHandlerPlayServer;
 import net.minecraft.util.StringUtils;
-import net.minecraft.world.World;
 import org.apache.logging.log4j.Logger;
 
 public class LOTRPacketBuyUnit
@@ -76,7 +74,6 @@ implements IMessage {
     implements IMessageHandler<LOTRPacketBuyUnit, IMessage> {
         public IMessage onMessage(LOTRPacketBuyUnit packet, MessageContext context) {
             EntityPlayerMP entityplayer = context.getServerHandler().playerEntity;
-            World world = entityplayer.worldObj;
             Container container = entityplayer.openContainer;
             if (container != null && container instanceof LOTRContainerUnitTrade) {
                 LOTRContainerUnitTrade tradeContainer = (LOTRContainerUnitTrade)container;

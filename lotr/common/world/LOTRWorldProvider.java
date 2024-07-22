@@ -66,18 +66,24 @@ extends WorldProvider {
     private IRenderHandler lotrSkyRenderer;
     @SideOnly(value=Side.CLIENT)
     private IRenderHandler lotrCloudRenderer;
-    @SideOnly(value=Side.CLIENT)
-    private IRenderHandler lotrWeatherRenderer;
-    private boolean spawnHostiles = true;
-    private boolean spawnPeacefuls = true;
     private double cloudsR;
     private double cloudsG;
     private double cloudsB;
     private double fogR;
     private double fogG;
     private double fogB;
+    @SideOnly(value=Side.CLIENT)
+    private IRenderHandler lotrWeatherRenderer;
 
     public abstract LOTRDimension getLOTRDimension();
+
+    @SideOnly(value=Side.CLIENT)
+    public IRenderHandler getWeatherRenderer() {
+        if (this.lotrWeatherRenderer == null) {
+            this.lotrWeatherRenderer = new LOTRWeatherRenderer();
+        }
+        return this.lotrWeatherRenderer;
+    }
 
     public void registerWorldChunkManager() {
         this.worldChunkMgr = new LOTRWorldChunkManager(this.worldObj, this.getLOTRDimension());
@@ -174,11 +180,10 @@ extends WorldProvider {
     }
 
     private boolean canSnow_ignoreTemp(int i, int j, int k, boolean checkLight) {
-        Block block;
         if (!checkLight) {
             return true;
         }
-        return j >= 0 && j < this.worldObj.getHeight() && this.worldObj.getSavedLightValue(EnumSkyBlock.Block, i, j, k) < 10 && (block = this.worldObj.getBlock(i, j, k)).getMaterial() == Material.air && Blocks.snow_layer.canPlaceBlockAt(this.worldObj, i, j, k);
+        return j >= 0 && j < this.worldObj.getHeight() && this.worldObj.getSavedLightValue(EnumSkyBlock.Block, i, j, k) < 10 && this.worldObj.getBlock(i, j, k).getMaterial() == Material.air && Blocks.snow_layer.canPlaceBlockAt(this.worldObj, i, j, k);
     }
 
     public boolean shouldMapSpin(String entity, double x, double y, double z) {
@@ -228,14 +233,6 @@ extends WorldProvider {
             return this.lotrSkyRenderer;
         }
         return super.getSkyRenderer();
-    }
-
-    @SideOnly(value=Side.CLIENT)
-    public IRenderHandler getWeatherRenderer() {
-        if (this.lotrWeatherRenderer == null) {
-            this.lotrWeatherRenderer = new LOTRWeatherRenderer();
-        }
-        return this.lotrWeatherRenderer;
     }
 
     @SideOnly(value=Side.CLIENT)

@@ -33,16 +33,18 @@ implements IMessage {
     private int entityID;
     public boolean isHired;
     public UUID hiringPlayer;
+    public LOTRHiredNPCInfo.Task task;
     public String squadron;
     public int xpLvl;
 
     public LOTRPacketHiredInfo() {
     }
 
-    public LOTRPacketHiredInfo(int i, UUID player, String sq, int lvl) {
+    public LOTRPacketHiredInfo(int i, UUID player, LOTRHiredNPCInfo.Task t, String sq, int lvl) {
         this.entityID = i;
         this.hiringPlayer = player;
         this.isHired = this.hiringPlayer != null;
+        this.task = t;
         this.squadron = sq;
         this.xpLvl = lvl;
     }
@@ -54,6 +56,7 @@ implements IMessage {
             data.writeLong(this.hiringPlayer.getMostSignificantBits());
             data.writeLong(this.hiringPlayer.getLeastSignificantBits());
         }
+        data.writeByte(this.task.ordinal());
         if (StringUtils.isNullOrEmpty((String)this.squadron)) {
             data.writeShort(-1);
         } else {
@@ -68,6 +71,7 @@ implements IMessage {
         this.entityID = data.readInt();
         this.isHired = data.readBoolean();
         this.hiringPlayer = this.isHired ? new UUID(data.readLong(), data.readLong()) : null;
+        this.task = LOTRHiredNPCInfo.Task.forID(data.readByte());
         short sqLength = data.readShort();
         if (sqLength > -1) {
             this.squadron = data.readBytes((int)sqLength).toString(Charsets.UTF_8);

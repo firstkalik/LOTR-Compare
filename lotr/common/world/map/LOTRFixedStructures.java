@@ -33,7 +33,10 @@ public enum LOTRFixedStructures {
         this.zCoord = LOTRWaypoint.mapToWorldZ(z);
     }
 
-    public boolean isAt(int x, int z) {
+    public boolean isAt(World world, int x, int z) {
+        if (!LOTRFixedStructures.hasMapFeatures(world)) {
+            return false;
+        }
         return this.xCoord == x && this.zCoord == z;
     }
 
@@ -63,12 +66,11 @@ public enum LOTRFixedStructures {
             }
             if (!(structureNear = LOTRFixedStructures.structureNear(world, x, z, 256))) {
                 for (LOTRWaypoint wp : LOTRWaypoint.values()) {
-                    double rangeSq;
-                    double range;
                     double dz;
+                    double range;
                     double dx = x - wp.getXCoord();
                     double distSq = dx * dx + (dz = (double)(z - wp.getZCoord())) * dz;
-                    if (!(distSq < (rangeSq = (range = 256.0) * range))) continue;
+                    if (distSq >= 256.0 * (range = 256.0)) continue;
                     structureNear = true;
                     break;
                 }
@@ -87,7 +89,7 @@ public enum LOTRFixedStructures {
             double dz = z - str.zCoord;
             double distSq = dx * dx + dz * dz;
             double rangeSq = range * range;
-            if (!(distSq < rangeSq)) continue;
+            if (distSq >= rangeSq) continue;
             return true;
         }
         return false;

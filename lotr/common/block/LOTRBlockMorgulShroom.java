@@ -32,9 +32,9 @@ extends LOTRBlockMordorPlant {
 
     public void updateTick(World world, int i, int j, int k, Random random) {
         if (random.nextInt(10) == 0) {
-            int k1;
-            int i1;
             int j1;
+            int i1;
+            int k1;
             boolean nearbyWater = false;
             for (i1 = i - 2; i1 <= i + 2 && !nearbyWater; ++i1) {
                 for (j1 = j - 2; j1 <= j + 2 && !nearbyWater; ++j1) {

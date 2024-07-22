@@ -52,7 +52,7 @@ extends LOTRBlockLeavesBase {
     public int colorMultiplier(IBlockAccess world, int i, int j, int k) {
         int meta = world.getBlockMetadata(i, j, k) & 3;
         if (meta == 0) {
-            return LOTRBlockLeavesVanilla1.getBiomeLeafColor(world, i, j, k);
+            return LOTRBlockLeavesBase.getBiomeLeafColor(world, i, j, k);
         }
         return super.colorMultiplier(world, i, j, k);
     }

@@ -64,13 +64,12 @@ extends LOTRBiomeGenRohan {
 
     @Override
     public void generateBiomeTerrain(World world, Random random, Block[] blocks, byte[] meta, int i, int k, double stoneNoise, int height, LOTRBiomeVariant variant) {
-        double d2;
         Block topBlock_pre = this.topBlock;
         int topBlockMeta_pre = this.topBlockMeta;
         Block fillerBlock_pre = this.fillerBlock;
         int fillerBlockMeta_pre = this.fillerBlockMeta;
         double d1 = biomeTerrainNoise.func_151601_a((double)i * 0.005, (double)k * 0.005);
-        if (d1 + (d2 = biomeTerrainNoise.func_151601_a((double)i * 0.4, (double)k * 0.4)) > 1.0) {
+        if (d1 + biomeTerrainNoise.func_151601_a((double)i * 0.4, (double)k * 0.4) > 1.0) {
             this.topBlock = Blocks.dirt;
             this.topBlockMeta = 1;
             this.fillerBlock = this.topBlock;
@@ -96,10 +95,10 @@ extends LOTRBiomeGenRohan {
         if (random.nextInt(30) == 0) {
             int rocks = 10 + random.nextInt(20);
             for (int l = 0; l < rocks; ++l) {
-                int k1;
                 int rockMeta;
-                int j1;
                 Block rockBlock;
+                int k1;
+                int j1;
                 int i1 = i + random.nextInt(16) + 8;
                 Block block = world.getBlock(i1, (j1 = world.getHeightValue(i1, k1 = k + random.nextInt(16) + 8)) - 1, k1);
                 if (block != this.topBlock && block != this.fillerBlock) continue;

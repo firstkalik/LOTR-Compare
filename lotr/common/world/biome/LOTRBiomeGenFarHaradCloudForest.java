@@ -2,6 +2,7 @@
  * Decompiled with CFR 0.148.
  * 
  * Could not load the following classes:
+ *  net.minecraft.entity.passive.EntityOcelot
  *  net.minecraft.world.biome.BiomeGenBase
  *  net.minecraft.world.biome.BiomeGenBase$SpawnListEntry
  */
@@ -18,6 +19,7 @@ import lotr.common.world.biome.LOTRBiomeGenFarHarad;
 import lotr.common.world.biome.LOTRMusicRegion;
 import lotr.common.world.biome.variant.LOTRBiomeVariant;
 import lotr.common.world.feature.LOTRTreeType;
+import net.minecraft.entity.passive.EntityOcelot;
 import net.minecraft.world.biome.BiomeGenBase;
 
 public class LOTRBiomeGenFarHaradCloudForest
@@ -25,6 +27,7 @@ extends LOTRBiomeGenFarHarad {
     public LOTRBiomeGenFarHaradCloudForest(int i, boolean major) {
         super(i, major);
         this.spawnableCreatureList.clear();
+        this.spawnableCreatureList.add(new BiomeGenBase.SpawnListEntry(EntityOcelot.class, 4, 1, 3));
         this.spawnableCreatureList.add(new BiomeGenBase.SpawnListEntry(LOTREntityFlamingo.class, 10, 4, 4));
         this.spawnableLOTRAmbientList.clear();
         this.spawnableLOTRAmbientList.add(new BiomeGenBase.SpawnListEntry(LOTREntityBird.class, 10, 4, 4));

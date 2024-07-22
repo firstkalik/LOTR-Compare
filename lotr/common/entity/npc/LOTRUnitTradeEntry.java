@@ -108,22 +108,19 @@ public class LOTRUnitTradeEntry {
     }
 
     public int getCost(EntityPlayer entityplayer, LOTRHireableBase trader) {
-        float f;
         float cost = this.initialCost;
-        float maxDiscount = 0.5f;
-        float notPledgedExpense = 2.0f;
         LOTRFaction fac = trader.getFaction();
         LOTRPlayerData pd = LOTRLevelData.getData(entityplayer);
         float alignment = pd.getAlignment(fac);
         boolean pledged = pd.isPledgedTo(fac);
         float alignSurplus = Math.max(alignment - this.alignmentRequired, 0.0f);
         if (pledged) {
-            f = alignSurplus / 1500.0f;
+            float f = alignSurplus / 1500.0f;
             f = MathHelper.clamp_float((float)f, (float)0.0f, (float)1.0f);
             cost *= 1.0f - (f *= 0.5f);
         } else {
             cost *= 2.0f;
-            f = alignSurplus / 2000.0f;
+            float f = alignSurplus / 2000.0f;
             f = MathHelper.clamp_float((float)f, (float)0.0f, (float)1.0f);
             cost *= 1.0f - (f *= 0.5f);
         }

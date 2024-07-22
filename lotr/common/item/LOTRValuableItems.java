@@ -23,11 +23,10 @@ public class LOTRValuableItems {
 
     private static void registerToolMaterials() {
         if (!initTools) {
-            Item.ToolMaterial[] allMaterials;
             toolMaterials.clear();
-            for (Item.ToolMaterial material : allMaterials = Item.ToolMaterial.values()) {
+            for (Item.ToolMaterial material : Item.ToolMaterial.values()) {
                 ItemStack repair;
-                if (material.getHarvestLevel() < 2 || (repair = material.getRepairItemStack()) == null || repair.getItem() == null) continue;
+                if (material.getHarvestLevel() < 2 || (repair = material.getRepairItemStack()) == null) continue;
                 toolMaterials.add(repair.copy());
             }
             initTools = true;

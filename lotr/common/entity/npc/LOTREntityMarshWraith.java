@@ -76,7 +76,6 @@ extends LOTREntityNPC {
     public UUID attackTargetUUID;
     private boolean checkedForAttackTarget;
     private int timeUntilDespawn = -1;
-    private static final int maxTimeUntilDespawn = 100;
 
     public LOTREntityMarshWraith(World world) {
         super(world);
@@ -149,11 +148,12 @@ extends LOTREntityNPC {
 
     @Override
     public void onLivingUpdate() {
+        int j;
         super.onLivingUpdate();
         if (!this.worldObj.isRemote && !this.isDead) {
             int hover = 2;
             int i = MathHelper.floor_double((double)this.posX);
-            int j = MathHelper.floor_double((double)this.posY);
+            j = MathHelper.floor_double((double)this.posY);
             int k = MathHelper.floor_double((double)this.posZ);
             double newY = this.posY;
             for (int j1 = 0; j1 <= hover; ++j1) {
@@ -189,7 +189,6 @@ extends LOTREntityNPC {
                 if (this.getAttackTarget() == null || this.getAttackTarget().isDead) {
                     this.setDeathFadeTime(30);
                 } else {
-                    int j;
                     int k;
                     if (this.timeUntilDespawn == -1) {
                         this.timeUntilDespawn = 100;

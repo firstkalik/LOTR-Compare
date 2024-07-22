@@ -7,6 +7,7 @@
  *  net.minecraft.client.Minecraft
  *  net.minecraft.client.entity.EntityClientPlayerMP
  *  net.minecraft.client.gui.FontRenderer
+ *  net.minecraft.client.gui.Gui
  *  net.minecraft.client.gui.GuiButton
  *  net.minecraft.entity.player.EntityPlayer
  *  net.minecraft.util.EnumChatFormatting
@@ -24,6 +25,7 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,6 +39,7 @@ import lotr.common.network.LOTRPacketSelectTitle;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumChatFormatting;
@@ -50,7 +53,6 @@ public class LOTRGuiTitles
 extends LOTRGuiMenuBase {
     private LOTRTitle.PlayerTitle currentTitle;
     private List<LOTRTitle> displayedTitles = new ArrayList<LOTRTitle>();
-    private static final int maxDisplayedTitles = 12;
     private Map<LOTRTitle, Pair<Boolean, Pair<Integer, Integer>>> displayedTitleInfo = new HashMap<LOTRTitle, Pair<Boolean, Pair<Integer, Integer>>>();
     private LOTRTitle selectedTitle;
     private EnumChatFormatting selectedColor = EnumChatFormatting.WHITE;
@@ -95,8 +97,9 @@ extends LOTRGuiMenuBase {
             if (!title.canDisplay((EntityPlayer)this.mc.thePlayer)) continue;
             unavailableTitles.add(title);
         }
-        Collections.sort(availableTitles);
-        Collections.sort(unavailableTitles);
+        Comparator<LOTRTitle> sorter = LOTRTitle.createTitleSorter((EntityPlayer)this.mc.thePlayer);
+        Collections.sort(availableTitles, sorter);
+        Collections.sort(unavailableTitles, sorter);
         this.displayedTitles.addAll(availableTitles);
         this.displayedTitles.add(null);
         this.displayedTitles.addAll(unavailableTitles);
@@ -108,7 +111,7 @@ extends LOTRGuiMenuBase {
         this.setupScrollBar(i, j);
         String s = StatCollector.translateToLocal((String)"lotr.gui.titles.title");
         this.drawCenteredString(s, this.guiLeft + this.xSize / 2, this.guiTop - 30, 16777215);
-        String titleName = this.currentTitle == null ? StatCollector.translateToLocal((String)"lotr.gui.titles.currentTitle.none") : this.currentTitle.getTitle().getDisplayName();
+        String titleName = this.currentTitle == null ? StatCollector.translateToLocal((String)"lotr.gui.titles.currentTitle.none") : this.currentTitle.getTitle().getDisplayName((EntityPlayer)this.mc.thePlayer);
         EnumChatFormatting currentColor = this.currentTitle == null ? EnumChatFormatting.WHITE : this.currentTitle.getColor();
         titleName = (Object)currentColor + titleName + (Object)EnumChatFormatting.RESET;
         this.drawCenteredString(StatCollector.translateToLocalFormatted((String)"lotr.gui.titles.currentTitle", (Object[])new Object[]{titleName}), this.guiLeft + this.xSize / 2, this.guiTop, 16777215);
@@ -126,11 +129,11 @@ extends LOTRGuiMenuBase {
         for (int index = min; index <= max; ++index) {
             boolean isCurrentTitle;
             String name;
-            boolean mouseOver;
+            int mouseOver;
             LOTRTitle title = this.displayedTitles.get(index);
             boolean bl = isCurrentTitle = this.currentTitle != null && this.currentTitle.getTitle() == title;
             if (title != null) {
-                name = title.getDisplayName();
+                name = title.getDisplayName((EntityPlayer)this.mc.thePlayer);
                 if (isCurrentTitle) {
                     name = "[" + name + "]";
                     name = (Object)this.currentTitle.getColor() + name;
@@ -144,17 +147,17 @@ extends LOTRGuiMenuBase {
             int nameXMax = titleX + nameWidth / 2;
             int nameYMin = titleY;
             int nameYMax = titleY + nameHeight;
-            boolean bl2 = mouseOver = i >= nameXMin && i < nameXMax && j >= nameYMin && j < nameYMax;
+            int n = mouseOver = i >= nameXMin && i < nameXMax && j >= nameYMin && j < nameYMax ? 1 : 0;
             if (title != null) {
-                this.displayedTitleInfo.put(title, (Pair<Boolean, Pair<Integer, Integer>>)Pair.of((Object)mouseOver, (Object)Pair.of((Object)titleX, (Object)titleY)));
+                this.displayedTitleInfo.put(title, (Pair<Boolean, Pair<Integer, Integer>>)Pair.of((Object)(mouseOver != 0), (Object)Pair.of((Object)titleX, (Object)titleY)));
             }
-            int textColor = title != null ? (title.canPlayerUse((EntityPlayer)this.mc.thePlayer) ? (mouseOver ? 16777120 : 16777215) : (mouseOver ? 12303291 : 7829367)) : 7829367;
+            int textColor = title != null ? (title.canPlayerUse((EntityPlayer)this.mc.thePlayer) ? (mouseOver != 0 ? 16777120 : 16777215) : (mouseOver != 0 ? 12303291 : 7829367)) : 7829367;
             this.drawCenteredString(name, titleX, titleY, textColor);
             titleY += yIncrement;
         }
         this.displayedColorBoxes.clear();
         if (this.selectedTitle != null) {
-            String title = (Object)this.selectedColor + this.selectedTitle.getDisplayName();
+            String title = (Object)this.selectedColor + this.selectedTitle.getDisplayName((EntityPlayer)this.mc.thePlayer);
             this.drawCenteredString(title, this.guiLeft + this.xSize / 2, this.guiTop + 185, 16777215);
             ArrayList<EnumChatFormatting> colorCodes = new ArrayList<EnumChatFormatting>();
             for (EnumChatFormatting ecf : EnumChatFormatting.values()) {
@@ -183,7 +186,7 @@ extends LOTRGuiMenuBase {
             int y1 = this.guiTop + this.scrollBarY + scroll;
             int x2 = x1 + this.scrollWidgetWidth;
             int y2 = y1 + this.scrollWidgetHeight;
-            LOTRGuiTitles.drawRect((int)x1, (int)y1, (int)x2, (int)y2, (int)-1426063361);
+            Gui.drawRect((int)x1, (int)y1, (int)x2, (int)y2, (int)-1426063361);
         }
         this.selectButton.enabled = this.selectedTitle != null;
         this.removeButton.enabled = this.currentTitle != null;

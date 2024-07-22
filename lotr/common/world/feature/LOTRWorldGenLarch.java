@@ -35,7 +35,6 @@ extends WorldGenAbstractTree {
         boolean flag = true;
         if (j >= 1 && j + height + 1 <= 256) {
             for (int j1 = j; j1 <= j + 1 + height && flag; ++j1) {
-                boolean flag1 = true;
                 int range = 0;
                 range = j1 - j < trunkBaseHeight ? 0 : leafWidth;
                 for (int i1 = i - range; i1 <= i + range && flag; ++i1) {

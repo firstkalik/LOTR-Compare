@@ -119,10 +119,12 @@ extends EntityThrowable {
             target.attackEntityFrom(DamageSource.causeMobDamage((EntityLivingBase)this.getThrower()), 10.0f);
         }
         if (!(entities = this.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, this.boundingBox.expand(6.0, 6.0, 6.0))).isEmpty()) {
-            for (int i = 0; i < entities.size(); ++i) {
-                float damage;
-                EntityLivingBase entity = (EntityLivingBase)entities.get(i);
-                if (entity == target || !this.isEntityVulnerable((Entity)entity) || !((damage = 10.0f - this.getDistanceToEntity((Entity)entity) * 0.5f) > 0.0f)) continue;
+            for (Object entitie : entities) {
+                float f;
+                EntityLivingBase entity = (EntityLivingBase)entitie;
+                if (entity == target || !this.isEntityVulnerable((Entity)entity)) continue;
+                float damage = 500.0f - this.getDistanceToEntity((Entity)entity) * 0.5f;
+                if (f <= 0.0f) continue;
                 entity.attackEntityFrom(DamageSource.causeMobDamage((EntityLivingBase)this.getThrower()), damage);
             }
         }

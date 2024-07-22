@@ -39,7 +39,6 @@ implements IMessage {
     public boolean inCombat;
     public boolean guardMode;
     public int guardRange;
-    public LOTRHiredNPCInfo.Task task;
 
     public LOTRPacketHiredGui() {
     }
@@ -62,7 +61,6 @@ implements IMessage {
         data.writeBoolean(this.inCombat);
         data.writeBoolean(this.guardMode);
         data.writeInt(this.guardRange);
-        data.writeByte(this.task.ordinal());
     }
 
     public void fromBytes(ByteBuf data) {
@@ -78,7 +76,6 @@ implements IMessage {
         this.inCombat = data.readBoolean();
         this.guardMode = data.readBoolean();
         this.guardRange = data.readInt();
-        this.task = LOTRHiredNPCInfo.Task.forID(data.readByte());
     }
 
     public static class Handler

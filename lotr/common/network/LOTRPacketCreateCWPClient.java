@@ -97,7 +97,6 @@ implements IMessage {
     }
 
     public void fromBytes(ByteBuf data) {
-        boolean shared;
         this.mapX = data.readInt();
         this.mapY = data.readInt();
         this.xCoord = data.readInt();
@@ -115,7 +114,7 @@ implements IMessage {
                 this.sharedFellowshipIDs.add(fsID);
             }
         }
-        if (shared = data.readBoolean()) {
+        if (data.readBoolean()) {
             this.sharingPlayer = new UUID(data.readLong(), data.readLong());
             byte usernameLength = data.readByte();
             this.sharingPlayerName = data.readBytes((int)usernameLength).toString(Charsets.UTF_8);

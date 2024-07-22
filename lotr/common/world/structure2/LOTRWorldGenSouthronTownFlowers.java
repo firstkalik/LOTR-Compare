@@ -28,8 +28,9 @@ extends LOTRWorldGenSouthronStructure {
 
     @Override
     public boolean generateWithSetRotation(World world, Random random, int i, int j, int k, int rotation) {
-        int k1;
         int i1;
+        int k1;
+        int j1;
         this.setOriginAndRotation(world, i, j, k, rotation, 1);
         this.setupRandomBlocks(random);
         ItemStack flower = this.getRandomFlower(world, random);
@@ -38,7 +39,7 @@ extends LOTRWorldGenSouthronStructure {
         if (this.restrictions) {
             for (i1 = -3; i1 <= 3; ++i1) {
                 for (k1 = 0; k1 <= 3; ++k1) {
-                    int j1 = this.getTopBlock(world, i1, k1) - 1;
+                    j1 = this.getTopBlock(world, i1, k1) - 1;
                     if (this.isSurface(world, i1, j1, k1)) continue;
                     return false;
                 }
@@ -46,7 +47,6 @@ extends LOTRWorldGenSouthronStructure {
         }
         for (i1 = -3; i1 <= 3; ++i1) {
             for (k1 = 0; k1 <= 3; ++k1) {
-                int j1;
                 int i2 = Math.abs(i1);
                 for (j1 = 1; j1 <= 4; ++j1) {
                     this.setAir(world, i1, j1, k1);

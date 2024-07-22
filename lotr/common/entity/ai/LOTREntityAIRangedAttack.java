@@ -84,7 +84,7 @@ extends EntityAIBase {
     public void updateTask() {
         double distanceSq = this.theOwner.getDistanceSq(this.attackTarget.posX, this.attackTarget.boundingBox.minY, this.attackTarget.posZ);
         boolean canSee = this.theOwner.getEntitySenses().canSee((Entity)this.attackTarget);
-        this.repathDelay = canSee ? ++this.repathDelay : 0;
+        int n = this.repathDelay = canSee ? (this.repathDelay = this.repathDelay + 1) : 0;
         if (distanceSq <= (double)this.attackRangeSq) {
             if (this.theOwner.getDistanceSqToEntity((Entity)this.attackTarget) < 25.0) {
                 Vec3 vec = LOTREntityAIRangedAttack.findPositionAwayFrom((EntityLivingBase)this.theOwner, this.attackTarget, 8, 16);
@@ -118,11 +118,11 @@ extends EntityAIBase {
     public static Vec3 findPositionAwayFrom(EntityLivingBase entity, EntityLivingBase target, int min, int max) {
         Random random = entity.getRNG();
         for (int l = 0; l < 24; ++l) {
-            int k;
             int j;
+            int k;
             int i = MathHelper.floor_double((double)entity.posX) - max + random.nextInt(max * 2 + 1);
             double d = target.getDistanceSq((double)i, (double)(j = MathHelper.floor_double((double)entity.boundingBox.minY) - 4 + random.nextInt(9)), (double)(k = MathHelper.floor_double((double)entity.posZ) - max + random.nextInt(max * 2 + 1)));
-            if (!(d > (double)(min * min)) || !(d < (double)(max * max))) continue;
+            if (d <= (double)(min * min) || d >= (double)(max * max)) continue;
             return Vec3.createVectorHelper((double)i, (double)j, (double)k);
         }
         return null;

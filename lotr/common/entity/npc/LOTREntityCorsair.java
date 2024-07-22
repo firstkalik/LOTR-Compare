@@ -3,15 +3,18 @@
  * 
  * Could not load the following classes:
  *  net.minecraft.entity.EntityCreature
+ *  net.minecraft.entity.EntityLivingBase
  *  net.minecraft.entity.IEntityLivingData
  *  net.minecraft.entity.IRangedAttackMob
  *  net.minecraft.entity.ai.EntityAIBase
  *  net.minecraft.entity.ai.EntityAITasks
  *  net.minecraft.entity.ai.attributes.IAttribute
  *  net.minecraft.entity.ai.attributes.IAttributeInstance
+ *  net.minecraft.entity.item.EntityItem
  *  net.minecraft.entity.player.EntityPlayer
  *  net.minecraft.item.Item
  *  net.minecraft.item.ItemStack
+ *  net.minecraft.util.MathHelper
  *  net.minecraft.world.World
  */
 package lotr.common.entity.npc;
@@ -31,15 +34,18 @@ import lotr.common.quest.LOTRMiniQuest;
 import lotr.common.quest.LOTRMiniQuestFactory;
 import lotr.common.world.structure.LOTRChestContents;
 import net.minecraft.entity.EntityCreature;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.IRangedAttackMob;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityAITasks;
 import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
 public class LOTREntityCorsair
@@ -130,8 +136,14 @@ extends LOTREntityUmbarian {
     }
 
     @Override
-    public boolean lootsExtraCoins() {
-        return true;
+    public void onKillEntity(EntityLivingBase entity) {
+        super.onKillEntity(entity);
+        if (entity instanceof LOTREntityNPC && ((LOTREntityNPC)entity).canDropRares() && this.rand.nextInt(2) == 0) {
+            int coins = this.getRandomCoinDropAmount();
+            if ((coins = (int)((float)coins * MathHelper.randomFloatClamp((Random)this.rand, (float)1.0f, (float)3.0f))) > 0) {
+                entity.dropItem(LOTRMod.silverCoin, coins);
+            }
+        }
     }
 
     @Override

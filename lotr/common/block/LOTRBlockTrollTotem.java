@@ -108,10 +108,10 @@ extends BlockContainer {
     }
 
     public boolean onBlockActivated(World world, int i, int j, int k, EntityPlayer entityplayer, int side, float f, float f1, float f2) {
-        ItemStack itemstack;
-        TileEntity tileentity;
         LOTRTileEntityTrollTotem totem;
-        if ((world.getBlockMetadata(i, j, k) & 3) == 0 && (tileentity = world.getTileEntity(i, j, k)) instanceof LOTRTileEntityTrollTotem && (totem = (LOTRTileEntityTrollTotem)tileentity).canSummon() && LOTRLevelData.getData(entityplayer).getAlignment(LOTRFaction.ANGMAR) < 0.0f && (itemstack = entityplayer.inventory.getCurrentItem()) != null && LOTRMod.isOreNameEqual(itemstack, "bone")) {
+        TileEntity tileentity;
+        ItemStack itemstack;
+        if ((world.getBlockMetadata(i, j, k) & 3) == 0 && (tileentity = world.getTileEntity(i, j, k)) instanceof LOTRTileEntityTrollTotem && (totem = (LOTRTileEntityTrollTotem)tileentity).canSummon() && LOTRLevelData.getData(entityplayer).getAlignment(LOTRFaction.GUNDABAD) < 0.0f && (itemstack = entityplayer.inventory.getCurrentItem()) != null && LOTRMod.isOreNameEqual(itemstack, "bone")) {
             if (!entityplayer.capabilities.isCreativeMode) {
                 --itemstack.stackSize;
                 if (itemstack.stackSize <= 0) {

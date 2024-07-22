@@ -18,7 +18,6 @@
  */
 package lotr.client.render.tileentity;
 
-import io.gitlab.dwarfyassassin.lotrucp.client.util.FakeArmorStandEntity;
 import lotr.client.LOTRClientProxy;
 import lotr.client.model.LOTRArmorModels;
 import lotr.client.model.LOTRModelArmorStand;
@@ -50,7 +49,6 @@ extends TileEntitySpecialRenderer {
 
     public void renderTileEntityAt(TileEntity tileentity, double d, double d1, double d2, float f) {
         LOTRTileEntityArmorStand armorStand = (LOTRTileEntityArmorStand)tileentity;
-        FakeArmorStandEntity fakeArmorEntity = FakeArmorStandEntity.INSTANCE;
         GL11.glPushMatrix();
         GL11.glDisable((int)2884);
         GL11.glEnable((int)32826);
@@ -76,8 +74,8 @@ extends TileEntitySpecialRenderer {
         GL11.glScalef((float)-1.0f, (float)-1.0f, (float)1.0f);
         float scale = 0.0625f;
         this.bindTexture(standTexture);
-        standModel.render((Entity)fakeArmorEntity, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, scale);
-        LOTRArmorModels.INSTANCE.setupModelForRender(modelBipedMain, null, fakeArmorEntity);
+        standModel.render(null, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, scale);
+        LOTRArmorModels.INSTANCE.setupModelForRender(modelBipedMain, null, null);
         GL11.glTranslatef((float)0.0f, (float)-0.1875f, (float)0.0f);
         for (int slot = 0; slot < 4; ++slot) {
             float f4;
@@ -85,16 +83,16 @@ extends TileEntitySpecialRenderer {
             if (itemstack == null || !(itemstack.getItem() instanceof ItemArmor) && !(itemstack.getItem() instanceof LOTRItemPlate)) continue;
             boolean isArmor = itemstack.getItem() instanceof ItemArmor;
             if (isArmor) {
-                this.bindTexture(RenderBiped.getArmorResource((Entity)fakeArmorEntity, (ItemStack)itemstack, (int)slot, null));
+                this.bindTexture(RenderBiped.getArmorResource(null, (ItemStack)itemstack, (int)slot, null));
             }
             ModelBiped armorModel = slot == 2 ? modelBiped2 : modelBiped1;
             LOTRArmorModels.INSTANCE.setupArmorForSlot(armorModel, slot);
-            armorModel = ForgeHooksClient.getArmorModel((EntityLivingBase)fakeArmorEntity, (ItemStack)itemstack, (int)slot, (ModelBiped)armorModel);
-            ModelBiped specialModel = LOTRArmorModels.INSTANCE.getSpecialArmorModel(itemstack, slot, fakeArmorEntity, modelBipedMain);
+            armorModel = ForgeHooksClient.getArmorModel(null, (ItemStack)itemstack, (int)slot, (ModelBiped)armorModel);
+            ModelBiped specialModel = LOTRArmorModels.INSTANCE.getSpecialArmorModel(itemstack, slot, null, modelBipedMain);
             if (specialModel != null) {
                 armorModel = specialModel;
             }
-            LOTRArmorModels.INSTANCE.setupModelForRender(armorModel, null, fakeArmorEntity);
+            LOTRArmorModels.INSTANCE.setupModelForRender(armorModel, null, null);
             float f1 = 1.0f;
             boolean isColoredArmor = false;
             if (isArmor) {
@@ -111,12 +109,12 @@ extends TileEntitySpecialRenderer {
             } else {
                 GL11.glColor3f((float)f1, (float)f1, (float)f1);
             }
-            armorModel.render((Entity)fakeArmorEntity, BIPED_ARM_ROTATION, 0.0f, BIPED_TICKS_EXISTED, 0.0f, 0.0f, scale);
+            armorModel.render(null, BIPED_ARM_ROTATION, 0.0f, BIPED_TICKS_EXISTED, 0.0f, 0.0f, scale);
             if (isColoredArmor) {
                 this.bindTexture(RenderBiped.getArmorResource(null, (ItemStack)itemstack, (int)slot, (String)"overlay"));
                 f1 = 1.0f;
                 GL11.glColor3f((float)f1, (float)f1, (float)f1);
-                armorModel.render((Entity)fakeArmorEntity, BIPED_ARM_ROTATION, 0.0f, BIPED_TICKS_EXISTED, 0.0f, 0.0f, scale);
+                armorModel.render(null, BIPED_ARM_ROTATION, 0.0f, BIPED_TICKS_EXISTED, 0.0f, 0.0f, scale);
             }
             if (!itemstack.isItemEnchanted()) continue;
             float f2 = (float)armorStand.ticksExisted + f;
@@ -139,7 +137,7 @@ extends TileEntitySpecialRenderer {
                 float f6 = f2 * (0.001f + (float)k * 0.003f) * 20.0f;
                 GL11.glTranslatef((float)0.0f, (float)f6, (float)0.0f);
                 GL11.glMatrixMode((int)5888);
-                armorModel.render((Entity)fakeArmorEntity, BIPED_ARM_ROTATION, 0.0f, BIPED_TICKS_EXISTED, 0.0f, 0.0f, scale);
+                armorModel.render(null, BIPED_ARM_ROTATION, 0.0f, BIPED_TICKS_EXISTED, 0.0f, 0.0f, scale);
             }
             GL11.glColor4f((float)1.0f, (float)1.0f, (float)1.0f, (float)1.0f);
             GL11.glMatrixMode((int)5890);

@@ -11,7 +11,7 @@ public interface LOTRUnitTradeable
 extends LOTRHireableBase {
     public LOTRUnitTradeEntries getUnits();
 
-    public LOTRInvasions getWarhorn();
+    public LOTRInvasions getConquestHorn();
 
     public boolean shouldTraderRespawn();
 }

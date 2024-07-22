@@ -5,7 +5,7 @@
  *  net.minecraft.entity.player.EntityPlayer
  *  net.minecraft.entity.player.EntityPlayerMP
  *  net.minecraft.inventory.Container
- *  net.minecraft.inventory.ISidedInventory
+ *  net.minecraft.inventory.IInventory
  *  net.minecraft.item.Item
  *  net.minecraft.item.ItemStack
  *  net.minecraft.nbt.NBTBase
@@ -17,21 +17,18 @@
  *  net.minecraft.tileentity.TileEntity
  *  net.minecraft.util.StatCollector
  *  net.minecraft.world.World
- *  org.apache.commons.lang3.ArrayUtils
  */
 package lotr.common.tileentity;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
-import lotr.common.inventory.LOTRSlotStackSize;
 import lotr.common.item.LOTRItemMug;
 import lotr.common.item.LOTRPoisonedDrinks;
 import lotr.common.recipe.LOTRBrewingRecipes;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ISidedInventory;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
@@ -43,26 +40,23 @@ import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
-import org.apache.commons.lang3.ArrayUtils;
 
 public class LOTRTileEntityBarrel
 extends TileEntity
-implements ISidedInventory {
+implements IInventory {
     public static final int EMPTY = 0;
     public static final int BREWING = 1;
     public static final int FULL = 2;
     public static final int brewTime = 12000;
     public static final int brewAnimTime = 32;
     private ItemStack[] inventory = new ItemStack[10];
-    private static final int[] INGREDIENT_SLOTS = new int[]{0, 1, 2, 3, 4, 5};
-    private static final int[] BUCKET_SLOTS = new int[]{6, 7, 8};
-    public static final int BARREL_SLOT = 9;
     public int barrelMode;
     public int brewingTime;
     public int brewingAnim;
     public int brewingAnimPrev;
     private String specialBarrelName;
     public List players = new ArrayList();
+    public static final int BARREL_SLOT = 9;
 
     public ItemStack getBrewedDrink() {
         if (this.barrelMode == 2 && this.inventory[9] != null) {
@@ -302,10 +296,12 @@ implements ISidedInventory {
             this.brewingAnimPrev = this.brewingAnim++;
             if (this.barrelMode == 1) {
                 if (this.brewingAnim >= 32) {
-                    this.brewingAnimPrev = this.brewingAnim = 0;
+                    this.brewingAnim = 0;
+                    this.brewingAnimPrev = 0;
                 }
             } else {
-                this.brewingAnimPrev = this.brewingAnim = 0;
+                this.brewingAnim = 0;
+                this.brewingAnimPrev = 0;
             }
         }
         if (needUpdate) {
@@ -324,44 +320,6 @@ implements ISidedInventory {
     }
 
     public boolean isItemValidForSlot(int slot, ItemStack itemstack) {
-        if (ArrayUtils.contains((int[])INGREDIENT_SLOTS, (int)slot)) {
-            return true;
-        }
-        if (ArrayUtils.contains((int[])BUCKET_SLOTS, (int)slot)) {
-            return LOTRBrewingRecipes.isWaterSource(itemstack);
-        }
-        return false;
-    }
-
-    public int[] getAccessibleSlotsFromSide(int side) {
-        if (side == 0) {
-            return BUCKET_SLOTS;
-        }
-        if (side == 1) {
-            ArrayList<LOTRSlotStackSize> slotsWithStackSize = new ArrayList<LOTRSlotStackSize>();
-            for (int slot : INGREDIENT_SLOTS) {
-                int size = this.getStackInSlot(slot) == null ? 0 : this.getStackInSlot((int)slot).stackSize;
-                slotsWithStackSize.add(new LOTRSlotStackSize(slot, size));
-            }
-            Collections.sort(slotsWithStackSize);
-            int[] sortedSlots = new int[INGREDIENT_SLOTS.length];
-            for (int i = 0; i < sortedSlots.length; ++i) {
-                LOTRSlotStackSize slotAndStack = (LOTRSlotStackSize)slotsWithStackSize.get(i);
-                sortedSlots[i] = slotAndStack.slot;
-            }
-            return sortedSlots;
-        }
-        return BUCKET_SLOTS;
-    }
-
-    public boolean canInsertItem(int slot, ItemStack insertItem, int side) {
-        return this.isItemValidForSlot(slot, insertItem);
-    }
-
-    public boolean canExtractItem(int slot, ItemStack extractItem, int side) {
-        if (ArrayUtils.contains((int[])BUCKET_SLOTS, (int)slot)) {
-            return !this.isItemValidForSlot(slot, extractItem);
-        }
         return false;
     }
 

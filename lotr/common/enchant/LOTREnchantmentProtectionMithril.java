@@ -42,7 +42,7 @@ extends LOTREnchantmentProtectionSpecial {
     public boolean canApply(ItemStack itemstack, boolean considering) {
         if (super.canApply(itemstack, considering)) {
             Item item = itemstack.getItem();
-            return item instanceof ItemArmor && ((ItemArmor)item).getArmorMaterial() == LOTRMaterial.MITHRIL.toArmorMaterial();
+            return item instanceof ItemArmor && ((ItemArmor)item).getArmorMaterial() == LOTRMaterial.MITHRIL.toArmorMaterial() || item instanceof ItemArmor && ((ItemArmor)item).getArmorMaterial() == LOTRMaterial.MITHRILD.toArmorMaterial() || item instanceof ItemArmor && ((ItemArmor)item).getArmorMaterial() == LOTRMaterial.BILBO.toArmorMaterial() || item instanceof ItemArmor && ((ItemArmor)item).getArmorMaterial() == LOTRMaterial.MORIA.toArmorMaterial() || item instanceof ItemArmor && ((ItemArmor)item).getArmorMaterial() == LOTRMaterial.GONDOR_MITHRIL.toArmorMaterial();
         }
         return false;
     }

@@ -62,7 +62,7 @@ extends LOTREntityDunedain {
     public LOTREntityRanger(World world) {
         super(world);
         this.addTargetTasks(true);
-        this.npcCape = LOTRCapes.RANGER;
+        this.npcCape = LOTRCapes.ALIGNMENT_RANGER.capeTexture;
     }
 
     @Override
@@ -165,8 +165,8 @@ extends LOTREntityDunedain {
     }
 
     @Override
-    public void setAttackTarget(EntityLivingBase target, boolean speak) {
-        super.setAttackTarget(target, speak);
+    public void setAttackTarget(EntityLivingBase target) {
+        super.setAttackTarget(target);
         if (target != null && target != this.prevRangerTarget) {
             this.prevRangerTarget = target;
             if (!this.worldObj.isRemote && !this.isRangerSneaking() && this.ridingEntity == null) {

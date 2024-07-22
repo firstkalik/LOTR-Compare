@@ -193,7 +193,7 @@ extends LOTREntityDorwinionMan {
                                 int j1 = j + MathHelper.getRandomIntegerInRange((Random)world.rand, (int)(-spawnRange / 2), (int)(spawnRange / 2));
                                 int k1 = k + MathHelper.getRandomIntegerInRange((Random)world.rand, (int)(-spawnRange), (int)spawnRange);
                                 Block belowBlock = world.getBlock(i1, j1 - 1, k1);
-                                int belowMeta = world.getBlockMetadata(i1, j1 - 1, k1);
+                                world.getBlockMetadata(i1, j1 - 1, k1);
                                 boolean belowSolid = belowBlock.isSideSolid((IBlockAccess)world, i1, j1 - 1, k1, ForgeDirection.UP);
                                 if (!belowSolid || world.getBlock(i1, j1, k1).isNormalCube() || world.getBlock(i1, j1 + 1, k1).isNormalCube()) continue;
                                 guard.setLocationAndAngles((double)i1 + 0.5, (double)j1, (double)k1 + 0.5, world.rand.nextFloat() * 360.0f, 0.0f);
@@ -221,7 +221,7 @@ extends LOTREntityDorwinionMan {
                         anyAlert = true;
                         continue;
                     }
-                    if (!(world.rand.nextFloat() < chance)) continue;
+                    if (world.rand.nextFloat() >= chance) continue;
                     ++guard.grapeAlert;
                     if (guard.grapeAlert >= 3) {
                         guard.setAttackTarget((EntityLivingBase)entityplayer);

@@ -47,8 +47,6 @@ import net.minecraftforge.event.ForgeEventFactory;
 
 public class LOTRGreyWandererTracker {
     private static Map<UUID, Integer> activeGreyWanderers = new HashMap<UUID, Integer>();
-    private static final int greyWandererCooldown_MAX = 3600;
-    private static final int spawnInterval = 2400;
     private static int spawnCooldown;
 
     public static void save(NBTTagCompound levelData) {
@@ -129,7 +127,6 @@ public class LOTRGreyWandererTracker {
             ArrayList players = new ArrayList(world.playerEntities);
             Collections.shuffle(players);
             Random rand = world.rand;
-            boolean spawned = false;
             block0: for (Object obj : players) {
                 EntityPlayer entityplayer = (EntityPlayer)obj;
                 if (LOTRLevelData.getData(entityplayer).hasAnyGWQuest()) continue;
@@ -152,7 +149,6 @@ public class LOTRGreyWandererTracker {
                     wanderer.onSpawnWithEgg(null);
                     LOTRGreyWandererTracker.addNewWanderer(wanderer.getUniqueID());
                     wanderer.arriveAt(entityplayer);
-                    spawned = true;
                     break block0;
                 }
             }

@@ -58,23 +58,13 @@ extends LOTRBiome {
         super(i, major);
         this.spawnableCreatureList.add(new BiomeGenBase.SpawnListEntry(LOTREntityCamel.class, 4, 4, 4));
         this.spawnableCreatureList.add(new BiomeGenBase.SpawnListEntry(LOTREntityHorse.class, 5, 4, 4));
-        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer = new LOTRBiomeSpawnList.SpawnListContainer[3];
-        arrspawnListContainer[0] = LOTRBiomeSpawnList.entry(LOTRSpawnList.UMBARIANS, 30).setSpawnChance(100);
-        arrspawnListContainer[1] = LOTRBiomeSpawnList.entry(LOTRSpawnList.UMBAR_SOLDIERS, 10).setSpawnChance(100);
-        arrspawnListContainer[2] = LOTRBiomeSpawnList.entry(LOTRSpawnList.CORSAIRS, 10).setSpawnChance(100);
+        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer = new LOTRBiomeSpawnList.SpawnListContainer[]{LOTRBiomeSpawnList.entry(LOTRSpawnList.UMBARIANS, 30).setSpawnChance(100), LOTRBiomeSpawnList.entry(LOTRSpawnList.UMBAR_SOLDIERS, 10).setSpawnChance(100), LOTRBiomeSpawnList.entry(LOTRSpawnList.CORSAIRS, 10).setSpawnChance(100)};
         this.npcSpawnList.newFactionList(100, 0.0f).add(arrspawnListContainer);
-        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer2 = new LOTRBiomeSpawnList.SpawnListContainer[3];
-        arrspawnListContainer2[0] = LOTRBiomeSpawnList.entry(LOTRSpawnList.UMBAR_SOLDIERS, 10);
-        arrspawnListContainer2[1] = LOTRBiomeSpawnList.entry(LOTRSpawnList.SOUTHRON_WARRIORS, 2);
-        arrspawnListContainer2[2] = LOTRBiomeSpawnList.entry(LOTRSpawnList.GULF_WARRIORS, 2);
+        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer2 = new LOTRBiomeSpawnList.SpawnListContainer[]{LOTRBiomeSpawnList.entry(LOTRSpawnList.UMBAR_SOLDIERS, 10), LOTRBiomeSpawnList.entry(LOTRSpawnList.SOUTHRON_WARRIORS, 2), LOTRBiomeSpawnList.entry(LOTRSpawnList.GULF_WARRIORS, 2)};
         this.npcSpawnList.newFactionList(0).add(arrspawnListContainer2);
-        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer3 = new LOTRBiomeSpawnList.SpawnListContainer[3];
-        arrspawnListContainer3[0] = LOTRBiomeSpawnList.entry(LOTRSpawnList.GONDOR_SOLDIERS, 10);
-        arrspawnListContainer3[1] = LOTRBiomeSpawnList.entry(LOTRSpawnList.PELARGIR_SOLDIERS, 5).setConquestThreshold(100.0f);
-        arrspawnListContainer3[2] = LOTRBiomeSpawnList.entry(LOTRSpawnList.DOL_AMROTH_SOLDIERS, 5).setConquestThreshold(100.0f);
+        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer3 = new LOTRBiomeSpawnList.SpawnListContainer[]{LOTRBiomeSpawnList.entry(LOTRSpawnList.GONDOR_SOLDIERS, 10), LOTRBiomeSpawnList.entry(LOTRSpawnList.PELARGIR_SOLDIERS, 5).setConquestThreshold(100.0f), LOTRBiomeSpawnList.entry(LOTRSpawnList.DOL_AMROTH_SOLDIERS, 5).setConquestThreshold(100.0f)};
         this.npcSpawnList.newFactionList(0).add(arrspawnListContainer3);
-        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer4 = new LOTRBiomeSpawnList.SpawnListContainer[1];
-        arrspawnListContainer4[0] = LOTRBiomeSpawnList.entry(LOTRSpawnList.ROHIRRIM_WARRIORS, 10);
+        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer4 = new LOTRBiomeSpawnList.SpawnListContainer[]{LOTRBiomeSpawnList.entry(LOTRSpawnList.ROHIRRIM_WARRIORS, 10)};
         this.npcSpawnList.newFactionList(0).add(arrspawnListContainer4);
         this.npcSpawnList.conquestGainRate = 0.2f;
         this.variantChance = 0.3f;
@@ -144,8 +134,6 @@ extends LOTRBiome {
 
     @Override
     public void generateBiomeTerrain(World world, Random random, Block[] blocks, byte[] meta, int i, int k, double stoneNoise, int height, LOTRBiomeVariant variant) {
-        double d5;
-        double d6;
         Block topBlock_pre = this.topBlock;
         int topBlockMeta_pre = this.topBlockMeta;
         Block fillerBlock_pre = this.fillerBlock;
@@ -154,7 +142,7 @@ extends LOTRBiome {
         double d2 = noiseDirt.func_151601_a((double)i * 0.07, (double)k * 0.07);
         double d3 = noiseDirt.func_151601_a((double)i * 0.25, (double)k * 0.25);
         double d4 = noiseSand.func_151601_a((double)i * 0.002, (double)k * 0.002);
-        if (d4 + (d5 = noiseSand.func_151601_a((double)i * 0.07, (double)k * 0.07)) + (d6 = noiseSand.func_151601_a((double)i * 0.25, (double)k * 0.25)) > 1.1) {
+        if (d4 + noiseSand.func_151601_a((double)i * 0.07, (double)k * 0.07) + noiseSand.func_151601_a((double)i * 0.25, (double)k * 0.25) > 1.1) {
             this.topBlock = Blocks.sand;
             this.topBlockMeta = 0;
             this.fillerBlock = this.topBlock;

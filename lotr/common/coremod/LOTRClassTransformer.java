@@ -189,18 +189,24 @@ implements IClassTransformer {
         if (name.equals("cpw.mods.fml.common.network.internal.FMLNetworkHandler")) {
             return this.patchFMLNetworkHandler(name, basicClass);
         }
+        if ("bcb".equals(name) || "net.minecraft.client.gui.GuiButton".equals(name)) {
+            return this.patchGuiButton(name, basicClass);
+        }
+        if ("bbw".equals(name) || "net.minecraft.client.gui.Gui".equals(name)) {
+            return this.patchGui(name, basicClass);
+        }
         return basicClass;
     }
 
     private byte[] patchBlockStone(String name, byte[] bytes) {
-        String targetMethodDesc;
         boolean isObf = !name.startsWith("net.minecraft");
         ClassNode classNode = new ClassNode();
         ClassReader classReader = new ClassReader(bytes);
         classReader.accept((ClassVisitor)classNode, 0);
         String targetMethodName = "getIcon";
         String targetMethodNameObf = "func_149673_e";
-        String targetMethodDescObf = targetMethodDesc = "(Lnet/minecraft/world/IBlockAccess;IIII)Lnet/minecraft/util/IIcon;";
+        String targetMethodDesc = "(Lnet/minecraft/world/IBlockAccess;IIII)Lnet/minecraft/util/IIcon;";
+        String targetMethodDescObf = "(Lnet/minecraft/world/IBlockAccess;IIII)Lnet/minecraft/util/IIcon;";
         MethodNode newMethod = isObf ? new MethodNode(1, targetMethodNameObf, targetMethodDescObf, null, null) : new MethodNode(1, targetMethodName, targetMethodDesc, null, null);
         newMethod.instructions.add((AbstractInsnNode)new VarInsnNode(25, 0));
         newMethod.instructions.add((AbstractInsnNode)new VarInsnNode(25, 1));
@@ -214,7 +220,8 @@ implements IClassTransformer {
         System.out.println("LOTRCore: Added method " + newMethod.name);
         targetMethodName = "getIcon";
         targetMethodNameObf = "func_149691_a";
-        targetMethodDescObf = targetMethodDesc = "(II)Lnet/minecraft/util/IIcon;";
+        targetMethodDesc = "(II)Lnet/minecraft/util/IIcon;";
+        targetMethodDescObf = "(II)Lnet/minecraft/util/IIcon;";
         newMethod = isObf ? new MethodNode(1, targetMethodNameObf, targetMethodDescObf, null, null) : new MethodNode(1, targetMethodName, targetMethodDesc, null, null);
         newMethod.instructions.add((AbstractInsnNode)new VarInsnNode(25, 0));
         newMethod.instructions.add((AbstractInsnNode)new FieldInsnNode(180, cls_Block, isObf ? "field_149761_L" : "blockIcon", "Lnet/minecraft/util/IIcon;"));
@@ -227,6 +234,58 @@ implements IClassTransformer {
         newMethod.instructions.add((AbstractInsnNode)new InsnNode(176));
         classNode.methods.add(newMethod);
         System.out.println("LOTRCore: Added method " + newMethod.name);
+        ClassWriter writer = new ClassWriter(1);
+        classNode.accept((ClassVisitor)writer);
+        return writer.toByteArray();
+    }
+
+    public byte[] patchGui(String name, byte[] bytes) {
+        ClassNode classNode = new ClassNode();
+        ClassReader classReader = new ClassReader(bytes);
+        classReader.accept((ClassVisitor)classNode, 0);
+        String targetMethodName = "drawCenteredStringWithoutShadow";
+        String targetMethodDesc = "(Lnet/minecraft/client/gui/FontRenderer;Ljava/lang/String;III)V";
+        MethodNode newMethod = new MethodNode(1, targetMethodName, targetMethodDesc, null, null);
+        newMethod.instructions.add((AbstractInsnNode)new VarInsnNode(25, 1));
+        newMethod.instructions.add((AbstractInsnNode)new VarInsnNode(25, 2));
+        newMethod.instructions.add((AbstractInsnNode)new VarInsnNode(21, 3));
+        newMethod.instructions.add((AbstractInsnNode)new VarInsnNode(21, 4));
+        newMethod.instructions.add((AbstractInsnNode)new VarInsnNode(21, 5));
+        newMethod.instructions.add((AbstractInsnNode)new MethodInsnNode(184, "lotr/common/coremod/LOTRReplacedMethods$Gui", "drawCenteredStringWithoutShadow", "(Lnet/minecraft/client/gui/FontRenderer;Ljava/lang/String;III)V", false));
+        newMethod.instructions.add((AbstractInsnNode)new InsnNode(177));
+        classNode.methods.add(newMethod);
+        System.out.println("Hummel009: Added method " + newMethod.name);
+        ClassWriter writer = new ClassWriter(0);
+        classNode.accept((ClassVisitor)writer);
+        return writer.toByteArray();
+    }
+
+    private byte[] patchGuiButton(String name, byte[] bytes) {
+        String targetMethodName2 = "drawButton";
+        String targetMethodName2Obf = "func_146112_a";
+        String targetMethodSign2 = "(Lnet/minecraft/client/Minecraft;II)V";
+        String targetMethodSign2Obf = "(Lbao;II)V";
+        ClassNode classNode = new ClassNode();
+        ClassReader classReader = new ClassReader(bytes);
+        classReader.accept((ClassVisitor)classNode, 0);
+        for (MethodNode method : classNode.methods) {
+            if (!method.name.equals(targetMethodName2) && !method.name.equals(targetMethodName2Obf) || !method.desc.equals(targetMethodSign2) && !method.desc.equals(targetMethodSign2Obf)) continue;
+            InsnList instructions = method.instructions;
+            for (AbstractInsnNode currentNode = instructions.getFirst(); currentNode != null; currentNode = currentNode.getNext()) {
+                if (currentNode instanceof LdcInsnNode) {
+                    LdcInsnNode ldcInsnNode = (LdcInsnNode)currentNode;
+                    if (ldcInsnNode.cst.equals(14737632) || ldcInsnNode.cst.equals(10526880) || ldcInsnNode.cst.equals(16777120)) {
+                        ldcInsnNode.cst = 6167573;
+                    }
+                }
+                if (currentNode.getOpcode() != 182) continue;
+                MethodInsnNode methodInsnNode = (MethodInsnNode)currentNode;
+                if (!"(Lnet/minecraft/client/gui/FontRenderer;Ljava/lang/String;III)V".equals(methodInsnNode.desc)) continue;
+                methodInsnNode.name = "drawCenteredStringWithoutShadow";
+            }
+            System.out.println("Hummel009: Patched method " + method.name);
+            break;
+        }
         ClassWriter writer = new ClassWriter(1);
         classNode.accept((ClassVisitor)writer);
         return writer.toByteArray();
@@ -432,12 +491,12 @@ implements IClassTransformer {
     }
 
     private byte[] patchBlockFence(String name, byte[] bytes) {
-        String targetMethodName2;
         String targetMethodName = "canConnectFenceTo";
         String targetMethodNameObf = "func_149826_e";
         String targetMethodSign = "(Lnet/minecraft/world/IBlockAccess;III)Z";
         String targetMethodSignObf = "(Lahl;III)Z";
-        String targetMethodNameObf2 = targetMethodName2 = "func_149825_a";
+        String targetMethodName2 = "func_149825_a";
+        String targetMethodNameObf2 = "func_149825_a";
         String targetMethodSign2 = "(Lnet/minecraft/block/Block;)Z";
         String targetMethodSignObf2 = "(Laji;)Z";
         ClassNode classNode = new ClassNode();
@@ -496,14 +555,18 @@ implements IClassTransformer {
     }
 
     private byte[] patchBlockTrapdoor(String name, byte[] bytes) {
-        String targetMethodName2;
         String targetMethodName = "canPlaceBlockOnSide";
         String targetMethodNameObf = "func_149707_d";
         String targetMethodSign = "(Lnet/minecraft/world/World;IIII)Z";
         String targetMethodSignObf = "(Lahb;IIII)Z";
-        String targetMethodNameObf2 = targetMethodName2 = "func_150119_a";
+        String targetMethodName2 = "func_150119_a";
+        String targetMethodNameObf2 = "func_150119_a";
         String targetMethodSign2 = "(Lnet/minecraft/block/Block;)Z";
         String targetMethodSignObf2 = "(Laji;)Z";
+        String targetMethodName3 = "getRenderType";
+        String targetMethodNameObf3 = "func_149645_b";
+        String targetMethodSign3 = "()I";
+        String targetMethodSignObf3 = "()I";
         ClassNode classNode = new ClassNode();
         ClassReader classReader = new ClassReader(bytes);
         classReader.accept((ClassVisitor)classNode, 0);
@@ -522,11 +585,20 @@ implements IClassTransformer {
                 method.instructions.insert(newIns);
                 System.out.println("LOTRCore: Patched method " + method.name);
             }
-            if (!method.name.equals(targetMethodName2) && !method.name.equals(targetMethodNameObf2) || !method.desc.equals(targetMethodSign2) && !method.desc.equals(targetMethodSignObf2)) continue;
+            if ((method.name.equals(targetMethodName2) || method.name.equals(targetMethodNameObf2)) && (method.desc.equals(targetMethodSign2) || method.desc.equals(targetMethodSignObf2))) {
+                method.instructions.clear();
+                newIns = new InsnList();
+                newIns.add((AbstractInsnNode)new VarInsnNode(25, 0));
+                newIns.add((AbstractInsnNode)new MethodInsnNode(184, "lotr/common/coremod/LOTRReplacedMethods$Trapdoor", "isValidSupportBlock", "(Lnet/minecraft/block/Block;)Z", false));
+                newIns.add((AbstractInsnNode)new InsnNode(172));
+                method.instructions.insert(newIns);
+                System.out.println("LOTRCore: Patched method " + method.name);
+            }
+            if (!method.name.equals(targetMethodName3) && !method.name.equals(targetMethodNameObf3) || !method.desc.equals(targetMethodSign3) && !method.desc.equals(targetMethodSignObf3)) continue;
             method.instructions.clear();
             newIns = new InsnList();
             newIns.add((AbstractInsnNode)new VarInsnNode(25, 0));
-            newIns.add((AbstractInsnNode)new MethodInsnNode(184, "lotr/common/coremod/LOTRReplacedMethods$Trapdoor", "isValidSupportBlock", "(Lnet/minecraft/block/Block;)Z", false));
+            newIns.add((AbstractInsnNode)new MethodInsnNode(184, "lotr/common/coremod/LOTRReplacedMethods$Trapdoor", "getRenderType", "(Lnet/minecraft/block/Block;)I", false));
             newIns.add((AbstractInsnNode)new InsnNode(172));
             method.instructions.insert(newIns);
             System.out.println("LOTRCore: Patched method " + method.name);
@@ -623,11 +695,11 @@ implements IClassTransformer {
     }
 
     private byte[] patchBlockAnvil(String name, byte[] bytes) {
-        String targetMethodDesc;
         boolean isObf = !name.startsWith("net.minecraft");
         String targetMethodName = "getCollisionBoundingBoxFromPool";
         String targetMethodNameObf = "func_149668_a";
-        String targetMethodDescObf = targetMethodDesc = "(Lnet/minecraft/world/World;III)Lnet/minecraft/util/AxisAlignedBB;";
+        String targetMethodDesc = "(Lnet/minecraft/world/World;III)Lnet/minecraft/util/AxisAlignedBB;";
+        String targetMethodDescObf = "(Lnet/minecraft/world/World;III)Lnet/minecraft/util/AxisAlignedBB;";
         ClassNode classNode = new ClassNode();
         ClassReader classReader = new ClassReader(bytes);
         classReader.accept((ClassVisitor)classNode, 0);
@@ -681,8 +753,8 @@ implements IClassTransformer {
         ClassReader classReader = new ClassReader(bytes);
         classReader.accept((ClassVisitor)classNode, 0);
         for (MethodNode method : classNode.methods) {
-            boolean[] newPrev;
             boolean playerObf;
+            boolean[] newPrev;
             InsnList newIns22;
             if ((method.name.equals(targetMethodName) || method.name.equals(targetMethodNameObf)) && method.desc.equals(targetMethodSign)) {
                 VarInsnNode nodeStore = LOTRClassTransformer.findNodeInMethod(method, new VarInsnNode(54, 6));
@@ -810,8 +882,8 @@ implements IClassTransformer {
     }
 
     private byte[] patchEntityMinecart(String name, byte[] bytes) {
-        String targetMethodName;
-        String targetMethodNameObf = targetMethodName = "func_145821_a";
+        String targetMethodName = "func_145821_a";
+        String targetMethodNameObf = "func_145821_a";
         String targetMethodSign = "(IIIDDLnet/minecraft/block/Block;I)V";
         String targetMethodSignObf = "(IIIDDLaji;I)V";
         ClassNode classNode = new ClassNode();
@@ -851,11 +923,11 @@ implements IClassTransformer {
     }
 
     private byte[] patchArmorProperties(String name, byte[] bytes) {
-        String targetMethodName;
-        String targetMethodSign;
         boolean isCauldron = LOTRModChecker.isCauldronServer();
-        String targetMethodNameObf = targetMethodName = "ApplyArmor";
-        String targetMethodSignObf = targetMethodSign = "(Lnet/minecraft/entity/EntityLivingBase;[Lnet/minecraft/item/ItemStack;Lnet/minecraft/util/DamageSource;D)F";
+        String targetMethodName = "ApplyArmor";
+        String targetMethodNameObf = "ApplyArmor";
+        String targetMethodSign = "(Lnet/minecraft/entity/EntityLivingBase;[Lnet/minecraft/item/ItemStack;Lnet/minecraft/util/DamageSource;D)F";
+        String targetMethodSignObf = "(Lnet/minecraft/entity/EntityLivingBase;[Lnet/minecraft/item/ItemStack;Lnet/minecraft/util/DamageSource;D)F";
         if (isCauldron) {
             targetMethodNameObf = "ApplyArmor";
             targetMethodName = "ApplyArmor";
@@ -1040,8 +1112,8 @@ implements IClassTransformer {
     }
 
     private byte[] patchDoorInteract(String name, byte[] bytes) {
-        String targetMethodName;
-        String targetMethodNameObf = targetMethodName = "func_151503_a";
+        String targetMethodName = "func_151503_a";
+        String targetMethodNameObf = "func_151503_a";
         String targetMethodSign = "(III)Lnet/minecraft/block/BlockDoor;";
         String targetMethodSignObf = "(III)Lakn;";
         ClassNode classNode = new ClassNode();
@@ -1079,12 +1151,12 @@ implements IClassTransformer {
     }
 
     private byte[] patchEnchantmentHelper(String name, byte[] bytes) {
-        String targetMethodName2;
         String targetMethodName = "getEnchantmentModifierLiving";
         String targetMethodNameObf = "func_77512_a";
         String targetMethodSign = "(Lnet/minecraft/entity/EntityLivingBase;Lnet/minecraft/entity/EntityLivingBase;)F";
         String targetMethodSignObf = "(Lsv;Lsv;)F";
-        String targetMethodNameObf2 = targetMethodName2 = "func_152377_a";
+        String targetMethodName2 = "func_152377_a";
+        String targetMethodNameObf2 = "func_152377_a";
         String targetMethodSign2 = "(Lnet/minecraft/item/ItemStack;Lnet/minecraft/entity/EnumCreatureAttribute;)F";
         String targetMethodSignObf2 = "(Ladd;Lsz;)F";
         String targetMethodName3 = "getSilkTouchModifier";
@@ -1259,8 +1331,8 @@ implements IClassTransformer {
     }
 
     private byte[] patchPotionDamage(String name, byte[] bytes) {
-        String targetMethodName;
-        String targetMethodNameObf = targetMethodName = "func_111183_a";
+        String targetMethodName = "func_111183_a";
+        String targetMethodNameObf = "func_111183_a";
         String targetMethodSign = "(ILnet/minecraft/entity/ai/attributes/AttributeModifier;)D";
         String targetMethodSignObf = "(ILtj;)D";
         ClassNode classNode = new ClassNode();
@@ -1326,8 +1398,8 @@ implements IClassTransformer {
     }
 
     private byte[] patchEntityClientPlayerMP(String name, byte[] bytes) {
-        String targetMethodName;
-        String targetMethodNameObf = targetMethodName = "func_110318_g";
+        String targetMethodName = "func_110318_g";
+        String targetMethodNameObf = "func_110318_g";
         String targetMethodSign = "()V";
         ClassNode classNode = new ClassNode();
         ClassReader classReader = new ClassReader(bytes);
@@ -1387,8 +1459,8 @@ implements IClassTransformer {
     }
 
     private byte[] patchFMLNetworkHandler(String name, byte[] bytes) {
-        String targetMethodName;
-        String targetMethodNameObf = targetMethodName = "getEntitySpawningPacket";
+        String targetMethodName = "getEntitySpawningPacket";
+        String targetMethodNameObf = "getEntitySpawningPacket";
         String targetMethodSign = "(Lnet/minecraft/entity/Entity;)Lnet/minecraft/network/Packet;";
         String targetMethodSignObf = "(Lsa;)Lft;";
         ClassNode classNode = new ClassNode();

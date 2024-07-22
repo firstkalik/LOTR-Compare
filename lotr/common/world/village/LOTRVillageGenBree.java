@@ -57,87 +57,87 @@ extends LOTRVillageGen {
         return new Instance(this, world, i, k, random, loc);
     }
 
+    public static enum VillageType {
+        HAMLET,
+        VILLAGE;
+
+    }
+
     public static class Instance
     extends LOTRVillageGen.AbstractInstance<LOTRVillageGenBree> {
         public VillageType villageType;
         private int innerSize;
-        private static final int innerSizeMin = 12;
-        private static final int innerSizeMax = 14;
-        private static final int roadWidth = 2;
-        private static final int pathFuzz = 3;
-        private static final int hamletHedgeGap = 32;
         private boolean hamletHedge;
         private static boolean[][] hobbitPathLookup;
-        private static final int hobbitPathLookupRadius = 180;
         private static int[] hobbitBurrowPathPoints;
         private static int[] hobbitBurrowEndPoints;
 
         public Instance(LOTRVillageGenBree village, World world, int i, int k, Random random, LocationInfo loc) {
             super(village, world, i, k, random, loc);
+            if (hobbitPathLookup == null) {
+                int l;
+                int size = 361;
+                hobbitPathLookup = new boolean[size][size];
+                int numBurrows = 20;
+                ArrayList<Integer> burrowCoords = new ArrayList<Integer>();
+                ArrayList<Integer> burrowEndCoords = new ArrayList<Integer>();
+                int samples = 300;
+                int burrowInterval = samples / numBurrows;
+                float[] pathPointsX = new float[samples];
+                float[] pathPointsZ = new float[samples];
+                int zStart = 50;
+                int zEnd = 150;
+                float cycles = 1.0f;
+                int amp = 80;
+                int endpointInterval = samples / MathHelper.floor_double((double)(cycles * 4.0f));
+                for (l = 0; l < samples; ++l) {
+                    float x;
+                    float t = (float)l / (float)samples;
+                    float z = (float)zStart + (float)(zEnd - zStart) * t;
+                    pathPointsX[l] = x = MathHelper.sin((float)((z - (float)zStart) / (float)(zEnd - zStart) * cycles * 3.1415927f * 2.0f)) * (float)amp;
+                    pathPointsZ[l] = z;
+                    if (l % burrowInterval == 0 && Math.abs(x) <= (float)amp * 0.8f) {
+                        burrowCoords.add(MathHelper.floor_double((double)x));
+                        burrowCoords.add(MathHelper.floor_double((double)z));
+                    }
+                    if (l % endpointInterval != 0 || l / endpointInterval % 2 != 1) continue;
+                    burrowEndCoords.add(MathHelper.floor_double((double)x));
+                    burrowEndCoords.add(MathHelper.floor_double((double)z));
+                }
+                hobbitBurrowPathPoints = new int[burrowCoords.size()];
+                for (l = 0; l < burrowCoords.size(); ++l) {
+                    Instance.hobbitBurrowPathPoints[l] = (Integer)burrowCoords.get(l);
+                }
+                hobbitBurrowEndPoints = new int[burrowEndCoords.size()];
+                for (l = 0; l < burrowEndCoords.size(); ++l) {
+                    Instance.hobbitBurrowEndPoints[l] = (Integer)burrowEndCoords.get(l);
+                }
+                int pathWidth = 3;
+                for (int z = -180; z <= 180; ++z) {
+                    block4: for (int x = -180; x <= 180; ++x) {
+                        int xi = x + 180;
+                        int zi = z + 180;
+                        Instance.hobbitPathLookup[zi][xi] = false;
+                        float xMid = (float)x + 0.5f;
+                        float zMid = (float)z + 0.5f;
+                        for (int l2 = 0; l2 < samples; ++l2) {
+                            float pathX = pathPointsX[l2];
+                            float dx = xMid - pathX;
+                            float pathZ = pathPointsZ[l2];
+                            float dz = zMid - pathZ;
+                            if (dx * dx + dz * dz > (float)(pathWidth * pathWidth)) continue;
+                            Instance.hobbitPathLookup[zi][xi] = true;
+                            continue block4;
+                        }
+                    }
+                }
+            }
         }
 
         @Override
         protected void setupVillageProperties(Random random) {
             if (this.locationInfo.isFixedLocation()) {
                 this.villageType = VillageType.VILLAGE;
-                if (hobbitPathLookup == null) {
-                    int l;
-                    int size = 361;
-                    hobbitPathLookup = new boolean[size][size];
-                    int numBurrows = 20;
-                    ArrayList<Integer> burrowCoords = new ArrayList<Integer>();
-                    ArrayList<Integer> burrowEndCoords = new ArrayList<Integer>();
-                    int samples = 300;
-                    int burrowInterval = samples / numBurrows;
-                    float[] pathPointsX = new float[samples];
-                    float[] pathPointsZ = new float[samples];
-                    int zStart = 50;
-                    int zEnd = 150;
-                    float cycles = 1.0f;
-                    int amp = 80;
-                    int endpointInterval = samples / MathHelper.floor_double((double)(cycles * 4.0f));
-                    for (l = 0; l < samples; ++l) {
-                        float x;
-                        float t = (float)l / (float)samples;
-                        float z = (float)zStart + (float)(zEnd - zStart) * t;
-                        pathPointsX[l] = x = MathHelper.sin((float)((z - (float)zStart) / (float)(zEnd - zStart) * cycles * 3.1415927f * 2.0f)) * (float)amp;
-                        pathPointsZ[l] = z;
-                        if (l % burrowInterval == 0 && Math.abs(x) <= (float)amp * 0.8f) {
-                            burrowCoords.add(MathHelper.floor_double((double)x));
-                            burrowCoords.add(MathHelper.floor_double((double)z));
-                        }
-                        if (l % endpointInterval != 0 || l / endpointInterval % 2 != 1) continue;
-                        burrowEndCoords.add(MathHelper.floor_double((double)x));
-                        burrowEndCoords.add(MathHelper.floor_double((double)z));
-                    }
-                    hobbitBurrowPathPoints = new int[burrowCoords.size()];
-                    for (l = 0; l < burrowCoords.size(); ++l) {
-                        Instance.hobbitBurrowPathPoints[l] = (Integer)burrowCoords.get(l);
-                    }
-                    hobbitBurrowEndPoints = new int[burrowEndCoords.size()];
-                    for (l = 0; l < burrowEndCoords.size(); ++l) {
-                        Instance.hobbitBurrowEndPoints[l] = (Integer)burrowEndCoords.get(l);
-                    }
-                    int pathWidth = 3;
-                    for (int z = -180; z <= 180; ++z) {
-                        block4: for (int x = -180; x <= 180; ++x) {
-                            int xi = x + 180;
-                            int zi = z + 180;
-                            Instance.hobbitPathLookup[zi][xi] = false;
-                            float xMid = (float)x + 0.5f;
-                            float zMid = (float)z + 0.5f;
-                            for (int l2 = 0; l2 < samples; ++l2) {
-                                float pathX = pathPointsX[l2];
-                                float dx = xMid - pathX;
-                                float pathZ = pathPointsZ[l2];
-                                float dz = zMid - pathZ;
-                                if (!(dx * dx + dz * dz <= (float)(pathWidth * pathWidth))) continue;
-                                Instance.hobbitPathLookup[zi][xi] = true;
-                                continue block4;
-                            }
-                        }
-                    }
-                }
             } else {
                 this.villageType = VillageType.HAMLET;
                 this.innerSize = MathHelper.getRandomIntegerInRange((Random)random, (int)12, (int)14);
@@ -279,8 +279,9 @@ extends LOTRVillageGen {
         }
 
         private void setupVillage(Random random) {
-            int l;
+            int hobbitX;
             int hobbitZ;
+            int l;
             this.addStructure(new LOTRWorldGenNPCRespawner(false){
 
                 @Override
@@ -373,16 +374,22 @@ extends LOTRVillageGen {
                 int houseZ = 5;
                 LOTRWorldGenBreeStructure house1 = new LOTRWorldGenBreeHouse(false);
                 LOTRWorldGenBreeStructure house2 = new LOTRWorldGenBreeHouse(false);
+                boolean forceHouse1 = false;
+                boolean forceHouse2 = false;
                 if (i1 <= -houses + 2 || i1 >= houses) {
                     house1 = new LOTRWorldGenBreeRuffianHouse(false);
                     house2 = new LOTRWorldGenBreeRuffianHouse(false);
+                    if (this.locationInfo.getAssociatedWaypoint() == LOTRWaypoint.BREE && i1 == -houses) {
+                        house1 = new LOTRWorldGenBreeRuffianHouse(false).setRuffianName("Bill Ferny");
+                        forceHouse1 = true;
+                    }
                 }
                 if (Math.abs(i1) < 2) continue;
-                this.addStructure(house1, houseX, houseZ, 0);
+                this.addStructure(house1, houseX, houseZ, 0, forceHouse1);
                 if (Math.abs(i1) == 4) {
                     this.addStructure(new LOTRWorldGenBreeSmithy(false), houseX, -houseZ, 2);
                 } else {
-                    this.addStructure(house2, houseX, -houseZ, 2);
+                    this.addStructure(house2, houseX, -houseZ, 2, forceHouse2);
                 }
                 int lampX = houseX - Integer.signum(i1) * 9;
                 int lampZ = houseZ - 1;
@@ -423,12 +430,12 @@ extends LOTRVillageGen {
             this.addStructure(new LOTRWorldGenBreeGarden(false), 6, 38, 3, true);
             this.addStructure(new LOTRWorldGenBreeGarden(false), -6, 38, 1, true);
             for (l = 0; l < hobbitBurrowPathPoints.length; l += 2) {
-                int hobbitX = hobbitBurrowPathPoints[l];
+                hobbitX = hobbitBurrowPathPoints[l];
                 hobbitZ = hobbitBurrowPathPoints[l + 1];
                 this.addStructure(new LOTRWorldGenBreeHobbitBurrow(false), hobbitX, hobbitZ + 6, 0, true);
             }
             for (l = 0; l < hobbitBurrowEndPoints.length; l += 2) {
-                int hobbitX = hobbitBurrowEndPoints[l];
+                hobbitX = hobbitBurrowEndPoints[l];
                 hobbitZ = hobbitBurrowEndPoints[l + 1];
                 if (Integer.signum(hobbitX) == -1) {
                     this.addStructure(new LOTRWorldGenBreeHobbitBurrow(false), hobbitX - 6, hobbitZ, 1, true);
@@ -470,8 +477,6 @@ extends LOTRVillageGen {
                 }
             }
             if (this.villageType == VillageType.VILLAGE) {
-                int zi;
-                int xi;
                 if (i1 <= 192 && k1 <= 3) {
                     return LOTRRoadType.PAVED_PATH;
                 }
@@ -481,7 +486,7 @@ extends LOTRVillageGen {
                 if (i1 <= 70 && Math.abs(k - -100) <= 3) {
                     return LOTRRoadType.PAVED_PATH;
                 }
-                if (i >= -180 && i <= 180 && k >= -180 && k <= 180 && hobbitPathLookup[zi = k + 180][xi = i + 180]) {
+                if (i >= -180 && i <= 180 && k >= -180 && k <= 180 && hobbitPathLookup[k + 180][i + 180]) {
                     return LOTRRoadType.PAVED_PATH;
                 }
             }
@@ -492,12 +497,6 @@ extends LOTRVillageGen {
         public boolean isVillageSpecificSurface(World world, int i, int j, int k) {
             return false;
         }
-
-    }
-
-    public static enum VillageType {
-        HAMLET,
-        VILLAGE;
 
     }
 

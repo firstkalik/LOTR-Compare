@@ -10,7 +10,6 @@
  *  net.minecraft.entity.player.EntityPlayerMP
  *  net.minecraft.inventory.Container
  *  net.minecraft.network.NetHandlerPlayServer
- *  net.minecraft.util.ChatAllowedCharacters
  *  org.apache.commons.lang3.StringUtils
  */
 package lotr.common.network;
@@ -25,7 +24,6 @@ import lotr.common.inventory.LOTRContainerAnvil;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.Container;
 import net.minecraft.network.NetHandlerPlayServer;
-import net.minecraft.util.ChatAllowedCharacters;
 import org.apache.commons.lang3.StringUtils;
 
 public class LOTRPacketAnvilRename
@@ -60,7 +58,7 @@ implements IMessage {
                 LOTRContainerAnvil anvil = (LOTRContainerAnvil)container;
                 String rename = packet.rename;
                 if (rename != null && !StringUtils.isBlank((CharSequence)rename)) {
-                    if ((rename = ChatAllowedCharacters.filerAllowedCharacters((String)rename)).length() <= 30) {
+                    if (rename.length() <= 30) {
                         anvil.updateItemName(rename);
                     }
                 } else {

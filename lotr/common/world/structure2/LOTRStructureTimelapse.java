@@ -42,7 +42,6 @@ public class LOTRStructureTimelapse {
 
     @SubscribeEvent
     public void onWorldUnload(WorldEvent.Unload event) {
-        World world = event.world;
         for (ThreadTimelapse thr : allThreads) {
             thr.interrupt();
         }
@@ -89,7 +88,7 @@ public class LOTRStructureTimelapse {
         public void onBlockSet() {
             if (LOTRConfig.strTimelapse) {
                 try {
-                    ThreadTimelapse.sleep(LOTRConfig.strTimelapseInterval);
+                    Thread.sleep(LOTRConfig.strTimelapseInterval);
                 }
                 catch (InterruptedException e) {
                     e.printStackTrace();

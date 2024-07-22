@@ -54,8 +54,6 @@ public class LOTRTraderNPCInfo {
     private int timeSinceTrade;
     private boolean shouldRefresh = true;
     private int valueSinceRefresh;
-    private static final int refreshValue = 5000;
-    private static final int refreshLockTime = 6000;
 
     public LOTRTraderNPCInfo(LOTREntityNPC npc) {
         this.theEntity = npc;
@@ -95,8 +93,8 @@ public class LOTRTraderNPCInfo {
         this.setBuyTrades(theTrader.getBuyPool().getRandomTrades(rand));
         this.setSellTrades(theTrader.getSellPool().getRandomTrades(rand));
         this.valueSinceRefresh = 0;
-        for (int i = 0; i < this.theEntity.worldObj.playerEntities.size(); ++i) {
-            EntityPlayer entityplayer = (EntityPlayer)this.theEntity.worldObj.playerEntities.get(i);
+        for (Object element : this.theEntity.worldObj.playerEntities) {
+            EntityPlayer entityplayer = (EntityPlayer)element;
             Container container = entityplayer.openContainer;
             if (!(container instanceof LOTRContainerTrade) || ((LOTRContainerTrade)container).theTraderNPC != this.theEntity) continue;
             ((LOTRContainerTrade)container).updateAllTradeSlots();
@@ -136,8 +134,8 @@ public class LOTRTraderNPCInfo {
                 sendUpdate = true;
             }
             if (sendUpdate) {
-                for (int i = 0; i < this.theEntity.worldObj.playerEntities.size(); ++i) {
-                    EntityPlayer entityplayer = (EntityPlayer)this.theEntity.worldObj.playerEntities.get(i);
+                for (Object element : this.theEntity.worldObj.playerEntities) {
+                    EntityPlayer entityplayer = (EntityPlayer)element;
                     Container container = entityplayer.openContainer;
                     if (!(container instanceof LOTRContainerTrade) || ((LOTRContainerTrade)container).theTraderNPC != this.theEntity) continue;
                     this.sendClientPacket(entityplayer);
@@ -189,17 +187,16 @@ public class LOTRTraderNPCInfo {
     }
 
     public void readFromNBT(NBTTagCompound data) {
-        NBTTagCompound nbt;
         int i;
         NBTTagCompound sellTradesData;
         NBTTagCompound buyTradesData;
-        LOTRTradeEntry trade;
+        NBTTagCompound nbt;
         if (data.hasKey("LOTRBuyTrades") && (buyTradesData = data.getCompoundTag("LOTRBuyTrades")).hasKey("Trades")) {
             NBTTagList buyTradesTags = buyTradesData.getTagList("Trades", 10);
             this.buyTrades = new LOTRTradeEntry[buyTradesTags.tagCount()];
             for (i = 0; i < buyTradesTags.tagCount(); ++i) {
                 nbt = buyTradesTags.getCompoundTagAt(i);
-                this.buyTrades[i] = trade = LOTRTradeEntry.readFromNBT(nbt);
+                this.buyTrades[i] = LOTRTradeEntry.readFromNBT(nbt);
             }
         }
         if (data.hasKey("LOTRSellTrades") && (sellTradesData = data.getCompoundTag("LOTRSellTrades")).hasKey("Trades")) {
@@ -207,7 +204,7 @@ public class LOTRTraderNPCInfo {
             this.sellTrades = new LOTRTradeEntry[sellTradesTags.tagCount()];
             for (i = 0; i < sellTradesTags.tagCount(); ++i) {
                 nbt = sellTradesTags.getCompoundTagAt(i);
-                this.sellTrades[i] = trade = LOTRTradeEntry.readFromNBT(nbt);
+                this.sellTrades[i] = LOTRTradeEntry.readFromNBT(nbt);
             }
         }
         if (data.hasKey("ShouldRefresh")) {

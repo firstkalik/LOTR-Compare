@@ -48,6 +48,13 @@ implements Comparable<LOTRFactionRank> {
         return this.getCodeNameFem() + ".f";
     }
 
+    public String getCodeFullNameWithGender(LOTRPlayerData pd) {
+        if (this.isGendered() && pd.useFeminineRanks()) {
+            return this.getCodeFullNameFem();
+        }
+        return this.getCodeFullName();
+    }
+
     public String getDisplayName() {
         return StatCollector.translateToLocal((String)this.getCodeName());
     }

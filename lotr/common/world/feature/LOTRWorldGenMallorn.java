@@ -87,7 +87,7 @@ extends WorldGenAbstractTree {
                         float cos = MathHelper.cos((float)angle);
                         float sin = MathHelper.sin((float)angle);
                         float angleY = random.nextFloat() * (float)Math.toRadians(50.0);
-                        float cosY = MathHelper.cos((float)angleY);
+                        MathHelper.cos((float)angleY);
                         float sinY = MathHelper.sin((float)angleY);
                         int length = 4 + random.nextInt(6);
                         int i1 = i;
@@ -126,7 +126,7 @@ extends WorldGenAbstractTree {
                             this.setBlockAndNotifyAdequately(world, rootX, rootY, rootZ, this.woodBlock, this.woodMeta | 0xC);
                             world.getBlock(rootX, rootY - 1, rootZ).onPlantGrow(world, rootX, rootY - 1, rootZ, rootX, rootY, rootZ);
                             --rootY;
-                            if (++roots <= 4 + random.nextInt(3)) continue;
+                            if (++roots > 4 + random.nextInt(3)) continue;
                         }
                     }
                 }

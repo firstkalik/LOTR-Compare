@@ -72,8 +72,8 @@ extends EntityAIBase {
         if (this.isBannerBearer) {
             ArrayList<EntityLiving> alliesToFollow = new ArrayList<EntityLiving>();
             List nearbyEntities = this.theNPC.worldObj.getEntitiesWithinAABB(EntityLiving.class, this.theNPC.boundingBox.expand(16.0, 16.0, 16.0));
-            for (int i = 0; i < nearbyEntities.size(); ++i) {
-                EntityLiving entity = (EntityLiving)nearbyEntities.get(i);
+            for (Object nearbyEntitie : nearbyEntities) {
+                EntityLiving entity = (EntityLiving)nearbyEntitie;
                 if (entity == this.theNPC || LOTRMod.getNPCFaction((Entity)entity) != this.theNPC.getFaction()) continue;
                 if (entity instanceof LOTREntityNPC) {
                     LOTREntityNPC npc = (LOTREntityNPC)entity;
@@ -83,10 +83,9 @@ extends EntityAIBase {
             }
             EntityLiving entityToFollow = null;
             double d = Double.MAX_VALUE;
-            for (int i = 0; i < alliesToFollow.size(); ++i) {
-                EntityLiving entity = (EntityLiving)alliesToFollow.get(i);
+            for (EntityLiving entity : alliesToFollow) {
                 double dist = this.theNPC.getDistanceSqToEntity((Entity)entity);
-                if (!(dist < d) || !(dist > (double)(this.minFollowDist * this.minFollowDist))) continue;
+                if (dist >= d || dist <= (double)(this.minFollowDist * this.minFollowDist)) continue;
                 d = dist;
                 entityToFollow = entity;
             }
@@ -95,7 +94,7 @@ extends EntityAIBase {
                 return true;
             }
         }
-        return !(this.theNPC.getDistanceSqToEntity((Entity)entityplayer) < (double)(this.minFollowDist * this.minFollowDist));
+        return this.theNPC.getDistanceSqToEntity((Entity)entityplayer) >= (double)(this.minFollowDist * this.minFollowDist);
     }
 
     public boolean continueExecuting() {

@@ -34,16 +34,17 @@ extends LOTRWorldGenMoredainHut {
     @Override
     public boolean generateWithSetRotation(World world, Random random, int i, int j, int k, int rotation) {
         int k1;
+        int k2;
         int i1;
         int i2;
-        int k2;
         if (!super.generateWithSetRotation(world, random, i, j, k, rotation)) {
             return false;
         }
         for (i1 = -3; i1 <= 3; ++i1) {
             for (k1 = -3; k1 <= 3; ++k1) {
+                int j1;
                 this.layFoundation(world, i1, k1);
-                for (int j1 = 1; j1 <= 6; ++j1) {
+                for (j1 = 1; j1 <= 6; ++j1) {
                     this.setAir(world, i1, j1, k1);
                 }
                 i2 = Math.abs(i1);
@@ -57,7 +58,7 @@ extends LOTRWorldGenMoredainHut {
                     this.setBlockAndMetadata(world, i1, 4, k1, this.stainedClayBlock, this.stainedClayMeta);
                 }
                 if (i2 != 3 || k2 != 3) continue;
-                for (int j1 = 2; j1 <= 3; ++j1) {
+                for (j1 = 2; j1 <= 3; ++j1) {
                     this.setBlockAndMetadata(world, i1, j1, k1, this.fenceBlock, this.fenceMeta);
                 }
             }

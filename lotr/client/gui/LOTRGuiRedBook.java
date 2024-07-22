@@ -45,7 +45,6 @@ import lotr.common.LOTRLevelData;
 import lotr.common.LOTRPlayerData;
 import lotr.common.entity.npc.LOTRSpeech;
 import lotr.common.fac.LOTRAlignmentValues;
-import lotr.common.fac.LOTRFaction;
 import lotr.common.network.LOTRPacketDeleteMiniquest;
 import lotr.common.network.LOTRPacketHandler;
 import lotr.common.network.LOTRPacketMiniquestTrack;
@@ -84,7 +83,6 @@ extends LOTRGuiScreenBase {
     private int pageTop = 18;
     private int pageBorder = 10;
     private boolean wasMouseDown;
-    private int lastMouseX;
     private int lastMouseY;
     private int scrollBarWidth = 12;
     private int scrollBarHeight = 216;
@@ -118,7 +116,6 @@ extends LOTRGuiScreenBase {
     private LOTRMiniQuest selectedMiniquest;
     private LOTRMiniQuest deletingMiniquest;
     private int trackTicks;
-    private static final int trackTicksMax = 40;
     private GuiButton buttonViewActive;
     private GuiButton buttonViewCompleted;
     private GuiButton buttonQuestDelete;
@@ -158,8 +155,6 @@ extends LOTRGuiScreenBase {
     }
 
     public void drawScreen(int i, int j, float f) {
-        boolean hasQuestViewButtons;
-        boolean hasQuestDeleteButtons;
         this.displayedMiniQuests.clear();
         this.setupScrollBar(i, j);
         this.drawDefaultBackground();
@@ -267,8 +262,7 @@ extends LOTRGuiScreenBase {
                         pageText.add(rewardText);
                         if (quest.alignmentRewarded != 0.0f) {
                             String alignS = LOTRAlignmentValues.formatAlignForDisplay(quest.alignmentRewarded);
-                            String alignFacName = quest.getAlignmentRewardFaction().factionName();
-                            String rewardAlign = StatCollector.translateToLocalFormatted((String)"lotr.gui.redBook.mq.diary.reward.align", (Object[])new Object[]{alignS, alignFacName});
+                            String rewardAlign = StatCollector.translateToLocalFormatted((String)"lotr.gui.redBook.mq.diary.reward.align", (Object[])new Object[]{alignS, factionName});
                             pageText.add(rewardAlign);
                         }
                         if ((float)quest.coinsRewarded != 0.0f) {
@@ -338,9 +332,13 @@ extends LOTRGuiScreenBase {
                 this.drawTexturedModalRect(this.guiLeft + this.scrollBarX + this.scrollBarBorder, this.guiTop + this.scrollBarY + this.scrollBarBorder, 234, 0, this.scrollWidgetWidth, this.scrollWidgetHeight);
             }
         }
-        this.buttonViewActive.enabled = this.buttonViewActive.visible = (hasQuestViewButtons = page == Page.MINIQUESTS && this.selectedMiniquest == null);
+        boolean hasQuestViewButtons = page == Page.MINIQUESTS && this.selectedMiniquest == null;
+        this.buttonViewActive.visible = hasQuestViewButtons;
+        this.buttonViewActive.enabled = hasQuestViewButtons;
         this.buttonViewCompleted.enabled = this.buttonViewCompleted.visible = hasQuestViewButtons;
-        this.buttonQuestDelete.enabled = this.buttonQuestDelete.visible = (hasQuestDeleteButtons = page == Page.MINIQUESTS && this.deletingMiniquest != null);
+        boolean hasQuestDeleteButtons = page == Page.MINIQUESTS && this.deletingMiniquest != null;
+        this.buttonQuestDelete.visible = hasQuestDeleteButtons;
+        this.buttonQuestDelete.enabled = hasQuestDeleteButtons;
         this.buttonQuestDeleteCancel.enabled = this.buttonQuestDeleteCancel.visible = hasQuestDeleteButtons;
         if (viewCompleted) {
             this.buttonQuestDelete.displayString = StatCollector.translateToLocal((String)"lotr.gui.redBook.mq.deleteCmpYes");
@@ -463,7 +461,6 @@ extends LOTRGuiScreenBase {
             float d = (float)(this.lastMouseY - j) / (float)this.fontRendererObj.FONT_HEIGHT;
             this.diaryScroll -= d;
         }
-        this.lastMouseX = i;
         this.lastMouseY = j;
     }
 
@@ -498,13 +495,13 @@ extends LOTRGuiScreenBase {
 
     protected void mouseClicked(int i, int j, int mouse) {
         if (mouse == 0) {
-            int questX;
+            int j1;
+            int i2;
             int i1;
+            int j2;
             int questY;
             LOTRMiniQuest quest;
-            int j1;
-            int j2;
-            int i2;
+            int questX;
             if (page == Page.MINIQUESTS && this.deletingMiniquest == null) {
                 for (Map.Entry<LOTRMiniQuest, Pair<Integer, Integer>> entry : this.displayedMiniQuests.entrySet()) {
                     quest = entry.getKey();

@@ -17,7 +17,6 @@ import net.minecraft.util.MathHelper;
 public class LOTRModelDikDik
 extends ModelBase {
     private ModelRenderer head = new ModelRenderer((ModelBase)this, 42, 23);
-    private ModelRenderer neck;
     private ModelRenderer body;
     private ModelRenderer leg1;
     private ModelRenderer leg2;

@@ -67,7 +67,7 @@ extends LOTRWorldGenHarnedorStructure {
             for (int k1 = -10; k1 <= 10; ++k1) {
                 int i2 = Math.abs(i1);
                 int k2 = Math.abs(k1);
-                if (!(i2 <= 5 && k2 <= 4 || i2 <= 4 && k2 <= 6 || i2 <= 3 && k2 <= 7 || i2 <= 2 && k2 <= 8) && (i2 > 1 || k2 > 9)) continue;
+                if (!(i2 <= 5 && k2 <= 4 || i2 <= 4 && k2 <= 6 || i2 <= 3 && k2 <= 7 || i2 <= 2 && k2 <= 8 || i2 <= 1 && k2 <= 9)) continue;
                 for (j1 = 1; j1 <= 6; ++j1) {
                     this.setAir(world, i1, j1, k1);
                 }

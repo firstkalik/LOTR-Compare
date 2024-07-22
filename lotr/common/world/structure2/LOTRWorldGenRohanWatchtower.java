@@ -30,28 +30,28 @@ extends LOTRWorldGenRohanStructure {
 
     @Override
     public boolean generateWithSetRotation(World world, Random random, int i, int j, int k, int rotation) {
-        int k1;
-        int j1;
-        int i1;
         int j12;
+        int i1;
         int k12;
+        int j1;
+        int k1;
         this.setOriginAndRotation(world, i, j, k, rotation, 0);
         this.setupRandomBlocks(random);
         int height = 7 + random.nextInt(3);
         this.originY += height;
         if (this.restrictions) {
             for (int i12 = -4; i12 <= 4; ++i12) {
-                for (k12 = -4; k12 <= 4; ++k12) {
-                    j12 = this.getTopBlock(world, i12, k12) - 1;
-                    if (this.isSurface(world, i12, j12, k12)) continue;
+                for (k1 = -4; k1 <= 4; ++k1) {
+                    j1 = this.getTopBlock(world, i12, k1) - 1;
+                    if (this.isSurface(world, i12, j1, k1)) continue;
                     return false;
                 }
             }
         }
         int[] i12 = new int[]{-3, 3};
-        k12 = i12.length;
-        for (j12 = 0; j12 < k12; ++j12) {
-            int i13 = i12[j12];
+        k1 = i12.length;
+        for (j1 = 0; j1 < k1; ++j1) {
+            int i13 = i12[j1];
             for (int k13 : new int[]{-3, 3}) {
                 int j13 = 3;
                 while (!this.isOpaque(world, i13, j13, k13) && this.getY(j13) >= 0) {
@@ -62,13 +62,13 @@ extends LOTRWorldGenRohanStructure {
             }
         }
         for (i1 = -2; i1 <= 2; ++i1) {
-            for (k12 = -2; k12 <= 2; ++k12) {
-                this.setBlockAndMetadata(world, i1, 0, k12, this.plankBlock, this.plankMeta);
+            for (k1 = -2; k1 <= 2; ++k1) {
+                this.setBlockAndMetadata(world, i1, 0, k1, this.plankBlock, this.plankMeta);
             }
         }
         for (i1 = -3; i1 <= 3; ++i1) {
-            for (k12 = -3; k12 <= 3; ++k12) {
-                this.setBlockAndMetadata(world, i1, 4, k12, this.plankBlock, this.plankMeta);
+            for (k1 = -3; k1 <= 3; ++k1) {
+                this.setBlockAndMetadata(world, i1, 4, k1, this.plankBlock, this.plankMeta);
             }
         }
         for (i1 = -2; i1 <= 2; ++i1) {
@@ -83,17 +83,17 @@ extends LOTRWorldGenRohanStructure {
             this.setBlockAndMetadata(world, i1, 3, -3, this.fenceBlock, this.fenceMeta);
             this.setBlockAndMetadata(world, i1, 3, 3, this.fenceBlock, this.fenceMeta);
         }
-        for (k1 = -2; k1 <= 2; ++k1) {
-            this.setBlockAndMetadata(world, -3, 0, k1, this.logBlock, this.logMeta | 8);
-            this.setBlockAndMetadata(world, 3, 0, k1, this.logBlock, this.logMeta | 8);
-            this.setBlockAndMetadata(world, -3, 4, k1, this.logBlock, this.logMeta | 8);
-            this.setBlockAndMetadata(world, 3, 4, k1, this.logBlock, this.logMeta | 8);
-            this.setBlockAndMetadata(world, -4, 0, k1, this.plankStairBlock, 5);
-            this.setBlockAndMetadata(world, 4, 0, k1, this.plankStairBlock, 4);
-            this.setBlockAndMetadata(world, -4, 1, k1, this.fenceBlock, this.fenceMeta);
-            this.setBlockAndMetadata(world, 4, 1, k1, this.fenceBlock, this.fenceMeta);
-            this.setBlockAndMetadata(world, -3, 3, k1, this.fenceBlock, this.fenceMeta);
-            this.setBlockAndMetadata(world, 3, 3, k1, this.fenceBlock, this.fenceMeta);
+        for (k12 = -2; k12 <= 2; ++k12) {
+            this.setBlockAndMetadata(world, -3, 0, k12, this.logBlock, this.logMeta | 8);
+            this.setBlockAndMetadata(world, 3, 0, k12, this.logBlock, this.logMeta | 8);
+            this.setBlockAndMetadata(world, -3, 4, k12, this.logBlock, this.logMeta | 8);
+            this.setBlockAndMetadata(world, 3, 4, k12, this.logBlock, this.logMeta | 8);
+            this.setBlockAndMetadata(world, -4, 0, k12, this.plankStairBlock, 5);
+            this.setBlockAndMetadata(world, 4, 0, k12, this.plankStairBlock, 4);
+            this.setBlockAndMetadata(world, -4, 1, k12, this.fenceBlock, this.fenceMeta);
+            this.setBlockAndMetadata(world, 4, 1, k12, this.fenceBlock, this.fenceMeta);
+            this.setBlockAndMetadata(world, -3, 3, k12, this.fenceBlock, this.fenceMeta);
+            this.setBlockAndMetadata(world, 3, 3, k12, this.fenceBlock, this.fenceMeta);
         }
         this.setBlockAndMetadata(world, -3, 1, -2, this.fenceBlock, this.fenceMeta);
         this.setBlockAndMetadata(world, -3, 1, 2, this.fenceBlock, this.fenceMeta);
@@ -119,34 +119,34 @@ extends LOTRWorldGenRohanStructure {
             this.setBlockAndMetadata(world, i1, 4, -4, this.plankStairBlock, 2);
             this.setBlockAndMetadata(world, i1, 4, 4, this.plankStairBlock, 3);
         }
-        for (k1 = -4; k1 <= 4; ++k1) {
-            this.setBlockAndMetadata(world, -4, 4, k1, this.plankStairBlock, 1);
-            this.setBlockAndMetadata(world, 4, 4, k1, this.plankStairBlock, 0);
+        for (k12 = -4; k12 <= 4; ++k12) {
+            this.setBlockAndMetadata(world, -4, 4, k12, this.plankStairBlock, 1);
+            this.setBlockAndMetadata(world, 4, 4, k12, this.plankStairBlock, 0);
         }
-        for (j1 = 0; j1 <= 3; ++j1) {
-            this.setBlockAndMetadata(world, 0, j1, 3, this.plank2Block, this.plank2Meta);
-            this.setBlockAndMetadata(world, 0, j1, 2, Blocks.ladder, 2);
+        for (j12 = 0; j12 <= 3; ++j12) {
+            this.setBlockAndMetadata(world, 0, j12, 3, this.plank2Block, this.plank2Meta);
+            this.setBlockAndMetadata(world, 0, j12, 2, Blocks.ladder, 2);
         }
-        j1 = -1;
-        while (!this.isOpaque(world, 0, j1, 3) && this.getY(j1) >= 0) {
-            this.setBlockAndMetadata(world, 0, j1, 3, this.plank2Block, this.plank2Meta);
-            this.setGrassToDirt(world, 0, j1 - 1, 3);
-            if (!this.isOpaque(world, 0, j1, 2)) {
-                this.setBlockAndMetadata(world, 0, j1, 2, Blocks.ladder, 2);
+        j12 = -1;
+        while (!this.isOpaque(world, 0, j12, 3) && this.getY(j12) >= 0) {
+            this.setBlockAndMetadata(world, 0, j12, 3, this.plank2Block, this.plank2Meta);
+            this.setGrassToDirt(world, 0, j12 - 1, 3);
+            if (!this.isOpaque(world, 0, j12, 2)) {
+                this.setBlockAndMetadata(world, 0, j12, 2, Blocks.ladder, 2);
             }
-            --j1;
+            --j12;
         }
         this.placeChest(world, random, -2, 1, 2, 2, LOTRChestContents.ROHAN_WATCHTOWER);
         this.setBlockAndMetadata(world, 2, 1, 2, this.tableBlock, 0);
-        for (k1 = -2; k1 <= 2; ++k1) {
-            int k2 = Math.abs(k1);
+        for (k12 = -2; k12 <= 2; ++k12) {
+            int k2 = Math.abs(k12);
             for (int i14 : new int[]{-3, 3}) {
                 int j14 = -1;
-                while (!this.isOpaque(world, i14, j14, k1) && this.getY(j14) >= 0) {
+                while (!this.isOpaque(world, i14, j14, k12) && this.getY(j14) >= 0) {
                     if (k2 == 2 && IntMath.mod((int)j14, (int)4) == 1 || k2 == 1 && IntMath.mod((int)j14, (int)2) == 0 || k2 == 0 && IntMath.mod((int)j14, (int)4) == 3) {
-                        this.setBlockAndMetadata(world, i14, j14, k1, this.logBlock, this.logMeta);
+                        this.setBlockAndMetadata(world, i14, j14, k12, this.logBlock, this.logMeta);
                         if (k2 == 0) {
-                            this.setBlockAndMetadata(world, i14 - 1 * Integer.signum(i14), j14, k1, Blocks.torch, i14 > 0 ? 1 : 2);
+                            this.setBlockAndMetadata(world, i14 - 1 * Integer.signum(i14), j14, k12, Blocks.torch, i14 > 0 ? 1 : 2);
                         }
                     }
                     --j14;

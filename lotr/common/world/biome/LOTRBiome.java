@@ -60,20 +60,28 @@ import lotr.common.entity.animal.LOTREntityFish;
 import lotr.common.entity.animal.LOTREntityRabbit;
 import lotr.common.entity.animal.LOTREntityWildBoar;
 import lotr.common.entity.npc.LOTREntityBandit;
+import lotr.common.entity.npc.LOTREntityBanditOrc;
 import lotr.common.entity.npc.LOTREntityDwarf;
 import lotr.common.entity.npc.LOTREntityWickedDwarf;
+import lotr.common.entity.npc.LOTREntityWickedDwarf2;
 import lotr.common.world.LOTRWorldChunkManager;
 import lotr.common.world.biome.LOTRBiomeDecorator;
 import lotr.common.world.biome.LOTRBiomeGenAdornland;
 import lotr.common.world.biome.LOTRBiomeGenAndrast;
 import lotr.common.world.biome.LOTRBiomeGenAnduin;
 import lotr.common.world.biome.LOTRBiomeGenAnduinMouth;
+import lotr.common.world.biome.LOTRBiomeGenAnduinSource;
 import lotr.common.world.biome.LOTRBiomeGenAnduinVale;
+import lotr.common.world.biome.LOTRBiomeGenAnfalas;
+import lotr.common.world.biome.LOTRBiomeGenAngband;
+import lotr.common.world.biome.LOTRBiomeGenAngband2;
 import lotr.common.world.biome.LOTRBiomeGenAngle;
 import lotr.common.world.biome.LOTRBiomeGenAngmar;
 import lotr.common.world.biome.LOTRBiomeGenAngmarMountains;
 import lotr.common.world.biome.LOTRBiomeGenBarrowDowns;
 import lotr.common.world.biome.LOTRBiomeGenBeach;
+import lotr.common.world.biome.LOTRBiomeGenBeornsDomain;
+import lotr.common.world.biome.LOTRBiomeGenBizar;
 import lotr.common.world.biome.LOTRBiomeGenBlackrootVale;
 import lotr.common.world.biome.LOTRBiomeGenBlueMountains;
 import lotr.common.world.biome.LOTRBiomeGenBlueMountainsFoothills;
@@ -85,13 +93,17 @@ import lotr.common.world.biome.LOTRBiomeGenColdfells;
 import lotr.common.world.biome.LOTRBiomeGenDagorlad;
 import lotr.common.world.biome.LOTRBiomeGenDale;
 import lotr.common.world.biome.LOTRBiomeGenDeadMarshes;
+import lotr.common.world.biome.LOTRBiomeGenDimrillDale;
 import lotr.common.world.biome.LOTRBiomeGenDolGuldur;
 import lotr.common.world.biome.LOTRBiomeGenDorEnErnil;
 import lotr.common.world.biome.LOTRBiomeGenDorEnErnilHills;
 import lotr.common.world.biome.LOTRBiomeGenDorwinion;
 import lotr.common.world.biome.LOTRBiomeGenDorwinionHills;
 import lotr.common.world.biome.LOTRBiomeGenDunland;
+import lotr.common.world.biome.LOTRBiomeGenDurmeth;
+import lotr.common.world.biome.LOTRBiomeGenDurmethMountains;
 import lotr.common.world.biome.LOTRBiomeGenEastBight;
+import lotr.common.world.biome.LOTRBiomeGenEasternCoasts;
 import lotr.common.world.biome.LOTRBiomeGenEasternDesolation;
 import lotr.common.world.biome.LOTRBiomeGenEmynMuil;
 import lotr.common.world.biome.LOTRBiomeGenEnedwaith;
@@ -102,6 +114,7 @@ import lotr.common.world.biome.LOTRBiomeGenEriador;
 import lotr.common.world.biome.LOTRBiomeGenEriadorDowns;
 import lotr.common.world.biome.LOTRBiomeGenErynVorn;
 import lotr.common.world.biome.LOTRBiomeGenEttenmoors;
+import lotr.common.world.biome.LOTRBiomeGenFallForodwaith;
 import lotr.common.world.biome.LOTRBiomeGenFangorn;
 import lotr.common.world.biome.LOTRBiomeGenFangornClearing;
 import lotr.common.world.biome.LOTRBiomeGenFangornWasteland;
@@ -118,10 +131,12 @@ import lotr.common.world.biome.LOTRBiomeGenFarHaradMangrove;
 import lotr.common.world.biome.LOTRBiomeGenFarHaradSavannah;
 import lotr.common.world.biome.LOTRBiomeGenFarHaradSwamp;
 import lotr.common.world.biome.LOTRBiomeGenFarHaradVolcano;
+import lotr.common.world.biome.LOTRBiomeGenForestShelter;
 import lotr.common.world.biome.LOTRBiomeGenForodwaith;
 import lotr.common.world.biome.LOTRBiomeGenForodwaithCoast;
 import lotr.common.world.biome.LOTRBiomeGenForodwaithGlacier;
 import lotr.common.world.biome.LOTRBiomeGenForodwaithMountains;
+import lotr.common.world.biome.LOTRBiomeGenForodwaithMountains2;
 import lotr.common.world.biome.LOTRBiomeGenGladdenFields;
 import lotr.common.world.biome.LOTRBiomeGenGondor;
 import lotr.common.world.biome.LOTRBiomeGenGondorWoodlands;
@@ -132,6 +147,9 @@ import lotr.common.world.biome.LOTRBiomeGenGulfHarad;
 import lotr.common.world.biome.LOTRBiomeGenGulfHaradForest;
 import lotr.common.world.biome.LOTRBiomeGenHalfTrollForest;
 import lotr.common.world.biome.LOTRBiomeGenHaradMountains;
+import lotr.common.world.biome.LOTRBiomeGenHarhudor;
+import lotr.common.world.biome.LOTRBiomeGenHarhudorForest;
+import lotr.common.world.biome.LOTRBiomeGenHarhudorForestEdge;
 import lotr.common.world.biome.LOTRBiomeGenHarnedor;
 import lotr.common.world.biome.LOTRBiomeGenHarondor;
 import lotr.common.world.biome.LOTRBiomeGenImlothMelui;
@@ -166,6 +184,7 @@ import lotr.common.world.biome.LOTRBiomeGenMistyMountainsFoothills;
 import lotr.common.world.biome.LOTRBiomeGenMordor;
 import lotr.common.world.biome.LOTRBiomeGenMordorMountains;
 import lotr.common.world.biome.LOTRBiomeGenMorgulVale;
+import lotr.common.world.biome.LOTRBiomeGenMoria;
 import lotr.common.world.biome.LOTRBiomeGenNanCurunir;
 import lotr.common.world.biome.LOTRBiomeGenNanUngol;
 import lotr.common.world.biome.LOTRBiomeGenNearHarad;
@@ -187,37 +206,53 @@ import lotr.common.world.biome.LOTRBiomeGenPelennor;
 import lotr.common.world.biome.LOTRBiomeGenPertorogwaith;
 import lotr.common.world.biome.LOTRBiomeGenPinnathGelin;
 import lotr.common.world.biome.LOTRBiomeGenPukel;
-import lotr.common.world.biome.LOTRBiomeGenRedMountains;
-import lotr.common.world.biome.LOTRBiomeGenRedMountainsFoothills;
+import lotr.common.world.biome.LOTRBiomeGenRedMountainsBlacklock;
+import lotr.common.world.biome.LOTRBiomeGenRedMountainsFoothillsBlacklock;
+import lotr.common.world.biome.LOTRBiomeGenRedMountainsFoothillsStiffbeard;
+import lotr.common.world.biome.LOTRBiomeGenRedMountainsFoothillsStonefoot;
+import lotr.common.world.biome.LOTRBiomeGenRedMountainsIronfist;
+import lotr.common.world.biome.LOTRBiomeGenRedMountainsStiffbeard;
+import lotr.common.world.biome.LOTRBiomeGenRedMountainsStonefoot;
 import lotr.common.world.biome.LOTRBiomeGenRhun;
 import lotr.common.world.biome.LOTRBiomeGenRhunForest;
+import lotr.common.world.biome.LOTRBiomeGenRhunForest2;
 import lotr.common.world.biome.LOTRBiomeGenRhunIsland;
 import lotr.common.world.biome.LOTRBiomeGenRhunIslandForest;
 import lotr.common.world.biome.LOTRBiomeGenRhunLand;
 import lotr.common.world.biome.LOTRBiomeGenRhunLandHills;
 import lotr.common.world.biome.LOTRBiomeGenRhunLandSteppe;
 import lotr.common.world.biome.LOTRBiomeGenRhunRedForest;
+import lotr.common.world.biome.LOTRBiomeGenRhunSemiDesert;
 import lotr.common.world.biome.LOTRBiomeGenRivendell;
 import lotr.common.world.biome.LOTRBiomeGenRivendellHills;
 import lotr.common.world.biome.LOTRBiomeGenRiver;
 import lotr.common.world.biome.LOTRBiomeGenRohan;
+import lotr.common.world.biome.LOTRBiomeGenRohanGate;
 import lotr.common.world.biome.LOTRBiomeGenRohanUruk;
 import lotr.common.world.biome.LOTRBiomeGenRohanWoodlands;
 import lotr.common.world.biome.LOTRBiomeGenShire;
 import lotr.common.world.biome.LOTRBiomeGenShireMarshes;
 import lotr.common.world.biome.LOTRBiomeGenShireMoors;
 import lotr.common.world.biome.LOTRBiomeGenShireWoodlands;
+import lotr.common.world.biome.LOTRBiomeGenSouthMirkwoodCorrupted;
 import lotr.common.world.biome.LOTRBiomeGenSwanfleet;
 import lotr.common.world.biome.LOTRBiomeGenTaiga;
+import lotr.common.world.biome.LOTRBiomeGenTaiga2;
+import lotr.common.world.biome.LOTRBiomeGenTaigaRhun;
 import lotr.common.world.biome.LOTRBiomeGenTauredainClearing;
 import lotr.common.world.biome.LOTRBiomeGenTolfalas;
 import lotr.common.world.biome.LOTRBiomeGenTowerHills;
 import lotr.common.world.biome.LOTRBiomeGenTrollshaws;
 import lotr.common.world.biome.LOTRBiomeGenTundra;
+import lotr.common.world.biome.LOTRBiomeGenTundra2;
+import lotr.common.world.biome.LOTRBiomeGenTundra3;
+import lotr.common.world.biome.LOTRBiomeGenTundra4;
 import lotr.common.world.biome.LOTRBiomeGenUdun;
 import lotr.common.world.biome.LOTRBiomeGenUmbar;
 import lotr.common.world.biome.LOTRBiomeGenUmbarForest;
+import lotr.common.world.biome.LOTRBiomeGenUnchartedRhun;
 import lotr.common.world.biome.LOTRBiomeGenUtumno;
+import lotr.common.world.biome.LOTRBiomeGenWastelandRhun;
 import lotr.common.world.biome.LOTRBiomeGenWhiteDowns;
 import lotr.common.world.biome.LOTRBiomeGenWhiteMountains;
 import lotr.common.world.biome.LOTRBiomeGenWhiteMountainsFoothills;
@@ -228,6 +263,7 @@ import lotr.common.world.biome.LOTRBiomeGenWindMountainsFoothills;
 import lotr.common.world.biome.LOTRBiomeGenWold;
 import lotr.common.world.biome.LOTRBiomeGenWoodlandRealm;
 import lotr.common.world.biome.LOTRBiomeGenWoodlandRealmHills;
+import lotr.common.world.biome.LOTRBiomeSunLands;
 import lotr.common.world.biome.LOTRMusicRegion;
 import lotr.common.world.biome.variant.LOTRBiomeVariant;
 import lotr.common.world.biome.variant.LOTRBiomeVariantList;
@@ -355,11 +391,16 @@ extends BiomeGenBase {
     public static LOTRBiome pinnathGelin;
     public static LOTRBiome island;
     public static LOTRBiome forodwaithMountains;
+    public static LOTRBiome forodwaithMountains2;
     public static LOTRBiome mistyMountainsFoothills;
     public static LOTRBiome greyMountainsFoothills;
     public static LOTRBiome blueMountainsFoothills;
     public static LOTRBiome tundra;
     public static LOTRBiome taiga;
+    public static LOTRBiome notDeepOcean;
+    public static LOTRBiome middleDeepOcean;
+    public static LOTRBiome rhunSemiDesert;
+    public static LOTRBiome anfalas;
     public static LOTRBiome breeland;
     public static LOTRBiome chetwood;
     public static LOTRBiome forodwaithGlacier;
@@ -387,8 +428,14 @@ extends BiomeGenBase {
     public static LOTRBiome lebennin;
     public static LOTRBiome rhun;
     public static LOTRBiome rhunForest;
+    public static LOTRBiome rhunForest2;
     public static LOTRBiome redMountains;
+    public static LOTRBiome redMountains2;
+    public static LOTRBiome redMountains3;
+    public static LOTRBiome redMountains4;
     public static LOTRBiome redMountainsFoothills;
+    public static LOTRBiome redMountainsFoothills2;
+    public static LOTRBiome redMountainsFoothills3;
     public static LOTRBiome dolGuldur;
     public static LOTRBiome nearHaradSemiDesert;
     public static LOTRBiome farHaradArid;
@@ -441,7 +488,33 @@ extends BiomeGenBase {
     public static LOTRBiome farHaradJungleMountains;
     public static LOTRBiome halfTrollForest;
     public static LOTRBiome farHaradKanuka;
+    public static LOTRBiome moria;
     public static LOTRBiome utumno;
+    public static LOTRBiome angbandMountains;
+    public static LOTRBiome angband;
+    public static LOTRBiome uncharted_rhun;
+    public static LOTRBiome eastern_coasts;
+    public static LOTRBiome harhudor;
+    public static LOTRBiome wasteland_rhun;
+    public static LOTRBiome durmeth;
+    public static LOTRBiome durmeth_mountains;
+    public static LOTRBiome taiga_rhun;
+    public static LOTRBiome bizar;
+    public static LOTRBiome sunLands;
+    public static LOTRBiome tundrarhun;
+    public static LOTRBiome dimrill;
+    public static LOTRBiome fallforodwaith;
+    public static LOTRBiome forestShelter;
+    public static LOTRBiome southMirkwood;
+    public static LOTRBiome beornsDomain;
+    public static LOTRBiome anduinSource;
+    public static LOTRBiome harhudorForest;
+    public static LOTRBiome harhudorForestEdge;
+    public static LOTRBiome rohanGate;
+    public static LOTRBiome iceugol;
+    public static LOTRBiome snowtaiga;
+    public static LOTRBiome forohel;
+    public static LOTRBiome snowtundra;
     public LOTRDimension biomeDimension;
     public LOTRBiomeDecorator decorator;
     public int topBlockMeta = 0;
@@ -450,16 +523,17 @@ extends BiomeGenBase {
     public static NoiseGeneratorPerlin biomeTerrainNoise;
     protected static Random terrainRand;
     protected boolean enablePodzol = true;
-    protected boolean enableRocky = true;
+    protected boolean enableRocky = false;
     private LOTRBiomeVariantList biomeVariantsSmall = new LOTRBiomeVariantList();
     private LOTRBiomeVariantList biomeVariantsLarge = new LOTRBiomeVariantList();
-    private static final float defaultVariantChance = 0.4f;
     public float variantChance = 0.4f;
     public LOTRBiomeSpawnList npcSpawnList = new LOTRBiomeSpawnList(this);
     protected List spawnableLOTRAmbientList = new ArrayList();
     private List spawnableTraders = new ArrayList();
     private LOTREventSpawner.EventChance banditChance;
+    private LOTREventSpawner.EventChance banditChance1;
     private Class<? extends LOTREntityBandit> banditEntityClass;
+    private Class<? extends LOTREntityBanditOrc> banditEntityClass1;
     public final LOTRBiomeInvasionSpawns invasionSpawns;
     public BiomeColors biomeColors = new BiomeColors(this);
     public BiomeTerrain biomeTerrain = new BiomeTerrain(this);
@@ -505,7 +579,7 @@ extends BiomeGenBase {
         greyMountains = new LOTRBiomeGenGreyMountains(32, true).setTemperatureRainfall(0.28f, 0.2f).setMinMaxHeight(1.8f, 2.0f).setColor(13290689).setBiomeName("greyMountains");
         midgewater = new LOTRBiomeGenMidgewater(33, true).setTemperatureRainfall(0.6f, 1.0f).setMinMaxHeight(0.0f, 0.1f).setColor(6001495).setBiomeName("midgewater");
         brownLands = new LOTRBiomeGenBrownLands(34, true).setTemperatureRainfall(1.0f, 0.2f).setMinMaxHeight(0.2f, 0.2f).setColor(8552016).setBiomeName("brownLands");
-        ocean = new LOTRBiomeGenOcean(35, false).setTemperatureRainfall(0.8f, 0.8f).setMinMaxHeight(-1.0f, 0.3f).setColor(153997).setBiomeName("ocean");
+        ocean = new LOTRBiomeGenOcean(35, false).setTemperatureRainfall(0.8f, 0.7f).setMinMaxHeight(-1.0f, 0.3f).setColor(152962).setBiomeName("ocean");
         anduinHills = new LOTRBiomeGenAnduin(36, true).setTemperatureRainfall(0.7f, 0.7f).setMinMaxHeight(0.6f, 0.4f).setColor(7058012).setBiomeName("anduinHills");
         meneltarma = new LOTRBiomeGenMeneltarma(37, false).setTemperatureRainfall(0.9f, 0.8f).setMinMaxHeight(0.1f, 0.2f).setColor(9549658).setBiomeName("meneltarma");
         gladdenFields = new LOTRBiomeGenGladdenFields(38, true).setTemperatureRainfall(0.6f, 1.2f).setMinMaxHeight(0.0f, 0.1f).setColor(5020505).setBiomeName("gladdenFields");
@@ -586,8 +660,7 @@ extends BiomeGenBase {
         lebennin = new LOTRBiomeGenLebennin(114, true).setTemperatureRainfall(1.0f, 0.9f).setMinMaxHeight(0.1f, 0.3f).setColor(7845418).setBiomeName("lebennin");
         rhun = new LOTRBiomeGenRhun(115, true).setTemperatureRainfall(0.9f, 0.3f).setMinMaxHeight(0.3f, 0.0f).setColor(10465880).setBiomeName("rhun");
         rhunForest = new LOTRBiomeGenRhunForest(116, true).setTemperatureRainfall(0.8f, 0.9f).setMinMaxHeight(0.3f, 0.5f).setColor(7505723).setBiomeName("rhunForest");
-        redMountains = new LOTRBiomeGenRedMountains(117, true).setTemperatureRainfall(0.3f, 0.4f).setMinMaxHeight(1.5f, 2.0f).setColor(9662796).setBiomeName("redMountains");
-        redMountainsFoothills = new LOTRBiomeGenRedMountainsFoothills(118, true).setTemperatureRainfall(0.7f, 0.4f).setMinMaxHeight(0.5f, 0.9f).setColor(10064978).setBiomeName("redMountainsFoothills");
+        rhunForest2 = new LOTRBiomeGenRhunForest2(226, true).setTemperatureRainfall(0.8f, 0.9f).setMinMaxHeight(0.2f, 0.3f).setColor(7834942).setBiomeName("rhunAvariForest");
         dolGuldur = new LOTRBiomeGenDolGuldur(119, true).setTemperatureRainfall(0.6f, 0.8f).setMinMaxHeight(0.2f, 0.5f).setColor(2371343).setBiomeName("dolGuldur");
         nearHaradSemiDesert = new LOTRBiomeGenNearHaradSemiDesert(120, true).setTemperatureRainfall(1.5f, 0.2f).setMinMaxHeight(0.2f, 0.1f).setColor(12434282).setBiomeName("nearHaradSemiDesert");
         farHaradArid = new LOTRBiomeGenFarHaradArid(121, true).setTemperatureRainfall(1.5f, 0.3f).setMinMaxHeight(0.2f, 0.15f).setColor(11185749).setBiomeName("farHaradArid");
@@ -641,6 +714,43 @@ extends BiomeGenBase {
         halfTrollForest = new LOTRBiomeGenHalfTrollForest(169, true).setTemperatureRainfall(0.8f, 0.2f).setMinMaxHeight(0.3f, 0.4f).setColor(5992500).setBiomeName("halfTrollForest");
         farHaradKanuka = new LOTRBiomeGenKanuka(170, true).setTemperatureRainfall(1.0f, 1.0f).setMinMaxHeight(0.3f, 0.5f).setColor(5142552).setBiomeName("farHaradKanuka");
         utumno = new LOTRBiomeGenUtumno(0).setTemperatureRainfall(2.0f, 0.0f).setMinMaxHeight(0.0f, 0.0f).setColor(0).setBiomeName("utumno");
+        moria = new LOTRBiomeGenMoria(171, true).setTemperatureRainfall(0.2f, 0.5f).setMinMaxHeight(2.0f, 2.0f).setColor(14539991).setBiomeName("moria");
+        angband = new LOTRBiomeGenAngband(172, true).setTemperatureRainfall(0.0f, 0.2f).setMinMaxHeight(0.1f, 0.1f).setColor(13421767).setBiomeName("angband");
+        redMountains2 = new LOTRBiomeGenRedMountainsBlacklock(189, true).setTemperatureRainfall(0.3f, 0.4f).setMinMaxHeight(1.5f, 2.0f).setColor(10056783).setBiomeName("orocarni");
+        redMountainsFoothills2 = new LOTRBiomeGenRedMountainsFoothillsStiffbeard(190, true).setTemperatureRainfall(0.7f, 0.4f).setMinMaxHeight(0.5f, 0.9f).setColor(10392917).setBiomeName("orocarniFoothills");
+        redMountains3 = new LOTRBiomeGenRedMountainsStiffbeard(193, true).setTemperatureRainfall(0.3f, 0.2f).setMinMaxHeight(1.5f, 2.0f).setColor(9859662).setBiomeName("middle_orocarni");
+        redMountains4 = new LOTRBiomeGenRedMountainsIronfist(195, true).setTemperatureRainfall(0.0f, 0.2f).setMinMaxHeight(1.5f, 2.0f).setColor(15066597).setBiomeName("notrh_orocarni");
+        redMountainsFoothills3 = new LOTRBiomeGenRedMountainsFoothillsBlacklock(194, true).setTemperatureRainfall(0.7f, 0.4f).setMinMaxHeight(0.5f, 0.9f).setColor(10393685).setBiomeName("middle_orocarniFoothills");
+        redMountains = new LOTRBiomeGenRedMountainsStonefoot(117, true).setTemperatureRainfall(0.4f, 0.3f).setMinMaxHeight(1.5f, 2.0f).setColor(9662796).setBiomeName("redMountainsStonefoot");
+        redMountainsFoothills = new LOTRBiomeGenRedMountainsFoothillsStonefoot(118, true).setTemperatureRainfall(0.7f, 0.4f).setMinMaxHeight(0.5f, 0.9f).setColor(10064978).setBiomeName("redMountainsFoothills");
+        forodwaithMountains2 = new LOTRBiomeGenForodwaithMountains2(191, true).setTemperatureRainfall(0.0f, 0.2f).setMinMaxHeight(2.0f, 2.0f).setColor(15395562).setBiomeName("angbandMountains");
+        uncharted_rhun = new LOTRBiomeGenUnchartedRhun(196, true).setTemperatureRainfall(0.9f, 0.3f).setMinMaxHeight(0.3f, 0.0f).setColor(11449194).setBiomeName("uncharted_rhun");
+        eastern_coasts = new LOTRBiomeGenEasternCoasts(198, true).setTemperatureRainfall(0.6f, 0.3f).setMinMaxHeight(0.3f, 0.0f).setColor(8165242).setBiomeName("eastern_coasts");
+        harhudor = new LOTRBiomeGenHarhudor(199, true).setTemperatureRainfall(1.0f, 0.8f).setMinMaxHeight(0.1f, 0.3f).setColor(12041329).setBiomeName("harhudor");
+        wasteland_rhun = new LOTRBiomeGenWastelandRhun(202, true).setTemperatureRainfall(0.6f, 0.3f).setMinMaxHeight(0.3f, 0.0f).setColor(9014877).setBiomeName("wasteland_rhun");
+        durmeth = new LOTRBiomeGenDurmeth(204, true).setTemperatureRainfall(0.9f, 0.3f).setMinMaxHeight(0.3f, 0.0f).setColor(11511180).setBiomeName("durmeth");
+        durmeth_mountains = new LOTRBiomeGenDurmethMountains(205, true).setTemperatureRainfall(0.0f, 0.2f).setMinMaxHeight(0.5f, 0.9f).setColor(13553354).setBiomeName("durmeth_Foothills");
+        taiga_rhun = new LOTRBiomeGenTaigaRhun(206, true).setTemperatureRainfall(0.9f, 0.3f).setMinMaxHeight(0.3f, 0.0f).setColor(6328653).setBiomeName("taiga_rhun");
+        sunLands = new LOTRBiomeSunLands(208, true).setTemperatureRainfall(2.0f, 0.5f).setMinMaxHeight(0.3f, 0.0f).setColor(13744486).setBiomeName("sunLands");
+        tundrarhun = new LOTRBiomeGenTundra2(209, true).setTemperatureRainfall(0.1f, 0.3f).setMinMaxHeight(0.1f, 0.2f).setColor(11905936).setBiomeName("tundrarhun");
+        dimrill = new LOTRBiomeGenDimrillDale(210, true).setTemperatureRainfall(0.8f, 1.0f).setMinMaxHeight(0.6f, 0.4f).setColor(6134095).setBiomeName("dimrill");
+        bizar = new LOTRBiomeGenBizar(197, true).setTemperatureRainfall(0.6f, 0.3f).setMinMaxHeight(0.3f, 0.0f).setColor(9537614).setBiomeName("bizar_sham");
+        fallforodwaith = new LOTRBiomeGenFallForodwaith(173, true).setTemperatureRainfall(0.0f, 0.2f).setMinMaxHeight(0.1f, 0.1f).setColor(13750735).setBiomeName("fallforodwaith");
+        forestShelter = new LOTRBiomeGenForestShelter(211, true).setTemperatureRainfall(0.6f, 1.2f).setMinMaxHeight(0.0f, 0.1f).setColor(4087329).setBiomeName("forestShelter");
+        southMirkwood = new LOTRBiomeGenSouthMirkwoodCorrupted(212, true).setTemperatureRainfall(0.6f, 0.8f).setMinMaxHeight(0.2f, 0.5f).setColor(2308368).setBiomeName("southMirkwood");
+        beornsDomain = new LOTRBiomeGenBeornsDomain(213, true).setTemperatureRainfall(0.9f, 1.1f).setMinMaxHeight(0.05f, 0.05f).setColor(6590783).setBiomeName("beornsDomain");
+        anduinSource = new LOTRBiomeGenAnduinSource(214, true).setTemperatureRainfall(0.7f, 0.7f).setMinMaxHeight(0.6f, 0.4f).setColor(6920515).setBiomeName("anduinSource");
+        harhudorForest = new LOTRBiomeGenHarhudorForest(215, true).setTemperatureRainfall(1.5f, 1.0f).setMinMaxHeight(0.1f, 0.3f).setColor(7508280).setBiomeName("harhudorForest");
+        harhudorForestEdge = new LOTRBiomeGenHarhudorForestEdge(216, true).setTemperatureRainfall(1.5f, 0.8f).setMinMaxHeight(0.2f, 0.2f).setColor(8561471).setBiomeName("harhudorForestEdge");
+        rohanGate = new LOTRBiomeGenRohanGate(217, true).setTemperatureRainfall(0.4f, 0.7f).setMinMaxHeight(0.3f, 0.5f).setColor(7445577).setBiomeName("rohanGate");
+        iceugol = new LOTRBiomeGenAngband2(218, true).setTemperatureRainfall(0.0f, 0.2f).setMinMaxHeight(0.1f, 0.1f).setColor(13027010).setBiomeName("iceugol");
+        snowtaiga = new LOTRBiomeGenTaiga2(219, true).setTemperatureRainfall(0.1f, 0.7f).setMinMaxHeight(0.1f, 0.5f).setColor(9219966).setBiomeName("taigaSnow");
+        forohel = new LOTRBiomeGenTundra3(220, true).setTemperatureRainfall(0.1f, 0.3f).setMinMaxHeight(0.1f, 0.2f).setColor(13026228).setBiomeName("forohel");
+        snowtundra = new LOTRBiomeGenTundra4(221, true).setTemperatureRainfall(0.1f, 0.3f).setMinMaxHeight(0.1f, 0.2f).setColor(14076856).setBiomeName("snowtundra");
+        notDeepOcean = new LOTRBiomeGenOcean(222, false).setTemperatureRainfall(0.85f, 0.8f).setMinMaxHeight(-0.4f, 0.3f).setColor(225197).setBiomeName("ocean");
+        middleDeepOcean = new LOTRBiomeGenOcean(223, false).setTemperatureRainfall(0.85f, 0.8f).setMinMaxHeight(-0.75f, 0.3f).setColor(153997).setBiomeName("ocean");
+        rhunSemiDesert = new LOTRBiomeGenRhunSemiDesert(224, true).setTemperatureRainfall(1.5f, 0.2f).setMinMaxHeight(0.2f, 0.1f).setColor(12037994).setBiomeName("rhunSemiDesert");
+        anfalas = new LOTRBiomeGenAnfalas(225, true).setTemperatureRainfall(0.9f, 0.9f).setMinMaxHeight(0.07f, 0.2f).setColor(9152597).setBiomeName("anfalas");
     }
 
     public LOTRBiome(int i, boolean major) {
@@ -932,8 +1042,6 @@ extends BiomeGenBase {
     }
 
     public void generateBiomeTerrain(World world, Random random, Block[] blocks, byte[] meta, int i, int k, double stoneNoise, int height, LOTRBiomeVariant variant) {
-        boolean marsh;
-        double d1;
         int chunkX = i & 0xF;
         int chunkZ = k & 0xF;
         int xzIndex = chunkX * 16 + chunkZ;
@@ -947,14 +1055,17 @@ extends BiomeGenBase {
         Block filler = this.fillerBlock;
         int fillerMeta = this.fillerBlockMeta;
         if (this.enableRocky && height >= 90) {
-            double d2;
             float hFactor = (float)(height - 90) / 10.0f;
             float thresh = 1.2f - hFactor * 0.2f;
             thresh = Math.max(thresh, 0.0f);
             double d12 = biomeTerrainNoise.func_151601_a((double)i * 0.03, (double)k * 0.03);
-            if (d12 + (d2 = biomeTerrainNoise.func_151601_a((double)i * 0.3, (double)k * 0.3)) > (double)thresh) {
+            if (d12 + biomeTerrainNoise.func_151601_a((double)i * 0.3, (double)k * 0.3) > (double)thresh) {
                 if (random.nextInt(5) == 0) {
                     top = Blocks.gravel;
+                    topMeta = 0;
+                }
+                if (random.nextInt(5) == 0) {
+                    top = LOTRMod.susGravel;
                     topMeta = 0;
                 } else {
                     top = Blocks.stone;
@@ -968,16 +1079,18 @@ extends BiomeGenBase {
                 }
                 for (int j = height; j >= prevHeight; --j) {
                     int index = xzIndex * ySize + j;
-                    blocks[index] = top;
-                    meta[index] = topMeta;
+                    blocks[index] = Blocks.stone;
+                    meta[index] = 0;
                 }
             }
         }
         if (this.enablePodzol) {
             boolean podzol = false;
             if (this.topBlock == Blocks.grass) {
+                float f;
                 float trees = (float)this.decorator.treesPerChunk + this.getTreeIncreaseChance();
-                if ((trees = Math.max(trees, variant.treeFactor * 0.5f)) >= 1.0f) {
+                trees = Math.max(trees, variant.treeFactor * 0.5f);
+                if (f >= 1.0f) {
                     float thresh = 0.8f;
                     thresh -= trees * 0.15f;
                     thresh = Math.max(thresh, 0.0f);
@@ -1004,7 +1117,7 @@ extends BiomeGenBase {
                 }
             }
         }
-        if ((marsh = variant.hasMarsh) && (d1 = LOTRBiomeVariant.marshNoise.func_151601_a((double)i * 0.1, (double)k * 0.1)) > -0.1) {
+        if (variant.hasMarsh && LOTRBiomeVariant.marshNoise.func_151601_a((double)i * 0.1, (double)k * 0.1) > -0.1) {
             for (int j = ySize - 1; j >= 0; --j) {
                 int index = xzIndex * ySize + j;
                 if (blocks[index] != null && blocks[index].getMaterial() == Material.air) continue;
@@ -1117,7 +1230,7 @@ extends BiomeGenBase {
             return this.isDwarven;
         }
         this.initDwarven = true;
-        this.isDwarven = this.npcSpawnList.containsEntityClassByDefault(LOTREntityDwarf.class, world) && !this.npcSpawnList.containsEntityClassByDefault(LOTREntityWickedDwarf.class, world);
+        this.isDwarven = this.npcSpawnList.containsEntityClassByDefault(LOTREntityDwarf.class, world) && !this.npcSpawnList.containsEntityClassByDefault(LOTREntityWickedDwarf.class, world) && !this.npcSpawnList.containsEntityClassByDefault(LOTREntityWickedDwarf2.class, world);
         return this.isDwarven;
     }
 
@@ -1253,9 +1366,14 @@ extends BiomeGenBase {
 
     @SideOnly(value=Side.CLIENT)
     public final int getBaseGrassColor(int i, int j, int k) {
-        LOTRBiomeVariant variant = ((LOTRWorldChunkManager)LOTRMod.proxy.getClientWorld().getWorldChunkManager()).getBiomeVariantAt(i, k);
-        float temp = this.getFloatTemperature(i, j, k) + variant.tempBoost;
-        float rain = this.rainfall + variant.rainBoost;
+        float temp = this.getFloatTemperature(i, j, k);
+        float rain = this.rainfall;
+        WorldChunkManager wcMgr = LOTRMod.proxy.getClientWorld().getWorldChunkManager();
+        if (wcMgr instanceof LOTRWorldChunkManager) {
+            LOTRBiomeVariant variant = ((LOTRWorldChunkManager)wcMgr).getBiomeVariantAt(i, k);
+            temp += variant.tempBoost;
+            rain += variant.rainBoost;
+        }
         temp = MathHelper.clamp_float((float)temp, (float)0.0f, (float)1.0f);
         rain = MathHelper.clamp_float((float)rain, (float)0.0f, (float)1.0f);
         return ColorizerGrass.getGrassColor((double)temp, (double)rain);
@@ -1348,58 +1466,6 @@ extends BiomeGenBase {
         waterLimitSouth = 160000;
     }
 
-    public static class GrassBlockAndMeta {
-        public final Block block;
-        public final int meta;
-
-        public GrassBlockAndMeta(Block b, int i) {
-            this.block = b;
-            this.meta = i;
-        }
-    }
-
-    public static class BiomeTerrain {
-        private LOTRBiome theBiome;
-        private double xzScale = -1.0;
-        private double heightStretchFactor = -1.0;
-
-        public BiomeTerrain(LOTRBiome biome) {
-            this.theBiome = biome;
-        }
-
-        public void setXZScale(double d) {
-            this.xzScale = d;
-        }
-
-        public void resetXZScale() {
-            this.setXZScale(-1.0);
-        }
-
-        public boolean hasXZScale() {
-            return this.xzScale != -1.0;
-        }
-
-        public double getXZScale() {
-            return this.xzScale;
-        }
-
-        public void setHeightStretchFactor(double d) {
-            this.heightStretchFactor = d;
-        }
-
-        public void resetHeightStretchFactor() {
-            this.setHeightStretchFactor(-1.0);
-        }
-
-        public boolean hasHeightStretchFactor() {
-            return this.heightStretchFactor != -1.0;
-        }
-
-        public double getHeightStretchFactor() {
-            return this.heightStretchFactor;
-        }
-    }
-
     public static class BiomeColors {
         private LOTRBiome theBiome;
         private Color grass;
@@ -1477,6 +1543,62 @@ extends BiomeGenBase {
         public void updateWater(int rgb) {
             this.theBiome.waterColorMultiplier = rgb;
         }
+    }
+
+    public static class BiomeTerrain {
+        private double xzScale = -1.0;
+        private double heightStretchFactor = -1.0;
+
+        public BiomeTerrain(LOTRBiome biome) {
+        }
+
+        public void setXZScale(double d) {
+            this.xzScale = d;
+        }
+
+        public void resetXZScale() {
+            this.setXZScale(-1.0);
+        }
+
+        public boolean hasXZScale() {
+            return this.xzScale != -1.0;
+        }
+
+        public double getXZScale() {
+            return this.xzScale;
+        }
+
+        public void setHeightStretchFactor(double d) {
+            this.heightStretchFactor = d;
+        }
+
+        public void resetHeightStretchFactor() {
+            this.setHeightStretchFactor(-1.0);
+        }
+
+        public boolean hasHeightStretchFactor() {
+            return this.heightStretchFactor != -1.0;
+        }
+
+        public double getHeightStretchFactor() {
+            return this.heightStretchFactor;
+        }
+    }
+
+    public static class GrassBlockAndMeta {
+        public final Block block;
+        public final int meta;
+
+        public GrassBlockAndMeta(Block b, int i) {
+            this.block = b;
+            this.meta = i;
+        }
+    }
+
+    public static interface ImmuneToHeat {
+    }
+
+    public static interface ImmuneToFrost {
     }
 
 }

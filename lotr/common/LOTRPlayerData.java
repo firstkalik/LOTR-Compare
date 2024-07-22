@@ -8,6 +8,7 @@
  *  cpw.mods.fml.common.network.simpleimpl.IMessage
  *  cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper
  *  net.minecraft.block.Block
+ *  net.minecraft.command.ICommandSender
  *  net.minecraft.entity.Entity
  *  net.minecraft.entity.EntityList
  *  net.minecraft.entity.EntityLiving
@@ -18,6 +19,8 @@
  *  net.minecraft.entity.player.InventoryPlayer
  *  net.minecraft.entity.player.PlayerCapabilities
  *  net.minecraft.item.Item
+ *  net.minecraft.item.ItemArmor
+ *  net.minecraft.item.ItemArmor$ArmorMaterial
  *  net.minecraft.item.ItemBlock
  *  net.minecraft.item.ItemStack
  *  net.minecraft.nbt.NBTBase
@@ -46,6 +49,7 @@
  *  net.minecraft.world.gen.ChunkProviderServer
  *  org.apache.commons.lang3.StringUtils
  *  org.apache.commons.lang3.tuple.Pair
+ *  org.apache.logging.log4j.Logger
  */
 package lotr.common;
 
@@ -64,6 +68,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import lotr.common.LOTRAchievement;
+import lotr.common.LOTRCapes;
 import lotr.common.LOTRCommonProxy;
 import lotr.common.LOTRConfig;
 import lotr.common.LOTRDimension;
@@ -83,6 +88,7 @@ import lotr.common.fac.LOTRAlignmentValues;
 import lotr.common.fac.LOTRFaction;
 import lotr.common.fac.LOTRFactionData;
 import lotr.common.fac.LOTRFactionRank;
+import lotr.common.fellowship.FellowshipUpdateType;
 import lotr.common.fellowship.LOTRFellowship;
 import lotr.common.fellowship.LOTRFellowshipClient;
 import lotr.common.fellowship.LOTRFellowshipData;
@@ -105,6 +111,7 @@ import lotr.common.network.LOTRPacketFTScreen;
 import lotr.common.network.LOTRPacketFTTimer;
 import lotr.common.network.LOTRPacketFactionData;
 import lotr.common.network.LOTRPacketFellowship;
+import lotr.common.network.LOTRPacketFellowshipPartialUpdate;
 import lotr.common.network.LOTRPacketFellowshipRemove;
 import lotr.common.network.LOTRPacketHandler;
 import lotr.common.network.LOTRPacketLoginPlayerData;
@@ -124,6 +131,7 @@ import lotr.common.quest.LOTRMiniQuest;
 import lotr.common.quest.LOTRMiniQuestEvent;
 import lotr.common.quest.LOTRMiniQuestWelcome;
 import lotr.common.quest.MiniQuestSelector;
+import lotr.common.util.LOTRLog;
 import lotr.common.world.LOTRUtumnoLevel;
 import lotr.common.world.LOTRWorldProvider;
 import lotr.common.world.biome.LOTRBiome;
@@ -134,6 +142,7 @@ import lotr.common.world.map.LOTRCustomWaypoint;
 import lotr.common.world.map.LOTRCustomWaypointLogger;
 import lotr.common.world.map.LOTRWaypoint;
 import net.minecraft.block.Block;
+import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
@@ -144,6 +153,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.entity.player.PlayerCapabilities;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
@@ -171,6 +181,7 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.gen.ChunkProviderServer;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
+import org.apache.logging.log4j.Logger;
 
 public class LOTRPlayerData {
     private UUID playerUUID;
@@ -239,10 +250,16 @@ public class LOTRPlayerData {
     private boolean teleportedME = false;
     private LOTRPlayerQuestData questData = new LOTRPlayerQuestData(this);
     private int siegeActiveTime;
+    public LOTRCapes cape;
+    private static Map capes = new HashMap();
+    public long lastOnlineTime = -1L;
+    private static Map capesEnabled = new HashMap();
+    private boolean fastTravelDisabled;
 
     public LOTRPlayerData(UUID uuid) {
         this.playerUUID = uuid;
         this.viewingFaction = LOTRFaction.HOBBIT;
+        this.ftSinceTick = LOTRLevelData.getWaypointCooldownMax() * 20;
     }
 
     public UUID getPlayerUUID() {
@@ -250,9 +267,16 @@ public class LOTRPlayerData {
     }
 
     private EntityPlayer getPlayer() {
-        Object[] searchWorlds = null;
-        searchWorlds = LOTRMod.proxy.isClient() ? new World[]{LOTRMod.proxy.getClientWorld()} : MinecraftServer.getServer().worldServers;
-        for (WorldServer world : searchWorlds) {
+        WorldServer[] searchWorlds;
+        WorldServer[] arrworldServer;
+        if (LOTRMod.proxy.isClient()) {
+            World[] arrworld = new World[1];
+            arrworldServer = arrworld;
+            arrworld[0] = LOTRMod.proxy.getClientWorld();
+        } else {
+            arrworldServer = MinecraftServer.getServer().worldServers;
+        }
+        for (WorldServer world : searchWorlds = arrworldServer) {
             EntityPlayer entityplayer = world.func_152378_a(this.playerUUID);
             if (entityplayer == null) continue;
             return entityplayer;
@@ -261,8 +285,8 @@ public class LOTRPlayerData {
     }
 
     private EntityPlayer getOtherPlayer(UUID uuid) {
-        for (WorldServer world : MinecraftServer.getServer().worldServers) {
-            EntityPlayer entityplayer = world.func_152378_a(uuid);
+        for (WorldServer worldServer : MinecraftServer.getServer().worldServers) {
+            EntityPlayer entityplayer = worldServer.func_152378_a(uuid);
             if (entityplayer == null) continue;
             return entityplayer;
         }
@@ -312,9 +336,9 @@ public class LOTRPlayerData {
         playerData.setBoolean("HideAlignment", this.hideAlignment);
         NBTTagList takenRewardsTags = new NBTTagList();
         for (LOTRFaction faction : this.takenAlignmentRewards) {
-            NBTTagCompound nbt = new NBTTagCompound();
-            nbt.setString("Faction", faction.codeName());
-            takenRewardsTags.appendTag((NBTBase)nbt);
+            NBTTagCompound nbt2 = new NBTTagCompound();
+            nbt2.setString("Faction", faction.codeName());
+            takenRewardsTags.appendTag((NBTBase)nbt2);
         }
         playerData.setTag("TakenAlignmentRewards", (NBTBase)takenRewardsTags);
         if (this.pledgeFaction != null) {
@@ -336,14 +360,17 @@ public class LOTRPlayerData {
         playerData.setBoolean("ConquestKills", this.conquestKills);
         NBTTagList achievementTags = new NBTTagList();
         for (LOTRAchievement achievement : this.achievements) {
-            NBTTagCompound nbt = new NBTTagCompound();
-            nbt.setString("Category", achievement.category.name());
-            nbt.setInteger("ID", achievement.ID);
-            achievementTags.appendTag((NBTBase)nbt);
+            NBTTagCompound nbt3 = new NBTTagCompound();
+            nbt3.setString("Category", achievement.category.name());
+            nbt3.setInteger("ID", achievement.ID);
+            achievementTags.appendTag((NBTBase)nbt3);
         }
         playerData.setTag("Achievements", (NBTBase)achievementTags);
         if (this.shield != null) {
             playerData.setString("Shield", this.shield.name());
+        }
+        if (this.cape != null) {
+            playerData.setString("Cape", this.cape.name());
         }
         playerData.setBoolean("FriendlyFire", this.friendlyFire);
         playerData.setBoolean("HiredDeathMessages", this.hiredDeathMessages);
@@ -407,6 +434,7 @@ public class LOTRPlayerData {
             playerData.setString("MountUUID", this.uuidToMount.toString());
         }
         playerData.setInteger("MountUUIDTime", this.uuidToMountTime);
+        playerData.setLong("LastOnlineTime", this.lastOnlineTime);
         NBTTagList unlockedFTRegionTags = new NBTTagList();
         for (LOTRWaypoint.Region region : this.unlockedFTRegions) {
             NBTTagCompound nbt9 = new NBTTagCompound();
@@ -471,19 +499,19 @@ public class LOTRPlayerData {
         playerData.setInteger("NextCWPID", this.nextCwpID);
         NBTTagList fellowshipTags = new NBTTagList();
         for (UUID fsID : this.fellowshipIDs) {
-            NBTTagCompound nbt = new NBTTagCompound();
-            nbt.setString("ID", fsID.toString());
-            fellowshipTags.appendTag((NBTBase)nbt);
+            NBTTagCompound nbt4 = new NBTTagCompound();
+            nbt4.setString("ID", fsID.toString());
+            fellowshipTags.appendTag((NBTBase)nbt4);
         }
         playerData.setTag("Fellowships", (NBTBase)fellowshipTags);
         NBTTagList fellowshipInviteTags = new NBTTagList();
         for (LOTRFellowshipInvite invite : this.fellowshipInvites) {
-            NBTTagCompound nbt = new NBTTagCompound();
-            nbt.setString("ID", invite.fellowshipID.toString());
+            NBTTagCompound nbt5 = new NBTTagCompound();
+            nbt5.setString("ID", invite.fellowshipID.toString());
             if (invite.inviterID != null) {
-                nbt.setString("InviterID", invite.inviterID.toString());
+                nbt5.setString("InviterID", invite.inviterID.toString());
             }
-            fellowshipInviteTags.appendTag((NBTBase)nbt);
+            fellowshipInviteTags.appendTag((NBTBase)nbt5);
         }
         playerData.setTag("FellowshipInvites", (NBTBase)fellowshipInviteTags);
         if (this.chatBoundFellowshipID != null) {
@@ -498,16 +526,18 @@ public class LOTRPlayerData {
     }
 
     public void load(NBTTagCompound playerData) {
+        NBTTagCompound nbt;
         LOTRShields savedShield;
         UUID fsID;
-        LOTRTitle title;
         LOTRFaction cur;
         LOTRFaction faction;
+        LOTRTitle title;
+        LOTRCapes savedCape;
         this.alignments.clear();
         NBTTagList alignmentTags = playerData.getTagList("AlignmentMap", 10);
         for (int i = 0; i < alignmentTags.tagCount(); ++i) {
             float alignment;
-            NBTTagCompound nbt = alignmentTags.getCompoundTagAt(i);
+            nbt = alignmentTags.getCompoundTagAt(i);
             LOTRFaction faction2 = LOTRFaction.forName(nbt.getString("Faction"));
             if (faction2 == null) continue;
             if (nbt.hasKey("Alignment")) {
@@ -521,7 +551,7 @@ public class LOTRPlayerData {
         this.factionDataMap.clear();
         NBTTagList factionDataTags = playerData.getTagList("FactionData", 10);
         for (int i = 0; i < factionDataTags.tagCount(); ++i) {
-            NBTTagCompound nbt = factionDataTags.getCompoundTagAt(i);
+            nbt = factionDataTags.getCompoundTagAt(i);
             LOTRFaction faction3 = LOTRFaction.forName(nbt.getString("Faction"));
             if (faction3 == null) continue;
             LOTRFactionData data = new LOTRFactionData(this, faction3);
@@ -534,9 +564,9 @@ public class LOTRPlayerData {
         this.prevRegionFactions.clear();
         NBTTagList prevRegionFactionTags = playerData.getTagList("PrevRegionFactions", 10);
         for (int i = 0; i < prevRegionFactionTags.tagCount(); ++i) {
-            NBTTagCompound nbt = prevRegionFactionTags.getCompoundTagAt(i);
-            LOTRDimension.DimensionRegion region = LOTRDimension.DimensionRegion.forName(nbt.getString("Region"));
-            faction = LOTRFaction.forName(nbt.getString("Faction"));
+            NBTTagCompound nbt2 = prevRegionFactionTags.getCompoundTagAt(i);
+            LOTRDimension.DimensionRegion region = LOTRDimension.DimensionRegion.forName(nbt2.getString("Region"));
+            faction = LOTRFaction.forName(nbt2.getString("Faction"));
             if (region == null || faction == null) continue;
             this.prevRegionFactions.put(region, faction);
         }
@@ -544,8 +574,8 @@ public class LOTRPlayerData {
         this.takenAlignmentRewards.clear();
         NBTTagList takenRewardsTags = playerData.getTagList("TakenAlignmentRewards", 10);
         for (int i = 0; i < takenRewardsTags.tagCount(); ++i) {
-            NBTTagCompound nbt = takenRewardsTags.getCompoundTagAt(i);
-            faction = LOTRFaction.forName(nbt.getString("Faction"));
+            NBTTagCompound nbt3 = takenRewardsTags.getCompoundTagAt(i);
+            faction = LOTRFaction.forName(nbt3.getString("Faction"));
             if (faction == null) continue;
             this.takenAlignmentRewards.add(faction);
         }
@@ -583,9 +613,9 @@ public class LOTRPlayerData {
         this.achievements.clear();
         NBTTagList achievementTags = playerData.getTagList("Achievements", 10);
         for (int i = 0; i < achievementTags.tagCount(); ++i) {
-            NBTTagCompound nbt = achievementTags.getCompoundTagAt(i);
-            String category = nbt.getString("Category");
-            int ID = nbt.getInteger("ID");
+            NBTTagCompound nbt4 = achievementTags.getCompoundTagAt(i);
+            String category = nbt4.getString("Category");
+            int ID = nbt4.getInteger("ID");
             LOTRAchievement achievement = LOTRAchievement.achievementForCategoryAndID(LOTRAchievement.categoryForName(category), ID);
             if (achievement == null || this.achievements.contains(achievement)) continue;
             this.achievements.add(achievement);
@@ -593,6 +623,10 @@ public class LOTRPlayerData {
         this.shield = null;
         if (playerData.hasKey("Shield") && (savedShield = LOTRShields.shieldForName(playerData.getString("Shield"))) != null) {
             this.shield = savedShield;
+        }
+        this.cape = null;
+        if (playerData.hasKey("Cape") && (savedCape = LOTRCapes.capeForName(playerData.getString("Cape"))) != null) {
+            this.cape = savedCape;
         }
         if (playerData.hasKey("FriendlyFire")) {
             this.friendlyFire = playerData.getBoolean("FriendlyFire");
@@ -609,16 +643,16 @@ public class LOTRPlayerData {
         this.miniQuests.clear();
         NBTTagList miniquestTags = playerData.getTagList("MiniQuests", 10);
         for (int i = 0; i < miniquestTags.tagCount(); ++i) {
-            NBTTagCompound nbt = miniquestTags.getCompoundTagAt(i);
-            LOTRMiniQuest quest = LOTRMiniQuest.loadQuestFromNBT(nbt, this);
+            NBTTagCompound nbt5 = miniquestTags.getCompoundTagAt(i);
+            LOTRMiniQuest quest = LOTRMiniQuest.loadQuestFromNBT(nbt5, this);
             if (quest == null) continue;
             this.miniQuests.add(quest);
         }
         this.miniQuestsCompleted.clear();
         NBTTagList miniquestCompletedTags = playerData.getTagList("MiniQuestsCompleted", 10);
         for (int i = 0; i < miniquestCompletedTags.tagCount(); ++i) {
-            NBTTagCompound nbt = miniquestCompletedTags.getCompoundTagAt(i);
-            LOTRMiniQuest quest = LOTRMiniQuest.loadQuestFromNBT(nbt, this);
+            NBTTagCompound nbt6 = miniquestCompletedTags.getCompoundTagAt(i);
+            LOTRMiniQuest quest = LOTRMiniQuest.loadQuestFromNBT(nbt6, this);
             if (quest == null) continue;
             this.miniQuestsCompleted.add(quest);
         }
@@ -653,10 +687,10 @@ public class LOTRPlayerData {
         this.sentMessageTypes.clear();
         NBTTagList sentMessageTags = playerData.getTagList("SentMessageTypes", 10);
         for (int i = 0; i < sentMessageTags.tagCount(); ++i) {
-            NBTTagCompound nbt = sentMessageTags.getCompoundTagAt(i);
-            LOTRGuiMessageTypes message = LOTRGuiMessageTypes.forSaveName(nbt.getString("Message"));
+            NBTTagCompound nbt7 = sentMessageTags.getCompoundTagAt(i);
+            LOTRGuiMessageTypes message = LOTRGuiMessageTypes.forSaveName(nbt7.getString("Message"));
             if (message == null) continue;
-            boolean sent = nbt.getBoolean("Sent");
+            boolean sent = nbt7.getBoolean("Sent");
             this.sentMessageTypes.put(message, sent);
         }
         this.playerTitle = null;
@@ -668,18 +702,23 @@ public class LOTRPlayerData {
         if (playerData.hasKey("FemRankOverride")) {
             this.femRankOverride = playerData.getBoolean("FemRankOverride");
         }
-        this.ftSinceTick = playerData.getInteger("FTSince");
+        if (playerData.hasKey("FTSince")) {
+            this.ftSinceTick = playerData.getInteger("FTSince");
+        }
         this.targetFTWaypoint = null;
         this.uuidToMount = null;
         if (playerData.hasKey("MountUUID")) {
             this.uuidToMount = UUID.fromString(playerData.getString("MountUUID"));
         }
         this.uuidToMountTime = playerData.getInteger("MountUUIDTime");
+        if (playerData.hasKey("LastOnlineTime")) {
+            this.lastOnlineTime = playerData.getLong("LastOnlineTime");
+        }
         this.unlockedFTRegions.clear();
         NBTTagList unlockedFTRegionTags = playerData.getTagList("UnlockedFTRegions", 10);
         for (int i = 0; i < unlockedFTRegionTags.tagCount(); ++i) {
-            NBTTagCompound nbt = unlockedFTRegionTags.getCompoundTagAt(i);
-            String regionName = nbt.getString("Name");
+            NBTTagCompound nbt8 = unlockedFTRegionTags.getCompoundTagAt(i);
+            String regionName = nbt8.getString("Name");
             LOTRWaypoint.Region region = LOTRWaypoint.regionForName(regionName);
             if (region == null) continue;
             this.unlockedFTRegions.add(region);
@@ -687,36 +726,36 @@ public class LOTRPlayerData {
         this.customWaypoints.clear();
         NBTTagList customWaypointTags = playerData.getTagList("CustomWaypoints", 10);
         for (int i = 0; i < customWaypointTags.tagCount(); ++i) {
-            NBTTagCompound nbt = customWaypointTags.getCompoundTagAt(i);
-            LOTRCustomWaypoint waypoint = LOTRCustomWaypoint.readFromNBT(nbt, this);
+            NBTTagCompound nbt9 = customWaypointTags.getCompoundTagAt(i);
+            LOTRCustomWaypoint waypoint = LOTRCustomWaypoint.readFromNBT(nbt9, this);
             this.customWaypoints.add(waypoint);
         }
         this.cwpSharedUnlocked.clear();
         NBTTagList cwpSharedUnlockedTags = playerData.getTagList("CWPSharedUnlocked", 10);
         for (int i = 0; i < cwpSharedUnlockedTags.tagCount(); ++i) {
-            NBTTagCompound nbt = cwpSharedUnlockedTags.getCompoundTagAt(i);
-            UUID sharingPlayer = UUID.fromString(nbt.getString("SharingPlayer"));
+            NBTTagCompound nbt10 = cwpSharedUnlockedTags.getCompoundTagAt(i);
+            UUID sharingPlayer = UUID.fromString(nbt10.getString("SharingPlayer"));
             if (sharingPlayer == null) continue;
-            int ID = nbt.getInteger("CustomID");
+            int ID = nbt10.getInteger("CustomID");
             CWPSharedKey key = CWPSharedKey.keyFor(sharingPlayer, ID);
             this.cwpSharedUnlocked.add(key);
         }
         this.cwpSharedHidden.clear();
         NBTTagList cwpSharedHiddenTags = playerData.getTagList("CWPSharedHidden", 10);
         for (int i = 0; i < cwpSharedHiddenTags.tagCount(); ++i) {
-            NBTTagCompound nbt = cwpSharedHiddenTags.getCompoundTagAt(i);
-            UUID sharingPlayer = UUID.fromString(nbt.getString("SharingPlayer"));
+            NBTTagCompound nbt11 = cwpSharedHiddenTags.getCompoundTagAt(i);
+            UUID sharingPlayer = UUID.fromString(nbt11.getString("SharingPlayer"));
             if (sharingPlayer == null) continue;
-            int ID = nbt.getInteger("CustomID");
+            int ID = nbt11.getInteger("CustomID");
             CWPSharedKey key = CWPSharedKey.keyFor(sharingPlayer, ID);
             this.cwpSharedHidden.add(key);
         }
         this.wpUseCounts.clear();
         NBTTagList wpCooldownTags = playerData.getTagList("WPUses", 10);
         for (int i = 0; i < wpCooldownTags.tagCount(); ++i) {
-            NBTTagCompound nbt = wpCooldownTags.getCompoundTagAt(i);
-            String name = nbt.getString("WPName");
-            int count = nbt.getInteger("Count");
+            NBTTagCompound nbt12 = wpCooldownTags.getCompoundTagAt(i);
+            String name = nbt12.getString("WPName");
+            int count = nbt12.getInteger("Count");
             LOTRWaypoint wp = LOTRWaypoint.waypointForName(name);
             if (wp == null) continue;
             this.wpUseCounts.put(wp, count);
@@ -724,20 +763,20 @@ public class LOTRPlayerData {
         this.cwpUseCounts.clear();
         NBTTagList cwpCooldownTags = playerData.getTagList("CWPUses", 10);
         for (int i = 0; i < cwpCooldownTags.tagCount(); ++i) {
-            NBTTagCompound nbt = cwpCooldownTags.getCompoundTagAt(i);
-            int ID = nbt.getInteger("CustomID");
-            int count = nbt.getInteger("Count");
+            NBTTagCompound nbt13 = cwpCooldownTags.getCompoundTagAt(i);
+            int ID = nbt13.getInteger("CustomID");
+            int count = nbt13.getInteger("Count");
             this.cwpUseCounts.put(ID, count);
         }
         this.cwpSharedUseCounts.clear();
         NBTTagList cwpSharedCooldownTags = playerData.getTagList("CWPSharedUses", 10);
         for (int i = 0; i < cwpSharedCooldownTags.tagCount(); ++i) {
-            NBTTagCompound nbt = cwpSharedCooldownTags.getCompoundTagAt(i);
-            UUID sharingPlayer = UUID.fromString(nbt.getString("SharingPlayer"));
+            NBTTagCompound nbt14 = cwpSharedCooldownTags.getCompoundTagAt(i);
+            UUID sharingPlayer = UUID.fromString(nbt14.getString("SharingPlayer"));
             if (sharingPlayer == null) continue;
-            int ID = nbt.getInteger("CustomID");
+            int ID = nbt14.getInteger("CustomID");
             CWPSharedKey key = CWPSharedKey.keyFor(sharingPlayer, ID);
-            int count = nbt.getInteger("Count");
+            int count = nbt14.getInteger("Count");
             this.cwpSharedUseCounts.put(key, count);
         }
         this.nextCwpID = startCwpID;
@@ -747,20 +786,20 @@ public class LOTRPlayerData {
         this.fellowshipIDs.clear();
         NBTTagList fellowshipTags = playerData.getTagList("Fellowships", 10);
         for (int i = 0; i < fellowshipTags.tagCount(); ++i) {
-            NBTTagCompound nbt = fellowshipTags.getCompoundTagAt(i);
-            UUID fsID2 = UUID.fromString(nbt.getString("ID"));
+            NBTTagCompound nbt15 = fellowshipTags.getCompoundTagAt(i);
+            UUID fsID2 = UUID.fromString(nbt15.getString("ID"));
             if (fsID2 == null) continue;
             this.fellowshipIDs.add(fsID2);
         }
         this.fellowshipInvites.clear();
         NBTTagList fellowshipInviteTags = playerData.getTagList("FellowshipInvites", 10);
         for (int i = 0; i < fellowshipInviteTags.tagCount(); ++i) {
-            NBTTagCompound nbt = fellowshipInviteTags.getCompoundTagAt(i);
-            UUID fsID3 = UUID.fromString(nbt.getString("ID"));
+            NBTTagCompound nbt16 = fellowshipInviteTags.getCompoundTagAt(i);
+            UUID fsID3 = UUID.fromString(nbt16.getString("ID"));
             if (fsID3 == null) continue;
             UUID inviterID = null;
-            if (nbt.hasKey("InviterID")) {
-                inviterID = UUID.fromString(nbt.getString("InviterID"));
+            if (nbt16.hasKey("InviterID")) {
+                inviterID = UUID.fromString(nbt16.getString("InviterID"));
             }
             this.fellowshipInvites.add(new LOTRFellowshipInvite(fsID3, inviterID));
         }
@@ -828,7 +867,7 @@ public class LOTRPlayerData {
                 boolean valid = false;
                 if (this.getAlignment(fac) > 0.0f) {
                     for (LOTRFaction otherFac : LOTRFaction.getPlayableAlignmentFactions()) {
-                        if (fac == otherFac || !this.doFactionsDrain(fac, otherFac) || !(this.getAlignment(otherFac) > 0.0f)) continue;
+                        if (fac == otherFac || !this.doFactionsDrain(fac, otherFac) || this.getAlignment(otherFac) <= 0.0f) continue;
                         valid = true;
                         break;
                     }
@@ -864,7 +903,7 @@ public class LOTRPlayerData {
             this.runAchievementChecks((EntityPlayer)entityplayer, (World)world);
         }
         if (this.playerTitle != null && !this.playerTitle.getTitle().canPlayerUse((EntityPlayer)entityplayer)) {
-            ChatComponentTranslation msg = new ChatComponentTranslation("chat.lotr.loseTitle", new Object[]{this.playerTitle.getFullTitleComponent()});
+            ChatComponentTranslation msg = new ChatComponentTranslation("chat.lotr.loseTitle", new Object[]{this.playerTitle.getFullTitleComponent((EntityPlayer)entityplayer)});
             entityplayer.addChatMessage((IChatComponent)msg);
             this.setPlayerTitle(null);
         }
@@ -888,6 +927,9 @@ public class LOTRPlayerData {
             for (LOTRFaction fac : this.bountiesPlaced) {
                 ChatComponentTranslation msg = new ChatComponentTranslation("chat.lotr.bountyPlaced", new Object[]{fac.factionName()});
                 msg.getChatStyle().setColor(EnumChatFormatting.YELLOW);
+                ChatComponentTranslation factionNameComponent = new ChatComponentTranslation(fac.factionName(), new Object[0]);
+                factionNameComponent.getChatStyle().setColor(EnumChatFormatting.DARK_RED);
+                msg.appendSibling((IChatComponent)factionNameComponent);
                 entityplayer.addChatMessage((IChatComponent)msg);
             }
             this.bountiesPlaced.clear();
@@ -910,6 +952,7 @@ public class LOTRPlayerData {
         } else {
             this.setTicksUntilFT(0);
         }
+        this.lastOnlineTime = this.getCurrentOnlineTime();
         if (this.uuidToMount != null) {
             if (this.uuidToMountTime > 0) {
                 --this.uuidToMountTime;
@@ -995,7 +1038,6 @@ public class LOTRPlayerData {
         LOTRAlignmentBonusMap factionBonusMap = new LOTRAlignmentBonusMap();
         float prevMainAlignment = this.getAlignment(faction);
         float conquestBonus = 0.0f;
-        float notPledgedMultiplier = 0.5f;
         if (source.isKill) {
             List<LOTRFaction> killBonuses = faction.getBonusesForKilling();
             for (Object bonusFaction : killBonuses) {
@@ -1081,9 +1123,10 @@ public class LOTRPlayerData {
 
     private float checkBonusForPledgeEnemyLimit(LOTRFaction fac, float bonus) {
         if (this.isPledgeEnemyAlignmentLimited(fac)) {
-            float limit;
+            float f;
             float alignment = this.getAlignment(fac);
-            if (alignment > (limit = this.getPledgeEnemyAlignmentLimit(fac))) {
+            float limit = this.getPledgeEnemyAlignmentLimit(fac);
+            if (alignment > f) {
                 bonus = 0.0f;
             } else if (alignment + bonus > limit) {
                 bonus = limit - alignment;
@@ -1110,7 +1153,6 @@ public class LOTRPlayerData {
 
     private void runAlignmentDraining(EntityPlayerMP entityplayer) {
         if (LOTRConfig.alignmentDrain && this.pdTick % 1000 == 0) {
-            float drainLimit = 0.0f;
             ArrayList<LOTRFaction> drainFactions = new ArrayList<LOTRFaction>();
             List<LOTRFaction> allFacs = LOTRFaction.getPlayableAlignmentFactions();
             for (LOTRFaction fac1 : allFacs) {
@@ -1118,7 +1160,7 @@ public class LOTRPlayerData {
                     if (!this.doFactionsDrain(fac1, fac2)) continue;
                     float align1 = this.getAlignment(fac1);
                     float align2 = this.getAlignment(fac2);
-                    if (!(align1 > 0.0f) || !(align2 > 0.0f)) continue;
+                    if (align1 <= 0.0f || align2 <= 0.0f) continue;
                     if (!drainFactions.contains((Object)fac1)) {
                         drainFactions.add(fac1);
                     }
@@ -1206,8 +1248,7 @@ public class LOTRPlayerData {
     public List<LOTRFaction> getFactionsPreventingPledgeTo(LOTRFaction fac) {
         ArrayList<LOTRFaction> enemies = new ArrayList<LOTRFaction>();
         for (LOTRFaction otherFac : LOTRFaction.values()) {
-            float enemyAlign;
-            if (!otherFac.isPlayableAlignmentFaction() || !this.doesFactionPreventPledge(fac, otherFac) || !((enemyAlign = this.getAlignment(otherFac)) > 0.0f)) continue;
+            if (!otherFac.isPlayableAlignmentFaction() || !this.doesFactionPreventPledge(fac, otherFac) || this.getAlignment(otherFac) <= 0.0f) continue;
             enemies.add(otherFac);
         }
         return enemies;
@@ -1234,7 +1275,6 @@ public class LOTRPlayerData {
         this.setPledgeBreakCooldown(cdTicks += Math.round(cd * 150.0f * 60.0f * 20.0f));
         World world = entityplayer.worldObj;
         if (!world.isRemote) {
-            ChatComponentTranslation msg;
             LOTRFactionRank rank = wasPledge.getRank(prevAlign);
             LOTRFactionRank rankBelow = wasPledge.getRankBelow(rank);
             LOTRFactionRank rankBelow2 = wasPledge.getRankBelow(rankBelow);
@@ -1263,10 +1303,10 @@ public class LOTRPlayerData {
             }
             world.playSoundAtEntity((Entity)entityplayer, "lotr:event.unpledge", 1.0f, 1.0f);
             if (intentional) {
-                msg = new ChatComponentTranslation("chat.lotr.unpledge", new Object[]{wasPledge.factionName()});
+                ChatComponentTranslation msg = new ChatComponentTranslation("chat.lotr.unpledge", new Object[]{wasPledge.factionName()});
                 entityplayer.addChatMessage((IChatComponent)msg);
             } else {
-                msg = new ChatComponentTranslation("chat.lotr.autoUnpledge", new Object[]{wasPledge.factionName()});
+                ChatComponentTranslation msg = new ChatComponentTranslation("chat.lotr.autoUnpledge", new Object[]{wasPledge.factionName()});
                 entityplayer.addChatMessage((IChatComponent)msg);
             }
             this.checkAlignmentAchievements(wasPledge, prevAlign);
@@ -1289,8 +1329,8 @@ public class LOTRPlayerData {
     }
 
     public void setPledgeBreakCooldown(int i) {
-        boolean bigChange;
         EntityPlayer entityplayer;
+        boolean bigChange;
         int preCD = this.pledgeBreakCooldown;
         LOTRFaction preBroken = this.brokenPledgeFaction;
         this.pledgeBreakCooldown = i = Math.max(0, i);
@@ -1377,8 +1417,7 @@ public class LOTRPlayerData {
                 achievement.broadcastEarning(entityplayer);
                 List<LOTRAchievement> earnedAchievements = this.getEarnedAchievements(LOTRDimension.MIDDLE_EARTH);
                 int biomes = 0;
-                for (int i = 0; i < earnedAchievements.size(); ++i) {
-                    LOTRAchievement earnedAchievement = earnedAchievements.get(i);
+                for (LOTRAchievement earnedAchievement : earnedAchievements) {
                     if (!earnedAchievement.isBiomeAchievement) continue;
                     ++biomes;
                 }
@@ -1414,10 +1453,44 @@ public class LOTRPlayerData {
         }
     }
 
-    private void runAchievementChecks(EntityPlayer entityplayer, World world) {
-        LOTRMaterial fullMaterial;
+    private boolean runAchievementChecks1(EntityPlayer entityplayer, World world) {
         int i = MathHelper.floor_double((double)entityplayer.posX);
-        int j = MathHelper.floor_double((double)entityplayer.boundingBox.minY);
+        MathHelper.floor_double((double)entityplayer.boundingBox.minY);
+        int k = MathHelper.floor_double((double)entityplayer.posZ);
+        BiomeGenBase biome = world.getBiomeGenForCoords(i, k);
+        if (biome instanceof LOTRBiome) {
+            LOTRWaypoint.Region biomeRegion;
+            LOTRBiome lotrbiome = (LOTRBiome)biome;
+            LOTRAchievement ach = lotrbiome.getBiomeAchievement();
+            if (ach != null) {
+                this.addAchievement(ach);
+            }
+            if ((biomeRegion = lotrbiome.getBiomeWaypoints()) != null) {
+                this.unlockFTRegion(biomeRegion);
+            }
+        }
+        if (entityplayer.dimension == LOTRDimension.MIDDLE_EARTH.dimensionID) {
+            this.addAchievement(LOTRAchievement.enterMiddleEarth);
+        }
+        if (entityplayer.dimension == LOTRDimension.UTUMNO.dimensionID) {
+            this.addAchievement(LOTRAchievement.enterUtumnoIce);
+            int y = MathHelper.floor_double((double)entityplayer.boundingBox.minY);
+            LOTRUtumnoLevel level = LOTRUtumnoLevel.forY(y);
+            if (level == LOTRUtumnoLevel.OBSIDIAN) {
+                this.addAchievement(LOTRAchievement.enterUtumnoObsidian);
+            } else if (level == LOTRUtumnoLevel.FIRE) {
+                this.addAchievement(LOTRAchievement.enterUtumnoFire);
+            }
+        }
+        if (entityplayer.inventory.hasItem(LOTRMod.silmaril_air)) {
+            this.addAchievement(LOTRAchievement.getSilmaril);
+        }
+        return true;
+    }
+
+    private boolean runAchievementChecks(EntityPlayer entityplayer, World world) {
+        int i = MathHelper.floor_double((double)entityplayer.posX);
+        MathHelper.floor_double((double)entityplayer.boundingBox.minY);
         int k = MathHelper.floor_double((double)entityplayer.posZ);
         BiomeGenBase biome = world.getBiomeGenForCoords(i, k);
         if (biome instanceof LOTRBiome) {
@@ -1434,6 +1507,9 @@ public class LOTRPlayerData {
         if (entityplayer.dimension == LOTRDimension.MIDDLE_EARTH.dimensionID) {
             this.addAchievement(LOTRAchievement.enterMiddleEarth);
         }
+        if (entityplayer.dimension == LOTRDimension.MIDDLE_EARTH.dimensionID) {
+            this.addAchievement(LOTRAchievement.enterLotr);
+        }
         if (entityplayer.dimension == LOTRDimension.UTUMNO.dimensionID) {
             this.addAchievement(LOTRAchievement.enterUtumnoIce);
             int y = MathHelper.floor_double((double)entityplayer.boundingBox.minY);
@@ -1446,6 +1522,99 @@ public class LOTRPlayerData {
         }
         if (entityplayer.inventory.hasItem(LOTRMod.pouch)) {
             this.addAchievement(LOTRAchievement.getPouch);
+        }
+        if (entityplayer.inventory.hasItem(LOTRMod.LOTRRingOne)) {
+            this.addAchievement(LOTRAchievement.getOne);
+        }
+        if (entityplayer.inventory.hasItem(LOTRMod.vilia)) {
+            this.addAchievement(LOTRAchievement.getThree);
+        }
+        if (entityplayer.inventory.hasItem(LOTRMod.nenia)) {
+            this.addAchievement(LOTRAchievement.getThree);
+        }
+        if (entityplayer.inventory.hasItem(LOTRMod.naria)) {
+            this.addAchievement(LOTRAchievement.getThree);
+        }
+        if (entityplayer.inventory.hasItem(LOTRMod.d1)) {
+            this.addAchievement(LOTRAchievement.getSeven);
+        }
+        if (entityplayer.inventory.hasItem(LOTRMod.d2)) {
+            this.addAchievement(LOTRAchievement.getSeven);
+        }
+        if (entityplayer.inventory.hasItem(LOTRMod.d3)) {
+            this.addAchievement(LOTRAchievement.getSeven);
+        }
+        if (entityplayer.inventory.hasItem(LOTRMod.d4)) {
+            this.addAchievement(LOTRAchievement.getSeven);
+        }
+        if (entityplayer.inventory.hasItem(LOTRMod.d5)) {
+            this.addAchievement(LOTRAchievement.getSeven);
+        }
+        if (entityplayer.inventory.hasItem(LOTRMod.d6)) {
+            this.addAchievement(LOTRAchievement.getSeven);
+        }
+        if (entityplayer.inventory.hasItem(LOTRMod.d7)) {
+            this.addAchievement(LOTRAchievement.getSeven);
+        }
+        if (entityplayer.inventory.hasItem(LOTRMod.h1)) {
+            this.addAchievement(LOTRAchievement.getNine);
+        }
+        if (entityplayer.inventory.hasItem(LOTRMod.h2)) {
+            this.addAchievement(LOTRAchievement.getNine);
+        }
+        if (entityplayer.inventory.hasItem(LOTRMod.h3)) {
+            this.addAchievement(LOTRAchievement.getNine);
+        }
+        if (entityplayer.inventory.hasItem(LOTRMod.h4)) {
+            this.addAchievement(LOTRAchievement.getNine);
+        }
+        if (entityplayer.inventory.hasItem(LOTRMod.h5)) {
+            this.addAchievement(LOTRAchievement.getNine);
+        }
+        if (entityplayer.inventory.hasItem(LOTRMod.h6)) {
+            this.addAchievement(LOTRAchievement.getNine);
+        }
+        if (entityplayer.inventory.hasItem(LOTRMod.h7)) {
+            this.addAchievement(LOTRAchievement.getNine);
+        }
+        if (entityplayer.inventory.hasItem(LOTRMod.h8)) {
+            this.addAchievement(LOTRAchievement.getNine);
+        }
+        if (entityplayer.inventory.hasItem(LOTRMod.h9)) {
+            this.addAchievement(LOTRAchievement.getNine);
+        }
+        if (entityplayer.inventory.hasItem(LOTRMod.arcenstone)) {
+            this.addAchievement(LOTRAchievement.getArcenstone);
+        }
+        if (entityplayer.inventory.hasItem(LOTRMod.bodyBilbo)) {
+            this.addAchievement(LOTRAchievement.getBilbo);
+        }
+        if (entityplayer.inventory.hasItem(LOTRMod.helmetMoriaMithril)) {
+            this.addAchievement(LOTRAchievement.wearMoriaMithril);
+        }
+        if (entityplayer.inventory.hasItem(LOTRMod.bodyMoriaMithril)) {
+            this.addAchievement(LOTRAchievement.wearMoriaMithril);
+        }
+        if (entityplayer.inventory.hasItem(LOTRMod.legsMoriaMithril)) {
+            this.addAchievement(LOTRAchievement.wearMoriaMithril);
+        }
+        if (entityplayer.inventory.hasItem(LOTRMod.bootsMoriaMithril)) {
+            this.addAchievement(LOTRAchievement.wearMoriaMithril);
+        }
+        if (entityplayer.inventory.hasItem(LOTRMod.silmaril_wather)) {
+            this.addAchievement(LOTRAchievement.getSilmaril);
+        }
+        if (entityplayer.inventory.hasItem(LOTRMod.silmaril_fire)) {
+            this.addAchievement(LOTRAchievement.getSilmaril);
+        }
+        if (entityplayer.inventory.hasItem(LOTRMod.silmaril_air)) {
+            this.addAchievement(LOTRAchievement.getSilmaril);
+        }
+        if (entityplayer.inventory.hasItem(LOTRMod.khamRaw)) {
+            this.addAchievement(LOTRAchievement.getKham);
+        }
+        if (entityplayer.inventory.hasItem(LOTRMod.kham)) {
+            this.addAchievement(LOTRAchievement.getKham);
         }
         HashSet<Block> tables = new HashSet<Block>();
         int crossbowBolts = 0;
@@ -1477,12 +1646,29 @@ public class LOTRPlayerData {
         if (biome instanceof LOTRBiomeGenMistyMountains && entityplayer.posY > 192.0) {
             this.addAchievement(LOTRAchievement.climbMistyMountains);
         }
-        if ((fullMaterial = this.isPlayerWearingFull(entityplayer)) != null) {
+        if (biome instanceof LOTRBiome && (double)entityplayer.fallDistance > 250.0) {
+            this.addAchievement(LOTRAchievement.leapoffaith);
+        }
+        if (biome instanceof LOTRBiome && (double)entityplayer.distanceWalkedModified > 10000.0) {
+            this.addAchievement(LOTRAchievement.insearchofyourself);
+        }
+        if (biome instanceof LOTRBiome && (double)entityplayer.distanceWalkedModified > 100000.0) {
+            this.addAchievement(LOTRAchievement.notenough);
+        }
+        LOTRMaterial fullMaterial = this.isPlayerWearingFull(entityplayer);
+        LOTRMaterial chestplateMaterial = this.isPlayerWearingFull2(entityplayer);
+        if (fullMaterial != null) {
             if (fullMaterial == LOTRMaterial.MITHRIL) {
                 this.addAchievement(LOTRAchievement.wearFullMithril);
             } else if (fullMaterial == LOTRMaterial.FUR) {
                 this.addAchievement(LOTRAchievement.wearFullFur);
             } else if (fullMaterial == LOTRMaterial.BLUE_DWARVEN) {
+                this.addAchievement(LOTRAchievement.wearFullBlueDwarven);
+            } else if (fullMaterial == LOTRMaterial.BLUE_DWARVENGOLD) {
+                this.addAchievement(LOTRAchievement.wearFullBlueDwarven);
+            } else if (fullMaterial == LOTRMaterial.BLUE_DWARVENSILVER) {
+                this.addAchievement(LOTRAchievement.wearFullBlueDwarven);
+            } else if (fullMaterial == LOTRMaterial.BLUE_DWARVENMITHRIL) {
                 this.addAchievement(LOTRAchievement.wearFullBlueDwarven);
             } else if (fullMaterial == LOTRMaterial.HIGH_ELVEN) {
                 this.addAchievement(LOTRAchievement.wearFullHighElven);
@@ -1509,6 +1695,12 @@ public class LOTRPlayerData {
             } else if (fullMaterial == LOTRMaterial.DALE) {
                 this.addAchievement(LOTRAchievement.wearFullDale);
             } else if (fullMaterial == LOTRMaterial.DWARVEN) {
+                this.addAchievement(LOTRAchievement.wearFullDwarven);
+            } else if (fullMaterial == LOTRMaterial.DWARVENGOLD) {
+                this.addAchievement(LOTRAchievement.wearFullDwarven);
+            } else if (fullMaterial == LOTRMaterial.DWARVENSILVER) {
+                this.addAchievement(LOTRAchievement.wearFullDwarven);
+            } else if (fullMaterial == LOTRMaterial.DWARVENMITHRIL) {
                 this.addAchievement(LOTRAchievement.wearFullDwarven);
             } else if (fullMaterial == LOTRMaterial.GALADHRIM) {
                 this.addAchievement(LOTRAchievement.wearFullElven);
@@ -1576,8 +1768,90 @@ public class LOTRPlayerData {
                 this.addAchievement(LOTRAchievement.wearFullHalfTroll);
             } else if (fullMaterial == LOTRMaterial.UTUMNO) {
                 this.addAchievement(LOTRAchievement.wearFullUtumno);
+            } else if (fullMaterial == LOTRMaterial.BONE) {
+                this.addAchievement(LOTRAchievement.wearFullBone);
+            } else if (fullMaterial == LOTRMaterial.BRONZE) {
+                this.addAchievement(LOTRAchievement.wearFullBronze);
+            } else if (fullMaterial == LOTRMaterial.MORIA) {
+                this.addAchievement(LOTRAchievement.wearFullMoriaMithril);
+            } else if (fullMaterial == LOTRMaterial.GONDOR_MITHRIL) {
+                this.addAchievement(LOTRAchievement.wearFullGondorMithril);
+            } else if (fullMaterial == LOTRMaterial.MORIA_DWARVEN) {
+                this.addAchievement(LOTRAchievement.wearFullMoria);
+            } else if (fullMaterial == LOTRMaterial.REDSTONEFOOT) {
+                this.addAchievement(LOTRAchievement.wearFullStonefoot);
+            } else if (fullMaterial == LOTRMaterial.REDSTIFFBEARD) {
+                this.addAchievement(LOTRAchievement.wearFullStiffbeard);
+            } else if (fullMaterial == LOTRMaterial.REDIRONFIST) {
+                this.addAchievement(LOTRAchievement.wearFullIronfist);
+            } else if (fullMaterial == LOTRMaterial.REDBLACKLOCK) {
+                this.addAchievement(LOTRAchievement.wearFullBlacklock);
+            } else if (fullMaterial == LOTRMaterial.MITHRILD) {
+                this.addAchievement(LOTRAchievement.wearFullDwarvenMithril);
+            } else if (fullMaterial == LOTRMaterial.EREBOR) {
+                this.addAchievement(LOTRAchievement.wearFullErebor);
+            } else if (fullMaterial == LOTRMaterial.EREBORGOLD) {
+                this.addAchievement(LOTRAchievement.wearFullErebor);
+            } else if (fullMaterial == LOTRMaterial.EREBORSILVER) {
+                this.addAchievement(LOTRAchievement.wearFullErebor);
+            } else if (fullMaterial == LOTRMaterial.EREBORMITHRIL) {
+                this.addAchievement(LOTRAchievement.wearFullErebor);
+            } else if (fullMaterial == LOTRMaterial.GULDUR) {
+                this.addAchievement(LOTRAchievement.wearFullGuldur);
+            } else if (fullMaterial == LOTRMaterial.ANGBAND) {
+                this.addAchievement(LOTRAchievement.wearAngband);
+            } else if (fullMaterial == LOTRMaterial.ANGBANDU) {
+                this.addAchievement(LOTRAchievement.wearAngbandu);
+            } else if (fullMaterial == LOTRMaterial.BERSERK) {
+                this.addAchievement(LOTRAchievement.wearBerserk);
+            } else if (fullMaterial == LOTRMaterial.WIND) {
+                this.addAchievement(LOTRAchievement.wearWind);
+            } else if (fullMaterial == LOTRMaterial.ANGBANDE) {
+                this.addAchievement(LOTRAchievement.wearAngbande);
+            } else if (fullMaterial == LOTRMaterial.BOLDOG) {
+                this.addAchievement(LOTRAchievement.wearBoldog);
+            } else if (fullMaterial == LOTRMaterial.GANDALF) {
+                this.addAchievement(LOTRAchievement.wearFullIstari);
+            } else if (fullMaterial == LOTRMaterial.GREY_DWARVEN) {
+                this.addAchievement(LOTRAchievement.wearFullGrey);
+            } else if (fullMaterial == LOTRMaterial.DARK_DWARVEN) {
+                this.addAchievement(LOTRAchievement.wearFullDark);
+            } else if (fullMaterial == LOTRMaterial.SARUMAN) {
+                this.addAchievement(LOTRAchievement.wearFullWhite);
+            } else if (fullMaterial == LOTRMaterial.RADAGAST) {
+                this.addAchievement(LOTRAchievement.wearFullBrown);
+            } else if (fullMaterial == LOTRMaterial.PALLANDO) {
+                this.addAchievement(LOTRAchievement.wearFullBlue);
+            } else if (fullMaterial == LOTRMaterial.ALATAR) {
+                this.addAchievement(LOTRAchievement.wearFullBlue);
+            } else if (fullMaterial == LOTRMaterial.SAURON) {
+                this.addAchievement(LOTRAchievement.wearFullSauron);
+            } else if (fullMaterial == LOTRMaterial.AVARI_ELVEN) {
+                this.addAchievement(LOTRAchievement.wearFullAvari);
+            } else if (fullMaterial == LOTRMaterial.AVARI_ELVEN_SCOUT) {
+                this.addAchievement(LOTRAchievement.wearFullAvariScout);
+            } else if (fullMaterial == LOTRMaterial.MELKOQUENDI) {
+                this.addAchievement(LOTRAchievement.wearFullDarkElf);
+            } else if (fullMaterial == LOTRMaterial.MELKOQUENDI_RANGER) {
+                this.addAchievement(LOTRAchievement.wearFullDarkElfRanger);
+            } else if (fullMaterial == LOTRMaterial.BRONZE1) {
+                this.addAchievement(LOTRAchievement.wearFullChainmailBronze);
+            } else if (fullMaterial == LOTRMaterial.DWARVEN1) {
+                this.addAchievement(LOTRAchievement.wearFullChainmailDwarf);
+            } else if (fullMaterial == LOTRMaterial.MORDOR1) {
+                this.addAchievement(LOTRAchievement.wearFullChainmailOrc);
+            } else if (fullMaterial == LOTRMaterial.URUK1) {
+                this.addAchievement(LOTRAchievement.wearFullChainmailUruk);
+            } else if (fullMaterial == LOTRMaterial.BLACK_URUK1) {
+                this.addAchievement(LOTRAchievement.wearFullChainmailBlackUruk);
+            } else if (chestplateMaterial == LOTRMaterial.BILBO) {
+                this.addAchievement(LOTRAchievement.wearFullChainmailBlackUruk);
             }
         }
+        if (chestplateMaterial != null && chestplateMaterial == LOTRMaterial.BILBO) {
+            this.addAchievement(LOTRAchievement.wearBilbo);
+        }
+        return false;
     }
 
     public LOTRMaterial isPlayerWearingFull(EntityPlayer entityplayer) {
@@ -1598,6 +1872,27 @@ public class LOTRPlayerData {
         return fullMaterial;
     }
 
+    public LOTRMaterial isPlayerWearingFull2(EntityPlayer entityplayer) {
+        LOTRMaterial chestplateMaterial = null;
+        for (ItemStack itemstack : entityplayer.inventory.armorInventory) {
+            if (itemstack == null || !(itemstack.getItem() instanceof LOTRItemArmor)) continue;
+            LOTRItemArmor armor = (LOTRItemArmor)itemstack.getItem();
+            LOTRMaterial armorMaterial = armor.getLOTRArmorMaterial();
+            if (armor.armorType != 1) continue;
+            chestplateMaterial = armorMaterial;
+            break;
+        }
+        return chestplateMaterial;
+    }
+
+    public static ItemArmor.ArmorMaterial getBodyMaterial(EntityLivingBase entity) {
+        ItemStack item = entity.getEquipmentInSlot(3);
+        if (item == null || !(item.getItem() instanceof LOTRItemArmor)) {
+            return null;
+        }
+        return ((ItemArmor)item.getItem()).getArmorMaterial();
+    }
+
     private void sendAchievementPacket(EntityPlayerMP entityplayer, LOTRAchievement achievement, boolean display) {
         LOTRPacketAchievement packet = new LOTRPacketAchievement(achievement, display);
         LOTRPacketHandler.networkWrapper.sendTo((IMessage)packet, entityplayer);
@@ -1611,6 +1906,15 @@ public class LOTRPlayerData {
     public void setShield(LOTRShields lotrshield) {
         this.shield = lotrshield;
         this.markDirty();
+    }
+
+    public void setCape(LOTRCapes cape) {
+        this.cape = cape;
+        this.markDirty();
+    }
+
+    public LOTRCapes getCape() {
+        return this.cape;
     }
 
     public LOTRShields getShield() {
@@ -1721,26 +2025,26 @@ public class LOTRPlayerData {
             int k = waypoint.getZCoord();
             world.theChunkProviderServer.provideChunk(i >> 4, k >> 4);
             int j = waypoint.getYCoord((World)world, i, k);
-            Entity playerMount = entityplayer.ridingEntity;
+            Object playerMount = entityplayer.ridingEntity;
             entityplayer.mountEntity(null);
             entityplayer.setPositionAndUpdate((double)i + 0.5, (double)j, (double)k + 0.5);
             entityplayer.fallDistance = 0.0f;
             if (playerMount instanceof EntityLiving) {
-                playerMount = this.fastTravelEntity(world, (EntityLiving)playerMount, i, j, k);
+                playerMount = this.fastTravelEntity(world, (Entity)playerMount, i, j, k);
             }
             if (playerMount != null) {
                 this.setUUIDToMount(playerMount.getUniqueID());
             }
-            for (EntityLiving entity : entitiesToTransport) {
-                Entity mount = entity.ridingEntity;
-                entity.mountEntity(null);
-                entity = this.fastTravelEntity(world, entity, i, j, k);
+            for (EntityLiving entity2 : entitiesToTransport) {
+                Object mount = entity2.ridingEntity;
+                entity2.mountEntity(null);
+                T entity2 = this.fastTravelEntity(world, (Entity)entity2, i, j, k);
                 if (!(mount instanceof EntityLiving)) continue;
-                mount = this.fastTravelEntity(world, (EntityLiving)mount, i, j, k);
-                entity.mountEntity(mount);
+                mount = this.fastTravelEntity(world, (Entity)mount, i, j, k);
+                entity2.mountEntity(mount);
             }
             this.sendFTPacket(entityplayer, waypoint, startX, startZ);
-            this.setTimeSinceFT(0);
+            this.setTimeSinceFTWithUpdate(0);
             this.incrementWPUseCount(waypoint);
             if (waypoint instanceof LOTRWaypoint) {
                 this.lastWaypoint = (LOTRWaypoint)waypoint;
@@ -1757,11 +2061,11 @@ public class LOTRPlayerData {
         LOTRPacketHandler.networkWrapper.sendTo((IMessage)packet, entityplayer);
     }
 
-    private <T extends EntityLiving> T fastTravelEntity(WorldServer world, T entity, int i, int j, int k) {
-        String entityID = EntityList.getEntityString(entity);
+    private <T extends EntityLiving> T fastTravelEntity(WorldServer world, Entity playerMount, int i, int j, int k) {
+        String entityID = EntityList.getEntityString((Entity)playerMount);
         NBTTagCompound nbt = new NBTTagCompound();
-        entity.writeToNBT(nbt);
-        entity.setDead();
+        playerMount.writeToNBT(nbt);
+        playerMount.setDead();
         EntityLiving newEntity = (EntityLiving)EntityList.createEntityByName((String)entityID, (World)world);
         newEntity.readFromNBT(nbt);
         newEntity.setLocationAndAngles((double)i + 0.5, (double)j, (double)k + 0.5, newEntity.rotationYaw, newEntity.rotationPitch);
@@ -1780,8 +2084,8 @@ public class LOTRPlayerData {
             if (!entityplayer.capabilities.isCreativeMode) {
                 double range = 16.0;
                 List entities = world.getEntitiesWithinAABB(EntityLiving.class, entityplayer.boundingBox.expand(range, range, range));
-                for (int l = 0; l < entities.size(); ++l) {
-                    EntityLiving entityliving = (EntityLiving)entities.get(l);
+                for (Object element : entities) {
+                    EntityLiving entityliving = (EntityLiving)element;
                     if (entityliving.getAttackTarget() != entityplayer) continue;
                     return false;
                 }
@@ -1796,11 +2100,11 @@ public class LOTRPlayerData {
     }
 
     public void setTimeSinceFT(int i) {
-        boolean bigChange;
         EntityPlayer entityplayer;
+        boolean bigChange;
         int preTick = this.ftSinceTick;
         this.ftSinceTick = i = Math.max(0, i);
-        boolean bl = bigChange = (this.ftSinceTick == 0 || preTick == 0) && this.ftSinceTick != preTick;
+        boolean bl = bigChange = (this.ftSinceTick == 0 || preTick == 0) && this.ftSinceTick != preTick || preTick < 0 && this.ftSinceTick >= 0;
         if (bigChange || LOTRPlayerData.isTimerAutosaveTick()) {
             this.markDirty();
         }
@@ -2040,7 +2344,7 @@ public class LOTRPlayerData {
             return;
         }
         LOTRCustomWaypoint existing = null;
-        existing = this.customWaypointsShared.contains(waypoint) ? waypoint : this.getSharedCustomWaypointByID(waypoint.getSharingPlayerID(), waypoint.getID());
+        LOTRCustomWaypoint lOTRCustomWaypoint = existing = this.customWaypointsShared.contains(waypoint) ? waypoint : this.getSharedCustomWaypointByID(waypoint.getSharingPlayerID(), waypoint.getID());
         if (existing != null) {
             this.customWaypointsShared.remove(existing);
             EntityPlayer entityplayer = this.getPlayer();
@@ -2206,9 +2510,8 @@ public class LOTRPlayerData {
     private void removeSharedCustomWaypoints() {
         ArrayList<LOTRCustomWaypoint> removes = new ArrayList<LOTRCustomWaypoint>();
         for (LOTRCustomWaypoint waypoint : this.customWaypointsShared) {
-            List<UUID> sharedFellowPlayers;
             LOTRCustomWaypoint wpOriginal = LOTRLevelData.getData(waypoint.getSharingPlayerID()).getCustomWaypointByID(waypoint.getID());
-            if (wpOriginal == null || (sharedFellowPlayers = wpOriginal.getPlayersInAllSharedFellowships()).contains(this.playerUUID)) continue;
+            if (wpOriginal == null || wpOriginal.getPlayersInAllSharedFellowships().contains(this.playerUUID)) continue;
             removes.add(waypoint);
         }
         for (LOTRCustomWaypoint waypoint : removes) {
@@ -2292,14 +2595,37 @@ public class LOTRPlayerData {
         }
     }
 
-    public void updateFellowship(LOTRFellowship fs) {
-        this.sendFellowshipPacket(fs);
+    public void updateFellowship(LOTRFellowship fs, FellowshipUpdateType updateType) {
+        if (updateType == FellowshipUpdateType.FULL) {
+            this.sendFellowshipPacket(fs);
+        } else {
+            EntityPlayer entityplayer = this.getPlayer();
+            if (entityplayer != null && !entityplayer.worldObj.isRemote) {
+                LOTRPacketFellowshipPartialUpdate partialUpdatePacket = null;
+                if (updateType == FellowshipUpdateType.RENAME) {
+                    partialUpdatePacket = new LOTRPacketFellowshipPartialUpdate.Rename(fs);
+                } else if (updateType == FellowshipUpdateType.CHANGE_ICON) {
+                    partialUpdatePacket = new LOTRPacketFellowshipPartialUpdate.ChangeIcon(fs);
+                } else if (updateType == FellowshipUpdateType.TOGGLE_PVP) {
+                    partialUpdatePacket = new LOTRPacketFellowshipPartialUpdate.TogglePvp(fs);
+                } else if (updateType == FellowshipUpdateType.TOGGLE_HIRED_FRIENDLY_FIRE) {
+                    partialUpdatePacket = new LOTRPacketFellowshipPartialUpdate.ToggleHiredFriendlyFire(fs);
+                } else if (updateType == FellowshipUpdateType.TOGGLE_SHOW_MAP_LOCATIONS) {
+                    partialUpdatePacket = new LOTRPacketFellowshipPartialUpdate.ToggleShowMap(fs);
+                }
+                if (partialUpdatePacket != null) {
+                    LOTRPacketHandler.networkWrapper.sendTo((IMessage)partialUpdatePacket, (EntityPlayerMP)entityplayer);
+                } else {
+                    LOTRLog.logger.error("No associated packet for fellowship partial update type " + updateType.name());
+                }
+            }
+        }
         this.addSharedCustomWaypoints(fs.getFellowshipID());
         this.removeSharedCustomWaypoints();
     }
 
-    public void createFellowship(String name, boolean restrict) {
-        if (restrict && !this.canCreateFellowships(false)) {
+    public void createFellowship(String name, boolean normalCreation) {
+        if (!(!normalCreation || LOTRConfig.enableFellowshipCreation && this.canCreateFellowships(false))) {
             return;
         }
         if (!this.anyMatchingFellowshipNames(name, false)) {
@@ -2804,7 +3130,8 @@ public class LOTRPlayerData {
     }
 
     public void removeMiniQuest(LOTRMiniQuest quest, boolean completed) {
-        List<LOTRMiniQuest> removeList = completed ? this.miniQuestsCompleted : this.miniQuests;
+        List<LOTRMiniQuest> removeList;
+        List<LOTRMiniQuest> list = removeList = completed ? this.miniQuestsCompleted : this.miniQuests;
         if (removeList.remove(quest)) {
             this.markDirty();
             EntityPlayer entityplayer = this.getPlayer();
@@ -2853,6 +3180,45 @@ public class LOTRPlayerData {
         quest.writeToNBT(nbt);
         LOTRPacketMiniquest packet = new LOTRPacketMiniquest(nbt, completed);
         LOTRPacketHandler.networkWrapper.sendTo((IMessage)packet, entityplayer);
+    }
+
+    private long getCurrentOnlineTime() {
+        return MinecraftServer.getServer().worldServerForDimension(0).getTotalWorldTime();
+    }
+
+    public void setTimeSinceFTWithUpdate(int i) {
+        this.setTimeSinceFT(i, true);
+    }
+
+    private void setTimeSinceFT(int i, boolean forceUpdate) {
+        boolean bigChange;
+        EntityPlayer entityplayer;
+        int preTick = this.ftSinceTick;
+        this.ftSinceTick = i = Math.max(0, i);
+        boolean bl = bigChange = (this.ftSinceTick == 0 || preTick == 0) && this.ftSinceTick != preTick || preTick < 0 && this.ftSinceTick >= 0;
+        if (bigChange || LOTRPlayerData.isTimerAutosaveTick() || forceUpdate) {
+            this.markDirty();
+        }
+        if ((bigChange || this.ftSinceTick % 5 == 0 || forceUpdate) && (entityplayer = this.getPlayer()) != null && !entityplayer.worldObj.isRemote) {
+            LOTRPacketFTTimer packet = new LOTRPacketFTTimer(this.ftSinceTick);
+            LOTRPacketHandler.networkWrapper.sendTo((IMessage)packet, (EntityPlayerMP)entityplayer);
+        }
+    }
+
+    public void updateFastTravelClockFromLastOnlineTime(ICommandSender player, World world) {
+        long currentOnlineTime;
+        int ftClockIncrease;
+        int diff;
+        double offlineFactor;
+        if (this.lastOnlineTime <= 0L) {
+            return;
+        }
+        MinecraftServer server = MinecraftServer.getServer();
+        if (!server.isSinglePlayer() && (ftClockIncrease = (int)((double)(diff = (int)((currentOnlineTime = this.getCurrentOnlineTime()) - this.lastOnlineTime)) * (offlineFactor = 0.1))) > 0) {
+            this.setTimeSinceFTWithUpdate(this.ftSinceTick + ftClockIncrease);
+            ChatComponentTranslation chatComponentTranslation = new ChatComponentTranslation("chat.lotr.ft.offlineTick", new Object[]{LOTRLevelData.getHMSTime_Ticks(diff), LOTRLevelData.getHMSTime_Ticks(ftClockIncrease)});
+            player.addChatMessage((IChatComponent)chatComponentTranslation);
+        }
     }
 
     public LOTRMiniQuest getMiniQuestForID(UUID id, boolean completed) {
@@ -3009,7 +3375,7 @@ public class LOTRPlayerData {
         for (UUID fsID : this.fellowshipIDs) {
             LOTRFellowship fs = LOTRFellowshipData.getFellowship(fsID);
             if (fs == null) continue;
-            fs.updateForAllMembers();
+            fs.updateForAllMembers(FellowshipUpdateType.FULL);
         }
     }
 
@@ -3036,6 +3402,14 @@ public class LOTRPlayerData {
 
     public LOTRPlayerQuestData getQuestData() {
         return this.questData;
+    }
+
+    public boolean isFastTravelDisabled() {
+        return this.fastTravelDisabled;
+    }
+
+    public void setFastTravelDisabled(boolean disabled) {
+        this.fastTravelDisabled = disabled;
     }
 
     private static class CWPSharedKey

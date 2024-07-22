@@ -77,9 +77,9 @@ extends LOTREntityNearHaradrimBase {
     @Override
     public String getSpeechBank(EntityPlayer entityplayer) {
         if (this.isFriendly(entityplayer)) {
-            return "nearHarad/harnennor/haradrim/friendly";
+            return "nearHarad/harnedor/haradrim/friendly";
         }
-        return "nearHarad/harnennor/haradrim/hostile";
+        return "nearHarad/harnedor/haradrim/hostile";
     }
 
     @Override

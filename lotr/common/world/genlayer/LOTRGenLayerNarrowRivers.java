@@ -32,8 +32,7 @@ extends LOTRGenLayer {
                     block2: for (int range = 1; range <= this.maxRange; ++range) {
                         for (int k2 = k1 - range; k2 <= k1 + range; ++k2) {
                             for (int i2 = i1 - range; i2 <= i1 + range; ++i2) {
-                                int subRiver;
-                                if (Math.abs(i2 - i1) != range && Math.abs(k2 - k1) != range || (subRiver = rivers[i2 + this.maxRange + (k2 + this.maxRange) * (xSize + this.maxRange * 2)]) != 0) continue;
+                                if (Math.abs(i2 - i1) != range && Math.abs(k2 - k1) != range || rivers[i2 + this.maxRange + (k2 + this.maxRange) * (xSize + this.maxRange * 2)] != 0) continue;
                                 isRiver = 0;
                                 break block2;
                             }

@@ -26,6 +26,7 @@ import net.minecraft.item.ItemStack;
 
 public enum LOTREnchantmentType {
     BREAKABLE,
+    UNBREAKABLE,
     ARMOR,
     ARMOR_FEET,
     ARMOR_LEGS,
@@ -44,6 +45,9 @@ public enum LOTREnchantmentType {
         Item item = itemstack.getItem();
         if (this == BREAKABLE && item.isDamageable()) {
             return true;
+        }
+        if (this == UNBREAKABLE && item.isDamageable()) {
+            return false;
         }
         if (item instanceof ItemArmor && ((ItemArmor)item).damageReduceAmount > 0) {
             if (this == ARMOR) {

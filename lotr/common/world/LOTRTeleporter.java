@@ -33,9 +33,9 @@ extends Teleporter {
     }
 
     public void placeInPortal(Entity entity, double d, double d1, double d2, float f) {
-        int k;
         int j;
         int i;
+        int k;
         if (this.world.provider.dimensionId == LOTRDimension.MIDDLE_EARTH.dimensionID) {
             i = 0;
             k = 0;

@@ -37,6 +37,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import lotr.common.LOTRLevelData;
+import lotr.common.fellowship.FellowshipUpdateType;
 import lotr.common.fellowship.LOTRFellowshipData;
 import lotr.common.network.LOTRPacketFellowshipNotification;
 import lotr.common.network.LOTRPacketHandler;
@@ -90,7 +91,7 @@ public class LOTRFellowship {
     public void createAndRegister() {
         LOTRFellowshipData.addFellowship(this);
         LOTRLevelData.getData(this.ownerUUID).addFellowship(this);
-        this.updateForAllMembers();
+        this.updateForAllMembers(FellowshipUpdateType.FULL);
         this.markDirty();
     }
 
@@ -147,12 +148,11 @@ public class LOTRFellowship {
         this.adminUUIDs.clear();
         NBTTagList memberTags = fsData.getTagList("Members", 10);
         for (int i = 0; i < memberTags.tagCount(); ++i) {
-            boolean isAdmin;
             NBTTagCompound nbt = memberTags.getCompoundTagAt(i);
             UUID member = UUID.fromString(nbt.getString("Member"));
             if (member == null) continue;
             this.memberUUIDs.add(member);
-            if (!nbt.hasKey("Admin") || !(isAdmin = nbt.getBoolean("Admin"))) continue;
+            if (!nbt.hasKey("Admin") || !nbt.getBoolean("Admin")) continue;
             this.adminUUIDs.add(member);
         }
         if (fsData.hasKey("Name")) {
@@ -199,7 +199,7 @@ public class LOTRFellowship {
             this.adminUUIDs.remove(owner);
         }
         LOTRLevelData.getData(this.ownerUUID).addFellowship(this);
-        this.updateForAllMembers();
+        this.updateForAllMembers(FellowshipUpdateType.FULL);
         this.markDirty();
     }
 
@@ -209,7 +209,7 @@ public class LOTRFellowship {
 
     public void setName(String name) {
         this.fellowshipName = name;
-        this.updateForAllMembers();
+        this.updateForAllMembers(FellowshipUpdateType.RENAME);
         this.markDirty();
     }
 
@@ -225,7 +225,7 @@ public class LOTRFellowship {
         if (!this.isOwner(player) && !this.memberUUIDs.contains(player)) {
             this.memberUUIDs.add(player);
             LOTRLevelData.getData(player).addFellowship(this);
-            this.updateForAllMembers();
+            this.updateForAllMembers(FellowshipUpdateType.FULL);
             this.markDirty();
         }
     }
@@ -237,7 +237,7 @@ public class LOTRFellowship {
                 this.adminUUIDs.remove(player);
             }
             LOTRLevelData.getData(player).removeFellowship(this);
-            this.updateForAllMembers();
+            this.updateForAllMembers(FellowshipUpdateType.FULL);
             this.markDirty();
         }
     }
@@ -261,11 +261,11 @@ public class LOTRFellowship {
         if (this.memberUUIDs.contains(player)) {
             if (flag && !this.adminUUIDs.contains(player)) {
                 this.adminUUIDs.add(player);
-                this.updateForAllMembers();
+                this.updateForAllMembers(FellowshipUpdateType.FULL);
                 this.markDirty();
             } else if (!flag && this.adminUUIDs.contains(player)) {
                 this.adminUUIDs.remove(player);
-                this.updateForAllMembers();
+                this.updateForAllMembers(FellowshipUpdateType.FULL);
                 this.markDirty();
             }
         }
@@ -277,7 +277,7 @@ public class LOTRFellowship {
 
     public void setIcon(ItemStack itemstack) {
         this.fellowshipIcon = itemstack;
-        this.updateForAllMembers();
+        this.updateForAllMembers(FellowshipUpdateType.CHANGE_ICON);
         this.markDirty();
     }
 
@@ -287,7 +287,7 @@ public class LOTRFellowship {
 
     public void setPreventPVP(boolean flag) {
         this.preventPVP = flag;
-        this.updateForAllMembers();
+        this.updateForAllMembers(FellowshipUpdateType.TOGGLE_PVP);
         this.markDirty();
     }
 
@@ -297,7 +297,7 @@ public class LOTRFellowship {
 
     public void setPreventHiredFriendlyFire(boolean flag) {
         this.preventHiredFF = flag;
-        this.updateForAllMembers();
+        this.updateForAllMembers(FellowshipUpdateType.TOGGLE_HIRED_FRIENDLY_FIRE);
         this.markDirty();
     }
 
@@ -307,13 +307,13 @@ public class LOTRFellowship {
 
     public void setShowMapLocations(boolean flag) {
         this.showMapLocations = flag;
-        this.updateForAllMembers();
+        this.updateForAllMembers(FellowshipUpdateType.TOGGLE_SHOW_MAP_LOCATIONS);
         this.markDirty();
     }
 
-    public void updateForAllMembers() {
+    public void updateForAllMembers(FellowshipUpdateType updateType) {
         for (UUID player : this.getAllPlayerUUIDs()) {
-            LOTRLevelData.getData(player).updateFellowship(this);
+            LOTRLevelData.getData(player).updateFellowship(this, updateType);
         }
     }
 

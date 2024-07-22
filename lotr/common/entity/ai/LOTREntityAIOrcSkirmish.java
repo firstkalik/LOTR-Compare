@@ -44,8 +44,8 @@ extends LOTREntityAINearestAttackableTargetBasic {
         if (!this.theOrc.isOrcSkirmishing()) {
             int chance = 20000;
             List nearbyOrcs = this.theOrc.worldObj.getEntitiesWithinAABB(LOTREntityOrc.class, this.theOrc.boundingBox.expand(16.0, 8.0, 16.0));
-            for (int i = 0; i < nearbyOrcs.size(); ++i) {
-                LOTREntityOrc orc = (LOTREntityOrc)nearbyOrcs.get(i);
+            for (Object nearbyOrc : nearbyOrcs) {
+                LOTREntityOrc orc = (LOTREntityOrc)nearbyOrc;
                 if (!orc.isOrcSkirmishing()) continue;
                 chance /= 10;
             }

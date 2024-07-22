@@ -52,9 +52,8 @@ extends LOTRWorldGenNomadStructure {
         }
         for (int i1 = -6; i1 <= 6; ++i1) {
             for (int k1 = -6; k1 <= 6; ++k1) {
-                int k2;
                 int i2 = Math.abs(i1);
-                if (i2 + (k2 = Math.abs(k1)) > 9) continue;
+                if (i2 + Math.abs(k1) > 9) continue;
                 if (!this.isSurface(world, i1, 0, k1)) {
                     this.laySandBase(world, i1, 0, k1);
                 }

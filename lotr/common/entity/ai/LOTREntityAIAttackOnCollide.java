@@ -114,7 +114,7 @@ extends EntityAIBase {
             LOTREntityNPC theNPC = (LOTREntityNPC)this.theOwner;
             ItemStack spearBackup = theNPC.npcItemsInv.getSpearBackup();
             if (spearBackup != null) {
-                LOTRItemSpear spearItem = (LOTRItemSpear)weapon.getItem();
+                weapon.getItem();
                 double d = this.theOwner.getDistanceToEntity((Entity)this.attackTarget);
                 double range = this.theOwner.getNavigator().getPathSearchRange();
                 if (d > 5.0 && d < range * 0.75) {

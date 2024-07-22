@@ -95,21 +95,21 @@ import net.minecraftforge.common.util.ForgeDirection;
 
 public class LOTREntityAIFarm
 extends EntityAIBase {
-    private static final int DEPOSIT_THRESHOLD = 16;
-    private static final int COLLECT_THRESHOLD = 16;
-    private static final int MIN_CHEST_RANGE = 24;
-    private LOTREntityNPC theEntity;
-    private LOTRFarmhand theEntityFarmer;
-    private World theWorld;
-    private double moveSpeed;
-    private float farmingEfficiency;
-    private Action action = null;
-    private ChunkCoordinates actionTarget;
-    private ChunkCoordinates pathTarget;
-    private int pathingTick;
-    private int rePathDelay;
-    private boolean harvestingSolidBlock;
-    private FakePlayer fakePlayer;
+    public static final int DEPOSIT_THRESHOLD = 16;
+    public static final int COLLECT_THRESHOLD = 16;
+    public static final int MIN_CHEST_RANGE = 24;
+    public LOTREntityNPC theEntity;
+    public LOTRFarmhand theEntityFarmer;
+    public World theWorld;
+    public double moveSpeed;
+    public float farmingEfficiency;
+    public Action action = null;
+    public ChunkCoordinates actionTarget;
+    public ChunkCoordinates pathTarget;
+    public int pathingTick;
+    public int rePathDelay;
+    public boolean harvestingSolidBlock;
+    public FakePlayer fakePlayer;
 
     public LOTREntityAIFarm(LOTRFarmhand npc, double d, float f) {
         this.theEntity = (LOTREntityNPC)((Object)npc);
@@ -128,7 +128,7 @@ extends EntityAIBase {
         return flag;
     }
 
-    private boolean shouldFarmhandExecute() {
+    public boolean shouldFarmhandExecute() {
         if (this.theEntity.hiredNPCInfo.isActive && !this.theEntity.hiredNPCInfo.isGuardMode()) {
             return false;
         }
@@ -183,16 +183,16 @@ extends EntityAIBase {
         return false;
     }
 
-    private boolean isFarmingGrapes() {
+    public boolean isFarmingGrapes() {
         IPlantable seed = this.getSeedsToPlant();
         return seed.getPlant((IBlockAccess)this.theWorld, -1, -1, -1) instanceof LOTRBlockGrapevine;
     }
 
-    private boolean canDoHoeing() {
+    public boolean canDoHoeing() {
         return true;
     }
 
-    private boolean canDoPlanting() {
+    public boolean canDoPlanting() {
         if (this.theEntity.hiredNPCInfo.isActive) {
             ItemStack invSeeds = this.getInventorySeeds();
             return invSeeds != null && invSeeds.stackSize > 1;
@@ -200,14 +200,14 @@ extends EntityAIBase {
         return true;
     }
 
-    private boolean canDoHarvesting() {
+    public boolean canDoHarvesting() {
         if (this.theEntity.hiredNPCInfo.isActive) {
             return this.getInventorySeeds() != null && this.hasSpaceForCrops() && this.getCropForSeed(this.getSeedsToPlant()) != null;
         }
         return false;
     }
 
-    private boolean canDoDepositing() {
+    public boolean canDoDepositing() {
         if (this.theEntity.hiredNPCInfo.isActive) {
             for (int l = 1; l <= 2; ++l) {
                 ItemStack itemstack = this.theEntity.hiredNPCInfo.getHiredInventory().getStackInSlot(l);
@@ -218,7 +218,7 @@ extends EntityAIBase {
         return false;
     }
 
-    private boolean canDoBonemealing() {
+    public boolean canDoBonemealing() {
         if (this.theEntity.hiredNPCInfo.isActive) {
             ItemStack invBmeal = this.getInventoryBonemeal();
             return invBmeal != null;
@@ -226,7 +226,7 @@ extends EntityAIBase {
         return false;
     }
 
-    private boolean canDoCollecting() {
+    public boolean canDoCollecting() {
         if (this.theEntity.hiredNPCInfo.isActive) {
             ItemStack seeds = this.getInventorySeeds();
             if (seeds != null && seeds.stackSize <= 16) {
@@ -240,7 +240,7 @@ extends EntityAIBase {
         return false;
     }
 
-    private ItemStack getInventorySeeds() {
+    public ItemStack getInventorySeeds() {
         Item item;
         IPlantable iplantable;
         if (this.theEntity.hiredNPCInfo.getHiredInventory() == null) {
@@ -253,7 +253,7 @@ extends EntityAIBase {
         return null;
     }
 
-    private IPlantable getSeedsToPlant() {
+    public IPlantable getSeedsToPlant() {
         ItemStack invSeeds;
         if (this.theEntity.hiredNPCInfo.isActive && (invSeeds = this.getInventorySeeds()) != null) {
             return (IPlantable)invSeeds.getItem();
@@ -261,7 +261,7 @@ extends EntityAIBase {
         return this.theEntityFarmer.getUnhiredSeeds();
     }
 
-    private boolean hasSpaceForCrops() {
+    public boolean hasSpaceForCrops() {
         if (this.theEntity.hiredNPCInfo.getHiredInventory() == null) {
             return false;
         }
@@ -273,7 +273,7 @@ extends EntityAIBase {
         return false;
     }
 
-    private ItemStack getInventoryBonemeal() {
+    public ItemStack getInventoryBonemeal() {
         if (this.theEntity.hiredNPCInfo.getHiredInventory() == null) {
             return null;
         }
@@ -284,7 +284,7 @@ extends EntityAIBase {
         return null;
     }
 
-    private ItemStack getCropForSeed(IPlantable seed) {
+    public ItemStack getCropForSeed(IPlantable seed) {
         Block block = seed.getPlant((IBlockAccess)this.theWorld, -1, -1, -1);
         if (block instanceof BlockCrops) {
             return new ItemStack(LOTRReflection.getCropItem((BlockCrops)block));
@@ -306,7 +306,7 @@ extends EntityAIBase {
         this.setAppropriateHomeRange(this.action);
     }
 
-    private void setAppropriateHomeRange(Action targetAction) {
+    public void setAppropriateHomeRange(Action targetAction) {
         if (this.theEntity.hiredNPCInfo.isActive) {
             int hRange = this.theEntity.hiredNPCInfo.getGuardRange();
             ChunkCoordinates home = this.theEntity.getHomePosition();
@@ -555,7 +555,7 @@ extends EntityAIBase {
         }
     }
 
-    private TargetPair findTarget(Action targetAction) {
+    public TargetPair findTarget(Action targetAction) {
         this.setAppropriateHomeRange(targetAction);
         Random rand = this.theEntity.getRNG();
         boolean isChestAction = targetAction == Action.DEPOSITING || targetAction == Action.COLLECTING;
@@ -606,9 +606,9 @@ extends EntityAIBase {
         return null;
     }
 
-    private List<TileEntityChest> gatherNearbyChests() {
+    public List<TileEntityChest> gatherNearbyChests() {
         int x = MathHelper.floor_double((double)this.theEntity.posX);
-        int y = MathHelper.floor_double((double)this.theEntity.boundingBox.minY);
+        MathHelper.floor_double((double)this.theEntity.boundingBox.minY);
         int z = MathHelper.floor_double((double)this.theEntity.posZ);
         int searchRange = (int)this.theEntity.func_110174_bM();
         int chunkX = x >> 4;
@@ -633,7 +633,7 @@ extends EntityAIBase {
         return nearbyChests;
     }
 
-    private ChunkCoordinates getPathTarget(int i, int j, int k, Action targetAction) {
+    public ChunkCoordinates getPathTarget(int i, int j, int k, Action targetAction) {
         if (targetAction == Action.HOEING) {
             if (this.isReplaceable(i, j + 1, k)) {
                 return new ChunkCoordinates(i, j + 1, k);
@@ -661,7 +661,7 @@ extends EntityAIBase {
         return new ChunkCoordinates(i, j, k);
     }
 
-    private boolean isSolidOpenWalkTarget(int i, int j, int k) {
+    public boolean isSolidOpenWalkTarget(int i, int j, int k) {
         Block below = this.theWorld.getBlock(i, j - 1, k);
         if (below.isOpaqueCube() || below.canSustainPlant((IBlockAccess)this.theWorld, i, j - 1, k, ForgeDirection.UP, (IPlantable)Blocks.wheat)) {
             ArrayList bounds = new ArrayList();
@@ -676,7 +676,7 @@ extends EntityAIBase {
         return false;
     }
 
-    private ChunkCoordinates getAdjacentSolidOpenWalkTarget(int i, int j, int k) {
+    public ChunkCoordinates getAdjacentSolidOpenWalkTarget(int i, int j, int k) {
         ArrayList<ChunkCoordinates> possibleCoords = new ArrayList<ChunkCoordinates>();
         for (int i1 = -1; i1 <= 1; ++i1) {
             for (int k1 = -1; k1 <= 1; ++k1) {
@@ -695,11 +695,11 @@ extends EntityAIBase {
         return new ChunkCoordinates(i, j, k);
     }
 
-    private boolean isSuitableForHoeing(ChunkCoordinates pos) {
+    public boolean isSuitableForHoeing(ChunkCoordinates pos) {
         return this.isSuitableForHoeing(pos.posX, pos.posY, pos.posZ);
     }
 
-    private boolean isSuitableForHoeing(int i, int j, int k) {
+    public boolean isSuitableForHoeing(int i, int j, int k) {
         this.harvestingSolidBlock = false;
         Block block = this.theWorld.getBlock(i, j, k);
         boolean isGrassDirt = block.canSustainPlant((IBlockAccess)this.theWorld, i, j, k, ForgeDirection.UP, (IPlantable)Blocks.tallgrass);
@@ -723,11 +723,11 @@ extends EntityAIBase {
         return false;
     }
 
-    private boolean isSuitableForPlanting(ChunkCoordinates pos) {
+    public boolean isSuitableForPlanting(ChunkCoordinates pos) {
         return this.isSuitableForPlanting(pos.posX, pos.posY, pos.posZ);
     }
 
-    private boolean isSuitableForPlanting(int i, int j, int k) {
+    public boolean isSuitableForPlanting(int i, int j, int k) {
         this.harvestingSolidBlock = false;
         if (this.isFarmingGrapes()) {
             return this.theWorld.getBlock(i, j, k) == LOTRMod.grapevine && LOTRBlockGrapevine.canPlantGrapesAt(this.theWorld, i, j, k, this.getSeedsToPlant());
@@ -735,11 +735,11 @@ extends EntityAIBase {
         return this.theWorld.getBlock(i, j - 1, k).isFertile(this.theWorld, i, j - 1, k) && this.isReplaceable(i, j, k);
     }
 
-    private boolean isSuitableForHarvesting(ChunkCoordinates pos) {
+    public boolean isSuitableForHarvesting(ChunkCoordinates pos) {
         return this.isSuitableForHarvesting(pos.posX, pos.posY, pos.posZ);
     }
 
-    private boolean isSuitableForHarvesting(int i, int j, int k) {
+    public boolean isSuitableForHarvesting(int i, int j, int k) {
         this.harvestingSolidBlock = false;
         IPlantable seed = this.getSeedsToPlant();
         Block plantBlock = seed.getPlant((IBlockAccess)this.theWorld, i, j, k);
@@ -767,11 +767,11 @@ extends EntityAIBase {
         return false;
     }
 
-    private boolean isSuitableForDepositing(ChunkCoordinates pos) {
+    public boolean isSuitableForDepositing(ChunkCoordinates pos) {
         return this.isSuitableForDepositing(pos.posX, pos.posY, pos.posZ);
     }
 
-    private boolean isSuitableForDepositing(int i, int j, int k) {
+    public boolean isSuitableForDepositing(int i, int j, int k) {
         this.harvestingSolidBlock = false;
         TileEntityChest chest = this.getSuitableChest(i, j, k);
         if (chest != null) {
@@ -788,11 +788,11 @@ extends EntityAIBase {
         return false;
     }
 
-    private boolean isSuitableForBonemealing(ChunkCoordinates pos) {
+    public boolean isSuitableForBonemealing(ChunkCoordinates pos) {
         return this.isSuitableForBonemealing(pos.posX, pos.posY, pos.posZ);
     }
 
-    private boolean isSuitableForBonemealing(int i, int j, int k) {
+    public boolean isSuitableForBonemealing(int i, int j, int k) {
         IGrowable growableBlock;
         this.harvestingSolidBlock = false;
         IPlantable seed = this.getSeedsToPlant();
@@ -804,11 +804,11 @@ extends EntityAIBase {
         return false;
     }
 
-    private boolean isSuitableForCollecting(ChunkCoordinates pos) {
+    public boolean isSuitableForCollecting(ChunkCoordinates pos) {
         return this.isSuitableForCollecting(pos.posX, pos.posY, pos.posZ);
     }
 
-    private boolean isSuitableForCollecting(int i, int j, int k) {
+    public boolean isSuitableForCollecting(int i, int j, int k) {
         this.harvestingSolidBlock = false;
         TileEntityChest chest = this.getSuitableChest(i, j, k);
         if (chest != null) {
@@ -829,7 +829,7 @@ extends EntityAIBase {
         return false;
     }
 
-    private TileEntityChest getSuitableChest(int i, int j, int k) {
+    public TileEntityChest getSuitableChest(int i, int j, int k) {
         TileEntity te;
         Block block = this.theWorld.getBlock(i, j, k);
         int meta = this.theWorld.getBlockMetadata(i, j, k);
@@ -837,9 +837,7 @@ extends EntityAIBase {
         if (block.hasTileEntity(meta) && (te = this.theWorld.getTileEntity(i, j, k)) instanceof TileEntityChest) {
             TileEntityChest chest = (TileEntityChest)te;
             boolean flag = false;
-            if (this.isFarmhandMarked(chest)) {
-                flag = true;
-            } else if (chest.adjacentChestXNeg != null && this.isFarmhandMarked(chest.adjacentChestXNeg)) {
+            if (this.isFarmhandMarked(chest) || chest.adjacentChestXNeg != null && this.isFarmhandMarked(chest.adjacentChestXNeg)) {
                 flag = true;
             } else if (chest.adjacentChestXPos != null && this.isFarmhandMarked(chest.adjacentChestXPos)) {
                 flag = true;
@@ -855,7 +853,7 @@ extends EntityAIBase {
         return suitableChest;
     }
 
-    private boolean isFarmhandMarked(TileEntityChest chest) {
+    public boolean isFarmhandMarked(TileEntityChest chest) {
         int i = chest.xCoord;
         int j = chest.yCoord;
         int k = chest.zCoord;
@@ -870,7 +868,7 @@ extends EntityAIBase {
         return false;
     }
 
-    private boolean isReplaceable(int i, int j, int k) {
+    public boolean isReplaceable(int i, int j, int k) {
         Block block = this.theWorld.getBlock(i, j, k);
         return !block.getMaterial().isLiquid() && block.isReplaceable((IBlockAccess)this.theWorld, i, j, k);
     }

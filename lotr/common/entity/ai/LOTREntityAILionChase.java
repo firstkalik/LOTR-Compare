@@ -45,7 +45,6 @@ extends EntityAIBase {
     private double speed;
     private int chaseTimer;
     private int lionRePathDelay;
-    private int targetRePathDelay;
 
     public LOTREntityAILionChase(LOTREntityLionBase lion, double d) {
         this.theLion = lion;
@@ -62,15 +61,15 @@ extends EntityAIBase {
         }
         List entities = this.theLion.worldObj.getEntitiesWithinAABB(EntityAnimal.class, this.theLion.boundingBox.expand(12.0, 12.0, 12.0));
         ArrayList<EntityAnimal> validTargets = new ArrayList<EntityAnimal>();
-        for (int i = 0; i < entities.size(); ++i) {
-            EntityAnimal entity = (EntityAnimal)entities.get(i);
+        for (Object entitie : entities) {
+            EntityAnimal entity = (EntityAnimal)entitie;
             if (entity.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.attackDamage) != null) continue;
             validTargets.add(entity);
         }
         if (validTargets.isEmpty()) {
             return false;
         }
-        this.targetEntity = (EntityAnimal)validTargets.get(this.theLion.getRNG().nextInt(validTargets.size()));
+        this.targetEntity = (EntityCreature)validTargets.get(this.theLion.getRNG().nextInt(validTargets.size()));
         return true;
     }
 
@@ -99,7 +98,6 @@ extends EntityAIBase {
     public void resetTask() {
         this.chaseTimer = 0;
         this.lionRePathDelay = 0;
-        this.targetRePathDelay = 0;
     }
 }
 

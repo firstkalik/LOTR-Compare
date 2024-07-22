@@ -42,6 +42,18 @@ extends Block {
         if (this == LOTRMod.oreNaurite) {
             return LOTRMod.nauriteGem;
         }
+        if (this == LOTRMod.oreLavaCoal) {
+            return LOTRMod.lavaCoal;
+        }
+        if (this == LOTRMod.oreMordorLavaCoal) {
+            return LOTRMod.lavaCoal;
+        }
+        if (this == LOTRMod.oreIron) {
+            return LOTRMod.ironRaw;
+        }
+        if (this == LOTRMod.oreGold) {
+            return LOTRMod.goldRaw;
+        }
         if (this == LOTRMod.oreQuendite) {
             return LOTRMod.quenditeCrystal;
         }
@@ -63,6 +75,15 @@ extends Block {
     public int quantityDropped(Random random) {
         if (this == LOTRMod.oreNaurite) {
             return 1 + random.nextInt(2);
+        }
+        if (this == LOTRMod.oreLavaCoal) {
+            return 1 + random.nextInt(2);
+        }
+        if (this == LOTRMod.oreIron) {
+            return 1 + random.nextInt(1);
+        }
+        if (this == LOTRMod.oreGold) {
+            return 1 + random.nextInt(1);
         }
         if (this == LOTRMod.oreGlowstone) {
             return 2 + random.nextInt(4);
@@ -93,14 +114,23 @@ extends Block {
             if (this == LOTRMod.oreNaurite) {
                 amountXp = MathHelper.getRandomIntegerInRange((Random)world.rand, (int)0, (int)2);
             }
+            if (this == LOTRMod.oreLavaCoal) {
+                amountXp = MathHelper.getRandomIntegerInRange((Random)world.rand, (int)0, (int)2);
+            }
+            if (this == LOTRMod.oreIron) {
+                amountXp = MathHelper.getRandomIntegerInRange((Random)world.rand, (int)0, (int)2);
+            }
+            if (this == LOTRMod.oreGold) {
+                amountXp = MathHelper.getRandomIntegerInRange((Random)world.rand, (int)0, (int)2);
+            }
             if (this == LOTRMod.oreQuendite) {
-                amountXp = MathHelper.getRandomIntegerInRange((Random)world.rand, (int)2, (int)5);
+                amountXp = MathHelper.getRandomIntegerInRange((Random)world.rand, (int)0, (int)2);
             }
             if (this == LOTRMod.oreGlowstone) {
-                amountXp = MathHelper.getRandomIntegerInRange((Random)world.rand, (int)2, (int)4);
+                amountXp = MathHelper.getRandomIntegerInRange((Random)world.rand, (int)0, (int)2);
             }
             if (this == LOTRMod.oreGulduril) {
-                amountXp = MathHelper.getRandomIntegerInRange((Random)world.rand, (int)2, (int)5);
+                amountXp = MathHelper.getRandomIntegerInRange((Random)world.rand, (int)0, (int)2);
             }
             if (this == LOTRMod.oreSulfur || this == LOTRMod.oreSaltpeter) {
                 amountXp = MathHelper.getRandomIntegerInRange((Random)world.rand, (int)0, (int)2);

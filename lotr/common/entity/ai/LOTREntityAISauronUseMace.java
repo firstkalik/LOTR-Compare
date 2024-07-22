@@ -46,12 +46,12 @@ extends EntityAIBase {
     public boolean shouldExecute() {
         int targets = 0;
         List nearbyEntities = this.theWorld.getEntitiesWithinAABB(EntityLivingBase.class, this.theSauron.boundingBox.expand(6.0, 6.0, 6.0));
-        for (int i = 0; i < nearbyEntities.size(); ++i) {
-            EntityLivingBase entity = (EntityLivingBase)nearbyEntities.get(i);
+        for (Object nearbyEntitie : nearbyEntities) {
+            EntityLivingBase entity = (EntityLivingBase)nearbyEntitie;
             if (!entity.isEntityAlive()) continue;
             if (entity instanceof EntityPlayer) {
                 EntityPlayer entityplayer = (EntityPlayer)entity;
-                if (entityplayer.capabilities.isCreativeMode || !(LOTRLevelData.getData(entityplayer).getAlignment(this.theSauron.getFaction()) < 0.0f) && this.theSauron.getAttackTarget() != entityplayer) continue;
+                if (entityplayer.capabilities.isCreativeMode || LOTRLevelData.getData(entityplayer).getAlignment(this.theSauron.getFaction()) >= 0.0f && this.theSauron.getAttackTarget() != entityplayer) continue;
                 ++targets;
                 continue;
             }

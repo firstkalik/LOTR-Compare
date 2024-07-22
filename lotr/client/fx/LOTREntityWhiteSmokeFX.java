@@ -17,8 +17,7 @@ public class LOTREntityWhiteSmokeFX
 extends EntitySmokeFX {
     public LOTREntityWhiteSmokeFX(World world, double d, double d1, double d2, double d3, double d4, double d5) {
         super(world, d, d1, d2, d3, d4, d5);
-        float grey;
-        this.particleGreen = this.particleBlue = (grey = MathHelper.randomFloatClamp((Random)this.rand, (float)0.6f, (float)1.0f));
+        this.particleGreen = this.particleBlue = MathHelper.randomFloatClamp((Random)this.rand, (float)0.6f, (float)1.0f);
         this.particleRed = this.particleBlue;
     }
 }

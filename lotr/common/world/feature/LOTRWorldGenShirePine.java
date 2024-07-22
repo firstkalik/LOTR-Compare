@@ -90,9 +90,9 @@ extends WorldGenAbstractTree {
                 }
                 int lastDir = -1;
                 for (int j1 = j; j1 < j + height; ++j1) {
+                    int i1;
                     int dir;
                     int k1;
-                    int i1;
                     this.setBlockAndNotifyAdequately(world, i, j1, k, this.woodBlock, this.woodMeta);
                     if (j1 < j + 3 || j1 >= minLeafHeight || random.nextInt(3) != 0 || (dir = random.nextInt(4)) == lastDir) continue;
                     lastDir = dir;

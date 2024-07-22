@@ -47,6 +47,7 @@ implements IMessage {
     public String[] whitelistSlots;
     public int[] whitelistPerms;
     public int defaultPerms;
+    public boolean thisPlayerHasPermission;
 
     public LOTRPacketBannerData() {
     }
@@ -80,6 +81,7 @@ implements IMessage {
         }
         data.writeShort(-1);
         data.writeShort(this.defaultPerms);
+        data.writeBoolean(this.thisPlayerHasPermission);
     }
 
     public void fromBytes(ByteBuf data) {
@@ -106,6 +108,7 @@ implements IMessage {
             this.whitelistPerms[index] = data.readShort();
         }
         this.defaultPerms = data.readShort();
+        this.thisPlayerHasPermission = data.readBoolean();
     }
 
     public static class Handler
@@ -139,6 +142,7 @@ implements IMessage {
                 }
                 List<LOTRBannerProtection.Permission> defaultPerms = LOTRBannerWhitelistEntry.static_decodePermBitFlags(packet.defaultPerms);
                 banner.setDefaultPermissions(defaultPerms);
+                banner.setClientside_playerHasPermissionInSurvival(packet.thisPlayerHasPermission);
                 if (packet.openGui) {
                     LOTRMod.proxy.displayBannerGui(banner);
                 }

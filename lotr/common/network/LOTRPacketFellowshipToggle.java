@@ -49,6 +49,13 @@ extends LOTRPacketFellowshipDo {
         this.function = ToggleFunction.values()[data.readByte()];
     }
 
+    public static enum ToggleFunction {
+        PVP,
+        HIRED_FF,
+        MAP_SHOW;
+
+    }
+
     public static class Handler
     implements IMessageHandler<LOTRPacketFellowshipToggle, IMessage> {
         public IMessage onMessage(LOTRPacketFellowshipToggle packet, MessageContext context) {
@@ -69,13 +76,6 @@ extends LOTRPacketFellowshipDo {
             }
             return null;
         }
-    }
-
-    public static enum ToggleFunction {
-        PVP,
-        HIRED_FF,
-        MAP_SHOW;
-
     }
 
 }

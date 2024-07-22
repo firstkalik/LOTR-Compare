@@ -52,7 +52,6 @@ extends TileEntity {
     private int targetX;
     private int targetZ;
     private int targetResetTick;
-    private static final int targetResetTick_max = 1200;
 
     public void updateEntity() {
         if (this.worldObj.getBlock(this.xCoord, this.yCoord - 1, this.zCoord) == this.getBlockType()) {
@@ -102,8 +101,8 @@ extends TileEntity {
     }
 
     private LOTRTileEntityUtumnoPortal findActingTargetingPortal() {
-        int range;
-        for (int i = range = 8; i >= -range; --i) {
+        int range = 8;
+        for (int i = 8; i >= -range; --i) {
             for (int k = range; k >= -range; --k) {
                 TileEntity te;
                 int i1 = this.xCoord + i;

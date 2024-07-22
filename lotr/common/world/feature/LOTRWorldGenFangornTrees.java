@@ -60,9 +60,7 @@ extends WorldGenAbstractTree {
     }
 
     public boolean generate(World world, Random random, int i, int j, int k) {
-        boolean isSoil;
-        Block below;
-        if (this.restrictions && !(isSoil = (below = world.getBlock(i, j - 1, k)).canSustainPlant((IBlockAccess)world, i, j - 1, k, ForgeDirection.UP, (IPlantable)Blocks.sapling))) {
+        if (this.restrictions && !world.getBlock(i, j - 1, k).canSustainPlant((IBlockAccess)world, i, j - 1, k, ForgeDirection.UP, (IPlantable)Blocks.sapling)) {
             return false;
         }
         float f = 0.5f + random.nextFloat() * 0.5f;
@@ -210,12 +208,9 @@ extends WorldGenAbstractTree {
 
     private void growVines(World world, Random random, int i, int j, int k, int meta) {
         this.setBlockAndNotifyAdequately(world, i, j, k, Blocks.vine, meta);
-        int length = 4 + random.nextInt(12);
-        while (world.isAirBlock(i, --j, k) && length > 0) {
+        for (int length = 4 + random.nextInt(12); world.isAirBlock(i, --j, k) && length > 0; --length) {
             this.setBlockAndNotifyAdequately(world, i, j, k, Blocks.vine, meta);
-            --length;
         }
-        return;
     }
 }
 

@@ -69,10 +69,6 @@ implements IItemRenderer {
         return false;
     }
 
-    /*
-     * Enabled force condition propagation
-     * Lifted jumps to return sites
-     */
     public void renderItem(IItemRenderer.ItemRenderType type, ItemStack itemstack, Object ... data) {
         GL11.glPushMatrix();
         EntityLivingBase entity = (EntityLivingBase)data[1];
@@ -100,7 +96,9 @@ implements IItemRenderer {
         }
         if (this.largeItemRenderer != null) {
             Item item = itemstack.getItem();
-            if (!(item instanceof LOTRItemBow)) throw new RuntimeException("Attempting to render a large bow which is not a bow");
+            if (!(item instanceof LOTRItemBow)) {
+                throw new RuntimeException("Attempting to render a large bow which is not a bow");
+            }
             LOTRItemBow bow = (LOTRItemBow)item;
             LOTRItemBow.BowState bowState = LOTRItemBow.BowState.HELD;
             if (entity instanceof EntityPlayer) {

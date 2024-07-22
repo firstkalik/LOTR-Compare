@@ -13,6 +13,7 @@
  *  net.minecraft.item.Item
  *  net.minecraft.item.ItemStack
  *  net.minecraft.nbt.NBTTagCompound
+ *  net.minecraft.potion.Potion
  *  net.minecraft.world.World
  */
 package lotr.common.entity.item;
@@ -30,11 +31,14 @@ import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.potion.Potion;
 import net.minecraft.world.World;
 
 public class LOTREntityArrowPoisoned
 extends EntityArrow
 implements IEntityAdditionalSpawnData {
+    protected boolean isInGround = false;
+
     public LOTREntityArrowPoisoned(World world) {
         super(world);
     }
@@ -86,6 +90,23 @@ implements IEntityAdditionalSpawnData {
                 this.setDead();
             }
         }
+    }
+
+    public void onUpdate() {
+        super.onUpdate();
+        if (this.worldObj.isRemote && !this.isInGround) {
+            int c = Potion.poison.getLiquidColor();
+            double d0 = (double)(c >> 16 & 0xFF) / 255.0;
+            double d1 = (double)(c >> 8 & 0xFF) / 255.0;
+            double d2 = (double)(c & 0xFF) / 255.0;
+            for (int i = 0; i < 1; ++i) {
+                this.worldObj.spawnParticle("mobSpell", this.posX + this.motionX / 6.0, this.posY + this.motionY / 6.0, this.posZ + this.motionZ / 6.0, d0, d1, d2);
+            }
+        }
+    }
+
+    public boolean hasParticleType() {
+        return true;
     }
 }
 

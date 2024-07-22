@@ -148,8 +148,8 @@ extends LOTRWorldGenStructureBase {
     }
 
     private boolean generateFacingWest(World world, Random random, int i, int j, int k) {
-        int k1;
         int i1;
+        int k1;
         if (this.restrictions) {
             for (i1 = i; i1 >= i - 5; --i1) {
                 for (k1 = k + 2; k1 >= k - 3; --k1) {
@@ -236,8 +236,8 @@ extends LOTRWorldGenStructureBase {
     }
 
     private boolean generateFacingEast(World world, Random random, int i, int j, int k) {
-        int k1;
         int i1;
+        int k1;
         if (this.restrictions) {
             for (i1 = i; i1 <= i + 5; ++i1) {
                 for (k1 = k - 2; k1 <= k + 3; ++k1) {

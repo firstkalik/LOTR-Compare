@@ -93,10 +93,6 @@ extends GuiContainer {
     private LOTRGuiUnitTradeButton buttonLeftUnit;
     private LOTRGuiUnitTradeButton buttonRightUnit;
     private GuiTextField squadronNameField;
-    private static final int extraInfoX = 49;
-    private static final int extraInfoY = 106;
-    private static final int extraInfoWidth = 9;
-    private static final int extraInfoHeight = 7;
 
     public LOTRGuiHireBase(EntityPlayer entityplayer, LOTRHireableBase trader, World world) {
         super((Container)new LOTRContainerUnitTrade(entityplayer, trader, world));
@@ -244,8 +240,7 @@ extends GuiContainer {
         if (this.currentDisplayedMob == null || this.currentDisplayedMob.getClass() != entityClass || mountClass == null && this.currentDisplayedMount != null || mountClass != null && (this.currentDisplayedMount == null || this.currentDisplayedMount.getClass() != mountClass)) {
             this.currentDisplayedMob = this.currentTrade().getOrCreateHiredNPC((World)this.mc.theWorld);
             if (mountClass != null) {
-                EntityLiving mount;
-                this.currentDisplayedMount = mount = this.currentTrade().createHiredMount((World)this.mc.theWorld);
+                this.currentDisplayedMount = this.currentTrade().createHiredMount((World)this.mc.theWorld);
                 this.currentDisplayedMob.mountEntity((Entity)this.currentDisplayedMount);
             } else {
                 this.currentDisplayedMount = null;

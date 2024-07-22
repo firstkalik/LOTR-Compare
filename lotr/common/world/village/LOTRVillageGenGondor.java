@@ -68,18 +68,6 @@ import net.minecraft.world.World;
 
 public class LOTRVillageGenGondor
 extends LOTRVillageGen {
-    private static final int INNER_MAX = 20;
-    private static final int OUTER_MIN = 53;
-    private static final int OUTER_MAX = 60;
-    private static final int SPOKE_WIDTH = 2;
-    private static final int PATH_FUZZ = 4;
-    private static final int FORT_WALL_Z = 37;
-    private static final int FORT_WALL_CENTRE_X = 11;
-    private static final int FORT_WALL_CORNER = 30;
-    private static final int TOWER_X = 23;
-    private static final int TOWER_Z = 33;
-    private static final int SIGN_R = 50;
-    private static final int SIGN_DISP = 7;
     private LOTRWorldGenGondorStructure.GondorFiefdom villageFief;
 
     public LOTRVillageGenGondor(LOTRBiome biome, LOTRWorldGenGondorStructure.GondorFiefdom fief, float f) {
@@ -94,6 +82,13 @@ extends LOTRVillageGen {
     @Override
     protected LOTRVillageGen.AbstractInstance<?> createVillageInstance(World world, int i, int k, Random random, LocationInfo loc) {
         return new Instance(this, world, i, k, random, loc);
+    }
+
+    public static enum VillageType {
+        VILLAGE,
+        TOWN,
+        FORT;
+
     }
 
     public static class Instance
@@ -153,7 +148,7 @@ extends LOTRVillageGen {
 
                 @Override
                 public void setupRespawner(LOTREntityNPCRespawner spawner) {
-                    spawner.setSpawnClass(Instance.this.villageFief.getLevyClasses()[0]);
+                    spawner.setSpawnClass(villageFief.getLevyClasses()[0]);
                     spawner.setCheckRanges(40, -12, 12, 16);
                     spawner.setSpawnRanges(20, -6, 6, 64);
                     spawner.setBlockEnemySpawnRange(60);
@@ -181,9 +176,9 @@ extends LOTRVillageGen {
             float frac = 1.0f / (float)houses;
             float turn = 0.0f;
             while (turn < 1.0f) {
-                int i;
-                int k;
                 int l;
+                int k;
+                int i;
                 float turnR = (float)Math.toRadians((turn += frac) * 360.0f);
                 float sin = MathHelper.sin((float)turnR);
                 float cos = MathHelper.cos((float)turnR);
@@ -289,7 +284,7 @@ extends LOTRVillageGen {
 
                         @Override
                         public void setupRespawner(LOTREntityNPCRespawner spawner) {
-                            spawner.setSpawnClasses(Instance.this.villageFief.getLevyClasses()[0], Instance.this.villageFief.getLevyClasses()[1]);
+                            spawner.setSpawnClasses(villageFief.getLevyClasses()[0], villageFief.getLevyClasses()[1]);
                             spawner.setCheckRanges(40, -12, 12, 16);
                             spawner.setSpawnRanges(20, -6, 6, 64);
                             spawner.setBlockEnemySpawnRange(60);
@@ -507,7 +502,7 @@ extends LOTRVillageGen {
 
                         @Override
                         public void setupRespawner(LOTREntityNPCRespawner spawner) {
-                            spawner.setSpawnClasses(Instance.this.villageFief.getSoldierClasses()[0], Instance.this.villageFief.getSoldierClasses()[1]);
+                            spawner.setSpawnClasses(villageFief.getSoldierClasses()[0], villageFief.getSoldierClasses()[1]);
                             spawner.setCheckRanges(20, -12, 12, 16);
                             spawner.setSpawnRanges(20, -6, 6, 40);
                             spawner.setBlockEnemySpawnRange(40);
@@ -613,7 +608,6 @@ extends LOTRVillageGen {
             int i1 = Math.abs(i);
             int k1 = Math.abs(k);
             if (this.villageType == VillageType.VILLAGE) {
-                int d1;
                 int dSq = i * i + k * k;
                 int imn = 20 + random.nextInt(4);
                 if (dSq < imn * imn) {
@@ -624,7 +618,7 @@ extends LOTRVillageGen {
                 if (dSq > omn * omn && dSq < omx * omx) {
                     return LOTRRoadType.PATH;
                 }
-                if (dSq < 2809 && (d1 = Math.abs(i1 - k1)) <= 2 + random.nextInt(4)) {
+                if (dSq < 2809 && Math.abs(i1 - k1) <= 2 + random.nextInt(4)) {
                     return LOTRRoadType.PATH;
                 }
             }
@@ -650,13 +644,6 @@ extends LOTRVillageGen {
             Block block = world.getBlock(i, j, k);
             return this.villageType == VillageType.TOWN && block == Blocks.cobblestone;
         }
-
-    }
-
-    public static enum VillageType {
-        VILLAGE,
-        TOWN,
-        FORT;
 
     }
 

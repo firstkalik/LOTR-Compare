@@ -79,19 +79,17 @@ extends LOTRWorldGenCampBase {
     public boolean generateWithSetRotation(World world, Random random, int i, int j, int k, int rotation) {
         if (super.generateWithSetRotation(world, random, i, j, k, rotation)) {
             float ang;
-            int r;
             int k1;
-            int rot;
-            int j1;
+            int r;
             int i1;
-            for (int att = 0; att < 16 && !this.generateSubstructureWithRestrictionFlag(new LOTRWorldGenCorsairCampCage(this.notifyChanges), world, random, i1 = (int)((float)(r = MathHelper.getRandomIntegerInRange((Random)random, (int)8, (int)20)) * MathHelper.cos((float)(ang = random.nextFloat() * 3.1415927f * 2.0f))), j1 = this.getTopBlock(world, i1, k1 = (int)((float)r * MathHelper.sin((float)ang))), k1, rot = random.nextInt(4), true); ++att) {
+            for (int att = 0; att < 16 && !this.generateSubstructureWithRestrictionFlag(new LOTRWorldGenCorsairCampCage(this.notifyChanges), world, random, i1 = (int)((float)(r = MathHelper.getRandomIntegerInRange((Random)random, (int)8, (int)20)) * MathHelper.cos((float)(ang = random.nextFloat() * 3.1415927f * 2.0f))), this.getTopBlock(world, i1, k1 = (int)((float)r * MathHelper.sin((float)ang))), k1, random.nextInt(4), true); ++att) {
             }
             int chestPiles = 1 + random.nextInt(2);
             block1: for (int l = 0; l < chestPiles; ++l) {
                 for (int att = 0; att < 16; ++att) {
-                    int j12;
                     float ang2;
                     int k12;
+                    int j12;
                     int r2 = MathHelper.getRandomIntegerInRange((Random)random, (int)8, (int)20);
                     int i12 = (int)((float)r2 * MathHelper.cos((float)(ang2 = random.nextFloat() * 3.1415927f * 2.0f)));
                     if (!this.isOpaque(world, i12, (j12 = this.getTopBlock(world, i12, k12 = (int)((float)r2 * MathHelper.sin((float)ang2)))) - 1, k12) || !this.isAir(world, i12, j12, k12) || !this.isAir(world, i12, j12 + 1, k12)) continue;

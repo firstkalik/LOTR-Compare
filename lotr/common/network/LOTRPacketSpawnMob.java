@@ -80,7 +80,7 @@ implements IMessage {
             }
             LOTRLog.logger.info("LOTR: Received mob spawn packet: " + modEntityID + "[" + x + ", " + y + ", " + z + "]");
             try {
-                new AdhocEntitySpawnHandler().channelRead0(null, (FMLMessage.EntityMessage)msg);
+                new AdhocEntitySpawnHandler().channelRead0((ChannelHandlerContext)null, (FMLMessage.EntityMessage)msg);
             }
             catch (Exception e) {
                 LOTRLog.logger.error("LOTR: FATAL ERROR spawning entity!!!");

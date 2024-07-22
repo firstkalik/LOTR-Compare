@@ -40,7 +40,7 @@ implements LOTRUnitTradeable {
     public LOTREntityLossarnachCaptain(World world) {
         super(world);
         this.addTargetTasks(false);
-        this.npcCape = LOTRCapes.LOSSARNACH;
+        this.npcCape = LOTRCapes.LOSSARNACH.capeTexture;
     }
 
     @Override
@@ -73,7 +73,7 @@ implements LOTRUnitTradeable {
     }
 
     @Override
-    public LOTRInvasions getWarhorn() {
+    public LOTRInvasions getConquestHorn() {
         return LOTRInvasions.GONDOR_LOSSARNACH;
     }
 

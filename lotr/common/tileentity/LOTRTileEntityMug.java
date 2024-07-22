@@ -132,7 +132,7 @@ extends TileEntity {
             }
         } else {
             boolean hasItem = nbt.getBoolean("HasMugItem");
-            this.mugItem = !hasItem ? null : ItemStack.loadItemStackFromNBT((NBTTagCompound)nbt.getCompoundTag("MugItem"));
+            ItemStack itemStack = this.mugItem = !hasItem ? null : ItemStack.loadItemStackFromNBT((NBTTagCompound)nbt.getCompoundTag("MugItem"));
         }
         if (nbt.hasKey("Vessel")) {
             this.mugVessel = LOTRItemMug.Vessel.forMeta(nbt.getByte("Vessel"));

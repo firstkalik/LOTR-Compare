@@ -58,11 +58,11 @@ extends WorldGenAbstractTree {
     }
 
     public boolean generate(World world, Random random, int i, int j, int k) {
-        int k1;
-        int i1;
-        int j1;
-        int i12;
         Block below;
+        int k1;
+        int i12;
+        int j1;
+        int i1;
         int height = MathHelper.getRandomIntegerInRange((Random)random, (int)this.minHeight, (int)this.maxHeight);
         int leafMin = 3 + random.nextInt(3);
         leafMin = j + leafMin - 1;
@@ -77,10 +77,10 @@ extends WorldGenAbstractTree {
                 if (j12 >= leafMin) {
                     range = 2;
                 }
-                for (i12 = i - range; i12 <= i + this.extraTrunk + range && flag; ++i12) {
+                for (i1 = i - range; i1 <= i + this.extraTrunk + range && flag; ++i1) {
                     for (int k12 = k - range; k12 <= k + this.extraTrunk + range && flag; ++k12) {
                         if (j12 >= 0 && j12 < 256) {
-                            if (this.isReplaceable(world, i12, j12, k12)) continue;
+                            if (this.isReplaceable(world, i1, j12, k12)) continue;
                             flag = false;
                             continue;
                         }
@@ -95,20 +95,20 @@ extends WorldGenAbstractTree {
             return false;
         }
         boolean canGrow = true;
-        for (i1 = i; i1 <= i + this.extraTrunk && canGrow; ++i1) {
+        for (i12 = i; i12 <= i + this.extraTrunk && canGrow; ++i12) {
             for (k1 = k; k1 <= k + this.extraTrunk && canGrow; ++k1) {
-                below = world.getBlock(i1, j - 1, k1);
-                if (below.canSustainPlant((IBlockAccess)world, i1, j - 1, k1, ForgeDirection.UP, (IPlantable)Blocks.sapling)) continue;
+                below = world.getBlock(i12, j - 1, k1);
+                if (below.canSustainPlant((IBlockAccess)world, i12, j - 1, k1, ForgeDirection.UP, (IPlantable)Blocks.sapling)) continue;
                 canGrow = false;
             }
         }
         if (!canGrow) {
             return false;
         }
-        for (i1 = i; i1 <= i + this.extraTrunk; ++i1) {
+        for (i12 = i; i12 <= i + this.extraTrunk; ++i12) {
             for (k1 = k; k1 <= k + this.extraTrunk; ++k1) {
-                below = world.getBlock(i1, j - 1, k1);
-                below.onPlantGrow(world, i1, j - 1, k1, i1, j, k1);
+                below = world.getBlock(i12, j - 1, k1);
+                below.onPlantGrow(world, i12, j - 1, k1, i12, j, k1);
             }
         }
         for (j1 = leafMin; j1 <= leafTop; ++j1) {
@@ -151,9 +151,9 @@ extends WorldGenAbstractTree {
             }
         }
         for (j1 = j; j1 < j + height; ++j1) {
-            for (i12 = i; i12 <= i + this.extraTrunk; ++i12) {
+            for (i1 = i; i1 <= i + this.extraTrunk; ++i1) {
                 for (int k14 = k; k14 <= k + this.extraTrunk; ++k14) {
-                    this.setBlockAndNotifyAdequately(world, i12, j1, k14, this.woodBlock, this.woodMeta);
+                    this.setBlockAndNotifyAdequately(world, i1, j1, k14, this.woodBlock, this.woodMeta);
                 }
             }
         }

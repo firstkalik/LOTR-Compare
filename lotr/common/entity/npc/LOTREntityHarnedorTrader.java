@@ -71,9 +71,9 @@ implements LOTRTradeable {
     @Override
     public String getSpeechBank(EntityPlayer entityplayer) {
         if (this.isFriendly(entityplayer)) {
-            return "nearHarad/harnennor/bazaarTrader/friendly";
+            return "nearHarad/harnedor/bazaarTrader/friendly";
         }
-        return "nearHarad/harnennor/bazaarTrader/hostile";
+        return "nearHarad/harnedor/bazaarTrader/hostile";
     }
 }
 

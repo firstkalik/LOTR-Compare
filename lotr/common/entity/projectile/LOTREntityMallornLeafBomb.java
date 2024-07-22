@@ -153,10 +153,12 @@ extends EntityThrowable {
             double range = 2.0;
             List entities = this.worldObj.getEntitiesWithinAABB(EntityLivingBase.class, this.boundingBox.expand(range, range, range));
             if (!entities.isEmpty()) {
-                for (int i = 0; i < entities.size(); ++i) {
-                    float damage;
-                    EntityLivingBase entity = (EntityLivingBase)entities.get(i);
-                    if (!this.isEntityVulnerable((Entity)entity) || !((damage = this.leavesDamage / Math.max(1.0f, this.getDistanceToEntity((Entity)entity))) > 0.0f)) continue;
+                for (Object entitie : entities) {
+                    float f;
+                    EntityLivingBase entity = (EntityLivingBase)entitie;
+                    if (!this.isEntityVulnerable((Entity)entity)) continue;
+                    float damage = this.leavesDamage / Math.max(1.0f, this.getDistanceToEntity((Entity)entity));
+                    if (f <= 0.0f) continue;
                     entity.attackEntityFrom(DamageSource.causeMobDamage((EntityLivingBase)this.getThrower()), damage);
                 }
             }

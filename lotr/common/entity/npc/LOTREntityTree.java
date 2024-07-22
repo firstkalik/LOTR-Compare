@@ -102,11 +102,11 @@ extends LOTREntityNPC {
     }
 
     @Override
-    public void setAttackTarget(EntityLivingBase target, boolean speak) {
+    public void setAttackTarget(EntityLivingBase target) {
         if (target instanceof LOTREntityTree) {
             return;
         }
-        super.setAttackTarget(target, speak);
+        super.setAttackTarget(target);
     }
 
     public void knockBack(Entity entity, float f, double d, double d1) {
@@ -172,7 +172,7 @@ extends LOTREntityNPC {
             int j = MathHelper.floor_double((double)this.boundingBox.minY);
             int k = MathHelper.floor_double((double)this.posZ);
             Block block = this.worldObj.getBlock(i, j - 1, k);
-            int meta = this.worldObj.getBlockMetadata(i, j - 1, k);
+            this.worldObj.getBlockMetadata(i, j - 1, k);
             return j > 62 && (block == Blocks.grass || block == Blocks.dirt);
         }
         return false;

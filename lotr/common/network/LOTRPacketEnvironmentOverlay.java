@@ -36,6 +36,12 @@ implements IMessage {
         this.overlay = Overlay.values()[overlayID];
     }
 
+    public static enum Overlay {
+        FROST,
+        BURN;
+
+    }
+
     public static class Handler
     implements IMessageHandler<LOTRPacketEnvironmentOverlay, IMessage> {
         public IMessage onMessage(LOTRPacketEnvironmentOverlay packet, MessageContext context) {
@@ -46,12 +52,6 @@ implements IMessage {
             }
             return null;
         }
-    }
-
-    public static enum Overlay {
-        FROST,
-        BURN;
-
     }
 
 }

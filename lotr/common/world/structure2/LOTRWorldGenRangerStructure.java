@@ -54,7 +54,6 @@ extends LOTRWorldGenStructureBase2 {
     protected Block woodBeamBlock;
     protected int woodBeamMeta;
     protected Block doorBlock;
-    protected Block trapdoorBlock;
     protected Block wallBlock;
     protected int wallMeta;
     protected Block roofBlock;
@@ -120,7 +119,6 @@ extends LOTRWorldGenStructureBase2 {
             this.woodBeamBlock = LOTRMod.woodBeamV1;
             this.woodBeamMeta = 0;
             this.doorBlock = Blocks.wooden_door;
-            this.trapdoorBlock = Blocks.trapdoor;
         } else if (randomWood == 3) {
             this.logBlock = LOTRMod.wood2;
             this.logMeta = 1;
@@ -135,7 +133,6 @@ extends LOTRWorldGenStructureBase2 {
             this.woodBeamBlock = LOTRMod.woodBeam2;
             this.woodBeamMeta = 1;
             this.doorBlock = LOTRMod.doorBeech;
-            this.trapdoorBlock = LOTRMod.trapdoorBeech;
         } else if (randomWood == 4) {
             this.logBlock = Blocks.log;
             this.logMeta = 1;
@@ -150,7 +147,6 @@ extends LOTRWorldGenStructureBase2 {
             this.woodBeamBlock = LOTRMod.woodBeamV1;
             this.woodBeamMeta = 1;
             this.doorBlock = LOTRMod.doorSpruce;
-            this.trapdoorBlock = LOTRMod.trapdoorSpruce;
         } else if (randomWood == 5) {
             this.logBlock = LOTRMod.wood5;
             this.logMeta = 0;
@@ -165,7 +161,6 @@ extends LOTRWorldGenStructureBase2 {
             this.woodBeamBlock = LOTRMod.woodBeam5;
             this.woodBeamMeta = 0;
             this.doorBlock = LOTRMod.doorPine;
-            this.trapdoorBlock = LOTRMod.trapdoorPine;
         } else if (randomWood == 6) {
             this.logBlock = LOTRMod.wood4;
             this.logMeta = 0;
@@ -180,7 +175,6 @@ extends LOTRWorldGenStructureBase2 {
             this.woodBeamBlock = LOTRMod.woodBeam4;
             this.woodBeamMeta = 0;
             this.doorBlock = LOTRMod.doorChestnut;
-            this.trapdoorBlock = LOTRMod.trapdoorChestnut;
         }
         if (random.nextBoolean()) {
             this.wallBlock = LOTRMod.daub;
@@ -197,7 +191,7 @@ extends LOTRWorldGenStructureBase2 {
         this.barsBlock = random.nextBoolean() ? Blocks.iron_bars : LOTRMod.bronzeBars;
         this.tableBlock = LOTRMod.rangerTable;
         this.bedBlock = LOTRMod.strawBed;
-        this.plateBlock = random.nextBoolean() ? LOTRMod.woodPlateBlock : LOTRMod.ceramicPlateBlock;
+        Block block = this.plateBlock = random.nextBoolean() ? LOTRMod.woodPlateBlock : LOTRMod.ceramicPlateBlock;
         if (random.nextBoolean()) {
             this.cropBlock = Blocks.wheat;
             this.cropMeta = 7;

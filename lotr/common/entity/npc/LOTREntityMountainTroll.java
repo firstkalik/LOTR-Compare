@@ -21,6 +21,7 @@
  *  net.minecraft.entity.player.EntityPlayer
  *  net.minecraft.entity.projectile.EntityArrow
  *  net.minecraft.item.ItemStack
+ *  net.minecraft.util.MathHelper
  *  net.minecraft.world.World
  */
 package lotr.common.entity.npc;
@@ -53,6 +54,7 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
 public class LOTREntityMountainTroll
@@ -97,7 +99,7 @@ extends LOTREntityTroll {
     @Override
     protected void applyEntityAttributes() {
         super.applyEntityAttributes();
-        this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(70.0);
+        this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue((double)MathHelper.getRandomIntegerInRange((Random)this.rand, (int)70, (int)80));
         this.getEntityAttribute(npcAttackDamage).setBaseValue(7.0);
         this.getAttributeMap().registerAttribute(thrownRockDamage);
     }

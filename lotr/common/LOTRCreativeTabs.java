@@ -33,6 +33,7 @@ extends CreativeTabs {
     public static LOTRCreativeTabs tabCombat = new LOTRCreativeTabs("combat");
     public static LOTRCreativeTabs tabStory = new LOTRCreativeTabs("story");
     public static LOTRCreativeTabs tabSpawn = new LOTRCreativeTabs("spawning");
+    public static LOTRCreativeTabs tabDevelopers = new LOTRCreativeTabs("dewelopers");
     public ItemStack theIcon;
 
     public LOTRCreativeTabs(String label) {
@@ -43,13 +44,14 @@ extends CreativeTabs {
         LOTRCreativeTabs.tabBlock.theIcon = new ItemStack(LOTRMod.brick, 1, 11);
         LOTRCreativeTabs.tabUtil.theIcon = new ItemStack(LOTRMod.dwarvenForge);
         LOTRCreativeTabs.tabDeco.theIcon = new ItemStack(LOTRMod.simbelmyne);
-        LOTRCreativeTabs.tabFood.theIcon = new ItemStack(LOTRMod.lembas);
+        LOTRCreativeTabs.tabFood.theIcon = new ItemStack(LOTRMod.lembasNugget);
         LOTRCreativeTabs.tabMaterials.theIcon = new ItemStack(LOTRMod.mithril);
         LOTRCreativeTabs.tabMisc.theIcon = new ItemStack(LOTRMod.hobbitPipe);
         LOTRCreativeTabs.tabTools.theIcon = new ItemStack(LOTRMod.pickaxeOrc);
         LOTRCreativeTabs.tabCombat.theIcon = new ItemStack(LOTRMod.helmetGondor);
         LOTRCreativeTabs.tabStory.theIcon = new ItemStack(LOTRMod.anduril);
         LOTRCreativeTabs.tabSpawn.theIcon = new ItemStack(LOTRMod.spawnEgg, 1, 55);
+        LOTRCreativeTabs.tabDevelopers.theIcon = new ItemStack(LOTRMod.eru);
     }
 
     @SideOnly(value=Side.CLIENT)

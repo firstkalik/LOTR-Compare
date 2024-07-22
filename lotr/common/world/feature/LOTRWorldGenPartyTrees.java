@@ -45,8 +45,8 @@ extends WorldGenAbstractTree {
     }
 
     public boolean generate(World world, Random random, int i, int j, int k) {
-        int k1;
         int j1;
+        int k1;
         int i1;
         int trunkWidth = 1;
         int height = random.nextInt(12) + 12;

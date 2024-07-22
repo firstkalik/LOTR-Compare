@@ -114,9 +114,8 @@ extends LOTREntityTroll {
     @Override
     public boolean attackEntityAsMob(Entity entity) {
         if (super.attackEntityAsMob(entity)) {
-            int difficulty;
             int duration;
-            if (entity instanceof EntityLivingBase && (duration = (difficulty = this.worldObj.difficultySetting.getDifficultyId()) * 3 - 1) > 0) {
+            if (entity instanceof EntityLivingBase && (duration = this.worldObj.difficultySetting.getDifficultyId() * 3 - 1) > 0) {
                 ((EntityLivingBase)entity).addPotionEffect(new PotionEffect(Potion.poison.id, duration * 20, 0));
             }
             return true;

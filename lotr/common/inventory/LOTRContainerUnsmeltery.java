@@ -61,8 +61,8 @@ extends Container {
 
     public void detectAndSendChanges() {
         super.detectAndSendChanges();
-        for (int i = 0; i < this.crafters.size(); ++i) {
-            ICrafting crafting = (ICrafting)this.crafters.get(i);
+        for (Object element : this.crafters) {
+            ICrafting crafting = (ICrafting)element;
             if (this.currentSmeltTime != this.theUnsmeltery.currentSmeltTime) {
                 crafting.sendProgressBarUpdate((Container)this, 0, this.theUnsmeltery.currentSmeltTime);
             }

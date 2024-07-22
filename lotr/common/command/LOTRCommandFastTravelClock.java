@@ -40,20 +40,21 @@ extends CommandBase {
 
     public void processCommand(ICommandSender sender, String[] args) {
         if (args.length >= 1) {
+            int seconds;
             EntityPlayerMP entityplayer;
             String argSeconds = args[0];
-            int seconds = argSeconds.equals("max") ? 1000000 : LOTRCommandFastTravelClock.parseIntWithMin((ICommandSender)sender, (String)args[0], (int)0);
+            int n = seconds = argSeconds.equals("max") ? 1000000 : CommandBase.parseIntWithMin((ICommandSender)sender, (String)args[0], (int)0);
             if (args.length >= 2) {
-                entityplayer = LOTRCommandFastTravelClock.getPlayer((ICommandSender)sender, (String)args[1]);
+                entityplayer = CommandBase.getPlayer((ICommandSender)sender, (String)args[1]);
             } else {
-                entityplayer = LOTRCommandFastTravelClock.getCommandSenderAsPlayer((ICommandSender)sender);
+                entityplayer = CommandBase.getCommandSenderAsPlayer((ICommandSender)sender);
                 if (entityplayer == null) {
                     throw new PlayerNotFoundException();
                 }
             }
             int ticks = seconds * 20;
             LOTRLevelData.getData((EntityPlayer)entityplayer).setTimeSinceFT(ticks);
-            LOTRCommandFastTravelClock.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.fastTravelClock.set", (Object[])new Object[]{entityplayer.getCommandSenderName(), seconds, LOTRLevelData.getHMSTime_Seconds(seconds)});
+            CommandBase.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.fastTravelClock.set", (Object[])new Object[]{entityplayer.getCommandSenderName(), seconds, LOTRLevelData.getHMSTime_Seconds(seconds)});
             return;
         }
         throw new WrongUsageException(this.getCommandUsage(sender), new Object[0]);
@@ -61,10 +62,10 @@ extends CommandBase {
 
     public List addTabCompletionOptions(ICommandSender sender, String[] args) {
         if (args.length == 1) {
-            return LOTRCommandFastTravelClock.getListOfStringsMatchingLastWord((String[])args, (String[])new String[]{"0", "max"});
+            return CommandBase.getListOfStringsMatchingLastWord((String[])args, (String[])new String[]{"0", "max"});
         }
         if (args.length == 2) {
-            return LOTRCommandFastTravelClock.getListOfStringsMatchingLastWord((String[])args, (String[])MinecraftServer.getServer().getAllUsernames());
+            return CommandBase.getListOfStringsMatchingLastWord((String[])args, (String[])MinecraftServer.getServer().getAllUsernames());
         }
         return null;
     }

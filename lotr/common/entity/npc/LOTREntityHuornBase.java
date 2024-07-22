@@ -23,12 +23,14 @@
  *  net.minecraft.pathfinding.PathNavigate
  *  net.minecraft.util.AxisAlignedBB
  *  net.minecraft.util.DamageSource
+ *  net.minecraft.util.MathHelper
  *  net.minecraft.world.World
  */
 package lotr.common.entity.npc;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import java.util.Random;
 import lotr.client.LOTRTickHandlerClient;
 import lotr.common.entity.ai.LOTREntityAIAttackOnCollide;
 import lotr.common.entity.ai.LOTREntityAIFollowHiringPlayer;
@@ -53,6 +55,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
 public abstract class LOTREntityHuornBase
@@ -86,7 +89,7 @@ extends LOTREntityTree {
     @Override
     protected void applyEntityAttributes() {
         super.applyEntityAttributes();
-        this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(60.0);
+        this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue((double)MathHelper.getRandomIntegerInRange((Random)this.rand, (int)60, (int)80));
         this.getEntityAttribute(SharedMonsterAttributes.followRange).setBaseValue(24.0);
         this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.3);
         this.getEntityAttribute(npcAttackDamage).setBaseValue(4.0);

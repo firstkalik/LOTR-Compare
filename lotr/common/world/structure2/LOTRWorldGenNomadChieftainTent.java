@@ -14,7 +14,6 @@ import java.util.Random;
 import lotr.common.LOTRFoods;
 import lotr.common.LOTRMod;
 import lotr.common.entity.animal.LOTREntityCamel;
-import lotr.common.entity.npc.LOTREntityNomad;
 import lotr.common.entity.npc.LOTREntityNomadChieftain;
 import lotr.common.entity.npc.LOTREntityNomadWarrior;
 import lotr.common.item.LOTRItemBanner;
@@ -65,8 +64,8 @@ extends LOTRWorldGenNomadStructure {
         }
         for (int i1 = -12; i1 <= 12; ++i1) {
             for (int k1 = -8; k1 <= 8; ++k1) {
-                int i2 = Math.abs(i1);
-                int k2 = Math.abs(k1);
+                Math.abs(i1);
+                Math.abs(k1);
                 if (!this.isSurface(world, i1, 0, k1)) {
                     this.laySandBase(world, i1, 0, k1);
                 }

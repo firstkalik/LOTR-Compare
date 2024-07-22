@@ -55,8 +55,7 @@ extends LOTRBiome {
         this.biomeColors.setSky(0);
         this.biomeColors.setFoggy(true);
         this.biomeColors.setWater(0);
-        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer = new LOTRBiomeSpawnList.SpawnListContainer[1];
-        arrspawnListContainer[0] = LOTRBiomeSpawnList.entry(LOTRSpawnList.UTUMNO_GUESTS, 10);
+        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer = new LOTRBiomeSpawnList.SpawnListContainer[]{LOTRBiomeSpawnList.entry(LOTRSpawnList.UTUMNO_GUESTS, 10)};
         this.spawnableGuestList.newFactionList(100).add(arrspawnListContainer);
     }
 
@@ -116,15 +115,15 @@ extends LOTRBiome {
                 for (int i2 = i1 - radius; i2 <= i1 + radius; ++i2) {
                     for (int j2 = yMin; j2 <= yMax; ++j2) {
                         for (int k2 = k1 - radius; k2 <= k1 + radius; ++k2) {
-                            int j3;
                             int k3;
+                            int j3;
                             int i3 = Math.abs(i2 - i1);
                             double dist = i3 * i3 + (j3 = Math.abs(j2 - j1)) * j3 + (k3 = Math.abs(k2 - k1)) * k3;
                             if (dist < (double)((radius - 5) * (radius - 5))) {
                                 world.setBlockToAir(i2, j2, k2);
                                 continue;
                             }
-                            if (!(dist < (double)(radius * radius)) || random.nextInt(6) != 0) continue;
+                            if (dist >= (double)(radius * radius) || random.nextInt(6) != 0) continue;
                             world.setBlockToAir(i2, j2, k2);
                         }
                     }
@@ -142,7 +141,7 @@ extends LOTRBiome {
             int fuzz = 2;
             for (int j2 = j1 - fuzz; j2 <= j1 + fuzz; ++j2) {
                 Block block = world.getBlock(i1, j2, k1);
-                int meta = world.getBlockMetadata(i1, j2, k1);
+                world.getBlockMetadata(i1, j2, k1);
                 if (!block.isOpaqueCube() || !world.isAirBlock(i1, j2 + 1, k1) || !world.isAirBlock(i1 - 1, j2, k1) && !world.isAirBlock(i1 + 1, j2, k1) && !world.isAirBlock(i1, j2, k1 - 1) && !world.isAirBlock(i1, j2, k1 + 1)) continue;
                 int[] bridge = this.searchForBridge(world, i1, j2, k1, -1, 0);
                 if (bridge == null && (bridge = this.searchForBridge(world, i1, j2, k1, 1, 0)) == null && (bridge = this.searchForBridge(world, i1, j2, k1, 0, -1)) == null) {
@@ -356,10 +355,9 @@ extends LOTRBiome {
                         }
                         if (flag) continue;
                         if (pass == 0) {
-                            int fz;
                             generate = true;
                             int fx = facingX;
-                            facingX = fz = facingZ;
+                            facingX = facingZ;
                             facingZ = fx;
                             continue block1;
                         }
@@ -386,10 +384,10 @@ extends LOTRBiome {
     }
 
     private void generateStalactites(World world, Random random, int i, int k) {
+        int j1;
+        int l;
         int k1;
         int i1;
-        int l;
-        int j1;
         for (l = 0; l < 2; ++l) {
             i1 = i + 8 + random.nextInt(16);
             k1 = k + 8 + random.nextInt(16);

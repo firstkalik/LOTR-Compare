@@ -27,11 +27,11 @@ public interface LOTRTradeable {
 
     public boolean shouldTraderRespawn();
 
-    public static interface Smith
+    public static interface Bartender
     extends LOTRTradeable {
     }
 
-    public static interface Bartender
+    public static interface Smith
     extends LOTRTradeable {
     }
 

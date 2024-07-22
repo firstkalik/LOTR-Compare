@@ -59,9 +59,8 @@ extends WorldGenAbstractTree {
 
     public boolean generate(World world, Random random, int i, int j, int k) {
         int canopyMin;
-        int j1;
-        boolean isSoil;
         Block below;
+        int j1;
         int height = MathHelper.getRandomIntegerInRange((Random)random, (int)this.minHeight, (int)this.maxHeight);
         boolean flag = true;
         if (j >= 1 && height + 1 <= 256) {
@@ -87,7 +86,7 @@ extends WorldGenAbstractTree {
         } else {
             flag = false;
         }
-        if (!(isSoil = (below = world.getBlock(i, j - 1, k)).canSustainPlant((IBlockAccess)world, i, j - 1, k, ForgeDirection.UP, (IPlantable)Blocks.sapling))) {
+        if (!(below = world.getBlock(i, j - 1, k)).canSustainPlant((IBlockAccess)world, i, j - 1, k, ForgeDirection.UP, (IPlantable)Blocks.sapling)) {
             flag = false;
         }
         if (!flag) {
@@ -152,7 +151,7 @@ extends WorldGenAbstractTree {
                     this.setBlockAndNotifyAdequately(world, rootX, rootY, rootZ, this.woodBlock, this.woodMeta | 0xC);
                     world.getBlock(rootX, rootY - 1, rootZ).onPlantGrow(world, rootX, rootY - 1, rootZ, rootX, rootY, rootZ);
                     --rootY;
-                    if (++roots <= 4 + random.nextInt(3)) continue;
+                    if (++roots > 4 + random.nextInt(3)) continue;
                 }
             }
         }

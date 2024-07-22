@@ -28,6 +28,7 @@ package lotr.common.entity.npc;
 
 import java.util.Random;
 import lotr.common.entity.ai.LOTREntityAIAttackOnCollide;
+import lotr.common.entity.ai.LOTREntityAIFollowHiringPlayer;
 import lotr.common.entity.npc.LOTREntityNPC;
 import lotr.common.entity.npc.LOTRInventoryNPCItems;
 import lotr.common.fac.LOTRFaction;
@@ -66,6 +67,7 @@ extends LOTREntityNPC {
         this.tasks.addTask(4, (EntityAIBase)new EntityAIWander((EntityCreature)this, 1.0));
         this.tasks.addTask(5, (EntityAIBase)new EntityAIWatchClosest((EntityLiving)this, EntityPlayer.class, 8.0f, 0.02f));
         this.tasks.addTask(6, (EntityAIBase)new EntityAILookIdle((EntityLiving)this));
+        this.tasks.addTask(7, (EntityAIBase)new LOTREntityAIFollowHiringPlayer(this));
         this.addTargetTasks(true);
     }
 
@@ -92,22 +94,25 @@ extends LOTREntityNPC {
 
     @Override
     public void onLivingUpdate() {
-        float f;
-        if (this.worldObj.isDaytime() && !this.worldObj.isRemote && (f = this.getBrightness(1.0f)) > 0.5f && this.rand.nextFloat() * 30.0f < (f - 0.4f) * 2.0f && this.worldObj.canBlockSeeTheSky(MathHelper.floor_double((double)this.posX), MathHelper.floor_double((double)this.posY), MathHelper.floor_double((double)this.posZ))) {
-            boolean flag = true;
-            ItemStack itemstack = this.getEquipmentInSlot(4);
-            if (itemstack != null) {
-                if (itemstack.isItemStackDamageable()) {
-                    itemstack.setItemDamage(itemstack.getItemDamageForDisplay() + this.rand.nextInt(2));
-                    if (itemstack.getItemDamageForDisplay() >= itemstack.getMaxDamage()) {
-                        this.renderBrokenItemStack(itemstack);
-                        this.setCurrentItemOrArmor(4, (ItemStack)null);
+        if (this.worldObj.isDaytime() && !this.worldObj.isRemote) {
+            float f;
+            float f2 = this.getBrightness(1.0f);
+            if (f > 0.5f && this.rand.nextFloat() * 30.0f < (f2 - 0.4f) * 2.0f && this.worldObj.canBlockSeeTheSky(MathHelper.floor_double((double)this.posX), MathHelper.floor_double((double)this.posY), MathHelper.floor_double((double)this.posZ))) {
+                boolean flag = true;
+                ItemStack itemstack = this.getEquipmentInSlot(4);
+                if (itemstack != null) {
+                    if (itemstack.isItemStackDamageable()) {
+                        itemstack.setItemDamage(itemstack.getItemDamageForDisplay() + this.rand.nextInt(2));
+                        if (itemstack.getItemDamageForDisplay() >= itemstack.getMaxDamage()) {
+                            this.renderBrokenItemStack(itemstack);
+                            this.setCurrentItemOrArmor(4, null);
+                        }
                     }
+                    flag = false;
                 }
-                flag = false;
-            }
-            if (flag) {
-                this.setFire(8);
+                if (flag) {
+                    this.setFire(8);
+                }
             }
         }
         super.onLivingUpdate();

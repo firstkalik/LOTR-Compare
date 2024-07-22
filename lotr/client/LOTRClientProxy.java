@@ -59,6 +59,9 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import cpw.mods.fml.relauncher.Side;
+import cubex2.mods.multipagechest.TileEntityMultiPageChest;
+import cubex2.mods.multipagechest.client.MultiPageChestRenderer;
+import cubex2.mods.multipagechest.client.TileEntityMultiPageChestRenderer;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -68,9 +71,14 @@ import lotr.client.LOTRItemRendererManager;
 import lotr.client.LOTRKeyHandler;
 import lotr.client.LOTRLang;
 import lotr.client.LOTRReflectionClient;
+import lotr.client.LOTRRenderCampfire;
 import lotr.client.LOTRSpeechClient;
 import lotr.client.LOTRTextures;
 import lotr.client.LOTRTickHandlerClient;
+import lotr.client.LanternHighElvenModel;
+import lotr.client.LanternMallornModel;
+import lotr.client.LanternModel;
+import lotr.client.LanternMorgulModel;
 import lotr.client.fx.LOTREffectRenderer;
 import lotr.client.fx.LOTREntityAlignmentBonus;
 import lotr.client.fx.LOTREntityAngryFX;
@@ -112,16 +120,24 @@ import lotr.client.model.LOTRArmorModels;
 import lotr.client.render.LOTRRenderBlocks;
 import lotr.client.render.LOTRRenderPlayer;
 import lotr.client.render.entity.LOTRRenderAlignmentBonus;
+import lotr.client.render.entity.LOTRRenderAngbandSpiderFire;
 import lotr.client.render.entity.LOTRRenderAngmarHillman;
 import lotr.client.render.entity.LOTRRenderArrowPoisoned;
+import lotr.client.render.entity.LOTRRenderArrowPoisoned2;
+import lotr.client.render.entity.LOTRRenderArrowPoisoned3;
+import lotr.client.render.entity.LOTRRenderArrowPoisoned4;
 import lotr.client.render.entity.LOTRRenderAurochs;
 import lotr.client.render.entity.LOTRRenderBalrog;
+import lotr.client.render.entity.LOTRRenderBalrog2;
 import lotr.client.render.entity.LOTRRenderBandit;
 import lotr.client.render.entity.LOTRRenderBanner;
 import lotr.client.render.entity.LOTRRenderBannerWall;
 import lotr.client.render.entity.LOTRRenderBarrowWight;
+import lotr.client.render.entity.LOTRRenderBarrowWight2;
 import lotr.client.render.entity.LOTRRenderBear;
+import lotr.client.render.entity.LOTRRenderBear2;
 import lotr.client.render.entity.LOTRRenderBearRug;
+import lotr.client.render.entity.LOTRRenderBearRug2;
 import lotr.client.render.entity.LOTRRenderBird;
 import lotr.client.render.entity.LOTRRenderBossTrophy;
 import lotr.client.render.entity.LOTRRenderBreeMan;
@@ -129,6 +145,7 @@ import lotr.client.render.entity.LOTRRenderBreeRuffian;
 import lotr.client.render.entity.LOTRRenderBreeTrader;
 import lotr.client.render.entity.LOTRRenderButterfly;
 import lotr.client.render.entity.LOTRRenderCamel;
+import lotr.client.render.entity.LOTRRenderCaveTroll;
 import lotr.client.render.entity.LOTRRenderCrocodile;
 import lotr.client.render.entity.LOTRRenderCrossbowBolt;
 import lotr.client.render.entity.LOTRRenderDaleMan;
@@ -136,6 +153,8 @@ import lotr.client.render.entity.LOTRRenderDaleTrader;
 import lotr.client.render.entity.LOTRRenderDart;
 import lotr.client.render.entity.LOTRRenderDeadMarshFace;
 import lotr.client.render.entity.LOTRRenderDeer;
+import lotr.client.render.entity.LOTRRenderDeer2;
+import lotr.client.render.entity.LOTRRenderDesertSpider;
 import lotr.client.render.entity.LOTRRenderDikDik;
 import lotr.client.render.entity.LOTRRenderDorwinionElfVintner;
 import lotr.client.render.entity.LOTRRenderDorwinionMan;
@@ -187,7 +206,9 @@ import lotr.client.render.entity.LOTRRenderMidges;
 import lotr.client.render.entity.LOTRRenderMirkTroll;
 import lotr.client.render.entity.LOTRRenderMirkwoodSpider;
 import lotr.client.render.entity.LOTRRenderMordorSpider;
+import lotr.client.render.entity.LOTRRenderMordorTroll;
 import lotr.client.render.entity.LOTRRenderMoredain;
+import lotr.client.render.entity.LOTRRenderMorgulSpider;
 import lotr.client.render.entity.LOTRRenderMountainTroll;
 import lotr.client.render.entity.LOTRRenderMountainTrollChieftain;
 import lotr.client.render.entity.LOTRRenderNPCRespawner;
@@ -198,9 +219,12 @@ import lotr.client.render.entity.LOTRRenderNurnSlave;
 import lotr.client.render.entity.LOTRRenderOlogHai;
 import lotr.client.render.entity.LOTRRenderOrc;
 import lotr.client.render.entity.LOTRRenderOrcBomb;
+import lotr.client.render.entity.LOTRRenderPallando;
 import lotr.client.render.entity.LOTRRenderPlate;
 import lotr.client.render.entity.LOTRRenderPortal;
 import lotr.client.render.entity.LOTRRenderRabbit;
+import lotr.client.render.entity.LOTRRenderRaccoon;
+import lotr.client.render.entity.LOTRRenderRam;
 import lotr.client.render.entity.LOTRRenderRanger;
 import lotr.client.render.entity.LOTRRenderRhino;
 import lotr.client.render.entity.LOTRRenderRohanTrader;
@@ -213,6 +237,9 @@ import lotr.client.render.entity.LOTRRenderShirePony;
 import lotr.client.render.entity.LOTRRenderSkeleton;
 import lotr.client.render.entity.LOTRRenderSmokeRing;
 import lotr.client.render.entity.LOTRRenderSnowTroll;
+import lotr.client.render.entity.LOTRRenderSnowTroll2;
+import lotr.client.render.entity.LOTRRenderSnowTroll3;
+import lotr.client.render.entity.LOTRRenderSnowTroll4;
 import lotr.client.render.entity.LOTRRenderSpear;
 import lotr.client.render.entity.LOTRRenderStoneTroll;
 import lotr.client.render.entity.LOTRRenderSwan;
@@ -223,14 +250,18 @@ import lotr.client.render.entity.LOTRRenderTauredainShaman;
 import lotr.client.render.entity.LOTRRenderTermite;
 import lotr.client.render.entity.LOTRRenderThrowingAxe;
 import lotr.client.render.entity.LOTRRenderThrownRock;
+import lotr.client.render.entity.LOTRRenderThrownRock2;
 import lotr.client.render.entity.LOTRRenderTraderRespawn;
 import lotr.client.render.entity.LOTRRenderTroll;
 import lotr.client.render.entity.LOTRRenderUtumnoIceSpider;
 import lotr.client.render.entity.LOTRRenderUtumnoTroll;
+import lotr.client.render.entity.LOTRRenderUtumnoTrollFire;
 import lotr.client.render.entity.LOTRRenderWarg;
 import lotr.client.render.entity.LOTRRenderWargskinRug;
 import lotr.client.render.entity.LOTRRenderWhiteOryx;
 import lotr.client.render.entity.LOTRRenderWickedDwarf;
+import lotr.client.render.entity.LOTRRenderWickedDwarf2;
+import lotr.client.render.entity.LOTRRenderWickedDwarfBandit;
 import lotr.client.render.entity.LOTRRenderWildBoar;
 import lotr.client.render.entity.LOTRRenderWraithBall;
 import lotr.client.render.entity.LOTRRenderZebra;
@@ -266,17 +297,20 @@ import lotr.common.LOTRDimension;
 import lotr.common.LOTRGuiMessageTypes;
 import lotr.common.LOTRMod;
 import lotr.common.LOTRTickHandlerServer;
+import lotr.common.block.LOTRTileEntityCampfire;
 import lotr.common.entity.LOTREntityFallingFireJar;
 import lotr.common.entity.LOTREntityInvasionSpawner;
 import lotr.common.entity.LOTREntityNPCRespawner;
 import lotr.common.entity.LOTRInvasionStatus;
 import lotr.common.entity.animal.LOTREntityAurochs;
 import lotr.common.entity.animal.LOTREntityBear;
+import lotr.common.entity.animal.LOTREntityBear2;
 import lotr.common.entity.animal.LOTREntityBird;
 import lotr.common.entity.animal.LOTREntityButterfly;
 import lotr.common.entity.animal.LOTREntityCamel;
 import lotr.common.entity.animal.LOTREntityCrocodile;
 import lotr.common.entity.animal.LOTREntityDeer;
+import lotr.common.entity.animal.LOTREntityDeer2;
 import lotr.common.entity.animal.LOTREntityDikDik;
 import lotr.common.entity.animal.LOTREntityElk;
 import lotr.common.entity.animal.LOTREntityFish;
@@ -288,6 +322,8 @@ import lotr.common.entity.animal.LOTREntityKineAraw;
 import lotr.common.entity.animal.LOTREntityLionBase;
 import lotr.common.entity.animal.LOTREntityMidges;
 import lotr.common.entity.animal.LOTREntityRabbit;
+import lotr.common.entity.animal.LOTREntityRaccoon;
+import lotr.common.entity.animal.LOTREntityRam;
 import lotr.common.entity.animal.LOTREntityRhino;
 import lotr.common.entity.animal.LOTREntityScorpion;
 import lotr.common.entity.animal.LOTREntityShirePony;
@@ -296,11 +332,18 @@ import lotr.common.entity.animal.LOTREntityTermite;
 import lotr.common.entity.animal.LOTREntityWhiteOryx;
 import lotr.common.entity.animal.LOTREntityWildBoar;
 import lotr.common.entity.animal.LOTREntityZebra;
+import lotr.common.entity.item.LOTREntityArrowAvari;
+import lotr.common.entity.item.LOTREntityArrowExplosion;
+import lotr.common.entity.item.LOTREntityArrowHunger;
+import lotr.common.entity.item.LOTREntityArrowMorgul;
 import lotr.common.entity.item.LOTREntityArrowPoisoned;
+import lotr.common.entity.item.LOTREntityArrowSlow;
+import lotr.common.entity.item.LOTREntityArrowWeak;
 import lotr.common.entity.item.LOTREntityBanner;
 import lotr.common.entity.item.LOTREntityBannerWall;
 import lotr.common.entity.item.LOTREntityBarrel;
 import lotr.common.entity.item.LOTREntityBearRug;
+import lotr.common.entity.item.LOTREntityBearRug2;
 import lotr.common.entity.item.LOTREntityBossTrophy;
 import lotr.common.entity.item.LOTREntityFallingTreasure;
 import lotr.common.entity.item.LOTREntityGiraffeRug;
@@ -310,12 +353,23 @@ import lotr.common.entity.item.LOTREntityPortal;
 import lotr.common.entity.item.LOTREntityStoneTroll;
 import lotr.common.entity.item.LOTREntityTraderRespawn;
 import lotr.common.entity.item.LOTREntityWargskinRug;
+import lotr.common.entity.npc.LOTREntityAngbandBalrog;
+import lotr.common.entity.npc.LOTREntityAngbandSpiderFire;
+import lotr.common.entity.npc.LOTREntityAngbandSpiderIce;
+import lotr.common.entity.npc.LOTREntityAngbandTrollFire;
+import lotr.common.entity.npc.LOTREntityAngbandTrollObsidian;
 import lotr.common.entity.npc.LOTREntityAngmarHillman;
 import lotr.common.entity.npc.LOTREntityAngmarHillmanWarrior;
+import lotr.common.entity.npc.LOTREntityAvariElfSmith;
 import lotr.common.entity.npc.LOTREntityBalrog;
 import lotr.common.entity.npc.LOTREntityBandit;
+import lotr.common.entity.npc.LOTREntityBanditDwarf;
 import lotr.common.entity.npc.LOTREntityBanditHarad;
+import lotr.common.entity.npc.LOTREntityBanditRhun;
 import lotr.common.entity.npc.LOTREntityBarrowWight;
+import lotr.common.entity.npc.LOTREntityBarrowWight2;
+import lotr.common.entity.npc.LOTREntityBlacklockCap;
+import lotr.common.entity.npc.LOTREntityBlacklockSmith;
 import lotr.common.entity.npc.LOTREntityBlueDwarfCommander;
 import lotr.common.entity.npc.LOTREntityBlueDwarfMerchant;
 import lotr.common.entity.npc.LOTREntityBlueMountainsSmith;
@@ -336,6 +390,7 @@ import lotr.common.entity.npc.LOTREntityBreeRuffian;
 import lotr.common.entity.npc.LOTREntityDaleBaker;
 import lotr.common.entity.npc.LOTREntityDaleBlacksmith;
 import lotr.common.entity.npc.LOTREntityDaleMan;
+import lotr.common.entity.npc.LOTREntityDesertSpider;
 import lotr.common.entity.npc.LOTREntityDolAmrothSoldier;
 import lotr.common.entity.npc.LOTREntityDorwinionElfVintner;
 import lotr.common.entity.npc.LOTREntityDorwinionMan;
@@ -350,6 +405,7 @@ import lotr.common.entity.npc.LOTREntityEasterling;
 import lotr.common.entity.npc.LOTREntityEasterlingBlacksmith;
 import lotr.common.entity.npc.LOTREntityElf;
 import lotr.common.entity.npc.LOTREntityEnt;
+import lotr.common.entity.npc.LOTREntityEreborDwarfCommander;
 import lotr.common.entity.npc.LOTREntityGaladhrimSmith;
 import lotr.common.entity.npc.LOTREntityGaladhrimTrader;
 import lotr.common.entity.npc.LOTREntityGaladhrimWarden;
@@ -366,6 +422,7 @@ import lotr.common.entity.npc.LOTREntityGondorMan;
 import lotr.common.entity.npc.LOTREntityGondorMason;
 import lotr.common.entity.npc.LOTREntityGondorRenegade;
 import lotr.common.entity.npc.LOTREntityGulfBartender;
+import lotr.common.entity.npc.LOTREntityGundabadCaveTroll;
 import lotr.common.entity.npc.LOTREntityHalfTroll;
 import lotr.common.entity.npc.LOTREntityHalfTrollScavenger;
 import lotr.common.entity.npc.LOTREntityHaradSlave;
@@ -375,12 +432,17 @@ import lotr.common.entity.npc.LOTREntityHobbit;
 import lotr.common.entity.npc.LOTREntityHobbitBartender;
 import lotr.common.entity.npc.LOTREntityHuornBase;
 import lotr.common.entity.npc.LOTREntityIronHillsMerchant;
+import lotr.common.entity.npc.LOTREntityIronfistCap;
 import lotr.common.entity.npc.LOTREntityMallornEnt;
 import lotr.common.entity.npc.LOTREntityMarshWraith;
 import lotr.common.entity.npc.LOTREntityMirkTroll;
 import lotr.common.entity.npc.LOTREntityMirkwoodSpider;
 import lotr.common.entity.npc.LOTREntityMordorSpider;
+import lotr.common.entity.npc.LOTREntityMordorTroll;
 import lotr.common.entity.npc.LOTREntityMoredain;
+import lotr.common.entity.npc.LOTREntityMorgulSpider;
+import lotr.common.entity.npc.LOTREntityMountainSnowTroll;
+import lotr.common.entity.npc.LOTREntityMountainSnowTroll2;
 import lotr.common.entity.npc.LOTREntityMountainTroll;
 import lotr.common.entity.npc.LOTREntityMountainTrollChieftain;
 import lotr.common.entity.npc.LOTREntityNPC;
@@ -390,7 +452,9 @@ import lotr.common.entity.npc.LOTREntityNearHaradrimWarlord;
 import lotr.common.entity.npc.LOTREntityNurnSlave;
 import lotr.common.entity.npc.LOTREntityOlogHai;
 import lotr.common.entity.npc.LOTREntityOrc;
+import lotr.common.entity.npc.LOTREntityPallando;
 import lotr.common.entity.npc.LOTREntityRanger;
+import lotr.common.entity.npc.LOTREntityRedDwarfMerchant;
 import lotr.common.entity.npc.LOTREntityRivendellSmith;
 import lotr.common.entity.npc.LOTREntityRivendellTrader;
 import lotr.common.entity.npc.LOTREntityRohanBaker;
@@ -407,33 +471,44 @@ import lotr.common.entity.npc.LOTREntityScrapTrader;
 import lotr.common.entity.npc.LOTREntitySkeletalWraith;
 import lotr.common.entity.npc.LOTREntitySnowTroll;
 import lotr.common.entity.npc.LOTREntitySouthronBartender;
+import lotr.common.entity.npc.LOTREntityStiffbeardCap;
+import lotr.common.entity.npc.LOTREntityStonefootCap;
+import lotr.common.entity.npc.LOTREntityStonefootSmith;
 import lotr.common.entity.npc.LOTREntityTauredain;
 import lotr.common.entity.npc.LOTREntityTauredainShaman;
 import lotr.common.entity.npc.LOTREntityTroll;
+import lotr.common.entity.npc.LOTREntityTundraSnowTroll;
 import lotr.common.entity.npc.LOTREntityUmbarBartender;
 import lotr.common.entity.npc.LOTREntityUtumnoIceSpider;
 import lotr.common.entity.npc.LOTREntityUtumnoTroll;
 import lotr.common.entity.npc.LOTREntityWarg;
 import lotr.common.entity.npc.LOTREntityWickedDwarf;
+import lotr.common.entity.npc.LOTREntityWickedDwarf2;
 import lotr.common.entity.npc.LOTREntityWoodElfSmith;
 import lotr.common.entity.npc.LOTRHiredNPCInfo;
 import lotr.common.entity.projectile.LOTREntityConker;
 import lotr.common.entity.projectile.LOTREntityCrossbowBolt;
 import lotr.common.entity.projectile.LOTREntityDart;
 import lotr.common.entity.projectile.LOTREntityFirePot;
+import lotr.common.entity.projectile.LOTREntityFirePotDwarven;
+import lotr.common.entity.projectile.LOTREntityFirePotMorgoth;
+import lotr.common.entity.projectile.LOTREntityFirePotUtumno;
 import lotr.common.entity.projectile.LOTREntityGandalfFireball;
 import lotr.common.entity.projectile.LOTREntityMallornLeafBomb;
 import lotr.common.entity.projectile.LOTREntityMarshWraithBall;
 import lotr.common.entity.projectile.LOTREntityMysteryWeb;
 import lotr.common.entity.projectile.LOTREntityPebble;
+import lotr.common.entity.projectile.LOTREntityPebble2;
 import lotr.common.entity.projectile.LOTREntityPlate;
 import lotr.common.entity.projectile.LOTREntitySmokeRing;
 import lotr.common.entity.projectile.LOTREntitySpear;
 import lotr.common.entity.projectile.LOTREntityThrowingAxe;
 import lotr.common.entity.projectile.LOTREntityThrownRock;
+import lotr.common.entity.projectile.LOTREntityThrownRock2;
 import lotr.common.entity.projectile.LOTREntityThrownTermite;
 import lotr.common.fac.LOTRAlignmentBonusMap;
 import lotr.common.fac.LOTRFaction;
+import lotr.common.item.LOTREntityArrowFire;
 import lotr.common.network.LOTRPacketClientInfo;
 import lotr.common.network.LOTRPacketHandler;
 import lotr.common.quest.LOTRMiniQuest;
@@ -519,6 +594,11 @@ extends LOTRCommonProxy {
     public static LOTRKeyHandler keyHandler;
     private static LOTRGuiHandler guiHandler;
     public static LOTRMusic musicHandler;
+    public static int LanternModel;
+    public static int LanternMorgulModel;
+    public static int LanternHighElvenModel;
+    public static int LanternMallornModel;
+    private int campfireRenderID;
     private int beaconRenderID;
     private int barrelRenderID;
     private int orcBombRenderID;
@@ -554,6 +634,17 @@ extends LOTRCommonProxy {
     private int orcChainRenderID;
     private int guldurilRenderID;
     private int orcPlatingRenderID;
+    private int trapdoorRenderID;
+
+    @Override
+    public void registerRenderInformation() {
+        RenderingRegistry.registerBlockHandler((ISimpleBlockRenderingHandler)new MultiPageChestRenderer());
+    }
+
+    @Override
+    public void registerTileEntitySpecialRenderer() {
+        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMultiPageChest.class, (TileEntitySpecialRenderer)new TileEntityMultiPageChestRenderer());
+    }
 
     @Override
     public void onPreload() {
@@ -566,6 +657,13 @@ extends LOTRCommonProxy {
     public void onLoad() {
         customEffectRenderer = new LOTREffectRenderer(Minecraft.getMinecraft());
         LOTRTextures.load();
+        RenderingRegistry.registerEntityRenderingHandler(LOTREntityBlacklockCap.class, (Render)new LOTRRenderDwarfCommander());
+        RenderingRegistry.registerEntityRenderingHandler(LOTREntityStonefootCap.class, (Render)new LOTRRenderDwarfCommander());
+        RenderingRegistry.registerEntityRenderingHandler(LOTREntityStiffbeardCap.class, (Render)new LOTRRenderDwarfCommander());
+        RenderingRegistry.registerEntityRenderingHandler(LOTREntityIronfistCap.class, (Render)new LOTRRenderDwarfCommander());
+        RenderingRegistry.registerEntityRenderingHandler(LOTREntityEreborDwarfCommander.class, (Render)new LOTRRenderDwarfCommander());
+        RenderingRegistry.registerEntityRenderingHandler(LOTREntityBlacklockSmith.class, (Render)new LOTRRenderDwarfSmith());
+        RenderingRegistry.registerEntityRenderingHandler(LOTREntityStonefootSmith.class, (Render)new LOTRRenderDwarfSmith());
         RenderingRegistry.registerEntityRenderingHandler(LOTREntityPortal.class, (Render)new LOTRRenderPortal());
         RenderingRegistry.registerEntityRenderingHandler(LOTREntityHorse.class, (Render)new LOTRRenderHorse());
         RenderingRegistry.registerEntityRenderingHandler(LOTREntityHobbit.class, (Render)new LOTRRenderHobbit());
@@ -591,6 +689,7 @@ extends LOTRCommonProxy {
         RenderingRegistry.registerEntityRenderingHandler(LOTREntityDwarfCommander.class, (Render)new LOTRRenderDwarfCommander());
         RenderingRegistry.registerEntityRenderingHandler(LOTREntityBlueDwarfCommander.class, (Render)new LOTRRenderDwarfCommander());
         RenderingRegistry.registerEntityRenderingHandler(LOTREntityBlueDwarfMerchant.class, (Render)new LOTRRenderDwarfCommander());
+        RenderingRegistry.registerEntityRenderingHandler(LOTREntityRedDwarfMerchant.class, (Render)new LOTRRenderDwarfCommander());
         RenderingRegistry.registerEntityRenderingHandler(LOTREntityThrowingAxe.class, (Render)new LOTRRenderThrowingAxe());
         RenderingRegistry.registerEntityRenderingHandler(LOTREntityCrossbowBolt.class, (Render)new LOTRRenderCrossbowBolt());
         RenderingRegistry.registerEntityRenderingHandler(LOTREntityTroll.class, (Render)new LOTRRenderTroll());
@@ -598,8 +697,10 @@ extends LOTRCommonProxy {
         RenderingRegistry.registerEntityRenderingHandler(LOTREntityStoneTroll.class, (Render)new LOTRRenderStoneTroll());
         RenderingRegistry.registerEntityRenderingHandler(LOTREntityGollum.class, (Render)new LOTRRenderGollum());
         RenderingRegistry.registerEntityRenderingHandler(LOTREntityMirkwoodSpider.class, (Render)new LOTRRenderMirkwoodSpider());
+        RenderingRegistry.registerEntityRenderingHandler(LOTREntityDesertSpider.class, (Render)new LOTRRenderDesertSpider());
         RenderingRegistry.registerEntityRenderingHandler(LOTREntityRohanMan.class, (Render)new LOTRRenderRohirrim());
         RenderingRegistry.registerEntityRenderingHandler(LOTREntityPebble.class, (Render)new RenderSnowball(LOTRMod.pebble));
+        RenderingRegistry.registerEntityRenderingHandler(LOTREntityPebble2.class, (Render)new RenderSnowball(LOTRMod.pebble));
         RenderingRegistry.registerEntityRenderingHandler(LOTREntityMysteryWeb.class, (Render)new RenderSnowball(LOTRMod.mysteryWeb));
         RenderingRegistry.registerEntityRenderingHandler(LOTREntityRohanBlacksmith.class, (Render)new LOTRRenderRohanTrader("outfit_blacksmith"));
         RenderingRegistry.registerEntityRenderingHandler(LOTREntityRanger.class, (Render)new LOTRRenderRanger());
@@ -607,8 +708,6 @@ extends LOTRCommonProxy {
         RenderingRegistry.registerEntityRenderingHandler(LOTREntityDunlendingWarrior.class, (Render)new LOTRRenderDunlendingBase());
         RenderingRegistry.registerEntityRenderingHandler(LOTREntityEnt.class, (Render)new LOTRRenderEnt());
         RenderingRegistry.registerEntityRenderingHandler(LOTREntityTraderRespawn.class, (Render)new LOTRRenderTraderRespawn());
-        RenderingRegistry.registerEntityRenderingHandler(LOTREntityMountainTroll.class, (Render)new LOTRRenderMountainTroll());
-        RenderingRegistry.registerEntityRenderingHandler(LOTREntityThrownRock.class, (Render)new LOTRRenderThrownRock());
         RenderingRegistry.registerEntityRenderingHandler(LOTREntityMountainTrollChieftain.class, (Render)new LOTRRenderMountainTrollChieftain());
         RenderingRegistry.registerEntityRenderingHandler(LOTREntityHuornBase.class, (Render)new LOTRRenderHuorn());
         RenderingRegistry.registerEntityRenderingHandler(LOTREntityRohanMeadhost.class, (Render)new LOTRRenderRohanTrader("outfit_meadhost"));
@@ -643,14 +742,23 @@ extends LOTRCommonProxy {
         RenderingRegistry.registerEntityRenderingHandler(LOTREntityThrownTermite.class, (Render)new RenderSnowball(LOTRMod.termite));
         RenderingRegistry.registerEntityRenderingHandler(LOTREntityDikDik.class, (Render)new LOTRRenderDikDik());
         RenderingRegistry.registerEntityRenderingHandler(LOTREntityUtumnoIceSpider.class, (Render)new LOTRRenderUtumnoIceSpider());
+        RenderingRegistry.registerEntityRenderingHandler(LOTREntityAngbandSpiderIce.class, (Render)new LOTRRenderUtumnoIceSpider());
+        RenderingRegistry.registerEntityRenderingHandler(LOTREntityAngbandSpiderFire.class, (Render)new LOTRRenderAngbandSpiderFire());
+        RenderingRegistry.registerEntityRenderingHandler(LOTREntityMorgulSpider.class, (Render)new LOTRRenderMorgulSpider());
+        RenderingRegistry.registerEntityRenderingHandler(LOTREntityAngbandTrollFire.class, (Render)new LOTRRenderUtumnoTrollFire());
+        RenderingRegistry.registerEntityRenderingHandler(LOTREntityMordorTroll.class, (Render)new LOTRRenderMordorTroll());
+        RenderingRegistry.registerEntityRenderingHandler(LOTREntityAngbandTrollObsidian.class, (Render)new LOTRRenderUtumnoTroll());
         RenderingRegistry.registerEntityRenderingHandler(LOTREntityConker.class, (Render)new RenderSnowball(LOTRMod.chestnut));
         RenderingRegistry.registerEntityRenderingHandler(LOTREntityUtumnoTroll.class, (Render)new LOTRRenderUtumnoTroll());
         RenderingRegistry.registerEntityRenderingHandler(LOTREntityBalrog.class, (Render)new LOTRRenderBalrog());
+        RenderingRegistry.registerEntityRenderingHandler(LOTREntityAngbandBalrog.class, (Render)new LOTRRenderBalrog2());
         RenderingRegistry.registerEntityRenderingHandler(LOTREntityHalfTroll.class, (Render)new LOTRRenderHalfTroll());
+        RenderingRegistry.registerEntityRenderingHandler(LOTREntityGundabadCaveTroll.class, (Render)new LOTRRenderCaveTroll());
         RenderingRegistry.registerEntityRenderingHandler(LOTREntityHalfTrollScavenger.class, (Render)new LOTRRenderHalfTrollScavenger());
         RenderingRegistry.registerEntityRenderingHandler(LOTREntityGaladhrimSmith.class, (Render)new LOTRRenderElvenSmith("galadhrimSmith_cloak", "galadhrimSmith_cape"));
         RenderingRegistry.registerEntityRenderingHandler(LOTREntityHighElfSmith.class, (Render)new LOTRRenderElvenSmith("highElfSmith_cloak", "highElfSmith_cape"));
         RenderingRegistry.registerEntityRenderingHandler(LOTREntityWoodElfSmith.class, (Render)new LOTRRenderElvenSmith("woodElfSmith_cloak", "woodElfSmith_cape"));
+        RenderingRegistry.registerEntityRenderingHandler(LOTREntityAvariElfSmith.class, (Render)new LOTRRenderElvenSmith("woodElfSmith_cloak", "woodElfSmith_cape"));
         RenderingRegistry.registerEntityRenderingHandler(LOTREntityDolAmrothSoldier.class, (Render)new LOTRRenderSwanKnight());
         RenderingRegistry.registerEntityRenderingHandler(LOTREntitySwan.class, (Render)new LOTRRenderSwan());
         RenderingRegistry.registerEntityRenderingHandler(LOTREntityMoredain.class, (Render)new LOTRRenderMoredain());
@@ -664,12 +772,16 @@ extends LOTRCommonProxy {
         RenderingRegistry.registerEntityRenderingHandler(LOTREntityTauredain.class, (Render)new LOTRRenderTauredain());
         RenderingRegistry.registerEntityRenderingHandler(LOTREntityDart.class, (Render)new LOTRRenderDart());
         RenderingRegistry.registerEntityRenderingHandler(LOTREntityBarrowWight.class, (Render)new LOTRRenderBarrowWight());
+        RenderingRegistry.registerEntityRenderingHandler(LOTREntityBarrowWight2.class, (Render)new LOTRRenderBarrowWight2());
         RenderingRegistry.registerEntityRenderingHandler(LOTREntityTauredainShaman.class, (Render)new LOTRRenderTauredainShaman());
         RenderingRegistry.registerEntityRenderingHandler(LOTREntityGaladhrimWarden.class, (Render)new LOTRRenderGaladhrimWarden());
         RenderingRegistry.registerEntityRenderingHandler(LOTREntityDwarfSmith.class, (Render)new LOTRRenderDwarfSmith());
         RenderingRegistry.registerEntityRenderingHandler(LOTREntityBlueMountainsSmith.class, (Render)new LOTRRenderDwarfSmith());
         RenderingRegistry.registerEntityRenderingHandler(LOTREntityBanditHarad.class, (Render)new LOTRRenderBandit("harad"));
+        RenderingRegistry.registerEntityRenderingHandler(LOTREntityBanditRhun.class, (Render)new LOTRRenderBandit("rhun"));
         RenderingRegistry.registerEntityRenderingHandler(LOTREntityDeer.class, (Render)new LOTRRenderDeer());
+        RenderingRegistry.registerEntityRenderingHandler(LOTREntityDeer2.class, (Render)new LOTRRenderDeer2());
+        RenderingRegistry.registerEntityRenderingHandler(LOTREntityRam.class, (Render)new LOTRRenderRam());
         RenderingRegistry.registerEntityRenderingHandler(LOTREntityDaleMan.class, (Render)new LOTRRenderDaleMan());
         RenderingRegistry.registerEntityRenderingHandler(LOTREntityDaleBlacksmith.class, (Render)new LOTRRenderDaleTrader("blacksmith_apron"));
         RenderingRegistry.registerEntityRenderingHandler(LOTREntityNPCRespawner.class, (Render)new LOTRRenderNPCRespawner());
@@ -695,18 +807,37 @@ extends LOTRCommonProxy {
         RenderingRegistry.registerEntityRenderingHandler(LOTREntityRohanBaker.class, (Render)new LOTRRenderRohanTrader("outfit_baker"));
         RenderingRegistry.registerEntityRenderingHandler(LOTREntityRohanOrcharder.class, (Render)new LOTRRenderRohanTrader("outfit_orcharder"));
         RenderingRegistry.registerEntityRenderingHandler(LOTREntityBear.class, (Render)new LOTRRenderBear());
+        RenderingRegistry.registerEntityRenderingHandler(LOTREntityBear2.class, (Render)new LOTRRenderBear2());
         RenderingRegistry.registerEntityRenderingHandler(LOTREntityEasterling.class, (Render)new LOTRRenderEasterling());
         RenderingRegistry.registerEntityRenderingHandler(LOTREntityEasterlingBlacksmith.class, (Render)new LOTRRenderEasterlingTrader("outfit_blacksmith"));
         RenderingRegistry.registerEntityRenderingHandler(LOTREntityFallingFireJar.class, (Render)new LOTRRenderFallingFireJar());
         RenderingRegistry.registerEntityRenderingHandler(LOTREntityFirePot.class, (Render)new RenderSnowball(LOTRMod.rhunFirePot));
+        RenderingRegistry.registerEntityRenderingHandler(LOTREntityFirePotUtumno.class, (Render)new RenderSnowball(LOTRMod.rhunFirePotUtumno));
+        RenderingRegistry.registerEntityRenderingHandler(LOTREntityFirePotDwarven.class, (Render)new RenderSnowball(LOTRMod.rhunFirePotDwarven));
+        RenderingRegistry.registerEntityRenderingHandler(LOTREntityFirePotMorgoth.class, (Render)new RenderSnowball(LOTRMod.balrogFire));
         RenderingRegistry.registerEntityRenderingHandler(LOTREntityRivendellSmith.class, (Render)new LOTRRenderElvenSmith("rivendellSmith_cloak", "rivendellSmith_cape"));
         RenderingRegistry.registerEntityRenderingHandler(LOTREntityRivendellTrader.class, (Render)new LOTRRenderElvenTrader("rivendellTrader_cloak"));
         RenderingRegistry.registerEntityRenderingHandler(LOTREntityFish.class, (Render)new LOTRRenderFish());
         RenderingRegistry.registerEntityRenderingHandler(LOTREntityArrowPoisoned.class, (Render)new LOTRRenderArrowPoisoned());
+        RenderingRegistry.registerEntityRenderingHandler(LOTREntityArrowMorgul.class, (Render)new LOTRRenderArrowPoisoned3());
+        RenderingRegistry.registerEntityRenderingHandler(LOTREntityArrowFire.class, (Render)new LOTRRenderArrowPoisoned2());
+        RenderingRegistry.registerEntityRenderingHandler(LOTREntityArrowWeak.class, (Render)new LOTRRenderArrowPoisoned2());
+        RenderingRegistry.registerEntityRenderingHandler(LOTREntityArrowHunger.class, (Render)new LOTRRenderArrowPoisoned2());
+        RenderingRegistry.registerEntityRenderingHandler(LOTREntityArrowExplosion.class, (Render)new LOTRRenderArrowPoisoned2());
+        RenderingRegistry.registerEntityRenderingHandler(LOTREntityArrowAvari.class, (Render)new LOTRRenderArrowPoisoned4());
+        RenderingRegistry.registerEntityRenderingHandler(LOTREntityArrowSlow.class, (Render)new LOTRRenderArrowPoisoned2());
         RenderingRegistry.registerEntityRenderingHandler(LOTREntityNearHaradBlacksmith.class, (Render)new LOTRRenderNearHaradTrader("outfit_blacksmith"));
         RenderingRegistry.registerEntityRenderingHandler(LOTREntitySnowTroll.class, (Render)new LOTRRenderSnowTroll());
+        RenderingRegistry.registerEntityRenderingHandler(LOTREntityTundraSnowTroll.class, (Render)new LOTRRenderSnowTroll4());
+        RenderingRegistry.registerEntityRenderingHandler(LOTREntityMountainSnowTroll.class, (Render)new LOTRRenderSnowTroll2());
+        RenderingRegistry.registerEntityRenderingHandler(LOTREntityMountainSnowTroll2.class, (Render)new LOTRRenderSnowTroll3());
+        RenderingRegistry.registerEntityRenderingHandler(LOTREntityMountainTroll.class, (Render)new LOTRRenderMountainTroll());
+        RenderingRegistry.registerEntityRenderingHandler(LOTREntityThrownRock.class, (Render)new LOTRRenderThrownRock());
+        RenderingRegistry.registerEntityRenderingHandler(LOTREntityThrownRock2.class, (Render)new LOTRRenderThrownRock2());
         RenderingRegistry.registerEntityRenderingHandler(LOTREntityLionRug.class, (Render)new LOTRRenderLionRug());
+        RenderingRegistry.registerEntityRenderingHandler(LOTREntityRaccoon.class, (Render)new LOTRRenderRaccoon());
         RenderingRegistry.registerEntityRenderingHandler(LOTREntityBearRug.class, (Render)new LOTRRenderBearRug());
+        RenderingRegistry.registerEntityRenderingHandler(LOTREntityBearRug2.class, (Render)new LOTRRenderBearRug2());
         RenderingRegistry.registerEntityRenderingHandler(LOTREntityGiraffeRug.class, (Render)new LOTRRenderGiraffeRug());
         RenderingRegistry.registerEntityRenderingHandler(LOTREntityHaradSlave.class, (Render)new LOTRRenderHaradSlave());
         RenderingRegistry.registerEntityRenderingHandler(LOTREntityGondorRenegade.class, (Render)new LOTRRenderGondorRenegade());
@@ -716,7 +847,10 @@ extends LOTRCommonProxy {
         RenderingRegistry.registerEntityRenderingHandler(LOTREntityGulfBartender.class, (Render)new LOTRRenderHaradrimTrader("outfit_bartender"));
         RenderingRegistry.registerEntityRenderingHandler(LOTREntityWhiteOryx.class, (Render)new LOTRRenderWhiteOryx());
         RenderingRegistry.registerEntityRenderingHandler(LOTREntityGandalf.class, (Render)new LOTRRenderGandalf());
+        RenderingRegistry.registerEntityRenderingHandler(LOTREntityPallando.class, (Render)new LOTRRenderPallando());
         RenderingRegistry.registerEntityRenderingHandler(LOTREntityWickedDwarf.class, (Render)new LOTRRenderWickedDwarf());
+        RenderingRegistry.registerEntityRenderingHandler(LOTREntityWickedDwarf2.class, (Render)new LOTRRenderWickedDwarf2());
+        RenderingRegistry.registerEntityRenderingHandler(LOTREntityBanditDwarf.class, (Render)new LOTRRenderWickedDwarfBandit());
         RenderingRegistry.registerEntityRenderingHandler(LOTREntityBreeMan.class, (Render)new LOTRRenderBreeMan());
         RenderingRegistry.registerEntityRenderingHandler(LOTREntitySwordCommandMarker.class, (Render)new LOTRRenderSwordCommandMarker());
         RenderingRegistry.registerEntityRenderingHandler(LOTREntityBreeBlacksmith.class, (Render)new LOTRRenderBreeTrader("outfit_blacksmith"));
@@ -733,6 +867,7 @@ extends LOTRCommonProxy {
         RenderingRegistry.registerEntityRenderingHandler(LOTREntityBreeHobbitBrewer.class, (Render)new LOTRRenderHobbitTrader("outfit_brewer"));
         RenderingRegistry.registerEntityRenderingHandler(LOTREntityBreeHobbitFlorist.class, (Render)new LOTRRenderHobbitTrader("outfit_florist"));
         RenderingRegistry.registerEntityRenderingHandler(EntityPotion.class, (Render)new RenderSnowball((Item)Items.potionitem, 16384));
+        this.campfireRenderID = RenderingRegistry.getNextAvailableRenderId();
         this.beaconRenderID = RenderingRegistry.getNextAvailableRenderId();
         this.barrelRenderID = RenderingRegistry.getNextAvailableRenderId();
         this.orcBombRenderID = RenderingRegistry.getNextAvailableRenderId();
@@ -768,6 +903,7 @@ extends LOTRCommonProxy {
         this.orcChainRenderID = RenderingRegistry.getNextAvailableRenderId();
         this.guldurilRenderID = RenderingRegistry.getNextAvailableRenderId();
         this.orcPlatingRenderID = RenderingRegistry.getNextAvailableRenderId();
+        this.trapdoorRenderID = RenderingRegistry.getNextAvailableRenderId();
         RenderingRegistry.registerBlockHandler((int)this.beaconRenderID, (ISimpleBlockRenderingHandler)new LOTRRenderBlocks(true));
         RenderingRegistry.registerBlockHandler((int)this.barrelRenderID, (ISimpleBlockRenderingHandler)new LOTRRenderBlocks(true));
         RenderingRegistry.registerBlockHandler((int)this.orcBombRenderID, (ISimpleBlockRenderingHandler)new LOTRRenderBlocks(true));
@@ -803,6 +939,9 @@ extends LOTRCommonProxy {
         RenderingRegistry.registerBlockHandler((int)this.orcChainRenderID, (ISimpleBlockRenderingHandler)new LOTRRenderBlocks(false));
         RenderingRegistry.registerBlockHandler((int)this.guldurilRenderID, (ISimpleBlockRenderingHandler)new LOTRRenderBlocks(true));
         RenderingRegistry.registerBlockHandler((int)this.orcPlatingRenderID, (ISimpleBlockRenderingHandler)new LOTRRenderBlocks(true));
+        RenderingRegistry.registerBlockHandler((int)this.trapdoorRenderID, (ISimpleBlockRenderingHandler)new LOTRRenderBlocks(true));
+        RenderingRegistry.registerBlockHandler((int)this.campfireRenderID, (ISimpleBlockRenderingHandler)new LOTRRenderBlocks(true));
+        ClientRegistry.bindTileEntitySpecialRenderer(LOTRTileEntityCampfire.class, (TileEntitySpecialRenderer)new LOTRRenderCampfire());
         ClientRegistry.bindTileEntitySpecialRenderer(LOTRTileEntityBeacon.class, (TileEntitySpecialRenderer)new LOTRRenderBeacon());
         ClientRegistry.bindTileEntitySpecialRenderer(LOTRTileEntityMobSpawner.class, (TileEntitySpecialRenderer)new LOTRTileEntityMobSpawnerRenderer());
         ClientRegistry.bindTileEntitySpecialRenderer(LOTRTileEntityPlate.class, (TileEntitySpecialRenderer)new LOTRRenderPlateFood());
@@ -826,6 +965,14 @@ extends LOTRCommonProxy {
         ClientRegistry.bindTileEntitySpecialRenderer(LOTRTileEntityKebabStand.class, (TileEntitySpecialRenderer)new LOTRRenderKebabStand());
         ClientRegistry.bindTileEntitySpecialRenderer(LOTRTileEntitySignCarved.class, (TileEntitySpecialRenderer)new LOTRRenderSignCarved());
         ClientRegistry.bindTileEntitySpecialRenderer(LOTRTileEntitySignCarvedIthildin.class, (TileEntitySpecialRenderer)new LOTRRenderSignCarvedIthildin());
+        LanternModel = RenderingRegistry.getNextAvailableRenderId();
+        LanternMorgulModel = RenderingRegistry.getNextAvailableRenderId();
+        LanternHighElvenModel = RenderingRegistry.getNextAvailableRenderId();
+        LanternMallornModel = RenderingRegistry.getNextAvailableRenderId();
+        RenderingRegistry.registerBlockHandler((int)LanternModel, (ISimpleBlockRenderingHandler)new LanternModel());
+        RenderingRegistry.registerBlockHandler((int)LanternMorgulModel, (ISimpleBlockRenderingHandler)new LanternMorgulModel());
+        RenderingRegistry.registerBlockHandler((int)LanternHighElvenModel, (ISimpleBlockRenderingHandler)new LanternHighElvenModel());
+        RenderingRegistry.registerBlockHandler((int)LanternMallornModel, (ISimpleBlockRenderingHandler)new LanternMallornModel());
     }
 
     @Override
@@ -1092,10 +1239,9 @@ extends LOTRCommonProxy {
 
     @Override
     public void handleInvasionWatch(int invasionEntityID, boolean overrideAlreadyWatched) {
-        World world;
         Entity e;
         LOTRInvasionStatus status = LOTRTickHandlerClient.watchedInvasion;
-        if ((overrideAlreadyWatched || !status.isActive()) && (e = (world = this.getClientWorld()).getEntityByID(invasionEntityID)) instanceof LOTREntityInvasionSpawner) {
+        if ((overrideAlreadyWatched || !status.isActive()) && (e = this.getClientWorld().getEntityByID(invasionEntityID)) instanceof LOTREntityInvasionSpawner) {
             status.setWatchedInvasion((LOTREntityInvasionSpawner)e);
         }
     }
@@ -1188,7 +1334,7 @@ extends LOTRCommonProxy {
                 } else if (s.startsWith("Mirk")) {
                     texIndices = rand.nextBoolean() ? LOTRFunctions.intRange(32, 37) : LOTRFunctions.intRange(40, 45);
                 } else if (s.startsWith("Green")) {
-                    texIndices = rand.nextBoolean() ? LOTRFunctions.intRange(48, 53) : LOTRFunctions.intRange(56, 61);
+                    int[] arrn = texIndices = rand.nextBoolean() ? LOTRFunctions.intRange(48, 53) : LOTRFunctions.intRange(56, 61);
                 }
                 if (texIndices != null) {
                     if (type.indexOf("_") > -1) {
@@ -1296,9 +1442,9 @@ extends LOTRCommonProxy {
     }
 
     @Override
-    public void usePouchOnChest(EntityPlayer entityplayer, World world, int i, int j, int k, int side, ItemStack itemstack) {
+    public void usePouchOnChest(EntityPlayer entityplayer, World world, int i, int j, int k, int side, ItemStack itemstack, int pouchSlot) {
         if (!world.isRemote) {
-            super.usePouchOnChest(entityplayer, world, i, j, k, side, itemstack);
+            super.usePouchOnChest(entityplayer, world, i, j, k, side, itemstack, pouchSlot);
         } else {
             ((EntityClientPlayerMP)entityplayer).sendQueue.addToSendQueue((Packet)new C08PacketPlayerBlockPlacement(i, j, k, side, itemstack, 0.0f, 0.0f, 0.0f));
         }
@@ -1488,6 +1634,11 @@ extends LOTRCommonProxy {
     @Override
     public int getOrcPlatingRenderID() {
         return this.orcPlatingRenderID;
+    }
+
+    @Override
+    public int getTrapdoorRenderID() {
+        return this.trapdoorRenderID;
     }
 
     static {

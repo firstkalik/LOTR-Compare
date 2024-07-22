@@ -78,7 +78,7 @@ extends EntityThrowable {
         if (this.isInWater() && !this.worldObj.isRemote) {
             this.setDead();
         }
-        this.prevRenderSmokeAge = this.renderSmokeAge == -1 ? (this.renderSmokeAge = this.getSmokeAge()) : this.renderSmokeAge;
+        int n = this.prevRenderSmokeAge = this.renderSmokeAge == -1 ? (this.renderSmokeAge = this.getSmokeAge()) : this.renderSmokeAge;
         if (!this.worldObj.isRemote) {
             this.setSmokeAge(this.getSmokeAge() + 1);
             if (this.getSmokeAge() >= MAX_AGE) {

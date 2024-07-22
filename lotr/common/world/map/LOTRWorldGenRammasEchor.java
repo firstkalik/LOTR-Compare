@@ -57,7 +57,7 @@ extends LOTRWorldGenStructureBase2 {
             for (int i1 = i; i1 <= i + 15; ++i1) {
                 block1: for (int k1 = k; k1 <= k + 15; ++k1) {
                     double circleDist = this.isPosInWall(i1, k1);
-                    if (!(circleDist < this.wallThick)) continue;
+                    if (circleDist >= this.wallThick) continue;
                     float roadNear = LOTRRoads.isRoadNear(i1, k1, 9);
                     boolean gate = roadNear >= 0.0f;
                     boolean fences = false;
@@ -92,12 +92,12 @@ extends LOTRWorldGenStructureBase2 {
                         if (below == Blocks.grass || below == Blocks.dirt || below == Blocks.stone) continue block1;
                         if (!gate) continue;
                         if (fences) {
-                            if (j1 != this.gateBottom) continue;
-                            continue block1;
+                            if (j1 == this.gateBottom) continue block1;
+                            continue;
                         }
                         int lerpGateTop = this.gateBottom + Math.round((float)(this.gateTop - this.gateBottom) * MathHelper.sqrt_float((float)(1.0f - roadNear)));
                         if (j1 != lerpGateTop) continue;
-                        if (!(circleDist > 0.025)) continue block1;
+                        if (circleDist <= 0.025) continue block1;
                         fences = true;
                     }
                 }
@@ -107,10 +107,9 @@ extends LOTRWorldGenStructureBase2 {
     }
 
     private boolean isTorchAt(int i, int k) {
-        int zmod;
         int torchRange = 12;
         int xmod = IntMath.mod((int)i, (int)torchRange);
-        return IntMath.mod((int)(xmod + (zmod = IntMath.mod((int)k, (int)torchRange))), (int)torchRange) == 0;
+        return IntMath.mod((int)(xmod + IntMath.mod((int)k, (int)torchRange)), (int)torchRange) == 0;
     }
 
     @Override

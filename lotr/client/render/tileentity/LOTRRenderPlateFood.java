@@ -32,11 +32,9 @@ extends TileEntitySpecialRenderer {
     private Random rand = new Random();
 
     public void renderTileEntityAt(TileEntity tileentity, double d, double d1, double d2, float f) {
-        float plateFallOffset;
         LOTRTileEntityPlate plate = (LOTRTileEntityPlate)tileentity;
         ItemStack plateItem = plate.getFoodItem();
         LOTRPlateFallingInfo fallInfo = plate.plateFallInfo;
-        float f2 = plateFallOffset = fallInfo == null ? 0.0f : fallInfo.getPlateOffsetY(f);
         if (plateItem != null) {
             GL11.glPushMatrix();
             GL11.glDisable((int)2884);

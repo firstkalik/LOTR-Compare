@@ -17,7 +17,6 @@
  */
 package lotr.client.sound;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -63,7 +62,7 @@ extends PositionedSound {
         return res;
     }
 
-    public void loadTrack(InputStream in) throws IOException {
+    public void loadTrack(InputStream in) {
         this.loadSoundResource();
         LOTRMusic.addTrackToRegions(this);
     }

@@ -6,14 +6,18 @@
  *  net.minecraft.inventory.IInventory
  *  net.minecraft.inventory.Slot
  *  net.minecraft.item.ItemStack
+ *  net.minecraft.world.World
  */
 package lotr.common.inventory;
 
+import lotr.common.LOTRAchievement;
+import lotr.common.LOTRLevelData;
 import lotr.common.inventory.LOTRContainerAnvil;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.world.World;
 
 public class LOTRSlotAnvilOutput
 extends Slot {
@@ -40,6 +44,7 @@ extends Slot {
 
     public void onPickupFromSlot(EntityPlayer entityplayer, ItemStack itemstack) {
         int materials = this.theAnvil.materialCost;
+        boolean wasSmithCombine = this.theAnvil.isSmithScrollCombine;
         this.theAnvil.invInput.setInventorySlotContents(0, null);
         ItemStack combinerItem = this.theAnvil.invInput.getStackInSlot(1);
         if (combinerItem != null) {
@@ -53,7 +58,11 @@ extends Slot {
         if (materials > 0) {
             this.theAnvil.takeMaterialOrCoinAmount(materials);
         }
+        if (!entityplayer.worldObj.isRemote && wasSmithCombine) {
+            LOTRLevelData.getData(entityplayer).addAchievement(LOTRAchievement.combineSmithScrolls);
+        }
         this.theAnvil.materialCost = 0;
+        this.theAnvil.isSmithScrollCombine = false;
         this.theAnvil.playAnvilSound();
     }
 }

@@ -30,10 +30,9 @@ import net.minecraft.world.biome.BiomeGenBase;
 public class LOTRTileEntityCorruptMallorn
 extends TileEntity {
     public void updateEntity() {
-        BiomeGenBase biome;
         super.updateEntity();
         Random rand = this.worldObj.rand;
-        if (!this.worldObj.isRemote && LOTRMod.canSpawnMobs(this.worldObj) && rand.nextInt(40) == 0 && (biome = this.worldObj.getBiomeGenForCoords(this.xCoord, this.zCoord)) instanceof LOTRBiomeGenFangorn) {
+        if (!this.worldObj.isRemote && LOTRMod.canSpawnMobs(this.worldObj) && rand.nextInt(40) == 0 && this.worldObj.getBiomeGenForCoords(this.xCoord, this.zCoord) instanceof LOTRBiomeGenFangorn) {
             int checkRange = 24;
             int spawnRange = 20;
             List nearbyEnts = this.worldObj.getEntitiesWithinAABB(LOTREntityEnt.class, AxisAlignedBB.getBoundingBox((double)this.xCoord, (double)this.yCoord, (double)this.zCoord, (double)(this.xCoord + 1), (double)(this.yCoord + 1), (double)(this.zCoord + 1)).expand((double)checkRange, (double)checkRange, (double)checkRange));

@@ -50,8 +50,7 @@ extends IRenderHandler {
     private static final ResourceLocation moonTexture = new ResourceLocation("lotr:sky/moon.png");
     private static final ResourceLocation sunTexture = new ResourceLocation("lotr:sky/sun.png");
     private static final ResourceLocation earendilTexture = new ResourceLocation("lotr:sky/earendil.png");
-    private LOTRWorldProvider worldProvider;
-    private LOTRRandomSkins skyTextures;
+    private LOTRRandomSkins skyTextures = LOTRRandomSkins.loadSkinsList("lotr:sky/night");
     private ResourceLocation currentSkyTexture;
     private int glSkyList;
     private int glSkyList2;
@@ -59,8 +58,6 @@ extends IRenderHandler {
     public LOTRSkyRenderer(LOTRWorldProvider provider) {
         int j;
         int k;
-        this.worldProvider = provider;
-        this.skyTextures = LOTRRandomSkins.loadSkinsList("lotr:sky/night");
         Tessellator tessellator = Tessellator.instance;
         this.glSkyList = GLAllocation.generateDisplayLists((int)3);
         GL11.glNewList((int)this.glSkyList, (int)4864);

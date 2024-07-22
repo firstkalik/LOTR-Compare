@@ -11,9 +11,9 @@ extends LOTRWorldGenSouthronFortWall {
         super(flag);
     }
 
-    public static class Long
-    extends LOTRWorldGenSouthronFortWall.Long {
-        public Long(boolean flag) {
+    public static class Short
+    extends LOTRWorldGenSouthronFortWall.Short {
+        public Short(boolean flag) {
             super(flag);
         }
 
@@ -23,9 +23,9 @@ extends LOTRWorldGenSouthronFortWall {
         }
     }
 
-    public static class Short
-    extends LOTRWorldGenSouthronFortWall.Short {
-        public Short(boolean flag) {
+    public static class Long
+    extends LOTRWorldGenSouthronFortWall.Long {
+        public Long(boolean flag) {
             super(flag);
         }
 

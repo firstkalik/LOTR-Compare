@@ -129,7 +129,7 @@ implements IMessage {
             new PacketBuffer(data).writeNBTTagCompoundToBuffer(iconData);
         }
         catch (IOException e) {
-            FMLLog.severe((String)"LOTR: Error writing fellowship data", (Object[])new Object[0]);
+            FMLLog.severe((String)"LOTR: Error writing fellowship icon data", (Object[])new Object[0]);
             e.printStackTrace();
         }
         data.writeBoolean(this.isOwned);
@@ -165,7 +165,7 @@ implements IMessage {
             iconData = new PacketBuffer(data).readNBTTagCompoundFromBuffer();
         }
         catch (IOException e) {
-            FMLLog.severe((String)"LOTR: Error reading fellowship data", (Object[])new Object[0]);
+            FMLLog.severe((String)"LOTR: Error reading fellowship icon data", (Object[])new Object[0]);
             e.printStackTrace();
         }
         this.fellowshipIcon = ItemStack.loadItemStackFromNBT((NBTTagCompound)iconData);
@@ -173,7 +173,6 @@ implements IMessage {
         this.isAdminned = data.readBoolean();
         byte usernameLength = 0;
         while ((usernameLength = data.readByte()) >= 0) {
-            boolean admin;
             ByteBuf usernameBytes = data.readBytes((int)usernameLength);
             String username = usernameBytes.toString(Charsets.UTF_8);
             this.playerNames.add(username);
@@ -187,7 +186,7 @@ implements IMessage {
                     this.titleMap.put(username, playerTitle);
                 }
             }
-            if (!(admin = data.readBoolean())) continue;
+            if (!data.readBoolean()) continue;
             this.adminNames.add(username);
         }
         this.preventPVP = data.readBoolean();

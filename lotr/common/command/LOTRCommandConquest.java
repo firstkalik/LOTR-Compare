@@ -58,14 +58,14 @@ extends CommandBase {
                 int posZ = (Integer)obj[1];
                 LOTRConquestZone zone = (LOTRConquestZone)obj[2];
                 zone.clearAllFactions(world);
-                LOTRCommandConquest.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.conquest.clear", (Object[])new Object[]{posX, posZ});
+                CommandBase.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.conquest.clear", (Object[])new Object[]{posX, posZ});
                 return;
             }
             if (function.equals("rate")) {
                 if (args.length >= 2) {
-                    double rate = LOTRCommandConquest.parseDoubleBounded((ICommandSender)sender, (String)args[1], (double)0.0, (double)100.0);
+                    double rate = CommandBase.parseDoubleBounded((ICommandSender)sender, (String)args[1], (double)0.0, (double)100.0);
                     LOTRLevelData.setConquestRate((float)rate);
-                    LOTRCommandConquest.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.conquest.rateSet", (Object[])new Object[]{rate});
+                    CommandBase.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.conquest.rateSet", (Object[])new Object[]{rate});
                     return;
                 }
                 float currentRate = LOTRLevelData.getConquestRate();
@@ -77,7 +77,7 @@ extends CommandBase {
                 if (fac == null) {
                     throw new WrongUsageException("commands.lotr.conquest.noFaction", new Object[]{args[1]});
                 }
-                float amount = (float)LOTRCommandConquest.parseDouble((ICommandSender)sender, (String)args[2]);
+                float amount = (float)CommandBase.parseDouble((ICommandSender)sender, (String)args[2]);
                 Object[] obj = this.parseCoordsAndZone(sender, args, 3);
                 int posX = (Integer)obj[0];
                 int posZ = (Integer)obj[1];
@@ -90,7 +90,7 @@ extends CommandBase {
                         throw new WrongUsageException("commands.lotr.conquest.tooHigh", new Object[]{Float.valueOf(100000.0f)});
                     }
                     zone.setConquestStrength(fac, amount, world);
-                    LOTRCommandConquest.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.conquest.set", (Object[])new Object[]{fac.factionName(), Float.valueOf(amount), posX, posZ});
+                    CommandBase.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.conquest.set", (Object[])new Object[]{fac.factionName(), Float.valueOf(amount), posX, posZ});
                     return;
                 }
                 if (function.equals("add")) {
@@ -103,7 +103,7 @@ extends CommandBase {
                         throw new WrongUsageException("commands.lotr.conquest.tooHigh", new Object[]{Float.valueOf(100000.0f)});
                     }
                     zone.addConquestStrength(fac, amount, world);
-                    LOTRCommandConquest.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.conquest.add", (Object[])new Object[]{fac.factionName(), Float.valueOf(amount), posX, posZ});
+                    CommandBase.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.conquest.add", (Object[])new Object[]{fac.factionName(), Float.valueOf(amount), posX, posZ});
                     return;
                 }
                 if (function.equals("radial")) {
@@ -118,7 +118,7 @@ extends CommandBase {
                     } else {
                         LOTRConquestGrid.doRadialConquest(world, zone, (EntityPlayer)senderIfPlayer, fac, null, amount, amount);
                     }
-                    LOTRCommandConquest.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.conquest.radial", (Object[])new Object[]{fac.factionName(), Float.valueOf(amount), posX, posZ});
+                    CommandBase.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.conquest.radial", (Object[])new Object[]{fac.factionName(), Float.valueOf(amount), posX, posZ});
                     return;
                 }
             }
@@ -130,8 +130,8 @@ extends CommandBase {
         int posX = sender.getPlayerCoordinates().posX;
         int posZ = sender.getPlayerCoordinates().posZ;
         if (args.length >= specifyIndex + 2) {
-            posX = LOTRCommandConquest.parseInt((ICommandSender)sender, (String)args[specifyIndex]);
-            posZ = LOTRCommandConquest.parseInt((ICommandSender)sender, (String)args[specifyIndex + 1]);
+            posX = CommandBase.parseInt((ICommandSender)sender, (String)args[specifyIndex]);
+            posZ = CommandBase.parseInt((ICommandSender)sender, (String)args[specifyIndex + 1]);
         }
         LOTRConquestZone zone = LOTRConquestGrid.getZoneByWorldCoords(posX, posZ);
         if (zone.isDummyZone) {
@@ -142,11 +142,11 @@ extends CommandBase {
 
     public List addTabCompletionOptions(ICommandSender sender, String[] args) {
         if (args.length == 1) {
-            return LOTRCommandConquest.getListOfStringsMatchingLastWord((String[])args, (String[])new String[]{"set", "add", "radial", "clear", "rate"});
+            return CommandBase.getListOfStringsMatchingLastWord((String[])args, (String[])new String[]{"set", "add", "radial", "clear", "rate"});
         }
         if (args.length == 2 && (args[0].equals("set") || args[0].equals("add") || args[0].equals("radial"))) {
             List<String> list = LOTRFaction.getPlayableAlignmentFactionNames();
-            return LOTRCommandConquest.getListOfStringsMatchingLastWord((String[])args, (String[])list.toArray(new String[0]));
+            return CommandBase.getListOfStringsMatchingLastWord((String[])args, (String[])list.toArray(new String[0]));
         }
         return null;
     }

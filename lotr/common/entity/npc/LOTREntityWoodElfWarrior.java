@@ -114,7 +114,7 @@ extends LOTREntityWoodElf {
             if (this.hiredNPCInfo.getHiringPlayer() == entityplayer) {
                 return "woodElf/elf/hired";
             }
-            if (LOTRLevelData.getData(entityplayer).getAlignment(this.getFaction()) >= LOTREntityWoodElfWarrior.getWoodlandTrustLevel()) {
+            if (LOTRLevelData.getData(entityplayer).getAlignment(this.getFaction()) >= LOTREntityWoodElf.getWoodlandTrustLevel()) {
                 return "woodElf/warrior/friendly";
             }
             return "woodElf/elf/neutral";

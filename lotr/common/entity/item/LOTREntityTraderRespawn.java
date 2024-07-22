@@ -212,7 +212,7 @@ extends Entity {
         this.prevPosY = this.posY;
         this.prevPosZ = this.posZ;
         this.prevSpawnerSpin = this.spawnerSpin;
-        this.spawnerSpin = this.isSpawnImminent() ? (this.spawnerSpin += 24.0f) : (this.spawnerSpin += 6.0f);
+        this.spawnerSpin = this.isSpawnImminent() ? (this.spawnerSpin = this.spawnerSpin + 24.0f) : (this.spawnerSpin = this.spawnerSpin + 6.0f);
         this.prevSpawnerSpin = MathHelper.wrapAngleTo180_float((float)this.prevSpawnerSpin);
         this.spawnerSpin = MathHelper.wrapAngleTo180_float((float)this.spawnerSpin);
         if (this.getScale() < MAX_SCALE) {

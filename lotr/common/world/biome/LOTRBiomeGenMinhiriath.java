@@ -11,6 +11,8 @@ package lotr.common.world.biome;
 
 import java.util.Random;
 import lotr.common.LOTRAchievement;
+import lotr.common.entity.npc.LOTREntityDaleMerchant;
+import lotr.common.entity.npc.LOTREntityHobbitBartender2;
 import lotr.common.world.biome.LOTRBiomeDecorator;
 import lotr.common.world.biome.LOTRBiomeGenEriador;
 import lotr.common.world.biome.LOTRMusicRegion;
@@ -38,10 +40,12 @@ extends LOTRBiomeGenEriador {
         this.addBiomeVariant(LOTRBiomeVariant.DEADFOREST_OAK_SPRUCE);
         this.decorator.grassPerChunk = 5;
         this.decorator.doubleGrassPerChunk = 3;
+        this.registerTravellingTrader(LOTREntityDaleMerchant.class);
         this.decorator.addTree(LOTRTreeType.OAK_DEAD, 1000);
         this.decorator.addTree(LOTRTreeType.SPRUCE_DEAD, 300);
         this.decorator.addTree(LOTRTreeType.BEECH_DEAD, 100);
         this.decorator.addTree(LOTRTreeType.BIRCH_DEAD, 50);
+        this.registerTravellingTrader(LOTREntityHobbitBartender2.class);
     }
 
     @Override

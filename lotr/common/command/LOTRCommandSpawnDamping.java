@@ -50,7 +50,7 @@ extends CommandBase {
             String option = args[0];
             if (option.equals("reset")) {
                 LOTRSpawnDamping.resetAll();
-                LOTRCommandSpawnDamping.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.spawnDamping.reset", (Object[])new Object[0]);
+                CommandBase.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.spawnDamping.reset", (Object[])new Object[0]);
                 return;
             }
             if (args.length >= 2) {
@@ -59,9 +59,9 @@ extends CommandBase {
                     throw new WrongUsageException("commands.lotr.spawnDamping.noType", new Object[]{type});
                 }
                 if (option.equals("set") && args.length >= 3) {
-                    float damping = (float)LOTRCommandSpawnDamping.parseDoubleBounded((ICommandSender)sender, (String)args[2], (double)0.0, (double)1.0);
+                    float damping = (float)CommandBase.parseDoubleBounded((ICommandSender)sender, (String)args[2], (double)0.0, (double)1.0);
                     LOTRSpawnDamping.setSpawnDamping(type, damping);
-                    LOTRCommandSpawnDamping.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.spawnDamping.set", (Object[])new Object[]{type, Float.valueOf(damping)});
+                    CommandBase.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.spawnDamping.set", (Object[])new Object[]{type, Float.valueOf(damping)});
                     return;
                 }
                 if (option.equals("calc")) {
@@ -86,7 +86,7 @@ extends CommandBase {
 
     public List addTabCompletionOptions(ICommandSender sender, String[] args) {
         if (args.length == 1) {
-            return LOTRCommandSpawnDamping.getListOfStringsMatchingLastWord((String[])args, (String[])new String[]{"set", "calc", "reset"});
+            return CommandBase.getListOfStringsMatchingLastWord((String[])args, (String[])new String[]{"set", "calc", "reset"});
         }
         if (args.length == 2 && (args[0].equals("set") || args[0].equals("calc"))) {
             ArrayList<String> types = new ArrayList<String>();
@@ -94,7 +94,7 @@ extends CommandBase {
                 types.add(type.name());
             }
             types.add(LOTRSpawnDamping.TYPE_NPC);
-            return LOTRCommandSpawnDamping.getListOfStringsMatchingLastWord((String[])args, (String[])types.toArray(new String[0]));
+            return CommandBase.getListOfStringsMatchingLastWord((String[])args, (String[])types.toArray(new String[0]));
         }
         return null;
     }

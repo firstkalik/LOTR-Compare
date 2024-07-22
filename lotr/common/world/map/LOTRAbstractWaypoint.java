@@ -11,31 +11,31 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 
 public interface LOTRAbstractWaypoint {
-    public int getX();
+    public String getCodeName();
 
-    public int getY();
+    public String getDisplayName();
+
+    public int getID();
+
+    public WaypointLockState getLockState(EntityPlayer var1);
+
+    public String getLoreText(EntityPlayer var1);
+
+    public double getX();
 
     public int getXCoord();
 
-    public int getZCoord();
+    public double getY();
 
     public int getYCoord(World var1, int var2, int var3);
 
     public int getYCoordSaved();
 
-    public String getCodeName();
-
-    public String getDisplayName();
-
-    public String getLoreText(EntityPlayer var1);
+    public int getZCoord();
 
     public boolean hasPlayerUnlocked(EntityPlayer var1);
 
-    public WaypointLockState getLockState(EntityPlayer var1);
-
     public boolean isHidden();
-
-    public int getID();
 
     public static enum WaypointLockState {
         STANDARD_LOCKED(0, 200),
@@ -46,8 +46,8 @@ public interface LOTRAbstractWaypoint {
         SHARED_CUSTOM_LOCKED(0, 208),
         SHARED_CUSTOM_UNLOCKED(4, 208);
 
-        public final int iconU;
-        public final int iconV;
+        public int iconU;
+        public int iconV;
 
         private WaypointLockState(int u, int v) {
             this.iconU = u;

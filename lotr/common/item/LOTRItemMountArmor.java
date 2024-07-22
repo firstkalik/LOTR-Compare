@@ -23,6 +23,7 @@ import lotr.common.LOTRReflection;
 import lotr.common.entity.animal.LOTREntityCamel;
 import lotr.common.entity.animal.LOTREntityElk;
 import lotr.common.entity.animal.LOTREntityGiraffe;
+import lotr.common.entity.animal.LOTREntityRam;
 import lotr.common.entity.animal.LOTREntityRhino;
 import lotr.common.entity.animal.LOTREntityWildBoar;
 import lotr.common.entity.npc.LOTREntityWarg;
@@ -120,6 +121,9 @@ extends Item {
         if (mount instanceof LOTREntityRhino) {
             return this.mountType == Mount.RHINO;
         }
+        if (mount instanceof LOTREntityRam) {
+            return this.mountType == Mount.RAM;
+        }
         return this.mountType == Mount.HORSE;
     }
 
@@ -171,7 +175,8 @@ extends Item {
         CAMEL("camel"),
         WARG("warg"),
         GIRAFFE("giraffe"),
-        RHINO("rhino");
+        RHINO("rhino"),
+        RAM("ram");
 
         public final String textureName;
 

@@ -37,13 +37,15 @@ public class LOTRPacketNPCSpeech
 implements IMessage {
     private int entityID;
     private String speech;
+    private boolean forceChatMsg;
 
     public LOTRPacketNPCSpeech() {
     }
 
-    public LOTRPacketNPCSpeech(int id, String s) {
+    public LOTRPacketNPCSpeech(int id, String s, boolean forceChat) {
         this.entityID = id;
         this.speech = s;
+        this.forceChatMsg = forceChat;
     }
 
     public void toBytes(ByteBuf data) {
@@ -51,12 +53,14 @@ implements IMessage {
         byte[] speechBytes = this.speech.getBytes(Charsets.UTF_8);
         data.writeInt(speechBytes.length);
         data.writeBytes(speechBytes);
+        data.writeBoolean(this.forceChatMsg);
     }
 
     public void fromBytes(ByteBuf data) {
         this.entityID = data.readInt();
         int length = data.readInt();
         this.speech = data.readBytes(length).toString(Charsets.UTF_8);
+        this.forceChatMsg = data.readBoolean();
     }
 
     public static class Handler
@@ -70,7 +74,7 @@ implements IMessage {
                 if (LOTRConfig.immersiveSpeech) {
                     LOTRMod.proxy.clientReceiveSpeech(npc, packet.speech);
                 }
-                if (!LOTRConfig.immersiveSpeech || LOTRConfig.immersiveSpeechChatLog) {
+                if (!LOTRConfig.immersiveSpeech || LOTRConfig.immersiveSpeechChatLog || packet.forceChatMsg) {
                     String name = npc.getCommandSenderName();
                     String message = (Object)EnumChatFormatting.YELLOW + "<" + name + "> " + (Object)EnumChatFormatting.WHITE + packet.speech;
                     entityplayer.addChatMessage((IChatComponent)new ChatComponentText(message));

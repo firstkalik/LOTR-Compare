@@ -17,6 +17,8 @@ public interface LOTRNPCMount {
 
     public void super_moveEntityWithHeading(float var1, float var2);
 
+    public float getStepHeightWhileRiddenByPlayer();
+
     public String getMountArmorTexture();
 
     public boolean isMountArmorValid(ItemStack var1);

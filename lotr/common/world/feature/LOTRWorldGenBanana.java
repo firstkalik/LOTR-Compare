@@ -27,9 +27,9 @@ extends WorldGenAbstractTree {
     }
 
     public boolean generate(World world, Random random, int i, int j, int k) {
-        int l;
-        ForgeDirection dir;
         int l1;
+        ForgeDirection dir;
+        int l;
         int height = 2 + random.nextInt(3);
         int[] leaves = new int[4];
         for (int l2 = 0; l2 < 4; ++l2) {

@@ -155,9 +155,7 @@ public enum LOTRUtumnoLevel {
                             metadata[blockIndex] = (byte)utumnoLevel.brickMeta;
                             if (chunkHasGlowing) {
                                 boolean glowing = false;
-                                if (utumnoLevel == ICE && rand.nextInt(16) == 0) {
-                                    glowing = true;
-                                } else if (utumnoLevel == OBSIDIAN && rand.nextInt(12) == 0) {
+                                if (utumnoLevel == ICE && rand.nextInt(16) == 0 || utumnoLevel == OBSIDIAN && rand.nextInt(12) == 0) {
                                     glowing = true;
                                 } else if (utumnoLevel == FIRE && rand.nextInt(8) == 0) {
                                     glowing = true;
@@ -207,8 +205,6 @@ public enum LOTRUtumnoLevel {
                     int actingZ = blockZ;
                     int actingXInChunk = (actingX += (int)Math.round(corridorNoiseXHere * 1.7)) & 0xF;
                     int actingZInChunk = (actingZ += (int)Math.round(corridorNoiseZHere * 1.7)) & 0xF;
-                    int actingChunkX = actingX / 16;
-                    int actingChunkZ = actingZ / 16;
                     boolean carveHugeHole = hugeHoleChunk && actingY >= utumnoLevel.corridorBaseLevels[0] && actingY < utumnoLevel.corridorBaseLevels[utumnoLevel.corridorBaseLevels.length - 1];
                     boolean carveHugeRavine = hugeRavineChunk && actingY >= utumnoLevel.corridorBaseLevels[0] && actingY < utumnoLevel.corridorBaseLevels[utumnoLevel.corridorBaseLevels.length - 1];
                     boolean carveCorridor = false;

@@ -15,11 +15,43 @@ import lotr.common.quest.LOTRMiniQuestBounty;
 public interface MiniQuestSelector {
     public boolean include(LOTRMiniQuest var1);
 
-    public static class BountyActiveFaction
-    extends BountyActiveAnyFaction {
+    public static class OptionalActive
+    implements MiniQuestSelector {
+        private boolean activeOnly = false;
+
+        public OptionalActive setActiveOnly() {
+            this.activeOnly = true;
+            return this;
+        }
+
+        @Override
+        public boolean include(LOTRMiniQuest quest) {
+            if (this.activeOnly) {
+                return quest.isActive();
+            }
+            return true;
+        }
+    }
+
+    public static class EntityId
+    extends OptionalActive {
+        private final UUID entityID;
+
+        public EntityId(UUID id) {
+            this.entityID = id;
+        }
+
+        @Override
+        public boolean include(LOTRMiniQuest quest) {
+            return super.include(quest) && quest.entityUUID.equals(this.entityID);
+        }
+    }
+
+    public static class Faction
+    extends OptionalActive {
         private final Supplier<LOTRFaction> factionGet;
 
-        public BountyActiveFaction(Supplier<LOTRFaction> sup) {
+        public Faction(Supplier<LOTRFaction> sup) {
             this.factionGet = sup;
         }
 
@@ -45,49 +77,17 @@ public interface MiniQuestSelector {
         }
     }
 
-    public static class Faction
-    extends OptionalActive {
+    public static class BountyActiveFaction
+    extends BountyActiveAnyFaction {
         private final Supplier<LOTRFaction> factionGet;
 
-        public Faction(Supplier<LOTRFaction> sup) {
+        public BountyActiveFaction(Supplier<LOTRFaction> sup) {
             this.factionGet = sup;
         }
 
         @Override
         public boolean include(LOTRMiniQuest quest) {
             return super.include(quest) && quest.entityFaction == this.factionGet.get();
-        }
-    }
-
-    public static class EntityId
-    extends OptionalActive {
-        private final UUID entityID;
-
-        public EntityId(UUID id) {
-            this.entityID = id;
-        }
-
-        @Override
-        public boolean include(LOTRMiniQuest quest) {
-            return super.include(quest) && quest.entityUUID.equals(this.entityID);
-        }
-    }
-
-    public static class OptionalActive
-    implements MiniQuestSelector {
-        private boolean activeOnly = false;
-
-        public OptionalActive setActiveOnly() {
-            this.activeOnly = true;
-            return this;
-        }
-
-        @Override
-        public boolean include(LOTRMiniQuest quest) {
-            if (this.activeOnly) {
-                return quest.isActive();
-            }
-            return true;
         }
     }
 

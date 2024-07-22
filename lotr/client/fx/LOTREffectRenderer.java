@@ -40,11 +40,11 @@ public class LOTREffectRenderer {
         List<EntityFX> layerList;
         int layer = entityfx.getFXLayer();
         if (layer >= this.particleLayers.length) {
-            List[] newLayers = new List[layer + 1];
-            for (int l = 0; l < newLayers.length; ++l) {
-                newLayers[l] = l < this.particleLayers.length ? this.particleLayers[l] : new ArrayList();
+            List[] arrayOfList = new List[layer + 1];
+            for (int l = 0; l < arrayOfList.length; ++l) {
+                arrayOfList[l] = l < this.particleLayers.length ? this.particleLayers[l] : new ArrayList();
             }
-            this.particleLayers = newLayers;
+            this.particleLayers = arrayOfList;
         }
         if ((layerList = this.particleLayers[layer]).size() >= 4000) {
             layerList.remove(0);

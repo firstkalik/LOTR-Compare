@@ -74,7 +74,7 @@ public class LOTRConquestZone {
         }
         int index = allPlayableFacs.indexOf((Object)fac);
         this.conquestStrengths[index] = str;
-        this.isEmptyKey = str == 0.0f ? (this.isEmptyKey &= 1L << index ^ 0xFFFFFFFFFFFFFFFFL) : (this.isEmptyKey |= 1L << index);
+        this.isEmptyKey = str == 0.0f ? (this.isEmptyKey = this.isEmptyKey & (1L << index ^ 0xFFFFFFFFFFFFFFFFL)) : (this.isEmptyKey = this.isEmptyKey | 1L << index);
         this.markDirty();
     }
 
@@ -93,7 +93,7 @@ public class LOTRConquestZone {
     private void updateAllOtherFactions(LOTRFaction fac, World world) {
         for (int i = 0; i < this.conquestStrengths.length; ++i) {
             LOTRFaction otherFac = allPlayableFacs.get(i);
-            if (otherFac == fac || !(this.conquestStrengths[i] > 0.0f)) continue;
+            if (otherFac == fac || this.conquestStrengths[i] <= 0.0f) continue;
             float otherStr = this.getConquestStrength(otherFac, world);
             this.setConquestStrengthRaw(otherFac, otherStr);
         }
@@ -176,12 +176,11 @@ public class LOTRConquestZone {
         LOTRConquestZone zone = new LOTRConquestZone(x, z);
         zone.isLoaded = false;
         zone.lastChangeTime = time;
-        block0: for (int i = 0; i < allPlayableFacs.size(); ++i) {
-            LOTRFaction fac = allPlayableFacs.get(i);
-            ArrayList<String> aliases = new ArrayList<String>();
-            aliases.add(fac.codeName());
-            aliases.addAll(fac.listAliases());
-            for (String alias : fac.listAliases()) {
+        block0: for (LOTRFaction fac : allPlayableFacs) {
+            ArrayList<String> nameAndAliases = new ArrayList<String>();
+            nameAndAliases.add(fac.codeName());
+            nameAndAliases.addAll(fac.listAliases());
+            for (String alias : nameAndAliases) {
                 String facKey = alias + "_str";
                 if (!nbt.hasKey(facKey)) continue;
                 float str = nbt.getFloat(facKey);

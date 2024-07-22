@@ -54,8 +54,7 @@ implements IMessage {
         data.writeInt(this.posY);
         data.writeInt(this.posZ);
         data.writeByte(this.signText.length);
-        for (int i = 0; i < this.signText.length; ++i) {
-            String line = this.signText[i];
+        for (String line : this.signText) {
             if (line == null) {
                 data.writeShort(-1);
                 continue;
@@ -73,9 +72,8 @@ implements IMessage {
         byte lines = data.readByte();
         this.signText = new String[lines];
         for (int i = 0; i < this.signText.length; ++i) {
-            String line;
             short length = data.readShort();
-            this.signText[i] = length > -1 ? (line = data.readBytes((int)length).toString(Charsets.UTF_8)) : "";
+            this.signText[i] = length > -1 ? data.readBytes((int)length).toString(Charsets.UTF_8) : "";
         }
     }
 

@@ -9,6 +9,7 @@
  *  net.minecraft.block.BlockFence
  *  net.minecraft.block.BlockFire
  *  net.minecraft.block.BlockLiquid
+ *  net.minecraft.block.BlockTrapDoor
  *  net.minecraft.block.material.Material
  *  net.minecraft.client.Minecraft
  *  net.minecraft.client.renderer.EntityRenderer
@@ -63,6 +64,7 @@ import net.minecraft.block.BlockDoublePlant;
 import net.minecraft.block.BlockFence;
 import net.minecraft.block.BlockFire;
 import net.minecraft.block.BlockLiquid;
+import net.minecraft.block.BlockTrapDoor;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.EntityRenderer;
@@ -230,6 +232,10 @@ implements ISimpleBlockRenderingHandler {
             this.renderBlockRandomRotated(world, i, j, k, block, renderblocks, true);
             return true;
         }
+        if (id == LOTRMod.proxy.getTrapdoorRenderID()) {
+            this.renderTrapdoor(world, i, j, k, block, renderblocks);
+            return true;
+        }
         return false;
     }
 
@@ -302,6 +308,9 @@ implements ISimpleBlockRenderingHandler {
             ((LOTRRenderGuldurilGlow)TileEntityRendererDispatcher.instance.getSpecialRendererByClass(LOTRTileEntityGulduril.class)).renderInvGlow();
         }
         if (id == LOTRMod.proxy.getOrcPlatingRenderID()) {
+            LOTRRenderBlocks.renderStandardInvBlock(renderblocks, block, meta);
+        }
+        if (id == LOTRMod.proxy.getTrapdoorRenderID()) {
             LOTRRenderBlocks.renderStandardInvBlock(renderblocks, block, meta);
         }
     }
@@ -1300,10 +1309,10 @@ implements ISimpleBlockRenderingHandler {
     }
 
     private boolean renderDoor(IBlockAccess world, int i, int j, int k, Block block, RenderBlocks renderblocks) {
-        boolean topDoor;
         Tessellator tessellator = Tessellator.instance;
         int meta = world.getBlockMetadata(i, j, k);
-        boolean bl = topDoor = (meta & 8) != 0;
+        boolean topDoor = (meta & 8) != 0;
+        boolean bl = topDoor;
         if (topDoor ? world.getBlock(i, j - 1, k) != block : world.getBlock(i, j + 1, k) != block) {
             return false;
         }
@@ -1312,38 +1321,38 @@ implements ISimpleBlockRenderingHandler {
         float f1 = 1.0f;
         float f2 = 0.8f;
         float f3 = 0.6f;
-        int light = block.getMixedBrightnessForBlock(world, i, j, k);
+        int light2 = block.getMixedBrightnessForBlock(world, i, j, k);
         if (!topDoor || world.getBlock(i, j - 1, k) != block) {
-            tessellator.setBrightness(renderblocks.renderMinY > 0.0 ? light : block.getMixedBrightnessForBlock(world, i, j - 1, k));
+            tessellator.setBrightness(renderblocks.renderMinY > 0.0 ? light2 : block.getMixedBrightnessForBlock(world, i, j - 1, k));
             tessellator.setColorOpaque_F(f, f, f);
             renderblocks.renderFaceYNeg(block, (double)i, (double)j, (double)k, renderblocks.getBlockIcon(block, world, i, j, k, 0));
             flag = true;
         }
         if (topDoor || world.getBlock(i, j + 1, k) != block) {
-            tessellator.setBrightness(renderblocks.renderMaxY < 1.0 ? light : block.getMixedBrightnessForBlock(world, i, j + 1, k));
+            tessellator.setBrightness(renderblocks.renderMaxY < 1.0 ? light2 : block.getMixedBrightnessForBlock(world, i, j + 1, k));
             tessellator.setColorOpaque_F(f1, f1, f1);
             renderblocks.renderFaceYPos(block, (double)i, (double)j, (double)k, renderblocks.getBlockIcon(block, world, i, j, k, 1));
             flag = true;
         }
-        tessellator.setBrightness(renderblocks.renderMinZ > 0.0 ? light : block.getMixedBrightnessForBlock(world, i, j, k - 1));
+        tessellator.setBrightness(renderblocks.renderMinZ > 0.0 ? light2 : block.getMixedBrightnessForBlock(world, i, j, k - 1));
         tessellator.setColorOpaque_F(f2, f2, f2);
         IIcon iicon = renderblocks.getBlockIcon(block, world, i, j, k, 2);
         renderblocks.renderFaceZNeg(block, (double)i, (double)j, (double)k, iicon);
         flag = true;
         renderblocks.flipTexture = false;
-        tessellator.setBrightness(renderblocks.renderMaxZ < 1.0 ? light : block.getMixedBrightnessForBlock(world, i, j, k + 1));
+        tessellator.setBrightness(renderblocks.renderMaxZ < 1.0 ? light2 : block.getMixedBrightnessForBlock(world, i, j, k + 1));
         tessellator.setColorOpaque_F(f2, f2, f2);
         iicon = renderblocks.getBlockIcon(block, world, i, j, k, 3);
         renderblocks.renderFaceZPos(block, (double)i, (double)j, (double)k, iicon);
         flag = true;
         renderblocks.flipTexture = false;
-        tessellator.setBrightness(renderblocks.renderMinX > 0.0 ? light : block.getMixedBrightnessForBlock(world, i - 1, j, k));
+        tessellator.setBrightness(renderblocks.renderMinX > 0.0 ? light2 : block.getMixedBrightnessForBlock(world, i - 1, j, k));
         tessellator.setColorOpaque_F(f3, f3, f3);
         iicon = renderblocks.getBlockIcon(block, world, i, j, k, 4);
         renderblocks.renderFaceXNeg(block, (double)i, (double)j, (double)k, iicon);
         flag = true;
         renderblocks.flipTexture = false;
-        tessellator.setBrightness(renderblocks.renderMaxX < 1.0 ? light : block.getMixedBrightnessForBlock(world, i + 1, j, k));
+        tessellator.setBrightness(renderblocks.renderMaxX < 1.0 ? light2 : block.getMixedBrightnessForBlock(world, i + 1, j, k));
         tessellator.setColorOpaque_F(f3, f3, f3);
         iicon = renderblocks.getBlockIcon(block, world, i, j, k, 5);
         renderblocks.renderFaceXPos(block, (double)i, (double)j, (double)k, iicon);
@@ -1353,7 +1362,6 @@ implements ISimpleBlockRenderingHandler {
     }
 
     private void renderRope(IBlockAccess world, int i, int j, int k, Block block, RenderBlocks renderblocks) {
-        double ropeTop;
         double ropeWidth = 0.125;
         double ropeMinX = 0.5 - ropeWidth / 2.0;
         double ropeMaxX = 1.0 - ropeMinX;
@@ -1366,7 +1374,8 @@ implements ISimpleBlockRenderingHandler {
         double knotMinX = 0.5 - knotWidth / 2.0;
         double knotMaxX = 1.0 - knotMinX;
         double knotOffset = knotWidth;
-        double d = ropeTop = top ? 1.0 - knotHeight : 1.0;
+        double ropeTop = top ? 1.0 - knotHeight : 1.0;
+        double d = ropeTop;
         if (meta == 5) {
             renderblocks.setRenderBounds(0.0, 0.0, ropeMinX, ropeOffset, ropeTop, ropeMaxX);
             renderblocks.renderStandardBlock(block, i, j, k);
@@ -1407,6 +1416,29 @@ implements ISimpleBlockRenderingHandler {
                 renderblocks.setRenderAllFaces(false);
             }
         }
+    }
+
+    private void renderTrapdoor(IBlockAccess world, int i, int j, int k, Block block, RenderBlocks renderblocks) {
+        int meta = world.getBlockMetadata(i, j, k);
+        if (!BlockTrapDoor.func_150118_d((int)meta)) {
+            int dir = meta & 3;
+            if (dir == 0) {
+                renderblocks.uvRotateTop = 3;
+                renderblocks.uvRotateBottom = 3;
+            } else if (dir == 1) {
+                renderblocks.uvRotateTop = 0;
+                renderblocks.uvRotateBottom = 0;
+            } else if (dir == 2) {
+                renderblocks.uvRotateTop = 1;
+                renderblocks.uvRotateBottom = 2;
+            } else if (dir == 3) {
+                renderblocks.uvRotateTop = 2;
+                renderblocks.uvRotateBottom = 1;
+            }
+        }
+        renderblocks.renderStandardBlock(block, i, j, k);
+        renderblocks.uvRotateBottom = 0;
+        renderblocks.uvRotateTop = 0;
     }
 
     private static void renderStandardInvBlock(RenderBlocks renderblocks, Block block, int meta) {

@@ -21,8 +21,8 @@ extends LOTRWorldGenStructureBase2 {
 
     @Override
     public boolean generateWithSetRotation(World world, Random random, int i, int j, int k, int rotation) {
-        int k1;
         int i1;
+        int k1;
         int height = 4 + random.nextInt(4);
         this.setOriginAndRotation(world, i, j += height + 1, k, rotation, 3);
         for (i1 = -2; i1 <= 2; ++i1) {
@@ -66,22 +66,6 @@ extends LOTRWorldGenStructureBase2 {
             this.setBlockAndMetadata(world, i, j, k, LOTRMod.brick, 2 + random.nextInt(2));
         } else {
             this.setBlockAndMetadata(world, i, j, k, LOTRMod.brick, 1);
-        }
-    }
-
-    private void placeRandomSlab(World world, Random random, int i, int j, int k, boolean inverted) {
-        if (random.nextInt(5) == 0) {
-            this.setBlockAndMetadata(world, i, j, k, LOTRMod.slabSingle, 4 + random.nextInt(2) + (inverted ? 8 : 0));
-        } else {
-            this.setBlockAndMetadata(world, i, j, k, LOTRMod.slabSingle, 3 + (inverted ? 8 : 0));
-        }
-    }
-
-    private void placeRandomStairs(World world, Random random, int i, int j, int k, int metadata) {
-        if (random.nextInt(5) == 0) {
-            this.setBlockAndMetadata(world, i, j, k, random.nextBoolean() ? LOTRMod.stairsGondorBrickMossy : LOTRMod.stairsGondorBrickCracked, metadata);
-        } else {
-            this.setBlockAndMetadata(world, i, j, k, LOTRMod.stairsGondorBrick, metadata);
         }
     }
 }

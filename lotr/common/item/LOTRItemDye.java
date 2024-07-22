@@ -92,11 +92,10 @@ extends Item {
     }
 
     public static int isItemDye(ItemStack itemstack) {
-        int[] oreIDs;
         if (itemstack.getItem() == Items.dye) {
             return itemstack.getItemDamage();
         }
-        for (int id : oreIDs = OreDictionary.getOreIDs((ItemStack)itemstack)) {
+        for (int id : OreDictionary.getOreIDs((ItemStack)itemstack)) {
             String oreName = OreDictionary.getOreName((int)id);
             for (int j = 0; j <= 15; ++j) {
                 ItemStack dye = new ItemStack(Items.dye, 1, j);

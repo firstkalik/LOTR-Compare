@@ -189,6 +189,47 @@ public class LOTRFactionRelations {
         }
     }
 
+    public static enum Relation {
+        ALLY,
+        FRIEND,
+        NEUTRAL,
+        ENEMY,
+        MORTAL_ENEMY;
+
+
+        public String codeName() {
+            return this.name();
+        }
+
+        public String getDisplayName() {
+            return StatCollector.translateToLocal((String)("lotr.faction.rel." + this.codeName()));
+        }
+
+        public static List<String> listRelationNames() {
+            ArrayList<String> names = new ArrayList<String>();
+            for (Relation rel : Relation.values()) {
+                names.add(rel.codeName());
+            }
+            return names;
+        }
+
+        public static Relation forID(int id) {
+            for (Relation rel : Relation.values()) {
+                if (rel.ordinal() != id) continue;
+                return rel;
+            }
+            return null;
+        }
+
+        public static Relation forName(String name) {
+            for (Relation rel : Relation.values()) {
+                if (!rel.codeName().equals(name)) continue;
+                return rel;
+            }
+            return null;
+        }
+    }
+
     public static class FactionPair {
         private final LOTRFaction fac1;
         private final LOTRFaction fac2;
@@ -240,47 +281,6 @@ public class LOTRFactionRelations {
             LOTRFaction f2 = LOTRFaction.forName(nbt.getString("FacPair2"));
             if (f1 != null && f2 != null) {
                 return new FactionPair(f1, f2);
-            }
-            return null;
-        }
-    }
-
-    public static enum Relation {
-        ALLY,
-        FRIEND,
-        NEUTRAL,
-        ENEMY,
-        MORTAL_ENEMY;
-
-
-        public String codeName() {
-            return this.name();
-        }
-
-        public String getDisplayName() {
-            return StatCollector.translateToLocal((String)("lotr.faction.rel." + this.codeName()));
-        }
-
-        public static List<String> listRelationNames() {
-            ArrayList<String> names = new ArrayList<String>();
-            for (Relation rel : Relation.values()) {
-                names.add(rel.codeName());
-            }
-            return names;
-        }
-
-        public static Relation forID(int id) {
-            for (Relation rel : Relation.values()) {
-                if (rel.ordinal() != id) continue;
-                return rel;
-            }
-            return null;
-        }
-
-        public static Relation forName(String name) {
-            for (Relation rel : Relation.values()) {
-                if (!rel.codeName().equals(name)) continue;
-                return rel;
             }
             return null;
         }

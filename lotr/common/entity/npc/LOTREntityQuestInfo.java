@@ -68,7 +68,6 @@ public class LOTREntityQuestInfo {
     private int offerTime = 0;
     public static final int maxOfferTime = 24000;
     private int offerChance;
-    private static final int offerChance_default = 20000;
     private float minAlignment;
     private Map<UUID, LOTRMiniQuest> playerSpecificOffers = new HashMap<UUID, LOTRMiniQuest>();
     private List<EntityPlayer> openOfferPlayers = new ArrayList<EntityPlayer>();
@@ -250,10 +249,6 @@ public class LOTREntityQuestInfo {
 
     private void removeActiveQuestPlayer(EntityPlayer entityplayer) {
         this.activeQuestPlayers.remove(entityplayer.getUniqueID());
-    }
-
-    private boolean doesPlayerHaveActiveQuest(EntityPlayer entityplayer) {
-        return this.activeQuestPlayers.contains(entityplayer.getUniqueID());
     }
 
     public boolean interact(EntityPlayer entityplayer) {

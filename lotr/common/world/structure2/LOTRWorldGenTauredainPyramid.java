@@ -59,11 +59,11 @@ extends LOTRWorldGenStructureBase2 {
 
     @Override
     public boolean generateWithSetRotation(World world, Random random, int i, int j, int k, int rotation) {
-        int k1;
-        int j1;
         int i1;
-        int k12;
         int i12;
+        int j1;
+        int k12;
+        int k1;
         int depth = 20;
         this.setOriginAndRotation(world, i, j -= depth - 1, k, rotation, this.usingPlayer != null ? RADIUS - depth : 0);
         this.isGolden = random.nextInt(20) == 0;
@@ -130,26 +130,25 @@ extends LOTRWorldGenStructureBase2 {
         }
         if (this.restrictions) {
             for (i12 = -RADIUS; i12 <= RADIUS; ++i12) {
-                for (k1 = -RADIUS; k1 <= RADIUS; ++k1) {
-                    j1 = this.getTopBlock(world, i12, k1);
-                    Block block = this.getBlock(world, i12, j1 - 1, k1);
+                for (k12 = -RADIUS; k12 <= RADIUS; ++k12) {
+                    j1 = this.getTopBlock(world, i12, k12);
+                    Block block = this.getBlock(world, i12, j1 - 1, k12);
                     if (block == Blocks.grass || block == Blocks.dirt || block == Blocks.stone || block == LOTRMod.mudGrass || block == LOTRMod.mud) continue;
                     return false;
                 }
             }
         }
         for (i12 = -RADIUS; i12 <= RADIUS; ++i12) {
-            for (k1 = -RADIUS; k1 <= RADIUS; ++k1) {
+            for (k12 = -RADIUS; k12 <= RADIUS; ++k12) {
                 j1 = 0;
-                while (!(this.getY(j1) < this.originY && this.isOpaque(world, i12, j1, k1) || this.getY(j1) < 0)) {
-                    this.placeRandomBrick(world, random, i12, j1, k1);
-                    this.setGrassToDirt(world, i12, j1 - 1, k1);
+                while (!(this.getY(j1) < this.originY && this.isOpaque(world, i12, j1, k12) || this.getY(j1) < 0)) {
+                    this.placeRandomBrick(world, random, i12, j1, k12);
+                    this.setGrassToDirt(world, i12, j1 - 1, k12);
                     --j1;
                 }
             }
         }
         int steps = (RADIUS - 10) / 2;
-        int topRadius = RADIUS - steps * 2;
         int topHeight = steps * 2;
         for (int step = 0; step < steps; ++step) {
             for (int j12 = step * 2; j12 <= step * 2 + 1; ++j12) {
@@ -189,8 +188,7 @@ extends LOTRWorldGenStructureBase2 {
         int stepX = 0;
         int stepY = topHeight - 1;
         int stepZ = 3;
-        do {
-            if (stepY < topHeight - 13) break;
+        while (stepY >= topHeight - 13) {
             int newX = stepX;
             int newY = stepY;
             int newZ = stepZ;
@@ -229,7 +227,7 @@ extends LOTRWorldGenStructureBase2 {
             stepX = newX;
             stepY = newY;
             stepZ = newZ;
-        } while (true);
+        }
         this.setAir(world, stepX, stepY + 3, stepZ);
         for (int j16 = topHeight - 18 + 2; j16 < topHeight - 13; ++j16) {
             this.setAir(world, maze1End[0] - (maze1.xSize - 1) / 2, j16, maze1End[1] - (maze1.zSize - 1) / 2);
@@ -261,7 +259,7 @@ extends LOTRWorldGenStructureBase2 {
                 } else if (i2 >= chamberRMax - 2 && k2 >= chamberRMax - 2) {
                     this.setBlockAndMetadata(world, i17, topHeight - 26, k17, LOTRMod.slabSingle8, 4);
                 }
-                if ((i2 != chamberRMax || k2 % 6 != 0 || k2 >= chamberRMax - 4) && (k2 != chamberRMax || i2 % 6 != 0 || i2 >= chamberRMax - 4)) continue;
+                if (!(i2 == chamberRMax && k2 % 6 == 0 && k2 < chamberRMax - 4 || k2 == chamberRMax && i2 % 6 == 0 && i2 < chamberRMax - 4)) continue;
                 Block pillarBlock = LOTRMod.pillar;
                 int pillarMeta = 14;
                 if (this.isGolden) {
@@ -304,114 +302,114 @@ extends LOTRWorldGenStructureBase2 {
         int roomTop = topHeight - 36;
         int roomPillarEdge = 32;
         for (i1 = -37; i1 <= 37; ++i1) {
-            for (k12 = -37; k12 <= 37; ++k12) {
+            for (k1 = -37; k1 <= 37; ++k1) {
                 int j111;
                 int j112;
                 int i2 = Math.abs(i1);
-                int k2 = Math.abs(k12);
+                int k2 = Math.abs(k1);
                 int actingRoomTop = roomTop;
                 if (i2 != roomPillarEdge && k2 != roomPillarEdge) {
                     actingRoomTop -= random.nextInt(2);
                 }
-                for (j111 = roomFloor + 1; j111 < actingRoomTop; ++j111) {
-                    this.setAir(world, i1, j111, k12);
+                for (j112 = roomFloor + 1; j112 < actingRoomTop; ++j112) {
+                    this.setAir(world, i1, j112, k1);
                 }
                 if (i2 > roomPillarEdge || k2 > roomPillarEdge) {
-                    for (j111 = roomBottom + 1; j111 <= roomFloor + 1; ++j111) {
-                        this.placeRandomBrick(world, random, i1, j111, k12);
+                    for (j112 = roomBottom + 1; j112 <= roomFloor + 1; ++j112) {
+                        this.placeRandomBrick(world, random, i1, j112, k1);
                     }
                     continue;
                 }
                 if (i2 == roomPillarEdge || k2 == roomPillarEdge) {
-                    for (j111 = roomBottom + 1; j111 <= roomFloor + 1; ++j111) {
-                        this.setBlockAndMetadata(world, i1, j111, k12, LOTRMod.brick4, 4);
+                    for (j112 = roomBottom + 1; j112 <= roomFloor + 1; ++j112) {
+                        this.setBlockAndMetadata(world, i1, j112, k1, LOTRMod.brick4, 4);
                     }
-                    this.placeRandomBrick(world, random, i1, actingRoomTop - 1, k12);
+                    this.placeRandomBrick(world, random, i1, actingRoomTop - 1, k1);
                     if (this.isGolden) {
-                        this.setBlockAndMetadata(world, i1, actingRoomTop - 2, k12, LOTRMod.pillar2, 11);
+                        this.setBlockAndMetadata(world, i1, actingRoomTop - 2, k1, LOTRMod.pillar2, 11);
                     } else {
-                        this.setBlockAndMetadata(world, i1, actingRoomTop - 2, k12, LOTRMod.pillar, 14);
+                        this.setBlockAndMetadata(world, i1, actingRoomTop - 2, k1, LOTRMod.pillar, 14);
                     }
                     int i3 = IntMath.mod((int)i1, (int)4);
-                    int k3 = IntMath.mod((int)k12, (int)4);
+                    int k3 = IntMath.mod((int)k1, (int)4);
                     if (i2 == roomPillarEdge && k3 == 0 || k2 == roomPillarEdge && i3 == 0) {
-                        for (j112 = roomFloor + 2; j112 <= actingRoomTop - 2; ++j112) {
+                        for (j111 = roomFloor + 2; j111 <= actingRoomTop - 2; ++j111) {
                             if (this.isGolden) {
-                                this.setBlockAndMetadata(world, i1, j112, k12, LOTRMod.pillar2, 11);
+                                this.setBlockAndMetadata(world, i1, j111, k1, LOTRMod.pillar2, 11);
                                 continue;
                             }
-                            this.setBlockAndMetadata(world, i1, j112, k12, LOTRMod.pillar, 14);
+                            this.setBlockAndMetadata(world, i1, j111, k1, LOTRMod.pillar, 14);
                         }
                     }
                     if (i2 == roomPillarEdge) {
                         if (k3 == 1) {
-                            this.placeRandomStairs(world, random, i1, actingRoomTop - 3, k12, 7);
+                            this.placeRandomStairs(world, random, i1, actingRoomTop - 3, k1, 7);
                             continue;
                         }
                         if (k3 != 3) continue;
-                        this.placeRandomStairs(world, random, i1, actingRoomTop - 3, k12, 6);
+                        this.placeRandomStairs(world, random, i1, actingRoomTop - 3, k1, 6);
                         continue;
                     }
                     if (k2 != roomPillarEdge) continue;
                     if (i3 == 1) {
-                        this.placeRandomStairs(world, random, i1, actingRoomTop - 3, k12, 4);
+                        this.placeRandomStairs(world, random, i1, actingRoomTop - 3, k1, 4);
                         continue;
                     }
                     if (i3 != 3) continue;
-                    this.placeRandomStairs(world, random, i1, actingRoomTop - 3, k12, 5);
+                    this.placeRandomStairs(world, random, i1, actingRoomTop - 3, k1, 5);
                     continue;
                 }
                 if (i2 <= 10 && k2 <= 10) {
                     int max = Math.max(i2, k2);
                     int height = (10 - Math.max(max, 3)) / 2;
-                    for (j112 = roomBottom + 1; j112 <= roomFloor; ++j112) {
-                        this.placeRandomBrick(world, random, i1, j112, k12);
+                    for (j111 = roomBottom + 1; j111 <= roomFloor; ++j111) {
+                        this.placeRandomBrick(world, random, i1, j111, k1);
                     }
                     int lvlMin = roomFloor + 1;
                     int lvlMax = lvlMin + height;
                     for (int j113 = lvlMin; j113 <= lvlMax; ++j113) {
-                        this.placeRandomBrick(world, random, i1, j113, k12);
+                        this.placeRandomBrick(world, random, i1, j113, k1);
                     }
                     if (max > 3 && max % 2 == 0) {
-                        this.setBlockAndMetadata(world, i1, lvlMax, k12, LOTRMod.brick4, 4);
+                        this.setBlockAndMetadata(world, i1, lvlMax, k1, LOTRMod.brick4, 4);
                         if (i2 == k2) {
-                            this.setBlockAndMetadata(world, i1, lvlMax, k12, LOTRMod.pillar2, 11);
-                            this.setBlockAndMetadata(world, i1, lvlMax + 1, k12, LOTRMod.pillar2, 11);
-                            this.setBlockAndMetadata(world, i1, lvlMax + 2, k12, LOTRMod.tauredainDoubleTorch, 0);
-                            this.setBlockAndMetadata(world, i1, lvlMax + 3, k12, LOTRMod.tauredainDoubleTorch, 1);
+                            this.setBlockAndMetadata(world, i1, lvlMax, k1, LOTRMod.pillar2, 11);
+                            this.setBlockAndMetadata(world, i1, lvlMax + 1, k1, LOTRMod.pillar2, 11);
+                            this.setBlockAndMetadata(world, i1, lvlMax + 2, k1, LOTRMod.tauredainDoubleTorch, 0);
+                            this.setBlockAndMetadata(world, i1, lvlMax + 3, k1, LOTRMod.tauredainDoubleTorch, 1);
                         }
                     }
                     if (max <= 3 || i2 > 1 && k2 > 1) continue;
                     if (max % 2 == 0) {
-                        this.setBlockAndMetadata(world, i1, lvlMax, k12, LOTRMod.slabSingle8, 3);
+                        this.setBlockAndMetadata(world, i1, lvlMax, k1, LOTRMod.slabSingle8, 3);
                         continue;
                     }
-                    this.setBlockAndMetadata(world, i1, lvlMax, k12, LOTRMod.brick4, 3);
+                    this.setBlockAndMetadata(world, i1, lvlMax, k1, LOTRMod.brick4, 3);
                     continue;
                 }
-                for (j111 = roomBottom + 1; j111 <= roomFloor; ++j111) {
-                    this.setBlockAndMetadata(world, i1, j111, k12, Blocks.lava, 0);
+                for (j112 = roomBottom + 1; j112 <= roomFloor; ++j112) {
+                    this.setBlockAndMetadata(world, i1, j112, k1, Blocks.lava, 0);
                 }
                 if (random.nextInt(300) == 0) {
-                    this.setBlockAndMetadata(world, i1, actingRoomTop, k12, (Block)Blocks.flowing_lava, 0);
+                    this.setBlockAndMetadata(world, i1, actingRoomTop, k1, (Block)Blocks.flowing_lava, 0);
                 }
                 if (i2 == roomPillarEdge - 1 || k2 == roomPillarEdge - 1) {
                     if (random.nextInt(4) <= 0) continue;
-                    this.setBlockAndMetadata(world, i1, roomFloor, k12, Blocks.obsidian, 0);
+                    this.setBlockAndMetadata(world, i1, roomFloor, k1, Blocks.obsidian, 0);
                     continue;
                 }
                 if (i2 == roomPillarEdge - 2 || k2 == roomPillarEdge - 2) {
                     if (random.nextInt(2) != 0) continue;
-                    this.setBlockAndMetadata(world, i1, roomFloor, k12, Blocks.obsidian, 0);
+                    this.setBlockAndMetadata(world, i1, roomFloor, k1, Blocks.obsidian, 0);
                     continue;
                 }
                 if (i2 == roomPillarEdge - 3 || k2 == roomPillarEdge - 3) {
                     if (random.nextInt(4) != 0) continue;
-                    this.setBlockAndMetadata(world, i1, roomFloor, k12, Blocks.obsidian, 0);
+                    this.setBlockAndMetadata(world, i1, roomFloor, k1, Blocks.obsidian, 0);
                     continue;
                 }
                 if (random.nextInt(16) == 0) {
-                    this.placeRandomBrick(world, random, i1, roomFloor, k12);
+                    this.placeRandomBrick(world, random, i1, roomFloor, k1);
                 }
                 if (random.nextInt(200) != 0) continue;
                 Block pillarBlock = LOTRMod.pillar;
@@ -424,8 +422,8 @@ extends LOTRWorldGenStructureBase2 {
                     pillarBlock = LOTRMod.pillar2;
                     pillarMeta = 12;
                 }
-                for (j112 = roomBottom + 1; j112 < actingRoomTop; ++j112) {
-                    this.setBlockAndMetadata(world, i1, j112, k12, pillarBlock, pillarMeta);
+                for (j111 = roomBottom + 1; j111 < actingRoomTop; ++j111) {
+                    this.setBlockAndMetadata(world, i1, j111, k1, pillarBlock, pillarMeta);
                 }
             }
         }
@@ -442,9 +440,9 @@ extends LOTRWorldGenStructureBase2 {
         stepY = topHeight - 36;
         stepZ = 0;
         for (i1 = -1; i1 <= 1; ++i1) {
-            for (k12 = -1; k12 <= 1; ++k12) {
-                this.setAir(world, maze3EndX + i1, stepY, maze3EndZ + k12);
-                this.setAir(world, maze3EndX + i1, stepY - 1, maze3EndZ + k12);
+            for (k1 = -1; k1 <= 1; ++k1) {
+                this.setAir(world, maze3EndX + i1, stepY, maze3EndZ + k1);
+                this.setAir(world, maze3EndX + i1, stepY - 1, maze3EndZ + k1);
             }
         }
         this.placeRandomBrick(world, random, maze3EndX + 1, stepY, maze3EndZ + 1);
@@ -454,9 +452,7 @@ extends LOTRWorldGenStructureBase2 {
             int newZ = stepZ;
             int stepPlaceX = stepX + maze3EndX;
             int stepPlaceZ = stepZ + maze3EndZ;
-            if (stepX == -1 && stepZ == -1) {
-                this.placeRandomBrick(world, random, stepPlaceX, stepY, stepPlaceZ);
-            } else if (stepX == -1 && stepZ == 1) {
+            if (stepX == -1 && stepZ == -1 || stepX == -1 && stepZ == 1) {
                 this.placeRandomBrick(world, random, stepPlaceX, stepY, stepPlaceZ);
             } else if (stepX == 1 && stepZ == 1) {
                 this.placeRandomBrick(world, random, stepPlaceX, stepY, stepPlaceZ);
@@ -514,22 +510,6 @@ extends LOTRWorldGenStructureBase2 {
         }
     }
 
-    private void placeRandomWall(World world, Random random, int i, int j, int k) {
-        if (this.isGolden) {
-            this.setBlockAndMetadata(world, i, j, k, LOTRMod.wall4, 3);
-            return;
-        }
-        if (random.nextBoolean()) {
-            if (random.nextBoolean()) {
-                this.setBlockAndMetadata(world, i, j, k, LOTRMod.wall4, 1);
-            } else {
-                this.setBlockAndMetadata(world, i, j, k, LOTRMod.wall4, 2);
-            }
-        } else {
-            this.setBlockAndMetadata(world, i, j, k, LOTRMod.wall4, 0);
-        }
-    }
-
     private void placeRandomStairs(World world, Random random, int i, int j, int k, int meta) {
         if (this.isGolden) {
             this.setBlockAndMetadata(world, i, j, k, LOTRMod.stairsTauredainBrickGold, meta);
@@ -563,8 +543,7 @@ extends LOTRWorldGenStructureBase2 {
         for (int pass = 0; pass <= 1; ++pass) {
             for (int i1 = 0; i1 < maze.xSize; ++i1) {
                 for (int k1 = 0; k1 < maze.zSize; ++k1) {
-                    boolean path;
-                    if (pass == 0 && (path = maze.isPath(i1, k1))) {
+                    if (pass == 0 && maze.isPath(i1, k1)) {
                         for (int i2 = 0; i2 < scale; ++i2) {
                             for (int k2 = 0; k2 < scale; ++k2) {
                                 for (int j1 = 0; j1 < height; ++j1) {

@@ -371,11 +371,7 @@ extends LOTRGuiScreenBase {
     }
 
     private String trim(float f) {
-        return String.format("%.2f", f);
-    }
-
-    private String ticksToSeconds(int ticks) {
-        return this.trim((float)ticks / 20.0f) + "s";
+        return String.format("%.2f", Float.valueOf(f));
     }
 }
 

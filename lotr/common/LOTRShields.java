@@ -22,17 +22,23 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 
 public enum LOTRShields {
+    ALIGNMENT_BREE(LOTRFaction.BREE),
     ALIGNMENT_RANGER(LOTRFaction.RANGER_NORTH),
     ALIGNMENT_BLUE_MOUNTAINS(LOTRFaction.BLUE_MOUNTAINS),
+    ALIGNMENT_BELEGOST(LOTRFaction.BLUE_MOUNTAINS),
     ALIGNMENT_HIGH_ELF(LOTRFaction.HIGH_ELF),
     ALIGNMENT_RIVENDELL(LOTRFaction.HIGH_ELF),
     ALIGNMENT_GUNDABAD(LOTRFaction.GUNDABAD),
-    ALIGNMENT_ANGMAR(LOTRFaction.ANGMAR),
+    ALIGNMENT_ANGMAR(LOTRFaction.GUNDABAD),
     ALIGNMENT_WOOD_ELF(LOTRFaction.WOOD_ELF),
     ALIGNMENT_DOL_GULDUR(LOTRFaction.DOL_GULDUR),
+    ALIGNMENT_GULDUR(LOTRFaction.DOL_GULDUR),
+    ALIGNMENT_DOL_GULDUR_URUK(LOTRFaction.DOL_GULDUR),
     ALIGNMENT_DALE(LOTRFaction.DALE),
     ALIGNMENT_ESGAROTH(LOTRFaction.DALE),
     ALIGNMENT_DWARF(LOTRFaction.DURINS_FOLK),
+    ALIGNMENT_EREBOR(LOTRFaction.DURINS_FOLK),
+    ALIGNMENT_IRON_HILLS(LOTRFaction.DURINS_FOLK),
     ALIGNMENT_GALADHRIM(LOTRFaction.LOTHLORIEN),
     ALIGNMENT_DUNLAND(LOTRFaction.DUNLAND),
     ALIGNMENT_URUK_HAI(LOTRFaction.ISENGARD),
@@ -47,6 +53,7 @@ public enum LOTRShields {
     ALIGNMENT_LAMEDON(LOTRFaction.GONDOR),
     ALIGNMENT_MORDOR(LOTRFaction.MORDOR),
     ALIGNMENT_MINAS_MORGUL(LOTRFaction.MORDOR),
+    ALIGNMENT_NAN_UNGOL(LOTRFaction.MORDOR),
     ALIGNMENT_BLACK_URUK(LOTRFaction.MORDOR),
     ALIGNMENT_DORWINION(LOTRFaction.DORWINION),
     ALIGNMENT_DORWINION_ELF(LOTRFaction.DORWINION),
@@ -59,13 +66,30 @@ public enum LOTRShields {
     ALIGNMENT_MOREDAIN(LOTRFaction.MORWAITH),
     ALIGNMENT_TAUREDAIN(LOTRFaction.TAURETHRIM),
     ALIGNMENT_HALF_TROLL(LOTRFaction.HALF_TROLL),
+    ALIGNMENT_SHIRE(LOTRFaction.HOBBIT),
+    ALIGNMENT_ANGBAND(LOTRFaction.UTUMNO),
+    ALIGNMENT_TOL_IN_GAURHOTH(LOTRFaction.UTUMNO),
+    ALIGNMENT_URUMNO_OUTFIT(LOTRFaction.UTUMNO),
+    ALIGNMENT_UTUMNO_REMNANT(LOTRFaction.UTUMNO),
+    ALIGNMENT_ARNOR2(LOTRFaction.RANGER_NORTH),
+    ALIGNMENT_NUMENORIAN(LOTRFaction.GONDOR),
+    ALIGNMENT_ARNOR(LOTRFaction.RANGER_NORTH),
+    ALIGNMENT_RED_MOUNTAINS(LOTRFaction.RED_MOUNTAINS),
+    ALIGNMENT_RED_MOUNTAINS1(LOTRFaction.RED_MOUNTAINS),
+    ALIGNMENT_RED1(LOTRFaction.RED_MOUNTAINS),
+    ALIGNMENT_OROCARNI(LOTRFaction.RED_MOUNTAINS),
+    ALIGNMENT_WIND(LOTRFaction.WIND),
+    ALIGNMENT_AVARI(LOTRFaction.AVARI),
     ACHIEVEMENT_BRONZE,
     ACHIEVEMENT_SILVER,
     ACHIEVEMENT_GOLD,
     ACHIEVEMENT_MITHRIL,
     ALCOHOLIC,
+    BALROG,
     DEFEAT_MTC,
     DEFEAT_MALLORN_ENT,
+    DOVAKIN,
+    TESTERLOTR,
     ELVEN_CONTEST("7a19ce50-d5c8-4e16-b8f9-932d27ec3251"),
     EVIL_CONTEST("0c1eb454-df57-4b5c-91bf-16d8f15cae74", "2418e4fa-2483-4bd9-bf58-1e09c586959e"),
     SHIRE_CONTEST("a166423a-a1e3-45b1-a4b8-dea69f2bd64e", "3967d432-37ec-450d-ad37-9eec6bac9707", "bab181b6-7b76-49fe-baa2-b3ca4a48f486"),
@@ -116,9 +140,8 @@ public enum LOTRShields {
         this.shieldTexture = new ResourceLocation("lotr:shield/" + this.name().toLowerCase() + ".png");
         this.exclusiveUUIDs = new UUID[players.length];
         for (int i = 0; i < players.length; ++i) {
-            UUID uuid;
             String s = players[i];
-            this.exclusiveUUIDs[i] = uuid = UUID.fromString(s);
+            this.exclusiveUUIDs[i] = UUID.fromString(s);
         }
         this.isHidden = hidden;
     }
@@ -160,7 +183,40 @@ public enum LOTRShields {
         if (this == DEFEAT_MALLORN_ENT) {
             return LOTRLevelData.getData(entityplayer).hasAchievement(LOTRAchievement.killMallornEnt);
         }
-        if (this.shieldType == ShieldType.EXCLUSIVE) {
+        if (this == MOD) {
+            return LOTRLevelData.getData(entityplayer).hasAchievement(LOTRAchievement.mod);
+        }
+        if (this == ELECTRICIAN) {
+            return LOTRLevelData.getData(entityplayer).hasAchievement(LOTRAchievement.mod);
+        }
+        if (this == GRUK) {
+            return LOTRLevelData.getData(entityplayer).hasAchievement(LOTRAchievement.mod);
+        }
+        if (this == BOYD) {
+            return LOTRLevelData.getData(entityplayer).hasAchievement(LOTRAchievement.mod);
+        }
+        if (this == LOREMASTER_2016) {
+            return LOTRLevelData.getData(entityplayer).hasAchievement(LOTRAchievement.lore);
+        }
+        if (this == STRUCTURE_CONTEST) {
+            return LOTRLevelData.getData(entityplayer).hasAchievement(LOTRAchievement.mod);
+        }
+        if (this == TRANSLATOR) {
+            return LOTRLevelData.getData(entityplayer).hasAchievement(LOTRAchievement.translator);
+        }
+        if (this == BALROG) {
+            return LOTRLevelData.getData(entityplayer).hasAchievement(LOTRAchievement.killBalrog);
+        }
+        if (this == OGRE) {
+            return LOTRLevelData.getData(entityplayer).hasAchievement(LOTRAchievement.ogre);
+        }
+        if (this == DOVAKIN) {
+            return LOTRLevelData.getData(entityplayer).hasAchievement(LOTRAchievement.dovakin);
+        }
+        if (this == TESTERLOTR) {
+            return LOTRLevelData.getData(entityplayer).hasAchievement(LOTRAchievement.tester);
+        }
+        if (this == OGRE && this.shieldType == ShieldType.EXCLUSIVE) {
             for (UUID uuid : this.exclusiveUUIDs) {
                 if (!uuid.equals(entityplayer.getUniqueID())) continue;
                 return true;

@@ -63,7 +63,10 @@ extends LOTRBlockPortal {
     public boolean isValidPortalLocation(World world, int i, int j, int k, boolean portalAlreadyMade) {
         for (int i1 = i - 2; i1 <= i + 2; ++i1) {
             for (int k1 = k - 2; k1 <= k + 2; ++k1) {
-                if (Math.abs(i1 - i) == 2 && Math.abs(k1 - k) == 2 || !(Math.abs(i1 - i) == 2 || Math.abs(k1 - k) == 2 ? world.getBlock(i1, j, k1) != LOTRMod.quenditeGrass : world.getBlock(i1, j, k1) != (portalAlreadyMade ? LOTRMod.elvenPortal : Blocks.water) || !LOTRMod.isOpaque(world, i1, j - 1, k1))) continue;
+                if (Math.abs(i1 - i) == 2 && Math.abs(k1 - k) == 2) continue;
+                if (Math.abs(i1 - i) == 2 || Math.abs(k1 - k) == 2) {
+                    if (world.getBlock(i1, j, k1) == LOTRMod.quenditeGrass) continue;
+                } else if (world.getBlock(i1, j, k1) == (portalAlreadyMade ? LOTRMod.elvenPortal : Blocks.water) && LOTRMod.isOpaque(world, i1, j - 1, k1)) continue;
                 return false;
             }
         }

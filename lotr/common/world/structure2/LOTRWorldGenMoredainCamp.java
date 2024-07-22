@@ -91,13 +91,12 @@ extends LOTRWorldGenStructureBase2 {
         structure.restrictions = this.restrictions;
         structure.usingPlayer = this.usingPlayer;
         for (int l = 0; l < 16; ++l) {
-            int rotation;
             int x = MathHelper.getRandomIntegerInRange((Random)random, (int)4, (int)8);
             int z = MathHelper.getRandomIntegerInRange((Random)random, (int)4, (int)8);
             int spawnX = this.getX(x *= random.nextBoolean() ? -1 : 1, z *= random.nextBoolean() ? -1 : 1);
             int spawnZ = this.getZ(x, z);
             int spawnY = this.getY(this.getTopBlock(world, x, z));
-            if (!structure.generateWithSetRotation(world, random, spawnX, spawnY, spawnZ, rotation = random.nextInt(4))) continue;
+            if (!structure.generateWithSetRotation(world, random, spawnX, spawnY, spawnZ, random.nextInt(4))) continue;
             return true;
         }
         return false;

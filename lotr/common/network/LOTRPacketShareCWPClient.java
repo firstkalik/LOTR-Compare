@@ -55,10 +55,9 @@ implements IMessage {
     implements IMessageHandler<LOTRPacketShareCWPClient, IMessage> {
         public IMessage onMessage(LOTRPacketShareCWPClient packet, MessageContext context) {
             LOTRCustomWaypoint cwp;
-            LOTRFellowshipClient fsClient;
             LOTRPlayerData pd;
-            EntityPlayer entityplayer;
-            if (!LOTRMod.proxy.isSingleplayer() && (cwp = (pd = LOTRLevelData.getData(entityplayer = LOTRMod.proxy.getClientPlayer())).getCustomWaypointByID(packet.cwpID)) != null && (fsClient = pd.getClientFellowshipByID(packet.fellowshipID)) != null) {
+            LOTRFellowshipClient fsClient;
+            if (!LOTRMod.proxy.isSingleplayer() && (cwp = (pd = LOTRLevelData.getData(LOTRMod.proxy.getClientPlayer())).getCustomWaypointByID(packet.cwpID)) != null && (fsClient = pd.getClientFellowshipByID(packet.fellowshipID)) != null) {
                 if (packet.adding) {
                     pd.customWaypointAddSharedFellowshipClient(cwp, fsClient);
                 } else {

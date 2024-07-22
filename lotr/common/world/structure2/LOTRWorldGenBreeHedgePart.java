@@ -43,13 +43,16 @@ extends LOTRWorldGenBreeStructure {
 
     @Override
     public boolean generateWithSetRotation(World world, Random random, int i, int j, int k, int rotation) {
-        int k1;
-        int i1;
         int j1;
         this.setOriginAndRotation(world, i, j, k, rotation, 0);
         this.setupRandomBlocks(random);
-        if (this.restrictions && (!this.isSurface(world, i1 = 0, j1 = this.getTopBlock(world, i1, k1 = 0) - 1, k1) || this.grassOnly && this.getBlock(world, i1, j1, k1) != Blocks.grass)) {
-            return false;
+        if (this.restrictions) {
+            int i1 = 0;
+            int k1 = 0;
+            j1 = this.getTopBlock(world, i1, 0) - 1;
+            if (!this.isSurface(world, 0, j1, k1) || this.grassOnly && this.getBlock(world, i1, j1, k1) != Blocks.grass) {
+                return false;
+            }
         }
         int j12 = 0;
         while (!this.isOpaque(world, 0, j12, 0) && this.getY(j12) >= 0) {

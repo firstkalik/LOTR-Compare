@@ -35,6 +35,7 @@ import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import lotr.client.model.LOTRModelAngbandHelmet;
 import lotr.client.model.LOTRModelArnorHelmet;
 import lotr.client.model.LOTRModelBlackNumenoreanHelmet;
 import lotr.client.model.LOTRModelBlackUrukHelmet;
@@ -65,6 +66,8 @@ import lotr.client.model.LOTRModelTauredainGoldHelmet;
 import lotr.client.model.LOTRModelUmbarHelmet;
 import lotr.client.model.LOTRModelUrukHelmet;
 import lotr.client.model.LOTRModelWingedHelmet;
+import lotr.client.model.LOTRModelWizardHat;
+import lotr.client.model.LOTRModelhelmetguldururuk;
 import lotr.common.LOTRMod;
 import lotr.common.entity.npc.LOTREntityNPC;
 import lotr.common.item.LOTRItemBanner;
@@ -111,7 +114,11 @@ public class LOTRArmorModels {
             map = new HashMap<Item, ModelBiped>();
             map.put(LOTRMod.leatherHat, new LOTRModelLeatherHat());
             map.put(LOTRMod.helmetGondor, new LOTRModelGondorHelmet(1.0f));
+            map.put(LOTRMod.gandalfhat, new LOTRModelWizardHat());
             map.put(LOTRMod.helmetElven, new LOTRModelGaladhrimHelmet(1.0f));
+            map.put(LOTRMod.helmetguldururuk, new LOTRModelhelmetguldururuk(1.0f));
+            map.put(LOTRMod.helmetAngband, new LOTRModelAngbandHelmet(1.0f));
+            map.put(LOTRMod.helmetangbande, new LOTRModelGundabadUrukHelmet(1.0f));
             map.put(LOTRMod.helmetGondorWinged, new LOTRModelWingedHelmet(1.0f));
             map.put(LOTRMod.helmetMorgul, new LOTRModelMorgulHelmet(1.0f));
             map.put(LOTRMod.helmetGemsbok, new LOTRModelGemsbokHelmet(1.0f));
@@ -127,6 +134,7 @@ public class LOTRArmorModels {
             map.put(LOTRMod.legsHaradRobes, new LOTRModelHaradRobes(0.5f));
             map.put(LOTRMod.bootsHaradRobes, new LOTRModelHaradRobes(1.0f));
             map.put(LOTRMod.helmetGondolin, new LOTRModelGondolinHelmet(1.0f));
+            map.put(LOTRMod.helmetDain, new LOTRModelGondolinHelmet(1.0f));
             map.put(LOTRMod.helmetRohanMarshal, new LOTRModelRohanMarshalHelmet(1.0f));
             map.put(LOTRMod.helmetTauredainChieftain, new LOTRModelTauredainChieftainHelmet(1.0f));
             map.put(LOTRMod.helmetTauredainGold, new LOTRModelTauredainGoldHelmet(1.0f));
@@ -146,6 +154,8 @@ public class LOTRArmorModels {
             map.put(LOTRMod.plate, new LOTRModelHeadPlate());
             map.put(LOTRMod.woodPlate, new LOTRModelHeadPlate());
             map.put(LOTRMod.ceramicPlate, new LOTRModelHeadPlate());
+            map.put(LOTRMod.goldPlate, new LOTRModelHeadPlate());
+            map.put(LOTRMod.mithrilPlate, new LOTRModelHeadPlate());
             for (ModelBiped armorModel : map.values()) {
                 this.copyModelRotations(armorModel, key);
             }
@@ -196,8 +206,8 @@ public class LOTRArmorModels {
     public int getEntityArmorModel(RendererLivingEntity renderer, ModelBiped mainModel, EntityLivingBase entity, ItemStack armor, int slot) {
         ModelBiped armorModel = this.getSpecialArmorModel(armor, slot, entity, mainModel);
         if (armorModel != null) {
-            Item armorItem;
             int color;
+            Item armorItem;
             Item item = armorItem = armor == null ? null : armor.getItem();
             if (armorItem instanceof ItemArmor) {
                 Minecraft.getMinecraft().getTextureManager().bindTexture(RenderBiped.getArmorResource((Entity)entity, (ItemStack)armor, (int)slot, null));
@@ -271,12 +281,11 @@ public class LOTRArmorModels {
         int value = 0;
         boolean aimBow = false;
         if (itemstack != null) {
-            EntityPlayer entityplayer;
             value = 1;
             Item item = itemstack.getItem();
             boolean isRanged = false;
             if (itemstack.getItemUseAction() == EnumAction.bow) {
-                isRanged = item instanceof LOTRItemSpear ? entity instanceof EntityPlayer : !(item instanceof ItemSword);
+                boolean bl = item instanceof LOTRItemSpear ? entity instanceof EntityPlayer : (isRanged = !(item instanceof ItemSword));
             }
             if (item instanceof LOTRItemSling) {
                 isRanged = true;
@@ -297,7 +306,7 @@ public class LOTRArmorModels {
             if (item instanceof LOTRItemBanner) {
                 value = 3;
             }
-            if (entity instanceof EntityPlayer && (entityplayer = (EntityPlayer)entity).getItemInUseCount() > 0 && itemstack.getItemUseAction() == EnumAction.block) {
+            if (entity instanceof EntityPlayer && ((EntityPlayer)entity).getItemInUseCount() > 0 && itemstack.getItemUseAction() == EnumAction.block) {
                 value = 3;
             }
             if (entity instanceof LOTREntityNPC && ((LOTREntityNPC)entity).clientIsEating) {

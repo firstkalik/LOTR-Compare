@@ -23,8 +23,8 @@ extends WorldGenerator {
         while (((block = world.getBlock(i, j, k)).isAir((IBlockAccess)world, i, j, k) || block.isLeaves((IBlockAccess)world, i, j, k)) && --j > 0) {
         }
         for (int l = 0; l < 128; ++l) {
-            int k1;
             int j1;
+            int k1;
             int i1 = i + random.nextInt(8) - random.nextInt(8);
             if (!world.isAirBlock(i1, j1 = j + random.nextInt(4) - random.nextInt(4), k1 = k + random.nextInt(8) - random.nextInt(8)) || !LOTRMod.clover.canBlockStay(world, i1, j1, k1)) continue;
             if (random.nextInt(500) == 0) {

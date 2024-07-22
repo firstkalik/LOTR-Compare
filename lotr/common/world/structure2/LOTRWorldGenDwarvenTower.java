@@ -101,11 +101,11 @@ extends LOTRWorldGenStructureBase2 {
 
     @Override
     public boolean generateWithSetRotation(World world, Random random, int i, int j, int k, int rotation) {
-        int k1;
         int k12;
+        int k1;
+        int j12;
         int i1;
         int j1;
-        int j12;
         LOTREntityNPC commander;
         this.setOriginAndRotation(world, i, j, k, rotation, 6);
         this.setupRandomBlocks(random);
@@ -139,50 +139,44 @@ extends LOTRWorldGenStructureBase2 {
             }
         }
         for (int l = 0; l <= sections; ++l) {
-            int i12;
-            int i13;
-            int k13;
-            int j13;
-            int k2;
-            Object k14;
             int j14;
+            int k2;
+            int i12;
+            int k14;
+            int i13;
+            boolean flag;
+            int j13;
             int sectionBase = l * 5;
-            for (i12 = -4; i12 <= 4; ++i12) {
+            for (i13 = -4; i13 <= 4; ++i13) {
                 for (j14 = sectionBase + 1; j14 <= sectionBase + 5; ++j14) {
-                    for (k14 = -4; k14 <= 4; ++k14) {
-                        this.setAir(world, i12, j14, (int)k14);
-                        this.setAir(world, i12, j14, (int)k14);
+                    for (int k13 = -4; k13 <= 4; ++k13) {
+                        this.setAir(world, i13, j14, k13);
+                        this.setAir(world, i13, j14, k13);
                     }
                 }
             }
             for (j1 = sectionBase + 1; j1 <= sectionBase + 5; ++j1) {
-                boolean flag;
-                int n;
-                int n2;
                 for (int i14 = -5; i14 <= 5; ++i14) {
-                    k14 = new int[]{-5, 5};
-                    n2 = ((int)k14).length;
-                    for (n = 0; n < n2; ++n) {
-                        void k15 = k14[n];
+                    int[] arrn = new int[]{-5, 5};
+                    int n = arrn.length;
+                    for (int i2 = 0; i2 < n; ++i2) {
+                        int k15 = arrn[i2];
                         flag = true;
                         if (this.ruined) {
                             boolean bl = flag = random.nextInt(20) != 0;
                         }
                         if (!flag) continue;
-                        this.placeBrick(world, random, i14, j1, (int)k15);
+                        this.placeBrick(world, random, i14, j1, k15);
                     }
                 }
-                for (k13 = -4; k13 <= 4; ++k13) {
-                    k14 = new int[]{-5, 5};
-                    n2 = ((int)k14).length;
-                    for (n = 0; n < n2; ++n) {
-                        void i15 = k14[n];
+                for (k14 = -4; k14 <= 4; ++k14) {
+                    for (int i15 : new int[]{-5, 5}) {
                         flag = true;
                         if (this.ruined) {
                             boolean bl = flag = random.nextInt(20) != 0;
                         }
                         if (!flag) continue;
-                        this.placeBrick(world, random, (int)i15, j1, k13);
+                        this.placeBrick(world, random, i15, j1, k14);
                     }
                 }
             }
@@ -202,14 +196,14 @@ extends LOTRWorldGenStructureBase2 {
             this.placePillar(world, random, 4, sectionBase + 2, 4);
             this.setBlockAndMetadata(world, 4, sectionBase + 3, 4, this.glowBrickBlock, this.glowBrickMeta);
             this.placePillar(world, random, 4, sectionBase + 4, 4);
-            for (i12 = -4; i12 <= 4; ++i12) {
-                for (k13 = -4; k13 <= 4; ++k13) {
-                    boolean flag = true;
+            for (i13 = -4; i13 <= 4; ++i13) {
+                for (k14 = -4; k14 <= 4; ++k14) {
+                    flag = true;
                     if (this.ruined) {
                         boolean bl = flag = random.nextInt(12) != 0;
                     }
                     if (!flag) continue;
-                    this.setBlockAndMetadata(world, i12, sectionBase + 5, k13, this.plankBlock, this.plankMeta);
+                    this.setBlockAndMetadata(world, i13, sectionBase + 5, k14, this.plankBlock, this.plankMeta);
                 }
             }
             for (k12 = -2; k12 <= 2; ++k12) {
@@ -225,15 +219,15 @@ extends LOTRWorldGenStructureBase2 {
             }
             int randomFeature = random.nextInt(5);
             if (l % 2 == 0) {
-                for (k13 = -1; k13 <= 4; ++k13) {
-                    for (i13 = 1; i13 <= 2; ++i13) {
-                        this.setAir(world, i13, sectionBase + 5, k13);
-                        k2 = k13 - -1;
+                for (k14 = -1; k14 <= 4; ++k14) {
+                    for (i12 = 1; i12 <= 2; ++i12) {
+                        this.setAir(world, i12, sectionBase + 5, k14);
+                        k2 = k14 - -1;
                         for (j13 = sectionBase + 1; j13 <= sectionBase + k2; ++j13) {
-                            this.placeBrick(world, random, i13, j13, k13);
+                            this.placeBrick(world, random, i12, j13, k14);
                         }
                         if (k2 >= 5) continue;
-                        this.placeBrickStair(world, random, i13, sectionBase + k2 + 1, k13, 2);
+                        this.placeBrickStair(world, random, i12, sectionBase + k2 + 1, k14, 2);
                     }
                 }
                 this.placeRandomFeature(world, random, -2, sectionBase + 1, 4, randomFeature, false);
@@ -243,15 +237,15 @@ extends LOTRWorldGenStructureBase2 {
                 this.setBlockAndMetadata(world, 0, sectionBase + 2, 4, this.plankSlabBlock, this.plankSlabMeta);
                 this.setBlockAndMetadata(world, -3, sectionBase + 2, 4, this.plankSlabBlock, this.plankSlabMeta);
             } else {
-                for (k13 = -4; k13 <= 1; ++k13) {
-                    for (i13 = -2; i13 <= -1; ++i13) {
-                        this.setAir(world, i13, sectionBase + 5, k13);
-                        k2 = 5 - (k13 - -4);
+                for (k14 = -4; k14 <= 1; ++k14) {
+                    for (i12 = -2; i12 <= -1; ++i12) {
+                        this.setAir(world, i12, sectionBase + 5, k14);
+                        k2 = 5 - (k14 - -4);
                         for (j13 = sectionBase + 1; j13 <= sectionBase + k2; ++j13) {
-                            this.placeBrick(world, random, i13, j13, k13);
+                            this.placeBrick(world, random, i12, j13, k14);
                         }
                         if (k2 >= 5) continue;
-                        this.placeBrickStair(world, random, i13, sectionBase + k2 + 1, k13, 3);
+                        this.placeBrickStair(world, random, i12, sectionBase + k2 + 1, k14, 3);
                     }
                 }
                 this.placeRandomFeature(world, random, 2, sectionBase + 1, -4, randomFeature, true);

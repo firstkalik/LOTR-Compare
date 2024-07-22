@@ -58,22 +58,22 @@ implements IRecipe {
     }
 
     public ItemStack getCraftingResult(InventoryCrafting inv) {
-        EntityPlayer craftingPlayer;
         ItemStack result;
+        EntityPlayer craftingPlayer;
         block12: {
             ItemStack drink = null;
             ItemStack poison = null;
             for (int i = 0; i < inv.getSizeInventory(); ++i) {
-                ItemStack itemstack = inv.getStackInSlot(i);
+                Field[] itemstack = inv.getStackInSlot(i);
                 if (itemstack == null) continue;
-                if (LOTRPoisonedDrinks.canPoison(itemstack)) {
+                if (LOTRPoisonedDrinks.canPoison((ItemStack)itemstack)) {
                     if (drink != null) {
                         return null;
                     }
                     drink = itemstack.copy();
                     continue;
                 }
-                if (LOTRMod.isOreNameEqual(itemstack, "poison")) {
+                if (LOTRMod.isOreNameEqual((ItemStack)itemstack, "poison")) {
                     if (poison != null) {
                         return null;
                     }
@@ -89,7 +89,6 @@ implements IRecipe {
             LOTRPoisonedDrinks.setDrinkPoisoned(result, true);
             craftingPlayer = null;
             try {
-                if (!(inv instanceof InventoryCrafting)) break block12;
                 Container cwb = null;
                 for (Field f : inv.getClass().getDeclaredFields()) {
                     f.setAccessible(true);

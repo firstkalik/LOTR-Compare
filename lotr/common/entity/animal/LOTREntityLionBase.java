@@ -137,8 +137,8 @@ extends LOTREntityAnimalMF {
     }
 
     public void onLivingUpdate() {
-        EntityLivingBase entity;
         boolean isChild;
+        EntityLivingBase entity;
         if (!this.worldObj.isRemote && (isChild = this.isChild()) != this.prevIsChild) {
             if (isChild) {
                 this.tasks.removeTask(this.attackAI);
@@ -174,6 +174,10 @@ extends LOTREntityAnimalMF {
         int furs = 1 + this.rand.nextInt(3) + 1;
         for (int l = 0; l < furs; ++l) {
             this.dropItem(LOTRMod.lionFur, 1);
+        }
+        int k = 1 + this.rand.nextInt(2) + this.rand.nextInt(i + 1);
+        for (int j = 0; j < k; ++j) {
+            this.dropItem(Items.bone, 1);
         }
         int meats = this.rand.nextInt(2) + 1 + this.rand.nextInt(1 + i);
         for (int l = 0; l < meats; ++l) {
@@ -213,10 +217,10 @@ extends LOTREntityAnimalMF {
             if (this.isChild()) {
                 double range = 12.0;
                 List list = this.worldObj.getEntitiesWithinAABBExcludingEntity((Entity)this, this.boundingBox.expand(range, range, range));
-                for (E obj : list) {
+                for (LOTREntityLionBase obj : list) {
                     LOTREntityLionBase lion;
-                    Entity entity = (Entity)obj;
-                    if (!(entity instanceof LOTREntityLionBase) || (lion = (LOTREntityLionBase)entity).isChild()) continue;
+                    LOTREntityLionBase entity = obj;
+                    if (!(entity instanceof LOTREntityLionBase) || (lion = entity).isChild()) continue;
                     lion.becomeAngryAt((EntityLivingBase)attacker);
                 }
             } else {

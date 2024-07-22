@@ -36,9 +36,9 @@ extends LOTRWorldGenStructureBase {
     }
 
     public boolean generate(World world, Random random, int i, int j, int k) {
+        int j1;
         int k1;
         int i1;
-        int j1;
         int j12;
         if (this.restrictions && (world.getBlock(i, j - 1, k) != Blocks.grass || !(world.getBiomeGenForCoords(i, k) instanceof LOTRBiomeGenNurn))) {
             return false;
@@ -69,8 +69,8 @@ extends LOTRWorldGenStructureBase {
         if (this.restrictions) {
             for (i1 = i - 3; i1 <= i + 3; ++i1) {
                 for (k1 = k - 3; k1 <= k + 3; ++k1) {
-                    j1 = world.getHeightValue(i1, k1) - 1;
-                    Block l = world.getBlock(i1, j1, k1);
+                    j12 = world.getHeightValue(i1, k1) - 1;
+                    Block l = world.getBlock(i1, j12, k1);
                     if (l == Blocks.grass) continue;
                     return false;
                 }
@@ -88,27 +88,27 @@ extends LOTRWorldGenStructureBase {
         }
         for (i1 = i - 3; i1 <= i + 3; i1 += 6) {
             for (k1 = k - 3; k1 <= k + 3; k1 += 6) {
-                for (j1 = j + 5; !(j1 < j && LOTRMod.isOpaque(world, i1, j1, k1) || j1 < 0); --j1) {
-                    this.setBlockAndNotifyAdequately(world, i1, j1, k1, LOTRMod.wood, 3);
-                    this.setGrassToDirt(world, i1, j1 - 1, k1);
+                for (j12 = j + 5; !(j12 < j && LOTRMod.isOpaque(world, i1, j12, k1) || j12 < 0); --j12) {
+                    this.setBlockAndNotifyAdequately(world, i1, j12, k1, LOTRMod.wood, 3);
+                    this.setGrassToDirt(world, i1, j12 - 1, k1);
                 }
             }
         }
-        for (j12 = j + 2; j12 <= j + 4; ++j12) {
-            this.setBlockAndNotifyAdequately(world, i - 2, j12, k - 3, LOTRMod.fence, 3);
-            this.setBlockAndNotifyAdequately(world, i - 2, j12, k + 3, LOTRMod.fence, 3);
-            this.setBlockAndNotifyAdequately(world, i + 2, j12, k - 3, LOTRMod.fence, 3);
-            this.setBlockAndNotifyAdequately(world, i + 2, j12, k + 3, LOTRMod.fence, 3);
-            this.setBlockAndNotifyAdequately(world, i - 3, j12, k - 2, LOTRMod.fence, 3);
-            this.setBlockAndNotifyAdequately(world, i + 3, j12, k - 2, LOTRMod.fence, 3);
-            this.setBlockAndNotifyAdequately(world, i - 3, j12, k + 2, LOTRMod.fence, 3);
-            this.setBlockAndNotifyAdequately(world, i + 3, j12, k + 2, LOTRMod.fence, 3);
+        for (j1 = j + 2; j1 <= j + 4; ++j1) {
+            this.setBlockAndNotifyAdequately(world, i - 2, j1, k - 3, LOTRMod.fence, 3);
+            this.setBlockAndNotifyAdequately(world, i - 2, j1, k + 3, LOTRMod.fence, 3);
+            this.setBlockAndNotifyAdequately(world, i + 2, j1, k - 3, LOTRMod.fence, 3);
+            this.setBlockAndNotifyAdequately(world, i + 2, j1, k + 3, LOTRMod.fence, 3);
+            this.setBlockAndNotifyAdequately(world, i - 3, j1, k - 2, LOTRMod.fence, 3);
+            this.setBlockAndNotifyAdequately(world, i + 3, j1, k - 2, LOTRMod.fence, 3);
+            this.setBlockAndNotifyAdequately(world, i - 3, j1, k + 2, LOTRMod.fence, 3);
+            this.setBlockAndNotifyAdequately(world, i + 3, j1, k + 2, LOTRMod.fence, 3);
         }
-        for (j12 = j + 11; !(j12 < j && LOTRMod.isOpaque(world, i, j12, k) || j12 < 0); --j12) {
-            this.setBlockAndNotifyAdequately(world, i, j12, k, LOTRMod.wood, 3);
-            this.setGrassToDirt(world, i, j12 - 1, k);
-            if (j12 > j + 6) continue;
-            this.setBlockAndNotifyAdequately(world, i, j12, k - 1, Blocks.ladder, 2);
+        for (j1 = j + 11; !(j1 < j && LOTRMod.isOpaque(world, i, j1, k) || j1 < 0); --j1) {
+            this.setBlockAndNotifyAdequately(world, i, j1, k, LOTRMod.wood, 3);
+            this.setGrassToDirt(world, i, j1 - 1, k);
+            if (j1 > j + 6) continue;
+            this.setBlockAndNotifyAdequately(world, i, j1, k - 1, Blocks.ladder, 2);
         }
         this.setBlockAndNotifyAdequately(world, i, j + 1, k - 1, LOTRMod.trapdoorCharred, 0);
         this.setBlockAndNotifyAdequately(world, i, j + 7, k - 1, LOTRMod.trapdoorCharred, 0);

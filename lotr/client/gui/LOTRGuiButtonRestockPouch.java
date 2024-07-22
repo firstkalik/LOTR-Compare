@@ -4,7 +4,6 @@
  * Could not load the following classes:
  *  net.minecraft.client.Minecraft
  *  net.minecraft.client.entity.EntityClientPlayerMP
- *  net.minecraft.client.gui.FontRenderer
  *  net.minecraft.client.gui.GuiButton
  *  net.minecraft.client.gui.inventory.GuiContainer
  *  net.minecraft.client.gui.inventory.GuiContainerCreative
@@ -21,7 +20,6 @@ import lotr.client.LOTRReflectionClient;
 import lotr.common.LOTRMod;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityClientPlayerMP;
-import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.gui.inventory.GuiContainerCreative;
@@ -45,7 +43,6 @@ extends GuiButton {
     public void drawButton(Minecraft mc, int i, int j) {
         this.checkPouchRestockEnabled(mc);
         if (this.visible) {
-            FontRenderer fontrenderer = mc.fontRenderer;
             mc.getTextureManager().bindTexture(texture);
             GL11.glColor4f((float)1.0f, (float)1.0f, (float)1.0f, (float)1.0f);
             this.field_146123_n = i >= this.xPosition && j >= this.yPosition && i < this.xPosition + this.width && j < this.yPosition + this.height;
@@ -56,10 +53,9 @@ extends GuiButton {
     }
 
     private void checkPouchRestockEnabled(Minecraft mc) {
-        int creativeTabIndex;
         InventoryPlayer inv = mc.thePlayer.inventory;
         this.enabled = this.visible = inv.hasItem(LOTRMod.pouch);
-        if (this.parentGUI instanceof GuiContainerCreative && (creativeTabIndex = LOTRReflectionClient.getCreativeTabIndex((GuiContainerCreative)this.parentGUI)) != CreativeTabs.tabInventory.getTabIndex()) {
+        if (this.parentGUI instanceof GuiContainerCreative && LOTRReflectionClient.getCreativeTabIndex((GuiContainerCreative)this.parentGUI) != CreativeTabs.tabInventory.getTabIndex()) {
             this.visible = false;
             this.enabled = false;
         }

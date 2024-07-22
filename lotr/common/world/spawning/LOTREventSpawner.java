@@ -64,8 +64,6 @@ import net.minecraftforge.event.ForgeEventFactory;
 
 public class LOTREventSpawner {
     private static Set<ChunkCoordIntPair> eligibleSpawnChunks = new HashSet<ChunkCoordIntPair>();
-    private static final int playerRange = 32;
-    private static final int expectedChunks = 16;
     public static List<LOTRTravellingTraderSpawner> travellingTraders = new ArrayList<LOTRTravellingTraderSpawner>();
     private static Set<Class> traderClasses = new HashSet<Class>();
 
@@ -98,15 +96,13 @@ public class LOTREventSpawner {
         Random rand = world.rand;
         block0: for (ChunkCoordIntPair chunkCoords : spawnChunks) {
             BiomeGenBase biome;
-            int i;
             int k;
+            int i;
             ChunkPosition chunkposition = LOTRSpawnerNPCs.getRandomSpawningPointInChunk(world, chunkCoords);
             if (chunkposition == null || !((biome = world.getBiomeGenForCoords(i = chunkposition.chunkPosX, k = chunkposition.chunkPosZ)) instanceof LOTRBiome)) continue;
             LOTRBiomeInvasionSpawns invasionSpawns = ((LOTRBiome)biome).invasionSpawns;
             for (EventChance invChance : EventChance.values()) {
-                List nearbyPlayers;
                 int range;
-                AxisAlignedBB playerCheckBox;
                 List<LOTRInvasions> invList = invasionSpawns.getInvasionsForChance(invChance);
                 if (invList.isEmpty()) continue;
                 final LOTRInvasions invasionType = invList.get(rand.nextInt(invList.size()));
@@ -114,7 +110,7 @@ public class LOTREventSpawner {
                 if (!world.isDaytime() && LOTRWorldProvider.isLunarEclipse()) {
                     chance *= 5.0;
                 }
-                if (!(rand.nextDouble() < chance) || (nearbyPlayers = world.selectEntitiesWithinAABB(EntityPlayer.class, playerCheckBox = AxisAlignedBB.getBoundingBox((double)(i - (range = 48)), (double)0.0, (double)(k - range), (double)(i + range), (double)world.getHeight(), (double)(k + range)), new IEntitySelector(){
+                if (rand.nextDouble() >= chance || world.selectEntitiesWithinAABB(EntityPlayer.class, AxisAlignedBB.getBoundingBox((double)(i - 48), (double)0.0, (double)(k - (range = 48)), (double)(i + range), (double)world.getHeight(), (double)(k + range)), new IEntitySelector(){
 
                     public boolean isEntityApplicable(Entity entity) {
                         EntityPlayer entityplayer;
@@ -123,7 +119,7 @@ public class LOTREventSpawner {
                         }
                         return false;
                     }
-                })).isEmpty()) continue;
+                }).isEmpty()) continue;
                 for (int attempts = 0; attempts < 16; ++attempts) {
                     Block block;
                     int k1;
@@ -147,27 +143,24 @@ public class LOTREventSpawner {
         Random rand = world.rand;
         block0: for (ChunkCoordIntPair chunkCoords : spawnChunks) {
             int range;
-            AxisAlignedBB playerCheckBox;
             BiomeGenBase biome;
-            int i;
             int k;
-            List nearbyPlayers;
+            int i;
             ChunkPosition chunkposition = LOTRSpawnerNPCs.getRandomSpawningPointInChunk(world, chunkCoords);
             if (chunkposition == null || !((biome = world.getBiomeGenForCoords(i = chunkposition.chunkPosX, k = chunkposition.chunkPosZ)) instanceof LOTRBiome)) continue;
             LOTRBiome lotrbiome = (LOTRBiome)biome;
             Class<? extends LOTREntityBandit> banditClass = lotrbiome.getBanditEntityClass();
             double chance = lotrbiome.getBanditChance().chancesPerSecondPerChunk[16];
-            if (!(chance > 0.0) || !(world.rand.nextDouble() < chance) || (nearbyPlayers = world.selectEntitiesWithinAABB(EntityPlayer.class, playerCheckBox = AxisAlignedBB.getBoundingBox((double)(i - (range = 48)), (double)0.0, (double)(k - range), (double)(i + range), (double)world.getHeight(), (double)(k + range)), LOTRMod.selectNonCreativePlayers())).isEmpty()) continue;
+            if (chance <= 0.0 || world.rand.nextDouble() >= chance || world.selectEntitiesWithinAABB(EntityPlayer.class, AxisAlignedBB.getBoundingBox((double)(i - 48), (double)0.0, (double)(k - (range = 48)), (double)(i + range), (double)world.getHeight(), (double)(k + range)), LOTRMod.selectNonCreativePlayers()).isEmpty()) continue;
             int banditsSpawned = 0;
             int maxBandits = MathHelper.getRandomIntegerInRange((Random)world.rand, (int)1, (int)4);
             for (int attempts = 0; attempts < 32; ++attempts) {
-                Block block;
-                LOTREntityBandit bandit;
-                String entityName;
                 int k1;
+                LOTREntityBandit bandit;
+                Block block;
                 int i1 = i + MathHelper.getRandomIntegerInRange((Random)rand, (int)-32, (int)32);
                 int j1 = world.getHeightValue(i1, k1 = k + MathHelper.getRandomIntegerInRange((Random)rand, (int)-32, (int)32));
-                if (j1 <= 60 || (block = world.getBlock(i1, j1 - 1, k1)) != biome.topBlock && block != biome.fillerBlock || world.getBlock(i1, j1, k1).isNormalCube() || world.getBlock(i1, j1 + 1, k1).isNormalCube() || (bandit = (LOTREntityBandit)EntityList.createEntityByName((String)(entityName = LOTREntities.getStringFromClass(banditClass)), (World)world)) == null) continue;
+                if (j1 <= 60 || (block = world.getBlock(i1, j1 - 1, k1)) != biome.topBlock && block != biome.fillerBlock || world.getBlock(i1, j1, k1).isNormalCube() || world.getBlock(i1, j1 + 1, k1).isNormalCube() || (bandit = (LOTREntityBandit)EntityList.createEntityByName((String)LOTREntities.getStringFromClass(banditClass), (World)world)) == null) continue;
                 bandit.setLocationAndAngles((double)i1 + 0.5, (double)j1, (double)k1 + 0.5, world.rand.nextFloat() * 360.0f, 0.0f);
                 Event.Result canSpawn = ForgeEventFactory.canEntitySpawn((EntityLiving)bandit, (World)world, (float)((float)bandit.posX), (float)((float)bandit.posY), (float)((float)bandit.posZ));
                 if (canSpawn != Event.Result.ALLOW && (canSpawn != Event.Result.DEFAULT || !bandit.getCanSpawnHere())) continue;
@@ -183,10 +176,12 @@ public class LOTREventSpawner {
         NEVER(0.0f, 0),
         RARE(0.1f, 3600),
         UNCOMMON(0.3f, 3600),
+        HALFTIME(0.5f, 3600),
         COMMON(0.9f, 3600),
         BANDIT_RARE(0.1f, 3600),
         BANDIT_UNCOMMON(0.3f, 3600),
-        BANDIT_COMMON(0.8f, 3600);
+        BANDIT_COMMON(0.8f, 3600),
+        BANDIT_UNBELIEVABLE(1.0f, 3600);
 
         public final double chancePerSecond;
         public final double[] chancesPerSecondPerChunk;

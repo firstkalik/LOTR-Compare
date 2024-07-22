@@ -22,7 +22,6 @@ import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 
 public class LOTRPoisonedDrinks {
-    private static final int POISON_DURATION = 300;
     public static Potion killingPoison;
 
     public static void registerPotion() {

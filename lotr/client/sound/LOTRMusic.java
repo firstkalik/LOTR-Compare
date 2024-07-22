@@ -28,7 +28,6 @@
  *  net.minecraft.client.resources.IResourcePack
  *  net.minecraft.client.resources.SimpleReloadableResourceManager
  *  net.minecraft.util.ResourceLocation
- *  net.minecraft.world.World
  *  net.minecraft.world.WorldProvider
  *  net.minecraftforge.client.event.sound.PlaySoundEvent17
  *  net.minecraftforge.common.MinecraftForge
@@ -95,7 +94,6 @@ import net.minecraft.client.resources.IResourceManagerReloadListener;
 import net.minecraft.client.resources.IResourcePack;
 import net.minecraft.client.resources.SimpleReloadableResourceManager;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
 import net.minecraft.world.WorldProvider;
 import net.minecraftforge.client.event.sound.PlaySoundEvent17;
 import net.minecraftforge.common.MinecraftForge;
@@ -128,7 +126,7 @@ implements IResourceManagerReloadListener {
 
     @SubscribeEvent
     public void onPlaySound(PlaySoundEvent17 event) {
-        Minecraft mc = Minecraft.getMinecraft();
+        Minecraft.getMinecraft();
         if (!allTracks.isEmpty() && event.category == SoundCategory.MUSIC && !(event.sound instanceof LOTRMusicTrack)) {
             if (LOTRMusic.isLOTRDimension()) {
                 event.result = null;
@@ -243,7 +241,7 @@ implements IResourceManagerReloadListener {
                 JsonArray regions = trackData.get("regions").getAsJsonArray();
                 for (Object r : regions) {
                     LOTRMusicRegion region;
-                    JsonObject regionData = r.getAsJsonObject();
+                    JsonObject regionData = ((JsonElement)r).getAsJsonObject();
                     String regionName = regionData.get("name").getAsString();
                     boolean allRegions = false;
                     if (regionName.equalsIgnoreCase("all")) {
@@ -259,8 +257,8 @@ implements IResourceManagerReloadListener {
                     ArrayList<String> subregionNames = new ArrayList<String>();
                     if (region != null && regionData.has("sub")) {
                         JsonArray subList = regionData.get("sub").getAsJsonArray();
-                        for (Iterator s : subList) {
-                            String sub = s.getAsString();
+                        for (Object s : subList) {
+                            String sub = ((JsonElement)s).getAsString();
                             if (region.hasSubregion(sub)) {
                                 subregionNames.add(sub);
                                 continue;
@@ -270,7 +268,7 @@ implements IResourceManagerReloadListener {
                     }
                     ArrayList<LOTRMusicCategory> regionCategories = new ArrayList<LOTRMusicCategory>();
                     if (region != null && regionData.has("categories")) {
-                        Iterator s;
+                        Object s;
                         JsonArray catList = regionData.get("categories").getAsJsonArray();
                         s = catList.iterator();
                         while (s.hasNext()) {

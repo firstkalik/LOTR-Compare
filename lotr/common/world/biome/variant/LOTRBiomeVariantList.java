@@ -30,7 +30,7 @@ public class LOTRBiomeVariantList {
         }
         float f = index * this.totalWeight;
         for (VariantBucket bucket : this.variantList) {
-            if (!(f >= bucket.min) || !(f < bucket.max)) continue;
+            if (f < bucket.min || f >= bucket.max) continue;
             return bucket.variant;
         }
         return null;

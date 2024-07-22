@@ -76,8 +76,6 @@ import org.lwjgl.opengl.GL11;
 
 public class LOTRNPCRendering {
     private static RenderItem itemRenderer = new RenderItem();
-    private static final int SPEECH_WIDTH = 150;
-    private static final float SPEECH_SCALE = 0.015f;
 
     public static void renderAllNPCSpeeches(Minecraft mc, World world, float f) {
         GL11.glPushMatrix();
@@ -112,7 +110,7 @@ public class LOTRNPCRendering {
         Minecraft mc = Minecraft.getMinecraft();
         WorldClient world = mc.theWorld;
         world.theProfiler.startSection("renderNPCSpeech");
-        TextureManager textureManager = mc.getTextureManager();
+        mc.getTextureManager();
         RenderManager renderManager = RenderManager.instance;
         FontRenderer fr = mc.fontRenderer;
         double distance = RendererLivingEntity.NAME_TAG_RANGE;
@@ -120,7 +118,8 @@ public class LOTRNPCRendering {
         if (distanceSq <= distance * distance) {
             String name = (Object)EnumChatFormatting.YELLOW + entity.getCommandSenderName();
             int fontHeight = fr.FONT_HEIGHT;
-            List speechLines = fr.listFormattedStringToWidth(speech, 150);
+            int speechWidth = 150;
+            List speechLines = fr.listFormattedStringToWidth(speech, speechWidth);
             float alpha = 0.8f;
             if (speechAge < 0.1f) {
                 alpha *= speechAge / 0.1f;
@@ -179,18 +178,6 @@ public class LOTRNPCRendering {
         world.theProfiler.endSection();
     }
 
-    private static float calcSpeechDisplacement(LOTREntityNPC npc) {
-        LOTRSpeechClient.TimedSpeech timedSpeech = LOTRSpeechClient.getSpeechFor(npc);
-        if (timedSpeech != null) {
-            FontRenderer fr = Minecraft.getMinecraft().fontRenderer;
-            int fontHeight = fr.FONT_HEIGHT;
-            int numLines = fr.listFormattedStringToWidth(timedSpeech.getSpeech(), 150).size();
-            float f = fontHeight * (3 + numLines);
-            return f * 0.015f;
-        }
-        return 0.0f;
-    }
-
     public static void renderHiredIcon(EntityLivingBase entity, double d, double d1, double d2) {
         if (!LOTRConfig.hiredUnitIcons) {
             return;
@@ -199,27 +186,23 @@ public class LOTRNPCRendering {
             return;
         }
         if (entity instanceof LOTREntityNPC && LOTRSpeechClient.hasSpeech((LOTREntityNPC)entity)) {
-            d1 += (double)LOTRNPCRendering.calcSpeechDisplacement((LOTREntityNPC)entity);
+            return;
         }
         Minecraft mc = Minecraft.getMinecraft();
-        TextureManager textureManager = mc.getTextureManager();
-        FontRenderer fr = mc.fontRenderer;
-        RenderManager renderManager = RenderManager.instance;
-        EntityLivingBase viewer = renderManager.livingPlayer;
         WorldClient world = mc.theWorld;
         world.theProfiler.startSection("renderHiredIcon");
+        TextureManager textureManager = mc.getTextureManager();
+        RenderManager renderManager = RenderManager.instance;
         double distance = RendererLivingEntity.NAME_TAG_RANGE;
-        double distanceSq = entity.getDistanceSqToEntity((Entity)viewer);
+        double distanceSq = entity.getDistanceSqToEntity((Entity)renderManager.livingPlayer);
         if (distanceSq <= distance * distance) {
             ItemStack hiredIcon = entity.getHeldItem();
-            int xpLvl = -1;
             String squadron = null;
             if (entity instanceof LOTREntityNPC) {
                 LOTREntityNPC npc = (LOTREntityNPC)entity;
-                xpLvl = npc.hiredNPCInfo.xpLevel;
-                String sq = npc.hiredNPCInfo.getSquadron();
-                if (!StringUtils.isNullOrEmpty((String)sq)) {
-                    squadron = sq;
+                String s = npc.hiredNPCInfo.getSquadron();
+                if (!StringUtils.isNullOrEmpty((String)s)) {
+                    squadron = s;
                 }
             }
             GL11.glPushMatrix();
@@ -238,6 +221,7 @@ public class LOTRNPCRendering {
             if (squadron != null) {
                 GL11.glTranslatef((float)0.0f, (float)0.3f, (float)0.0f);
                 GL11.glPushMatrix();
+                FontRenderer fr = mc.fontRenderer;
                 Tessellator tessellator = Tessellator.instance;
                 int halfWidth = fr.getStringWidth(squadron) / 2;
                 float boxScale = 0.015f;
@@ -259,28 +243,13 @@ public class LOTRNPCRendering {
                 GL11.glDepthMask((boolean)false);
                 GL11.glPopMatrix();
             }
-            if (viewer.isSneaking() && xpLvl >= 0) {
-                GL11.glPushMatrix();
-                GL11.glTranslatef((float)0.0f, (float)0.5f, (float)0.0f);
-                GL11.glScalef((float)-1.0f, (float)-1.0f, (float)1.0f);
-                float textScale = 0.03f;
-                GL11.glScalef((float)textScale, (float)textScale, (float)textScale);
-                String s = String.valueOf(xpLvl);
-                if (entity.ridingEntity instanceof LOTREntityNPC) {
-                    int mountLvl = ((LOTREntityNPC)entity.ridingEntity).hiredNPCInfo.xpLevel;
-                    s = s + " - " + String.valueOf(mountLvl);
-                }
-                LOTRTickHandlerClient.drawBorderedText(fr, -fr.getStringWidth(s) / 2, 0, s, 16733440, 1.0f);
-                GL11.glPopMatrix();
-            } else if (hiredIcon != null) {
-                GL11.glPushMatrix();
+            if (hiredIcon != null) {
                 GL11.glTranslatef((float)0.0f, (float)0.5f, (float)0.0f);
                 GL11.glScalef((float)-1.0f, (float)-1.0f, (float)1.0f);
                 float itemScale = 0.03f;
                 GL11.glScalef((float)itemScale, (float)itemScale, (float)itemScale);
                 textureManager.bindTexture(TextureMap.locationItemsTexture);
                 itemRenderer.renderIcon(-8, -8, hiredIcon.getIconIndex(), 16, 16);
-                GL11.glPopMatrix();
             }
             GL11.glDisable((int)3042);
             GL11.glEnable((int)2929);
@@ -300,7 +269,7 @@ public class LOTRNPCRendering {
             return;
         }
         if (entity instanceof LOTREntityNPC && LOTRSpeechClient.hasSpeech((LOTREntityNPC)entity)) {
-            d1 += (double)LOTRNPCRendering.calcSpeechDisplacement((LOTREntityNPC)entity);
+            return;
         }
         LOTRNPCRendering.renderHealthBar(entity, d, d1, d2, new int[]{5888860, 12006707}, new int[]{6079225, 12006707});
     }
@@ -481,11 +450,10 @@ public class LOTRNPCRendering {
                 TextureManager textureManager = mc.getTextureManager();
                 RenderManager renderManager = RenderManager.instance;
                 IIcon icon = LOTRItemRedBook.questOfferIcon;
-                Tessellator tessellator = Tessellator.instance;
-                float minU = icon.getMinU();
-                float maxU = icon.getMaxU();
-                float minV = icon.getMinV();
-                float maxV = icon.getMaxV();
+                icon.getMinU();
+                icon.getMaxU();
+                icon.getMinV();
+                icon.getMaxV();
                 float scale = 0.75f;
                 float alpha = 1.0f;
                 int questColor = npc.questInfo.clientOfferColor;

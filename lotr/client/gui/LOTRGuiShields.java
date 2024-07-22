@@ -53,8 +53,8 @@ extends LOTRGuiMenuBase {
     private static ModelBiped playerModel = new ModelBiped();
     private int modelX;
     private int modelY;
-    private float modelRotation;
-    private float modelRotationPrev;
+    private float modelRotation = -140.0f;
+    private float modelRotationPrev = -140.0f;
     private int isMouseDown;
     private int mouseX;
     private int mouseY;
@@ -68,10 +68,6 @@ extends LOTRGuiMenuBase {
     private GuiButton shieldSelect;
     private GuiButton shieldRemove;
     private GuiButton changeCategory;
-
-    public LOTRGuiShields() {
-        this.modelRotationPrev = this.modelRotation = -140.0f;
-    }
 
     @Override
     public void initGui() {
@@ -208,8 +204,8 @@ extends LOTRGuiMenuBase {
         this.drawCenteredString(s, x, y, 16777215);
         y += this.fontRendererObj.FONT_HEIGHT * 2;
         List desc = this.fontRendererObj.listFormattedStringToWidth(this.currentShield.getShieldDesc(), 220);
-        for (int l = 0; l < desc.size(); ++l) {
-            s = (String)desc.get(l);
+        for (Object element : desc) {
+            s = (String)element;
             this.drawCenteredString(s, x, y, 16777215);
             y += this.fontRendererObj.FONT_HEIGHT;
         }

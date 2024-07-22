@@ -41,7 +41,6 @@ public class LOTRBiomeGenKanuka
 extends LOTRBiomeGenFarHarad {
     private static NoiseGeneratorPerlin noisePaths1 = new NoiseGeneratorPerlin(new Random(22L), 1);
     private static NoiseGeneratorPerlin noisePaths2 = new NoiseGeneratorPerlin(new Random(11L), 1);
-    private static final int FOREST_HEIGHT = 75;
 
     public LOTRBiomeGenKanuka(int i, boolean major) {
         super(i, major);

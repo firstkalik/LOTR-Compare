@@ -44,14 +44,14 @@ extends LOTRWorldGenSouthronStructure {
             this.findSurface(world, i1, k1);
             boolean bl = beam = i2 % 4 == 2;
             if (beam) {
-                for (j1 = 6; !(j1 < 1 && this.isOpaque(world, i1, j1, k1) || this.getY(j1) < 0); --j1) {
-                    this.setBlockAndMetadata(world, i1, j1, k1, this.woodBeamBlock, this.woodBeamMeta);
-                    this.setGrassToDirt(world, i1, j1 - 1, k1);
+                for (j12 = 6; !(j12 < 1 && this.isOpaque(world, i1, j12, k1) || this.getY(j12) < 0); --j12) {
+                    this.setBlockAndMetadata(world, i1, j12, k1, this.woodBeamBlock, this.woodBeamMeta);
+                    this.setGrassToDirt(world, i1, j12 - 1, k1);
                 }
             } else {
-                for (j1 = 5; !(j1 < 1 && this.isOpaque(world, i1, j1, k1) || this.getY(j1) < 0); --j1) {
-                    this.setBlockAndMetadata(world, i1, j1, k1, this.plankBlock, this.plankMeta);
-                    this.setGrassToDirt(world, i1, j1 - 1, k1);
+                for (j12 = 5; !(j12 < 1 && this.isOpaque(world, i1, j12, k1) || this.getY(j12) < 0); --j12) {
+                    this.setBlockAndMetadata(world, i1, j12, k1, this.plankBlock, this.plankMeta);
+                    this.setGrassToDirt(world, i1, j12 - 1, k1);
                 }
                 if (i2 % 2 == 1) {
                     this.setBlockAndMetadata(world, i1, 5, k1, this.plankStairBlock, 2);
@@ -61,26 +61,18 @@ extends LOTRWorldGenSouthronStructure {
             }
             int k3 = k1 - 1;
             this.setBlockAndMetadata(world, i1, 2, k3, this.brickStairBlock, 2);
-            for (j12 = 1; !(j12 < 1 && this.isOpaque(world, i1, j12, k3) || this.getY(j12) < 0); --j12) {
-                this.setBlockAndMetadata(world, i1, j12, k3, this.brickBlock, this.brickMeta);
-                this.setGrassToDirt(world, i1, j12 - 1, k3);
+            for (j1 = 1; !(j1 < 1 && this.isOpaque(world, i1, j1, k3) || this.getY(j1) < 0); --j1) {
+                this.setBlockAndMetadata(world, i1, j1, k3, this.brickBlock, this.brickMeta);
+                this.setGrassToDirt(world, i1, j1 - 1, k3);
             }
             k3 = k1 + 1;
             this.setBlockAndMetadata(world, i1, 2, k3, this.brickStairBlock, 3);
-            for (j12 = 1; !(j12 < 1 && this.isOpaque(world, i1, j12, k3) || this.getY(j12) < 0); --j12) {
-                this.setBlockAndMetadata(world, i1, j12, k3, this.brickBlock, this.brickMeta);
-                this.setGrassToDirt(world, i1, j12 - 1, k3);
+            for (j1 = 1; !(j1 < 1 && this.isOpaque(world, i1, j1, k3) || this.getY(j1) < 0); --j1) {
+                this.setBlockAndMetadata(world, i1, j1, k3, this.brickBlock, this.brickMeta);
+                this.setGrassToDirt(world, i1, j1 - 1, k3);
             }
         }
         return true;
-    }
-
-    public static class Long
-    extends LOTRWorldGenSouthronFortWall {
-        public Long(boolean flag) {
-            super(flag);
-            this.isLong = true;
-        }
     }
 
     public static class Short
@@ -88,6 +80,14 @@ extends LOTRWorldGenSouthronStructure {
         public Short(boolean flag) {
             super(flag);
             this.isLong = false;
+        }
+    }
+
+    public static class Long
+    extends LOTRWorldGenSouthronFortWall {
+        public Long(boolean flag) {
+            super(flag);
+            this.isLong = true;
         }
     }
 

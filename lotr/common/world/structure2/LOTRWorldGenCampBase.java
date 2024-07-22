@@ -75,9 +75,12 @@ extends LOTRWorldGenStructureBase2 {
     @Override
     public boolean generateWithSetRotation(World world, Random random, int i, int j, int k, int rotation) {
         int i14;
+        int j1;
+        int tentZ;
         int l;
+        int k1;
         if (this.restrictions) {
-            if (!LOTRWorldGenCampBase.isSurfaceStatic(world, i, j - 1, k)) {
+            if (!LOTRWorldGenStructureBase2.isSurfaceStatic(world, i, j - 1, k)) {
                 return false;
             }
             if (world.getBlock(i, j, k).getMaterial().isLiquid()) {
@@ -88,18 +91,18 @@ extends LOTRWorldGenStructureBase2 {
         this.setupRandomBlocks(random);
         int groundRange = 12;
         for (int i12 = -groundRange; i12 <= groundRange; ++i12) {
-            for (int k1 = -groundRange; k1 <= groundRange; ++k1) {
+            for (int k12 = -groundRange; k12 <= groundRange; ++k12) {
                 int k2;
-                int j1;
+                int j12;
                 int i2 = Math.abs(i12);
-                if (i2 * i2 + (k2 = Math.abs(k1)) * k2 >= groundRange * groundRange || this.getBlock(world, i12, (j1 = this.getTopBlock(world, i12, k1)) - 1, k1) != Blocks.grass || random.nextInt(5) == 0) continue;
-                this.setBlockAndMetadata(world, i12, j1 - 1, k1, Blocks.dirt, 1);
+                if (i2 * i2 + (k2 = Math.abs(k12)) * k2 >= groundRange * groundRange || this.getBlock(world, i12, (j12 = this.getTopBlock(world, i12, k12)) - 1, k12) != Blocks.grass || random.nextInt(5) == 0) continue;
+                this.setBlockAndMetadata(world, i12, j12 - 1, k12, Blocks.dirt, 1);
             }
         }
         int highestHeight = 0;
         for (int i13 = -1; i13 <= 1; ++i13) {
-            for (int k1 = -1; k1 <= 1; ++k1) {
-                int j1 = this.getTopBlock(world, i13, k1);
+            for (int k13 = -1; k13 <= 1; ++k13) {
+                j1 = this.getTopBlock(world, i13, k13);
                 if (j1 <= highestHeight) continue;
                 highestHeight = j1;
             }
@@ -113,9 +116,9 @@ extends LOTRWorldGenStructureBase2 {
         }
         for (l = 0; l < 4; ++l) {
             int tentX = MathHelper.getRandomIntegerInRange((Random)random, (int)-3, (int)3);
-            int tentZ = MathHelper.getRandomIntegerInRange((Random)random, (int)6, (int)12);
+            tentZ = MathHelper.getRandomIntegerInRange((Random)random, (int)6, (int)12);
             i14 = 0;
-            int k1 = 0;
+            k1 = 0;
             int rot = l;
             if (rot == 0) {
                 i14 = tentX;
@@ -130,14 +133,17 @@ extends LOTRWorldGenStructureBase2 {
                 i14 = -tentZ;
                 k1 = tentX;
             }
-            int j1 = this.getTopBlock(world, i14, k1);
-            this.generateSubstructure(this.createTent(this.notifyChanges, random), world, random, i14, j1, k1, rot);
+            int j13 = this.getTopBlock(world, i14, k1);
+            this.generateSubstructure(this.createTent(this.notifyChanges, random), world, random, i14, j13, k1, rot);
         }
         if (this.hasOrcTorches) {
-            for (int i14 : new int[]{-2, 2}) {
-                for (int k1 : new int[]{-2, 2}) {
-                    int j1 = this.getTopBlock(world, i14, k1);
-                    this.placeOrcTorch(world, i14, j1, k1);
+            int[] tentX = new int[]{-2, 2};
+            tentZ = tentX.length;
+            for (k1 = 0; k1 < tentZ; ++k1) {
+                int i141 = tentX[k1];
+                for (int k14 : new int[]{-2, 2}) {
+                    int j14 = this.getTopBlock(world, i141, k14);
+                    this.placeOrcTorch(world, i141, j14, k14);
                 }
             }
         }
@@ -146,48 +152,48 @@ extends LOTRWorldGenStructureBase2 {
             int farmRange = 12;
             int minFarmRange = 5;
             block7: for (int l2 = 0; l2 < 32; ++l2) {
-                int k1;
+                int k15;
                 int i15 = MathHelper.getRandomIntegerInRange((Random)random, (int)(-farmRange), (int)farmRange);
-                int dSq = i15 * i15 + (k1 = MathHelper.getRandomIntegerInRange((Random)random, (int)(-farmRange), (int)farmRange)) * k1;
+                int dSq = i15 * i15 + (k15 = MathHelper.getRandomIntegerInRange((Random)random, (int)(-farmRange), (int)farmRange)) * k15;
                 if (dSq <= minFarmRange * minFarmRange) continue;
                 for (int i2 = i15 - 2; i2 <= i15 + 2; ++i2) {
-                    for (int k2 = k1 - 2; k2 <= k1 + 2; ++k2) {
+                    for (int k2 = k15 - 2; k2 <= k15 + 2; ++k2) {
                         int j2 = this.getTopBlock(world, i2, k2) - 1;
                         if (!this.isSurface(world, i2, j2, k2) || !this.isAir(world, i2, j2 + 1, k2) && !this.isReplaceable(world, i2, j2 + 1, k2)) continue block7;
                     }
                 }
-                farmCoords = new int[]{i15, k1};
+                farmCoords = new int[]{i15, k15};
                 break;
             }
             if (farmCoords != null) {
+                int i2;
                 void k2;
                 int j2;
-                int i2;
                 i14 = farmCoords[0];
-                void k1 = farmCoords[1];
-                int highestFarmHeight = this.getTopBlock(world, i14, (int)k1);
+                void k16 = farmCoords[1];
+                int highestFarmHeight = this.getTopBlock(world, i14, (int)k16);
                 for (i2 = i14 - 2; i2 <= i14 + 2; ++i2) {
-                    for (k2 = k1 - 2; k2 <= k1 + 2; ++k2) {
+                    for (k2 = k16 - 2; k2 <= k16 + 2; ++k2) {
                         j2 = this.getTopBlock(world, i2, (int)k2);
                         if (j2 <= highestFarmHeight) continue;
                         highestFarmHeight = j2;
                     }
                 }
                 for (i2 = i14 - 2; i2 <= i14 + 2; ++i2) {
-                    for (k2 = k1 - 2; k2 <= k1 + 2; ++k2) {
+                    for (k2 = k16 - 2; k2 <= k16 + 2; ++k2) {
                         j2 = highestFarmHeight - 2;
                         while (!this.isOpaque(world, i2, j2, (int)k2) && this.getY(j2) >= 0) {
                             this.setBiomeFiller(world, i2, j2, (int)k2);
                             this.setGrassToDirt(world, i2, j2 - 1, (int)k2);
                             --j2;
                         }
-                        if (Math.abs(i2 - i14) == 2 || Math.abs((int)(k2 - k1)) == 2) {
+                        if (Math.abs(i2 - i14) == 2 || Math.abs((int)(k2 - k16)) == 2) {
                             this.setBlockAndMetadata(world, i2, highestFarmHeight, (int)k2, this.fenceBlock, this.fenceMeta);
                             this.setBiomeTop(world, i2, highestFarmHeight - 1, (int)k2);
                             this.setGrassToDirt(world, i2, highestFarmHeight - 2, (int)k2);
                             continue;
                         }
-                        if (i2 == i14 && k2 == k1) {
+                        if (i2 == i14 && k2 == k16) {
                             this.setBlockAndMetadata(world, i2, highestFarmHeight - 1, (int)k2, Blocks.water, 0);
                             continue;
                         }
@@ -198,16 +204,16 @@ extends LOTRWorldGenStructureBase2 {
                 }
                 int gate = random.nextInt(4);
                 if (gate == 0) {
-                    this.setBlockAndMetadata(world, i14, highestFarmHeight, (int)(k1 + 2), this.fenceGateBlock, 0);
+                    this.setBlockAndMetadata(world, i14, highestFarmHeight, (int)(k16 + 2), this.fenceGateBlock, 0);
                 } else if (gate == 1) {
-                    this.setBlockAndMetadata(world, i14 - 2, highestFarmHeight, (int)k1, this.fenceGateBlock, 1);
+                    this.setBlockAndMetadata(world, i14 - 2, highestFarmHeight, (int)k16, this.fenceGateBlock, 1);
                 } else if (gate == 2) {
-                    this.setBlockAndMetadata(world, i14, highestFarmHeight, (int)(k1 - 2), this.fenceGateBlock, 2);
+                    this.setBlockAndMetadata(world, i14, highestFarmHeight, (int)(k16 - 2), this.fenceGateBlock, 2);
                 } else if (gate == 3) {
-                    this.setBlockAndMetadata(world, i14 + 2, highestFarmHeight, (int)k1, this.fenceGateBlock, 3);
+                    this.setBlockAndMetadata(world, i14 + 2, highestFarmHeight, (int)k16, this.fenceGateBlock, 3);
                 }
                 int scarecrowX = i14 + (random.nextBoolean() ? -2 : 2);
-                void scarecrowZ = k1 + (random.nextBoolean() ? -2 : 2);
+                void scarecrowZ = k16 + (random.nextBoolean() ? -2 : 2);
                 this.setBlockAndMetadata(world, scarecrowX, highestFarmHeight + 1, (int)scarecrowZ, this.fenceBlock, this.fenceMeta);
                 if (this.hasOrcTorches) {
                     this.setBlockAndMetadata(world, scarecrowX, highestFarmHeight + 2, (int)scarecrowZ, Blocks.wool, 12);
@@ -219,19 +225,16 @@ extends LOTRWorldGenStructureBase2 {
             }
         }
         if (this.hasSkulls) {
-            int range;
-            int k1;
             int i16;
-            int j1;
             for (l = 0; l < 6; ++l) {
-                range = 8;
+                int range = 8;
                 i16 = MathHelper.getRandomIntegerInRange((Random)random, (int)(-range), (int)range);
                 if (i16 * i16 + (k1 = MathHelper.getRandomIntegerInRange((Random)random, (int)(-range), (int)range)) * k1 <= 20 || !this.isSurface(world, i16, (j1 = this.getTopBlock(world, i16, k1)) - 1, k1) || !this.isReplaceable(world, i16, j1, k1) || !this.isAir(world, i16, j1 + 1, k1)) continue;
                 this.setBlockAndMetadata(world, i16, j1, k1, this.fenceBlock, this.fenceMeta);
                 this.placeSkull(world, random, i16, j1 + 1, k1);
             }
             for (l = 0; l < 6; ++l) {
-                range = 12;
+                int range = 12;
                 i16 = MathHelper.getRandomIntegerInRange((Random)random, (int)(-range), (int)range);
                 if (i16 * i16 + (k1 = MathHelper.getRandomIntegerInRange((Random)random, (int)(-range), (int)range)) * k1 <= 20 || !this.isSurface(world, i16, (j1 = this.getTopBlock(world, i16, k1)) - 1, k1) || !this.isReplaceable(world, i16, j1, k1) || !this.isAir(world, i16, j1 + 1, k1)) continue;
                 this.placeSkull(world, random, i16, j1, k1);

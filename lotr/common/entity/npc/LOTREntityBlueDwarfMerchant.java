@@ -8,10 +8,13 @@
  */
 package lotr.common.entity.npc;
 
+import java.util.Random;
 import lotr.common.LOTRAchievement;
 import lotr.common.LOTRLevelData;
+import lotr.common.entity.animal.LOTREntityWildBoar;
 import lotr.common.entity.npc.LOTREntityBlueDwarf;
 import lotr.common.entity.npc.LOTREntityNPC;
+import lotr.common.entity.npc.LOTRNPCMount;
 import lotr.common.entity.npc.LOTRTradeEntries;
 import lotr.common.entity.npc.LOTRTravellingTrader;
 import lotr.common.fac.LOTRFaction;
@@ -25,6 +28,14 @@ implements LOTRTravellingTrader {
     public LOTREntityBlueDwarfMerchant(World world) {
         super(world);
         this.addTargetTasks(false);
+        this.spawnRidingHorse = this.rand.nextInt(4) == 0;
+    }
+
+    @Override
+    public LOTRNPCMount createMountToRide() {
+        LOTREntityWildBoar boar = new LOTREntityWildBoar(this.worldObj);
+        boar.setMountArmor(null);
+        return boar;
     }
 
     @Override
@@ -50,6 +61,10 @@ implements LOTRTravellingTrader {
     @Override
     public float getAlignmentBonus() {
         return 2.0f;
+    }
+
+    public int getTotalArmorValue() {
+        return 12;
     }
 
     @Override

@@ -45,6 +45,12 @@ implements IMessage {
         }
     }
 
+    public static enum ClientMQEvent {
+        MAP,
+        FACTIONS;
+
+    }
+
     public static class Handler
     implements IMessageHandler<LOTRPacketClientMQEvent, IMessage> {
         public IMessage onMessage(LOTRPacketClientMQEvent packet, MessageContext context) {
@@ -57,12 +63,6 @@ implements IMessage {
             }
             return null;
         }
-    }
-
-    public static enum ClientMQEvent {
-        MAP,
-        FACTIONS;
-
     }
 
 }

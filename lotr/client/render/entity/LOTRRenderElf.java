@@ -28,11 +28,13 @@ import lotr.client.render.entity.LOTRRandomSkins;
 import lotr.client.render.entity.LOTRRenderBiped;
 import lotr.common.LOTRMod;
 import lotr.common.entity.LOTRRandomSkinEntity;
+import lotr.common.entity.npc.LOTREntityAvariElf;
 import lotr.common.entity.npc.LOTREntityDorwinionElf;
 import lotr.common.entity.npc.LOTREntityElf;
 import lotr.common.entity.npc.LOTREntityHighElf;
 import lotr.common.entity.npc.LOTREntityRivendellElf;
 import lotr.common.entity.npc.LOTREntityTormentedElf;
+import lotr.common.entity.npc.LOTREntityWickedElf;
 import lotr.common.entity.npc.LOTREntityWoodElf;
 import lotr.common.entity.npc.LOTRFamilyInfo;
 import lotr.common.item.LOTRItemRing;
@@ -66,6 +68,9 @@ extends LOTRRenderBiped {
     private static LOTRRandomSkins jazzSkinsMale;
     private static LOTRRandomSkins jazzSkinsFemale;
     private static LOTRRandomSkins jazzOutfits;
+    private static LOTRRandomSkins avariElfSkinsMale;
+    private static LOTRRandomSkins avariElfSkinsFemale;
+    private static LOTRRandomSkins wickedElfSkins;
     private LOTRModelElf eyesModel = new LOTRModelElf(0.05f, 64, 64);
     private LOTRModelElf outfitModel = new LOTRModelElf(0.6f, 64, 64);
 
@@ -75,6 +80,8 @@ extends LOTRRenderBiped {
         galadhrimSkinsFemale = LOTRRandomSkins.loadSkinsList("lotr:mob/elf/galadhrim_female");
         woodElfSkinsMale = LOTRRandomSkins.loadSkinsList("lotr:mob/elf/woodElf_male");
         woodElfSkinsFemale = LOTRRandomSkins.loadSkinsList("lotr:mob/elf/woodElf_female");
+        avariElfSkinsMale = LOTRRandomSkins.loadSkinsList("lotr:mob/elf/avariElf_male");
+        avariElfSkinsFemale = LOTRRandomSkins.loadSkinsList("lotr:mob/elf/avariElf_female");
         highElfSkinsMale = LOTRRandomSkins.loadSkinsList("lotr:mob/elf/highElf_male");
         highElfSkinsFemale = LOTRRandomSkins.loadSkinsList("lotr:mob/elf/highElf_female");
         dorwinionSkinsMale = LOTRRandomSkins.loadSkinsList("lotr:mob/elf/dorwinion_male");
@@ -83,6 +90,7 @@ extends LOTRRenderBiped {
         jazzSkinsMale = LOTRRandomSkins.loadSkinsList("lotr:mob/elf/jazz_male");
         jazzSkinsFemale = LOTRRandomSkins.loadSkinsList("lotr:mob/elf/jazz_female");
         jazzOutfits = LOTRRandomSkins.loadSkinsList("lotr:mob/elf/jazz_outfit");
+        wickedElfSkins = LOTRRandomSkins.loadSkinsList("lotr:mob/elf/wicked_male");
     }
 
     @Override
@@ -104,6 +112,9 @@ extends LOTRRenderBiped {
         if (elf instanceof LOTREntityTormentedElf) {
             return tormentedElfSkins.getRandomSkin(elf);
         }
+        if (elf instanceof LOTREntityWickedElf) {
+            return wickedElfSkins.getRandomSkin(elf);
+        }
         if (elf instanceof LOTREntityDorwinionElf) {
             if (male) {
                 return dorwinionSkinsMale.getRandomSkin(elf);
@@ -122,6 +133,12 @@ extends LOTRRenderBiped {
             }
             return woodElfSkinsFemale.getRandomSkin(elf);
         }
+        if (elf instanceof LOTREntityAvariElf) {
+            if (male) {
+                return avariElfSkinsMale.getRandomSkin(elf);
+            }
+            return avariElfSkinsFemale.getRandomSkin(elf);
+        }
         if (male) {
             return galadhrimSkinsMale.getRandomSkin(elf);
         }
@@ -129,9 +146,14 @@ extends LOTRRenderBiped {
     }
 
     protected void renderModel(EntityLivingBase entity, float f, float f1, float f2, float f3, float f4, float f5) {
+        ResourceLocation eyes;
         super.renderModel(entity, f, f1, f2, f3, f4, f5);
         if (entity instanceof LOTREntityTormentedElf) {
-            ResourceLocation eyes = LOTRTextures.getEyesTexture(this.getEntityTexture((Entity)entity), new int[][]{{9, 12}, {13, 12}}, 2, 1);
+            eyes = LOTRTextures.getEyesTexture(this.getEntityTexture((Entity)entity), new int[][]{{9, 12}, {13, 12}}, 2, 1);
+            LOTRGlowingEyes.renderGlowingEyes((Entity)entity, eyes, this.eyesModel, f, f1, f2, f3, f4, f5);
+        }
+        if (entity instanceof LOTREntityWickedElf) {
+            eyes = LOTRTextures.getEyesTexture(this.getEntityTexture((Entity)entity), new int[][]{{9, 12}, {13, 12}}, 2, 1);
             LOTRGlowingEyes.renderGlowingEyes((Entity)entity, eyes, this.eyesModel, f, f1, f2, f3, f4, f5);
         }
     }

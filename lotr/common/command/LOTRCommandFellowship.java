@@ -61,7 +61,7 @@ extends CommandBase {
 
     private UUID getPlayerIDByName(ICommandSender sender, String username) {
         try {
-            EntityPlayerMP entityplayer = LOTRCommandFellowship.getPlayer((ICommandSender)sender, (String)username);
+            EntityPlayerMP entityplayer = CommandBase.getPlayer((ICommandSender)sender, (String)username);
             if (entityplayer != null) {
                 return entityplayer.getUniqueID();
             }
@@ -114,10 +114,6 @@ extends CommandBase {
         return args;
     }
 
-    /*
-     * Enabled force condition propagation
-     * Lifted jumps to return sites
-     */
     public void processCommand(ICommandSender sender, String[] args) {
         if (args.length >= 3 && args[0].equals("create")) {
             args = LOTRCommandFellowship.fixArgsForFellowship(args, 2, false);
@@ -127,16 +123,24 @@ extends CommandBase {
                 throw new WrongUsageException("commands.lotr.fellowship.edit.notFound", new Object[]{playerName, fsName});
             }
             UUID playerID = this.getPlayerIDByName(sender, playerName);
-            if (playerID == null) throw new PlayerNotFoundException();
+            if (playerID == null) {
+                throw new PlayerNotFoundException();
+            }
             LOTRPlayerData playerData = LOTRLevelData.getData(playerID);
             LOTRFellowship fellowship = playerData.getFellowshipByName(fsName);
-            if (fellowship != null) throw new WrongUsageException("commands.lotr.fellowship.create.exists", new Object[]{playerName, fsName});
+            if (fellowship != null) {
+                throw new WrongUsageException("commands.lotr.fellowship.create.exists", new Object[]{playerName, fsName});
+            }
             playerData.createFellowship(fsName, false);
-            LOTRCommandFellowship.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.fellowship.create", (Object[])new Object[]{playerName, fsName});
+            CommandBase.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.fellowship.create", (Object[])new Object[]{playerName, fsName});
             return;
         }
-        if (!args[0].equals("option")) throw new WrongUsageException(this.getCommandUsage(sender), new Object[0]);
-        if ((args = LOTRCommandFellowship.fixArgsForFellowship(args, 2, false)).length < 4) throw new PlayerNotFoundException();
+        if (!args[0].equals("option")) {
+            throw new WrongUsageException(this.getCommandUsage(sender), new Object[0]);
+        }
+        if ((args = LOTRCommandFellowship.fixArgsForFellowship(args, 2, false)).length < 4) {
+            throw new PlayerNotFoundException();
+        }
         String ownerName = args[1];
         String fsName = args[2];
         if (fsName == null) {
@@ -144,13 +148,17 @@ extends CommandBase {
         }
         String option = args[3];
         UUID ownerID = this.getPlayerIDByName(sender, ownerName);
-        if (ownerID == null) throw new WrongUsageException(this.getCommandUsage(sender), new Object[0]);
+        if (ownerID == null) {
+            throw new WrongUsageException(this.getCommandUsage(sender), new Object[0]);
+        }
         LOTRPlayerData ownerData = LOTRLevelData.getData(ownerID);
         LOTRFellowship fellowship = ownerData.getFellowshipByName(fsName);
-        if (fellowship == null || !fellowship.isOwner(ownerID)) throw new WrongUsageException("commands.lotr.fellowship.edit.notFound", new Object[]{ownerName, fsName});
+        if (fellowship == null || !fellowship.isOwner(ownerID)) {
+            throw new WrongUsageException("commands.lotr.fellowship.edit.notFound", new Object[]{ownerName, fsName});
+        }
         if (option.equals("disband")) {
             ownerData.disbandFellowship(fellowship);
-            LOTRCommandFellowship.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.fellowship.disband", (Object[])new Object[]{ownerName, fsName});
+            CommandBase.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.fellowship.disband", (Object[])new Object[]{ownerName, fsName});
             return;
         }
         if (option.equals("rename")) {
@@ -170,38 +178,40 @@ extends CommandBase {
                 }
                 newName = newName.replace("\"", "");
             }
-            if (StringUtils.isBlank((CharSequence)newName)) throw new WrongUsageException("commands.lotr.fellowship.rename.error", new Object[0]);
+            if (StringUtils.isBlank((CharSequence)newName)) {
+                throw new WrongUsageException("commands.lotr.fellowship.rename.error", new Object[0]);
+            }
             ownerData.renameFellowship(fellowship, newName);
-            LOTRCommandFellowship.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.fellowship.rename", (Object[])new Object[]{ownerName, fsName, newName});
+            CommandBase.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.fellowship.rename", (Object[])new Object[]{ownerName, fsName, newName});
             return;
         }
         if (option.equals("icon")) {
-            String iconData = LOTRCommandFellowship.func_147178_a((ICommandSender)sender, (String[])args, (int)4).getUnformattedText();
+            String iconData = CommandBase.func_147178_a((ICommandSender)sender, (String[])args, (int)4).getUnformattedText();
             if (iconData.equals("clear")) {
                 ownerData.setFellowshipIcon(fellowship, null);
-                LOTRCommandFellowship.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.fellowship.icon", (Object[])new Object[]{ownerName, fsName, "[none]"});
+                CommandBase.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.fellowship.icon", (Object[])new Object[]{ownerName, fsName, "[none]"});
                 return;
             }
             ItemStack itemstack = null;
             try {
                 NBTBase nbt = JsonToNBT.func_150315_a((String)iconData);
                 if (!(nbt instanceof NBTTagCompound)) {
-                    LOTRCommandFellowship.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.fellowship.icon.tagError", (Object[])new Object[]{"Not a valid tag"});
+                    CommandBase.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.fellowship.icon.tagError", (Object[])new Object[]{"Not a valid tag"});
                     return;
                 }
                 NBTTagCompound compound = (NBTTagCompound)nbt;
                 itemstack = ItemStack.loadItemStackFromNBT((NBTTagCompound)compound);
             }
             catch (NBTException nbtexception) {
-                LOTRCommandFellowship.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.fellowship.icon.tagError", (Object[])new Object[]{nbtexception.getMessage()});
+                CommandBase.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.fellowship.icon.tagError", (Object[])new Object[]{nbtexception.getMessage()});
                 return;
             }
             if (itemstack != null) {
                 ownerData.setFellowshipIcon(fellowship, itemstack);
-                LOTRCommandFellowship.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.fellowship.icon", (Object[])new Object[]{ownerName, fsName, itemstack.getDisplayName()});
+                CommandBase.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.fellowship.icon", (Object[])new Object[]{ownerName, fsName, itemstack.getDisplayName()});
                 return;
             }
-            LOTRCommandFellowship.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.fellowship.icon.tagError", (Object[])new Object[]{"No item"});
+            CommandBase.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.fellowship.icon.tagError", (Object[])new Object[]{"No item"});
             return;
         }
         if (option.equals("pvp") || option.equals("hired-ff")) {
@@ -210,27 +220,29 @@ extends CommandBase {
             if (setting.equals("prevent")) {
                 prevent = true;
             } else {
-                if (!setting.equals("allow")) throw new WrongUsageException(this.getCommandUsage(sender), new Object[0]);
+                if (!setting.equals("allow")) {
+                    throw new WrongUsageException(this.getCommandUsage(sender), new Object[0]);
+                }
                 prevent = false;
             }
             if (option.equals("pvp")) {
                 ownerData.setFellowshipPreventPVP(fellowship, prevent);
                 if (prevent) {
-                    LOTRCommandFellowship.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.fellowship.pvp.prevent", (Object[])new Object[]{ownerName, fsName});
+                    CommandBase.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.fellowship.pvp.prevent", (Object[])new Object[]{ownerName, fsName});
                     return;
-                } else {
-                    LOTRCommandFellowship.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.fellowship.pvp.allow", (Object[])new Object[]{ownerName, fsName});
                 }
+                CommandBase.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.fellowship.pvp.allow", (Object[])new Object[]{ownerName, fsName});
                 return;
             }
-            if (!option.equals("hired-ff")) throw new WrongUsageException(this.getCommandUsage(sender), new Object[0]);
+            if (!option.equals("hired-ff")) {
+                throw new WrongUsageException(this.getCommandUsage(sender), new Object[0]);
+            }
             ownerData.setFellowshipPreventHiredFF(fellowship, prevent);
             if (prevent) {
-                LOTRCommandFellowship.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.fellowship.hiredFF.prevent", (Object[])new Object[]{ownerName, fsName});
+                CommandBase.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.fellowship.hiredFF.prevent", (Object[])new Object[]{ownerName, fsName});
                 return;
-            } else {
-                LOTRCommandFellowship.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.fellowship.hiredFF.allow", (Object[])new Object[]{ownerName, fsName});
             }
+            CommandBase.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.fellowship.hiredFF.allow", (Object[])new Object[]{ownerName, fsName});
             return;
         }
         if (option.equals("map-show")) {
@@ -239,68 +251,91 @@ extends CommandBase {
             if (setting.equals("on")) {
                 show = true;
             } else {
-                if (!setting.equals("off")) throw new WrongUsageException(this.getCommandUsage(sender), new Object[0]);
+                if (!setting.equals("off")) {
+                    throw new WrongUsageException(this.getCommandUsage(sender), new Object[0]);
+                }
                 show = false;
             }
             ownerData.setFellowshipShowMapLocations(fellowship, show);
             if (show) {
-                LOTRCommandFellowship.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.fellowship.mapShow.on", (Object[])new Object[]{ownerName, fsName});
+                CommandBase.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.fellowship.mapShow.on", (Object[])new Object[]{ownerName, fsName});
                 return;
-            } else {
-                LOTRCommandFellowship.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.fellowship.mapShow.off", (Object[])new Object[]{ownerName, fsName});
             }
+            CommandBase.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.fellowship.mapShow.off", (Object[])new Object[]{ownerName, fsName});
             return;
         }
-        if (args.length < 3) throw new WrongUsageException(this.getCommandUsage(sender), new Object[0]);
+        if (args.length < 3) {
+            throw new WrongUsageException(this.getCommandUsage(sender), new Object[0]);
+        }
         String playerName = args[4];
         UUID playerID = this.getPlayerIDByName(sender, playerName);
-        if (playerID == null) throw new PlayerNotFoundException();
+        if (playerID == null) {
+            throw new PlayerNotFoundException();
+        }
         LOTRPlayerData playerData = LOTRLevelData.getData(playerID);
         if (option.equals("invite")) {
-            if (fellowship.containsPlayer(playerID)) throw new WrongUsageException("commands.lotr.fellowship.edit.alreadyIn", new Object[]{ownerName, fsName, playerName});
+            if (fellowship.containsPlayer(playerID)) {
+                throw new WrongUsageException("commands.lotr.fellowship.edit.alreadyIn", new Object[]{ownerName, fsName, playerName});
+            }
             ownerData.invitePlayerToFellowship(fellowship, playerID);
-            LOTRCommandFellowship.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.fellowship.invite", (Object[])new Object[]{ownerName, fsName, playerName});
+            CommandBase.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.fellowship.invite", (Object[])new Object[]{ownerName, fsName, playerName});
             return;
         }
         if (option.equals("add")) {
-            if (fellowship.containsPlayer(playerID)) throw new WrongUsageException("commands.lotr.fellowship.edit.alreadyIn", new Object[]{ownerName, fsName, playerName});
+            if (fellowship.containsPlayer(playerID)) {
+                throw new WrongUsageException("commands.lotr.fellowship.edit.alreadyIn", new Object[]{ownerName, fsName, playerName});
+            }
             ownerData.invitePlayerToFellowship(fellowship, playerID);
             playerData.acceptFellowshipInvite(fellowship);
-            LOTRCommandFellowship.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.fellowship.add", (Object[])new Object[]{ownerName, fsName, playerName});
+            CommandBase.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.fellowship.add", (Object[])new Object[]{ownerName, fsName, playerName});
             return;
         }
         if (option.equals("remove")) {
-            if (!fellowship.hasMember(playerID)) throw new WrongUsageException("commands.lotr.fellowship.edit.notMember", new Object[]{ownerName, fsName, playerName});
+            if (!fellowship.hasMember(playerID)) {
+                throw new WrongUsageException("commands.lotr.fellowship.edit.notMember", new Object[]{ownerName, fsName, playerName});
+            }
             ownerData.removePlayerFromFellowship(fellowship, playerID);
-            LOTRCommandFellowship.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.fellowship.remove", (Object[])new Object[]{ownerName, fsName, playerName});
+            CommandBase.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.fellowship.remove", (Object[])new Object[]{ownerName, fsName, playerName});
             return;
         }
         if (option.equals("transfer")) {
-            if (!fellowship.hasMember(playerID)) throw new WrongUsageException("commands.lotr.fellowship.edit.notMember", new Object[]{ownerName, fsName, playerName});
+            if (!fellowship.hasMember(playerID)) {
+                throw new WrongUsageException("commands.lotr.fellowship.edit.notMember", new Object[]{ownerName, fsName, playerName});
+            }
             ownerData.transferFellowship(fellowship, playerID);
-            LOTRCommandFellowship.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.fellowship.transfer", (Object[])new Object[]{ownerName, fsName, playerName});
+            CommandBase.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.fellowship.transfer", (Object[])new Object[]{ownerName, fsName, playerName});
             return;
         }
         if (option.equals("op")) {
-            if (!fellowship.hasMember(playerID)) throw new WrongUsageException("commands.lotr.fellowship.edit.notMember", new Object[]{ownerName, fsName, playerName});
-            if (fellowship.isAdmin(playerID)) throw new WrongUsageException("commands.lotr.fellowship.edit.alreadyOp", new Object[]{ownerName, fsName, playerName});
+            if (!fellowship.hasMember(playerID)) {
+                throw new WrongUsageException("commands.lotr.fellowship.edit.notMember", new Object[]{ownerName, fsName, playerName});
+            }
+            if (fellowship.isAdmin(playerID)) {
+                throw new WrongUsageException("commands.lotr.fellowship.edit.alreadyOp", new Object[]{ownerName, fsName, playerName});
+            }
             ownerData.setFellowshipAdmin(fellowship, playerID, true);
-            LOTRCommandFellowship.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.fellowship.op", (Object[])new Object[]{ownerName, fsName, playerName});
+            CommandBase.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.fellowship.op", (Object[])new Object[]{ownerName, fsName, playerName});
             return;
         }
-        if (!option.equals("deop")) throw new WrongUsageException(this.getCommandUsage(sender), new Object[0]);
-        if (!fellowship.hasMember(playerID)) throw new WrongUsageException("commands.lotr.fellowship.edit.notMember", new Object[]{ownerName, fsName, playerName});
-        if (!fellowship.isAdmin(playerID)) throw new WrongUsageException("commands.lotr.fellowship.edit.notOp", new Object[]{ownerName, fsName, playerName});
+        if (!option.equals("deop")) {
+            throw new WrongUsageException(this.getCommandUsage(sender), new Object[0]);
+        }
+        if (!fellowship.hasMember(playerID)) {
+            throw new WrongUsageException("commands.lotr.fellowship.edit.notMember", new Object[]{ownerName, fsName, playerName});
+        }
+        if (!fellowship.isAdmin(playerID)) {
+            throw new WrongUsageException("commands.lotr.fellowship.edit.notOp", new Object[]{ownerName, fsName, playerName});
+        }
         ownerData.setFellowshipAdmin(fellowship, playerID, false);
-        LOTRCommandFellowship.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.fellowship.deop", (Object[])new Object[]{ownerName, fsName, playerName});
+        CommandBase.func_152373_a((ICommandSender)sender, (ICommand)this, (String)"commands.lotr.fellowship.deop", (Object[])new Object[]{ownerName, fsName, playerName});
     }
 
     public List addTabCompletionOptions(ICommandSender sender, String[] args) {
         if (args.length == 1) {
-            return LOTRCommandFellowship.getListOfStringsMatchingLastWord((String[])args, (String[])new String[]{"create", "option"});
+            return CommandBase.getListOfStringsMatchingLastWord((String[])args, (String[])new String[]{"create", "option"});
         }
         if (args.length == 2) {
-            return LOTRCommandFellowship.getListOfStringsMatchingLastWord((String[])args, (String[])MinecraftServer.getServer().getAllUsernames());
+            return CommandBase.getListOfStringsMatchingLastWord((String[])args, (String[])MinecraftServer.getServer().getAllUsernames());
         }
         if (args.length > 2) {
             String function = args[0];
@@ -320,18 +355,17 @@ extends CommandBase {
                     }
                     if (fsName != null && (fellowship = playerData.getFellowshipByName(fsName)) != null) {
                         if (args.length == 4) {
-                            return LOTRCommandFellowship.getListOfStringsMatchingLastWord((String[])args, (String[])new String[]{"invite", "add", "remove", "transfer", "op", "deop", "disband", "rename", "icon", "pvp", "hired-ff", "map-show"});
+                            return CommandBase.getListOfStringsMatchingLastWord((String[])args, (String[])new String[]{"invite", "add", "remove", "transfer", "op", "deop", "disband", "rename", "icon", "pvp", "hired-ff", "map-show"});
                         }
                         String option = args[3];
                         if (option.equals("invite") || option.equals("add")) {
-                            GameProfile[] players;
                             ArrayList<String> notInFellowshipNames = new ArrayList<String>();
-                            for (GameProfile playerProfile : players = MinecraftServer.getServer().getConfigurationManager().func_152600_g()) {
+                            for (GameProfile playerProfile : MinecraftServer.getServer().getConfigurationManager().func_152600_g()) {
                                 UUID playerID = playerProfile.getId();
                                 if (fellowship.containsPlayer(playerID)) continue;
                                 notInFellowshipNames.add(playerProfile.getName());
                             }
-                            return LOTRCommandFellowship.getListOfStringsMatchingLastWord((String[])args, (String[])notInFellowshipNames.toArray(new String[0]));
+                            return CommandBase.getListOfStringsMatchingLastWord((String[])args, (String[])notInFellowshipNames.toArray(new String[0]));
                         }
                         if (option.equals("remove") || option.equals("transfer")) {
                             ArrayList<String> memberNames = new ArrayList<String>();
@@ -340,7 +374,7 @@ extends CommandBase {
                                 if (playerProfile == null || playerProfile.getName() == null) continue;
                                 memberNames.add(playerProfile.getName());
                             }
-                            return LOTRCommandFellowship.getListOfStringsMatchingLastWord((String[])args, (String[])memberNames.toArray(new String[0]));
+                            return CommandBase.getListOfStringsMatchingLastWord((String[])args, (String[])memberNames.toArray(new String[0]));
                         }
                         if (option.equals("op")) {
                             ArrayList<String> notAdminNames = new ArrayList<String>();
@@ -349,7 +383,7 @@ extends CommandBase {
                                 if (fellowship.isAdmin(playerID) || (playerProfile = MinecraftServer.getServer().func_152358_ax().func_152652_a(playerID)) == null || playerProfile.getName() == null) continue;
                                 notAdminNames.add(playerProfile.getName());
                             }
-                            return LOTRCommandFellowship.getListOfStringsMatchingLastWord((String[])args, (String[])notAdminNames.toArray(new String[0]));
+                            return CommandBase.getListOfStringsMatchingLastWord((String[])args, (String[])notAdminNames.toArray(new String[0]));
                         }
                         if (option.equals("deop")) {
                             ArrayList<String> adminNames = new ArrayList<String>();
@@ -358,13 +392,13 @@ extends CommandBase {
                                 if (!fellowship.isAdmin(playerID) || (playerProfile = MinecraftServer.getServer().func_152358_ax().func_152652_a(playerID)) == null || playerProfile.getName() == null) continue;
                                 adminNames.add(playerProfile.getName());
                             }
-                            return LOTRCommandFellowship.getListOfStringsMatchingLastWord((String[])args, (String[])adminNames.toArray(new String[0]));
+                            return CommandBase.getListOfStringsMatchingLastWord((String[])args, (String[])adminNames.toArray(new String[0]));
                         }
                         if (option.equals("pvp") || option.equals("hired-ff")) {
-                            return LOTRCommandFellowship.getListOfStringsMatchingLastWord((String[])args, (String[])new String[]{"prevent", "allow"});
+                            return CommandBase.getListOfStringsMatchingLastWord((String[])args, (String[])new String[]{"prevent", "allow"});
                         }
                         if (option.equals("map-show")) {
-                            return LOTRCommandFellowship.getListOfStringsMatchingLastWord((String[])args, (String[])new String[]{"on", "off"});
+                            return CommandBase.getListOfStringsMatchingLastWord((String[])args, (String[])new String[]{"on", "off"});
                         }
                     }
                 }
@@ -391,7 +425,7 @@ extends CommandBase {
             }
             autocompletes.add(autocompFsName);
         }
-        return LOTRCommandFellowship.getListOfStringsMatchingLastWord((String[])argsOriginal, (String[])autocompletes.toArray(new String[0]));
+        return CommandBase.getListOfStringsMatchingLastWord((String[])argsOriginal, (String[])autocompletes.toArray(new String[0]));
     }
 
     public boolean isUsernameIndex(String[] args, int i) {

@@ -61,8 +61,7 @@ extends LOTRBiomeGenFarHaradSavannah {
         this.spawnableCreatureList.add(new BiomeGenBase.SpawnListEntry(LOTREntityRhino.class, 8, 4, 4));
         this.spawnableCreatureList.add(new BiomeGenBase.SpawnListEntry(LOTREntityGemsbok.class, 8, 4, 8));
         this.npcSpawnList.clear();
-        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer = new LOTRBiomeSpawnList.SpawnListContainer[1];
-        arrspawnListContainer[0] = LOTRBiomeSpawnList.entry(LOTRSpawnList.CORSAIRS, 10).setSpawnChance(5000);
+        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer = new LOTRBiomeSpawnList.SpawnListContainer[]{LOTRBiomeSpawnList.entry(LOTRSpawnList.CORSAIRS, 10).setSpawnChance(5000)};
         this.npcSpawnList.newFactionList(100).add(arrspawnListContainer);
         this.populatedSpawnList.clear();
         this.topBlock = Blocks.stone;
@@ -90,7 +89,6 @@ extends LOTRBiomeGenFarHaradSavannah {
 
     @Override
     public void generateBiomeTerrain(World world, Random random, Block[] blocks, byte[] meta, int i, int k, double stoneNoise, int height, LOTRBiomeVariant variant) {
-        double d8;
         Block topBlock_pre = this.topBlock;
         int topBlockMeta_pre = this.topBlockMeta;
         Block fillerBlock_pre = this.fillerBlock;
@@ -102,7 +100,7 @@ extends LOTRBiomeGenFarHaradSavannah {
         double d5 = noiseSand.func_151601_a((double)i * 0.06, (double)k * 0.06);
         double d6 = noiseSand.func_151601_a((double)i * 0.47, (double)k * 0.47);
         double d7 = noiseSandstone.func_151601_a((double)i * 0.06, (double)k * 0.06);
-        if (d7 + (d8 = noiseSandstone.func_151601_a((double)i * 0.47, (double)k * 0.47)) > 0.8) {
+        if (d7 + noiseSandstone.func_151601_a((double)i * 0.47, (double)k * 0.47) > 0.8) {
             this.topBlock = Blocks.sandstone;
             this.topBlockMeta = 0;
             this.fillerBlock = Blocks.sand;

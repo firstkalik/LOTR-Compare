@@ -6,7 +6,6 @@
  *  cpw.mods.fml.common.network.simpleimpl.IMessageHandler
  *  cpw.mods.fml.common.network.simpleimpl.MessageContext
  *  io.netty.buffer.ByteBuf
- *  net.minecraft.entity.player.EntityPlayer
  *  net.minecraft.entity.player.EntityPlayerMP
  *  net.minecraft.entity.player.InventoryPlayer
  *  net.minecraft.item.Item
@@ -20,7 +19,6 @@ import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import io.netty.buffer.ByteBuf;
 import lotr.common.LOTRMod;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.Item;

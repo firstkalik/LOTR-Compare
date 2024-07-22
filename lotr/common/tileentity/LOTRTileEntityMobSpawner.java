@@ -142,8 +142,8 @@ extends TileEntity {
                     }
                     List nearbyEntitiesList = this.worldObj.getEntitiesWithinAABB(entity.getClass(), AxisAlignedBB.getBoundingBox((double)this.xCoord, (double)this.yCoord, (double)this.zCoord, (double)(this.xCoord + 1), (double)(this.yCoord + 1), (double)(this.zCoord + 1)).expand((double)this.nearbyMobCheckRange, (double)this.nearbyMobCheckRange, (double)this.nearbyMobCheckRange));
                     ArrayList<Entity> nearbySameEntitiesList = new ArrayList<Entity>();
-                    for (int l = 0; l < nearbyEntitiesList.size(); ++l) {
-                        Entity nearbyEntity = (Entity)nearbyEntitiesList.get(l);
+                    for (Object element : nearbyEntitiesList) {
+                        Entity nearbyEntity = (Entity)element;
                         if (nearbyEntity.getClass() != entity.getClass()) continue;
                         nearbySameEntitiesList.add(nearbyEntity);
                     }
@@ -152,7 +152,6 @@ extends TileEntity {
                         this.updateDelay();
                         return;
                     }
-                    if (entity == null) continue;
                     double d = (double)this.xCoord + (this.worldObj.rand.nextDouble() - this.worldObj.rand.nextDouble()) * (double)this.maxSpawnRange;
                     double d1 = (double)this.yCoord + (this.worldObj.rand.nextDouble() - this.worldObj.rand.nextDouble()) * (double)this.maxSpawnRangeVertical;
                     double d2 = (double)this.zCoord + (this.worldObj.rand.nextDouble() - this.worldObj.rand.nextDouble()) * (double)this.maxSpawnRange;

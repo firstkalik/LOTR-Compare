@@ -33,8 +33,8 @@ extends LOTRWorldGenGondorStructure {
             xMax = 8;
         }
         for (int i1 = xMin; i1 <= xMax; ++i1) {
-            boolean pillar;
             int j1;
+            boolean pillar;
             int i2 = Math.abs(i1);
             int k1 = 0;
             this.findSurface(world, i1, k1);
@@ -60,19 +60,19 @@ extends LOTRWorldGenGondorStructure {
         return true;
     }
 
-    public static class Right
-    extends LOTRWorldGenGondorFortWall {
-        public Right(boolean flag) {
-            super(flag);
-            this.isRight = true;
-        }
-    }
-
     public static class Left
     extends LOTRWorldGenGondorFortWall {
         public Left(boolean flag) {
             super(flag);
             this.isRight = false;
+        }
+    }
+
+    public static class Right
+    extends LOTRWorldGenGondorFortWall {
+        public Right(boolean flag) {
+            super(flag);
+            this.isRight = true;
         }
     }
 

@@ -76,15 +76,21 @@ public class LOTREntityRegistry {
                 String s = "";
                 while ((s = bufferedreader.readLine()) != null) {
                     String name;
-                    int i;
-                    boolean targetEnemies;
-                    int j;
-                    String factionString;
                     int k;
+                    int j;
+                    boolean targetEnemies;
+                    int i;
                     String line = s;
                     if (s.startsWith("#")) continue;
                     LOTRFaction faction = null;
-                    if (!s.startsWith("name=") || (s = s.substring("name=".length())).toLowerCase().startsWith("lotr".toLowerCase()) || (i = s.indexOf(",faction=")) < 0 || (j = s.indexOf(",targetEnemies=")) < 0 || (k = s.indexOf(",bonus=")) < 0 || (name = s.substring(0, i)).length() == 0 || (faction = LOTRFaction.forName(factionString = s.substring(i + ",faction=".length(), j))) == null) continue;
+                    if (!s.startsWith("name=") || (s = s.substring("name=".length())).toLowerCase().startsWith("lotr".toLowerCase()) || (i = s.indexOf(",faction=")) < 0 || (j = s.indexOf(",targetEnemies=")) < 0 || (k = s.indexOf(",bonus=")) < 0 || (name = s.substring(0, i)).length() == 0) continue;
+                    String factionString = s.substring(i + ",faction=".length(), j);
+                    for (LOTRFaction f : LOTRFaction.values()) {
+                        if (!f.codeName().equals(factionString)) continue;
+                        faction = f;
+                        break;
+                    }
+                    if (faction == null) continue;
                     String targetEnemiesString = s.substring(j + ",targetEnemies=".length(), k);
                     if (targetEnemiesString.equals("true")) {
                         targetEnemies = true;

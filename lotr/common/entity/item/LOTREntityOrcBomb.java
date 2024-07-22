@@ -57,7 +57,7 @@ extends EntityTNTPrimed {
     }
 
     public void setFuseFromHiredUnit() {
-        int strength = LOTRBlockOrcBomb.getBombStrengthLevel(this.getBombStrengthLevel());
+        LOTRBlockOrcBomb.getBombStrengthLevel(this.getBombStrengthLevel());
     }
 
     public void onUpdate() {
@@ -105,9 +105,7 @@ extends EntityTNTPrimed {
         boolean doTerrainDamage = false;
         if (this.droppedByPlayer) {
             doTerrainDamage = true;
-        } else if (this.droppedByHiredUnit) {
-            doTerrainDamage = LOTRMod.canGrief(this.worldObj);
-        } else if (this.droppedTargetingPlayer) {
+        } else if (this.droppedByHiredUnit || this.droppedTargetingPlayer) {
             doTerrainDamage = LOTRMod.canGrief(this.worldObj);
         }
         int meta = this.getBombStrengthLevel();

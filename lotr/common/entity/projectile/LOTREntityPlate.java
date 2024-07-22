@@ -105,8 +105,8 @@ implements IEntityAdditionalSpawnData {
     }
 
     protected void onImpact(MovingObjectPosition m) {
-        int k;
         int j;
+        int k;
         int i;
         if (m.typeOfHit == MovingObjectPosition.MovingObjectType.ENTITY) {
             if (m.entityHit == this.getThrower()) {
@@ -138,9 +138,8 @@ implements IEntityAdditionalSpawnData {
     }
 
     private boolean breakGlass(int i, int j, int k) {
-        boolean bannerProtection;
         Block block = this.worldObj.getBlock(i, j, k);
-        if (block.getMaterial() == Material.glass && !(bannerProtection = LOTRBannerProtection.isProtected(this.worldObj, i, j, k, LOTRBannerProtection.forThrown(this), true))) {
+        if (block.getMaterial() == Material.glass && !LOTRBannerProtection.isProtected(this.worldObj, i, j, k, LOTRBannerProtection.forThrown(this), true)) {
             this.worldObj.playAuxSFX(2001, i, j, k, Block.getIdFromBlock((Block)block) + (this.worldObj.getBlockMetadata(i, j, k) << 12));
             this.worldObj.setBlockToAir(i, j, k);
             return true;

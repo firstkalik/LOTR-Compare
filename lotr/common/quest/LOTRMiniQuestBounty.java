@@ -55,8 +55,6 @@ import org.apache.commons.lang3.StringUtils;
 
 public class LOTRMiniQuestBounty
 extends LOTRMiniQuest {
-    private static final int KILL_THRESHOLD = 25;
-    private static final float MIN_ALIGNMENT_LOWERING = 100.0f;
     public UUID targetID;
     public String targetName;
     public boolean killed;
@@ -178,9 +176,10 @@ extends LOTRMiniQuest {
             this.updateQuest();
             LOTRFaction highestFaction = this.getPledgeOrHighestAlignmentFaction(slainPlayer, 100.0f);
             if (highestFaction != null) {
-                float alignmentLoss;
+                float f;
                 float curAlignment = slainPlayerData.getAlignment(highestFaction);
-                if (curAlignment + (alignmentLoss = this.getKilledAlignmentPenalty()) < 100.0f) {
+                float alignmentLoss = this.getKilledAlignmentPenalty();
+                if (curAlignment + f < 100.0f) {
                     alignmentLoss = -(curAlignment - 100.0f);
                 }
                 LOTRAlignmentValues.AlignmentBonus source = new LOTRAlignmentValues.AlignmentBonus(alignmentLoss, "lotr.alignment.bountyKill");
@@ -205,22 +204,24 @@ extends LOTRMiniQuest {
     @Override
     public void onKilledByPlayer(EntityPlayer entityplayer, EntityPlayer killer) {
         if (!this.killed && !this.isFailed() && killer.getUniqueID().equals(this.targetID)) {
-            LOTRPlayerData pd;
-            float curAlignment;
+            Object source;
+            float f;
             LOTRPlayerData killerData = LOTRLevelData.getData(killer);
             LOTRFaction killerHighestFaction = this.getPledgeOrHighestAlignmentFaction(killer, 0.0f);
             if (killerHighestFaction != null) {
                 float killerBonus = this.getAlignmentBonus();
-                LOTRAlignmentValues.AlignmentBonus source = new LOTRAlignmentValues.AlignmentBonus(killerBonus, "lotr.alignment.killedHunter");
-                killerData.addAlignment(killer, source, killerHighestFaction, (Entity)entityplayer);
+                source = new LOTRAlignmentValues.AlignmentBonus(killerBonus, "lotr.alignment.killedHunter");
+                killerData.addAlignment(killer, (LOTRAlignmentValues.AlignmentBonus)source, killerHighestFaction, (Entity)entityplayer);
             }
-            if ((curAlignment = (pd = this.getPlayerData()).getAlignment(this.entityFaction)) > 100.0f) {
+            LOTRPlayerData pd = this.getPlayerData();
+            float curAlignment = pd.getAlignment(this.entityFaction);
+            if (f > 100.0f) {
                 float alignmentLoss = this.getKilledAlignmentPenalty();
                 if (curAlignment + alignmentLoss < 100.0f) {
                     alignmentLoss = -(curAlignment - 100.0f);
                 }
-                LOTRAlignmentValues.AlignmentBonus source = new LOTRAlignmentValues.AlignmentBonus(alignmentLoss, "lotr.alignment.killedByBounty");
-                pd.addAlignment(entityplayer, source, this.entityFaction, (Entity)killer);
+                source = new LOTRAlignmentValues.AlignmentBonus(alignmentLoss, "lotr.alignment.killedByBounty");
+                pd.addAlignment(entityplayer, (LOTRAlignmentValues.AlignmentBonus)source, this.entityFaction, (Entity)killer);
                 ChatComponentTranslation slainMsg1 = new ChatComponentTranslation("chat.lotr.killedByBounty1", new Object[]{killer.getCommandSenderName()});
                 ChatComponentTranslation slainMsg2 = new ChatComponentTranslation("chat.lotr.killedByBounty2", new Object[]{this.entityFaction.factionName()});
                 slainMsg1.getChatStyle().setColor(EnumChatFormatting.YELLOW);
@@ -250,7 +251,7 @@ extends LOTRMiniQuest {
         float highestAlignment = min;
         for (LOTRFaction f : LOTRFaction.getPlayableAlignmentFactions()) {
             float alignment = pd.getAlignment(f);
-            if (!(alignment > min)) continue;
+            if (alignment <= min) continue;
             if (alignment > highestAlignment) {
                 highestFactions.clear();
                 highestFactions.add(f);
@@ -347,21 +348,6 @@ extends LOTRMiniQuest {
         return false;
     }
 
-    public static enum BountyHelp {
-        BIOME("biome"),
-        WAYPOINT("wp");
-
-        public final String speechName;
-
-        private BountyHelp(String s) {
-            this.speechName = s;
-        }
-
-        public static BountyHelp getRandomHelpType(Random random) {
-            return BountyHelp.values()[random.nextInt(BountyHelp.values().length)];
-        }
-    }
-
     public static class QFBounty<Q extends LOTRMiniQuestBounty>
     extends LOTRMiniQuest.QuestFactoryBase<Q> {
         public QFBounty(String name) {
@@ -401,6 +387,21 @@ extends LOTRMiniQuest {
             quest.alignmentBonus = alignment;
             quest.coinBonus = coins;
             return (Q)quest;
+        }
+    }
+
+    public static enum BountyHelp {
+        BIOME("biome"),
+        WAYPOINT("wp");
+
+        public final String speechName;
+
+        private BountyHelp(String s) {
+            this.speechName = s;
+        }
+
+        public static BountyHelp getRandomHelpType(Random random) {
+            return BountyHelp.values()[random.nextInt(BountyHelp.values().length)];
         }
     }
 

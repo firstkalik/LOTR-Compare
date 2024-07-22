@@ -93,6 +93,7 @@ implements LOTRRandomSkinEntity {
         return itemstack != null && itemstack.getItem() == Items.wheat;
     }
 
+    @Override
     protected void dropFewItems(boolean flag, int i) {
         int hide = this.rand.nextInt(3) + this.rand.nextInt(1 + i);
         for (int l = 0; l < hide; ++l) {

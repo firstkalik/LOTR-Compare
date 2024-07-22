@@ -40,7 +40,7 @@ implements LOTRUnitTradeable {
     public LOTREntityHarnedorWarlord(World world) {
         super(world);
         this.addTargetTasks(false);
-        this.npcCape = LOTRCapes.NEAR_HARAD;
+        this.npcCape = LOTRCapes.ALIGNMENT_NEAR_HARAD.capeTexture;
     }
 
     @Override
@@ -69,7 +69,7 @@ implements LOTRUnitTradeable {
     }
 
     @Override
-    public LOTRInvasions getWarhorn() {
+    public LOTRInvasions getConquestHorn() {
         return LOTRInvasions.NEAR_HARAD_HARNEDOR;
     }
 
@@ -92,11 +92,11 @@ implements LOTRUnitTradeable {
     public String getSpeechBank(EntityPlayer entityplayer) {
         if (this.isFriendly(entityplayer)) {
             if (this.canTradeWith(entityplayer)) {
-                return "nearHarad/harnennor/warlord/friendly";
+                return "nearHarad/harnedor/warlord/friendly";
             }
-            return "nearHarad/harnennor/warlord/neutral";
+            return "nearHarad/harnedor/warlord/neutral";
         }
-        return "nearHarad/harnennor/warrior/hostile";
+        return "nearHarad/harnedor/warrior/hostile";
     }
 }
 

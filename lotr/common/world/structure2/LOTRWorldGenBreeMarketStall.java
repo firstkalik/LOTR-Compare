@@ -99,83 +99,83 @@ extends LOTRWorldGenBreeStructure {
     @Override
     public boolean generateWithSetRotation(World world, Random random, int i, int j, int k, int rotation) {
         int k1;
-        int i1;
         int i12;
-        int step;
-        int j1;
-        int j2;
         int k12;
+        int j1;
+        int step;
         int i2;
+        int j2;
         int j12;
+        int i1;
         int k2;
         this.setOriginAndRotation(world, i, j, k, rotation, 3);
         this.setupRandomBlocks(random);
         if (this.restrictions) {
             int minHeight = 0;
             int maxHeight = 0;
-            for (i12 = -3; i12 <= 3; ++i12) {
+            for (i1 = -3; i1 <= 3; ++i1) {
                 for (int k13 = -3; k13 <= 3; ++k13) {
-                    j1 = this.getTopBlock(world, i12, k13) - 1;
-                    if (!this.isSurface(world, i12, j1, k13)) {
+                    j12 = this.getTopBlock(world, i1, k13) - 1;
+                    if (!this.isSurface(world, i1, j12, k13)) {
                         return false;
                     }
-                    if (j1 < minHeight) {
-                        minHeight = j1;
+                    if (j12 < minHeight) {
+                        minHeight = j12;
                     }
-                    if (j1 > maxHeight) {
-                        maxHeight = j1;
+                    if (j12 > maxHeight) {
+                        maxHeight = j12;
                     }
                     if (maxHeight - minHeight <= 6) continue;
                     return false;
                 }
             }
         }
-        for (i1 = -2; i1 <= 2; ++i1) {
-            for (k1 = -2; k1 <= 2; ++k1) {
-                i2 = Math.abs(i1);
-                k2 = Math.abs(k1);
+        for (i12 = -2; i12 <= 2; ++i12) {
+            for (k12 = -2; k12 <= 2; ++k12) {
+                i2 = Math.abs(i12);
+                k2 = Math.abs(k12);
                 if (i2 == 2 && k2 == 2) {
-                    for (j1 = 3; !(j1 < 0 && this.isOpaque(world, i1, j1, k1) || this.getY(j1) < 0); --j1) {
-                        this.setBlockAndMetadata(world, i1, j1, k1, this.beamBlock, this.beamMeta);
-                        this.setGrassToDirt(world, i1, j1 - 1, k1);
+                    for (j12 = 3; !(j12 < 0 && this.isOpaque(world, i12, j12, k12) || this.getY(j12) < 0); --j12) {
+                        this.setBlockAndMetadata(world, i12, j12, k12, this.beamBlock, this.beamMeta);
+                        this.setGrassToDirt(world, i12, j12 - 1, k12);
                     }
                     continue;
                 }
-                this.placeRandomFloor(world, random, i1, 0, k1);
-                this.setGrassToDirt(world, i1, -1, k1);
-                j1 = -1;
-                while (!this.isOpaque(world, i1, j1, k1) && this.getY(j1) >= 0) {
-                    this.setBlockAndMetadata(world, i1, j1, k1, Blocks.dirt, 0);
-                    this.setGrassToDirt(world, i1, j1 - 1, k1);
-                    --j1;
+                this.placeRandomFloor(world, random, i12, 0, k12);
+                this.setGrassToDirt(world, i12, -1, k12);
+                j12 = -1;
+                while (!this.isOpaque(world, i12, j12, k12) && this.getY(j12) >= 0) {
+                    this.setBlockAndMetadata(world, i12, j12, k12, Blocks.dirt, 0);
+                    this.setGrassToDirt(world, i12, j12 - 1, k12);
+                    --j12;
                 }
-                for (j1 = 1; j1 <= 4; ++j1) {
-                    this.setAir(world, i1, j1, k1);
+                for (j12 = 1; j12 <= 4; ++j12) {
+                    this.setAir(world, i12, j12, k12);
                 }
-                if (!(i2 == 2 & k2 <= 1) && (k2 != 2 || i2 > 1)) continue;
-                this.setBlockAndMetadata(world, i1, 3, k1, this.fenceBlock, this.fenceMeta);
+                if (!(i2 == 2 && k2 <= 1 || k2 == 2 && i2 <= 1)) continue;
+                this.setBlockAndMetadata(world, i12, 3, k12, this.fenceBlock, this.fenceMeta);
             }
         }
-        for (i1 = -3; i1 <= 3; ++i1) {
-            for (k1 = -3; k1 <= 3; ++k1) {
-                i2 = Math.abs(i1);
-                k2 = Math.abs(k1);
+        for (i12 = -3; i12 <= 3; ++i12) {
+            for (k12 = -3; k12 <= 3; ++k12) {
+                i2 = Math.abs(i12);
+                k2 = Math.abs(k12);
                 if (i2 == 3 && k2 >= 1 && k2 <= 2 || k2 == 3 && i2 >= 1 && i2 <= 2) {
-                    this.setBlockAndMetadata(world, i1, 3, k1, this.wool1Block, this.wool1Meta);
+                    this.setBlockAndMetadata(world, i12, 3, k12, this.wool1Block, this.wool1Meta);
                 }
                 if (i2 + k2 == 3 || i2 + k2 == 4) {
                     if (i2 == 2 && k2 == 2) {
-                        this.setBlockAndMetadata(world, i1, 4, k1, this.wool2Block, this.wool2Meta);
+                        this.setBlockAndMetadata(world, i12, 4, k12, this.wool2Block, this.wool2Meta);
                     } else {
-                        this.setBlockAndMetadata(world, i1, 4, k1, this.wool1Block, this.wool1Meta);
+                        this.setBlockAndMetadata(world, i12, 4, k12, this.wool1Block, this.wool1Meta);
                     }
                 }
                 if (i2 + k2 > 2) continue;
                 if (i2 == k2) {
-                    this.setBlockAndMetadata(world, i1, 5, k1, this.wool2Block, this.wool2Meta);
+                    this.setBlockAndMetadata(world, i12, 5, k12, this.wool2Block, this.wool2Meta);
                     continue;
                 }
-                this.setBlockAndMetadata(world, i1, 5, k1, this.wool1Block, this.wool1Meta);
+                this.setBlockAndMetadata(world, i12, 5, k12, this.wool1Block, this.wool1Meta);
             }
         }
         this.setBlockAndMetadata(world, -1, 1, -2, this.plankStairBlock, 4);
@@ -190,8 +190,8 @@ extends LOTRWorldGenBreeStructure {
         this.setBlockAndMetadata(world, -2, 1, 1, this.plankStairBlock, 6);
         this.setBlockAndMetadata(world, -2, 1, 0, this.plankSlabBlock, this.plankSlabMeta | 8);
         this.setBlockAndMetadata(world, -2, 1, -1, this.plankStairBlock, 7);
-        for (i1 = -1; i1 <= 1; ++i1) {
-            this.setBlockAndMetadata(world, i1, 1, -3, this.trapdoorBlock, 12);
+        for (i12 = -1; i12 <= 1; ++i12) {
+            this.setBlockAndMetadata(world, i12, 1, -3, this.trapdoorBlock, 12);
         }
         for (int k14 = -1; k14 <= 1; ++k14) {
             this.setBlockAndMetadata(world, -3, 1, k14, this.trapdoorBlock, 15);
@@ -201,24 +201,31 @@ extends LOTRWorldGenBreeStructure {
         } else {
             this.setBlockAndMetadata(world, 1, 1, 1, LOTRMod.chestBasket, 2);
         }
-        int maxSteps = 12;
-        for (step = 0; step < 12 && !this.isOpaque(world, i12 = 3 + step, j12 = 0 - step, k12 = -1); ++step) {
-            this.placeRandomFloor(world, random, i12, j12, k12);
-            this.setGrassToDirt(world, i12, j12 - 1, k12);
-            j2 = j12 - 1;
-            while (!this.isOpaque(world, i12, j2, k12) && this.getY(j2) >= 0) {
-                this.setBlockAndMetadata(world, i12, j2, k12, Blocks.dirt, 0);
-                this.setGrassToDirt(world, i12, j2 - 1, k12);
+        for (step = 0; step < 12; ++step) {
+            i1 = 3 + step;
+            j1 = 0 - step;
+            k1 = -1;
+            if (this.isOpaque(world, i1, j1, -1)) break;
+            this.placeRandomFloor(world, random, i1, j1, k1);
+            this.setGrassToDirt(world, i1, j1 - 1, k1);
+            j2 = j1 - 1;
+            while (!this.isOpaque(world, i1, j2, k1) && this.getY(j2) >= 0) {
+                this.setBlockAndMetadata(world, i1, j2, k1, Blocks.dirt, 0);
+                this.setGrassToDirt(world, i1, j2 - 1, k1);
                 --j2;
             }
         }
-        for (step = 0; step < 12 && !this.isOpaque(world, i12 = -1, j12 = 0 - step, k12 = 3 + step); ++step) {
-            this.placeRandomFloor(world, random, i12, j12, k12);
-            this.setGrassToDirt(world, i12, j12 - 1, k12);
-            j2 = j12 - 1;
-            while (!this.isOpaque(world, i12, j2, k12) && this.getY(j2) >= 0) {
-                this.setBlockAndMetadata(world, i12, j2, k12, Blocks.dirt, 0);
-                this.setGrassToDirt(world, i12, j2 - 1, k12);
+        for (step = 0; step < 12; ++step) {
+            i1 = -1;
+            j1 = 0 - step;
+            k1 = 3 + step;
+            if (this.isOpaque(world, -1, j1, k1)) break;
+            this.placeRandomFloor(world, random, i1, j1, k1);
+            this.setGrassToDirt(world, i1, j1 - 1, k1);
+            j2 = j1 - 1;
+            while (!this.isOpaque(world, i1, j2, k1) && this.getY(j2) >= 0) {
+                this.setBlockAndMetadata(world, i1, j2, k1, Blocks.dirt, 0);
+                this.setGrassToDirt(world, i1, j2 - 1, k1);
                 --j2;
             }
         }
@@ -232,9 +239,9 @@ extends LOTRWorldGenBreeStructure {
 
     protected abstract LOTREntityNPC createTrader(World var1, Random var2);
 
-    public static class Farmer
+    public static class Baker
     extends LOTRWorldGenBreeMarketStall {
-        public Farmer(boolean flag) {
+        public Baker(boolean flag) {
             super(flag);
         }
 
@@ -242,22 +249,21 @@ extends LOTRWorldGenBreeStructure {
         protected void setupRandomBlocks(Random random) {
             super.setupRandomBlocks(random);
             this.wool1Block = Blocks.wool;
-            this.wool1Meta = 13;
+            this.wool1Meta = 4;
         }
 
         @Override
         protected void decorateStall(World world, Random random) {
-            this.placePlate_item(world, random, -1, 2, -2, LOTRMod.plateBlock, this.getRandomFarmerItem(random), true);
-            this.placePlate_item(world, random, 0, 2, -2, LOTRMod.woodPlateBlock, this.getRandomFarmerItem(random), true);
-            this.placePlate_item(world, random, -2, 2, -1, LOTRMod.woodPlateBlock, this.getRandomFarmerItem(random), true);
-            this.placePlate_item(world, random, -2, 2, 1, LOTRMod.ceramicPlateBlock, this.getRandomFarmerItem(random), true);
-            this.placePlate_item(world, random, 2, 2, 0, LOTRMod.ceramicPlateBlock, this.getRandomFarmerItem(random), true);
-            this.setBlockAndMetadata(world, -1, 1, -1, Blocks.pumpkin, 3);
-            this.setGrassToDirt(world, -1, 0, -1);
+            this.placePlate_item(world, random, -1, 2, -2, LOTRMod.woodPlateBlock, this.getRandomBakeryItem(random), true);
+            this.placePlate_item(world, random, 1, 2, 2, LOTRMod.ceramicPlateBlock, this.getRandomBakeryItem(random), true);
+            this.placePlate_item(world, random, -2, 2, 1, LOTRMod.plateBlock, this.getRandomBakeryItem(random), true);
+            this.setBlockAndMetadata(world, 1, 2, -2, LOTRWorldGenBreeStructure.getRandomPieBlock(random), 0);
+            this.setBlockAndMetadata(world, -2, 2, -1, LOTRWorldGenBreeStructure.getRandomPieBlock(random), 0);
+            this.setBlockAndMetadata(world, 2, 2, 1, LOTRWorldGenBreeStructure.getRandomPieBlock(random), 0);
         }
 
-        protected ItemStack getRandomFarmerItem(Random random) {
-            ItemStack[] foods = new ItemStack[]{new ItemStack(Items.carrot), new ItemStack(Items.potato), new ItemStack(LOTRMod.lettuce), new ItemStack(LOTRMod.turnip), new ItemStack(LOTRMod.leek), new ItemStack(Items.apple), new ItemStack(LOTRMod.appleGreen), new ItemStack(LOTRMod.pear), new ItemStack(LOTRMod.plum)};
+        protected ItemStack getRandomBakeryItem(Random random) {
+            ItemStack[] foods = new ItemStack[]{new ItemStack(Items.bread), new ItemStack(LOTRMod.cornBread), new ItemStack(LOTRMod.hobbitPancake), new ItemStack(LOTRMod.hobbitPancakeMapleSyrup)};
             ItemStack ret = foods[random.nextInt(foods.length)].copy();
             ret.stackSize = 1 + random.nextInt(3);
             return ret;
@@ -265,151 +271,7 @@ extends LOTRWorldGenBreeStructure {
 
         @Override
         protected LOTREntityNPC createTrader(World world, Random random) {
-            return new LOTREntityBreeFarmer(world);
-        }
-    }
-
-    public static class Florist
-    extends LOTRWorldGenBreeMarketStall {
-        public Florist(boolean flag) {
-            super(flag);
-        }
-
-        @Override
-        protected void setupRandomBlocks(Random random) {
-            super.setupRandomBlocks(random);
-            this.wool1Block = Blocks.wool;
-            this.wool1Meta = 10;
-        }
-
-        @Override
-        protected void decorateStall(World world, Random random) {
-            this.placeRandomFlowerPot(world, random, -1, 2, -2);
-            this.placeRandomFlowerPot(world, random, 1, 2, -2);
-            this.placeRandomFlowerPot(world, random, -2, 2, 0);
-            this.placeRandomFlowerPot(world, random, 2, 2, 1);
-            this.placeRandomFlowerPot(world, random, 0, 2, 2);
-        }
-
-        @Override
-        protected LOTREntityNPC createTrader(World world, Random random) {
-            return random.nextBoolean() ? new LOTREntityBreeHobbitFlorist(world) : new LOTREntityBreeFlorist(world);
-        }
-    }
-
-    public static class Smith
-    extends LOTRWorldGenBreeMarketStall {
-        public Smith(boolean flag) {
-            super(flag);
-        }
-
-        @Override
-        protected void setupRandomBlocks(Random random) {
-            super.setupRandomBlocks(random);
-            this.wool1Block = Blocks.wool;
-            this.wool1Meta = 7;
-        }
-
-        @Override
-        protected void decorateStall(World world, Random random) {
-            this.placeWeaponRack(world, 1, 2, -2, 7, new ItemStack(LOTRMod.ironCrossbow));
-            this.placeWeaponRack(world, -2, 2, 1, 3, new ItemStack(LOTRMod.battleaxeIron));
-            this.placeWeaponRack(world, 2, 2, 1, 1, new ItemStack(Items.iron_sword));
-            LOTREntityBreeGuard armorGuard = new LOTREntityBreeGuard(world);
-            armorGuard.onSpawnWithEgg(null);
-            this.placeArmorStand(world, 0, 1, 1, 0, new ItemStack[]{armorGuard.getEquipmentInSlot(4), armorGuard.getEquipmentInSlot(3), null, null});
-        }
-
-        @Override
-        protected LOTREntityNPC createTrader(World world, Random random) {
-            return new LOTREntityBreeBlacksmith(world);
-        }
-    }
-
-    public static class Lumber
-    extends LOTRWorldGenBreeMarketStall {
-        public Lumber(boolean flag) {
-            super(flag);
-        }
-
-        @Override
-        protected void setupRandomBlocks(Random random) {
-            super.setupRandomBlocks(random);
-            this.wool1Block = Blocks.wool;
-            this.wool1Meta = 12;
-        }
-
-        @Override
-        protected void decorateStall(World world, Random random) {
-            this.setBlockAndMetadata(world, 0, 1, 1, Blocks.log, 0);
-            this.setGrassToDirt(world, 0, 0, 1);
-            this.setBlockAndMetadata(world, -1, 1, -1, LOTRMod.wood5, 4);
-            this.setGrassToDirt(world, -1, 0, -1);
-            this.placeWeaponRack(world, 1, 2, -2, 7, new ItemStack(Items.iron_axe));
-        }
-
-        @Override
-        protected LOTREntityNPC createTrader(World world, Random random) {
-            return new LOTREntityBreeLumberman(world);
-        }
-    }
-
-    public static class Mason
-    extends LOTRWorldGenBreeMarketStall {
-        public Mason(boolean flag) {
-            super(flag);
-        }
-
-        @Override
-        protected void setupRandomBlocks(Random random) {
-            super.setupRandomBlocks(random);
-            this.wool1Block = Blocks.wool;
-            this.wool1Meta = 8;
-        }
-
-        @Override
-        protected void decorateStall(World world, Random random) {
-            this.setBlockAndMetadata(world, 0, 1, 1, this.brickBlock, this.brickMeta);
-            this.setBlockAndMetadata(world, 0, 2, 1, this.brickBlock, this.brickMeta);
-            this.setGrassToDirt(world, 0, 0, 1);
-            this.setBlockAndMetadata(world, -1, 1, -1, Blocks.cobblestone, 0);
-            this.setGrassToDirt(world, -1, 0, -1);
-            this.placeWeaponRack(world, 1, 2, -2, 7, new ItemStack(Items.iron_pickaxe));
-            this.placeWeaponRack(world, -2, 2, 1, 6, new ItemStack(LOTRMod.pickaxeBronze));
-        }
-
-        @Override
-        protected LOTREntityNPC createTrader(World world, Random random) {
-            return new LOTREntityBreeMason(world);
-        }
-    }
-
-    public static class Brewer
-    extends LOTRWorldGenBreeMarketStall {
-        public Brewer(boolean flag) {
-            super(flag);
-        }
-
-        @Override
-        protected void setupRandomBlocks(Random random) {
-            super.setupRandomBlocks(random);
-            this.wool1Block = Blocks.wool;
-            this.wool1Meta = 1;
-        }
-
-        @Override
-        protected void decorateStall(World world, Random random) {
-            this.placeMug(world, random, -1, 2, -2, 0, LOTRFoods.BREE_DRINK);
-            this.placeMug(world, random, 1, 2, -2, 0, LOTRFoods.BREE_DRINK);
-            this.placeMug(world, random, 1, 2, 2, 2, LOTRFoods.BREE_DRINK);
-            this.setBlockAndMetadata(world, -1, 1, -1, LOTRMod.barrel, 3);
-            this.setBlockAndMetadata(world, -2, 2, 1, LOTRMod.barrel, 2);
-            this.setBlockAndMetadata(world, 2, 2, 1, LOTRMod.barrel, 5);
-        }
-
-        @Override
-        protected LOTREntityNPC createTrader(World world, Random random) {
-            return random.nextBoolean() ? new LOTREntityBreeHobbitBrewer(world) : new LOTREntityBreeBrewer(world);
+            return random.nextBoolean() ? new LOTREntityBreeHobbitBaker(world) : new LOTREntityBreeBaker(world);
         }
     }
 
@@ -448,9 +310,9 @@ extends LOTRWorldGenBreeStructure {
         }
     }
 
-    public static class Baker
+    public static class Brewer
     extends LOTRWorldGenBreeMarketStall {
-        public Baker(boolean flag) {
+        public Brewer(boolean flag) {
             super(flag);
         }
 
@@ -458,21 +320,166 @@ extends LOTRWorldGenBreeStructure {
         protected void setupRandomBlocks(Random random) {
             super.setupRandomBlocks(random);
             this.wool1Block = Blocks.wool;
-            this.wool1Meta = 4;
+            this.wool1Meta = 1;
         }
 
         @Override
         protected void decorateStall(World world, Random random) {
-            this.placePlate_item(world, random, -1, 2, -2, LOTRMod.woodPlateBlock, this.getRandomBakeryItem(random), true);
-            this.placePlate_item(world, random, 1, 2, 2, LOTRMod.ceramicPlateBlock, this.getRandomBakeryItem(random), true);
-            this.placePlate_item(world, random, -2, 2, 1, LOTRMod.plateBlock, this.getRandomBakeryItem(random), true);
-            this.setBlockAndMetadata(world, 1, 2, -2, Baker.getRandomPieBlock(random), 0);
-            this.setBlockAndMetadata(world, -2, 2, -1, Baker.getRandomPieBlock(random), 0);
-            this.setBlockAndMetadata(world, 2, 2, 1, Baker.getRandomPieBlock(random), 0);
+            this.placeMug(world, random, -1, 2, -2, 0, LOTRFoods.BREE_DRINK);
+            this.placeMug(world, random, 1, 2, -2, 0, LOTRFoods.BREE_DRINK);
+            this.placeMug(world, random, 1, 2, 2, 2, LOTRFoods.BREE_DRINK);
+            this.setBlockAndMetadata(world, -1, 1, -1, LOTRMod.barrel, 3);
+            this.setBlockAndMetadata(world, -2, 2, 1, LOTRMod.barrel, 2);
+            this.setBlockAndMetadata(world, 2, 2, 1, LOTRMod.barrel, 5);
         }
 
-        protected ItemStack getRandomBakeryItem(Random random) {
-            ItemStack[] foods = new ItemStack[]{new ItemStack(Items.bread), new ItemStack(LOTRMod.cornBread), new ItemStack(LOTRMod.hobbitPancake), new ItemStack(LOTRMod.hobbitPancakeMapleSyrup)};
+        @Override
+        protected LOTREntityNPC createTrader(World world, Random random) {
+            return random.nextBoolean() ? new LOTREntityBreeHobbitBrewer(world) : new LOTREntityBreeBrewer(world);
+        }
+    }
+
+    public static class Mason
+    extends LOTRWorldGenBreeMarketStall {
+        public Mason(boolean flag) {
+            super(flag);
+        }
+
+        @Override
+        protected void setupRandomBlocks(Random random) {
+            super.setupRandomBlocks(random);
+            this.wool1Block = Blocks.wool;
+            this.wool1Meta = 8;
+        }
+
+        @Override
+        protected void decorateStall(World world, Random random) {
+            this.setBlockAndMetadata(world, 0, 1, 1, this.brickBlock, this.brickMeta);
+            this.setBlockAndMetadata(world, 0, 2, 1, this.brickBlock, this.brickMeta);
+            this.setGrassToDirt(world, 0, 0, 1);
+            this.setBlockAndMetadata(world, -1, 1, -1, Blocks.cobblestone, 0);
+            this.setGrassToDirt(world, -1, 0, -1);
+            this.placeWeaponRack(world, 1, 2, -2, 7, new ItemStack(Items.iron_pickaxe));
+            this.placeWeaponRack(world, -2, 2, 1, 6, new ItemStack(LOTRMod.pickaxeBronze));
+        }
+
+        @Override
+        protected LOTREntityNPC createTrader(World world, Random random) {
+            return new LOTREntityBreeMason(world);
+        }
+    }
+
+    public static class Lumber
+    extends LOTRWorldGenBreeMarketStall {
+        public Lumber(boolean flag) {
+            super(flag);
+        }
+
+        @Override
+        protected void setupRandomBlocks(Random random) {
+            super.setupRandomBlocks(random);
+            this.wool1Block = Blocks.wool;
+            this.wool1Meta = 12;
+        }
+
+        @Override
+        protected void decorateStall(World world, Random random) {
+            this.setBlockAndMetadata(world, 0, 1, 1, Blocks.log, 0);
+            this.setGrassToDirt(world, 0, 0, 1);
+            this.setBlockAndMetadata(world, -1, 1, -1, LOTRMod.wood5, 4);
+            this.setGrassToDirt(world, -1, 0, -1);
+            this.placeWeaponRack(world, 1, 2, -2, 7, new ItemStack(Items.iron_axe));
+        }
+
+        @Override
+        protected LOTREntityNPC createTrader(World world, Random random) {
+            return new LOTREntityBreeLumberman(world);
+        }
+    }
+
+    public static class Smith
+    extends LOTRWorldGenBreeMarketStall {
+        public Smith(boolean flag) {
+            super(flag);
+        }
+
+        @Override
+        protected void setupRandomBlocks(Random random) {
+            super.setupRandomBlocks(random);
+            this.wool1Block = Blocks.wool;
+            this.wool1Meta = 7;
+        }
+
+        @Override
+        protected void decorateStall(World world, Random random) {
+            this.placeWeaponRack(world, 1, 2, -2, 7, new ItemStack(LOTRMod.ironCrossbow));
+            this.placeWeaponRack(world, -2, 2, 1, 3, new ItemStack(LOTRMod.battleaxeIron));
+            this.placeWeaponRack(world, 2, 2, 1, 1, new ItemStack(Items.iron_sword));
+            LOTREntityBreeGuard armorGuard = new LOTREntityBreeGuard(world);
+            armorGuard.onSpawnWithEgg(null);
+            this.placeArmorStand(world, 0, 1, 1, 0, new ItemStack[]{armorGuard.getEquipmentInSlot(4), armorGuard.getEquipmentInSlot(3), null, null});
+        }
+
+        @Override
+        protected LOTREntityNPC createTrader(World world, Random random) {
+            return new LOTREntityBreeBlacksmith(world);
+        }
+    }
+
+    public static class Florist
+    extends LOTRWorldGenBreeMarketStall {
+        public Florist(boolean flag) {
+            super(flag);
+        }
+
+        @Override
+        protected void setupRandomBlocks(Random random) {
+            super.setupRandomBlocks(random);
+            this.wool1Block = Blocks.wool;
+            this.wool1Meta = 10;
+        }
+
+        @Override
+        protected void decorateStall(World world, Random random) {
+            this.placeRandomFlowerPot(world, random, -1, 2, -2);
+            this.placeRandomFlowerPot(world, random, 1, 2, -2);
+            this.placeRandomFlowerPot(world, random, -2, 2, 0);
+            this.placeRandomFlowerPot(world, random, 2, 2, 1);
+            this.placeRandomFlowerPot(world, random, 0, 2, 2);
+        }
+
+        @Override
+        protected LOTREntityNPC createTrader(World world, Random random) {
+            return random.nextBoolean() ? new LOTREntityBreeHobbitFlorist(world) : new LOTREntityBreeFlorist(world);
+        }
+    }
+
+    public static class Farmer
+    extends LOTRWorldGenBreeMarketStall {
+        public Farmer(boolean flag) {
+            super(flag);
+        }
+
+        @Override
+        protected void setupRandomBlocks(Random random) {
+            super.setupRandomBlocks(random);
+            this.wool1Block = Blocks.wool;
+            this.wool1Meta = 13;
+        }
+
+        @Override
+        protected void decorateStall(World world, Random random) {
+            this.placePlate_item(world, random, -1, 2, -2, LOTRMod.plateBlock, this.getRandomFarmerItem(random), true);
+            this.placePlate_item(world, random, 0, 2, -2, LOTRMod.woodPlateBlock, this.getRandomFarmerItem(random), true);
+            this.placePlate_item(world, random, -2, 2, -1, LOTRMod.woodPlateBlock, this.getRandomFarmerItem(random), true);
+            this.placePlate_item(world, random, -2, 2, 1, LOTRMod.ceramicPlateBlock, this.getRandomFarmerItem(random), true);
+            this.placePlate_item(world, random, 2, 2, 0, LOTRMod.ceramicPlateBlock, this.getRandomFarmerItem(random), true);
+            this.setBlockAndMetadata(world, -1, 1, -1, Blocks.pumpkin, 3);
+            this.setGrassToDirt(world, -1, 0, -1);
+        }
+
+        protected ItemStack getRandomFarmerItem(Random random) {
+            ItemStack[] foods = new ItemStack[]{new ItemStack(Items.carrot), new ItemStack(Items.potato), new ItemStack(LOTRMod.lettuce), new ItemStack(LOTRMod.turnip), new ItemStack(LOTRMod.leek), new ItemStack(Items.apple), new ItemStack(LOTRMod.appleGreen), new ItemStack(LOTRMod.pear), new ItemStack(LOTRMod.plum)};
             ItemStack ret = foods[random.nextInt(foods.length)].copy();
             ret.stackSize = 1 + random.nextInt(3);
             return ret;
@@ -480,7 +487,7 @@ extends LOTRWorldGenBreeStructure {
 
         @Override
         protected LOTREntityNPC createTrader(World world, Random random) {
-            return random.nextBoolean() ? new LOTREntityBreeHobbitBaker(world) : new LOTREntityBreeBaker(world);
+            return new LOTREntityBreeFarmer(world);
         }
     }
 

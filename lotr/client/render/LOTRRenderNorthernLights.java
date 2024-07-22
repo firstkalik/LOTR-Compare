@@ -23,7 +23,6 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Random;
 import lotr.client.LOTRReflectionClient;
 import lotr.common.LOTRDate;
@@ -46,33 +45,85 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.Project;
 
 public class LOTRRenderNorthernLights {
-    private static int nlTick;
-    private static int currentNightNum;
-    private static float brightnessTonight;
-    private static float maxNorthTonight;
-    private static float minNorthTonight;
-    private static int rainingTick;
-    private static int rainingTickPrev;
-    private static final int rainingChangeTime = 80;
-    private static boolean atUtumno;
-    private static int utumnoChange;
-    private static final int utumnoChangeTime = 200;
-    private static final Random rand;
-    private static final Random dateRand;
-    private static float[] colorTopCurrent;
-    private static float[] colorMidCurrent;
-    private static float[] colorBottomCurrent;
-    private static float[] colorTopNext;
-    private static float[] colorMidNext;
-    private static float[] colorBottomNext;
-    private static int colorChangeTime;
-    private static int colorChangeTick;
-    private static int timeUntilColorChange;
-    private static int utumnoCheckTime;
-    private static AuroraCycle wave0;
-    private static List<AuroraCycle> waveOscillations;
-    private static List<AuroraCycle> glowOscillations;
-    private static AuroraCycle glow0;
+    public static int nlTick;
+    public static int currentNightNum;
+    public static float brightnessTonight;
+    public static float maxNorthTonight;
+    public static float minNorthTonight;
+    public static int rainingTick;
+    public static int rainingTickPrev;
+    public static int rainingChangeTime;
+    public static boolean atNightKing;
+    public static int nightKingChange;
+    public static int nightKingChangeTime;
+    public static Random rand;
+    public static Random dateRand;
+    public static float[] colorTopCurrent;
+    public static float[] colorMidCurrent;
+    public static float[] colorBottomCurrent;
+    public static float[] colorTopNext;
+    public static float[] colorMidNext;
+    public static float[] colorBottomNext;
+    public static int colorChangeTime;
+    public static int colorChangeTick;
+    public static int timeUntilColorChange;
+    public static int nightKingCheckTime;
+    public static AuroraCycle wave0;
+    public static Collection<AuroraCycle> waveOscillations;
+    public static Collection<AuroraCycle> glowOscillations;
+    public static AuroraCycle glow0;
+
+    public static Color[] generateColorSet() {
+        float h1 = MathHelper.randomFloatClamp((Random)rand, (float)0.22f, (float)0.48f);
+        float h2 = MathHelper.randomFloatClamp((Random)rand, (float)0.22f, (float)0.48f);
+        float h3 = MathHelper.randomFloatClamp((Random)rand, (float)0.22f, (float)0.48f);
+        if (rand.nextInt(3) == 0) {
+            h1 = MathHelper.randomFloatClamp((Random)rand, (float)0.78f, (float)1.08f);
+        }
+        if (rand.nextInt(5) == 0) {
+            h1 = MathHelper.randomFloatClamp((Random)rand, (float)0.78f, (float)1.08f);
+            h2 = MathHelper.randomFloatClamp((Random)rand, (float)0.85f, (float)1.08f);
+        }
+        if (rand.nextInt(50) == 0) {
+            h1 = MathHelper.randomFloatClamp((Random)rand, (float)0.7f, (float)1.08f);
+            h2 = MathHelper.randomFloatClamp((Random)rand, (float)0.54f, (float)0.77f);
+            h3 = MathHelper.randomFloatClamp((Random)rand, (float)0.48f, (float)0.7f);
+        }
+        Color topColor = new Color(Color.HSBtoRGB(h1, 1.0f, 1.0f));
+        Color midColor = new Color(Color.HSBtoRGB(h2, 1.0f, 1.0f));
+        Color bottomColor = new Color(Color.HSBtoRGB(h3, 1.0f, 1.0f));
+        return new Color[]{topColor, midColor, bottomColor};
+    }
+
+    public static float getNorthernness(EntityLivingBase entity) {
+        float minNorth = minNorthTonight;
+        float maxNorth = maxNorthTonight;
+        float northernness = ((float)entity.posZ - minNorth) / (maxNorth - minNorth);
+        return MathHelper.clamp_float((float)northernness, (float)0.0f, (float)1.0f);
+    }
+
+    public static float glowEquation(Minecraft mc, float t, float tick, float renderTick) {
+        float f = 0.0f;
+        f += glow0.calc(t, tick);
+        if (mc.gameSettings.fancyGraphics) {
+            for (AuroraCycle c : glowOscillations) {
+                f += c.calc(t, tick);
+            }
+        }
+        return f;
+    }
+
+    public static boolean isRainLayerAt(EntityLivingBase entity) {
+        World world = entity.worldObj;
+        int i = MathHelper.floor_double((double)entity.posX);
+        int j = MathHelper.floor_double((double)entity.boundingBox.minY);
+        int k = MathHelper.floor_double((double)entity.posZ);
+        if (!world.isRaining()) {
+            return false;
+        }
+        BiomeGenBase biomegenbase = world.getBiomeGenForCoords(i, k);
+        return !biomegenbase.getEnableSnow() && biomegenbase.getFloatTemperature(i, j, k) >= 0.15f && biomegenbase.canSpawnLightningBolt();
+    }
 
     public static void render(Minecraft mc, WorldClient world, float tick) {
         float maxDaylight;
@@ -81,12 +132,12 @@ public class LOTRRenderNorthernLights {
         }
         float minSun = 0.2f;
         float daylight = (world.getSunBrightness(tick) - minSun) / (1.0f - minSun);
-        float nlBrightness = (1.0f - daylight - (1.0f - (maxDaylight = 0.3f))) / maxDaylight;
+        float nlBrightness = (1.0f - daylight - (1.0f - 0.3f)) / (maxDaylight = 0.3f);
         if (nlBrightness <= 0.0f) {
             return;
         }
         float tonight = brightnessTonight;
-        float utumno = (float)utumnoChange / 200.0f;
+        float utumno = (float)nightKingChange / 200.0f;
         if ((tonight += (1.0f - tonight) * utumno) <= 0.0f) {
             return;
         }
@@ -102,16 +153,16 @@ public class LOTRRenderNorthernLights {
         }
         nlBrightness *= 1.0f - raininess;
         world.theProfiler.startSection("aurora");
-        float nlScale = 2000.0f;
-        float nlDistance = (1.0f - northernness) * nlScale * 2.0f;
-        float nlHeight = nlScale * 0.5f;
         GL11.glMatrixMode((int)5889);
         GL11.glPushMatrix();
         GL11.glLoadIdentity();
         float fov = LOTRReflectionClient.getFOVModifier(mc.entityRenderer, tick, true);
+        float nlScale = 2000.0f;
         Project.gluPerspective((float)fov, (float)((float)mc.displayWidth / (float)mc.displayHeight), (float)0.05f, (float)(nlScale * 5.0f));
         GL11.glMatrixMode((int)5888);
         GL11.glPushMatrix();
+        float nlHeight = nlScale * 0.5f;
+        float nlDistance = (1.0f - northernness) * nlScale * 2.0f;
         GL11.glTranslatef((float)0.0f, (float)nlHeight, (float)(-nlDistance));
         GL11.glScalef((float)1.0f, (float)1.0f, (float)1.0f);
         GL11.glDisable((int)3553);
@@ -124,9 +175,9 @@ public class LOTRRenderNorthernLights {
         GL11.glShadeModel((int)7425);
         GL11.glDisable((int)2884);
         world.theProfiler.startSection("sheet");
-        LOTRRenderNorthernLights.renderSheet(mc, (World)world, nlScale * -0.5f, (nlBrightness *= 0.3f + (1.0f - world.getRainStrength(tick)) * 0.7f) * 0.8f, nlScale * 1.0f, nlScale * 0.25f, 0.25502f, tick);
-        LOTRRenderNorthernLights.renderSheet(mc, (World)world, 0.0f, nlBrightness * 1.0f, nlScale * 1.5f, nlScale * 0.3f, 0.15696f, tick);
-        LOTRRenderNorthernLights.renderSheet(mc, (World)world, nlScale * 0.5f, nlBrightness * 0.8f, nlScale * 1.0f, nlScale * 0.25f, 0.67596f, tick);
+        LOTRRenderNorthernLights.renderSheet(mc, (World)world, nlScale * -0.5f, (nlBrightness *= 0.3f + (1.0f - world.getRainStrength(tick)) * 0.7f) * 0.8f, nlScale, nlScale * 0.25f, 0.25502f, tick);
+        LOTRRenderNorthernLights.renderSheet(mc, (World)world, 0.0f, nlBrightness, nlScale * 1.5f, nlScale * 0.3f, 0.15696f, tick);
+        LOTRRenderNorthernLights.renderSheet(mc, (World)world, nlScale * 0.5f, nlBrightness * 0.8f, nlScale, nlScale * 0.25f, 0.67596f, tick);
         world.theProfiler.endSection();
         GL11.glEnable((int)2884);
         GL11.glShadeModel((int)7424);
@@ -142,30 +193,7 @@ public class LOTRRenderNorthernLights {
         world.theProfiler.endSection();
     }
 
-    private static float getNorthernness(EntityLivingBase entity) {
-        float minNorth = minNorthTonight;
-        float maxNorth = maxNorthTonight;
-        float northernness = ((float)entity.posZ - minNorth) / (maxNorth - minNorth);
-        northernness = MathHelper.clamp_float((float)northernness, (float)0.0f, (float)1.0f);
-        return northernness;
-    }
-
-    private static boolean isRainLayerAt(EntityLivingBase entity) {
-        World world = entity.worldObj;
-        int i = MathHelper.floor_double((double)entity.posX);
-        int j = MathHelper.floor_double((double)entity.boundingBox.minY);
-        int k = MathHelper.floor_double((double)entity.posZ);
-        if (!world.isRaining()) {
-            return false;
-        }
-        BiomeGenBase biomegenbase = world.getBiomeGenForCoords(i, k);
-        if (biomegenbase.getEnableSnow()) {
-            return false;
-        }
-        return biomegenbase.getFloatTemperature(i, j, k) >= 0.15f && biomegenbase.canSpawnLightningBolt();
-    }
-
-    private static void renderSheet(Minecraft mc, World world, float nlDistance, float nlBrightness, double halfWidth, double halfHeight, float tickExtra, float tick) {
+    public static void renderSheet(Minecraft mc, World world, float nlDistance, float nlBrightness, double halfWidth, double halfHeight, float tickExtra, float tick) {
         float r1 = colorTopCurrent[0];
         float g1 = colorTopCurrent[1];
         float b1 = colorTopCurrent[2];
@@ -189,10 +217,10 @@ public class LOTRRenderNorthernLights {
             b3 = colorBottomCurrent[2] + (colorBottomNext[2] - colorBottomCurrent[2]) * t;
         }
         float a1 = 0.0f;
-        float a2 = 0.4f;
-        float a3 = 0.8f;
         a1 *= nlBrightness;
+        float a2 = 0.4f;
         a2 *= nlBrightness;
+        float a3 = 0.8f;
         a3 *= nlBrightness;
         float fullTick = (float)nlTick + tick + tickExtra;
         Tessellator tess = Tessellator.instance;
@@ -222,12 +250,11 @@ public class LOTRRenderNorthernLights {
             double x1 = x0 + halfWidth * 2.0 / (double)strips;
             double yMin = -halfHeight;
             double yMid = -halfHeight * 0.4;
-            double yMax = halfHeight;
-            double z0 = nlDistance;
-            double z1 = nlDistance;
-            double extra = halfHeight * 0.15;
             tess.setColorRGBA_F(r3, g3, b3, 0.0f);
+            double extra = halfHeight * 0.15;
+            double z0 = nlDistance;
             tess.addVertex(x0, yMin - extra, z0 += (double)LOTRRenderNorthernLights.waveEquation(mc, t, fullTick, tick) * (halfWidth * 0.15));
+            double z1 = nlDistance;
             tess.addVertex(x1, yMin - extra, z1 += (double)LOTRRenderNorthernLights.waveEquation(mc, t1, fullTick, tick) * (halfWidth * 0.15));
             tess.setColorRGBA_F(r3, g3, b3, a3_here *= randomFade);
             tess.addVertex(x1, yMin, z1);
@@ -241,9 +268,9 @@ public class LOTRRenderNorthernLights {
             tess.setColorRGBA_F(r2, g2, b2, a2_here);
             tess.addVertex(x0, yMid, z0);
             tess.addVertex(x1, yMid, z1);
-            tess.setColorRGBA_F(r1, g1, b1, a1_here *= randomFade);
-            tess.addVertex(x1, yMax, z1);
-            tess.addVertex(x0, yMax, z0);
+            tess.setColorRGBA_F(r1, g1, b1, a1_here * randomFade);
+            tess.addVertex(x1, halfHeight, z1);
+            tess.addVertex(x0, halfHeight, z0);
         }
         world.theProfiler.endSection();
         world.theProfiler.startSection("draw");
@@ -253,8 +280,9 @@ public class LOTRRenderNorthernLights {
 
     public static void update(EntityLivingBase viewer) {
         AuroraCycle cycle;
-        float speed;
+        float freq;
         float amp;
+        float speed;
         ++nlTick;
         World world = viewer.worldObj;
         int effectiveDay = LOTRDate.ShireReckoning.currentDay;
@@ -265,12 +293,10 @@ public class LOTRRenderNorthernLights {
         if (effectiveDay != currentNightNum) {
             currentNightNum = effectiveDay;
             dateRand.setSeed((long)currentNightNum * 35920558925051L + (long)currentNightNum + 83025820626792L);
-            LOTRDate.ShireReckoning.Month month = LOTRDate.ShireReckoning.getShireDate((int)LOTRRenderNorthernLights.currentNightNum).month;
-            boolean isYule = month == LOTRDate.ShireReckoning.Month.YULE_1 || month == LOTRDate.ShireReckoning.Month.YULE_2;
             maxNorthTonight = -35000.0f;
             minNorthTonight = MathHelper.randomFloatClamp((Random)dateRand, (float)-20000.0f, (float)-15000.0f);
             float goSouth = dateRand.nextFloat();
-            if (isYule || goSouth < 0.01f) {
+            if (LOTRMod.isChristmas() || goSouth < 0.01f) {
                 minNorthTonight += 15000.0f;
             } else if (goSouth < 0.1f) {
                 minNorthTonight += 10000.0f;
@@ -281,7 +307,7 @@ public class LOTRRenderNorthernLights {
                 minNorthTonight = 1000000.0f;
             }
             float appearChance = 0.5f;
-            brightnessTonight = isYule || dateRand.nextFloat() < appearChance ? MathHelper.randomFloatClamp((Random)dateRand, (float)0.4f, (float)1.0f) : 0.0f;
+            brightnessTonight = LOTRMod.isChristmas() || dateRand.nextFloat() < appearChance ? MathHelper.randomFloatClamp((Random)dateRand, (float)0.4f, (float)1.0f) : 0.0f;
         }
         rainingTickPrev = rainingTick;
         boolean raining = LOTRRenderNorthernLights.isRainLayerAt(viewer);
@@ -306,7 +332,7 @@ public class LOTRRenderNorthernLights {
             colorMidNext = cs[1].getColorComponents(null);
             colorBottomNext = cs[2].getColorComponents(null);
             colorChangeTick = colorChangeTime = MathHelper.getRandomIntegerInRange((Random)rand, (int)100, (int)200);
-            utumnoCheckTime = 0;
+            nightKingCheckTime = 0;
         }
         if (colorChangeTick > 0 && --colorChangeTick <= 0) {
             colorChangeTime = 0;
@@ -318,31 +344,31 @@ public class LOTRRenderNorthernLights {
             colorBottomNext = null;
             timeUntilColorChange = MathHelper.getRandomIntegerInRange((Random)rand, (int)1200, (int)2400);
         }
-        if (utumnoCheckTime > 0) {
-            --utumnoCheckTime;
+        if (nightKingCheckTime > 0) {
+            --nightKingCheckTime;
         } else {
             double range = 256.0;
             if (LOTRFixedStructures.UTUMNO_ENTRANCE.distanceSqTo(viewer) <= range * range) {
-                atUtumno = true;
+                atNightKing = true;
                 timeUntilColorChange = 0;
                 colorTopNext = new float[]{1.0f, 0.4f, 0.0f};
                 colorMidNext = new float[]{1.0f, 0.0f, 0.0f};
                 colorBottomNext = new float[]{1.0f, 0.0f, 0.3f};
                 colorChangeTick = colorChangeTime = MathHelper.getRandomIntegerInRange((Random)rand, (int)100, (int)200);
             } else {
-                atUtumno = false;
+                atNightKing = false;
             }
-            utumnoCheckTime = 200;
+            nightKingCheckTime = 200;
         }
-        if (atUtumno) {
-            if (utumnoChange < 200) {
-                ++utumnoChange;
+        if (atNightKing) {
+            if (nightKingChange < 200) {
+                ++nightKingChange;
             }
-        } else if (utumnoChange > 0) {
-            --utumnoChange;
+        } else if (nightKingChange > 0) {
+            --nightKingChange;
         }
         if (rand.nextInt(50) == 0) {
-            float freq = MathHelper.randomFloatClamp((Random)rand, (float)8.0f, (float)100.0f);
+            freq = MathHelper.randomFloatClamp((Random)rand, (float)8.0f, (float)100.0f);
             speed = freq * 5.0E-4f;
             amp = MathHelper.randomFloatClamp((Random)rand, (float)0.05f, (float)0.3f);
             cycle = new AuroraCycle(freq, speed, amp);
@@ -359,7 +385,7 @@ public class LOTRRenderNorthernLights {
             waveOscillations.removeAll(removes);
         }
         if (rand.nextInt(120) == 0) {
-            float freq = MathHelper.randomFloatClamp((Random)rand, (float)30.0f, (float)150.0f);
+            freq = MathHelper.randomFloatClamp((Random)rand, (float)30.0f, (float)150.0f);
             speed = freq * 0.002f;
             amp = MathHelper.randomFloatClamp((Random)rand, (float)0.05f, (float)0.5f);
             cycle = new AuroraCycle(freq, speed, amp);
@@ -367,7 +393,7 @@ public class LOTRRenderNorthernLights {
             glowOscillations.add(cycle);
         }
         if (rand.nextInt(300) == 0) {
-            float freq = MathHelper.randomFloatClamp((Random)rand, (float)400.0f, (float)500.0f);
+            freq = MathHelper.randomFloatClamp((Random)rand, (float)400.0f, (float)500.0f);
             speed = freq * 0.004f;
             amp = MathHelper.randomFloatClamp((Random)rand, (float)0.1f, (float)0.2f);
             cycle = new AuroraCycle(freq, speed, amp);
@@ -385,29 +411,7 @@ public class LOTRRenderNorthernLights {
         }
     }
 
-    private static Color[] generateColorSet() {
-        float h1 = MathHelper.randomFloatClamp((Random)rand, (float)0.21f, (float)0.44f);
-        float h2 = MathHelper.randomFloatClamp((Random)rand, (float)0.21f, (float)0.44f);
-        float h3 = MathHelper.randomFloatClamp((Random)rand, (float)0.21f, (float)0.44f);
-        if (rand.nextInt(3) == 0) {
-            h1 = MathHelper.randomFloatClamp((Random)rand, (float)0.78f, (float)1.08f);
-        }
-        if (rand.nextInt(5) == 0) {
-            h1 = MathHelper.randomFloatClamp((Random)rand, (float)0.78f, (float)1.08f);
-            h2 = MathHelper.randomFloatClamp((Random)rand, (float)0.85f, (float)1.08f);
-        }
-        if (rand.nextInt(50) == 0) {
-            h1 = MathHelper.randomFloatClamp((Random)rand, (float)0.7f, (float)1.08f);
-            h2 = MathHelper.randomFloatClamp((Random)rand, (float)0.54f, (float)0.77f);
-            h3 = MathHelper.randomFloatClamp((Random)rand, (float)0.48f, (float)0.7f);
-        }
-        Color topColor = new Color(Color.HSBtoRGB(h1, 1.0f, 1.0f));
-        Color midColor = new Color(Color.HSBtoRGB(h2, 1.0f, 1.0f));
-        Color bottomColor = new Color(Color.HSBtoRGB(h3, 1.0f, 1.0f));
-        return new Color[]{topColor, midColor, bottomColor};
-    }
-
-    private static float waveEquation(Minecraft mc, float t, float tick, float renderTick) {
+    public static float waveEquation(Minecraft mc, float t, float tick, float renderTick) {
         float f = 0.0f;
         f += wave0.calc(t, tick);
         for (AuroraCycle c : waveOscillations) {
@@ -416,20 +420,9 @@ public class LOTRRenderNorthernLights {
         return f;
     }
 
-    private static float glowEquation(Minecraft mc, float t, float tick, float renderTick) {
-        float f = 0.0f;
-        f += glow0.calc(t, tick);
-        if (mc.gameSettings.fancyGraphics) {
-            for (AuroraCycle c : glowOscillations) {
-                f += c.calc(t, tick);
-            }
-        }
-        return f;
-    }
-
     static {
-        atUtumno = false;
-        utumnoChange = 0;
+        rainingChangeTime = 80;
+        nightKingChangeTime = 200;
         rand = new Random();
         dateRand = new Random();
         wave0 = new AuroraCycle(4.0f, 0.01f, 0.9f);
@@ -438,13 +431,13 @@ public class LOTRRenderNorthernLights {
         glow0 = new AuroraCycle(20.0f, 0.02f, 0.6f);
     }
 
-    private static class AuroraCycle {
-        public final float freq;
-        public final float tickMultiplier;
-        public final float amp;
+    public static class AuroraCycle {
+        public float freq;
+        public float tickMultiplier;
+        public float amp;
         public int age;
         public int maxAge = -1;
-        private float ampModifier = 1.0f;
+        public float ampModifier = 1.0f;
 
         public AuroraCycle(float f, float t, float a) {
             this.freq = f;

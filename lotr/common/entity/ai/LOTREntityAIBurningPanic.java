@@ -65,8 +65,8 @@ extends EntityAIBase {
     private Vec3 findWaterLocation() {
         Random random = this.theEntity.getRNG();
         for (int l = 0; l < 32; ++l) {
-            int j;
             int k;
+            int j;
             int i = MathHelper.floor_double((double)this.theEntity.posX) + MathHelper.getRandomIntegerInRange((Random)random, (int)-8, (int)8);
             if (this.theWorld.getBlock(i, (j = MathHelper.floor_double((double)this.theEntity.boundingBox.minY) + MathHelper.getRandomIntegerInRange((Random)random, (int)-8, (int)8)) + 1, k = MathHelper.floor_double((double)this.theEntity.posZ) + MathHelper.getRandomIntegerInRange((Random)random, (int)-8, (int)8)).isNormalCube() || this.theWorld.getBlock(i, j, k).isNormalCube() || this.theWorld.getBlock(i, j - 1, k).getMaterial() != Material.water) continue;
             return Vec3.createVectorHelper((double)((double)i + 0.5), (double)((double)j + 0.5), (double)((double)k + 0.5));

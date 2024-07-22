@@ -11,7 +11,6 @@ import lotr.common.world.biome.LOTRMusicRegion;
 public class LOTRTrackRegionInfo {
     private LOTRMusicRegion region;
     private List<String> subregions = new ArrayList<String>();
-    private static final double defaultWeight = 1.0;
     private double weight;
     private List<LOTRMusicCategory> categories = new ArrayList<LOTRMusicCategory>();
 

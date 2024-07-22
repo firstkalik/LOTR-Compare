@@ -14,9 +14,9 @@
 package lotr.common.world.structure2;
 
 import java.lang.reflect.Constructor;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.Random;
 import lotr.common.LOTRFoods;
 import lotr.common.LOTRMod;
@@ -72,8 +72,8 @@ extends LOTRWorldGenNomadStructure {
         }
         for (int i1 = -14; i1 <= 14; ++i1) {
             for (int k1 = -6; k1 <= 8; ++k1) {
-                int i2 = Math.abs(i1);
-                int k2 = Math.abs(k1);
+                Math.abs(i1);
+                Math.abs(k1);
                 if (!this.isSurface(world, i1, 0, k1)) {
                     this.laySandBase(world, i1, 0, k1);
                 }
@@ -103,14 +103,12 @@ extends LOTRWorldGenNomadStructure {
         this.placeAnimalJar(world, -4, 4, 5, LOTRMod.birdCage, 2, new LOTREntityBird(world));
         this.placeAnimalJar(world, -4, 5, -1, LOTRMod.birdCage, 0, new LOTREntityBird(world));
         this.placeAnimalJar(world, 0, 5, 5, LOTRMod.birdCageWood, 0, new LOTREntityBird(world));
-        ArrayList<Class> stallClasses = new ArrayList<Class>(Arrays.asList(stalls));
-        while (stallClasses.size() > 3) {
-            stallClasses.remove(random.nextInt(stallClasses.size()));
-        }
+        List<Class> stallClasses = Arrays.asList(Arrays.copyOf(stalls, stalls.length));
+        Collections.shuffle(stallClasses, random);
         try {
-            LOTRWorldGenStructureBase2 stall0 = (LOTRWorldGenStructureBase2)((Object)((Class)stallClasses.get(0)).getConstructor(Boolean.TYPE).newInstance(this.notifyChanges));
-            LOTRWorldGenStructureBase2 stall1 = (LOTRWorldGenStructureBase2)((Object)((Class)stallClasses.get(1)).getConstructor(Boolean.TYPE).newInstance(this.notifyChanges));
-            LOTRWorldGenStructureBase2 stall2 = (LOTRWorldGenStructureBase2)((Object)((Class)stallClasses.get(2)).getConstructor(Boolean.TYPE).newInstance(this.notifyChanges));
+            LOTRWorldGenStructureBase2 stall0 = (LOTRWorldGenStructureBase2)((Object)stallClasses.get(0).getConstructor(Boolean.TYPE).newInstance(this.notifyChanges));
+            LOTRWorldGenStructureBase2 stall1 = (LOTRWorldGenStructureBase2)((Object)stallClasses.get(1).getConstructor(Boolean.TYPE).newInstance(this.notifyChanges));
+            LOTRWorldGenStructureBase2 stall2 = (LOTRWorldGenStructureBase2)((Object)stallClasses.get(2).getConstructor(Boolean.TYPE).newInstance(this.notifyChanges));
             this.generateSubstructure(stall0, world, random, -4, 1, 6, 0);
             this.generateSubstructure(stall1, world, random, 0, 1, 6, 0);
             this.generateSubstructure(stall2, world, random, 4, 1, 6, 0);
@@ -121,41 +119,26 @@ extends LOTRWorldGenNomadStructure {
         return true;
     }
 
-    private static class Armourer
+    private static class Mason
     extends LOTRWorldGenStructureBase2 {
-        public Armourer(boolean flag) {
+        public Mason(boolean flag) {
             super(flag);
         }
 
         @Override
         public boolean generateWithSetRotation(World world, Random random, int i, int j, int k, int rotation) {
             this.setOriginAndRotation(world, i, j, k, rotation, 0);
-            this.setBlockAndMetadata(world, 1, 1, 1, Blocks.anvil, 1);
-            this.placeArmorStand(world, 0, 1, 1, 0, new ItemStack[]{new ItemStack(LOTRMod.helmetMoredainLion), new ItemStack(LOTRMod.bodyHarnedor), new ItemStack(LOTRMod.legsNomad), new ItemStack(LOTRMod.bootsNomad)});
-            this.placeWeaponRack(world, -1, 2, -2, 2, new LOTRWorldGenNomadBazaarTent(false).getRandomNomadWeapon(random));
-            LOTREntityNomadArmourer trader = new LOTREntityNomadArmourer(world);
-            this.spawnNPCAndSetHome(trader, world, 0, 1, 0, 4);
-            return true;
-        }
-    }
-
-    private static class Miner
-    extends LOTRWorldGenStructureBase2 {
-        public Miner(boolean flag) {
-            super(flag);
-        }
-
-        @Override
-        public boolean generateWithSetRotation(World world, Random random, int i, int j, int k, int rotation) {
-            this.setOriginAndRotation(world, i, j, k, rotation, 0);
-            this.setBlockAndMetadata(world, -1, 1, 1, LOTRMod.oreCopper, 0);
-            this.setBlockAndMetadata(world, -1, 2, 1, LOTRMod.oreTin, 0);
-            this.setBlockAndMetadata(world, 0, 1, 1, LOTRMod.oreCopper, 0);
-            this.setBlockAndMetadata(world, 1, 1, 1, LOTRMod.oreTin, 0);
-            this.setBlockAndMetadata(world, 1, 2, 1, Blocks.lapis_ore, 0);
-            this.setBlockAndMetadata(world, 1, 1, 0, Blocks.lapis_ore, 0);
-            this.placeWeaponRack(world, 0, 2, 1, 6, new ItemStack(LOTRMod.pickaxeBronze));
-            LOTREntityNomadMiner trader = new LOTREntityNomadMiner(world);
+            this.setBlockAndMetadata(world, -1, 1, 1, LOTRMod.redSandstone, 0);
+            this.setBlockAndMetadata(world, -1, 2, 1, LOTRMod.redSandstone, 0);
+            this.setBlockAndMetadata(world, -1, 3, 1, LOTRMod.redSandstone, 0);
+            this.setBlockAndMetadata(world, -1, 1, 0, Blocks.sandstone, 0);
+            this.setBlockAndMetadata(world, -1, 2, 0, Blocks.sandstone, 0);
+            this.setBlockAndMetadata(world, 0, 1, 1, LOTRMod.brick, 15);
+            this.setBlockAndMetadata(world, 0, 2, 1, LOTRMod.slabSingle4, 0);
+            this.setBlockAndMetadata(world, 1, 1, 1, LOTRMod.brick, 15);
+            this.setBlockAndMetadata(world, 1, 2, 1, LOTRMod.slabSingle4, 0);
+            this.placeWeaponRack(world, 1, 3, 1, 6, new ItemStack(LOTRMod.pickaxeBronze));
+            LOTREntityNomadMason trader = new LOTREntityNomadMason(world);
             this.spawnNPCAndSetHome(trader, world, 0, 1, 0, 4);
             return true;
         }
@@ -183,26 +166,41 @@ extends LOTRWorldGenNomadStructure {
         }
     }
 
-    private static class Mason
+    private static class Miner
     extends LOTRWorldGenStructureBase2 {
-        public Mason(boolean flag) {
+        public Miner(boolean flag) {
             super(flag);
         }
 
         @Override
         public boolean generateWithSetRotation(World world, Random random, int i, int j, int k, int rotation) {
             this.setOriginAndRotation(world, i, j, k, rotation, 0);
-            this.setBlockAndMetadata(world, -1, 1, 1, LOTRMod.redSandstone, 0);
-            this.setBlockAndMetadata(world, -1, 2, 1, LOTRMod.redSandstone, 0);
-            this.setBlockAndMetadata(world, -1, 3, 1, LOTRMod.redSandstone, 0);
-            this.setBlockAndMetadata(world, -1, 1, 0, Blocks.sandstone, 0);
-            this.setBlockAndMetadata(world, -1, 2, 0, Blocks.sandstone, 0);
-            this.setBlockAndMetadata(world, 0, 1, 1, LOTRMod.brick, 15);
-            this.setBlockAndMetadata(world, 0, 2, 1, LOTRMod.slabSingle4, 0);
-            this.setBlockAndMetadata(world, 1, 1, 1, LOTRMod.brick, 15);
-            this.setBlockAndMetadata(world, 1, 2, 1, LOTRMod.slabSingle4, 0);
-            this.placeWeaponRack(world, 1, 3, 1, 6, new ItemStack(LOTRMod.pickaxeBronze));
-            LOTREntityNomadMason trader = new LOTREntityNomadMason(world);
+            this.setBlockAndMetadata(world, -1, 1, 1, LOTRMod.oreCopper, 0);
+            this.setBlockAndMetadata(world, -1, 2, 1, LOTRMod.oreTin, 0);
+            this.setBlockAndMetadata(world, 0, 1, 1, LOTRMod.oreCopper, 0);
+            this.setBlockAndMetadata(world, 1, 1, 1, LOTRMod.oreTin, 0);
+            this.setBlockAndMetadata(world, 1, 2, 1, Blocks.lapis_ore, 0);
+            this.setBlockAndMetadata(world, 1, 1, 0, Blocks.lapis_ore, 0);
+            this.placeWeaponRack(world, 0, 2, 1, 6, new ItemStack(LOTRMod.pickaxeBronze));
+            LOTREntityNomadMiner trader = new LOTREntityNomadMiner(world);
+            this.spawnNPCAndSetHome(trader, world, 0, 1, 0, 4);
+            return true;
+        }
+    }
+
+    private static class Armourer
+    extends LOTRWorldGenStructureBase2 {
+        public Armourer(boolean flag) {
+            super(flag);
+        }
+
+        @Override
+        public boolean generateWithSetRotation(World world, Random random, int i, int j, int k, int rotation) {
+            this.setOriginAndRotation(world, i, j, k, rotation, 0);
+            this.setBlockAndMetadata(world, 1, 1, 1, Blocks.anvil, 1);
+            this.placeArmorStand(world, 0, 1, 1, 0, new ItemStack[]{new ItemStack(LOTRMod.helmetMoredainLion), new ItemStack(LOTRMod.bodyHarnedor), new ItemStack(LOTRMod.legsNomad), new ItemStack(LOTRMod.bootsNomad)});
+            this.placeWeaponRack(world, -1, 2, -2, 2, new LOTRWorldGenNomadBazaarTent(false).getRandomNomadWeapon(random));
+            LOTREntityNomadArmourer trader = new LOTREntityNomadArmourer(world);
             this.spawnNPCAndSetHome(trader, world, 0, 1, 0, 4);
             return true;
         }

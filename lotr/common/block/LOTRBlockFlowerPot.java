@@ -84,11 +84,10 @@ implements ITileEntityProvider {
     }
 
     public ArrayList<ItemStack> getDrops(World world, int i, int j, int k, int meta, int fortune) {
-        LOTRTileEntityFlowerPot pot;
         ItemStack itemstack;
         ArrayList<ItemStack> drops = new ArrayList<ItemStack>();
         drops.add(new ItemStack(Items.flower_pot));
-        if ((meta & 8) == 0 && (itemstack = LOTRBlockFlowerPot.getPlant((IBlockAccess)world, i, j, k)) != null && (pot = (LOTRTileEntityFlowerPot)world.getTileEntity(i, j, k)) != null) {
+        if ((meta & 8) == 0 && (itemstack = LOTRBlockFlowerPot.getPlant((IBlockAccess)world, i, j, k)) != null && (LOTRTileEntityFlowerPot)world.getTileEntity(i, j, k) != null) {
             drops.add(itemstack);
         }
         return drops;

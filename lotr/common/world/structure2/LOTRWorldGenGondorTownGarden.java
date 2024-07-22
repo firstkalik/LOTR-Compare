@@ -28,6 +28,7 @@ extends LOTRWorldGenGondorStructure {
 
     @Override
     public boolean generateWithSetRotation(World world, Random random, int i, int j, int k, int rotation) {
+        int j1;
         int k1;
         int i1;
         this.setOriginAndRotation(world, i, j, k, rotation, 0);
@@ -35,7 +36,7 @@ extends LOTRWorldGenGondorStructure {
         if (this.restrictions) {
             for (i1 = -3; i1 <= 3; ++i1) {
                 for (k1 = 0; k1 <= 3; ++k1) {
-                    int j1 = this.getTopBlock(world, i1, k1) - 1;
+                    j1 = this.getTopBlock(world, i1, k1) - 1;
                     if (this.isSurface(world, i1, j1, k1)) continue;
                     return false;
                 }
@@ -43,7 +44,6 @@ extends LOTRWorldGenGondorStructure {
         }
         for (i1 = -3; i1 <= 3; ++i1) {
             for (k1 = 0; k1 <= 3; ++k1) {
-                int j1;
                 int i2 = Math.abs(i1);
                 for (j1 = 0; !(j1 < 0 && this.isOpaque(world, i1, j1, k1) || this.getY(j1) < 0); --j1) {
                     this.setBlockAndMetadata(world, i1, j1, k1, this.rockSlabDoubleBlock, this.rockSlabDoubleMeta);

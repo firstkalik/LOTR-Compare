@@ -52,8 +52,7 @@ extends LOTRBlockGateDwarven {
         for (DoorSize s : DoorSize.values()) {
             for (int i = 0; i < s.width; ++i) {
                 for (int j = 0; j < s.height; ++j) {
-                    IIcon icon;
-                    s.icons[i][j] = icon = iconregister.registerIcon(this.getTextureName() + "_glow_" + s.doorName + "_" + i + "_" + j);
+                    s.icons[i][j] = iconregister.registerIcon(this.getTextureName() + "_glow_" + s.doorName + "_" + i + "_" + j);
                 }
             }
         }
@@ -64,12 +63,13 @@ extends LOTRBlockGateDwarven {
         LOTRTileEntityDwarvenDoor door = (LOTRTileEntityDwarvenDoor)world.getTileEntity(i, j, k);
         if (door != null) {
             int meta = world.getBlockMetadata(i, j, k);
-            int dir = LOTRBlockGateDwarvenIthildin.getGateDirection(meta);
+            int dir = LOTRBlockGate.getGateDirection(meta);
             door.setDoorSizeAndPos(null, 0, 0);
             door.setDoorBasePos(i, j, k);
             if (dir != 0 && dir != 1) {
                 int xzFactorX;
-                int n = dir == 2 ? 1 : (xzFactorX = dir == 3 ? -1 : 0);
+                int n;
+                int n2 = dir == 2 ? 1 : (xzFactorX = (n = dir == 3 ? -1 : 0));
                 int xzFactorZ = dir == 4 ? -1 : (dir == 5 ? 1 : 0);
                 block0: for (DoorSize doorSize : DoorSize.orderedSizes) {
                     int width = doorSize.width;
@@ -78,13 +78,13 @@ extends LOTRBlockGateDwarven {
                     int rangeY = height - 1;
                     for (int y = -rangeY; y <= 0; ++y) {
                         for (int xz = -rangeXZ; xz <= 0; ++xz) {
+                            TileEntity te;
                             int j2;
                             int i2;
-                            int xz1;
-                            TileEntity te;
-                            LOTRTileEntityDwarvenDoor otherDoor;
                             int y1;
                             int k2;
+                            LOTRTileEntityDwarvenDoor otherDoor;
+                            int xz1;
                             int j1 = j + y;
                             int i1 = i + xz * xzFactorX;
                             int k1 = k + xz * xzFactorZ;
@@ -92,7 +92,6 @@ extends LOTRBlockGateDwarven {
                             boolean canReplaceSize = true;
                             block3: for (y1 = 0; y1 <= rangeY; ++y1) {
                                 for (xz1 = 0; xz1 <= rangeXZ; ++xz1) {
-                                    DoorSize otherSize;
                                     j2 = j1 + y1;
                                     i2 = i1 + xz1 * xzFactorX;
                                     k2 = k1 + xz1 * xzFactorZ;
@@ -102,7 +101,7 @@ extends LOTRBlockGateDwarven {
                                         break block3;
                                     }
                                     te = world.getTileEntity(i2, j2, k2);
-                                    if (!(te instanceof LOTRTileEntityDwarvenDoor) || DoorSize.compareLarger.compare(otherSize = (otherDoor = (LOTRTileEntityDwarvenDoor)te).getDoorSize(), doorSize) == 1) continue;
+                                    if (!(te instanceof LOTRTileEntityDwarvenDoor) || DoorSize.compareLarger.compare((otherDoor = (LOTRTileEntityDwarvenDoor)te).getDoorSize(), doorSize) == 1) continue;
                                     canReplaceSize = false;
                                     break block3;
                                 }
@@ -133,9 +132,10 @@ extends LOTRBlockGateDwarven {
         int dir;
         DoorSize doorSize;
         LOTRTileEntityDwarvenDoor door = (LOTRTileEntityDwarvenDoor)world.getTileEntity(i, j, k);
-        if (door != null && (doorSize = door.getDoorSize()) != null && (dir = LOTRBlockGateDwarvenIthildin.getGateDirection(meta)) != 0 && dir != 1) {
+        if (door != null && (doorSize = door.getDoorSize()) != null && (dir = LOTRBlockGate.getGateDirection(meta)) != 0 && dir != 1) {
             int xzFactorX;
-            int n = dir == 2 ? 1 : (xzFactorX = dir == 3 ? -1 : 0);
+            int n;
+            int n2 = dir == 2 ? 1 : (xzFactorX = (n = dir == 3 ? -1 : 0));
             int xzFactorZ = dir == 4 ? -1 : (dir == 5 ? 1 : 0);
             int width = doorSize.width;
             int height = doorSize.height;
@@ -159,8 +159,8 @@ extends LOTRBlockGateDwarven {
     public IIcon getGlowIcon(IBlockAccess world, int i, int j, int k, int side) {
         TileEntity te;
         int meta = world.getBlockMetadata(i, j, k);
-        int dir = LOTRBlockGateDwarvenIthildin.getGateDirection(meta);
-        boolean open = LOTRBlockGateDwarvenIthildin.isGateOpen(world, i, j, k);
+        int dir = LOTRBlockGate.getGateDirection(meta);
+        boolean open = LOTRBlockGate.isGateOpen(world, i, j, k);
         if (!open && dir == Facing.oppositeSide[side] && (te = world.getTileEntity(i, j, k)) instanceof LOTRTileEntityDwarvenDoor) {
             LOTRTileEntityDwarvenDoor door = (LOTRTileEntityDwarvenDoor)te;
             return door.getDoorSize().icons[door.getDoorPosX()][door.getDoorPosY()];
@@ -178,8 +178,8 @@ extends LOTRBlockGateDwarven {
         int meta = world.getBlockMetadata(i, j, k);
         Block otherBlock = world.getBlock(i1, j1, k1);
         int otherMeta = world.getBlockMetadata(i1, j1, k1);
-        int dir = LOTRBlockGateDwarvenIthildin.getGateDirection(meta);
-        int otherDir = LOTRBlockGateDwarvenIthildin.getGateDirection(otherMeta);
+        int dir = LOTRBlockGate.getGateDirection(meta);
+        int otherDir = LOTRBlockGate.getGateDirection(otherMeta);
         return block == this && block == otherBlock && ((LOTRBlockGate)block).directionsMatch(dir, otherDir) && ((LOTRBlockGate)otherBlock).directionsMatch(dir, otherDir);
     }
 

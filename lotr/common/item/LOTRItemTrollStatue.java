@@ -101,8 +101,7 @@ extends Item {
 
     @SideOnly(value=Side.CLIENT)
     public void addInformation(ItemStack itemstack, EntityPlayer entityplayer, List list, boolean flag) {
-        boolean twoHeads;
-        if (itemstack.hasTagCompound() && (twoHeads = itemstack.getTagCompound().getBoolean("TwoHeads"))) {
+        if (itemstack.hasTagCompound() && itemstack.getTagCompound().getBoolean("TwoHeads")) {
             list.add(StatCollector.translateToLocal((String)"item.lotr.trollStatue.twoHeads"));
         }
     }

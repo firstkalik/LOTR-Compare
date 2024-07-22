@@ -52,14 +52,9 @@ extends LOTRBiome {
         this.spawnableCreatureList.clear();
         this.spawnableWaterCreatureList.clear();
         this.spawnableLOTRAmbientList.clear();
-        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer = new LOTRBiomeSpawnList.SpawnListContainer[3];
-        arrspawnListContainer[0] = LOTRBiomeSpawnList.entry(LOTRSpawnList.MORDOR_ORCS, 10);
-        arrspawnListContainer[1] = LOTRBiomeSpawnList.entry(LOTRSpawnList.MORDOR_BOMBARDIERS, 1);
-        arrspawnListContainer[2] = LOTRBiomeSpawnList.entry(LOTRSpawnList.MORDOR_WARGS, 2).setConquestOnly();
+        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer = new LOTRBiomeSpawnList.SpawnListContainer[]{LOTRBiomeSpawnList.entry(LOTRSpawnList.MORDOR_ORCS, 10), LOTRBiomeSpawnList.entry(LOTRSpawnList.MORDOR_BOMBARDIERS, 1), LOTRBiomeSpawnList.entry(LOTRSpawnList.MORDOR_WARGS, 2).setConquestOnly()};
         this.npcSpawnList.newFactionList(100).add(arrspawnListContainer);
-        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer2 = new LOTRBiomeSpawnList.SpawnListContainer[2];
-        arrspawnListContainer2[0] = LOTRBiomeSpawnList.entry(LOTRSpawnList.GONDOR_SOLDIERS, 5);
-        arrspawnListContainer2[1] = LOTRBiomeSpawnList.entry(LOTRSpawnList.RANGERS_ITHILIEN, 5);
+        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer2 = new LOTRBiomeSpawnList.SpawnListContainer[]{LOTRBiomeSpawnList.entry(LOTRSpawnList.GONDOR_SOLDIERS, 5), LOTRBiomeSpawnList.entry(LOTRSpawnList.RANGERS_ITHILIEN, 5)};
         this.npcSpawnList.newFactionList(0).add(arrspawnListContainer2);
         this.decorator.treesPerChunk = 0;
         this.decorator.flowersPerChunk = 0;
@@ -102,7 +97,6 @@ extends LOTRBiome {
 
     @Override
     public void generateBiomeTerrain(World world, Random random, Block[] blocks, byte[] meta, int i, int k, double stoneNoise, int height, LOTRBiomeVariant variant) {
-        double d6;
         Block topBlock_pre = this.topBlock;
         int topBlockMeta_pre = this.topBlockMeta;
         Block fillerBlock_pre = this.fillerBlock;
@@ -112,7 +106,7 @@ extends LOTRBiome {
         double d3 = this.noiseGravel.func_151601_a((double)i * 0.09, (double)k * 0.09);
         double d4 = this.noiseGravel.func_151601_a((double)i * 0.6, (double)k * 0.6);
         double d5 = this.noiseMordorGravel.func_151601_a((double)i * 0.09, (double)k * 0.09);
-        if (d5 + (d6 = this.noiseMordorGravel.func_151601_a((double)i * 0.6, (double)k * 0.6)) > 0.5) {
+        if (d5 + this.noiseMordorGravel.func_151601_a((double)i * 0.6, (double)k * 0.6) > 0.5) {
             this.topBlock = LOTRMod.mordorGravel;
             this.topBlockMeta = 0;
         } else if (d3 + d4 > 0.6) {

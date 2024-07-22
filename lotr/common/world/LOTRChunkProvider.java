@@ -3,7 +3,7 @@
  * 
  * Could not load the following classes:
  *  net.minecraft.block.Block
- *  net.minecraft.block.BlockSand
+ *  net.minecraft.block.BlockFalling
  *  net.minecraft.entity.EnumCreatureType
  *  net.minecraft.init.Blocks
  *  net.minecraft.util.IProgressUpdate
@@ -24,6 +24,7 @@ package lotr.common.world;
 
 import java.util.List;
 import java.util.Random;
+import lotr.common.LOTRConfig;
 import lotr.common.world.LOTRWorldChunkManager;
 import lotr.common.world.biome.LOTRBiome;
 import lotr.common.world.biome.LOTRBiomeDecorator;
@@ -35,11 +36,13 @@ import lotr.common.world.map.LOTRRoadGenerator;
 import lotr.common.world.map.LOTRRoads;
 import lotr.common.world.mapgen.LOTRMapGenCaves;
 import lotr.common.world.mapgen.LOTRMapGenRavine;
+import lotr.common.world.mapgen.bluedwarvenmine.LOTRMapGenBlueDwarvenMine;
 import lotr.common.world.mapgen.dwarvenmine.LOTRMapGenDwarvenMine;
+import lotr.common.world.mapgen.reddwarvenmine.LOTRMapGenRedDwarvenMine;
 import lotr.common.world.mapgen.tpyr.LOTRMapGenTauredainPyramid;
 import lotr.common.world.spawning.LOTRSpawnerAnimals;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockSand;
+import net.minecraft.block.BlockFalling;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.IProgressUpdate;
@@ -62,15 +65,6 @@ implements IChunkProvider {
     private Random rand;
     private BiomeGenBase[] biomesForGeneration;
     private LOTRBiomeVariant[] variantsForGeneration;
-    private static final double COORDINATE_SCALE = 684.412;
-    private static final double HEIGHT_SCALE = 1.0;
-    private static final double MAIN_NOISE_SCALE_XZ = 400.0;
-    private static final double MAIN_NOISE_SCALE_Y = 5000.0;
-    private static final double DEPTH_NOISE_SCALE = 200.0;
-    private static final double DEPTH_NOISE_EXP = 0.5;
-    private static final double HEIGHT_STRETCH = 6.0;
-    private static final double UPPER_LIMIT_SCALE = 512.0;
-    private static final double LOWER_LIMIT_SCALE = 512.0;
     private int biomeSampleRadius;
     private int biomeSampleWidth;
     private NoiseGeneratorOctaves noiseGen1;
@@ -91,6 +85,8 @@ implements IChunkProvider {
     private LOTRMapGenCaves caveGenerator = new LOTRMapGenCaves();
     private MapGenBase ravineGenerator = new LOTRMapGenRavine();
     private MapGenStructure dwarvenMineGenerator = new LOTRMapGenDwarvenMine();
+    private MapGenStructure blueDwarvenMineGenerator = new LOTRMapGenBlueDwarvenMine();
+    private MapGenStructure redDwarvenMineGenerator = new LOTRMapGenRedDwarvenMine();
     private MapGenStructure tauredainPyramid = new LOTRMapGenTauredainPyramid();
     public static final int seaLevel = 62;
 
@@ -108,8 +104,7 @@ implements IChunkProvider {
         this.biomeHeightNoise = new float[this.biomeSampleWidth * this.biomeSampleWidth];
         for (int i = -this.biomeSampleRadius; i <= this.biomeSampleRadius; ++i) {
             for (int k = -this.biomeSampleRadius; k <= this.biomeSampleRadius; ++k) {
-                float f;
-                this.biomeHeightNoise[i + this.biomeSampleRadius + (k + this.biomeSampleRadius) * this.biomeSampleWidth] = f = 10.0f / MathHelper.sqrt_float((float)((float)(i * i + k * k) + 0.2f));
+                this.biomeHeightNoise[i + this.biomeSampleRadius + (k + this.biomeSampleRadius) * this.biomeSampleWidth] = 10.0f / MathHelper.sqrt_float((float)((float)(i * i + k * k) + 0.2f));
             }
         }
     }
@@ -173,8 +168,6 @@ implements IChunkProvider {
         for (int i1 = 0; i1 < 16; ++i1) {
             for (int k1 = 0; k1 < 16; ++k1) {
                 int index;
-                boolean road;
-                Block block;
                 int x = i * 16 + i1;
                 int z = k * 16 + k1;
                 int xzIndex = i1 * 16 + k1;
@@ -191,10 +184,10 @@ implements IChunkProvider {
                 }
                 biome.generateBiomeTerrain(this.worldObj, this.rand, blocks, metadata, x, z, this.stoneNoise[xzIndex], height, variant);
                 if (!LOTRFixedStructures.hasMapFeatures(this.worldObj)) continue;
-                chunkFlags.roadFlags[xzIndex] = road = LOTRRoadGenerator.generateRoad(this.worldObj, this.rand, x, z, biome, blocks, metadata, this.blockHeightNoiseArray);
+                chunkFlags.roadFlags[xzIndex] = LOTRRoadGenerator.generateRoad(this.worldObj, this.rand, x, z, biome, blocks, metadata, this.blockHeightNoiseArray);
                 int lavaHeight = LOTRMountains.getLavaHeight(x, z);
                 if (lavaHeight <= 0) continue;
-                for (int j = lavaHeight; j >= 0 && !(block = blocks[index = xzIndex * ySize + j]).isOpaqueCube(); --j) {
+                for (int j = lavaHeight; j >= 0 && !blocks[index = xzIndex * ySize + j].isOpaqueCube(); --j) {
                     blocks[index] = Blocks.lava;
                     metadata[index] = 0;
                 }
@@ -213,13 +206,17 @@ implements IChunkProvider {
         byte[] metadata = new byte[65536];
         ChunkFlags chunkFlags = new ChunkFlags();
         this.generateTerrain(i, k, blocks, chunkFlags);
+        if (LOTRConfig.spawnDwarvenMine) {
+            this.dwarvenMineGenerator.func_151539_a((IChunkProvider)this, this.worldObj, i, k, blocks);
+            this.blueDwarvenMineGenerator.func_151539_a((IChunkProvider)this, this.worldObj, i, k, blocks);
+            this.redDwarvenMineGenerator.func_151539_a((IChunkProvider)this, this.worldObj, i, k, blocks);
+        }
         this.biomesForGeneration = chunkManager.loadBlockGeneratorData(this.biomesForGeneration, i * 16, k * 16, 16, 16);
         this.variantsForGeneration = chunkManager.getBiomeVariants(this.variantsForGeneration, i * 16, k * 16, 16, 16);
         this.replaceBlocksForBiome(i, k, blocks, metadata, this.biomesForGeneration, this.variantsForGeneration, chunkFlags);
         this.caveGenerator.chunkFlags = chunkFlags;
         this.caveGenerator.func_151539_a((IChunkProvider)this, this.worldObj, i, k, blocks);
         this.ravineGenerator.func_151539_a((IChunkProvider)this, this.worldObj, i, k, blocks);
-        this.dwarvenMineGenerator.func_151539_a((IChunkProvider)this, this.worldObj, i, k, blocks);
         this.tauredainPyramid.func_151539_a((IChunkProvider)this, this.worldObj, i, k, blocks);
         Chunk chunk = new Chunk(this.worldObj, i, k);
         ExtendedBlockStorage[] blockStorage = chunk.getBlockStorageArray();
@@ -276,15 +273,16 @@ implements IChunkProvider {
         int noiseIndex = 0;
         for (int i1 = 0; i1 < xSize; ++i1) {
             for (int k1 = 0; k1 < zSize; ++k1) {
-                double heightNoise;
+                double d;
+                double d2;
+                float heightVariation;
                 int xPos = i + i1 << 2;
                 int zPos = k + k1 << 2;
                 float totalBaseHeight = 0.0f;
                 float totalHeightVariation = 0.0f;
                 float totalHeightNoise = 0.0f;
-                float totalVariantHillFactor = 0.0f;
                 float totalFlatBiomeHeight = 0.0f;
-                int biomeCount = 0;
+                int totalFlatBiomeCount = 0;
                 int centreBiomeIndex = i1 + this.biomeSampleRadius + (k1 + this.biomeSampleRadius) * (xSize + this.biomeSampleWidth);
                 BiomeGenBase centreBiome = this.biomesForGeneration[centreBiomeIndex];
                 LOTRBiomeVariant centreVariant = this.variantsForGeneration[centreBiomeIndex];
@@ -294,20 +292,19 @@ implements IChunkProvider {
                 }
                 for (int i2 = -this.biomeSampleRadius; i2 <= this.biomeSampleRadius; ++i2) {
                     for (int k2 = -this.biomeSampleRadius; k2 <= this.biomeSampleRadius; ++k2) {
+                        float baseHeightPlus;
                         int biomeIndex = i1 + i2 + this.biomeSampleRadius + (k1 + k2 + this.biomeSampleRadius) * (xSize + this.biomeSampleWidth);
                         BiomeGenBase biome = this.biomesForGeneration[biomeIndex];
                         LOTRBiomeVariant variant = this.variantsForGeneration[biomeIndex];
                         int xPosHere = xPos + (i2 << 2);
                         int zPosHere = zPos + (k2 << 2);
                         float baseHeight = biome.rootHeight + variant.getHeightBoostAt(xPosHere, zPosHere);
-                        float heightVariation = biome.heightVariation * variant.hillFactor;
+                        heightVariation = biome.heightVariation * variant.hillFactor;
                         if (variant.absoluteHeight) {
                             baseHeight = variant.getHeightBoostAt(xPosHere, zPosHere);
                             heightVariation = variant.hillFactor;
                         }
-                        float hillFactor = variant.hillFactor;
-                        float baseHeightPlus = baseHeight + 2.0f;
-                        if (baseHeightPlus == 0.0f) {
+                        if ((baseHeightPlus = baseHeight + 2.0f) == 0.0f) {
                             baseHeightPlus = 0.001f;
                         }
                         float heightNoise2 = this.biomeHeightNoise[i2 + this.biomeSampleRadius + (k2 + this.biomeSampleRadius) * this.biomeSampleWidth] / baseHeightPlus / 2.0f;
@@ -318,7 +315,6 @@ implements IChunkProvider {
                         totalBaseHeight += baseHeight * heightNoise2;
                         totalHeightVariation += heightVariation * heightNoise2;
                         totalHeightNoise += heightNoise2;
-                        totalVariantHillFactor += hillFactor;
                         float flatBiomeHeight = biome.rootHeight;
                         boolean isWater = ((LOTRBiome)biome).isWateryBiome();
                         if (variant.absoluteHeight && variant.absoluteHeightLevel < 0.0f) {
@@ -328,22 +324,22 @@ implements IChunkProvider {
                             flatBiomeHeight = baseHeight;
                         }
                         totalFlatBiomeHeight += flatBiomeHeight;
-                        ++biomeCount;
+                        ++totalFlatBiomeCount;
                     }
                 }
                 float avgBaseHeight = totalBaseHeight / totalHeightNoise;
                 float avgHeightVariation = totalHeightVariation / totalHeightNoise;
-                float avgFlatBiomeHeight = totalFlatBiomeHeight / (float)biomeCount;
-                float avgVariantHillFactor = totalVariantHillFactor / (float)biomeCount;
+                float avgFlatBiomeHeight = totalFlatBiomeHeight / (float)totalFlatBiomeCount;
                 if (LOTRFixedStructures.hasMapFeatures(this.worldObj)) {
-                    float mountain;
+                    float f;
                     float roadNear = LOTRRoads.isRoadNear(xPos, zPos, 32);
                     if (roadNear >= 0.0f) {
                         float interpFactor = roadNear;
                         avgBaseHeight = avgFlatBiomeHeight + (avgBaseHeight - avgFlatBiomeHeight) * interpFactor;
                         avgHeightVariation *= interpFactor;
                     }
-                    if ((mountain = LOTRMountains.getTotalHeightBoost(xPos, zPos)) > 0.005f) {
+                    float mountain = LOTRMountains.getTotalHeightBoost(xPos, zPos);
+                    if (f > 0.005f) {
                         avgBaseHeight += mountain;
                         float mtnV = 0.2f;
                         float dv = avgHeightVariation - mtnV;
@@ -362,11 +358,15 @@ implements IChunkProvider {
                 if (avgHeightVariation == 0.0f) {
                     avgHeightVariation = 0.001f;
                 }
-                if ((heightNoise = this.noise6[noiseIndexXZ] / 8000.0) < 0.0) {
+                double heightNoise = this.noise6[noiseIndexXZ] / 8000.0;
+                if (d < 0.0) {
                     heightNoise = -heightNoise * 0.3;
                 }
-                if ((heightNoise = heightNoise * 3.0 - 2.0) < 0.0) {
-                    if ((heightNoise /= 2.0) < -1.0) {
+                heightNoise = heightNoise * 3.0 - 2.0;
+                if (d2 < 0.0) {
+                    double d3;
+                    heightNoise /= 2.0;
+                    if (d3 < -1.0) {
                         heightNoise = -1.0;
                     }
                     heightNoise /= 1.4;
@@ -380,18 +380,18 @@ implements IChunkProvider {
                 ++noiseIndexXZ;
                 for (int j1 = 0; j1 < ySize; ++j1) {
                     double baseHeight = avgBaseHeight;
-                    double heightVariation = avgHeightVariation;
-                    baseHeight += heightNoise * 0.2 * (double)avgVariantHillFactor;
+                    heightVariation = avgHeightVariation;
+                    baseHeight += heightNoise * 0.2 * (double)centreVariant.hillFactor;
                     baseHeight = baseHeight * (double)ySize / 16.0;
                     double var28 = (double)ySize / 2.0 + baseHeight * 4.0;
                     double totalNoise = 0.0;
-                    double var32 = ((double)j1 - var28) * heightStretch * 128.0 / 256.0 / heightVariation;
+                    double var32 = ((double)j1 - var28) * heightStretch * 128.0 / 256.0 / (double)heightVariation;
                     if (var32 < 0.0) {
                         var32 *= 4.0;
                     }
                     double var34 = this.noise1[noiseIndex] / 512.0;
                     double var36 = this.noise2[noiseIndex] / 512.0;
-                    double var38 = (this.noise3[noiseIndex] / 10.0 + 1.0) / 2.0 * (double)avgVariantHillFactor;
+                    double var38 = (this.noise3[noiseIndex] / 10.0 + 1.0) / 2.0 * (double)centreVariant.hillFactor;
                     totalNoise = var38 < 0.0 ? var34 : (var38 > 1.0 ? var36 : var34 + (var36 - var34) * var38);
                     totalNoise -= var32;
                     if (j1 > ySize - 4) {
@@ -411,10 +411,10 @@ implements IChunkProvider {
     }
 
     public void populate(IChunkProvider ichunkprovider, int i, int j) {
+        int j1;
         int k1;
         int i1;
-        int j1;
-        BlockSand.fallInstantly = true;
+        BlockFalling.fallInstantly = true;
         int k = i * 16;
         int l = j * 16;
         LOTRBiome biome = (LOTRBiome)this.worldObj.getBiomeGenForCoords(k + 16, l + 16);
@@ -423,7 +423,11 @@ implements IChunkProvider {
         long l1 = this.rand.nextLong() / 2L * 2L + 1L;
         long l2 = this.rand.nextLong() / 2L * 2L + 1L;
         this.rand.setSeed((long)i * l1 + (long)j * l2 ^ this.worldObj.getSeed());
-        this.dwarvenMineGenerator.generateStructuresInChunk(this.worldObj, this.rand, i, j);
+        if (LOTRConfig.spawnDwarvenMine) {
+            this.dwarvenMineGenerator.generateStructuresInChunk(this.worldObj, this.rand, i, j);
+            this.blueDwarvenMineGenerator.generateStructuresInChunk(this.worldObj, this.rand, i, j);
+            this.redDwarvenMineGenerator.generateStructuresInChunk(this.worldObj, this.rand, i, j);
+        }
         this.tauredainPyramid.generateStructuresInChunk(this.worldObj, this.rand, i, j);
         if (this.rand.nextInt(4) == 0) {
             i1 = k + this.rand.nextInt(16) + 8;
@@ -464,7 +468,7 @@ implements IChunkProvider {
                 this.worldObj.setBlock(i1 + k, j12, k12 + l, Blocks.snow_layer, 0, 2);
             }
         }
-        BlockSand.fallInstantly = false;
+        BlockFalling.fallInstantly = false;
     }
 
     public boolean saveChunks(boolean flag, IProgressUpdate update) {
@@ -500,7 +504,11 @@ implements IChunkProvider {
     }
 
     public void recreateStructures(int i, int k) {
-        this.dwarvenMineGenerator.func_151539_a((IChunkProvider)this, this.worldObj, i, k, null);
+        if (LOTRConfig.spawnDwarvenMine) {
+            this.dwarvenMineGenerator.func_151539_a((IChunkProvider)this, this.worldObj, i, k, null);
+            this.redDwarvenMineGenerator.func_151539_a((IChunkProvider)this, this.worldObj, i, k, null);
+            this.blueDwarvenMineGenerator.func_151539_a((IChunkProvider)this, this.worldObj, i, k, null);
+        }
         this.tauredainPyramid.func_151539_a((IChunkProvider)this, this.worldObj, i, k, null);
     }
 

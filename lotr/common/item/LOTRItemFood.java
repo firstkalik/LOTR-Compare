@@ -33,6 +33,9 @@ extends ItemFood {
         if (!world.isRemote && this == LOTRMod.maggotyBread) {
             LOTRLevelData.getData(entityplayer).addAchievement(LOTRAchievement.eatMaggotyBread);
         }
+        if (!world.isRemote && this == LOTRMod.kham) {
+            LOTRLevelData.getData(entityplayer).addAchievement(LOTRAchievement.eatKham);
+        }
         return super.onEaten(itemstack, world, entityplayer);
     }
 }

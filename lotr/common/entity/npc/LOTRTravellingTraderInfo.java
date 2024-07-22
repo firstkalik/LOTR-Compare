@@ -103,7 +103,7 @@ public class LOTRTravellingTraderInfo {
             }
             if (this.timeUntilDespawn == 2400) {
                 for (Object player : this.theEntity.worldObj.playerEntities) {
-                    LOTRSpeech.sendSpeechAndChatMessage((EntityPlayer)player, this.theEntity, this.theTrader.getDepartureSpeech());
+                    LOTRSpeech.sendSpeechBankWithChatMsg((EntityPlayer)player, this.theEntity, this.theTrader.getDepartureSpeech());
                 }
             }
             if (this.timeUntilDespawn == 0) {

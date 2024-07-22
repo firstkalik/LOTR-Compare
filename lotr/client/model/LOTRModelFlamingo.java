@@ -127,7 +127,7 @@ extends ModelBase {
             int cur = flamingo.getFishingTickCur();
             int pre = flamingo.getFishingTickPre();
             float fishing = (float)pre + (float)(cur - pre) * LOTRTickHandlerClient.renderTick;
-            if (cur > 160 + 20) {
+            if (cur > 180) {
                 this.head.rotateAngleX = 3.1415927f * (200.0f - fishing) / 20.0f;
             } else if (cur > 20) {
                 this.head.rotateAngleX = 3.1415927f;

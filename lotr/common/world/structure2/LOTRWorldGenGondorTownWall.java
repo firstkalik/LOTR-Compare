@@ -67,7 +67,7 @@ extends LOTRWorldGenGondorStructure {
         this.setupRandomBlocks(random);
         for (int i1 = this.xMin; i1 <= this.xMax; ++i1) {
             int j1;
-            int i2 = Math.abs(i1);
+            Math.abs(i1);
             int k1 = 0;
             this.findSurface(world, i1, k1);
             for (j1 = 1; !(j1 < 0 && this.isOpaque(world, i1, j1, k1) || this.getY(j1) < 0); --j1) {

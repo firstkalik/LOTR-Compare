@@ -14,9 +14,6 @@ public class LOTRMazeGenerator {
     public final int xSize;
     public final int zSize;
     private short[][] mazeFlags;
-    private static final short FLAG_PATH = 1;
-    private static final short FLAG_EXCLUDE = 2;
-    private static final short FLAG_DEADEND = 4;
     private int startX = -1;
     private int startZ = -1;
     private int endX = -1;
@@ -145,16 +142,6 @@ public class LOTRMazeGenerator {
         } while (++wx <= this.xSize / 2 + 1 && ++wz <= this.zSize / 2 + 1);
     }
 
-    private static class MazePos {
-        public int xPos;
-        public int zPos;
-
-        public MazePos(int x, int z) {
-            this.xPos = x;
-            this.zPos = z;
-        }
-    }
-
     private static enum Dir {
         XNEG(-1, 0),
         XPOS(1, 0),
@@ -167,6 +154,16 @@ public class LOTRMazeGenerator {
         private Dir(int x, int z) {
             this.xDir = x;
             this.zDir = z;
+        }
+    }
+
+    private static class MazePos {
+        public int xPos;
+        public int zPos;
+
+        public MazePos(int x, int z) {
+            this.xPos = x;
+            this.zPos = z;
         }
     }
 

@@ -32,30 +32,29 @@ extends LOTRWorldGenDaleStructure {
 
     @Override
     public boolean generateWithSetRotation(World world, Random random, int i, int j, int k, int rotation) {
-        int i1;
         int k1;
-        int j1;
         int j12;
         int k12;
-        Block block;
-        int j13;
+        int k13;
+        int j1;
+        int i1;
         this.setOriginAndRotation(world, i, j, k, rotation, 2);
         this.setupRandomBlocks(random);
         if (this.restrictions) {
             int minHeight = 0;
             int maxHeight = 0;
             for (int i12 = -5; i12 <= 5; ++i12) {
-                for (int k13 = -2; k13 <= 12; ++k13) {
-                    j1 = this.getTopBlock(world, i12, k13) - 1;
-                    block = this.getBlock(world, i12, j1, k13);
+                for (k13 = -2; k13 <= 12; ++k13) {
+                    int j13 = this.getTopBlock(world, i12, k13) - 1;
+                    Block block = this.getBlock(world, i12, j13, k13);
                     if (block != Blocks.grass) {
                         return false;
                     }
-                    if (j1 < minHeight) {
-                        minHeight = j1;
+                    if (j13 < minHeight) {
+                        minHeight = j13;
                     }
-                    if (j1 > maxHeight) {
-                        maxHeight = j1;
+                    if (j13 > maxHeight) {
+                        maxHeight = j13;
                     }
                     if (maxHeight - minHeight <= 6) continue;
                     return false;
@@ -64,14 +63,14 @@ extends LOTRWorldGenDaleStructure {
         }
         for (i1 = -3; i1 <= 3; ++i1) {
             for (k1 = 0; k1 <= 10; ++k1) {
-                j13 = 0;
-                while (!this.isOpaque(world, i1, j13, k1) && this.getY(j13) >= 0) {
-                    this.setBlockAndMetadata(world, i1, j13, k1, this.brickBlock, this.brickMeta);
-                    this.setGrassToDirt(world, i1, j13 - 1, k1);
-                    --j13;
+                j12 = 0;
+                while (!this.isOpaque(world, i1, j12, k1) && this.getY(j12) >= 0) {
+                    this.setBlockAndMetadata(world, i1, j12, k1, this.brickBlock, this.brickMeta);
+                    this.setGrassToDirt(world, i1, j12 - 1, k1);
+                    --j12;
                 }
-                for (j13 = 1; j13 <= 10; ++j13) {
-                    this.setAir(world, i1, j13, k1);
+                for (j12 = 1; j12 <= 10; ++j12) {
+                    this.setAir(world, i1, j12, k1);
                 }
             }
         }
@@ -160,9 +159,9 @@ extends LOTRWorldGenDaleStructure {
         }
         for (i1 = -4; i1 <= 4; ++i1) {
             if (IntMath.mod((int)i1, (int)4) == 0) {
-                for (j12 = 5; j12 <= 7; ++j12) {
-                    this.setBlockAndMetadata(world, i1, j12, -1, this.brickBlock, this.brickMeta);
-                    this.setBlockAndMetadata(world, i1, j12, 11, this.brickBlock, this.brickMeta);
+                for (j1 = 5; j1 <= 7; ++j1) {
+                    this.setBlockAndMetadata(world, i1, j1, -1, this.brickBlock, this.brickMeta);
+                    this.setBlockAndMetadata(world, i1, j1, 11, this.brickBlock, this.brickMeta);
                 }
                 this.setBlockAndMetadata(world, i1, 7, -2, this.brickStairBlock, 6);
                 this.setBlockAndMetadata(world, i1, 7, 12, this.brickStairBlock, 7);
@@ -174,9 +173,9 @@ extends LOTRWorldGenDaleStructure {
         }
         for (k12 = -1; k12 <= 11; ++k12) {
             if (IntMath.mod((int)k12, (int)4) == 3) {
-                for (j12 = 5; j12 <= 7; ++j12) {
-                    this.setBlockAndMetadata(world, -4, j12, k12, this.brickBlock, this.brickMeta);
-                    this.setBlockAndMetadata(world, 4, j12, k12, this.brickBlock, this.brickMeta);
+                for (j1 = 5; j1 <= 7; ++j1) {
+                    this.setBlockAndMetadata(world, -4, j1, k12, this.brickBlock, this.brickMeta);
+                    this.setBlockAndMetadata(world, 4, j1, k12, this.brickBlock, this.brickMeta);
                 }
                 this.setBlockAndMetadata(world, -5, 7, k12, this.brickStairBlock, 5);
                 this.setBlockAndMetadata(world, 5, 7, k12, this.brickStairBlock, 4);
@@ -235,12 +234,12 @@ extends LOTRWorldGenDaleStructure {
         }
         for (i1 = -1; i1 <= 1; ++i1) {
             for (k1 = 7; k1 <= 9; ++k1) {
-                for (j13 = 1; j13 <= 12; ++j13) {
+                for (j12 = 1; j12 <= 12; ++j12) {
                     if (i1 == 0 && k1 == 8) {
-                        this.setAir(world, i1, j13, k1);
+                        this.setAir(world, i1, j12, k1);
                         continue;
                     }
-                    this.setBlockAndMetadata(world, i1, j13, k1, this.brickBlock, this.brickMeta);
+                    this.setBlockAndMetadata(world, i1, j12, k1, this.brickBlock, this.brickMeta);
                 }
                 if (Math.abs(i1) == 1 && (k1 == 7 || k1 == 9)) {
                     this.setBlockAndMetadata(world, i1, 13, k1, this.brickSlabBlock, this.brickSlabMeta);
@@ -260,8 +259,8 @@ extends LOTRWorldGenDaleStructure {
         this.setBlockAndMetadata(world, 0, 3, 1, Blocks.torch, 3);
         int[] i14 = new int[]{-2, 2};
         k1 = i14.length;
-        for (j13 = 0; j13 < k1; ++j13) {
-            int i15 = i14[j13];
+        for (j12 = 0; j12 < k1; ++j12) {
+            int i15 = i14[j12];
             this.setBlockAndMetadata(world, i15, 1, 1, this.pillarBlock, this.pillarMeta);
             this.setBlockAndMetadata(world, i15, 2, 1, this.pillarBlock, this.pillarMeta);
             this.setBlockAndMetadata(world, i15, 3, 1, this.brickBlock, this.brickMeta);
@@ -280,14 +279,14 @@ extends LOTRWorldGenDaleStructure {
         this.setBlockAndMetadata(world, 2, 1, 3, LOTRMod.daleTable, 0);
         for (int l = 0; l <= 3; ++l) {
             k1 = 6 + l;
-            j13 = 1 + l;
-            int[] i15 = new int[]{-2, 2};
-            j1 = i15.length;
-            for (block = (Block)false; block < j1; ++block) {
-                int i16 = i15[block];
+            j12 = 1 + l;
+            int[] i12 = new int[]{-2, 2};
+            k13 = i12.length;
+            for (int i2 = 0; i2 < k13; ++i2) {
+                int i16 = i12[i2];
                 this.setAir(world, i16, 4, k1);
-                this.setBlockAndMetadata(world, i16, j13, k1, this.brickStairBlock, 2);
-                for (int j2 = j13 - 1; j2 >= 1; --j2) {
+                this.setBlockAndMetadata(world, i16, j12, k1, this.brickStairBlock, 2);
+                for (int j2 = j12 - 1; j2 >= 1; --j2) {
                     this.setBlockAndMetadata(world, i16, j2, k1, this.brickBlock, this.brickMeta);
                 }
             }
