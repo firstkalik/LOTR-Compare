@@ -74,31 +74,35 @@ implements IMessage {
             EntityPlayerMP entityplayer = context.getServerHandler().playerEntity;
             if (!LOTRConfig.enableFastTravel) {
                 entityplayer.addChatMessage((IChatComponent)new ChatComponentTranslation("chat.lotr.ftDisabled", new Object[0]));
-            } else {
-                LOTRPlayerData playerData = LOTRLevelData.getData((EntityPlayer)entityplayer);
-                boolean isCustom = packet.isCustom;
-                int waypointID = packet.wpID;
-                LOTRAbstractWaypoint waypoint = null;
-                if (!isCustom) {
-                    if (waypointID >= 0 && waypointID < LOTRWaypoint.values().length) {
-                        waypoint = LOTRWaypoint.values()[waypointID];
-                    }
-                } else {
-                    UUID sharingPlayer = packet.sharingPlayer;
-                    LOTRAbstractWaypoint lOTRAbstractWaypoint = waypoint = sharingPlayer != null ? playerData.getSharedCustomWaypointByID(sharingPlayer, waypointID) : playerData.getCustomWaypointByID(waypointID);
+                return null;
+            }
+            LOTRPlayerData playerData = LOTRLevelData.getData((EntityPlayer)entityplayer);
+            if (playerData.isFastTravelDisabled()) {
+                entityplayer.addChatMessage((IChatComponent)new ChatComponentTranslation("lotr.fasttravel.disabled", new Object[0]));
+                return null;
+            }
+            boolean isCustom = packet.isCustom;
+            int waypointID = packet.wpID;
+            LOTRAbstractWaypoint waypoint = null;
+            if (!isCustom) {
+                if (waypointID >= 0 && waypointID < LOTRWaypoint.values().length) {
+                    waypoint = LOTRWaypoint.values()[waypointID];
                 }
-                if (waypoint != null && waypoint.hasPlayerUnlocked((EntityPlayer)entityplayer)) {
-                    if (playerData.getTimeSinceFT() < playerData.getWaypointFTTime(waypoint, (EntityPlayer)entityplayer)) {
+            } else {
+                UUID sharingPlayer = packet.sharingPlayer;
+                LOTRAbstractWaypoint lOTRAbstractWaypoint = waypoint = sharingPlayer != null ? playerData.getSharedCustomWaypointByID(sharingPlayer, waypointID) : playerData.getCustomWaypointByID(waypointID);
+            }
+            if (waypoint != null && waypoint.hasPlayerUnlocked((EntityPlayer)entityplayer)) {
+                if (playerData.getTimeSinceFT() < playerData.getWaypointFTTime(waypoint, (EntityPlayer)entityplayer)) {
+                    entityplayer.closeScreen();
+                    entityplayer.addChatMessage((IChatComponent)new ChatComponentTranslation("lotr.fastTravel.moreTime", new Object[]{waypoint.getDisplayName()}));
+                } else {
+                    boolean canTravel = playerData.canFastTravel();
+                    if (!canTravel) {
                         entityplayer.closeScreen();
-                        entityplayer.addChatMessage((IChatComponent)new ChatComponentTranslation("lotr.fastTravel.moreTime", new Object[]{waypoint.getDisplayName()}));
+                        entityplayer.addChatMessage((IChatComponent)new ChatComponentTranslation("lotr.fastTravel.underAttack", new Object[0]));
                     } else {
-                        boolean canTravel = playerData.canFastTravel();
-                        if (!canTravel) {
-                            entityplayer.closeScreen();
-                            entityplayer.addChatMessage((IChatComponent)new ChatComponentTranslation("lotr.fastTravel.underAttack", new Object[0]));
-                        } else {
-                            playerData.setTargetFTWaypoint(waypoint);
-                        }
+                        playerData.setTargetFTWaypoint(waypoint);
                     }
                 }
             }

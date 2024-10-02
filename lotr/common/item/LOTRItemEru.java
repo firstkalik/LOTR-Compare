@@ -50,16 +50,19 @@ implements LOTRStoryItem {
         catch (Exception e) {
             e.printStackTrace();
         }
-        itemstack.damageItem(10, (EntityLivingBase)entity);
         if (Math.random() * 10.0 <= 100.0) {
+            itemstack.damageItem(10, (EntityLivingBase)entity);
+        }
+        if (!world.isRemote) {
+            LOTRLevelData.getData(entity).addAchievement(LOTRAchievement.enterLotr);
             entity.inventory.addItemStackToInventory(new ItemStack(LOTRMod.spell_heal, 1));
             entity.inventory.addItemStackToInventory(new ItemStack(LOTRMod.spell_healthboost, 1));
+            entity.inventory.addItemStackToInventory(new ItemStack(LOTRMod.cloth, 1));
+            entity.inventory.addItemStackToInventory(new ItemStack(LOTRMod.cloth2, 1));
+            entity.inventory.addItemStackToInventory(new ItemStack(LOTRMod.bodyBilbo, 1));
+            entity.inventory.addItemStackToInventory(new ItemStack(LOTRMod.sting, 1));
+            world.playSoundEffect((double)i + 0.5, (double)j + 0.5, (double)k + 0.5, "lotr:lion.hurt", 2.0f, 1.0f);
         }
-        if (Math.random() * 100.0 <= 100.0) {
-            entity.inventory.addItemStackToInventory(new ItemStack(LOTRMod.daggerMithril, 1));
-            LOTRLevelData.getData(entity).addAchievement(LOTRAchievement.enterLotr);
-        }
-        world.playSoundEffect((double)i + 0.5, (double)j + 0.5, (double)k + 0.5, "lotr:lion.hurt", 2.0f, 1.0f);
         return itemstack;
     }
 
@@ -70,11 +73,15 @@ implements LOTRStoryItem {
     public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List list, boolean par4) {
         list.add("\u00a7eCode: \u00a76Mevans (Owner) ");
         list.add("\u00a7lSupport: \u00a72Hummel009 \u00a72DwarfyAssassin\u00a76 FirstKalik");
-        list.add("\u00a7lTextures: \u00a72ElderKing \u00a74Morzan \u00a73Skylfr \u00a77Gruk \u00a7bFerin_I\u00a76 FirstKalik");
-        list.add("\u00a72Hummel009 ");
+        list.add("\u00a7lTextures: \u00a72ElderKing \u00a74Happy_Devil SlayingSlayer\u00a74 Morzan ");
+        list.add("\u00a72Hummel009 \u00a73Skylfr \u00a77Gruk \u00a7bFerin_I\u00a76 FirstKalik");
         list.add("\u00a7lTranslators: \u00a7eBek \u00a7bGalarcel \u00a7bAlqualinde \u00a72Hummel009 ");
         list.add("\u00a7lTesters: \u00a76Mr_Vexus \u00a72ElderKing \u00a7lFhrain \u00a7eThorin");
         list.add("\u00a78Right Click to Open");
+    }
+
+    public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
+        return super.onItemUseFirst(stack, player, world, x, y, z, side, hitX, hitY, hitZ);
     }
 
     public EnumRarity getRarity(ItemStack par1ItemStack) {

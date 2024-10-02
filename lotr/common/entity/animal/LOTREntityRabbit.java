@@ -4,12 +4,14 @@
  * Could not load the following classes:
  *  net.minecraft.block.Block
  *  net.minecraft.block.BlockGrass
+ *  net.minecraft.block.BlockSand
  *  net.minecraft.block.material.Material
  *  net.minecraft.entity.DataWatcher
  *  net.minecraft.entity.Entity
  *  net.minecraft.entity.EntityCreature
  *  net.minecraft.entity.EntityLiving
  *  net.minecraft.entity.EntityLivingBase
+ *  net.minecraft.entity.IEntityLivingData
  *  net.minecraft.entity.SharedMonsterAttributes
  *  net.minecraft.entity.ai.EntityAIBase
  *  net.minecraft.entity.ai.EntityAILookIdle
@@ -25,12 +27,14 @@
  *  net.minecraft.init.Items
  *  net.minecraft.item.Item
  *  net.minecraft.item.ItemStack
+ *  net.minecraft.nbt.NBTTagCompound
  *  net.minecraft.pathfinding.PathNavigate
  *  net.minecraft.util.AxisAlignedBB
  *  net.minecraft.util.DamageSource
  *  net.minecraft.util.MathHelper
  *  net.minecraft.util.MovingObjectPosition
  *  net.minecraft.world.World
+ *  net.minecraft.world.biome.BiomeGenBase
  */
 package lotr.common.entity.animal;
 
@@ -49,14 +53,20 @@ import lotr.common.entity.animal.LOTRAmbientCreature;
 import lotr.common.entity.animal.LOTRAmbientSpawnChecks;
 import lotr.common.entity.npc.LOTREntityNPC;
 import lotr.common.entity.npc.LOTRFarmhand;
+import lotr.common.world.biome.LOTRBiomeGenLastDesert;
+import lotr.common.world.biome.LOTRBiomeGenNearHarad;
+import lotr.common.world.biome.LOTRBiomeGenRedSemiDesert;
+import lotr.common.world.biome.LOTRBiomeGenRhunSemiDesert;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockGrass;
+import net.minecraft.block.BlockSand;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.DataWatcher;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityAILookIdle;
@@ -72,12 +82,14 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.BiomeGenBase;
 
 public class LOTREntityRabbit
 extends EntityCreature
@@ -102,6 +114,7 @@ LOTRRandomSkinEntity {
     public void entityInit() {
         super.entityInit();
         this.dataWatcher.addObject(17, (Object)0);
+        this.dataWatcher.addObject(18, (Object)0);
     }
 
     public boolean isRabbitEating() {
@@ -136,6 +149,19 @@ LOTRRandomSkinEntity {
         return flag;
     }
 
+    public IEntityLivingData onSpawnWithEgg(IEntityLivingData data) {
+        int k;
+        data = super.onSpawnWithEgg(data);
+        int i = MathHelper.floor_double((double)this.posX);
+        BiomeGenBase biome = this.worldObj.getBiomeGenForCoords(i, k = MathHelper.floor_double((double)this.posZ));
+        if (biome instanceof LOTRBiomeGenLastDesert || biome instanceof LOTRBiomeGenRhunSemiDesert || biome instanceof LOTRBiomeGenRedSemiDesert || biome instanceof LOTRBiomeGenNearHarad) {
+            this.setRabbitType(RabbitType.DESERT);
+        } else {
+            this.setRabbitType(RabbitType.COMMON);
+        }
+        return data;
+    }
+
     public void dropFewItems(boolean flag, int i) {
         int meat = this.rand.nextInt(3) + this.rand.nextInt(1 + i);
         for (int l = 0; l < meat; ++l) {
@@ -145,7 +171,7 @@ LOTRRandomSkinEntity {
             }
             this.dropItem(LOTRMod.rabbitRaw, 1);
         }
-        int j3 = this.rand.nextInt(2) + this.rand.nextInt(1 + i);
+        int j3 = this.rand.nextInt(8) + this.rand.nextInt(1 + i);
         for (int k = 0; k < j3; ++k) {
             this.dropItem(Items.bone, 1);
         }
@@ -159,8 +185,11 @@ LOTRRandomSkinEntity {
         if (super.getCanSpawnHere()) {
             boolean flag = LOTRAmbientSpawnChecks.canSpawn((EntityLiving)this, 8, 4, 32, 4, Material.plants, Material.vine);
             if (flag) {
+                int j;
+                int k;
                 int i = MathHelper.floor_double((double)this.posX);
-                return !this.anyFarmhandsNearby(i, MathHelper.floor_double((double)this.posY), MathHelper.floor_double((double)this.posZ));
+                Block blockBelow = this.worldObj.getBlock(i, (j = MathHelper.floor_double((double)this.posY)) - 1, k = MathHelper.floor_double((double)this.posZ));
+                return (blockBelow == Blocks.grass || blockBelow == Blocks.sand) && !this.anyFarmhandsNearby(i, j, k);
             }
         }
         return false;
@@ -196,8 +225,48 @@ LOTRRandomSkinEntity {
         return 200;
     }
 
+    public RabbitType getRabbitType() {
+        byte i = this.dataWatcher.getWatchableObjectByte(18);
+        if (i < 0 || i >= RabbitType.values().length) {
+            i = 0;
+        }
+        return RabbitType.values()[i];
+    }
+
+    public void setRabbitType(RabbitType type) {
+        this.setRabbitType(type.ordinal());
+    }
+
+    public void setRabbitType(int i) {
+        this.dataWatcher.updateObject(18, (Object)((byte)i));
+    }
+
+    public void readEntityFromNBT(NBTTagCompound nbt) {
+        super.readEntityFromNBT(nbt);
+        this.setRabbitType(nbt.getInteger("RabbitType"));
+        this.setRabbitEating(nbt.getBoolean("RabbitEating"));
+    }
+
+    public void writeEntityToNBT(NBTTagCompound nbt) {
+        super.writeEntityToNBT(nbt);
+        nbt.setInteger("RabbitType", this.getRabbitType().ordinal());
+        nbt.setBoolean("RabbitEating", this.isRabbitEating());
+    }
+
     public ItemStack getPickedResult(MovingObjectPosition target) {
         return new ItemStack(LOTRMod.spawnEgg, 1, LOTREntities.getEntityID((Entity)this));
     }
+
+    public static enum RabbitType {
+        COMMON("common"),
+        DESERT("desert");
+
+        public String textureDir;
+
+        private RabbitType(String s) {
+            this.textureDir = s;
+        }
+    }
+
 }
 

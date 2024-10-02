@@ -11,7 +11,7 @@ package lotr.client.render.entity;
 import lotr.client.model.LOTRModelBearRug2;
 import lotr.client.render.entity.LOTRRenderBear2;
 import lotr.client.render.entity.LOTRRenderRugBase;
-import lotr.common.entity.animal.LOTREntityBear2;
+import lotr.common.entity.animal.LOTREntityPolarBear;
 import lotr.common.entity.item.LOTREntityBearRug2;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.entity.Entity;

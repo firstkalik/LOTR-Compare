@@ -2,105 +2,113 @@
  * Decompiled with CFR 0.148.
  * 
  * Could not load the following classes:
- *  cpw.mods.fml.common.network.NetworkRegistry
- *  cpw.mods.fml.common.network.NetworkRegistry$TargetPoint
- *  cpw.mods.fml.common.network.simpleimpl.IMessage
- *  cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper
  *  net.minecraft.creativetab.CreativeTabs
  *  net.minecraft.entity.Entity
+ *  net.minecraft.entity.EntityCreature
  *  net.minecraft.entity.EntityLivingBase
- *  net.minecraft.entity.item.EntityEnderPearl
+ *  net.minecraft.entity.passive.EntityHorse
+ *  net.minecraft.entity.passive.EntityTameable
  *  net.minecraft.entity.player.EntityPlayer
- *  net.minecraft.entity.player.PlayerCapabilities
+ *  net.minecraft.entity.projectile.EntityArrow
  *  net.minecraft.item.EnumAction
  *  net.minecraft.item.Item
+ *  net.minecraft.item.Item$ToolMaterial
  *  net.minecraft.item.ItemStack
- *  net.minecraft.util.ChatComponentText
- *  net.minecraft.util.IChatComponent
+ *  net.minecraft.util.AxisAlignedBB
+ *  net.minecraft.util.DamageSource
+ *  net.minecraft.util.EntityDamageSourceIndirect
  *  net.minecraft.world.World
  */
 package lotr.common.item;
 
-import cpw.mods.fml.common.network.NetworkRegistry;
-import cpw.mods.fml.common.network.simpleimpl.IMessage;
-import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
-import java.util.Random;
-import lotr.common.LOTRAchievement;
+import java.util.List;
 import lotr.common.LOTRCreativeTabs;
-import lotr.common.LOTRLevelData;
-import lotr.common.item.LOTRItemBaseRing3;
+import lotr.common.LOTRMod;
+import lotr.common.entity.npc.LOTREntityNPCRideable;
+import lotr.common.item.LOTRItemSword;
 import lotr.common.item.LOTRStoryItem;
-import lotr.common.network.LOTRPacketHandler;
-import lotr.common.network.LOTRPacketWeaponFX;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityEnderPearl;
+import net.minecraft.entity.passive.EntityHorse;
+import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.PlayerCapabilities;
+import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.IChatComponent;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraft.world.World;
 
 public class LOTRItemPallandoStaff
-extends LOTRItemBaseRing3
+extends LOTRItemSword
 implements LOTRStoryItem {
-    public static int defaultCharges = 1500;
-    public static int cooldown = 40;
-
     public LOTRItemPallandoStaff() {
-        this.setMaxDamage(defaultCharges + 1);
+        super(Item.ToolMaterial.IRON);
         this.setMaxDamage(1500);
+        this.lotrWeaponDamage = 9.0f;
         this.setCreativeTab((CreativeTabs)LOTRCreativeTabs.tabStory);
-        this.lotrWeaponDamage = 7.0f;
     }
 
-    public boolean onItemUse(ItemStack srcItemStack, EntityPlayer playerEntity, World world, int par4, int par5, int par6, int par7, float par8, float par9, float par10) {
-        return super.onItemUse(srcItemStack, playerEntity, world, par4, par5, par6, par7, par8, par9, par10);
-    }
-
-    @Override
-    public ItemStack onItemRightClick(ItemStack srcItemStack, World world, EntityPlayer playerEntity) {
-        playerEntity.setItemInUse(srcItemStack, this.getMaxItemUseDuration(srcItemStack));
-        return srcItemStack;
-    }
-
-    public ItemStack onEaten(ItemStack srcItemStack, World world, EntityPlayer playerEntity) {
-        if (!playerEntity.capabilities.isCreativeMode) {
-            if (this.isOutOfCharge(srcItemStack)) {
-                this.playSound(noChargeAttackSound, world, playerEntity);
-                return srcItemStack;
-            }
-            srcItemStack.damageItem(this.getUseCost(), (EntityLivingBase)playerEntity);
-        }
-        world.playSoundAtEntity((Entity)playerEntity, "lotr:item.pooff", 1.0f, (itemRand.nextFloat() - itemRand.nextFloat()) * 0.2f + 1.0f);
+    public static void useStaff1(ItemStack itemstack, World world, EntityLivingBase user) {
+        user.swingItem();
         if (!world.isRemote) {
-            world.spawnEntityInWorld((Entity)new EntityEnderPearl(world, (EntityLivingBase)playerEntity));
-            LOTRPacketWeaponFX packet = new LOTRPacketWeaponFX(LOTRPacketWeaponFX.Type.FIREBALL_GANDALF_WHITE, (Entity)playerEntity);
-            LOTRPacketHandler.networkWrapper.sendToAllAround((IMessage)packet, LOTRPacketHandler.nearEntity((Entity)playerEntity, 256.0));
-            LOTRLevelData.getData(playerEntity).addAchievement(LOTRAchievement.useRing);
-            playerEntity.addChatMessage((IChatComponent)new ChatComponentText("\u00a7a\u0421\u043f\u043e\u0441\u043e\u0431\u043d\u043e\u0441\u0442\u044c \u0410\u043a\u0442\u0438\u0432\u0438\u0440\u043e\u0432\u0430\u043d\u0430"));
-            srcItemStack.damageItem(1, (EntityLivingBase)playerEntity);
+            List entities = world.getEntitiesWithinAABB(EntityLivingBase.class, user.boundingBox.expand(64.0, 64.0, 64.0));
+            for (EntityLivingBase entity : entities) {
+                if (entity == user || entity instanceof EntityHorse && ((EntityHorse)entity).isTame() || entity instanceof EntityTameable && ((EntityTameable)entity).isTamed()) continue;
+                entity.attackEntityFrom(DamageSource.magic, 5.0f);
+                if (!LOTRMod.canNPCAttackEntity((EntityCreature)user, entity, false)) continue;
+                EntityArrow arrow = new EntityArrow(world, user, 1.6f);
+                arrow.setDamage(5.0);
+                world.spawnEntityInWorld((Entity)arrow);
+            }
         }
-        return srcItemStack;
+    }
+
+    public static ItemStack useStaff(ItemStack itemstack, World world, EntityLivingBase user) {
+        user.swingItem();
+        if (!world.isRemote) {
+            List entities = world.getEntitiesWithinAABB(EntityLivingBase.class, user.boundingBox.expand(32.0, 32.0, 32.0));
+            for (EntityLivingBase entity : entities) {
+                if (entity == user || entity instanceof EntityHorse && ((EntityHorse)entity).isTame() || entity instanceof EntityTameable && ((EntityTameable)entity).isTamed() || entity instanceof LOTREntityNPCRideable && ((LOTREntityNPCRideable)entity).isNPCTamed()) continue;
+                entity.attackEntityFrom(new EntityDamageSourceIndirect("lotr:item.pooff", (Entity)entity, (Entity)user).setMagicDamage().setDamageBypassesArmor().setDamageAllowedInCreativeMode(), 5.0f);
+                if (!LOTRMod.canPlayerAttackEntity((EntityPlayer)user, entity, false)) continue;
+                EntityArrow arrow = new EntityArrow(world, user, entity, 1.6f, 0.0f);
+                arrow.setDamage(3.0);
+                arrow.canBePickedUp = 0;
+                world.spawnEntityInWorld((Entity)arrow);
+                itemstack.damageItem(1, user);
+            }
+        }
+        return itemstack;
     }
 
     @Override
-    public EnumAction getItemUseAction(ItemStack par1ItemStack) {
+    public boolean hitEntity(ItemStack item, EntityLivingBase hitEntity, EntityLivingBase attackingEntity) {
+        LOTRItemPallandoStaff.useStaff(item, hitEntity.worldObj, attackingEntity);
+        return true;
+    }
+
+    public EnumAction getItemUseAction(ItemStack itemstack) {
         return EnumAction.bow;
     }
 
-    @Override
-    public int getUseCost() {
-        return 1;
+    public int getMaxItemUseDuration(ItemStack itemstack) {
+        return 40;
+    }
+
+    public ItemStack onEaten(ItemStack itemstack, World world, EntityPlayer entityplayer) {
+        itemstack.damageItem(2, (EntityLivingBase)entityplayer);
+        return LOTRItemPallandoStaff.useStaff(itemstack, world, (EntityLivingBase)entityplayer);
     }
 
     @Override
-    public int getBaseRepairCost() {
-        return 3;
+    public ItemStack onItemRightClick(ItemStack itemstack, World world, EntityPlayer entityplayer) {
+        entityplayer.setItemInUse(itemstack, this.getMaxItemUseDuration(itemstack));
+        return itemstack;
     }
 }
 

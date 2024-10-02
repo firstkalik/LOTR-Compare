@@ -26,8 +26,8 @@ import cpw.mods.fml.relauncher.SideOnly;
 import java.util.Random;
 import lotr.common.LOTRCommonProxy;
 import lotr.common.LOTRMod;
-import lotr.common.entity.npc.LOTREntityMountainTroll;
-import lotr.common.entity.npc.LOTREntityTroll;
+import lotr.common.entity.npc.LOTREntityMountainTroll2;
+import lotr.common.entity.npc.LOTREntityTroll2;
 import net.minecraft.block.Block;
 import net.minecraft.entity.DataWatcher;
 import net.minecraft.entity.Entity;
@@ -119,9 +119,9 @@ extends EntityThrowable {
             }
             if (flag) {
                 if (this.getSpawnsTroll()) {
-                    LOTREntityTroll troll = new LOTREntityTroll(this.worldObj);
+                    LOTREntityTroll2 troll = new LOTREntityTroll2(this.worldObj);
                     if (this.rand.nextInt(3) == 0) {
-                        troll = new LOTREntityMountainTroll(this.worldObj);
+                        troll = new LOTREntityMountainTroll2(this.worldObj);
                     }
                     troll.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rand.nextFloat() * 360.0f, 0.0f);
                     troll.onSpawnWithEgg(null);

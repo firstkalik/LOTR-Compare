@@ -9,6 +9,8 @@
  *  net.minecraft.entity.player.EntityPlayer
  *  net.minecraft.item.Item
  *  net.minecraft.item.ItemStack
+ *  net.minecraft.util.ChatComponentTranslation
+ *  net.minecraft.util.IChatComponent
  *  net.minecraft.util.MathHelper
  *  net.minecraft.util.StatCollector
  *  net.minecraft.world.World
@@ -17,7 +19,9 @@ package lotr.common.entity.npc;
 
 import java.util.List;
 import java.util.Random;
+import lotr.common.LOTRConfig;
 import lotr.common.LOTRLevelData;
+import lotr.common.LOTRMod;
 import lotr.common.LOTRPlayerData;
 import lotr.common.entity.LOTREntities;
 import lotr.common.entity.animal.LOTREntityHorse;
@@ -35,6 +39,8 @@ import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.IChatComponent;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
@@ -50,6 +56,8 @@ public class LOTRUnitTradeEntry {
     private PledgeType pledgeType = PledgeType.NONE;
     public LOTRHiredNPCInfo.Task task = LOTRHiredNPCInfo.Task.WARRIOR;
     private String extraInfo = null;
+    private static final int BASE_MAX_HIRED_NPCS = LOTRConfig.maxHiredNPCs;
+    private static final int ADDITIONAL_NPCS_PER_1000_REP = 5;
 
     public LOTRUnitTradeEntry(Class c, int cost, float alignment) {
         this.entityClass = c;
@@ -107,31 +115,62 @@ public class LOTRUnitTradeEntry {
         return StatCollector.translateToLocal((String)("lotr.unitinfo." + this.extraInfo));
     }
 
+    public float costFromConfig() {
+        return this.initialCost * LOTRConfig.maxHornCost;
+    }
+
     public int getCost(EntityPlayer entityplayer, LOTRHireableBase trader) {
-        float cost = this.initialCost;
+        float f;
+        float cost = this.costFromConfig();
+        float maxDiscount = 0.5f;
+        float notPledgedExpense = 2.0f;
         LOTRFaction fac = trader.getFaction();
         LOTRPlayerData pd = LOTRLevelData.getData(entityplayer);
         float alignment = pd.getAlignment(fac);
         boolean pledged = pd.isPledgedTo(fac);
         float alignSurplus = Math.max(alignment - this.alignmentRequired, 0.0f);
         if (pledged) {
-            float f = alignSurplus / 1500.0f;
+            f = alignSurplus / 3500.0f;
             f = MathHelper.clamp_float((float)f, (float)0.0f, (float)1.0f);
             cost *= 1.0f - (f *= 0.5f);
         } else {
             cost *= 2.0f;
-            float f = alignSurplus / 2000.0f;
+            f = alignSurplus / 4000.0f;
             f = MathHelper.clamp_float((float)f, (float)0.0f, (float)1.0f);
             cost *= 1.0f - (f *= 0.5f);
         }
         int costI = Math.round(cost);
         costI = Math.max(costI, 1);
+        this.updateItemMetadata(new ItemStack(LOTRMod.silverCoin), costI);
         return costI;
     }
 
+    private int getMetaIndexForCost(int cost) {
+        if (cost < 10) {
+            return 0;
+        }
+        if (cost < 100) {
+            return 1;
+        }
+        if (cost < 1000) {
+            return 2;
+        }
+        if (cost < 10000) {
+            return 3;
+        }
+        if (cost < 100000) {
+            return 4;
+        }
+        if (cost < 1000000) {
+            return 5;
+        }
+        return 6;
+    }
+
     public boolean hasRequiredCostAndAlignment(EntityPlayer entityplayer, LOTRHireableBase trader) {
+        int cost = this.getCost(entityplayer, trader);
         int coins = LOTRItemCoin.getInventoryValue(entityplayer, false);
-        if (coins < this.getCost(entityplayer, trader)) {
+        if (coins < cost) {
             return false;
         }
         LOTRFaction fac = trader.getFaction();
@@ -139,7 +178,12 @@ public class LOTRUnitTradeEntry {
             return false;
         }
         float alignment = LOTRLevelData.getData(entityplayer).getAlignment(fac);
-        return alignment >= this.alignmentRequired;
+        if (alignment < this.alignmentRequired) {
+            return false;
+        }
+        ItemStack coinStack = new ItemStack(LOTRMod.silverCoin);
+        this.updateItemMetadata(coinStack, cost);
+        return true;
     }
 
     public String getUnitTradeName() {
@@ -151,9 +195,15 @@ public class LOTRUnitTradeEntry {
     }
 
     public void hireUnit(EntityPlayer entityplayer, LOTRHireableBase trader, String squadron) {
+        int maxHiredNPCs = this.getMaxHiredNPCs(entityplayer, trader.getFaction());
+        int hiredNPCCount = this.getGlobalHiredNPCCount(entityplayer);
+        if (hiredNPCCount >= maxHiredNPCs) {
+            entityplayer.addChatMessage((IChatComponent)new ChatComponentTranslation("message.hireUnit.limitReached", new Object[]{maxHiredNPCs}));
+            return;
+        }
+        int cost = this.getCost(entityplayer, trader);
         if (this.hasRequiredCostAndAlignment(entityplayer, trader)) {
             trader.onUnitTrade(entityplayer);
-            int cost = this.getCost(entityplayer, trader);
             LOTRItemCoin.takeCoins(cost, entityplayer);
             ((LOTREntityNPC)((Object)trader)).playTradeSound();
             World world = entityplayer.worldObj;
@@ -171,8 +221,35 @@ public class LOTRUnitTradeEntry {
                         world.spawnEntityInWorld((Entity)mount);
                     }
                 }
+                this.updateGlobalHiredNPCCount(entityplayer, 1);
             }
         }
+    }
+
+    private void updateItemMetadata(ItemStack itemStack, int cost) {
+        int metaIndex = this.getMetaIndexForCost(cost);
+        itemStack.setItemDamage(metaIndex);
+    }
+
+    private int getMaxHiredNPCs(EntityPlayer entityplayer, LOTRFaction faction) {
+        LOTRPlayerData playerData = LOTRLevelData.getData(entityplayer);
+        float alignment = playerData.getAlignment(faction);
+        int additionalNPCs = (int)(alignment / 1000.0f) * 5;
+        int customMaxHiredNPCs = playerData.getCustomMaxHiredNPCs();
+        if (customMaxHiredNPCs > 0) {
+            return customMaxHiredNPCs;
+        }
+        return BASE_MAX_HIRED_NPCS + additionalNPCs;
+    }
+
+    private int getGlobalHiredNPCCount(EntityPlayer entityplayer) {
+        LOTRPlayerData playerData = LOTRLevelData.getData(entityplayer);
+        return playerData.getGlobalHiredNPCCount();
+    }
+
+    private void updateGlobalHiredNPCCount(EntityPlayer entityplayer, int amount) {
+        LOTRPlayerData playerData = LOTRLevelData.getData(entityplayer);
+        playerData.updateGlobalHiredNPCCount(amount);
     }
 
     public LOTREntityNPC getOrCreateHiredNPC(World world) {

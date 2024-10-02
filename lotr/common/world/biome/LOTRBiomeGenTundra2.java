@@ -30,6 +30,7 @@ import lotr.common.LOTRMod;
 import lotr.common.entity.animal.LOTREntityBear;
 import lotr.common.entity.animal.LOTREntityDeer;
 import lotr.common.entity.animal.LOTREntityElk;
+import lotr.common.entity.animal.LOTREntityFox;
 import lotr.common.entity.npc.LOTREntityBandit;
 import lotr.common.entity.npc.LOTREntityBanditNorth;
 import lotr.common.entity.npc.LOTREntityNearHaradMerchant;
@@ -77,6 +78,7 @@ extends LOTRBiome {
         this.spawnableCreatureList.add(new BiomeGenBase.SpawnListEntry(LOTREntityDeer.class, 10, 4, 6));
         this.spawnableCreatureList.add(new BiomeGenBase.SpawnListEntry(LOTREntityElk.class, 10, 4, 6));
         this.spawnableCreatureList.add(new BiomeGenBase.SpawnListEntry(LOTREntityBear.class, 10, 1, 4));
+        this.spawnableCreatureList.add(new BiomeGenBase.SpawnListEntry(LOTREntityFox.class, 4, 1, 4));
         this.spawnableLOTRAmbientList.clear();
         this.npcSpawnList.clear();
         LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer = new LOTRBiomeSpawnList.SpawnListContainer[]{LOTRBiomeSpawnList.entry(LOTRSpawnList.DURMETH_ORCS, 10).setSpawnChance(1000), LOTRBiomeSpawnList.entry(LOTRSpawnList.DURMETH_WARGS, 5).setSpawnChance(1000), LOTRBiomeSpawnList.entry(LOTRSpawnList.TUNDRA_TROLLS, 5).setSpawnChance(1000)};

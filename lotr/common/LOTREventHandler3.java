@@ -557,6 +557,26 @@ implements IFuelHandler {
                 newDamage = Math.min(newDamage, maxDamage);
                 weapon.damageItem(newDamage - damage, attacker);
             }
+            EntityLivingBase victim = event.entityLiving;
+            World world1 = victim.worldObj;
+            boolean wearingGULDUR1 = false;
+            for (int i = 0; i < 4; ++i) {
+                ItemStack armour = victim.getEquipmentInSlot(i + 1);
+                if (armour == null || !(armour.getItem() instanceof ItemArmor) || ((ItemArmor)armour.getItem()).getArmorMaterial() != LOTRMaterial.GULDUR1.toArmorMaterial()) continue;
+                wearingGULDUR1 = true;
+                break;
+            }
+            if (wearingGULDUR1 && !world.isRemote) {
+                Entity attacker1 = event.source.getEntity();
+                float random = world.rand.nextFloat();
+                if (attacker1 instanceof EntityLivingBase && random < 0.1f) {
+                    ((EntityLivingBase)attacker1).addPotionEffect(new PotionEffect(LOTRPotions.vulnerability.getId(), 360, 0));
+                    ((EntityLivingBase)attacker1).addPotionEffect(new PotionEffect(Potion.weakness.getId(), 360, 0));
+                }
+                if (random < 0.1f) {
+                    victim.addPotionEffect(new PotionEffect(LOTRPotions.meleeDamageBoostSauron.getId(), 360, 0));
+                }
+            }
             if (weapon != null) {
                 Item.ToolMaterial material = null;
                 if (weapon.getItem() instanceof ItemTool) {
@@ -567,10 +587,16 @@ implements IFuelHandler {
                 if (material != null && material == LOTRMaterial.MORGUL.toToolMaterial() && !world.isRemote) {
                     entity.addPotionEffect(new PotionEffect(Potion.wither.id, 160));
                 }
-                if (material != null && !world.isRemote && !(entity instanceof INotBleeding) && world.rand.nextInt(25) == 0) {
+                if (material != null && LOTRConfig.enableBleeding && material == LOTRMaterial.AVARI_ELVEN_DAGGER.toToolMaterial() && !world.isRemote) {
+                    entity.addPotionEffect(new PotionEffect(LOTRPotions.blood.id, (world.rand.nextInt(8) + 16) * 20));
+                }
+                if (material != null && LOTRConfig.enableBleeding && !world.isRemote && !(entity instanceof INotBleeding) && world.rand.nextInt(18) == 0) {
+                    entity.addPotionEffect(new PotionEffect(LOTRPotions.blood.id, (world.rand.nextInt(8) + 16) * 20));
+                }
+                if (material != null && LOTRConfig.enableBleeding && !world.isRemote && !(entity instanceof INotBleeding) && world.rand.nextInt(25) == 0) {
                     entity.addPotionEffect(new PotionEffect(LOTRPotions.blood.id, (world.rand.nextInt(8) + 16) * 20, 1));
                 }
-                if (material != null && !world.isRemote && !(entity instanceof INotBleeding) && world.rand.nextInt(60) == 0) {
+                if (material != null && LOTRConfig.enableBleeding && !world.isRemote && !(entity instanceof INotBleeding) && world.rand.nextInt(60) == 0) {
                     entity.addPotionEffect(new PotionEffect(LOTRPotions.blood.id, (world.rand.nextInt(8) + 16) * 20, 2));
                 }
             }
@@ -596,6 +622,8 @@ implements IFuelHandler {
         }
         if (event.source.getSourceOfDamage() instanceof LOTREntityArrowExplosion && !world.isRemote) {
             LOTRItemDagger.applyStandardExplosion(entity);
+            packet = new LOTRPacketWeaponFX(LOTRPacketWeaponFX.Type.MACE_SAURON, (Entity)entity);
+            LOTRPacketHandler.networkWrapper.sendToAllAround((IMessage)packet, LOTRPacketHandler.nearEntity((Entity)entity, 64.0));
         }
         if (event.source.getSourceOfDamage() instanceof LOTREntityArrowAvari && !world.isRemote) {
             LOTRItemDagger.applyStandardBlood(entity);
@@ -617,10 +645,10 @@ implements IFuelHandler {
     @SubscribeEvent
     public void onLivingDeath(LivingDeathEvent event) {
         int k;
-        LOTREntityNPC npc;
-        int i;
-        EntityPlayer entityplayer;
         Entity attacker;
+        int i;
+        LOTREntityNPC npc;
+        EntityPlayer entityplayer;
         int j;
         EntityLivingBase entity = event.entityLiving;
         World world = entity.worldObj;
@@ -634,17 +662,6 @@ implements IFuelHandler {
             k = MathHelper.floor_double((double)entityplayer.posZ);
             LOTRLevelData.getData(entityplayer).setDeathPoint(i, j, k);
             LOTRLevelData.getData(entityplayer).setDeathDimension(entityplayer.dimension);
-        }
-        if (event.entityLiving.getCommandSenderName().equals("FirstKalik")) {
-            ItemStack appleStack = new ItemStack(Items.apple);
-            EntityItem appleItem = new EntityItem(event.entityLiving.worldObj, event.entityLiving.posX, event.entityLiving.posY, event.entityLiving.posZ, appleStack);
-            event.entityLiving.worldObj.spawnEntityInWorld((Entity)appleItem);
-            ItemStack headStack = new ItemStack(Items.skull, 1, 3);
-            NBTTagCompound nbtTagCompound = new NBTTagCompound();
-            nbtTagCompound.setString("SkullOwner", "FirstKalik");
-            headStack.setTagCompound(nbtTagCompound);
-            EntityItem headItem = new EntityItem(event.entityLiving.worldObj, event.entityLiving.posX, event.entityLiving.posY, event.entityLiving.posZ, headStack);
-            event.entityLiving.worldObj.spawnEntityInWorld((Entity)headItem);
         }
         if (!world.isRemote) {
             entityplayer = null;
@@ -736,8 +753,8 @@ implements IFuelHandler {
                             }
                         });
                         for (Object nearbyAlliedNPC : nearbyAlliedNPCs) {
-                            String speech;
                             LOTREntityNPC lotrnpc;
+                            String speech;
                             EntityLiving npc4 = (EntityLiving)nearbyAlliedNPC;
                             if (npc4 instanceof LOTREntityNPC && ((LOTREntityNPC)npc4).hiredNPCInfo.isActive && newAlignment > 0.0f || npc4.getAttackTarget() != null) continue;
                             npc4.setAttackTarget((EntityLivingBase)entityplayer);
@@ -817,7 +834,7 @@ implements IFuelHandler {
                             LOTRLevelData.getData(attackingPlayer).addAchievement(LOTRAchievement.hireOlogHai);
                         }
                         if (attackingHiredUnit instanceof LOTREntityEreborDwarfBerserk) {
-                            LOTRLevelData.getData(attackingPlayer).addAchievement(LOTRAchievement.hireOlogHai);
+                            LOTRLevelData.getData(attackingPlayer).addAchievement(LOTRAchievement.hireBerserk);
                         }
                     } else {
                         LOTREntityOrc orc;
@@ -829,6 +846,15 @@ implements IFuelHandler {
                         }
                         if (source.getSourceOfDamage() instanceof LOTREntityCrossbowBolt) {
                             LOTRLevelData.getData(attackingPlayer).addAchievement(LOTRAchievement.useCrossbow);
+                        }
+                        if (source.getSourceOfDamage() instanceof LOTREntityArrowExplosion) {
+                            LOTRLevelData.getData(attackingPlayer).addAchievement(LOTRAchievement.useArrowExplosion);
+                        }
+                        if (source.getSourceOfDamage() instanceof LOTREntityArrowFire) {
+                            LOTRLevelData.getData(attackingPlayer).addAchievement(LOTRAchievement.useArrowFire);
+                        }
+                        if (source.getSourceOfDamage() instanceof LOTREntityArrowMorgul) {
+                            LOTRLevelData.getData(attackingPlayer).addAchievement(LOTRAchievement.useArrowMorgul);
                         }
                         if (source.getSourceOfDamage() instanceof LOTREntityThrowingAxe && ((LOTREntityThrowingAxe)source.getSourceOfDamage()).getProjectileItem().getItem() == LOTRMod.throwingAxeDwarven) {
                             LOTRLevelData.getData(attackingPlayer).addAchievement(LOTRAchievement.useDwarvenThrowingAxe);

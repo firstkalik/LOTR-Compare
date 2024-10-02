@@ -45,7 +45,7 @@ implements LOTRMercenary {
     public LOTREntityRedDwarfWarrior3(World world) {
         super(world);
         this.npcCape = LOTRCapes.ALIGNMENT_DWARF.capeTexture;
-        this.npcShield = LOTRShields.ALIGNMENT_DWARF;
+        this.npcShield = LOTRShields.ALIGNMENT_EREBOR;
         this.spawnRidingHorse = this.rand.nextInt(6) == 0;
     }
 

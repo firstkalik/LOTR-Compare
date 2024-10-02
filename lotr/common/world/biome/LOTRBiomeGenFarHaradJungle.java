@@ -21,6 +21,7 @@ import lotr.common.LOTRMod;
 import lotr.common.entity.animal.LOTREntityBird;
 import lotr.common.entity.animal.LOTREntityButterfly;
 import lotr.common.entity.animal.LOTREntityFlamingo;
+import lotr.common.entity.animal.LOTREntityFrog;
 import lotr.common.entity.animal.LOTREntityJungleScorpion;
 import lotr.common.entity.animal.LOTREntityMidges;
 import lotr.common.world.biome.LOTRBiome;
@@ -60,7 +61,8 @@ extends LOTRBiomeGenFarHarad {
         }
         this.spawnableCreatureList.clear();
         this.spawnableCreatureList.add(new BiomeGenBase.SpawnListEntry(LOTREntityFlamingo.class, 10, 4, 4));
-        this.spawnableCreatureList.add(new BiomeGenBase.SpawnListEntry(EntityOcelot.class, 4, 1, 3));
+        this.spawnableCreatureList.add(new BiomeGenBase.SpawnListEntry(EntityOcelot.class, 8, 1, 3));
+        this.spawnableCreatureList.add(new BiomeGenBase.SpawnListEntry(LOTREntityFrog.class, 8, 1, 3));
         this.spawnableLOTRAmbientList.clear();
         this.spawnableLOTRAmbientList.add(new BiomeGenBase.SpawnListEntry(LOTREntityBird.class, 10, 4, 4));
         this.spawnableLOTRAmbientList.add(new BiomeGenBase.SpawnListEntry(LOTREntityButterfly.class, 15, 4, 4));

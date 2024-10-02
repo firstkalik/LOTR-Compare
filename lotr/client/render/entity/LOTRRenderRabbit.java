@@ -24,16 +24,21 @@ import org.lwjgl.opengl.GL11;
 
 public class LOTRRenderRabbit
 extends RenderLiving {
-    private static LOTRRandomSkins rabbitSkins;
+    private static LOTRRandomSkins commonRabbitSkins;
+    private static LOTRRandomSkins desertRabbitSkins;
 
     public LOTRRenderRabbit() {
         super((ModelBase)new LOTRModelRabbit(), 0.3f);
-        rabbitSkins = LOTRRandomSkins.loadSkinsList("lotr:mob/rabbit");
+        commonRabbitSkins = LOTRRandomSkins.loadSkinsList("lotr:mob/rabbit/common");
+        desertRabbitSkins = LOTRRandomSkins.loadSkinsList("lotr:mob/rabbit/desert");
     }
 
     protected ResourceLocation getEntityTexture(Entity entity) {
         LOTREntityRabbit rabbit = (LOTREntityRabbit)entity;
-        return rabbitSkins.getRandomSkin(rabbit);
+        if (rabbit.getRabbitType() == LOTREntityRabbit.RabbitType.DESERT) {
+            return desertRabbitSkins.getRandomSkin(rabbit);
+        }
+        return commonRabbitSkins.getRandomSkin(rabbit);
     }
 
     protected void preRenderCallback(EntityLivingBase entity, float f) {

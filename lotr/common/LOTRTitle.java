@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.UUID;
 import lotr.common.LOTRAchievement;
 import lotr.common.LOTRLevelData;
+import lotr.common.LOTRNewAchievementsTitle;
 import lotr.common.LOTRPatron;
 import lotr.common.LOTRPlayerData;
 import lotr.common.LOTRShields;
@@ -272,6 +273,9 @@ public class LOTRTitle {
     public static LOTRTitle TAUREDAIN_tauredain;
     public static LOTRTitle HALF_TROLL_halfTroll;
     public static LOTRTitle HALF_TROLL_pertorogwaith;
+    public static LOTRTitle any_10000;
+    public static LOTRTitle any_100000;
+    public static LOTRTitle lordOfTheRings;
     private static int nextTitleID;
     public final int titleID;
     private String name;
@@ -715,11 +719,11 @@ public class LOTRTitle {
         RHUN_rhunaerim = new LOTRTitle("RHUN_rhunaerim").setAlignment(LOTRFaction.RHUDEL);
         NEAR_HARAD_nearHarad = new LOTRTitle("NEAR_HARAD_nearHarad").setAlignment(LOTRFaction.NEAR_HARAD);
         NEAR_HARAD_nearHaradrim = new LOTRTitle("NEAR_HARAD_nearHaradrim").setAlignment(LOTRFaction.NEAR_HARAD);
-        NEAR_HARAD_umbar = new LOTRTitle("NEAR_HARAD_umbar").setAlignment(LOTRFaction.NEAR_HARAD);
-        NEAR_HARAD_corsair = new LOTRTitle("NEAR_HARAD_corsair").setAlignment(LOTRFaction.NEAR_HARAD);
-        NEAR_HARAD_harnedor = new LOTRTitle("NEAR_HARAD_harnedor").setAlignment(LOTRFaction.NEAR_HARAD);
-        NEAR_HARAD_ninzayan = new LOTRTitle("NEAR_HARAD_ninzayan").setAlignment(LOTRFaction.NEAR_HARAD);
-        NEAR_HARAD_belkadar = new LOTRTitle("NEAR_HARAD_belkadar").setAlignment(LOTRFaction.NEAR_HARAD);
+        NEAR_HARAD_umbar = new LOTRTitle("NEAR_HARAD_umbar").setAlignment(LOTRFaction.UMBAR);
+        NEAR_HARAD_corsair = new LOTRTitle("NEAR_HARAD_corsair").setAlignment(LOTRFaction.UMBAR);
+        NEAR_HARAD_harnedor = new LOTRTitle("NEAR_HARAD_harnedor").setAlignment(LOTRFaction.UMBAR);
+        NEAR_HARAD_ninzayan = new LOTRTitle("NEAR_HARAD_ninzayan").setAlignment(LOTRFaction.UMBAR);
+        NEAR_HARAD_belkadar = new LOTRTitle("NEAR_HARAD_belkadar").setAlignment(LOTRFaction.UMBAR);
         NEAR_HARAD_southronCoasts = new LOTRTitle("NEAR_HARAD_southronCoasts").setAlignment(LOTRFaction.NEAR_HARAD);
         NEAR_HARAD_azrazain = new LOTRTitle("NEAR_HARAD_azrazain").setAlignment(LOTRFaction.NEAR_HARAD);
         NEAR_HARAD_ain = new LOTRTitle("NEAR_HARAD_ain").setAlignment(LOTRFaction.NEAR_HARAD);
@@ -738,6 +742,9 @@ public class LOTRTitle {
         TAUREDAIN_tauredain = new LOTRTitle("TAUREDAIN_tauredain").setAlignment(LOTRFaction.TAURETHRIM);
         HALF_TROLL_halfTroll = new LOTRTitle("HALF_TROLL_halfTroll").setAlignment(LOTRFaction.HALF_TROLL);
         HALF_TROLL_pertorogwaith = new LOTRTitle("HALF_TROLL_pertorogwaith").setAlignment(LOTRFaction.HALF_TROLL);
+        any_10000 = new LOTRTitle("any_10000").setAnyAlignment(10000.0f);
+        any_100000 = new LOTRTitle("any_100000").setAnyAlignment(100000.0f);
+        lordOfTheRings = new LOTRNewAchievementsTitle("lordOfTheRings", LOTRAchievement.getThree, LOTRAchievement.getNine, LOTRAchievement.getSeven, LOTRAchievement.getOne);
     }
 
     static {

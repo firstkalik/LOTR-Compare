@@ -24,6 +24,7 @@
  *  net.minecraft.server.management.PlayerManager
  *  net.minecraft.server.management.PreYggdrasilConverter
  *  net.minecraft.util.AxisAlignedBB
+ *  net.minecraft.util.ChatComponentText
  *  net.minecraft.util.ChatComponentTranslation
  *  net.minecraft.util.CombatTracker
  *  net.minecraft.util.DamageSource
@@ -77,6 +78,7 @@ import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.server.management.PlayerManager;
 import net.minecraft.server.management.PreYggdrasilConverter;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.CombatTracker;
 import net.minecraft.util.DamageSource;
@@ -116,9 +118,30 @@ public class LOTRHiredNPCInfo {
     public boolean wasAttackCommanded = false;
     private boolean doneFirstUpdate = false;
     private boolean resendBasicData = true;
+    private boolean isHired;
+    private static final int BASE_MAX_HIRED_NPCS = LOTRConfig.maxHiredNPCs;
+    private static final int ADDITIONAL_NPCS_PER_1000_REP = 5;
+    private static final int REP_PER_ADDITIONAL_NPC = 1000;
 
     public LOTRHiredNPCInfo(LOTREntityNPC npc) {
         this.theEntity = npc;
+    }
+
+    public boolean isHired() {
+        return this.isHired;
+    }
+
+    public void release() {
+        if (this.isActive) {
+            this.isHired = false;
+            this.updateGlobalHiredNPCCount(-1);
+            this.hiringPlayerUUID = null;
+            this.isActive = false;
+            EntityPlayer hiringPlayer = this.getHiringPlayer();
+            if (hiringPlayer != null) {
+                hiringPlayer.addChatMessage((IChatComponent)new ChatComponentTranslation("message.hireUnit.released", new Object[0]));
+            }
+        }
     }
 
     public void hireUnit(EntityPlayer entityplayer, boolean setLocation, LOTRFaction hiringFaction, LOTRUnitTradeEntry tradeEntry, String squadron, Entity mount) {
@@ -134,8 +157,14 @@ public class LOTRHiredNPCInfo {
         this.setHiringPlayer(entityplayer);
         this.setTask(task);
         this.setSquadron(squadron);
+        this.isHired = true;
+        LOTRPlayerData playerData = LOTRLevelData.getData(entityplayer);
+        int hiredNPCCount = playerData.getGlobalHiredNPCCount();
+        int maxHiredNPCs = this.getMaxHiredNPCs(entityplayer, hiringFaction);
         if (hiringFaction != null && hiringFaction.isPlayableAlignmentFaction()) {
-            LOTRLevelData.getData(entityplayer).getFactionData(hiringFaction).addHire();
+            String message = StatCollector.translateToLocalFormatted((String)"message.hired_npcs", (Object[])new Object[]{hiredNPCCount + 1, maxHiredNPCs});
+            entityplayer.addChatMessage((IChatComponent)new ChatComponentText(message));
+            playerData.getFactionData(hiringFaction).addHire();
         }
         if (mount != null) {
             mount.setLocationAndAngles(this.theEntity.posX, this.theEntity.boundingBox.minY, this.theEntity.posZ, this.theEntity.rotationYaw, 0.0f);
@@ -151,6 +180,29 @@ public class LOTRHiredNPCInfo {
                 LOTRMountFunctions.setNavigatorRangeFromNPC(hiredHorse, this.theEntity);
             }
         }
+    }
+
+    private int getMaxHiredNPCs(EntityPlayer entityplayer, LOTRFaction faction) {
+        LOTRPlayerData playerData = LOTRLevelData.getData(entityplayer);
+        float alignment = playerData.getAlignment(faction);
+        int additionalNPCs = (int)(alignment / 1000.0f) * 5;
+        int customMaxHiredNPCs = playerData.getCustomMaxHiredNPCs();
+        if (customMaxHiredNPCs > 0) {
+            return customMaxHiredNPCs;
+        }
+        return BASE_MAX_HIRED_NPCS + additionalNPCs;
+    }
+
+    private void updateGlobalHiredNPCCount(int delta) {
+        LOTRPlayerData playerData;
+        if (this.hiringPlayerUUID != null && (playerData = LOTRLevelData.getData(this.hiringPlayerUUID)) != null) {
+            playerData.updateGlobalHiredNPCCount(delta);
+            this.markDirty();
+        }
+    }
+
+    public boolean isHiredBy(EntityPlayer entityplayer) {
+        return this.hiringPlayerUUID != null && this.hiringPlayerUUID.equals(entityplayer.getUniqueID());
     }
 
     public void setHiringPlayer(EntityPlayer entityplayer) {
@@ -242,24 +294,44 @@ public class LOTRHiredNPCInfo {
     }
 
     public void dismissUnit(boolean isDesertion) {
-        if (isDesertion) {
-            this.getHiringPlayer().addChatMessage((IChatComponent)new ChatComponentTranslation("lotr.hiredNPC.desert", new Object[]{this.theEntity.getCommandSenderName()}));
-        } else {
-            this.getHiringPlayer().addChatMessage((IChatComponent)new ChatComponentTranslation("lotr.hiredNPC.dismiss", new Object[]{this.theEntity.getCommandSenderName()}));
+        EntityPlayer hiringPlayer = this.getHiringPlayer();
+        if (hiringPlayer != null) {
+            LOTRPlayerData playerData = LOTRLevelData.getData(hiringPlayer);
+            int hiredNPCCount = playerData.getGlobalHiredNPCCount();
+            int maxHiredNPCs = this.getMaxHiredNPCs(hiringPlayer, this.theEntity.getHiringFaction());
+            this.updateGlobalHiredNPCCount(-1);
+            --hiredNPCCount;
+            if (isDesertion) {
+                hiringPlayer.addChatMessage((IChatComponent)new ChatComponentTranslation("lotr.hiredNPC.desert", new Object[]{this.theEntity.getCommandSenderName()}));
+            } else {
+                hiringPlayer.addChatMessage((IChatComponent)new ChatComponentTranslation("lotr.hiredNPC.dismiss", new Object[]{this.theEntity.getCommandSenderName()}));
+            }
+            String message = StatCollector.translateToLocalFormatted((String)"message.hired_all", (Object[])new Object[]{hiredNPCCount, maxHiredNPCs});
+            hiringPlayer.addChatMessage((IChatComponent)new ChatComponentText(message));
+            if (this.hiredTask == Task.FARMER && this.hiredInventory != null) {
+                this.hiredInventory.dropAllItems();
+            }
+            this.isActive = false;
+            this.canMove = true;
+            this.sendClientPacket(false);
+            this.setHiringPlayer(null);
         }
-        if (this.hiredTask == Task.FARMER && this.hiredInventory != null) {
-            this.hiredInventory.dropAllItems();
-        }
-        this.isActive = false;
-        this.canMove = true;
-        this.sendClientPacket(false);
-        this.setHiringPlayer(null);
     }
 
     public void onDeath(DamageSource damagesource) {
-        EntityPlayer hiringPlayer;
-        if (!this.theEntity.worldObj.isRemote && this.isActive && this.getHiringPlayer() != null && LOTRLevelData.getData(hiringPlayer = this.getHiringPlayer()).getEnableHiredDeathMessages()) {
-            hiringPlayer.addChatMessage((IChatComponent)new ChatComponentTranslation("lotr.hiredNPC.death", new Object[]{this.theEntity.func_110142_aN().func_151521_b()}));
+        if (!this.theEntity.worldObj.isRemote && this.isActive) {
+            EntityPlayer hiringPlayer = this.getHiringPlayer();
+            if (hiringPlayer != null && LOTRLevelData.getData(hiringPlayer).getEnableHiredDeathMessages()) {
+                hiringPlayer.addChatMessage((IChatComponent)new ChatComponentTranslation("lotr.hiredNPC.death", new Object[]{this.theEntity.func_110142_aN().func_151521_b()}));
+                this.updateGlobalHiredNPCCount(-1);
+                LOTRPlayerData playerData = LOTRLevelData.getData(hiringPlayer);
+                int hiredNPCCount = playerData.getGlobalHiredNPCCount();
+                int maxHiredNPCs = this.getMaxHiredNPCs(hiringPlayer, this.theEntity.getHiringFaction());
+                String message = StatCollector.translateToLocalFormatted((String)"message.hired_all", (Object[])new Object[]{hiredNPCCount, maxHiredNPCs});
+                hiringPlayer.addChatMessage((IChatComponent)new ChatComponentText(message));
+            }
+            this.isActive = false;
+            this.hiringPlayerUUID = null;
         }
         if (!this.theEntity.worldObj.isRemote && this.hiredInventory != null) {
             this.hiredInventory.dropAllItems();

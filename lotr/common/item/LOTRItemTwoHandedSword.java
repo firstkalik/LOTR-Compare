@@ -47,7 +47,7 @@ extends LOTRItemSword {
 
     public LOTRItemTwoHandedSword(Item.ToolMaterial material) {
         super(material);
-        LOTRWeaponStats.registerMeleeSpeed(LOTRItemTwoHandedSword.class, 0.65f);
+        LOTRWeaponStats.registerMeleeSpeed(LOTRItemTwoHandedSword.class, 0.7f);
         LOTRWeaponStats.registerMeleeReach(LOTRItemTwoHandedSword.class, 1.25f);
         if (material == Item.ToolMaterial.IRON) {
             this.lotrWeaponDamage = 6.0f;
@@ -62,10 +62,6 @@ extends LOTRItemSword {
     public boolean hitEntity(ItemStack itemstack, EntityLivingBase entity, EntityLivingBase attacker) {
         itemstack.damageItem(1, attacker);
         this.useTwoHandedSword(itemstack, entity.worldObj, entity, attacker);
-        Random random = new Random();
-        float pitch = 0.9f + random.nextFloat() * 0.2f;
-        float volume = 1.5f;
-        entity.worldObj.playSoundAtEntity((Entity)entity, "lotr:aurochs.swing", volume, pitch);
         return true;
     }
 
@@ -74,7 +70,7 @@ extends LOTRItemSword {
         if (world.isRemote) {
             return;
         }
-        double radius = 5.0;
+        double radius = 6.0;
         Vec3 position = Vec3.createVectorHelper((double)user.posX, (double)user.posY, (double)user.posZ);
         Vec3 look = user.getLookVec();
         Vec3 sight = position.addVector(look.xCoord * radius, look.yCoord * radius, look.zCoord * radius);
@@ -90,15 +86,24 @@ extends LOTRItemSword {
             if (!axisalignedbb.isVecInside(position) && movingobjectposition == null) continue;
             targets.add(entity);
         }
+        if (targets.size() > 1) {
+            Random random = new Random();
+            float pitch = 0.9f + random.nextFloat() * 0.2f;
+            float volume = 1.5f;
+            world.playSoundAtEntity((Entity)user, "lotr:aurochs.swing", volume, pitch);
+        }
         for (EntityLivingBase entity : targets) {
             if (entity == user || entity == target) continue;
-            float strength = this.lotrWeaponDamage - user.getDistanceToEntity((Entity)entity) * 0.75f;
-            strength = Math.max(strength, 0.01f);
+            Random random = new Random();
+            float pitch = 0.9f + random.nextFloat() * 0.2f;
+            float volume = 1.5f;
+            world.playSoundAtEntity((Entity)user, "lotr:aurochs.swing", volume, pitch);
+            float strength = this.lotrWeaponDamage * 0.7f;
             if (user instanceof EntityPlayer) {
-                entity.attackEntityFrom(DamageSource.causePlayerDamage((EntityPlayer)((EntityPlayer)user)), strength / 2.5f);
+                entity.attackEntityFrom(DamageSource.causePlayerDamage((EntityPlayer)((EntityPlayer)user)), strength);
                 continue;
             }
-            entity.attackEntityFrom(DamageSource.causeMobDamage((EntityLivingBase)user), strength / 2.5f);
+            entity.attackEntityFrom(DamageSource.causeMobDamage((EntityLivingBase)user), strength);
         }
     }
 }

@@ -36,7 +36,6 @@ public class LOTRMillstoneRecipes {
         LOTRMillstoneRecipes.addRecipe(LOTRMod.obsidianGravel, new ItemStack(LOTRMod.obsidianShard), 1.0f);
         LOTRMillstoneRecipes.addRecipe(LOTRMod.oreSalt, new ItemStack(LOTRMod.salt));
         LOTRMillstoneRecipes.addRecipe(Items.rotten_flesh, new ItemStack(Items.leather), 0.25f);
-        LOTRMillstoneRecipes.addRecipe(LOTRMod.oreMithril, new ItemStack(LOTRMod.mithrilNugget), 0.75f);
         LOTRMillstoneRecipes.addRecipe(new ItemStack(Blocks.sandstone, 1, 0), new ItemStack((Block)Blocks.sand, 2, 0));
         LOTRMillstoneRecipes.addRecipe(new ItemStack(LOTRMod.redSandstone, 1, 0), new ItemStack((Block)Blocks.sand, 2, 1));
         LOTRMillstoneRecipes.addRecipe(new ItemStack(LOTRMod.whiteSandstone, 1, 0), new ItemStack(LOTRMod.whiteSand, 2, 0));

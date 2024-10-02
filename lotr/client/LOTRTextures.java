@@ -152,6 +152,21 @@ implements IResourceManagerReloadListener {
     }
 
     public static void drawMap(EntityPlayer entityplayer, boolean sepia, double x0, double x1, double y0, double y1, double z, double minU, double maxU, double minV, double maxV, float alpha) {
+        int mtW;
+        boolean hasSunlandsAchievement;
+        double ratioY;
+        double mtX1;
+        int oceanColor;
+        double mtMaxV;
+        double mtX;
+        double mtX0;
+        double mtY1;
+        double ratioX;
+        double mtMaxU;
+        double mtMinU;
+        double mtMinV;
+        double mtY0;
+        double mtY;
         Tessellator tessellator = Tessellator.instance;
         mc.getTextureManager().bindTexture(LOTRTextures.getMapTexture(entityplayer, sepia));
         GL11.glColor4f((float)1.0f, (float)1.0f, (float)1.0f, (float)alpha);
@@ -161,29 +176,29 @@ implements IResourceManagerReloadListener {
         tessellator.addVertexWithUV(x1, y0, z, maxU, minV);
         tessellator.addVertexWithUV(x0, y0, z, minU, minV);
         tessellator.draw();
-        boolean meneltarma = entityplayer != null && LOTRLevelData.getData(entityplayer).hasAchievement(LOTRAchievement.enterMeneltarma);
-        boolean bl = meneltarma;
-        if (!meneltarma) {
-            double mtX = LOTRWaypoint.MENELTARMA_SUMMIT.getX();
-            double mtY = LOTRWaypoint.MENELTARMA_SUMMIT.getY();
-            int mtW = 20;
-            double mtMinU = (mtX - (double)mtW) / (double)LOTRGenLayerWorld.imageWidth;
-            double mtMaxU = (mtX + (double)mtW) / (double)LOTRGenLayerWorld.imageWidth;
-            double mtMinV = (mtY - (double)mtW) / (double)LOTRGenLayerWorld.imageHeight;
-            double mtMaxV = (mtY + (double)mtW) / (double)LOTRGenLayerWorld.imageHeight;
+        boolean hasMeneltarmaAchievement = entityplayer != null && LOTRLevelData.getData(entityplayer).hasAchievement(LOTRAchievement.enterMeneltarma);
+        boolean bl = hasSunlandsAchievement = entityplayer != null && LOTRLevelData.getData(entityplayer).hasAchievement(LOTRAchievement.enterSun);
+        if (!hasMeneltarmaAchievement) {
+            mtX = LOTRWaypoint.MENELTARMA_SUMMIT.getX();
+            mtY = LOTRWaypoint.MENELTARMA_SUMMIT.getY();
+            mtW = 20;
+            mtMinU = (mtX - (double)mtW) / (double)LOTRGenLayerWorld.imageWidth;
+            mtMaxU = (mtX + (double)mtW) / (double)LOTRGenLayerWorld.imageWidth;
+            mtMinV = (mtY - (double)mtW) / (double)LOTRGenLayerWorld.imageHeight;
+            mtMaxV = (mtY + (double)mtW) / (double)LOTRGenLayerWorld.imageHeight;
             if (minU <= mtMaxU && maxU >= mtMinU && minV <= mtMaxV && maxV >= mtMinV) {
                 GL11.glDisable((int)3553);
-                int oceanColor = LOTRTextures.getMapOceanColor(sepia);
+                oceanColor = LOTRTextures.getMapOceanColor(sepia);
                 mtMinU = Math.max(mtMinU, minU);
                 mtMaxU = Math.min(mtMaxU, maxU);
                 mtMinV = Math.max(mtMinV, minV);
                 mtMaxV = Math.min(mtMaxV, maxV);
-                double ratioX = (x1 - x0) / (maxU - minU);
-                double ratioY = (y1 - y0) / (maxV - minV);
-                double mtX0 = x0 + (mtMinU - minU) * ratioX;
-                double mtX1 = x0 + (mtMaxU - minU) * ratioX;
-                double mtY0 = y0 + (mtMinV - minV) * ratioY;
-                double mtY1 = y0 + (mtMaxV - minV) * ratioY;
+                ratioX = (x1 - x0) / (maxU - minU);
+                ratioY = (y1 - y0) / (maxV - minV);
+                mtX0 = x0 + (mtMinU - minU) * ratioX;
+                mtX1 = x0 + (mtMaxU - minU) * ratioX;
+                mtY0 = y0 + (mtMinV - minV) * ratioY;
+                mtY1 = y0 + (mtMaxV - minV) * ratioY;
                 tessellator.startDrawingQuads();
                 tessellator.setColorOpaque_I(oceanColor);
                 tessellator.addVertexWithUV(mtX0, mtY1, z, mtMinU, mtMaxV);
@@ -193,38 +208,36 @@ implements IResourceManagerReloadListener {
                 tessellator.draw();
                 GL11.glEnable((int)3553);
             }
-            meneltarma = entityplayer != null && LOTRLevelData.getData(entityplayer).hasAchievement(LOTRAchievement.enterSun);
-            boolean bl1 = meneltarma;
-            if (!meneltarma) {
-                double mtX1 = LOTRWaypoint.SUNLANDS_SUMMIT.getX();
-                double mtY1 = LOTRWaypoint.SUNLANDS_SUMMIT.getY();
-                int mtW1 = 270;
-                double mtMinU1 = (mtX1 - (double)mtW1) / (double)LOTRGenLayerWorld.imageWidth;
-                double mtMaxU1 = (mtX1 + (double)mtW1) / (double)LOTRGenLayerWorld.imageWidth;
-                double mtMinV1 = (mtY1 - (double)mtW1) / (double)LOTRGenLayerWorld.imageHeight;
-                double mtMaxV1 = (mtY1 + (double)mtW1) / (double)LOTRGenLayerWorld.imageHeight;
-                if (minU <= mtMaxU1 && maxU >= mtMinU1 && minV <= mtMaxV1 && maxV >= mtMinV1) {
-                    GL11.glDisable((int)3553);
-                    int oceanColor = LOTRTextures.getMapOceanColor(sepia);
-                    mtMinU1 = Math.max(mtMinU1, minU);
-                    mtMaxU1 = Math.min(mtMaxU1, maxU);
-                    mtMinV1 = Math.max(mtMinV1, minV);
-                    mtMaxV1 = Math.min(mtMaxV1, maxV);
-                    double ratioX = (x1 - x0) / (maxU - minU);
-                    double ratioY = (y1 - y0) / (maxV - minV);
-                    double mtX0 = x0 + (mtMinU1 - minU) * ratioX;
-                    double mtX11 = x0 + (mtMaxU1 - minU) * ratioX;
-                    double mtY0 = y0 + (mtMinV1 - minV) * ratioY;
-                    double mtY11 = y0 + (mtMaxV1 - minV) * ratioY;
-                    tessellator.startDrawingQuads();
-                    tessellator.setColorOpaque_I(oceanColor);
-                    tessellator.addVertexWithUV(mtX0, mtY11, z, mtMinU1, mtMaxV1);
-                    tessellator.addVertexWithUV(mtX11, mtY11, z, mtMaxU1, mtMaxV1);
-                    tessellator.addVertexWithUV(mtX11, mtY0, z, mtMaxU1, mtMinV1);
-                    tessellator.addVertexWithUV(mtX0, mtY0, z, mtMinU1, mtMinV1);
-                    tessellator.draw();
-                    GL11.glEnable((int)3553);
-                }
+        }
+        if (!hasSunlandsAchievement) {
+            mtX = LOTRWaypoint.SUNLANDS_SUMMIT.getX();
+            mtY = LOTRWaypoint.SUNLANDS_SUMMIT.getY();
+            mtW = 270;
+            mtMinU = (mtX - (double)mtW) / (double)LOTRGenLayerWorld.imageWidth;
+            mtMaxU = (mtX + (double)mtW) / (double)LOTRGenLayerWorld.imageWidth;
+            mtMinV = (mtY - (double)mtW) / (double)LOTRGenLayerWorld.imageHeight;
+            mtMaxV = (mtY + (double)mtW) / (double)LOTRGenLayerWorld.imageHeight;
+            if (minU <= mtMaxU && maxU >= mtMinU && minV <= mtMaxV && maxV >= mtMinV) {
+                GL11.glDisable((int)3553);
+                oceanColor = LOTRTextures.getMapOceanColor(sepia);
+                mtMinU = Math.max(mtMinU, minU);
+                mtMaxU = Math.min(mtMaxU, maxU);
+                mtMinV = Math.max(mtMinV, minV);
+                mtMaxV = Math.min(mtMaxV, maxV);
+                ratioX = (x1 - x0) / (maxU - minU);
+                ratioY = (y1 - y0) / (maxV - minV);
+                mtX0 = x0 + (mtMinU - minU) * ratioX;
+                mtX1 = x0 + (mtMaxU - minU) * ratioX;
+                mtY0 = y0 + (mtMinV - minV) * ratioY;
+                mtY1 = y0 + (mtMaxV - minV) * ratioY;
+                tessellator.startDrawingQuads();
+                tessellator.setColorOpaque_I(oceanColor);
+                tessellator.addVertexWithUV(mtX0, mtY1, z, mtMinU, mtMaxV);
+                tessellator.addVertexWithUV(mtX1, mtY1, z, mtMaxU, mtMaxV);
+                tessellator.addVertexWithUV(mtX1, mtY0, z, mtMaxU, mtMinV);
+                tessellator.addVertexWithUV(mtX0, mtY0, z, mtMinU, mtMinV);
+                tessellator.draw();
+                GL11.glEnable((int)3553);
             }
         }
     }
@@ -309,11 +322,11 @@ implements IResourceManagerReloadListener {
 
     public static void updateMapTextures() {
         if (LOTRConfig.changeMap) {
-            mapTexture = AltMapTexture;
-            sepiaMapTexture = altSepiaMapTexture;
-        } else if (LOTRConfig.bMap) {
             mapTexture = bMapTexture;
             sepiaMapTexture = bSepiaMapTexture;
+        } else if (LOTRConfig.bMap) {
+            mapTexture = AltMapTexture;
+            sepiaMapTexture = altSepiaMapTexture;
         } else {
             mapTexture = MapTexture;
             sepiaMapTexture = SepiaMapTexture;

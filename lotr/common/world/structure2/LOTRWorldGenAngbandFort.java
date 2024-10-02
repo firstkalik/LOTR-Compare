@@ -4,6 +4,7 @@
  * Could not load the following classes:
  *  net.minecraft.block.Block
  *  net.minecraft.entity.EntityCreature
+ *  net.minecraft.entity.IEntityLivingData
  *  net.minecraft.item.Item
  *  net.minecraft.item.ItemStack
  *  net.minecraft.world.World
@@ -16,7 +17,9 @@ import lotr.common.LOTRMod;
 import lotr.common.entity.LOTREntityNPCRespawner;
 import lotr.common.entity.npc.LOTREntityAngbandCap;
 import lotr.common.entity.npc.LOTREntityAngbandCrossbow;
+import lotr.common.entity.npc.LOTREntityAngbandOrcArcher;
 import lotr.common.entity.npc.LOTREntityAngbandUruc;
+import lotr.common.entity.npc.LOTREntityUtumnoOrc;
 import lotr.common.entity.npc.LOTREntityUtumnoTrader;
 import lotr.common.item.LOTRItemBanner;
 import lotr.common.world.map.LOTRFixedStructures;
@@ -24,6 +27,7 @@ import lotr.common.world.structure.LOTRChestContents;
 import lotr.common.world.structure2.LOTRWorldGenMordorStructure2;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityCreature;
+import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -142,34 +146,37 @@ extends LOTRWorldGenMordorStructure2 {
         this.placeWeaponRack(world, -3, 6, 12, 4, this.getRandomUrukWeapon(random));
         this.placeArmorStand(world, 15, 1, 6, 1, new ItemStack[]{new ItemStack(LOTRMod.helmetBerserk), new ItemStack(LOTRMod.bodyBerserk), new ItemStack(LOTRMod.legsBerserk), new ItemStack(LOTRMod.bootsBerserk)});
         this.placeArmorStand(world, 13, 1, 6, 1, new ItemStack[]{new ItemStack(LOTRMod.helmetboldog), new ItemStack(LOTRMod.bodyboldog), new ItemStack(LOTRMod.legsboldog), new ItemStack(LOTRMod.bootsboldog)});
-        this.placeArmorStand(world, 16, 1, -8, 1, new ItemStack[]{new ItemStack(LOTRMod.helmetAngband), new ItemStack(LOTRMod.bodyAngband), new ItemStack(LOTRMod.legsAngband), new ItemStack(LOTRMod.bootsAngband)});
-        this.placeArmorStand(world, 14, 1, -8, 1, new ItemStack[]{new ItemStack(LOTRMod.helmetAngband), new ItemStack(LOTRMod.bodyAngband), new ItemStack(LOTRMod.legsAngband), new ItemStack(LOTRMod.bootsAngband)});
-        this.placeArmorStand(world, 16, 1, -6, 1, new ItemStack[]{new ItemStack(LOTRMod.helmetAngband), new ItemStack(LOTRMod.bodyAngband), new ItemStack(LOTRMod.legsAngband), new ItemStack(LOTRMod.bootsAngband)});
-        this.placeArmorStand(world, 16, 1, -4, 1, new ItemStack[]{new ItemStack(LOTRMod.helmetAngband), new ItemStack(LOTRMod.bodyAngband), new ItemStack(LOTRMod.legsAngband), new ItemStack(LOTRMod.bootsAngband)});
-        this.placeArmorStand(world, 16, 1, -2, 1, new ItemStack[]{new ItemStack(LOTRMod.helmetAngband), new ItemStack(LOTRMod.bodyAngband), new ItemStack(LOTRMod.legsAngband), new ItemStack(LOTRMod.bootsAngband)});
-        this.placeArmorStand(world, 16, 1, 0, 1, new ItemStack[]{new ItemStack(LOTRMod.helmetAngband), new ItemStack(LOTRMod.bodyAngband), new ItemStack(LOTRMod.legsAngband), new ItemStack(LOTRMod.bootsAngband)});
-        this.placeArmorStand(world, 16, 1, 2, 1, new ItemStack[]{new ItemStack(LOTRMod.helmetAngband), new ItemStack(LOTRMod.bodyAngband), new ItemStack(LOTRMod.legsAngband), new ItemStack(LOTRMod.bootsAngband)});
-        this.placeArmorStand(world, 16, 1, 4, 1, new ItemStack[]{new ItemStack(LOTRMod.helmetAngband), new ItemStack(LOTRMod.bodyAngband), new ItemStack(LOTRMod.legsAngband), new ItemStack(LOTRMod.bootsAngband)});
-        this.placeArmorStand(world, 14, 1, -6, 1, new ItemStack[]{new ItemStack(LOTRMod.helmetAngband), new ItemStack(LOTRMod.bodyAngband), new ItemStack(LOTRMod.legsAngband), new ItemStack(LOTRMod.bootsAngband)});
-        this.placeArmorStand(world, 14, 1, -4, 1, new ItemStack[]{new ItemStack(LOTRMod.helmetAngband), new ItemStack(LOTRMod.bodyAngband), new ItemStack(LOTRMod.legsAngband), new ItemStack(LOTRMod.bootsAngband)});
-        this.placeArmorStand(world, 14, 1, -2, 1, new ItemStack[]{new ItemStack(LOTRMod.helmetAngband), new ItemStack(LOTRMod.bodyAngband), new ItemStack(LOTRMod.legsAngband), new ItemStack(LOTRMod.bootsAngband)});
-        this.placeArmorStand(world, 14, 1, 0, 1, new ItemStack[]{new ItemStack(LOTRMod.helmetAngband), new ItemStack(LOTRMod.bodyAngband), new ItemStack(LOTRMod.legsAngband), new ItemStack(LOTRMod.bootsAngband)});
-        this.placeArmorStand(world, 14, 1, 2, 1, new ItemStack[]{new ItemStack(LOTRMod.helmetAngband), new ItemStack(LOTRMod.bodyAngband), new ItemStack(LOTRMod.legsAngband), new ItemStack(LOTRMod.bootsAngband)});
-        this.placeArmorStand(world, 14, 1, 4, 1, new ItemStack[]{new ItemStack(LOTRMod.helmetAngband), new ItemStack(LOTRMod.bodyAngband), new ItemStack(LOTRMod.legsAngband), new ItemStack(LOTRMod.bootsAngband)});
-        this.placeArmorStand(world, -6, 1, -10, 3, new ItemStack[]{new ItemStack(LOTRMod.helmetAngbandu), new ItemStack(LOTRMod.bodyAngbandu), new ItemStack(LOTRMod.legsAngbandu), new ItemStack(LOTRMod.bootsAngbandu)});
-        this.placeArmorStand(world, -6, 1, -8, 3, new ItemStack[]{new ItemStack(LOTRMod.helmetAngbandu), new ItemStack(LOTRMod.bodyAngbandu), new ItemStack(LOTRMod.legsAngbandu), new ItemStack(LOTRMod.bootsAngbandu)});
-        this.placeArmorStand(world, -6, 1, -6, 3, new ItemStack[]{new ItemStack(LOTRMod.helmetAngbandu), new ItemStack(LOTRMod.bodyAngbandu), new ItemStack(LOTRMod.legsAngbandu), new ItemStack(LOTRMod.bootsAngbandu)});
-        this.placeArmorStand(world, -6, 1, -4, 3, new ItemStack[]{new ItemStack(LOTRMod.helmetAngbandu), new ItemStack(LOTRMod.bodyAngbandu), new ItemStack(LOTRMod.legsAngbandu), new ItemStack(LOTRMod.bootsAngbandu)});
-        this.placeArmorStand(world, -6, 1, -2, 3, new ItemStack[]{new ItemStack(LOTRMod.helmetAngbandu), new ItemStack(LOTRMod.bodyAngbandu), new ItemStack(LOTRMod.legsAngbandu), new ItemStack(LOTRMod.bootsAngbandu)});
-        this.placeArmorStand(world, -6, 1, 0, 3, new ItemStack[]{new ItemStack(LOTRMod.helmetAngbandu), new ItemStack(LOTRMod.bodyAngbandu), new ItemStack(LOTRMod.legsAngbandu), new ItemStack(LOTRMod.bootsAngbandu)});
+        this.placeArmorStand(world, 16, 1, -8, 1, this.getDisplayArmorOrNull(world, random));
+        this.placeArmorStand(world, 14, 1, -8, 1, this.getDisplayArmorOrNull(world, random));
+        this.placeArmorStand(world, 16, 1, -6, 1, this.getDisplayArmorOrNull(world, random));
+        this.placeArmorStand(world, 16, 1, -4, 1, this.getDisplayArmorOrNull(world, random));
+        this.placeArmorStand(world, 16, 1, -2, 1, this.getDisplayArmorOrNull(world, random));
+        this.placeArmorStand(world, 16, 1, 0, 1, this.getDisplayArmorOrNull(world, random));
+        this.placeArmorStand(world, 16, 1, 2, 1, this.getDisplayArmorOrNull(world, random));
+        this.placeArmorStand(world, 16, 1, 4, 1, this.getDisplayArmorOrNull(world, random));
+        this.placeArmorStand(world, 14, 1, -6, 1, this.getDisplayArmorOrNull(world, random));
+        this.placeArmorStand(world, 14, 1, -4, 1, this.getDisplayArmorOrNull(world, random));
+        this.placeArmorStand(world, 14, 1, -2, 1, this.getDisplayArmorOrNull(world, random));
+        this.placeArmorStand(world, 14, 1, 0, 1, this.getDisplayArmorOrNull(world, random));
+        this.placeArmorStand(world, 14, 1, 2, 1, this.getDisplayArmorOrNull(world, random));
+        this.placeArmorStand(world, 14, 1, 2, 1, this.getDisplayArmorOrNull(world, random));
+        this.placeArmorStand(world, 14, 1, 4, 1, this.getDisplayArmorOrNull(world, random));
+        this.placeArmorStand(world, -6, 1, -4, 3, this.getDisplayArmorOrNull1(world, random));
+        this.placeArmorStand(world, -6, 1, -8, 3, this.getDisplayArmorOrNull1(world, random));
+        this.placeArmorStand(world, -6, 1, -6, 3, this.getDisplayArmorOrNull1(world, random));
+        this.placeArmorStand(world, -6, 1, -4, 3, this.getDisplayArmorOrNull1(world, random));
+        this.placeArmorStand(world, -6, 1, -2, 3, this.getDisplayArmorOrNull1(world, random));
+        this.placeArmorStand(world, -6, 1, 0, 3, this.getDisplayArmorOrNull1(world, random));
+        this.placeArmorStand(world, -6, 1, -2, 3, this.getDisplayArmorOrNull1(world, random));
+        this.placeArmorStand(world, -6, 1, 0, 3, this.getDisplayArmorOrNull1(world, random));
         this.placeArmorStand(world, 6, 1, 4, 0, new ItemStack[]{new ItemStack(LOTRMod.helmetangbande), new ItemStack(LOTRMod.bodyangbande), new ItemStack(LOTRMod.legsangbande), new ItemStack(LOTRMod.bootsangbande)});
         this.placeArmorStand(world, 1, 1, 4, 0, new ItemStack[]{new ItemStack(LOTRMod.helmetangbande), new ItemStack(LOTRMod.bodyangbande), new ItemStack(LOTRMod.legsangbande), new ItemStack(LOTRMod.bootsangbande)});
-        this.placeArmorStand(world, -10, 1, 5, 3, new ItemStack[]{new ItemStack(LOTRMod.helmetUtumno), new ItemStack(LOTRMod.bodyUtumno), new ItemStack(LOTRMod.legsUtumno), new ItemStack(LOTRMod.bootsUtumno)});
-        this.placeArmorStand(world, -10, 1, 7, 3, new ItemStack[]{new ItemStack(LOTRMod.helmetUtumno), new ItemStack(LOTRMod.bodyUtumno), new ItemStack(LOTRMod.legsUtumno), new ItemStack(LOTRMod.bootsUtumno)});
-        this.placeArmorStand(world, -10, 1, 9, 3, new ItemStack[]{new ItemStack(LOTRMod.helmetUtumno), new ItemStack(LOTRMod.bodyUtumno), new ItemStack(LOTRMod.legsUtumno), new ItemStack(LOTRMod.bootsUtumno)});
-        this.placeArmorStand(world, -10, 1, 11, 3, new ItemStack[]{new ItemStack(LOTRMod.helmetUtumno), new ItemStack(LOTRMod.bodyUtumno), new ItemStack(LOTRMod.legsUtumno), new ItemStack(LOTRMod.bootsUtumno)});
-        this.placeArmorStand(world, -8, 1, 11, 0, new ItemStack[]{new ItemStack(LOTRMod.helmetUtumno), new ItemStack(LOTRMod.bodyUtumno), new ItemStack(LOTRMod.legsUtumno), new ItemStack(LOTRMod.bootsUtumno)});
-        this.placeArmorStand(world, -6, 1, 11, 0, new ItemStack[]{new ItemStack(LOTRMod.helmetUtumno), new ItemStack(LOTRMod.bodyUtumno), new ItemStack(LOTRMod.legsUtumno), new ItemStack(LOTRMod.bootsUtumno)});
+        this.placeArmorStand(world, -10, 1, 5, 3, this.getDisplayArmorOrNull2(world, random));
+        this.placeArmorStand(world, -10, 1, 7, 3, this.getDisplayArmorOrNull2(world, random));
+        this.placeArmorStand(world, -10, 1, 9, 3, this.getDisplayArmorOrNull2(world, random));
+        this.placeArmorStand(world, -10, 1, 11, 3, this.getDisplayArmorOrNull2(world, random));
+        this.placeArmorStand(world, -8, 1, 11, 0, this.getDisplayArmorOrNull2(world, random));
+        this.placeArmorStand(world, -6, 1, 11, 0, this.getDisplayArmorOrNull2(world, random));
         this.placeUrukArmor(world, random, 8, 4, 10, 2);
         this.placeUrukArmor(world, random, -1, 4, 10, 2);
         this.placeUrukArmor(world, random, 7, 4, 12, 3);
@@ -210,7 +217,7 @@ extends LOTRWorldGenMordorStructure2 {
         LOTREntityUtumnoTrader captain1 = new LOTREntityUtumnoTrader(world);
         captain.spawnRidingHorse = false;
         this.spawnNPCAndSetHome(captain1, world, 0, 1, 0, 8);
-        int uruks = 12;
+        int uruks = 8;
         for (int l = 0; l < uruks; ++l) {
             LOTREntityAngbandUruc uruk = random.nextInt(3) == 0 ? new LOTREntityAngbandCrossbow(world) : new LOTREntityAngbandUruc(world);
             uruk.spawnRidingHorse = false;
@@ -222,6 +229,69 @@ extends LOTRWorldGenMordorStructure2 {
         respawner.setSpawnRanges(24, -4, 8, 24);
         this.placeNPCRespawner(respawner, world, 0, 0, 0);
         return true;
+    }
+
+    private ItemStack[] getDisplayArmorOrNull(World world, Random random) {
+        LOTREntityAngbandUruc armorGuard = new LOTREntityAngbandUruc(world);
+        armorGuard.onSpawnWithEgg(null);
+        int slot = random.nextInt(4) + 1;
+        switch (slot) {
+            case 4: {
+                return new ItemStack[]{armorGuard.getEquipmentInSlot(4), null, null, null};
+            }
+            case 3: {
+                return new ItemStack[]{null, armorGuard.getEquipmentInSlot(3), null, null};
+            }
+            case 2: {
+                return new ItemStack[]{null, null, armorGuard.getEquipmentInSlot(2), null};
+            }
+            case 1: {
+                return new ItemStack[]{null, null, null, armorGuard.getEquipmentInSlot(1)};
+            }
+        }
+        return null;
+    }
+
+    private ItemStack[] getDisplayArmorOrNull1(World world, Random random) {
+        LOTREntityAngbandOrcArcher armorGuard = new LOTREntityAngbandOrcArcher(world);
+        armorGuard.onSpawnWithEgg(null);
+        int slot = random.nextInt(4) + 1;
+        switch (slot) {
+            case 4: {
+                return new ItemStack[]{armorGuard.getEquipmentInSlot(4), null, null, null};
+            }
+            case 3: {
+                return new ItemStack[]{null, armorGuard.getEquipmentInSlot(3), null, null};
+            }
+            case 2: {
+                return new ItemStack[]{null, null, armorGuard.getEquipmentInSlot(2), null};
+            }
+            case 1: {
+                return new ItemStack[]{null, null, null, armorGuard.getEquipmentInSlot(1)};
+            }
+        }
+        return null;
+    }
+
+    private ItemStack[] getDisplayArmorOrNull2(World world, Random random) {
+        LOTREntityUtumnoOrc armorGuard = new LOTREntityUtumnoOrc(world);
+        armorGuard.onSpawnWithEgg(null);
+        int slot = random.nextInt(4) + 1;
+        switch (slot) {
+            case 4: {
+                return new ItemStack[]{armorGuard.getEquipmentInSlot(4), null, null, null};
+            }
+            case 3: {
+                return new ItemStack[]{null, armorGuard.getEquipmentInSlot(3), null, null};
+            }
+            case 2: {
+                return new ItemStack[]{null, null, armorGuard.getEquipmentInSlot(2), null};
+            }
+            case 1: {
+                return new ItemStack[]{null, null, null, armorGuard.getEquipmentInSlot(1)};
+            }
+        }
+        return null;
     }
 
     protected ItemStack getRandomUrukWeapon(Random random) {

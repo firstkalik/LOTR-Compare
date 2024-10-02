@@ -29,7 +29,7 @@ extends LOTRBlockCraftingTable {
     private IIcon[] tableIcons;
 
     public LOTRBlockUmbarTable() {
-        super(Material.rock, LOTRFaction.NEAR_HARAD, 56);
+        super(Material.rock, LOTRFaction.UMBAR, 56);
         this.setStepSound(Block.soundTypeStone);
     }
 

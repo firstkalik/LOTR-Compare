@@ -87,7 +87,10 @@ import lotr.common.entity.npc.LOTREntityDunlendingWarrior;
 import lotr.common.entity.npc.LOTREntityDurmethBannerBearer;
 import lotr.common.entity.npc.LOTREntityDurmethOrc;
 import lotr.common.entity.npc.LOTREntityDurmethOrcArcher;
+import lotr.common.entity.npc.LOTREntityDurmethOrcWarrior;
+import lotr.common.entity.npc.LOTREntityDurmethOrcWarriorArcher;
 import lotr.common.entity.npc.LOTREntityDurmethWarg;
+import lotr.common.entity.npc.LOTREntityDurmethWarriorBannerBearer;
 import lotr.common.entity.npc.LOTREntityDwarfAxeThrower;
 import lotr.common.entity.npc.LOTREntityDwarfBannerBearer;
 import lotr.common.entity.npc.LOTREntityDwarfWarrior;
@@ -229,9 +232,9 @@ public enum LOTRInvasions {
     HIGH_ELF_RIVENDELL(LOTRFaction.HIGH_ELF, "rivendell"),
     GUNDABAD(LOTRFaction.GUNDABAD),
     GUNDABAD_WARG(LOTRFaction.GUNDABAD, "warg"),
-    ANGMAR(LOTRFaction.GUNDABAD, "orcs"),
-    ANGMAR_HILLMEN(LOTRFaction.GUNDABAD, "hillmen"),
-    ANGMAR_WARG(LOTRFaction.GUNDABAD, "wargs"),
+    ANGMAR(LOTRFaction.ANGMAR, "orcs"),
+    ANGMAR_HILLMEN(LOTRFaction.ANGMAR, "hillmen"),
+    ANGMAR_WARG(LOTRFaction.ANGMAR, "wargs"),
     WOOD_ELF(LOTRFaction.WOOD_ELF),
     DOL_GULDUR(LOTRFaction.DOL_GULDUR),
     DOL_GULDUR_URUK(LOTRFaction.DOL_GULDUR),
@@ -260,8 +263,8 @@ public enum LOTRInvasions {
     RHUN(LOTRFaction.RHUDEL),
     NEAR_HARAD_HARNEDOR(LOTRFaction.NEAR_HARAD, "harnedor"),
     NEAR_HARAD_COAST(LOTRFaction.NEAR_HARAD, "coast"),
-    NEAR_HARAD_UMBAR(LOTRFaction.NEAR_HARAD, "umbar"),
-    NEAR_HARAD_CORSAIR(LOTRFaction.NEAR_HARAD, "corsair"),
+    UMBAR(LOTRFaction.UMBAR),
+    UMBAR_CORSAIR(LOTRFaction.UMBAR, "corsair"),
     NEAR_HARAD_NOMAD(LOTRFaction.NEAR_HARAD, "nomad"),
     NEAR_HARAD_GULF(LOTRFaction.NEAR_HARAD, "gulf"),
     MOREDAIN(LOTRFaction.MORWAITH),
@@ -531,14 +534,14 @@ public enum LOTRInvasions {
         LOTRInvasions.NEAR_HARAD_COAST.invasionMobs.add(new InvasionSpawnEntry(LOTREntityNearHaradBannerBearer.class, 2));
         LOTRInvasions.NEAR_HARAD_COAST.invasionMobs.add(new InvasionSpawnEntry(LOTREntitySouthronChampion.class, 2));
         LOTRInvasions.NEAR_HARAD_COAST.invasionMobs.add(new InvasionSpawnEntry(LOTREntityMoredainMercenary.class, 5));
-        LOTRInvasions.NEAR_HARAD_UMBAR.invasionIcon = LOTRMod.scimitarNearHarad;
-        LOTRInvasions.NEAR_HARAD_UMBAR.invasionMobs.add(new InvasionSpawnEntry(LOTREntityUmbarWarrior.class, 100));
-        LOTRInvasions.NEAR_HARAD_UMBAR.invasionMobs.add(new InvasionSpawnEntry(LOTREntityUmbarArcher.class, 50));
-        LOTRInvasions.NEAR_HARAD_UMBAR.invasionMobs.add(new InvasionSpawnEntry(LOTREntityUmbarBannerBearer.class, 20));
-        LOTRInvasions.NEAR_HARAD_UMBAR.invasionMobs.add(new InvasionSpawnEntry(LOTREntityMoredainMercenary.class, 30));
-        LOTRInvasions.NEAR_HARAD_UMBAR.invasionMobs.add(new InvasionSpawnEntry(LOTREntityGondorRenegade.class, 4));
-        LOTRInvasions.NEAR_HARAD_CORSAIR.invasionIcon = LOTRMod.swordCorsair;
-        LOTRInvasions.NEAR_HARAD_CORSAIR.invasionMobs.add(new InvasionSpawnEntry(LOTREntityCorsair.class, 10));
+        LOTRInvasions.UMBAR.invasionIcon = LOTRMod.scimitarNearHarad;
+        LOTRInvasions.UMBAR.invasionMobs.add(new InvasionSpawnEntry(LOTREntityUmbarWarrior.class, 100));
+        LOTRInvasions.UMBAR.invasionMobs.add(new InvasionSpawnEntry(LOTREntityUmbarArcher.class, 50));
+        LOTRInvasions.UMBAR.invasionMobs.add(new InvasionSpawnEntry(LOTREntityUmbarBannerBearer.class, 20));
+        LOTRInvasions.UMBAR.invasionMobs.add(new InvasionSpawnEntry(LOTREntityMoredainMercenary.class, 30));
+        LOTRInvasions.UMBAR.invasionMobs.add(new InvasionSpawnEntry(LOTREntityGondorRenegade.class, 4));
+        LOTRInvasions.UMBAR.invasionIcon = LOTRMod.swordCorsair;
+        LOTRInvasions.UMBAR.invasionMobs.add(new InvasionSpawnEntry(LOTREntityCorsair.class, 10));
         LOTRInvasions.NEAR_HARAD_NOMAD.invasionIcon = LOTRMod.swordHarad;
         LOTRInvasions.NEAR_HARAD_NOMAD.invasionMobs.add(new InvasionSpawnEntry(LOTREntityNomadWarrior.class, 10));
         LOTRInvasions.NEAR_HARAD_NOMAD.invasionMobs.add(new InvasionSpawnEntry(LOTREntityNomadArcher.class, 5));
@@ -605,9 +608,12 @@ public enum LOTRInvasions {
         LOTRInvasions.DURMETH.invasionIcon = LOTRMod.hammerGundabadUruk;
         LOTRInvasions.DURMETH.invasionMobs.add(new InvasionSpawnEntry(LOTREntityDurmethOrc.class, 20));
         LOTRInvasions.DURMETH.invasionMobs.add(new InvasionSpawnEntry(LOTREntityDurmethOrcArcher.class, 15));
+        LOTRInvasions.DURMETH.invasionMobs.add(new InvasionSpawnEntry(LOTREntityDurmethOrcWarrior.class, 15));
+        LOTRInvasions.DURMETH.invasionMobs.add(new InvasionSpawnEntry(LOTREntityDurmethOrcWarriorArcher.class, 10));
         LOTRInvasions.DURMETH.invasionMobs.add(new InvasionSpawnEntry(LOTREntityWickedDwarf2.class, 15));
         LOTRInvasions.DURMETH.invasionMobs.add(new InvasionSpawnEntry(LOTREntityDurmethWarg.class, 20));
         LOTRInvasions.DURMETH.invasionMobs.add(new InvasionSpawnEntry(LOTREntityDurmethBannerBearer.class, 5));
+        LOTRInvasions.DURMETH.invasionMobs.add(new InvasionSpawnEntry(LOTREntityDurmethWarriorBannerBearer.class, 3));
         LOTRInvasions.DURMETH.invasionMobs.add(new InvasionSpawnEntry(LOTREntityGundabadCaveTroll.class, 3));
         LOTRInvasions.DURMETH.invasionMobs.add(new InvasionSpawnEntry(LOTREntityTundraSnowTroll.class, 2));
         LOTRInvasions.DURMETH.invasionMobs.add(new InvasionSpawnEntry(LOTREntitySnowTroll.class, 2));

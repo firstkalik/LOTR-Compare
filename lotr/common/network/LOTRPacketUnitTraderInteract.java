@@ -18,9 +18,13 @@ import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import io.netty.buffer.ByteBuf;
+import lotr.common.LOTRConfig;
+import lotr.common.LOTRLevelData;
 import lotr.common.LOTRMod;
+import lotr.common.LOTRPlayerData;
 import lotr.common.entity.npc.LOTREntityNPC;
 import lotr.common.entity.npc.LOTRHireableBase;
+import lotr.common.fac.LOTRFaction;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -31,6 +35,8 @@ public class LOTRPacketUnitTraderInteract
 implements IMessage {
     private int traderID;
     private int traderAction;
+    private static final int BASE_MAX_HIRED_NPCS = LOTRConfig.maxHiredNPCs;
+    private static final int ADDITIONAL_NPCS_PER_1000_REP = 5;
 
     public LOTRPacketUnitTraderInteract() {
     }
@@ -51,7 +57,26 @@ implements IMessage {
     }
 
     protected void openTradeGUI(EntityPlayer entityplayer, LOTREntityNPC trader) {
+        LOTRPlayerData playerData = LOTRLevelData.getData(entityplayer);
+        int maxHiredNPCs = this.getMaxHiredNPCs(entityplayer, trader.getFaction());
+        int hiredNPCCount = this.getGlobalHiredNPCCount(entityplayer);
         entityplayer.openGui((Object)LOTRMod.instance, 7, entityplayer.worldObj, trader.getEntityId(), 0, 0);
+    }
+
+    private int getMaxHiredNPCs(EntityPlayer entityplayer, LOTRFaction faction) {
+        LOTRPlayerData playerData = LOTRLevelData.getData(entityplayer);
+        float alignment = playerData.getAlignment(faction);
+        int additionalNPCs = (int)(alignment / 1000.0f) * 5;
+        int customMaxHiredNPCs = playerData.getCustomMaxHiredNPCs();
+        if (customMaxHiredNPCs > 0) {
+            return customMaxHiredNPCs;
+        }
+        return BASE_MAX_HIRED_NPCS + additionalNPCs;
+    }
+
+    private int getGlobalHiredNPCCount(EntityPlayer entityplayer) {
+        LOTRPlayerData playerData = LOTRLevelData.getData(entityplayer);
+        return playerData.getGlobalHiredNPCCount();
     }
 
     public static class Handler

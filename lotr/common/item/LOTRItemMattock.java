@@ -41,6 +41,9 @@ extends LOTRItemPickaxe {
         if (block == Blocks.melon_block) {
             return 10.0f;
         }
+        if (block == Blocks.pumpkin) {
+            return 10.0f;
+        }
         return f;
     }
 }

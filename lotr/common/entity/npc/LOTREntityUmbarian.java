@@ -22,6 +22,7 @@ import lotr.common.entity.npc.LOTRFamilyInfo;
 import lotr.common.entity.npc.LOTRInventoryNPCItems;
 import lotr.common.entity.npc.LOTRNPCMount;
 import lotr.common.entity.npc.LOTRNames;
+import lotr.common.fac.LOTRFaction;
 import lotr.common.quest.LOTRMiniQuest;
 import lotr.common.quest.LOTRMiniQuestFactory;
 import lotr.common.world.structure.LOTRChestContents;
@@ -42,6 +43,11 @@ extends LOTREntityNearHaradrimBase {
     @Override
     protected LOTRFoods getHaradrimFoods() {
         return LOTRFoods.SOUTHRON;
+    }
+
+    @Override
+    public LOTRFaction getFaction() {
+        return LOTRFaction.UMBAR;
     }
 
     @Override

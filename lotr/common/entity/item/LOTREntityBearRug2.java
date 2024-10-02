@@ -11,7 +11,7 @@
 package lotr.common.entity.item;
 
 import lotr.common.LOTRMod;
-import lotr.common.entity.animal.LOTREntityBear2;
+import lotr.common.entity.animal.LOTREntityPolarBear;
 import lotr.common.entity.item.LOTREntityRugBase;
 import net.minecraft.entity.DataWatcher;
 import net.minecraft.item.Item;
@@ -32,12 +32,12 @@ extends LOTREntityRugBase {
         this.dataWatcher.addObject(18, (Object)0);
     }
 
-    public LOTREntityBear2.BearType getRugType() {
+    public LOTREntityPolarBear.BearType getRugType() {
         byte i = this.dataWatcher.getWatchableObjectByte(18);
-        return LOTREntityBear2.BearType.forID(i);
+        return LOTREntityPolarBear.BearType.forID(i);
     }
 
-    public void setRugType(LOTREntityBear2.BearType t) {
+    public void setRugType(LOTREntityPolarBear.BearType t) {
         this.dataWatcher.updateObject(18, (Object)((byte)t.bearID));
     }
 
@@ -60,7 +60,7 @@ extends LOTREntityRugBase {
     @Override
     public void readEntityFromNBT(NBTTagCompound nbt) {
         super.readEntityFromNBT(nbt);
-        this.setRugType(LOTREntityBear2.BearType.forID(nbt.getByte("RugType")));
+        this.setRugType(LOTREntityPolarBear.BearType.forID(nbt.getByte("RugType")));
     }
 }
 

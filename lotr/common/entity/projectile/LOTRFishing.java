@@ -42,9 +42,9 @@ public class LOTRFishing {
     private static List<FishingItem> junk = new ArrayList<FishingItem>();
     private static List<FishingItem> treasure = new ArrayList<FishingItem>();
 
-    public static FishResult getFishResult(Random rand, float chance, int luck, int speed, boolean allowJunkTreasure) {
+    public static FishResult getFishResult(Random rand, float chance, int luck, int speed, boolean allowJunkTreasure, int seaFortuneLevel) {
         float junkChance = 0.1f - (float)luck * 0.025f - (float)speed * 0.01f;
-        float treasureChance = 0.2f + (float)luck * 0.01f - (float)speed * 0.01f;
+        float treasureChance = 0.2f + (float)luck * 0.01f - (float)speed * 0.01f + (float)seaFortuneLevel * 0.05f;
         junkChance = MathHelper.clamp_float((float)junkChance, (float)0.0f, (float)1.0f);
         treasureChance = MathHelper.clamp_float((float)treasureChance, (float)0.0f, (float)1.0f);
         if (allowJunkTreasure) {
@@ -122,9 +122,13 @@ public class LOTRFishing {
         treasure.add(new FishingItem(new ItemStack(LOTRMod.mithrilNugget), 5));
         treasure.add(new FishingItem(new ItemStack(LOTRMod.silverRing), 10));
         treasure.add(new FishingItem(new ItemStack(LOTRMod.goldRing), 5));
-        treasure.add(new FishingItem(new ItemStack(LOTRMod.ringValarUlmo), 1).setMaxDurability(0.75f));
-        treasure.add(new FishingItem(new ItemStack(LOTRMod.steelbow), 1).setMaxDurability(0.75f));
+        treasure.add(new FishingItem(new ItemStack(LOTRMod.mithril), 1));
+        treasure.add(new FishingItem(new ItemStack(LOTRMod.graalGold), 2));
+        treasure.add(new FishingItem(new ItemStack(LOTRMod.graalMithril), 1));
+        treasure.add(new FishingItem(new ItemStack(LOTRMod.ringValarUlmo), 1).setMaxDurability(0.1f));
+        treasure.add(new FishingItem(new ItemStack(LOTRMod.steelbow), 1).setMaxDurability(0.1f));
         treasure.add(new FishingItem(new ItemStack(LOTRMod.mithrilRing), 1));
+        treasure.add(new FishingItem(new ItemStack(LOTRMod.treasureMap), 5));
     }
 
     private static class FishingItem

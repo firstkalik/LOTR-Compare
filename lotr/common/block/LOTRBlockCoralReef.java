@@ -51,6 +51,7 @@ extends Block {
         this.setHardness(1.0f);
         this.setResistance(5.0f);
         this.setStepSound(Block.soundTypeStone);
+        this.setLightLevel(0.5f);
     }
 
     @SideOnly(value=Side.CLIENT)

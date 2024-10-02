@@ -9,6 +9,7 @@
 package lotr.common.block;
 
 import java.util.Random;
+import lotr.common.LOTRAchievement;
 import lotr.common.LOTRLevelData;
 import lotr.common.LOTRMod;
 import lotr.common.block.LOTRBlockForgeBase;
@@ -31,6 +32,7 @@ extends LOTRBlockForgeBase {
         if (hasRequiredAlignment) {
             if (!world.isRemote) {
                 entityplayer.openGui((Object)LOTRMod.instance, 5, world, i, j, k);
+                LOTRLevelData.getData(entityplayer).addAchievement(LOTRAchievement.useUpgradedMoriaForge);
             } else {
                 for (int l = 0; l < 8; ++l) {
                     double d = (float)i + world.rand.nextFloat();

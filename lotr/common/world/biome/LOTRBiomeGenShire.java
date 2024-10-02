@@ -15,6 +15,7 @@ package lotr.common.world.biome;
 import java.util.List;
 import java.util.Random;
 import lotr.common.LOTRMod;
+import lotr.common.entity.animal.LOTREntityFox;
 import lotr.common.entity.animal.LOTREntityShirePony;
 import lotr.common.entity.npc.LOTREntityBlueDwarfMerchant;
 import lotr.common.entity.npc.LOTREntityDaleMerchant;
@@ -55,6 +56,7 @@ extends LOTRBiome {
     public LOTRBiomeGenShire(int i, boolean major) {
         super(i, major);
         this.spawnableCreatureList.add(new BiomeGenBase.SpawnListEntry(LOTREntityShirePony.class, 12, 2, 6));
+        this.spawnableCreatureList.add(new BiomeGenBase.SpawnListEntry(LOTREntityFox.class, 4, 1, 4));
         LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer = new LOTRBiomeSpawnList.SpawnListContainer[]{LOTRBiomeSpawnList.entry(LOTRSpawnList.HOBBITS, 10)};
         this.npcSpawnList.newFactionList(100).add(arrspawnListContainer);
         LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer2 = new LOTRBiomeSpawnList.SpawnListContainer[]{LOTRBiomeSpawnList.entry(LOTRSpawnList.GUNDABAD_ORCS, 10), LOTRBiomeSpawnList.entry(LOTRSpawnList.GUNDABAD_WARGS, 3).setConquestThreshold(100.0f)};

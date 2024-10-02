@@ -19,6 +19,7 @@ package lotr.common.world.biome;
 import java.util.List;
 import java.util.Random;
 import lotr.common.LOTRAchievement;
+import lotr.common.LOTRMod;
 import lotr.common.entity.animal.LOTREntityAurochs;
 import lotr.common.entity.animal.LOTREntityCamel;
 import lotr.common.entity.animal.LOTREntityHorse;
@@ -118,6 +119,7 @@ extends LOTRBiome {
         this.decorator.addTree(LOTRTreeType.ALMOND, 5);
         this.decorator.addTree(LOTRTreeType.PLUM, 5);
         this.registerHaradFlowers();
+        this.addFlower(LOTRMod.miniCactus, 0, 2);
         this.decorator.addRandomStructure(new LOTRWorldGenHaradObelisk(false), 3000);
         this.decorator.addRandomStructure(new LOTRWorldGenStoneRuin.NEAR_HARAD(1, 3), 500);
         this.decorator.addRandomStructure(new LOTRWorldGenMoredainMercCamp(false), 1000);

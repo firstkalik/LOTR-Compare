@@ -12,6 +12,8 @@
 package lotr.common.enchant;
 
 import java.util.Set;
+import lotr.common.item.LOTRItemAxe;
+import lotr.common.item.LOTRItemBattleaxe;
 import lotr.common.item.LOTRItemBlowgun;
 import lotr.common.item.LOTRItemCommandSword;
 import lotr.common.item.LOTRItemCrossbow;
@@ -34,6 +36,7 @@ public enum LOTREnchantmentType {
     ARMOR_HEAD,
     MELEE,
     TOOL,
+    AXE,
     SHEARS,
     RANGED,
     RANGED_LAUNCHER,
@@ -75,6 +78,9 @@ public enum LOTREnchantmentType {
             return true;
         }
         if (this == TOOL && !item.getToolClasses(itemstack).isEmpty()) {
+            return true;
+        }
+        if (this == AXE && (item instanceof LOTRItemAxe || item instanceof LOTRItemBattleaxe)) {
             return true;
         }
         if (this == SHEARS && item instanceof ItemShears) {

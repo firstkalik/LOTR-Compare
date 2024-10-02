@@ -67,6 +67,7 @@ extends LOTRBiome {
         this.decorator.addTree(LOTRTreeType.OAK_DESERT, 1000);
         this.decorator.addTree(LOTRTreeType.OAK_DEAD, 200);
         this.registerHaradFlowers();
+        this.addFlower(LOTRMod.miniCactus, 0, 2);
         this.biomeColors.setSky(15592678);
         this.setBanditChance(LOTREventSpawner.EventChance.BANDIT_RARE);
         this.setBanditEntityClass(LOTREntityBanditHarad.class);

@@ -100,6 +100,8 @@ public enum LOTRMapLabels {
     LAST_DESERT((Object)((Object)LOTRBiome.lastDesert), 2540, 1460, 4.0f, -20, -2.5f, 0.5f),
     UTTER_EAST("utterEast", 2740, 1000, 10.0f, 60, -3.5f, -1.0f),
     OROCARNI("red", 2420, 870, 6.0f, 60, -3.5f, -0.5f),
+    NORTH_OROCARNI((Object)((Object)LOTRBiome.durmeth), 2318, 509, 2.0f, 2, -2.5f, 2.5f),
+    SOUTH_OROCARNI((Object)((Object)LOTRBiome.rhunForest), 2819, 1494, 5.0f, 2, -3.5f, 0.5f),
     NEAR_HARAD("nearHarad", 1590, 1685, 8.0f, -2, -4.5f, -0.5f),
     HARNEDOR((Object)((Object)LOTRBiome.harnedor), 1440, 1580, 3.0f, -3, -2.5f, 1.5f),
     LITHNEN("lithnen", 1615, 1615, 1.5f, -15, -1.5f, 1.5f),

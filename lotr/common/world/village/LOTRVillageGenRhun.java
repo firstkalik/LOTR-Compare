@@ -41,7 +41,7 @@ import net.minecraft.world.World;
 
 public class LOTRVillageGenRhun
 extends LOTRVillageGen {
-    private boolean enableTowns;
+    public boolean enableTowns;
 
     public LOTRVillageGenRhun(LOTRBiome biome, float f, boolean flag) {
         super(biome);
@@ -53,7 +53,7 @@ extends LOTRVillageGen {
     }
 
     @Override
-    protected LOTRVillageGen.AbstractInstance<?> createVillageInstance(World world, int i, int k, Random random, LocationInfo loc) {
+    public LOTRVillageGen.AbstractInstance<?> createVillageInstance(World world, int i, int k, Random random, LocationInfo loc) {
         return new Instance(this, world, i, k, random, loc);
     }
 
@@ -67,8 +67,8 @@ extends LOTRVillageGen {
     public static class Instance
     extends LOTRVillageGen.AbstractInstance<LOTRVillageGenRhun> {
         public VillageType villageType;
-        private String[] villageName;
-        private boolean enableTowns;
+        public String[] villageName;
+        public boolean enableTowns;
 
         public Instance(LOTRVillageGenRhun village, World world, int i, int k, Random random, LocationInfo loc) {
             super(village, world, i, k, random, loc);
@@ -76,18 +76,7 @@ extends LOTRVillageGen {
         }
 
         @Override
-        protected void setupVillageProperties(Random random) {
-            this.villageName = LOTRNames.getRhunVillageName(random);
-            this.villageType = random.nextInt(4) == 0 ? VillageType.FORT : (this.enableTowns && random.nextInt(4) == 0 ? VillageType.TOWN : VillageType.VILLAGE);
-        }
-
-        @Override
-        public boolean isFlat() {
-            return this.villageType == VillageType.TOWN;
-        }
-
-        @Override
-        protected void addVillageStructures(Random random) {
+        public void addVillageStructures(Random random) {
             if (this.villageType == VillageType.VILLAGE) {
                 this.setupVillage(random);
             } else if (this.villageType == VillageType.TOWN) {
@@ -97,88 +86,159 @@ extends LOTRVillageGen {
             }
         }
 
-        private void setupVillage(Random random) {
-            this.addStructure(new LOTRWorldGenNPCRespawner(false){
-
-                @Override
-                public void setupRespawner(LOTREntityNPCRespawner spawner) {
-                    spawner.setSpawnClass(LOTREntityEasterling.class);
-                    spawner.setCheckRanges(40, -12, 12, 40);
-                    spawner.setSpawnRanges(20, -6, 6, 64);
-                    spawner.setBlockEnemySpawnRange(60);
-                }
-            }, 0, 0, 0);
-            this.addStructure(new LOTRWorldGenNPCRespawner(false){
-
-                @Override
-                public void setupRespawner(LOTREntityNPCRespawner spawner) {
-                    spawner.setSpawnClasses(LOTREntityEasterlingWarrior.class, LOTREntityEasterlingArcher.class);
-                    spawner.setCheckRanges(40, -12, 12, 16);
-                    spawner.setSpawnRanges(20, -6, 6, 64);
-                    spawner.setBlockEnemySpawnRange(60);
-                }
-            }, 0, 0, 0);
-            int pathEnd = 68;
-            int pathSide = 7;
-            int centreSide = 19;
-            this.addStructure(new LOTRWorldGenEasterlingWell(false), 0, -2, 0, true);
-            int signX = 12;
-            this.addStructure(new LOTRWorldGenEasterlingVillageSign(false).setSignText(this.villageName), -signX, 0, 1, true);
-            this.addStructure(new LOTRWorldGenEasterlingVillageSign(false).setSignText(this.villageName), signX, 0, 3, true);
-            this.addStructure(new LOTRWorldGenEasterlingLargeTownHouse(false), 0, -centreSide, 2, true);
-            if (random.nextBoolean()) {
-                this.addStructure(new LOTRWorldGenEasterlingTavern(false), -pathEnd, 0, 1, true);
-                this.addStructure(this.getOtherVillageStructure(random), pathEnd, 0, 3, true);
-            } else {
-                this.addStructure(this.getOtherVillageStructure(random), -pathEnd, 0, 1, true);
-                this.addStructure(new LOTRWorldGenEasterlingTavern(false), pathEnd, 0, 3, true);
-            }
-            int rowHouses = 3;
-            for (int l = -rowHouses; l <= rowHouses; ++l) {
-                int i1 = l * 18;
-                int k1 = pathSide;
-                if (Math.abs(i1) <= 15) {
-                    k1 += 15 - pathSide;
-                }
-                if (Math.abs(l) >= 1) {
-                    this.addStructure(this.getRandomHouse(random), i1, -k1, 2);
-                }
-                this.addStructure(this.getRandomHouse(random), i1, k1, 0);
-                int k2 = k1 + 20;
-                if (l != 0) {
-                    if (random.nextInt(3) == 0) {
-                        this.addStructure(this.getRandomVillageFarm(random), i1, -k2, 2);
-                    } else {
-                        this.addStructure(new LOTRWorldGenHayBales(false), i1, -k2, 2);
-                    }
-                }
-                if (random.nextInt(3) == 0) {
-                    this.addStructure(this.getRandomVillageFarm(random), i1, k2, 0);
-                    continue;
-                }
-                this.addStructure(new LOTRWorldGenHayBales(false), i1, k2, 0);
-            }
-        }
-
-        private LOTRWorldGenStructureBase2 getRandomHouse(Random random) {
-            return new LOTRWorldGenEasterlingHouse(false);
-        }
-
-        private LOTRWorldGenStructureBase2 getOtherVillageStructure(Random random) {
+        public LOTRWorldGenStructureBase2 getOtherVillageStructure(Random random) {
             if (random.nextBoolean()) {
                 return new LOTRWorldGenEasterlingStables(false);
             }
             return new LOTRWorldGenEasterlingSmithy(false);
         }
 
-        private LOTRWorldGenStructureBase2 getRandomVillageFarm(Random random) {
+        @Override
+        public LOTRRoadType getPath(Random random, int i, int k) {
+            int innerOut;
+            int outerOut;
+            int dSq;
+            int imn;
+            int i1 = Math.abs(i);
+            int k1 = Math.abs(k);
+            if (this.villageType == VillageType.VILLAGE && ((dSq = i * i + k * k) < (imn = 15 + random.nextInt(4)) * imn || i1 <= 64 && k1 <= 3 + random.nextInt(2))) {
+                return LOTRRoadType.PATH;
+            }
+            if (this.villageType == VillageType.TOWN) {
+                innerOut = 18;
+                if (i1 <= innerOut && k1 <= innerOut && (i1 >= 12 || k1 >= 12)) {
+                    return LOTRRoadType.RHUN;
+                }
+                if (i1 <= 3 && k1 >= innerOut && k1 <= 86 || k1 <= 3 && i1 >= innerOut && i1 <= 86) {
+                    return LOTRRoadType.RHUN;
+                }
+                outerOut = 66;
+                if (i1 <= outerOut && k1 <= outerOut && (i1 >= 60 || k1 >= 60)) {
+                    return LOTRRoadType.RHUN;
+                }
+            }
+            if (this.villageType == VillageType.FORT) {
+                innerOut = 24;
+                if (i1 <= innerOut && k1 <= innerOut && (i1 >= 20 || k1 >= 20)) {
+                    return LOTRRoadType.RHUN;
+                }
+                if (k >= 14 && k <= 54 && i1 <= 2) {
+                    return LOTRRoadType.RHUN;
+                }
+                outerOut = 52;
+                if (i1 <= outerOut && k1 <= outerOut && (i1 >= 48 || k1 >= 48)) {
+                    return LOTRRoadType.RHUN;
+                }
+            }
+            return null;
+        }
+
+        public LOTRWorldGenStructureBase2 getRandomHouse(Random random) {
+            return new LOTRWorldGenEasterlingHouse(false);
+        }
+
+        public LOTRWorldGenStructureBase2 getRandomVillageFarm(Random random) {
             if (random.nextBoolean()) {
                 return new LOTRWorldGenEasterlingVillageFarm.Animals(false);
             }
             return new LOTRWorldGenEasterlingVillageFarm.Crops(false);
         }
 
-        private void setupTown(Random random) {
+        @Override
+        public boolean isFlat() {
+            return this.villageType == VillageType.TOWN;
+        }
+
+        @Override
+        public boolean isVillageSpecificSurface(World world, int i, int j, int k) {
+            return false;
+        }
+
+        public void setupFort(Random random) {
+            this.addStructure(new LOTRWorldGenNPCRespawner(false){
+
+                @Override
+                public void setupRespawner(LOTREntityNPCRespawner spawner) {
+                    spawner.setSpawnClass(LOTREntityEasterling.class);
+                    spawner.setCheckRanges(50, -12, 12, 16);
+                    spawner.setSpawnRanges(30, -6, 6, 40);
+                    spawner.setBlockEnemySpawnRange(60);
+                }
+            }, 0, 0, 0);
+            for (int i1 : new int[]{-48, 48}) {
+                for (int k1 : new int[]{-48, 48}) {
+                    this.addStructure(new LOTRWorldGenNPCRespawner(false){
+
+                        @Override
+                        public void setupRespawner(LOTREntityNPCRespawner spawner) {
+                            spawner.setSpawnClasses(LOTREntityEasterlingWarrior.class, LOTREntityEasterlingArcher.class);
+                            spawner.setCheckRanges(32, -12, 12, 16);
+                            spawner.setSpawnRanges(20, -6, 6, 40);
+                            spawner.setBlockEnemySpawnRange(40);
+                        }
+                    }, i1, k1, 0);
+                }
+            }
+            this.addStructure(new LOTRWorldGenEasterlingFortress(false), 0, 13, 2, true);
+            int stableX = 26;
+            int stableZ = 0;
+            this.addStructure(new LOTRWorldGenEasterlingStables(false), -stableX, stableZ, 1, true);
+            this.addStructure(new LOTRWorldGenEasterlingStables(false), stableX, stableZ, 3, true);
+            int wellX = stableX;
+            int wellZ = 18;
+            this.addStructure(new LOTRWorldGenEasterlingWell(false), -wellX, wellZ, 1, true);
+            this.addStructure(new LOTRWorldGenEasterlingWell(false), wellX, wellZ, 3, true);
+            int farmZ = 27;
+            for (int l = -3; l <= 3; ++l) {
+                int farmX = l * 10;
+                if (random.nextInt(3) == 0) {
+                    this.addStructure(new LOTRWorldGenHayBales(false), farmX, -farmZ - 5, 2);
+                    continue;
+                }
+                this.addStructure(this.getRandomVillageFarm(random), farmX, -farmZ, 2);
+            }
+            int statueX = 6;
+            int statueZ = 36;
+            this.addStructure(new LOTRWorldGenEasterlingStatue(false), -statueX, statueZ, 1, true);
+            this.addStructure(new LOTRWorldGenEasterlingStatue(false), statueX, statueZ, 3, true);
+            this.addStructure(new LOTRWorldGenEasterlingGatehouse(false).disableSigns(), 0, 62, 2, true);
+            int towerX = 58;
+            this.addStructure(new LOTRWorldGenEasterlingTower(false).disableDoor().setBackLadder().setLeftLadder(), -towerX, -towerX - 3, 0, true);
+            this.addStructure(new LOTRWorldGenEasterlingTower(false).disableDoor().setBackLadder().setRightLadder(), towerX, -towerX - 3, 0, true);
+            this.addStructure(new LOTRWorldGenEasterlingTower(false).disableDoor().setBackLadder().setRightLadder(), -towerX, towerX + 3, 2, true);
+            this.addStructure(new LOTRWorldGenEasterlingTower(false).disableDoor().setBackLadder().setLeftLadder(), towerX, towerX + 3, 2, true);
+            int wallZ = towerX;
+            this.addStructure(LOTRWorldGenEasterlingTownWall.Centre(false), 0, -wallZ, 0);
+            this.addStructure(LOTRWorldGenEasterlingTownWall.Centre(false), wallZ, 0, 1);
+            this.addStructure(LOTRWorldGenEasterlingTownWall.Centre(false), -wallZ, 0, 3);
+            for (int l = 0; l <= 5; ++l) {
+                int wallX = 11 + l * 8;
+                this.addStructure(LOTRWorldGenEasterlingTownWall.Left(false), wallX, -wallZ, 0);
+                this.addStructure(LOTRWorldGenEasterlingTownWall.Right(false), -wallX, -wallZ, 0);
+                this.addStructure(LOTRWorldGenEasterlingTownWall.Left(false), wallZ, wallX, 1);
+                this.addStructure(LOTRWorldGenEasterlingTownWall.Right(false), wallZ, -wallX, 1);
+                this.addStructure(LOTRWorldGenEasterlingTownWall.Left(false), -wallX, wallZ, 2);
+                this.addStructure(LOTRWorldGenEasterlingTownWall.Right(false), wallX, wallZ, 2);
+                this.addStructure(LOTRWorldGenEasterlingTownWall.Left(false), -wallZ, -wallX, 3);
+                this.addStructure(LOTRWorldGenEasterlingTownWall.Right(false), -wallZ, wallX, 3);
+            }
+            int lampX = 17;
+            this.addStructure(new LOTRWorldGenEasterlingLamp(false), -lampX, -lampX, 2, false);
+            this.addStructure(new LOTRWorldGenEasterlingLamp(false), lampX, -lampX, 2, false);
+            this.addStructure(new LOTRWorldGenEasterlingLamp(false), -lampX, lampX, 0, false);
+            this.addStructure(new LOTRWorldGenEasterlingLamp(false), lampX, lampX, 0, false);
+            lampX = 45;
+            this.addStructure(new LOTRWorldGenEasterlingLamp(false), -lampX, -lampX, 2, false);
+            this.addStructure(new LOTRWorldGenEasterlingLamp(false), lampX, -lampX, 2, false);
+            this.addStructure(new LOTRWorldGenEasterlingLamp(false), -lampX, lampX, 0, false);
+            this.addStructure(new LOTRWorldGenEasterlingLamp(false), lampX, lampX, 0, false);
+            lampX = 7;
+            int lampZ = 64;
+            this.addStructure(new LOTRWorldGenEasterlingLamp(false), -lampX, lampZ, 2, false);
+            this.addStructure(new LOTRWorldGenEasterlingLamp(false), lampX, lampZ, 2, false);
+        }
+
+        public void setupTown(Random random) {
             int marketZ;
             this.addStructure(new LOTRWorldGenNPCRespawner(false){
 
@@ -314,138 +374,73 @@ extends LOTRVillageGen {
             this.addStructure(new LOTRWorldGenEasterlingLamp(false), lampX, lampZ, 2, false);
         }
 
-        private void setupFort(Random random) {
+        public void setupVillage(Random random) {
             this.addStructure(new LOTRWorldGenNPCRespawner(false){
 
                 @Override
                 public void setupRespawner(LOTREntityNPCRespawner spawner) {
                     spawner.setSpawnClass(LOTREntityEasterling.class);
-                    spawner.setCheckRanges(50, -12, 12, 16);
-                    spawner.setSpawnRanges(30, -6, 6, 40);
+                    spawner.setCheckRanges(40, -12, 12, 40);
+                    spawner.setSpawnRanges(20, -6, 6, 64);
                     spawner.setBlockEnemySpawnRange(60);
                 }
             }, 0, 0, 0);
-            for (int i1 : new int[]{-48, 48}) {
-                for (int k1 : new int[]{-48, 48}) {
-                    this.addStructure(new LOTRWorldGenNPCRespawner(false){
+            this.addStructure(new LOTRWorldGenNPCRespawner(false){
 
-                        @Override
-                        public void setupRespawner(LOTREntityNPCRespawner spawner) {
-                            spawner.setSpawnClasses(LOTREntityEasterlingWarrior.class, LOTREntityEasterlingArcher.class);
-                            spawner.setCheckRanges(32, -12, 12, 16);
-                            spawner.setSpawnRanges(20, -6, 6, 40);
-                            spawner.setBlockEnemySpawnRange(40);
-                        }
-                    }, i1, k1, 0);
+                @Override
+                public void setupRespawner(LOTREntityNPCRespawner spawner) {
+                    spawner.setSpawnClasses(LOTREntityEasterlingWarrior.class, LOTREntityEasterlingArcher.class);
+                    spawner.setCheckRanges(40, -12, 12, 16);
+                    spawner.setSpawnRanges(20, -6, 6, 64);
+                    spawner.setBlockEnemySpawnRange(60);
                 }
+            }, 0, 0, 0);
+            int pathEnd = 68;
+            int pathSide = 7;
+            int centreSide = 19;
+            this.addStructure(new LOTRWorldGenEasterlingWell(false), 0, -2, 0, true);
+            int signX = 12;
+            this.addStructure(new LOTRWorldGenEasterlingVillageSign(false).setSignText(this.villageName), -signX, 0, 1, true);
+            this.addStructure(new LOTRWorldGenEasterlingVillageSign(false).setSignText(this.villageName), signX, 0, 3, true);
+            this.addStructure(new LOTRWorldGenEasterlingLargeTownHouse(false), 0, -centreSide, 2, true);
+            if (random.nextBoolean()) {
+                this.addStructure(new LOTRWorldGenEasterlingTavern(false), -pathEnd, 0, 1, true);
+                this.addStructure(this.getOtherVillageStructure(random), pathEnd, 0, 3, true);
+            } else {
+                this.addStructure(this.getOtherVillageStructure(random), -pathEnd, 0, 1, true);
+                this.addStructure(new LOTRWorldGenEasterlingTavern(false), pathEnd, 0, 3, true);
             }
-            this.addStructure(new LOTRWorldGenEasterlingFortress(false), 0, 13, 2, true);
-            int stableX = 26;
-            int stableZ = 0;
-            this.addStructure(new LOTRWorldGenEasterlingStables(false), -stableX, stableZ, 1, true);
-            this.addStructure(new LOTRWorldGenEasterlingStables(false), stableX, stableZ, 3, true);
-            int wellX = stableX;
-            int wellZ = 18;
-            this.addStructure(new LOTRWorldGenEasterlingWell(false), -wellX, wellZ, 1, true);
-            this.addStructure(new LOTRWorldGenEasterlingWell(false), wellX, wellZ, 3, true);
-            int farmZ = 27;
-            for (int l = -3; l <= 3; ++l) {
-                int farmX = l * 10;
+            int rowHouses = 3;
+            for (int l = -rowHouses; l <= rowHouses; ++l) {
+                int i1 = l * 18;
+                int k1 = pathSide;
+                if (Math.abs(i1) <= 15) {
+                    k1 += 15 - pathSide;
+                }
+                if (Math.abs(l) >= 1) {
+                    this.addStructure(this.getRandomHouse(random), i1, -k1, 2);
+                }
+                this.addStructure(this.getRandomHouse(random), i1, k1, 0);
+                int k2 = k1 + 20;
+                if (l != 0) {
+                    if (random.nextInt(3) == 0) {
+                        this.addStructure(this.getRandomVillageFarm(random), i1, -k2, 2);
+                    } else {
+                        this.addStructure(new LOTRWorldGenHayBales(false), i1, -k2, 2);
+                    }
+                }
                 if (random.nextInt(3) == 0) {
-                    this.addStructure(new LOTRWorldGenHayBales(false), farmX, -farmZ - 5, 2);
+                    this.addStructure(this.getRandomVillageFarm(random), i1, k2, 0);
                     continue;
                 }
-                this.addStructure(this.getRandomVillageFarm(random), farmX, -farmZ, 2);
+                this.addStructure(new LOTRWorldGenHayBales(false), i1, k2, 0);
             }
-            int statueX = 6;
-            int statueZ = 36;
-            this.addStructure(new LOTRWorldGenEasterlingStatue(false), -statueX, statueZ, 1, true);
-            this.addStructure(new LOTRWorldGenEasterlingStatue(false), statueX, statueZ, 3, true);
-            this.addStructure(new LOTRWorldGenEasterlingGatehouse(false).disableSigns(), 0, 62, 2, true);
-            int towerX = 58;
-            this.addStructure(new LOTRWorldGenEasterlingTower(false).disableDoor().setBackLadder().setLeftLadder(), -towerX, -towerX - 3, 0, true);
-            this.addStructure(new LOTRWorldGenEasterlingTower(false).disableDoor().setBackLadder().setRightLadder(), towerX, -towerX - 3, 0, true);
-            this.addStructure(new LOTRWorldGenEasterlingTower(false).disableDoor().setBackLadder().setRightLadder(), -towerX, towerX + 3, 2, true);
-            this.addStructure(new LOTRWorldGenEasterlingTower(false).disableDoor().setBackLadder().setLeftLadder(), towerX, towerX + 3, 2, true);
-            int wallZ = towerX;
-            this.addStructure(LOTRWorldGenEasterlingTownWall.Centre(false), 0, -wallZ, 0);
-            this.addStructure(LOTRWorldGenEasterlingTownWall.Centre(false), wallZ, 0, 1);
-            this.addStructure(LOTRWorldGenEasterlingTownWall.Centre(false), -wallZ, 0, 3);
-            for (int l = 0; l <= 5; ++l) {
-                int wallX = 11 + l * 8;
-                this.addStructure(LOTRWorldGenEasterlingTownWall.Left(false), wallX, -wallZ, 0);
-                this.addStructure(LOTRWorldGenEasterlingTownWall.Right(false), -wallX, -wallZ, 0);
-                this.addStructure(LOTRWorldGenEasterlingTownWall.Left(false), wallZ, wallX, 1);
-                this.addStructure(LOTRWorldGenEasterlingTownWall.Right(false), wallZ, -wallX, 1);
-                this.addStructure(LOTRWorldGenEasterlingTownWall.Left(false), -wallX, wallZ, 2);
-                this.addStructure(LOTRWorldGenEasterlingTownWall.Right(false), wallX, wallZ, 2);
-                this.addStructure(LOTRWorldGenEasterlingTownWall.Left(false), -wallZ, -wallX, 3);
-                this.addStructure(LOTRWorldGenEasterlingTownWall.Right(false), -wallZ, wallX, 3);
-            }
-            int lampX = 17;
-            this.addStructure(new LOTRWorldGenEasterlingLamp(false), -lampX, -lampX, 2, false);
-            this.addStructure(new LOTRWorldGenEasterlingLamp(false), lampX, -lampX, 2, false);
-            this.addStructure(new LOTRWorldGenEasterlingLamp(false), -lampX, lampX, 0, false);
-            this.addStructure(new LOTRWorldGenEasterlingLamp(false), lampX, lampX, 0, false);
-            lampX = 45;
-            this.addStructure(new LOTRWorldGenEasterlingLamp(false), -lampX, -lampX, 2, false);
-            this.addStructure(new LOTRWorldGenEasterlingLamp(false), lampX, -lampX, 2, false);
-            this.addStructure(new LOTRWorldGenEasterlingLamp(false), -lampX, lampX, 0, false);
-            this.addStructure(new LOTRWorldGenEasterlingLamp(false), lampX, lampX, 0, false);
-            lampX = 7;
-            int lampZ = 64;
-            this.addStructure(new LOTRWorldGenEasterlingLamp(false), -lampX, lampZ, 2, false);
-            this.addStructure(new LOTRWorldGenEasterlingLamp(false), lampX, lampZ, 2, false);
         }
 
         @Override
-        protected LOTRRoadType getPath(Random random, int i, int k) {
-            int innerOut;
-            int outerOut;
-            int i1 = Math.abs(i);
-            int k1 = Math.abs(k);
-            if (this.villageType == VillageType.VILLAGE) {
-                int dSq = i * i + k * k;
-                int imn = 15 + random.nextInt(4);
-                if (dSq < imn * imn) {
-                    return LOTRRoadType.PATH;
-                }
-                if (i1 <= 64 && k1 <= 3 + random.nextInt(2)) {
-                    return LOTRRoadType.PATH;
-                }
-            }
-            if (this.villageType == VillageType.TOWN) {
-                innerOut = 18;
-                if (i1 <= innerOut && k1 <= innerOut && (i1 >= 12 || k1 >= 12)) {
-                    return LOTRRoadType.RHUN;
-                }
-                if (i1 <= 3 && k1 >= innerOut && k1 <= 86 || k1 <= 3 && i1 >= innerOut && i1 <= 86) {
-                    return LOTRRoadType.RHUN;
-                }
-                outerOut = 66;
-                if (i1 <= outerOut && k1 <= outerOut && (i1 >= 60 || k1 >= 60)) {
-                    return LOTRRoadType.RHUN;
-                }
-            }
-            if (this.villageType == VillageType.FORT) {
-                innerOut = 24;
-                if (i1 <= innerOut && k1 <= innerOut && (i1 >= 20 || k1 >= 20)) {
-                    return LOTRRoadType.RHUN;
-                }
-                if (k >= 14 && k <= 54 && i1 <= 2) {
-                    return LOTRRoadType.RHUN;
-                }
-                outerOut = 52;
-                if (i1 <= outerOut && k1 <= outerOut && (i1 >= 48 || k1 >= 48)) {
-                    return LOTRRoadType.RHUN;
-                }
-            }
-            return null;
-        }
-
-        @Override
-        public boolean isVillageSpecificSurface(World world, int i, int j, int k) {
-            return false;
+        public void setupVillageProperties(Random random) {
+            this.villageName = LOTRNames.getRhunVillageName(random);
+            this.villageType = random.nextInt(4) == 0 ? VillageType.FORT : (this.enableTowns && random.nextInt(4) == 0 ? VillageType.TOWN : VillageType.VILLAGE);
         }
 
     }

@@ -79,7 +79,7 @@ extends LOTRBiomeGenFarHaradSavannah {
         this.setBanditChance(LOTREventSpawner.EventChance.BANDIT_COMMON);
         this.setBanditEntityClass(LOTREntityBanditHarad.class);
         this.invasionSpawns.clearInvasions();
-        this.invasionSpawns.addInvasion(LOTRInvasions.NEAR_HARAD_CORSAIR, LOTREventSpawner.EventChance.COMMON);
+        this.invasionSpawns.addInvasion(LOTRInvasions.UMBAR_CORSAIR, LOTREventSpawner.EventChance.COMMON);
     }
 
     @Override

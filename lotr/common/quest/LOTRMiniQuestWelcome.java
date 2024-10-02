@@ -236,6 +236,9 @@ extends LOTRMiniQuest {
                 dropItems.add(new ItemStack(LOTRMod.pouch, 1, 1));
                 dropItems.add(new ItemStack(LOTRMod.pouch, 1, 0));
                 dropItems.add(new ItemStack(LOTRMod.eru, 1, 0));
+                dropItems.add(new ItemStack(LOTRMod.totemOfUndying, 1, 0));
+                dropItems.add(new ItemStack(LOTRMod.wallet, 1, 0));
+                dropItems.add(new ItemStack(LOTRMod.magicClover, 1, 0));
                 dropItems.add(new ItemStack(LOTRMod.ring_lesser_speed, 1, 0));
                 dropItems.add(new ItemStack(LOTRMod.ring_lesser_mining, 1, 0));
                 pd.getQuestData().setGivenFirstPouches(true);

@@ -21,6 +21,7 @@
  *  net.minecraft.entity.player.EntityPlayer
  *  net.minecraft.entity.projectile.EntityArrow
  *  net.minecraft.item.ItemStack
+ *  net.minecraft.util.DamageSource
  *  net.minecraft.util.MathHelper
  *  net.minecraft.world.World
  */
@@ -54,6 +55,7 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
@@ -70,6 +72,14 @@ extends LOTREntityTroll {
     @Override
     public float getTrollScale() {
         return 1.6f;
+    }
+
+    @Override
+    public boolean attackEntityFrom(DamageSource source, float amount) {
+        if (source.getSourceOfDamage() instanceof EntityArrow && (double)this.getHealth() <= (double)this.getMaxHealth() * 0.5) {
+            return false;
+        }
+        return super.attackEntityFrom(source, amount);
     }
 
     @Override

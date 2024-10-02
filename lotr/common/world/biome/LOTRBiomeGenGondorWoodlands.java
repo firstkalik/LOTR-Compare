@@ -9,6 +9,7 @@
 package lotr.common.world.biome;
 
 import java.util.List;
+import lotr.common.entity.animal.LOTREntityFox;
 import lotr.common.world.biome.LOTRBiomeDecorator;
 import lotr.common.world.biome.LOTRBiomeGenGondor;
 import lotr.common.world.biome.variant.LOTRBiomeVariant;
@@ -20,6 +21,7 @@ extends LOTRBiomeGenGondor {
     public LOTRBiomeGenGondorWoodlands(int i, boolean major) {
         super(i, major);
         this.spawnableCreatureList.add(new BiomeGenBase.SpawnListEntry(EntityWolf.class, 8, 4, 8));
+        this.spawnableCreatureList.add(new BiomeGenBase.SpawnListEntry(LOTREntityFox.class, 4, 1, 4));
         this.clearBiomeVariants();
         this.addBiomeVariantSet(LOTRBiomeVariant.SET_FOREST);
         this.decorator.treesPerChunk = 6;

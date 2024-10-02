@@ -25,10 +25,14 @@
  *  net.minecraft.nbt.NBTTagCompound
  *  net.minecraft.nbt.NBTTagList
  *  net.minecraft.nbt.NBTTagString
+ *  net.minecraft.potion.Potion
+ *  net.minecraft.potion.PotionEffect
  *  net.minecraft.util.AxisAlignedBB
  *  net.minecraft.util.ChatComponentText
  *  net.minecraft.util.ChatComponentTranslation
+ *  net.minecraft.util.ChatStyle
  *  net.minecraft.util.DamageSource
+ *  net.minecraft.util.EnumChatFormatting
  *  net.minecraft.util.IChatComponent
  *  net.minecraft.util.MathHelper
  *  net.minecraft.util.MovingObjectPosition
@@ -60,6 +64,7 @@ import lotr.common.LOTRBannerProtection;
 import lotr.common.LOTRLevelData;
 import lotr.common.LOTRMod;
 import lotr.common.LOTRPlayerData;
+import lotr.common.LOTRPotions;
 import lotr.common.entity.LOTREntities;
 import lotr.common.entity.LOTREntityNPCRespawner;
 import lotr.common.entity.npc.LOTREntityNPC;
@@ -86,10 +91,14 @@ import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.ChatStyle;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
@@ -111,7 +120,7 @@ extends Entity {
     private int successiveFailedSpawns = 0;
     private int timeSincePlayerProgress = 0;
     private Map<UUID, Integer> recentPlayerContributors = new HashMap<UUID, Integer>();
-    private static double INVASION_FOLLOW_RANGE = 40.0;
+    private static double INVASION_FOLLOW_RANGE = 45.0;
     public boolean isWarhorn = false;
     public boolean spawnsPersistent = true;
     private List<LOTRFaction> bonusFactions = new ArrayList<LOTRFaction>();
@@ -192,7 +201,7 @@ extends Entity {
 
     public void startInvasion(EntityPlayer announcePlayer, int size) {
         if (size < 0) {
-            size = MathHelper.getRandomIntegerInRange((Random)this.rand, (int)30, (int)70);
+            size = MathHelper.getRandomIntegerInRange((Random)this.rand, (int)30, (int)100);
         }
         this.invasionRemaining = this.invasionSize = size;
         this.playHorn();
@@ -210,11 +219,131 @@ extends Entity {
             if (!announce) continue;
             this.announceInvasionTo(entityplayer);
             this.setWatchingInvasion((EntityPlayerMP)entityplayer, false);
+            LOTRPlayerData pd = LOTRLevelData.getData(entityplayer);
+            pd.addAchievement(LOTRAchievement.fightorflight);
         }
     }
 
     private void announceInvasionTo(EntityPlayer entityplayer) {
-        entityplayer.addChatMessage((IChatComponent)new ChatComponentTranslation("chat.lotr.invasion.start", new Object[]{this.getInvasionType().invasionName()}));
+        LOTRFaction faction = this.getInvasionType().invasionFaction;
+        String invasionName = this.getInvasionType().invasionName();
+        int npcCount = this.invasionSize;
+        float[] factionRgb = faction.getFactionRGB_MinBrightness(0.45f);
+        EnumChatFormatting color = this.getColorFromRGB(factionRgb);
+        IChatComponent factionNameComponent = new ChatComponentText(faction.factionName()).setChatStyle(new ChatStyle().setColor(color));
+        IChatComponent npcCountComponent = new ChatComponentText(String.valueOf(npcCount)).setChatStyle(new ChatStyle().setColor(EnumChatFormatting.YELLOW));
+        ChatComponentTranslation message = new ChatComponentTranslation("chat.lotr.invasion.start", new Object[]{factionNameComponent, npcCountComponent});
+        entityplayer.addChatMessage((IChatComponent)message);
+    }
+
+    private EnumChatFormatting getColorFromRGB(float[] rgb) {
+        int r = (int)(rgb[0] * 255.0f);
+        int g = (int)(rgb[1] * 255.0f);
+        int b = (int)(rgb[2] * 255.0f);
+        if (this.isCloseToColor(r, g, b, 16, 120, 8, 15)) {
+            return EnumChatFormatting.DARK_GREEN;
+        }
+        if (this.isCloseToColor(r, g, b, 119, 145, 119, 15)) {
+            return EnumChatFormatting.DARK_GREEN;
+        }
+        if (this.isCloseToColor(r, g, b, 77, 115, 88, 5)) {
+            return EnumChatFormatting.DARK_GREEN;
+        }
+        if (this.isCloseToColor(r, g, b, 127, 32, 0, 5)) {
+            return EnumChatFormatting.RED;
+        }
+        if (this.isCloseToColor(r, g, b, 73, 183, 82, 15)) {
+            return EnumChatFormatting.GREEN;
+        }
+        if (this.isCloseToColor(r, g, b, 53, 135, 39, 15)) {
+            return EnumChatFormatting.DARK_GREEN;
+        }
+        if (this.isCloseToColor(r, g, b, 53, 115, 76, 15)) {
+            return EnumChatFormatting.DARK_GREEN;
+        }
+        if (this.isCloseToColor(r, g, b, 57, 150, 78, 15)) {
+            return EnumChatFormatting.DARK_GREEN;
+        }
+        if (this.isCloseToColor(r, g, b, 89, 206, 78, 15)) {
+            return EnumChatFormatting.GREEN;
+        }
+        if (this.isCloseToColor(r, g, b, 75, 97, 130, 20)) {
+            return EnumChatFormatting.DARK_BLUE;
+        }
+        if (this.isCloseToColor(r, g, b, 206, 135, 95, 20)) {
+            return EnumChatFormatting.GOLD;
+        }
+        if (this.isCloseToColor(r, g, b, 115, 67, 67, 20)) {
+            return EnumChatFormatting.BLACK;
+        }
+        if (this.isCloseToColor(r, g, b, 115, 11, 0, 20)) {
+            return EnumChatFormatting.DARK_RED;
+        }
+        if (this.isCloseToColor(r, g, b, 150, 108, 84, 10)) {
+            return EnumChatFormatting.DARK_GRAY;
+        }
+        if (this.isCloseToColor(r, g, b, 249, 249, 249, 10)) {
+            return EnumChatFormatting.WHITE;
+        }
+        if (this.isCloseToColor(r, g, b, 105, 115, 105, 20)) {
+            return EnumChatFormatting.GRAY;
+        }
+        if (this.isCloseToColor(r, g, b, 124, 36, 27, 20)) {
+            return EnumChatFormatting.DARK_RED;
+        }
+        if (this.isCloseToColor(r, g, b, 89, 100, 115, 20)) {
+            return EnumChatFormatting.DARK_GRAY;
+        }
+        if (this.isCloseToColor(r, g, b, 196, 146, 39, 20)) {
+            return EnumChatFormatting.GOLD;
+        }
+        if (this.isCloseToColor(r, g, b, 115, 51, 109, 20)) {
+            return EnumChatFormatting.LIGHT_PURPLE;
+        }
+        if (this.isCloseToColor(r, g, b, 181, 27, 27, 20)) {
+            return EnumChatFormatting.RED;
+        }
+        if (this.isCloseToColor(r, g, b, 93, 145, 204, 30)) {
+            return EnumChatFormatting.BLUE;
+        }
+        if (this.isCloseToColor(r, g, b, 198, 229, 255, 140)) {
+            return EnumChatFormatting.AQUA;
+        }
+        if (this.isCloseToColor(r, g, b, 217, 176, 90, 20)) {
+            return EnumChatFormatting.GOLD;
+        }
+        if (this.isCloseToColor(r, g, b, 168, 148, 143, 20)) {
+            return EnumChatFormatting.GRAY;
+        }
+        if (r > 200 && g < 100 && b < 100) {
+            return EnumChatFormatting.RED;
+        }
+        if (r < 100 && g > 200 && b < 100) {
+            return EnumChatFormatting.GREEN;
+        }
+        if (r < 100 && g < 100 && b > 200) {
+            return EnumChatFormatting.BLUE;
+        }
+        if (r > 200 && g > 200 && b < 100) {
+            return EnumChatFormatting.YELLOW;
+        }
+        if (r < 100 && g > 200 && b > 200) {
+            return EnumChatFormatting.AQUA;
+        }
+        if (r > 200 && g < 100 && b > 200) {
+            return EnumChatFormatting.LIGHT_PURPLE;
+        }
+        if (r > 200 && g > 200 && b > 200) {
+            return EnumChatFormatting.WHITE;
+        }
+        if (r < 100 && g < 100 && b < 100) {
+            return EnumChatFormatting.DARK_GRAY;
+        }
+        return EnumChatFormatting.GRAY;
+    }
+
+    private boolean isCloseToColor(int r1, int g1, int b1, int r2, int g2, int b2, int tolerance) {
+        return Math.abs(r1 - r2) < tolerance && Math.abs(g1 - g2) < tolerance && Math.abs(b1 - b2) < tolerance;
     }
 
     public void setWatchingInvasion(EntityPlayerMP entityplayer, boolean overrideAlreadyWatched) {
@@ -351,7 +480,9 @@ extends Entity {
             }
             for (EntityPlayer entityplayer : achievementPlayers) {
                 LOTRPlayerData pd = LOTRLevelData.getData(entityplayer);
+                pd.addInvasionWin();
                 pd.addAchievement(LOTRAchievement.defeatInvasion);
+                entityplayer.addPotionEffect(new PotionEffect(LOTRPotions.hero.id, 12000, 0));
             }
             if (!conqRewardPlayers.isEmpty()) {
                 float boostPerPlayer = 50.0f / (float)conqRewardPlayers.size();
@@ -483,6 +614,8 @@ extends Entity {
         --this.invasionRemaining;
         this.timeSincePlayerProgress = 0;
         this.recentPlayerContributors.put(entityplayer.getUniqueID(), 2400);
+        LOTRPlayerData pd = LOTRLevelData.getData(entityplayer);
+        pd.addAchievement(LOTRAchievement.thejokesareover);
     }
 
     public boolean canBeCollidedWith() {

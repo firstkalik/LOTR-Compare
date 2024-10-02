@@ -5,7 +5,9 @@
  *  net.minecraft.entity.EntityLivingBase
  *  net.minecraft.entity.EnumCreatureAttribute
  *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.item.Item
  *  net.minecraft.item.ItemStack
+ *  net.minecraft.item.ItemTool
  *  net.minecraft.util.ChatComponentTranslation
  *  net.minecraft.util.ChatStyle
  *  net.minecraft.util.EnumChatFormatting
@@ -22,23 +24,32 @@ import java.util.List;
 import java.util.Map;
 import lotr.common.enchant.LOTREnchantmentBane;
 import lotr.common.enchant.LOTREnchantmentDamage;
+import lotr.common.enchant.LOTREnchantmentDamage2;
 import lotr.common.enchant.LOTREnchantmentDurability;
+import lotr.common.enchant.LOTREnchantmentFishingSpeed;
 import lotr.common.enchant.LOTREnchantmentKnockback;
 import lotr.common.enchant.LOTREnchantmentLooting;
 import lotr.common.enchant.LOTREnchantmentMeleeReach;
 import lotr.common.enchant.LOTREnchantmentMeleeSpeed;
 import lotr.common.enchant.LOTREnchantmentProtection;
+import lotr.common.enchant.LOTREnchantmentProtectionBattleaxe;
 import lotr.common.enchant.LOTREnchantmentProtectionFall;
 import lotr.common.enchant.LOTREnchantmentProtectionFire;
+import lotr.common.enchant.LOTREnchantmentProtectionHammer;
 import lotr.common.enchant.LOTREnchantmentProtectionMithril;
-import lotr.common.enchant.LOTREnchantmentProtectionMithril2;
 import lotr.common.enchant.LOTREnchantmentProtectionRanged;
+import lotr.common.enchant.LOTREnchantmentProtectionSword;
+import lotr.common.enchant.LOTREnchantmentProtectionWither;
 import lotr.common.enchant.LOTREnchantmentRangedDamage;
 import lotr.common.enchant.LOTREnchantmentRangedKnockback;
+import lotr.common.enchant.LOTREnchantmentSeaFortune;
 import lotr.common.enchant.LOTREnchantmentSilkTouch;
+import lotr.common.enchant.LOTREnchantmentSoulbound;
+import lotr.common.enchant.LOTREnchantmentThornArmor;
 import lotr.common.enchant.LOTREnchantmentToolSpeed;
 import lotr.common.enchant.LOTREnchantmentType;
 import lotr.common.enchant.LOTREnchantmentWeaponSpecial;
+import lotr.common.enchant.LOTRRandomEnchantment;
 import lotr.common.entity.npc.LOTREntityBalrog;
 import lotr.common.entity.npc.LOTREntityDwarf;
 import lotr.common.entity.npc.LOTREntityElf;
@@ -50,10 +61,15 @@ import lotr.common.entity.npc.LOTREntityOrc;
 import lotr.common.entity.npc.LOTREntitySauron;
 import lotr.common.entity.npc.LOTREntityTroll;
 import lotr.common.entity.npc.LOTREntityWarg;
+import lotr.common.item.LOTRItemAxe;
+import lotr.common.item.LOTRItemBattleaxe;
+import lotr.common.item.LOTRItemMattock;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemTool;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.ChatStyle;
 import net.minecraft.util.EnumChatFormatting;
@@ -105,7 +121,6 @@ public abstract class LOTREnchantment {
     public static final LOTREnchantment looting1 = new LOTREnchantmentLooting("looting1", 1).setEnchantWeight(6);
     public static final LOTREnchantment looting2 = new LOTREnchantmentLooting("looting2", 2).setEnchantWeight(2).setSkilful();
     public static final LOTREnchantment looting3 = new LOTREnchantmentLooting("looting3", 3).setEnchantWeight(1).setSkilful();
-    public static final LOTREnchantment looting4 = new LOTREnchantmentLooting("looting4", 4).setEnchantWeight(0).setSkilful();
     public static final LOTREnchantment protect1 = new LOTREnchantmentProtection("protect1", 1).setEnchantWeight(10);
     public static final LOTREnchantment protect2 = new LOTREnchantmentProtection("protect2", 2).setEnchantWeight(3).setSkilful();
     public static final LOTREnchantment protectWeak1 = new LOTREnchantmentProtection("protectWeak1", -1).setEnchantWeight(5);
@@ -114,6 +129,9 @@ public abstract class LOTREnchantment {
     public static final LOTREnchantment protectFire1 = new LOTREnchantmentProtectionFire("protectFire1", 1).setEnchantWeight(5);
     public static final LOTREnchantment protectFire2 = new LOTREnchantmentProtectionFire("protectFire2", 2).setEnchantWeight(2).setSkilful();
     public static final LOTREnchantment protectFire3 = new LOTREnchantmentProtectionFire("protectFire3", 3).setEnchantWeight(1).setSkilful();
+    public static final LOTREnchantment protectWither = new LOTREnchantmentProtectionWither("protectWither", 1).setEnchantWeight(0).setSkilful();
+    public static final LOTREnchantment protectHammer = new LOTREnchantmentProtectionHammer("protectHammer").setEnchantWeight(0).setSkilful();
+    public static final LOTREnchantment protectAxe = new LOTREnchantmentProtectionBattleaxe("protectAxe").setEnchantWeight(0).setSkilful();
     public static final LOTREnchantment protectFall1 = new LOTREnchantmentProtectionFall("protectFall1", 1).setEnchantWeight(5);
     public static final LOTREnchantment protectFall2 = new LOTREnchantmentProtectionFall("protectFall2", 2).setEnchantWeight(2).setSkilful();
     public static final LOTREnchantment protectFall3 = new LOTREnchantmentProtectionFall("protectFall3", 3).setEnchantWeight(1).setSkilful();
@@ -121,10 +139,11 @@ public abstract class LOTREnchantment {
     public static final LOTREnchantment protectRanged2 = new LOTREnchantmentProtectionRanged("protectRanged2", 2).setEnchantWeight(2).setSkilful();
     public static final LOTREnchantment protectRanged3 = new LOTREnchantmentProtectionRanged("protectRanged3", 3).setEnchantWeight(1).setSkilful();
     public static final LOTREnchantment protectMithril = new LOTREnchantmentProtectionMithril("protectMithril").setEnchantWeight(0);
-    public static final LOTREnchantment protectMithrilDwarven = new LOTREnchantmentProtectionMithril2("protectMithrilDwarven").setEnchantWeight(0);
+    public static final LOTREnchantment protectionMithrilElven = new LOTREnchantmentProtectionSword("protectSword").setEnchantWeight(0);
     public static final LOTREnchantment rangedStrong1 = new LOTREnchantmentRangedDamage("rangedStrong1", 1.1f).setEnchantWeight(10);
     public static final LOTREnchantment rangedStrong2 = new LOTREnchantmentRangedDamage("rangedStrong2", 1.2f).setEnchantWeight(3);
     public static final LOTREnchantment rangedStrong3 = new LOTREnchantmentRangedDamage("rangedStrong3", 1.3f).setEnchantWeight(1).setSkilful();
+    public static final LOTREnchantment rangedStrong4 = new LOTREnchantmentRangedDamage("rangedStrong4", 1.35f).setEnchantWeight(1).setSkilful();
     public static final LOTREnchantment rangedWeak1 = new LOTREnchantmentRangedDamage("rangedWeak1", 0.75f).setEnchantWeight(8);
     public static final LOTREnchantment rangedWeak2 = new LOTREnchantmentRangedDamage("rangedWeak2", 0.5f).setEnchantWeight(3);
     public static final LOTREnchantment rangedWeak3 = new LOTREnchantmentRangedDamage("rangedWeak3", 0.25f).setEnchantWeight(1);
@@ -134,6 +153,19 @@ public abstract class LOTREnchantment {
     public static final LOTREnchantment wither = new LOTREnchantmentWeaponSpecial("wither").setEnchantWeight(0).setApplyToProjectile();
     public static final LOTREnchantment chill = new LOTREnchantmentWeaponSpecial("chill").setEnchantWeight(0).setApplyToProjectile();
     public static final LOTREnchantment headhunting = new LOTREnchantmentWeaponSpecial("headhunting").setCompatibleOtherSpecial().setIncompatibleBane().setEnchantWeight(0).setApplyToProjectile();
+    public static final LOTREnchantment rangedInfinity = new LOTREnchantmentWeaponSpecial("rangedInfinity").setCompatibleOtherSpecial().setEnchantWeight(0).setApplyToProjectile().setSkilful();
+    public static final LOTREnchantment general = new LOTREnchantmentWeaponSpecial("general").setCompatibleOtherSpecial().setToolOnly().setEnchantWeight(0).setApplyToProjectile().setSkilful();
+    public static final LOTREnchantment ranged = new LOTREnchantmentWeaponSpecial("ranged").setCompatibleOtherSpecial().setToolOnly().setEnchantWeight(0).setApplyToProjectile().setSkilful();
+    public static final LOTREnchantment soulbound = new LOTREnchantmentSoulbound("soulbound").setEnchantWeight(0);
+    public static final LOTREnchantment vampireStrike = new LOTREnchantmentDamage2("vampireStrike", StatCollector.translateToLocal((String)"lotr.enchant.vampireStrike.desc")).setEnchantWeight(0);
+    public static final LOTREnchantment thornArmor = new LOTREnchantmentThornArmor("thornArmor", StatCollector.translateToLocal((String)"lotr.enchant.thornArmor.desc")).setEnchantWeight(1);
+    public static final LOTREnchantment lumberjack = new LOTRRandomEnchantment("lumberjack").setEnchantWeight(1).setSkilful();
+    public static final LOTREnchantment fishingSpeed1 = new LOTREnchantmentFishingSpeed("fishingSpeed1", 1).setEnchantWeight(1);
+    public static final LOTREnchantment fishingSpeed2 = new LOTREnchantmentFishingSpeed("fishingSpeed2", 2).setEnchantWeight(1);
+    public static final LOTREnchantment fishingSpeed3 = new LOTREnchantmentFishingSpeed("fishingSpeed3", 3).setEnchantWeight(1).setSkilful();
+    public static final LOTREnchantment seaFortune1 = new LOTREnchantmentSeaFortune("seaFortune1", 1).setEnchantWeight(1);
+    public static final LOTREnchantment seaFortune2 = new LOTREnchantmentSeaFortune("seaFortune2", 2).setEnchantWeight(1);
+    public static final LOTREnchantment seaFortune3 = new LOTREnchantmentSeaFortune("seaFortune3", 3).setEnchantWeight(1).setSkilful();
     public final String enchantName;
     public final List<LOTREnchantmentType> itemTypes;
     private int enchantWeight = 0;
@@ -142,9 +174,22 @@ public abstract class LOTREnchantment {
     private boolean persistsReforge = false;
     private boolean bypassAnvilLimit = false;
     private boolean applyToProjectile = false;
+    public boolean toolOnly = false;
+    public boolean axeOnly = false;
+    public boolean isSoulbound;
 
     public LOTREnchantment(String s, LOTREnchantmentType type) {
         this(s, new LOTREnchantmentType[]{type});
+    }
+
+    public LOTREnchantment setToolOnly() {
+        this.toolOnly = true;
+        return this;
+    }
+
+    public LOTREnchantment setAxeOnly() {
+        this.axeOnly = true;
+        return this;
     }
 
     public LOTREnchantment(String s, LOTREnchantmentType[] types) {
@@ -235,11 +280,29 @@ public abstract class LOTREnchantment {
     }
 
     public boolean canApply(ItemStack itemstack, boolean considering) {
+        if (this.toolOnly) {
+            return itemstack != null && itemstack.getItem() instanceof ItemTool;
+        }
         for (LOTREnchantmentType type : this.itemTypes) {
             if (!type.canApply(itemstack, considering)) continue;
             return true;
         }
         return false;
+    }
+
+    public boolean canApply1(ItemStack itemstack, boolean considering) {
+        if (this.axeOnly) {
+            return itemstack != null && (itemstack.getItem() instanceof LOTRItemAxe || itemstack.getItem() instanceof LOTRItemBattleaxe || itemstack.getItem() instanceof LOTRItemMattock);
+        }
+        for (LOTREnchantmentType type : this.itemTypes) {
+            if (!type.canApply(itemstack, considering)) continue;
+            return true;
+        }
+        return false;
+    }
+
+    public void setSoulbound() {
+        this.isSoulbound = true;
     }
 
     public boolean isCompatibleWith(LOTREnchantment other) {

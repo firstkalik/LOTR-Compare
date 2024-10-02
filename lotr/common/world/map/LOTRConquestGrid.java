@@ -59,13 +59,14 @@ import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.storage.WorldInfo;
 
 public class LOTRConquestGrid {
-    private static final int MAP_GRID_SCALE = IntMath.pow((int)2, (int)3);
-    private static Map<GridCoordPair, LOTRConquestZone> zoneMap = new HashMap<GridCoordPair, LOTRConquestZone>();
-    private static final LOTRConquestZone dummyZone = new LOTRConquestZone(-999, -999).setDummyZone();
-    public static boolean needsLoad = true;
-    private static final Set<GridCoordPair> dirtyZones = new HashSet<GridCoordPair>();
     public static final float MIN_CONQUEST = 0.0f;
     public static final float MAX_CONQUEST_SET = 100000.0f;
+    private static final int MAP_GRID_POW2 = 3;
+    private static final int MAP_GRID_SCALE = IntMath.pow((int)2, (int)3);
+    private static final LOTRConquestZone dummyZone = new LOTRConquestZone(-999, -999).setDummyZone();
+    private static final Set<GridCoordPair> dirtyZones = new HashSet<GridCoordPair>();
+    public static boolean needsLoad = true;
+    private static Map<GridCoordPair, LOTRConquestZone> zoneMap = new HashMap<GridCoordPair, LOTRConquestZone>();
     private static Map<GridCoordPair, List<LOTRFaction>> cachedZoneFactions = new HashMap<GridCoordPair, List<LOTRFaction>>();
 
     private static int worldToGridX(int i) {
@@ -139,8 +140,9 @@ public class LOTRConquestGrid {
     }
 
     private static float getConquestGainRate(EntityPlayer entityplayer) {
+        int k;
         int i = MathHelper.floor_double((double)entityplayer.posX);
-        BiomeGenBase bgb = entityplayer.worldObj.getBiomeGenForCoords(i, MathHelper.floor_double((double)entityplayer.posZ));
+        BiomeGenBase bgb = entityplayer.worldObj.getBiomeGenForCoords(i, k = MathHelper.floor_double((double)entityplayer.posZ));
         if (bgb instanceof LOTRBiome) {
             LOTRBiome biome = (LOTRBiome)bgb;
             return biome.npcSpawnList.conquestGainRate;
@@ -150,11 +152,13 @@ public class LOTRConquestGrid {
 
     public static float doRadialConquest(World world, LOTRConquestZone centralZone, EntityPlayer killingPlayer, LOTRFaction pledgeFaction, LOTRFaction enemyFaction, float conqGain, float conqCleanse) {
         if (!centralZone.isDummyZone) {
+            int range = 3;
+            float radius = 3.5f;
             float centralConqBonus = 0.0f;
             for (int i1 = -3; i1 <= 3; ++i1) {
                 for (int k1 = -3; k1 <= 3; ++k1) {
                     int distSq = i1 * i1 + k1 * k1;
-                    if ((float)distSq > 12.25f) continue;
+                    if (!((float)distSq <= 12.25f)) continue;
                     int zoneX = centralZone.gridX + i1;
                     int zoneZ = centralZone.gridZ + k1;
                     float dist = MathHelper.sqrt_float((float)distSq);
@@ -196,15 +200,17 @@ public class LOTRConquestGrid {
     }
 
     private static void checkNotifyConquest(LOTRConquestZone zone, EntityPlayer originPlayer, LOTRFaction faction, float newConq, float prevConq, boolean isCleansing) {
+        float notifInterval = 50.0f;
+        double notifRange = 200.0;
         if (MathHelper.floor_double((double)(newConq / 50.0f)) != MathHelper.floor_double((double)(prevConq / 50.0f)) || newConq == 0.0f && prevConq != newConq) {
             World world = originPlayer.worldObj;
             List playerEntities = world.playerEntities;
             for (Object obj : playerEntities) {
                 LOTRFaction pledgeFac;
+                boolean playerApplicable;
                 EntityPlayerMP player = (EntityPlayerMP)obj;
                 LOTRPlayerData pd = LOTRLevelData.getData((EntityPlayer)player);
-                if (player.getDistanceSqToEntity((Entity)originPlayer) > 40000.0 || LOTRConquestGrid.getZoneByEntityCoords((Entity)player) != zone) continue;
-                boolean playerApplicable = false;
+                if (!(player.getDistanceSqToEntity((Entity)originPlayer) <= 40000.0) || LOTRConquestGrid.getZoneByEntityCoords((Entity)player) != zone) continue;
                 boolean bl = isCleansing ? (pledgeFac = pd.getPledgeFaction()) != null && pledgeFac.isBadRelation(faction) : (playerApplicable = pd.isPledgedTo(faction));
                 if (!playerApplicable) continue;
                 LOTRPacketConquestNotification pkt = new LOTRPacketConquestNotification(faction, newConq, isCleansing);
@@ -262,8 +268,9 @@ public class LOTRConquestGrid {
             new LOTRGenLayerWorld();
         }
         if ((cachedFacs = cachedZoneFactions.get(gridCoords = GridCoordPair.forZone(zone))) == null) {
+            Object biome;
             cachedFacs = new ArrayList<LOTRFaction>();
-            ArrayList<Iterator<LOTRFaction>> includedBiomes = new ArrayList<Iterator<LOTRFaction>>();
+            ArrayList includedBiomes = new ArrayList();
             int[] mapMin = LOTRConquestGrid.getMinCoordsOnMap(zone);
             int[] mapMax = LOTRConquestGrid.getMaxCoordsOnMap(zone);
             int mapXMin = mapMin[0];
@@ -272,16 +279,17 @@ public class LOTRConquestGrid {
             int mapZMax = mapMax[1];
             for (int i = mapXMin; i < mapXMax; ++i) {
                 for (int k = mapZMin; k < mapZMax; ++k) {
-                    Object biome = LOTRGenLayerWorld.getBiomeOrOcean(i, k);
+                    biome = LOTRGenLayerWorld.getBiomeOrOcean(i, k);
                     if (includedBiomes.contains(biome)) continue;
-                    includedBiomes.add((Iterator<LOTRFaction>)biome);
+                    includedBiomes.add(biome);
                 }
             }
-            block2: for (LOTRFaction fac : LOTRFaction.getPlayableAlignmentFactions()) {
-                for (LOTRBiome biome2 : includedBiomes) {
+            for (LOTRFaction fac : LOTRFaction.getPlayableAlignmentFactions()) {
+                biome = includedBiomes.iterator();
+                while (biome.hasNext()) {
+                    LOTRBiome biome2 = (LOTRBiome)((Object)biome.next());
                     if (!biome2.npcSpawnList.isFactionPresent(world, fac)) continue;
                     cachedFacs.add(fac);
-                    continue block2;
                 }
             }
             cachedZoneFactions.put(gridCoords, cachedFacs);
@@ -351,7 +359,8 @@ public class LOTRConquestGrid {
             dirtyZones.clear();
             File dir = LOTRConquestGrid.getConquestDir();
             if (dir.exists()) {
-                for (File zoneDat : dir.listFiles()) {
+                File[] subfiles;
+                for (File zoneDat : subfiles = dir.listFiles()) {
                     LOTRConquestZone zone;
                     if (zoneDat.isDirectory() || !zoneDat.getName().endsWith(".dat") || (zone = LOTRConquestGrid.loadZoneFromFile(zoneDat)) == null) continue;
                     GridCoordPair key = GridCoordPair.forZone(zone);
@@ -403,13 +412,6 @@ public class LOTRConquestGrid {
         }
     }
 
-    public static enum ConquestViewable {
-        UNPLEDGED,
-        CAN_VIEW,
-        NEED_RANK;
-
-    }
-
     public static class ConquestViewableQuery {
         public final ConquestViewable result;
         public final LOTRFactionRank needRank;
@@ -422,13 +424,6 @@ public class LOTRConquestGrid {
         public static ConquestViewableQuery canView() {
             return new ConquestViewableQuery(ConquestViewable.CAN_VIEW, null);
         }
-    }
-
-    public static enum ConquestEffective {
-        EFFECTIVE,
-        ALLY_BOOST,
-        NO_EFFECT;
-
     }
 
     public static class GridCoordPair {
@@ -460,6 +455,20 @@ public class LOTRConquestGrid {
             GridCoordPair otherPair = (GridCoordPair)other;
             return this.gridX == otherPair.gridX && this.gridZ == otherPair.gridZ;
         }
+    }
+
+    public static enum ConquestViewable {
+        UNPLEDGED,
+        CAN_VIEW,
+        NEED_RANK;
+
+    }
+
+    public static enum ConquestEffective {
+        EFFECTIVE,
+        ALLY_BOOST,
+        NO_EFFECT;
+
     }
 
 }

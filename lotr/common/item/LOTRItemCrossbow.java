@@ -157,11 +157,13 @@ extends ItemBow {
                 boltItem = new ItemStack(LOTRMod.crossbowBolt);
             }
             if (boltItem != null) {
-                if (shouldConsume && boltSlot >= 0) {
+                if (shouldConsume && boltSlot >= 0 && !LOTREnchantmentHelper.hasEnchant(itemstack, LOTREnchantment.rangedInfinity)) {
                     --boltItem.stackSize;
                     if (boltItem.stackSize <= 0) {
                         entityplayer.inventory.mainInventory[boltSlot] = null;
                     }
+                } else {
+                    boltItem.stackSize = 0;
                 }
                 if (!world.isRemote) {
                     this.setLoaded(itemstack, boltItem.copy());

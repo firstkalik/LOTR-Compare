@@ -84,6 +84,8 @@ import lotr.common.entity.npc.LOTREntityDunlendingBerserker;
 import lotr.common.entity.npc.LOTREntityDunlendingWarrior;
 import lotr.common.entity.npc.LOTREntityDurmethOrc;
 import lotr.common.entity.npc.LOTREntityDurmethOrcArcher;
+import lotr.common.entity.npc.LOTREntityDurmethOrcWarrior;
+import lotr.common.entity.npc.LOTREntityDurmethOrcWarriorArcher;
 import lotr.common.entity.npc.LOTREntityDurmethWarg;
 import lotr.common.entity.npc.LOTREntityDwarf;
 import lotr.common.entity.npc.LOTREntityDwarfAxeThrower;
@@ -107,6 +109,7 @@ import lotr.common.entity.npc.LOTREntityGaladhrimWarrior;
 import lotr.common.entity.npc.LOTREntityGondorArcher;
 import lotr.common.entity.npc.LOTREntityGondorLevyman;
 import lotr.common.entity.npc.LOTREntityGondorMan;
+import lotr.common.entity.npc.LOTREntityGondorRenegade;
 import lotr.common.entity.npc.LOTREntityGondorSoldier;
 import lotr.common.entity.npc.LOTREntityGulfHaradArcher;
 import lotr.common.entity.npc.LOTREntityGulfHaradWarrior;
@@ -250,7 +253,7 @@ public class LOTRSpawnList {
     public static final LOTRSpawnList ANGMAR_HILLMEN = new LOTRSpawnList(new LOTRSpawnEntry(LOTREntityAngmarHillman.class, 10, 4, 6), new LOTRSpawnEntry(LOTREntityAngmarHillmanWarrior.class, 5, 4, 6), new LOTRSpawnEntry(LOTREntityAngmarHillmanAxeThrower.class, 5, 4, 6));
     public static final LOTRSpawnList TROLLS = new LOTRSpawnList(new LOTRSpawnEntry(LOTREntityTroll.class, 10, 1, 3));
     public static final LOTRSpawnList HILL_TROLLS = new LOTRSpawnList(new LOTRSpawnEntry(LOTREntityMountainTroll.class, 10, 1, 3));
-    public static final LOTRSpawnList SNOW_TROLLS = new LOTRSpawnList(new LOTRSpawnEntry(LOTREntitySnowTroll.class, 10, 1, 3));
+    public static final LOTRSpawnList SNOW_TROLLS = new LOTRSpawnList(new LOTRSpawnEntry(LOTREntitySnowTroll.class, 20, 1, 3));
     public static final LOTRSpawnList WOOD_ELVES = new LOTRSpawnList(new LOTRSpawnEntry(LOTREntityWoodElf.class, 10, 4, 6));
     public static final LOTRSpawnList WOOD_ELF_WARRIORS = new LOTRSpawnList(new LOTRSpawnEntry(LOTREntityWoodElfScout.class, 10, 4, 4), new LOTRSpawnEntry(LOTREntityWoodElfWarrior.class, 5, 4, 4));
     public static final LOTRSpawnList MIRKWOOD_SPIDERS = new LOTRSpawnList(new LOTRSpawnEntry(LOTREntityMirkwoodSpider.class, 10, 4, 6));
@@ -335,9 +338,10 @@ public class LOTRSpawnList {
     public static final LOTRSpawnList ANGBANDSIDER = new LOTRSpawnList(new LOTRSpawnEntry(LOTREntityAngbandSpiderIce.class, 10, 1, 3));
     public static final LOTRSpawnList ANGBANDWARGICE = new LOTRSpawnList(new LOTRSpawnEntry(LOTREntityAngbandWargIce.class, 10, 1, 3));
     public static final LOTRSpawnList WIND = new LOTRSpawnList(new LOTRSpawnEntry(LOTREntityWindDwarf.class, 100, 4, 4), new LOTRSpawnEntry(LOTREntityWindDwarfWarrior.class, 20, 4, 4), new LOTRSpawnEntry(LOTREntityWindDwarfAxeThrower.class, 20, 4, 4));
-    public static final LOTRSpawnList CAVE = new LOTRSpawnList(new LOTRSpawnEntry(LOTREntityGundabadCaveTroll.class, 100, 1, 3));
+    public static final LOTRSpawnList CAVE = new LOTRSpawnList(new LOTRSpawnEntry(LOTREntityGundabadCaveTroll.class, 20, 1, 3));
     public static final LOTRSpawnList DURMETH_ORCS = new LOTRSpawnList(new LOTRSpawnEntry(LOTREntityDurmethOrc.class, 20, 4, 6), new LOTRSpawnEntry(LOTREntityDurmethOrcArcher.class, 10, 4, 6));
-    public static final LOTRSpawnList DURMETH_WARGS = new LOTRSpawnList(new LOTRSpawnEntry(LOTREntityDurmethWarg.class, 10, 4, 4));
+    public static final LOTRSpawnList DURMETH_ORCS_WARRIORS = new LOTRSpawnList(new LOTRSpawnEntry(LOTREntityDurmethOrcWarrior.class, 20, 2, 4), new LOTRSpawnEntry(LOTREntityDurmethOrcWarriorArcher.class, 10, 2, 4));
+    public static final LOTRSpawnList DURMETH_WARGS = new LOTRSpawnList(new LOTRSpawnEntry(LOTREntityDurmethWarg.class, 15, 4, 4));
     public static final LOTRSpawnList WICKED_DWARF_WARRIOR = new LOTRSpawnList(new LOTRSpawnEntry(LOTREntityWickedDwarf2.class, 10, 1, 1));
     public static final LOTRSpawnList BANDITS = new LOTRSpawnList(new LOTRSpawnEntry(LOTREntityBanditRhun.class, 30, 2, 4));
     public static final LOTRSpawnList TUNDRA_TROLLS = new LOTRSpawnList(new LOTRSpawnEntry(LOTREntityTundraSnowTroll.class, 10, 1, 3));
@@ -345,6 +349,7 @@ public class LOTRSpawnList {
     public static final LOTRSpawnList UTUMNO_MOUNRAIN_SNOW_TROLLS = new LOTRSpawnList(new LOTRSpawnEntry(LOTREntityMountainSnowTroll2.class, 10, 1, 3));
     public static final LOTRSpawnList AVARI_ELVES = new LOTRSpawnList(new LOTRSpawnEntry(LOTREntityAvariElf.class, 10, 1, 4));
     public static final LOTRSpawnList AVARI_ELF_WARRIORS = new LOTRSpawnList(new LOTRSpawnEntry(LOTREntityAvariElfScout.class, 10, 2, 4), new LOTRSpawnEntry(LOTREntityAvariElfWarrior.class, 5, 2, 4));
+    public static final LOTRSpawnList GONDOR_RENEGADES = new LOTRSpawnList(new LOTRSpawnEntry(LOTREntityGondorRenegade.class, 10, 1, 4));
     private final List<LOTRSpawnEntry> spawnList;
     private LOTRFaction discoveredFaction;
 

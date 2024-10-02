@@ -46,6 +46,8 @@ extends LOTRBiome {
         this.npcSpawnList.newFactionList(100).add(arrspawnListContainer);
         LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer2 = new LOTRBiomeSpawnList.SpawnListContainer[]{LOTRBiomeSpawnList.entry(LOTRSpawnList.SNOW_TROLLS, 1).setSpawnChance(5000), LOTRBiomeSpawnList.entry(LOTRSpawnList.ANGMAR_ORCS, 30).setConquestOnly(), LOTRBiomeSpawnList.entry(LOTRSpawnList.ANGMAR_WARGS, 20).setConquestOnly(), LOTRBiomeSpawnList.entry(LOTRSpawnList.SNOW_TROLLS, 6).setConquestOnly()};
         this.npcSpawnList.newFactionList(20).add(arrspawnListContainer2);
+        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer61 = new LOTRBiomeSpawnList.SpawnListContainer[]{LOTRBiomeSpawnList.entry(LOTRSpawnList.MOUNTAIN_SNOW_TROLLS, 5).setSpawnChance(1000)};
+        this.npcSpawnList.newFactionList(90, 0.0f).add(arrspawnListContainer61);
         LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer3 = new LOTRBiomeSpawnList.SpawnListContainer[]{LOTRBiomeSpawnList.entry(LOTRSpawnList.BLUE_DWARVES, 10)};
         this.npcSpawnList.newFactionList(0).add(arrspawnListContainer3);
         LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer4 = new LOTRBiomeSpawnList.SpawnListContainer[]{LOTRBiomeSpawnList.entry(LOTRSpawnList.DWARVES, 10)};
@@ -61,10 +63,11 @@ extends LOTRBiome {
         this.addBiomeVariant(LOTRBiomeVariant.FOREST_ASPEN, 0.3f);
         this.spawnableCreatureList.add(new BiomeGenBase.SpawnListEntry(LOTREntityRam.class, 50, 4, 4));
         this.decorator.biomeGemFactor = 1.0f;
-        this.decorator.addOre((WorldGenerator)new WorldGenMinable(LOTRMod.oreMithril, 8), 0.7f, 0, 16);
+        this.decorator.addOre((WorldGenerator)new WorldGenMinable(LOTRMod.oreMithril, 8), 0.55f, 0, 16);
+        this.decorator.addOre((WorldGenerator)new WorldGenMinable(LOTRMod.oreMithril2, 5), 0.15f, 0, 16);
         this.decorator.addOre((WorldGenerator)new WorldGenMinable(LOTRMod.oreGlowstone, 4), 8.0f, 0, 48);
         this.decorator.flowersPerChunk = 1;
-        this.decorator.grassPerChunk = 3;
+        this.decorator.grassPerChunk = 2;
         this.decorator.doubleGrassPerChunk = 1;
         this.decorator.generateWater = false;
         this.decorator.generateLava = false;

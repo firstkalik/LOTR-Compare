@@ -173,8 +173,10 @@ extends Gui {
 
         @Override
         public void renderText(int x, int y) {
+            int titleColor = this.achievement.isRare ? 16711935 : 8019267;
+            GL11.glColor4f((float)1.0f, (float)1.0f, (float)1.0f, (float)1.0f);
             LOTRGuiNotificationDisplay.access$100((LOTRGuiNotificationDisplay)LOTRGuiNotificationDisplay.this).fontRenderer.drawString(StatCollector.translateToLocal((String)"achievement.get"), x, y, 8019267);
-            LOTRGuiNotificationDisplay.access$100((LOTRGuiNotificationDisplay)LOTRGuiNotificationDisplay.this).fontRenderer.drawString(this.achievement.getTitle((EntityPlayer)LOTRGuiNotificationDisplay.access$100((LOTRGuiNotificationDisplay)LOTRGuiNotificationDisplay.this).thePlayer), x, y + 11, 8019267);
+            LOTRGuiNotificationDisplay.access$100((LOTRGuiNotificationDisplay)LOTRGuiNotificationDisplay.this).fontRenderer.drawString(this.achievement.getTitle((EntityPlayer)LOTRGuiNotificationDisplay.access$100((LOTRGuiNotificationDisplay)LOTRGuiNotificationDisplay.this).thePlayer), x, y + 11, titleColor);
         }
 
         @Override

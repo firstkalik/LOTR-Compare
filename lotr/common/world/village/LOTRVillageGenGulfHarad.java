@@ -51,7 +51,7 @@ extends LOTRVillageGen {
     }
 
     @Override
-    protected LOTRVillageGen.AbstractInstance<?> createVillageInstance(World world, int i, int k, Random random, LocationInfo loc) {
+    public LOTRVillageGen.AbstractInstance<?> createVillageInstance(World world, int i, int k, Random random, LocationInfo loc) {
         return new Instance(this, world, i, k, random, loc);
     }
 
@@ -66,8 +66,8 @@ extends LOTRVillageGen {
     extends LOTRVillageGen.AbstractInstance<LOTRVillageGenGulfHarad> {
         public VillageType villageType;
         public String[] villageName;
-        private int numOuterHouses;
-        private boolean townWall = true;
+        public int numOuterHouses;
+        public boolean townWall = true;
         int rTownTower = 90;
 
         public Instance(LOTRVillageGenGulfHarad village, World world, int i, int k, Random random, LocationInfo loc) {
@@ -75,19 +75,7 @@ extends LOTRVillageGen {
         }
 
         @Override
-        protected void setupVillageProperties(Random random) {
-            this.villageType = random.nextInt(4) == 0 ? VillageType.FORT : (random.nextInt(3) == 0 ? VillageType.TOWN : VillageType.VILLAGE);
-            this.villageName = LOTRNames.getHaradVillageName(random);
-            this.numOuterHouses = MathHelper.getRandomIntegerInRange((Random)random, (int)5, (int)8);
-        }
-
-        @Override
-        public boolean isFlat() {
-            return false;
-        }
-
-        @Override
-        protected void addVillageStructures(Random random) {
+        public void addVillageStructures(Random random) {
             if (this.villageType == VillageType.VILLAGE) {
                 this.setupVillage(random);
             } else if (this.villageType == VillageType.TOWN) {
@@ -97,101 +85,89 @@ extends LOTRVillageGen {
             }
         }
 
-        private void setupVillage(Random random) {
-            this.addStructure(new LOTRWorldGenNPCRespawner(false){
-
-                @Override
-                public void setupRespawner(LOTREntityNPCRespawner spawner) {
-                    spawner.setSpawnClass(LOTREntityGulfHaradrim.class);
-                    spawner.setCheckRanges(64, -12, 12, 24);
-                    spawner.setSpawnRanges(32, -6, 6, 32);
-                    spawner.setBlockEnemySpawnRange(64);
+        @Override
+        public LOTRRoadType getPath(Random random, int i, int k) {
+            int dSq;
+            int i1 = Math.abs(i);
+            int k1 = Math.abs(k);
+            if (this.villageType == VillageType.VILLAGE) {
+                dSq = i * i + k * k;
+                int imn = 16 - random.nextInt(3);
+                int imx = 21 + random.nextInt(3);
+                if (dSq > imn * imn && dSq < imx * imx) {
+                    return LOTRRoadType.PATH;
                 }
-            }, 0, 0, 0);
-            this.addStructure(new LOTRWorldGenNPCRespawner(false){
-
-                @Override
-                public void setupRespawner(LOTREntityNPCRespawner spawner) {
-                    spawner.setSpawnClasses(LOTREntityGulfHaradWarrior.class, LOTREntityGulfHaradArcher.class);
-                    spawner.setCheckRanges(64, -12, 12, 12);
-                    spawner.setSpawnRanges(32, -6, 6, 32);
-                    spawner.setBlockEnemySpawnRange(64);
-                }
-            }, 0, 0, 0);
-            this.addStructure(new LOTRWorldGenGulfTotem(false), 0, -2, 0, true);
-            this.addStructure(new LOTRWorldGenGulfTavern(false), 0, 24, 0, true);
-            int rSignsInner = 11;
-            this.addStructure(new LOTRWorldGenGulfVillageSign(false).setSignText(this.villageName), -rSignsInner, 0, 1, true);
-            this.addStructure(new LOTRWorldGenGulfVillageSign(false).setSignText(this.villageName), rSignsInner, 0, 3, true);
-            for (int h = 0; h < this.numOuterHouses; ++h) {
-                float turn = (float)h / (float)(this.numOuterHouses - 1);
-                float turnMin = 0.15f;
-                float turnMax = 1.0f - turnMin;
-                float turnInRange = turnMin + (turnMax - turnMin) * turn;
-                float turnCorrected = (turnInRange + 0.25f) % 1.0f;
-                float turnR = (float)Math.toRadians(turnCorrected * 360.0f);
-                float sin = MathHelper.sin((float)turnR);
-                float cos = MathHelper.cos((float)turnR);
-                int r = 0;
-                float turn8 = turnCorrected * 8.0f;
-                if (turn8 >= 1.0f && turn8 < 3.0f) {
-                    r = 0;
-                } else if (turn8 >= 3.0f && turn8 < 5.0f) {
-                    r = 1;
-                } else if (turn8 >= 5.0f && turn8 < 7.0f) {
-                    r = 2;
-                } else if (turn8 >= 7.0f || turn8 < 1.0f) {
-                    r = 3;
-                }
-                int l = 24;
-                int i = Math.round((float)l * cos);
-                int k = Math.round((float)l * sin);
-                this.addStructure(this.getRandomHouse(random), i, k, r);
             }
-            int numFarms = this.numOuterHouses * 2;
-            float frac = 1.0f / (float)numFarms;
-            float turn = 0.0f;
-            while (turn < 1.0f) {
-                float turnR = (float)Math.toRadians((turn += frac) * 360.0f);
-                float sin = MathHelper.sin((float)turnR);
-                float cos = MathHelper.cos((float)turnR);
-                int r = 0;
-                float turn8 = turn * 8.0f;
-                if (turn8 >= 1.0f && turn8 < 3.0f) {
-                    r = 0;
-                } else if (turn8 >= 3.0f && turn8 < 5.0f) {
-                    r = 1;
-                } else if (turn8 >= 5.0f && turn8 < 7.0f) {
-                    r = 2;
-                } else if (turn8 >= 7.0f || turn8 < 1.0f) {
-                    r = 3;
+            if (this.villageType == VillageType.TOWN) {
+                dSq = i * i + k * k;
+                if (dSq < 576) {
+                    return LOTRRoadType.GULF_HARAD;
                 }
-                int l = 52;
-                int i = Math.round((float)l * cos);
-                int k = Math.round((float)l * sin);
-                if (random.nextInt(3) == 0) {
-                    this.addStructure(new LOTRWorldGenHayBales(false), i, k, r);
-                    continue;
+                if (k1 <= 3 && i1 <= 74 || i1 <= 3 && k <= 74) {
+                    return LOTRRoadType.GULF_HARAD;
                 }
-                this.addStructure(this.getRandomFarm(random), i, k, r);
             }
+            return null;
         }
 
-        private LOTRWorldGenStructureBase2 getRandomHouse(Random random) {
-            if (random.nextInt(5) == 0) {
-                return new LOTRWorldGenGulfSmithy(false);
-            }
-            return new LOTRWorldGenGulfHouse(false);
-        }
-
-        private LOTRWorldGenStructureBase2 getRandomFarm(Random random) {
+        public LOTRWorldGenStructureBase2 getRandomFarm(Random random) {
             if (random.nextBoolean()) {
                 return new LOTRWorldGenGulfFarm(false);
             }
             return new LOTRWorldGenGulfPasture(false);
         }
 
-        private void setupTown(Random random) {
+        public LOTRWorldGenStructureBase2 getRandomHouse(Random random) {
+            if (random.nextInt(5) == 0) {
+                return new LOTRWorldGenGulfSmithy(false);
+            }
+            return new LOTRWorldGenGulfHouse(false);
+        }
+
+        @Override
+        public boolean isFlat() {
+            return false;
+        }
+
+        @Override
+        public boolean isVillageSpecificSurface(World world, int i, int j, int k) {
+            if (this.villageType == VillageType.TOWN) {
+                Block block = world.getBlock(i, j, k);
+                int meta = world.getBlockMetadata(i, j, k);
+                if (block == LOTRMod.brick3 && (meta == 13 || meta == 14)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public void setupFort(Random random) {
+            this.addStructure(new LOTRWorldGenNPCRespawner(false){
+
+                @Override
+                public void setupRespawner(LOTREntityNPCRespawner spawner) {
+                    spawner.setSpawnClass(LOTREntityGulfHaradrim.class);
+                    spawner.setCheckRanges(40, -12, 12, 16);
+                    spawner.setSpawnRanges(24, -6, 6, 32);
+                    spawner.setBlockEnemySpawnRange(60);
+                }
+            }, 0, 0, 0);
+            this.addStructure(new LOTRWorldGenGulfWarCamp(false), 0, -15, 0, true);
+            int towerX = 36;
+            this.addStructure(new LOTRWorldGenGulfTower(false), -towerX, -towerX + 4, 2, true);
+            this.addStructure(new LOTRWorldGenGulfTower(false), towerX, -towerX + 4, 2, true);
+            this.addStructure(new LOTRWorldGenGulfTower(false), -towerX, towerX - 4, 0, true);
+            this.addStructure(new LOTRWorldGenGulfTower(false), towerX, towerX - 4, 0, true);
+            for (int l = -1; l <= 1; ++l) {
+                int i = l * 16;
+                int k = 28;
+                this.addStructure(this.getRandomFarm(random), i, k, 0);
+                this.addStructure(this.getRandomFarm(random), -k, i, 1);
+                this.addStructure(this.getRandomFarm(random), k, i, 3);
+            }
+        }
+
+        public void setupTown(Random random) {
             this.addStructure(new LOTRWorldGenNPCRespawner(false){
 
                 @Override
@@ -292,67 +268,91 @@ extends LOTRVillageGen {
             }
         }
 
-        private void setupFort(Random random) {
+        public void setupVillage(Random random) {
             this.addStructure(new LOTRWorldGenNPCRespawner(false){
 
                 @Override
                 public void setupRespawner(LOTREntityNPCRespawner spawner) {
                     spawner.setSpawnClass(LOTREntityGulfHaradrim.class);
-                    spawner.setCheckRanges(40, -12, 12, 16);
-                    spawner.setSpawnRanges(24, -6, 6, 32);
-                    spawner.setBlockEnemySpawnRange(60);
+                    spawner.setCheckRanges(64, -12, 12, 24);
+                    spawner.setSpawnRanges(32, -6, 6, 32);
+                    spawner.setBlockEnemySpawnRange(64);
                 }
             }, 0, 0, 0);
-            this.addStructure(new LOTRWorldGenGulfWarCamp(false), 0, -15, 0, true);
-            int towerX = 36;
-            this.addStructure(new LOTRWorldGenGulfTower(false), -towerX, -towerX + 4, 2, true);
-            this.addStructure(new LOTRWorldGenGulfTower(false), towerX, -towerX + 4, 2, true);
-            this.addStructure(new LOTRWorldGenGulfTower(false), -towerX, towerX - 4, 0, true);
-            this.addStructure(new LOTRWorldGenGulfTower(false), towerX, towerX - 4, 0, true);
-            for (int l = -1; l <= 1; ++l) {
-                int i = l * 16;
-                int k = 28;
-                this.addStructure(this.getRandomFarm(random), i, k, 0);
-                this.addStructure(this.getRandomFarm(random), -k, i, 1);
-                this.addStructure(this.getRandomFarm(random), k, i, 3);
+            this.addStructure(new LOTRWorldGenNPCRespawner(false){
+
+                @Override
+                public void setupRespawner(LOTREntityNPCRespawner spawner) {
+                    spawner.setSpawnClasses(LOTREntityGulfHaradWarrior.class, LOTREntityGulfHaradArcher.class);
+                    spawner.setCheckRanges(64, -12, 12, 12);
+                    spawner.setSpawnRanges(32, -6, 6, 32);
+                    spawner.setBlockEnemySpawnRange(64);
+                }
+            }, 0, 0, 0);
+            this.addStructure(new LOTRWorldGenGulfTotem(false), 0, -2, 0, true);
+            this.addStructure(new LOTRWorldGenGulfTavern(false), 0, 24, 0, true);
+            int rSignsInner = 11;
+            this.addStructure(new LOTRWorldGenGulfVillageSign(false).setSignText(this.villageName), -rSignsInner, 0, 1, true);
+            this.addStructure(new LOTRWorldGenGulfVillageSign(false).setSignText(this.villageName), rSignsInner, 0, 3, true);
+            for (int h = 0; h < this.numOuterHouses; ++h) {
+                float turn = (float)h / (float)(this.numOuterHouses - 1);
+                float turnMin = 0.15f;
+                float turnMax = 1.0f - turnMin;
+                float turnInRange = turnMin + (turnMax - turnMin) * turn;
+                float turnCorrected = (turnInRange + 0.25f) % 1.0f;
+                float turnR = (float)Math.toRadians(turnCorrected * 360.0f);
+                float sin = MathHelper.sin((float)turnR);
+                float cos = MathHelper.cos((float)turnR);
+                int r = 0;
+                float turn8 = turnCorrected * 8.0f;
+                if (turn8 >= 1.0f && turn8 < 3.0f) {
+                    r = 0;
+                } else if (turn8 >= 3.0f && turn8 < 5.0f) {
+                    r = 1;
+                } else if (turn8 >= 5.0f && turn8 < 7.0f) {
+                    r = 2;
+                } else if (turn8 >= 7.0f || turn8 < 1.0f) {
+                    r = 3;
+                }
+                int l = 24;
+                int i = Math.round((float)l * cos);
+                int k = Math.round((float)l * sin);
+                this.addStructure(this.getRandomHouse(random), i, k, r);
+            }
+            int numFarms = this.numOuterHouses * 2;
+            float frac = 1.0f / (float)numFarms;
+            float turn = 0.0f;
+            while (turn < 1.0f) {
+                float turnR = (float)Math.toRadians((turn += frac) * 360.0f);
+                float sin = MathHelper.sin((float)turnR);
+                float cos = MathHelper.cos((float)turnR);
+                int r = 0;
+                float turn8 = turn * 8.0f;
+                if (turn8 >= 1.0f && turn8 < 3.0f) {
+                    r = 0;
+                } else if (turn8 >= 3.0f && turn8 < 5.0f) {
+                    r = 1;
+                } else if (turn8 >= 5.0f && turn8 < 7.0f) {
+                    r = 2;
+                } else if (turn8 >= 7.0f || turn8 < 1.0f) {
+                    r = 3;
+                }
+                int l = 52;
+                int i = Math.round((float)l * cos);
+                int k = Math.round((float)l * sin);
+                if (random.nextInt(3) == 0) {
+                    this.addStructure(new LOTRWorldGenHayBales(false), i, k, r);
+                    continue;
+                }
+                this.addStructure(this.getRandomFarm(random), i, k, r);
             }
         }
 
         @Override
-        protected LOTRRoadType getPath(Random random, int i, int k) {
-            int dSq;
-            int i1 = Math.abs(i);
-            int k1 = Math.abs(k);
-            if (this.villageType == VillageType.VILLAGE) {
-                dSq = i * i + k * k;
-                int imn = 16 - random.nextInt(3);
-                int imx = 21 + random.nextInt(3);
-                if (dSq > imn * imn && dSq < imx * imx) {
-                    return LOTRRoadType.PATH;
-                }
-            }
-            if (this.villageType == VillageType.TOWN) {
-                dSq = i * i + k * k;
-                if (dSq < 576) {
-                    return LOTRRoadType.GULF_HARAD;
-                }
-                if (k1 <= 3 && i1 <= 74 || i1 <= 3 && k <= 74) {
-                    return LOTRRoadType.GULF_HARAD;
-                }
-            }
-            return null;
-        }
-
-        @Override
-        public boolean isVillageSpecificSurface(World world, int i, int j, int k) {
-            if (this.villageType == VillageType.TOWN) {
-                Block block = world.getBlock(i, j, k);
-                int meta = world.getBlockMetadata(i, j, k);
-                if (block == LOTRMod.brick3 && meta == 13 || block == LOTRMod.brick3 && meta == 14) {
-                    return true;
-                }
-            }
-            return false;
+        public void setupVillageProperties(Random random) {
+            this.villageType = random.nextInt(4) == 0 ? VillageType.FORT : (random.nextInt(3) == 0 ? VillageType.TOWN : VillageType.VILLAGE);
+            this.villageName = LOTRNames.getHaradVillageName(random);
+            this.numOuterHouses = MathHelper.getRandomIntegerInRange((Random)random, (int)5, (int)8);
         }
 
     }

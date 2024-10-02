@@ -13,8 +13,8 @@ package lotr.client.render.entity;
 
 import java.util.HashMap;
 import java.util.Map;
-import lotr.client.model.LOTRModelBear2;
-import lotr.common.entity.animal.LOTREntityBear2;
+import lotr.client.model.LOTRModelPolarBear;
+import lotr.common.entity.animal.LOTREntityPolarBear;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.entity.Entity;
@@ -27,19 +27,19 @@ extends RenderLiving {
     private static Map bearSkins = new HashMap();
 
     public LOTRRenderBear2() {
-        super((ModelBase)new LOTRModelBear2(), 0.5f);
+        super((ModelBase)new LOTRModelPolarBear(), 0.5f);
     }
 
     protected ResourceLocation getEntityTexture(Entity entity) {
-        LOTREntityBear2 bear = (LOTREntityBear2)entity;
+        LOTREntityPolarBear bear = (LOTREntityPolarBear)entity;
         return LOTRRenderBear2.getBearSkin(bear.getBearType());
     }
 
-    public static ResourceLocation getBearSkin(LOTREntityBear2.BearType type) {
+    public static ResourceLocation getBearSkin(LOTREntityPolarBear.BearType type) {
         String s = type.textureName();
         ResourceLocation skin = (ResourceLocation)bearSkins.get(s);
         if (skin == null) {
-            skin = new ResourceLocation("lotr:mob/bear2/" + s + ".png");
+            skin = new ResourceLocation("lotr:mob/polarBear/" + s + ".png");
             bearSkins.put(s, skin);
         }
         return skin;

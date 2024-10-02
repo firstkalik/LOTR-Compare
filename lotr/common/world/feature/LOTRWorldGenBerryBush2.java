@@ -35,6 +35,8 @@ extends WorldGenerator {
         if (bushType.poisonous && random.nextInt(2) != 0) {
             return false;
         }
+        int placementInterval = 2;
+        int placementCounter = 0;
         for (int l = 0; l < 12; ++l) {
             int i1 = i - random.nextInt(4) + random.nextInt(4);
             int j1 = j - random.nextInt(2) + random.nextInt(2);
@@ -42,7 +44,10 @@ extends WorldGenerator {
             Block below = world.getBlock(i1, j1 - 1, k1);
             Block block = world.getBlock(i1, j1, k1);
             if (!below.canSustainPlant((IBlockAccess)world, i1, j1 - 1, k1, ForgeDirection.UP, (IPlantable)Blocks.sapling) || block.getMaterial().isLiquid() || !block.isReplaceable((IBlockAccess)world, i1, j1, k1)) continue;
-            world.setBlock(i1, j1, k1, bush, bushMeta, 2);
+            if (placementCounter % placementInterval == 0) {
+                world.setBlock(i1, j1, k1, bush, bushMeta, 2);
+            }
+            ++placementCounter;
         }
         return true;
     }

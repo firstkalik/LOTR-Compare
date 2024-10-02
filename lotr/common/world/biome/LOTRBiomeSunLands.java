@@ -49,8 +49,10 @@ extends LOTRBiome {
         this.spawnableCreatureList.add(new BiomeGenBase.SpawnListEntry(EntityChicken.class, 5, 1, 4));
         this.npcSpawnList.clear();
         this.variantChance = 0.3f;
-        this.decorator.addOre((WorldGenerator)new WorldGenMinable(LOTRMod.oreMithril, 10), 0.8f, 0, 16);
+        this.decorator.addOre((WorldGenerator)new WorldGenMinable(LOTRMod.oreMithril2, 5), 0.16f, 0, 16);
+        this.decorator.addOre((WorldGenerator)new WorldGenMinable(LOTRMod.oreMithril, 10), 0.65f, 0, 16);
         this.addBiomeVariant(LOTRBiomeVariant.HILLS);
+        this.addBiomeVariant(LOTRBiomeVariant.HILLS_FOREST);
         this.addBiomeVariant(LOTRBiomeVariant.STEPPE);
         this.decorator.resetTreeCluster();
         this.decorator.willowPerChunk = 1;
@@ -59,8 +61,8 @@ extends LOTRBiome {
         this.decorator.generateLava = false;
         this.decorator.grassPerChunk = 6;
         this.decorator.doubleGrassPerChunk = 4;
-        this.decorator.addTree(LOTRTreeType.ACACIA, 200);
-        this.decorator.addTree(LOTRTreeType.ACACIA_DEAD, 20);
+        this.decorator.addTree(LOTRTreeType.PALM, 200);
+        this.decorator.addTree(LOTRTreeType.DATE_PALM, 20);
         this.biomeColors.setGrass(11009024);
         ArrayList flowerDupes = new ArrayList();
         for (int l = 0; l < 10; ++l) {

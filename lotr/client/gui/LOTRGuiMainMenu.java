@@ -28,6 +28,7 @@
  *  net.minecraft.client.renderer.texture.TextureManager
  *  net.minecraft.client.resources.LanguageManager
  *  net.minecraft.client.settings.GameSettings
+ *  net.minecraft.util.EnumChatFormatting
  *  net.minecraft.util.MathHelper
  *  net.minecraft.util.ResourceLocation
  *  net.minecraft.util.Session
@@ -53,6 +54,7 @@ import lotr.client.gui.LOTRGuiCapeArrows;
 import lotr.client.gui.LOTRGuiCapeArrows2;
 import lotr.client.gui.LOTRGuiMap;
 import lotr.client.gui.LOTRGuiRendererMap;
+import lotr.client.gui.LOTRGuiUpdates;
 import lotr.common.world.map.LOTRWaypoint;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
@@ -73,6 +75,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.resources.LanguageManager;
 import net.minecraft.client.settings.GameSettings;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Session;
@@ -89,6 +92,7 @@ extends GuiMainMenu {
     private boolean fadeIn = isFirstMenu;
     private ResourceLocation skin = LOTRGuiMainMenu.getPlayerSkin(Minecraft.getMinecraft().getSession().getUsername());
     private LanguageManager field_146454_h;
+    private GuiButton openVKButton;
     private static Random rand = new Random();
     private static boolean isFirstMenu = true;
     private static List<LOTRWaypoint> waypointRoute = new ArrayList<LOTRWaypoint>();
@@ -108,8 +112,8 @@ extends GuiMainMenu {
     private String namequit = "\u0412\u044b\u0439\u0442\u0438 \u0438\u0437 \u0438\u0433\u0440\u044b";
     private String nameone = "\u041e\u0434\u0438\u043d\u043e\u0447\u043d\u0430\u044f \u0438\u0433\u0440\u0430";
     private String nameserver = "\u0421\u043f\u0438\u0441\u043e\u043a \u0421\u0435\u0440\u0432\u0435\u0440\u043e\u0432";
-    private String nameserver2 = "\u00a76\u0421\u0435\u0440\u0432\u0435\u0440 LOTR+";
-    private String nameserver3 = "\u00a72Discord #1";
+    private String nameserver2 = "\u00a79Discord #1";
+    private String nameserver3 = "\u00a72Discord #2";
     private String namesetting = "\u00a72\u0432\u2013\u0454";
 
     public LOTRGuiMainMenu() {
@@ -183,6 +187,7 @@ extends GuiMainMenu {
         this.buttonList.add(new LOTRGuiCapeArrows(8, this.width / 2 + 2, i1 + 72 + 12 - 24, 98, 20, this.nameserver2));
         this.buttonList.add(new LOTRGuiCapeArrows(9, this.width / 2 + 2, i1 + 94 + 12 - 24, 98, 20, this.nameserver3));
         this.buttonList.add(new GuiButtonLanguage(10, this.width / 2 - 125, i1 + 94 + 12 - 24));
+        this.buttonList.add(new LOTRGuiUpdates(11, this.width / 2 + 104, i1 + 96 + 12 - 24, ""));
         int lowerButtonMaxY = 0;
         for (Object obj : this.buttonList) {
             GuiButton button = (GuiButton)obj;
@@ -301,7 +306,7 @@ extends GuiMainMenu {
             ModContainer modContainer = (ModContainer)modMap.get("lotr");
             String modName = modContainer.getName();
             String modVersion = modContainer.getVersion();
-            String copyright = "\u00a76" + modVersion;
+            String copyright = (Object)EnumChatFormatting.GOLD + modName + " " + modVersion;
             this.drawString(this.fontRendererObj, copyright, this.width - this.fontRendererObj.getStringWidth(copyright) - 3, this.height - 10, -1);
             String field_92025_p = (String)ObfuscationReflectionHelper.getPrivateValue(GuiMainMenu.class, (Object)((Object)this), (String[])new String[]{"field_92025_p"});
             String field_146972_A = (String)ObfuscationReflectionHelper.getPrivateValue(GuiMainMenu.class, (Object)((Object)this), (String[])new String[]{"field_146972_A"});
@@ -344,19 +349,22 @@ extends GuiMainMenu {
             this.mc.shutdown();
         }
         if (b.id == 6) {
-            Sys.openURL((String)"https://vk.cc/ctzZnM");
+            Sys.openURL((String)"https://vk.cc/cyOqGx");
         }
         if (b.id == 7) {
             this.mc.displayGuiScreen((GuiScreen)new GuiOptions((GuiScreen)this, this.mc.gameSettings));
         }
         if (b.id == 8) {
-            Sys.openURL((String)"https://dragon-lance.ru/");
+            Sys.openURL((String)"https://discord.gg/G5yzs9Cn3m");
         }
         if (b.id == 9) {
             Sys.openURL((String)"https://discord.com/invite/Hx5CksdyvE?utm_source=Discord%20Widget&utm_medium=Connect");
         }
         if (b.id == 10) {
             this.mc.displayGuiScreen((GuiScreen)new GuiLanguage((GuiScreen)this, this.mc.gameSettings, this.mc.getLanguageManager()));
+        }
+        if (b.id == 11) {
+            Sys.openURL((String)"https://disk.yandex.ru/d/MjyvZe4vs6W9PA");
         }
     }
 }

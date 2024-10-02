@@ -8,11 +8,14 @@
  *  net.minecraft.item.Item
  *  net.minecraft.item.ItemStack
  *  net.minecraft.potion.PotionEffect
+ *  net.minecraft.util.EnumChatFormatting
+ *  net.minecraft.util.StatCollector
  *  net.minecraft.world.World
  */
 package lotr.common.item;
 
 import java.util.List;
+import lotr.common.LOTRMod;
 import lotr.common.item.LOTRItemBaseRing2;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -20,6 +23,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 
 public class narchuil
@@ -58,7 +63,13 @@ extends LOTRItemBaseRing2 {
     }
 
     @Override
-    public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List list, boolean par4) {
+    public boolean getIsRepairable(ItemStack itemstack, ItemStack repairItem) {
+        return repairItem.getItem() == LOTRMod.silver;
+    }
+
+    @Override
+    public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List list, boolean advanced) {
+        list.add((Object)EnumChatFormatting.GREEN + StatCollector.translateToLocalFormatted((String)"lotr.ring.ready", (Object[])new Object[0]));
     }
 
     @Override
@@ -68,7 +79,7 @@ extends LOTRItemBaseRing2 {
 
     @Override
     public int getBaseRepairCost() {
-        return 3;
+        return 6;
     }
 }
 

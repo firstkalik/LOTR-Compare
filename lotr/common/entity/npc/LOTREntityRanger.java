@@ -19,11 +19,13 @@
  *  net.minecraft.item.ItemBow
  *  net.minecraft.item.ItemStack
  *  net.minecraft.util.DamageSource
+ *  net.minecraft.util.MathHelper
  *  net.minecraft.util.ResourceLocation
  *  net.minecraft.world.World
  */
 package lotr.common.entity.npc;
 
+import java.util.Random;
 import lotr.common.LOTRCapes;
 import lotr.common.LOTRMod;
 import lotr.common.entity.ai.LOTREntityAIAttackOnCollide;
@@ -49,6 +51,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBow;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
@@ -58,11 +61,20 @@ extends LOTREntityDunedain {
     public EntityAIBase meleeAttackAI;
     private int sneakCooldown = 0;
     private EntityLivingBase prevRangerTarget;
+    private EntityAIBase normalRangedAI;
+    private EntityAIBase enhancedRangedAI;
 
     public LOTREntityRanger(World world) {
         super(world);
         this.addTargetTasks(true);
         this.npcCape = LOTRCapes.ALIGNMENT_RANGER.capeTexture;
+        this.normalRangedAI = this.createDunedainRangedAI(1.25, 20, 40, 20.0f);
+        this.enhancedRangedAI = this.createDunedainRangedAI(1.26, 10, 20, 30.0f);
+        this.tasks.addTask(2, this.normalRangedAI);
+    }
+
+    protected EntityAIBase createDunedainRangedAI(double moveSpeed, int minAttackTime, int maxAttackTime, float maxRange) {
+        return new LOTREntityAIRangedAttack(this, moveSpeed, minAttackTime, maxAttackTime, maxRange);
     }
 
     @Override
@@ -100,7 +112,7 @@ extends LOTREntityDunedain {
     @Override
     protected void applyEntityAttributes() {
         super.applyEntityAttributes();
-        this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(25.0);
+        this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue((double)MathHelper.getRandomIntegerInRange((Random)this.rand, (int)25, (int)27));
         this.getEntityAttribute(SharedMonsterAttributes.followRange).setBaseValue(24.0);
         this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.25);
         this.getEntityAttribute(npcRangedAccuracy).setBaseValue(0.5);
@@ -122,25 +134,17 @@ extends LOTREntityDunedain {
     @Override
     public void onLivingUpdate() {
         super.onLivingUpdate();
-        if (!this.worldObj.isRemote) {
-            if (this.ridingEntity == null) {
-                if (this.isRangerSneaking()) {
-                    if (this.getAttackTarget() == null) {
-                        if (this.sneakCooldown > 0) {
-                            --this.sneakCooldown;
-                        } else {
-                            this.setRangerSneaking(false);
-                        }
-                    } else {
-                        this.sneakCooldown = 20;
-                    }
-                } else {
-                    this.sneakCooldown = 0;
-                }
-            } else if (this.isRangerSneaking()) {
-                this.setRangerSneaking(false);
-            }
+        if (this.getHealth() < this.getMaxHealth() / 2.0f) {
+            this.updateRangedAI(this.enhancedRangedAI);
+        } else {
+            this.updateRangedAI(this.normalRangedAI);
         }
+    }
+
+    private void updateRangedAI(EntityAIBase newAI) {
+        this.tasks.removeTask(this.normalRangedAI);
+        this.tasks.removeTask(this.enhancedRangedAI);
+        this.tasks.addTask(2, newAI);
     }
 
     @Override

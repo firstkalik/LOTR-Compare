@@ -20,6 +20,7 @@ import java.util.Random;
 import lotr.common.LOTRMod;
 import lotr.common.entity.ai.LOTREntityAIRangedAttack;
 import lotr.common.entity.item.LOTREntityArrowMorgul;
+import lotr.common.entity.item.LOTREntityArrowWeak;
 import lotr.common.entity.npc.LOTREntityAngmarOrc;
 import lotr.common.entity.npc.LOTREntityNPC;
 import lotr.common.entity.npc.LOTRInventoryNPCItems;
@@ -70,23 +71,22 @@ extends LOTREntityAngmarOrc {
         this.dropNPCArrows(i);
     }
 
-    @Override
-    protected float getPoisonedArrowChance() {
-        return 0.0f;
+    protected float getMorgulArrowChance() {
+        return 0.06666667f;
     }
 
-    protected float getMorgulArrowChance() {
+    protected float getWeakArrowChance() {
         return 0.06666667f;
     }
 
     @Override
     protected void npcArrowAttack(EntityLivingBase target, float f) {
-        LOTREntityArrowMorgul arrow;
         ItemStack heldItem = this.getHeldItem();
         float str = 1.3f + this.getDistanceToEntity((Entity)target) / 80.0f;
         float accuracy = (float)this.getEntityAttribute(npcRangedAccuracy).getAttributeValue();
         float poisonChance = this.getMorgulArrowChance();
-        LOTREntityArrowMorgul lOTREntityArrowMorgul = arrow = this.rand.nextFloat() < poisonChance ? new LOTREntityArrowMorgul(this.worldObj, (EntityLivingBase)this, target, str, accuracy) : new EntityArrow(this.worldObj, (EntityLivingBase)this, target, str * LOTRItemBow.getLaunchSpeedFactor(heldItem), accuracy);
+        float weakArrowChance = this.getWeakArrowChance();
+        EntityArrow arrow = this.rand.nextFloat() < poisonChance ? new LOTREntityArrowMorgul(this.worldObj, (EntityLivingBase)this, target, str, accuracy) : (this.rand.nextFloat() < weakArrowChance ? new LOTREntityArrowWeak(this.worldObj, (EntityLivingBase)this, target, str, accuracy) : new EntityArrow(this.worldObj, (EntityLivingBase)this, target, str *= LOTRItemBow.getLaunchSpeedFactor(heldItem), accuracy));
         if (heldItem != null) {
             LOTRItemBow.applyBowModifiers(arrow, heldItem);
         }

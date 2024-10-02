@@ -28,6 +28,7 @@
  *  net.minecraft.nbt.NBTTagList
  *  net.minecraft.nbt.NBTTagString
  *  net.minecraft.pathfinding.PathNavigate
+ *  net.minecraft.potion.Potion
  *  net.minecraft.server.MinecraftServer
  *  net.minecraft.server.management.ServerConfigurationManager
  *  net.minecraft.util.AxisAlignedBB
@@ -76,6 +77,7 @@ import lotr.common.LOTRGuiMessageTypes;
 import lotr.common.LOTRLevelData;
 import lotr.common.LOTRMod;
 import lotr.common.LOTRPlayerQuestData;
+import lotr.common.LOTRPotions;
 import lotr.common.LOTRShields;
 import lotr.common.LOTRTitle;
 import lotr.common.block.LOTRBlockCraftingTable;
@@ -136,6 +138,8 @@ import lotr.common.world.LOTRUtumnoLevel;
 import lotr.common.world.LOTRWorldProvider;
 import lotr.common.world.biome.LOTRBiome;
 import lotr.common.world.biome.LOTRBiomeGenMistyMountains;
+import lotr.common.world.biome.LOTRBiomeGenOcean;
+import lotr.common.world.biome.LOTRBiomeGenRedMountainsIronfist;
 import lotr.common.world.map.LOTRAbstractWaypoint;
 import lotr.common.world.map.LOTRConquestGrid;
 import lotr.common.world.map.LOTRCustomWaypoint;
@@ -161,6 +165,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
 import net.minecraft.pathfinding.PathNavigate;
+import net.minecraft.potion.Potion;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.management.ServerConfigurationManager;
 import net.minecraft.util.AxisAlignedBB;
@@ -254,6 +259,13 @@ public class LOTRPlayerData {
     private static Map capes = new HashMap();
     public long lastOnlineTime = -1L;
     private static Map capesEnabled = new HashMap();
+    private int invasionWins;
+    private boolean isBlocked;
+    private int globalHiredNPCCount;
+    private int customMaxHiredNPCs = -1;
+    private static final int BASE_MAX_HIRED_NPCS = LOTRConfig.maxHiredNPCs;
+    private static final int ADDITIONAL_NPCS_PER_1000_REP = 5;
+    private static final int REP_PER_ADDITIONAL_NPC = 1000;
     private boolean fastTravelDisabled;
 
     public LOTRPlayerData(UUID uuid) {
@@ -264,6 +276,31 @@ public class LOTRPlayerData {
 
     public UUID getPlayerUUID() {
         return this.playerUUID;
+    }
+
+    public int getInvasionWins() {
+        return this.invasionWins;
+    }
+
+    public void addInvasionWin() {
+        ++this.invasionWins;
+        this.checkForInvasionAchievements();
+        this.markDirty();
+    }
+
+    private void checkForInvasionAchievements() {
+        if (this.invasionWins >= 10) {
+            this.addAchievement(LOTRAchievement.defeatInvasion10);
+        }
+        if (this.invasionWins >= 50) {
+            this.addAchievement(LOTRAchievement.defeatInvasion50);
+        }
+        if (this.invasionWins >= 100) {
+            this.addAchievement(LOTRAchievement.defeatInvasion100);
+        }
+        if (this.invasionWins >= 200) {
+            this.addAchievement(LOTRAchievement.defeatInvasion200);
+        }
     }
 
     private EntityPlayer getPlayer() {
@@ -301,6 +338,35 @@ public class LOTRPlayerData {
         return this.needsSave;
     }
 
+    public int getGlobalHiredNPCCount() {
+        return this.globalHiredNPCCount;
+    }
+
+    public void updateGlobalHiredNPCCount(int amount) {
+        this.globalHiredNPCCount += amount;
+        if (this.globalHiredNPCCount < 0) {
+            this.globalHiredNPCCount = 0;
+        }
+        this.markDirty();
+        EntityPlayer entityplayer = this.getPlayer();
+    }
+
+    public int getCustomMaxHiredNPCs() {
+        return this.customMaxHiredNPCs;
+    }
+
+    public void setCustomMaxHiredNPCs(int amount) {
+        this.customMaxHiredNPCs = amount;
+        this.markDirty();
+    }
+
+    private int getMaxHiredNPCs(EntityPlayer entityplayer, LOTRFaction faction) {
+        LOTRPlayerData playerData = LOTRLevelData.getData(entityplayer);
+        float alignment = playerData.getAlignment(faction);
+        int additionalNPCs = (int)(alignment / 1000.0f) * 5;
+        return BASE_MAX_HIRED_NPCS + additionalNPCs;
+    }
+
     public void save(NBTTagCompound playerData) {
         NBTTagList alignmentTags = new NBTTagList();
         for (Map.Entry<LOTRFaction, Float> entry : this.alignments.entrySet()) {
@@ -311,6 +377,11 @@ public class LOTRPlayerData {
             nbt6.setFloat("AlignF", alignment);
             alignmentTags.appendTag((NBTBase)nbt6);
         }
+        playerData.setInteger("CustomMaxHiredNPCs", this.customMaxHiredNPCs);
+        playerData.setBoolean("FastTravelDisabled", this.fastTravelDisabled);
+        playerData.setInteger("GlobalHiredNPCCount", this.globalHiredNPCCount);
+        playerData.setInteger("InvasionWins", this.invasionWins);
+        playerData.setBoolean("IsBlocked", this.isBlocked);
         playerData.setTag("AlignmentMap", (NBTBase)alignmentTags);
         NBTTagList factionDataTags = new NBTTagList();
         for (Map.Entry<LOTRFaction, LOTRFactionData> entry : this.factionDataMap.entrySet()) {
@@ -525,6 +596,15 @@ public class LOTRPlayerData {
         this.needsSave = false;
     }
 
+    public boolean isBlocked() {
+        return this.isBlocked;
+    }
+
+    public void setBlocked(boolean blocked) {
+        this.isBlocked = blocked;
+        this.markDirty();
+    }
+
     public void load(NBTTagCompound playerData) {
         NBTTagCompound nbt;
         LOTRShields savedShield;
@@ -534,6 +614,21 @@ public class LOTRPlayerData {
         LOTRTitle title;
         LOTRCapes savedCape;
         this.alignments.clear();
+        if (playerData.hasKey("GlobalHiredNPCCount")) {
+            this.globalHiredNPCCount = playerData.getInteger("GlobalHiredNPCCount");
+        }
+        if (playerData.hasKey("IsBlocked")) {
+            this.isBlocked = playerData.getBoolean("IsBlocked");
+        }
+        if (playerData.hasKey("FastTravelDisabled")) {
+            this.fastTravelDisabled = playerData.getBoolean("FastTravelDisabled");
+        }
+        if (playerData.hasKey("CustomMaxHiredNPCs")) {
+            this.customMaxHiredNPCs = playerData.getInteger("CustomMaxHiredNPCs");
+        }
+        if (playerData.hasKey("InvasionWins")) {
+            this.invasionWins = playerData.getInteger("InvasionWins");
+        }
         NBTTagList alignmentTags = playerData.getTagList("AlignmentMap", 10);
         for (int i = 0; i < alignmentTags.tagCount(); ++i) {
             float alignment;
@@ -1038,6 +1133,9 @@ public class LOTRPlayerData {
         LOTRAlignmentBonusMap factionBonusMap = new LOTRAlignmentBonusMap();
         float prevMainAlignment = this.getAlignment(faction);
         float conquestBonus = 0.0f;
+        if (entityplayer.isPotionActive(LOTRPotions.hero)) {
+            bonus *= 1.5f;
+        }
         if (source.isKill) {
             List<LOTRFaction> killBonuses = faction.getBonusesForKilling();
             for (Object bonusFaction : killBonuses) {
@@ -1436,6 +1534,14 @@ public class LOTRPlayerData {
                 if (biomes >= 50) {
                     this.addAchievement(LOTRAchievement.travel50);
                 }
+                int rings = 0;
+                for (LOTRAchievement earnedAchievement : earnedAchievements) {
+                    if (!earnedAchievement.isRing) continue;
+                    ++rings;
+                }
+                if (rings >= 14) {
+                    this.addAchievement(LOTRAchievement.theLordofTheRings);
+                }
             }
         }
     }
@@ -1507,9 +1613,6 @@ public class LOTRPlayerData {
         if (entityplayer.dimension == LOTRDimension.MIDDLE_EARTH.dimensionID) {
             this.addAchievement(LOTRAchievement.enterMiddleEarth);
         }
-        if (entityplayer.dimension == LOTRDimension.MIDDLE_EARTH.dimensionID) {
-            this.addAchievement(LOTRAchievement.enterLotr);
-        }
         if (entityplayer.dimension == LOTRDimension.UTUMNO.dimensionID) {
             this.addAchievement(LOTRAchievement.enterUtumnoIce);
             int y = MathHelper.floor_double((double)entityplayer.boundingBox.minY);
@@ -1523,38 +1626,60 @@ public class LOTRPlayerData {
         if (entityplayer.inventory.hasItem(LOTRMod.pouch)) {
             this.addAchievement(LOTRAchievement.getPouch);
         }
-        if (entityplayer.inventory.hasItem(LOTRMod.LOTRRingOne)) {
+        if (entityplayer.inventory.hasItemStack(new ItemStack(LOTRMod.pouch, 1, 0))) {
+            this.addAchievement(LOTRAchievement.getPouch);
+        }
+        if (entityplayer.inventory.hasItemStack(new ItemStack(LOTRMod.pouch, 1, 1))) {
+            this.addAchievement(LOTRAchievement.getPouch);
+        }
+        if (entityplayer.inventory.hasItemStack(new ItemStack(LOTRMod.pouch, 1, 2))) {
+            this.addAchievement(LOTRAchievement.getPouch);
+        }
+        if (entityplayer.inventory.hasItem(LOTRMod.theOneRing)) {
             this.addAchievement(LOTRAchievement.getOne);
         }
         if (entityplayer.inventory.hasItem(LOTRMod.vilia)) {
             this.addAchievement(LOTRAchievement.getThree);
+            this.addAchievement(LOTRAchievement.getVilia);
+        }
+        if (entityplayer.inventory.hasItem(LOTRMod.steelbow)) {
+            this.addAchievement(LOTRAchievement.getNumenorBow);
         }
         if (entityplayer.inventory.hasItem(LOTRMod.nenia)) {
             this.addAchievement(LOTRAchievement.getThree);
+            this.addAchievement(LOTRAchievement.getNenia);
         }
         if (entityplayer.inventory.hasItem(LOTRMod.naria)) {
             this.addAchievement(LOTRAchievement.getThree);
+            this.addAchievement(LOTRAchievement.getNaria);
         }
         if (entityplayer.inventory.hasItem(LOTRMod.d1)) {
             this.addAchievement(LOTRAchievement.getSeven);
+            this.addAchievement(LOTRAchievement.getDwarven1);
         }
         if (entityplayer.inventory.hasItem(LOTRMod.d2)) {
             this.addAchievement(LOTRAchievement.getSeven);
+            this.addAchievement(LOTRAchievement.getDwarven2);
         }
         if (entityplayer.inventory.hasItem(LOTRMod.d3)) {
             this.addAchievement(LOTRAchievement.getSeven);
+            this.addAchievement(LOTRAchievement.getDwarven3);
         }
         if (entityplayer.inventory.hasItem(LOTRMod.d4)) {
             this.addAchievement(LOTRAchievement.getSeven);
+            this.addAchievement(LOTRAchievement.getDwarven4);
         }
         if (entityplayer.inventory.hasItem(LOTRMod.d5)) {
             this.addAchievement(LOTRAchievement.getSeven);
+            this.addAchievement(LOTRAchievement.getDwarven5);
         }
         if (entityplayer.inventory.hasItem(LOTRMod.d6)) {
             this.addAchievement(LOTRAchievement.getSeven);
+            this.addAchievement(LOTRAchievement.getDwarven6);
         }
         if (entityplayer.inventory.hasItem(LOTRMod.d7)) {
             this.addAchievement(LOTRAchievement.getSeven);
+            this.addAchievement(LOTRAchievement.getDwarven7);
         }
         if (entityplayer.inventory.hasItem(LOTRMod.h1)) {
             this.addAchievement(LOTRAchievement.getNine);
@@ -1591,15 +1716,19 @@ public class LOTRPlayerData {
         }
         if (entityplayer.inventory.hasItem(LOTRMod.helmetMoriaMithril)) {
             this.addAchievement(LOTRAchievement.wearMoriaMithril);
+            this.addAchievement(LOTRAchievement.wearMoriaMithrilHelmet);
         }
         if (entityplayer.inventory.hasItem(LOTRMod.bodyMoriaMithril)) {
             this.addAchievement(LOTRAchievement.wearMoriaMithril);
+            this.addAchievement(LOTRAchievement.wearMoriaMithrilChest);
         }
         if (entityplayer.inventory.hasItem(LOTRMod.legsMoriaMithril)) {
             this.addAchievement(LOTRAchievement.wearMoriaMithril);
+            this.addAchievement(LOTRAchievement.wearMoriaMithrilLegs);
         }
         if (entityplayer.inventory.hasItem(LOTRMod.bootsMoriaMithril)) {
             this.addAchievement(LOTRAchievement.wearMoriaMithril);
+            this.addAchievement(LOTRAchievement.wearMoriaMithrilBoots);
         }
         if (entityplayer.inventory.hasItem(LOTRMod.silmaril_wather)) {
             this.addAchievement(LOTRAchievement.getSilmaril);
@@ -1643,8 +1772,36 @@ public class LOTRPlayerData {
                 this.addAchievement(LOTRAchievement.hundreds);
             }
         }
+        if (!this.hasAchievement(LOTRAchievement.thousands) && this.pdTick % 20 == 0) {
+            int hiredUnits = 0;
+            List nearbyNPCs = world.getEntitiesWithinAABB(LOTREntityNPC.class, entityplayer.boundingBox.expand(64.0, 64.0, 64.0));
+            for (LOTREntityNPC npc : nearbyNPCs) {
+                if (!npc.hiredNPCInfo.isActive || npc.hiredNPCInfo.getHiringPlayer() != entityplayer) continue;
+                ++hiredUnits;
+            }
+            if (hiredUnits >= 1000) {
+                this.addAchievement(LOTRAchievement.thousands);
+            }
+        }
+        if (!this.hasAchievement(LOTRAchievement.three) && this.pdTick % 20 == 0) {
+            int hiredUnits = 0;
+            List nearbyNPCs = world.getEntitiesWithinAABB(LOTREntityNPC.class, entityplayer.boundingBox.expand(64.0, 64.0, 64.0));
+            for (LOTREntityNPC npc : nearbyNPCs) {
+                if (!npc.hiredNPCInfo.isActive || npc.hiredNPCInfo.getHiringPlayer() != entityplayer) continue;
+                ++hiredUnits;
+            }
+            if (hiredUnits >= 3) {
+                this.addAchievement(LOTRAchievement.three);
+            }
+        }
         if (biome instanceof LOTRBiomeGenMistyMountains && entityplayer.posY > 192.0) {
             this.addAchievement(LOTRAchievement.climbMistyMountains);
+        }
+        if (biome instanceof LOTRBiomeGenRedMountainsIronfist && entityplayer.posY > 236.0) {
+            this.addAchievement(LOTRAchievement.climbRedMountains);
+        }
+        if (biome instanceof LOTRBiomeGenOcean && entityplayer.posY < 35.0) {
+            this.addAchievement(LOTRAchievement.alltotheBottom);
         }
         if (biome instanceof LOTRBiome && (double)entityplayer.fallDistance > 250.0) {
             this.addAchievement(LOTRAchievement.leapoffaith);
@@ -1652,7 +1809,7 @@ public class LOTRPlayerData {
         if (biome instanceof LOTRBiome && (double)entityplayer.distanceWalkedModified > 10000.0) {
             this.addAchievement(LOTRAchievement.insearchofyourself);
         }
-        if (biome instanceof LOTRBiome && (double)entityplayer.distanceWalkedModified > 100000.0) {
+        if (biome instanceof LOTRBiome && (double)entityplayer.distanceWalkedModified > 50000.0) {
             this.addAchievement(LOTRAchievement.notenough);
         }
         LOTRMaterial fullMaterial = this.isPlayerWearingFull(entityplayer);
@@ -1846,6 +2003,8 @@ public class LOTRPlayerData {
                 this.addAchievement(LOTRAchievement.wearFullChainmailBlackUruk);
             } else if (chestplateMaterial == LOTRMaterial.BILBO) {
                 this.addAchievement(LOTRAchievement.wearFullChainmailBlackUruk);
+            } else if (fullMaterial == LOTRMaterial.DURMETH) {
+                this.addAchievement(LOTRAchievement.wearFullDurmeth);
             }
         }
         if (chestplateMaterial != null && chestplateMaterial == LOTRMaterial.BILBO) {
@@ -3106,7 +3265,7 @@ public class LOTRPlayerData {
         EntityPlayer entityplayer;
         this.alcoholTolerance = i;
         this.markDirty();
-        if (this.alcoholTolerance >= 250 && (entityplayer = this.getPlayer()) != null && !entityplayer.worldObj.isRemote) {
+        if (this.alcoholTolerance >= 400 && (entityplayer = this.getPlayer()) != null && !entityplayer.worldObj.isRemote) {
             this.addAchievement(LOTRAchievement.gainHighAlcoholTolerance);
         }
     }
@@ -3410,6 +3569,7 @@ public class LOTRPlayerData {
 
     public void setFastTravelDisabled(boolean disabled) {
         this.fastTravelDisabled = disabled;
+        this.markDirty();
     }
 
     private static class CWPSharedKey

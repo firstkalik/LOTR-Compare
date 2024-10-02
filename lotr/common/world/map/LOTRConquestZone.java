@@ -16,15 +16,15 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
 public class LOTRConquestZone {
+    public static List<LOTRFaction> allPlayableFacs;
     public final int gridX;
     public final int gridZ;
-    public boolean isDummyZone = false;
+    public boolean isDummyZone;
     private float[] conquestStrengths;
-    public static List<LOTRFaction> allPlayableFacs = null;
     private long lastChangeTime;
-    private long isEmptyKey = 0L;
+    private long isEmptyKey;
     private boolean isLoaded = true;
-    private boolean clientSide = false;
+    private boolean clientSide;
 
     public LOTRConquestZone(int i, int k) {
         this.gridX = i;
@@ -33,6 +33,30 @@ public class LOTRConquestZone {
             throw new RuntimeException("Too many factions! Need to upgrade LOTRConquestZone data format.");
         }
         this.conquestStrengths = new float[allPlayableFacs.size()];
+    }
+
+    public static LOTRConquestZone readFromNBT(NBTTagCompound nbt) {
+        short x = nbt.getShort("X");
+        short z = nbt.getShort("Z");
+        long time = nbt.getLong("Time");
+        LOTRConquestZone zone = new LOTRConquestZone(x, z);
+        zone.isLoaded = false;
+        zone.lastChangeTime = time;
+        block0: for (int i = 0; i < allPlayableFacs.size(); ++i) {
+            LOTRFaction fac = allPlayableFacs.get(i);
+            ArrayList<String> nameAndAliases = new ArrayList<String>();
+            nameAndAliases.add(fac.codeName());
+            nameAndAliases.addAll(fac.listAliases());
+            for (String alias : nameAndAliases) {
+                String facKey = alias + "_str";
+                if (!nbt.hasKey(facKey)) continue;
+                float str = nbt.getFloat(facKey);
+                zone.setConquestStrengthRaw(fac, str);
+                continue block0;
+            }
+        }
+        zone.isLoaded = true;
+        return zone;
     }
 
     public LOTRConquestZone setClientSide() {
@@ -93,7 +117,7 @@ public class LOTRConquestZone {
     private void updateAllOtherFactions(LOTRFaction fac, World world) {
         for (int i = 0; i < this.conquestStrengths.length; ++i) {
             LOTRFaction otherFac = allPlayableFacs.get(i);
-            if (otherFac == fac || this.conquestStrengths[i] <= 0.0f) continue;
+            if (otherFac == fac || !(this.conquestStrengths[i] > 0.0f)) continue;
             float otherStr = this.getConquestStrength(otherFac, world);
             this.setConquestStrengthRaw(otherFac, otherStr);
         }
@@ -167,29 +191,6 @@ public class LOTRConquestZone {
             if (str == 0.0f) continue;
             nbt.setFloat(facKey, str);
         }
-    }
-
-    public static LOTRConquestZone readFromNBT(NBTTagCompound nbt) {
-        short x = nbt.getShort("X");
-        short z = nbt.getShort("Z");
-        long time = nbt.getLong("Time");
-        LOTRConquestZone zone = new LOTRConquestZone(x, z);
-        zone.isLoaded = false;
-        zone.lastChangeTime = time;
-        block0: for (LOTRFaction fac : allPlayableFacs) {
-            ArrayList<String> nameAndAliases = new ArrayList<String>();
-            nameAndAliases.add(fac.codeName());
-            nameAndAliases.addAll(fac.listAliases());
-            for (String alias : nameAndAliases) {
-                String facKey = alias + "_str";
-                if (!nbt.hasKey(facKey)) continue;
-                float str = nbt.getFloat(facKey);
-                zone.setConquestStrengthRaw(fac, str);
-                continue block0;
-            }
-        }
-        zone.isLoaded = true;
-        return zone;
     }
 }
 

@@ -41,7 +41,7 @@ extends Block {
 
     public boolean onBlockActivated(World world, int i, int j, int k, EntityPlayer entityplayer, int side, float f, float f1, float f2) {
         boolean hasRequiredAlignment;
-        boolean bl = hasRequiredAlignment = LOTRLevelData.getData(entityplayer).getAlignment(this.tableFaction) >= 10.0f;
+        boolean bl = hasRequiredAlignment = LOTRLevelData.getData(entityplayer).getAlignment(this.tableFaction) >= 100.0f;
         if (hasRequiredAlignment) {
             if (!world.isRemote) {
                 entityplayer.openGui((Object)LOTRMod.instance, this.tableGUIID, world, i, j, k);
@@ -54,7 +54,7 @@ extends Block {
                 world.spawnParticle("smoke", d, d1, d2, 0.0, 0.0, 0.0);
             }
             if (!world.isRemote) {
-                LOTRAlignmentValues.notifyAlignmentNotHighEnough(entityplayer, 10.0f, this.tableFaction);
+                LOTRAlignmentValues.notifyAlignmentNotHighEnough(entityplayer, 100.0f, this.tableFaction);
             }
         }
         return true;

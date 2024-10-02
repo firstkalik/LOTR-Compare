@@ -37,6 +37,7 @@ import lotr.common.item.LOTRItemDagger3;
 import lotr.common.item.LOTRItemDagger4;
 import lotr.common.item.LOTRItemDagger5;
 import lotr.common.item.LOTRItemHammer;
+import lotr.common.item.LOTRItemHammerUlfang;
 import lotr.common.item.LOTRItemLance;
 import lotr.common.item.LOTRItemPolearm;
 import lotr.common.item.LOTRItemPolearmLong;
@@ -201,6 +202,22 @@ public class LOTRWeaponStats {
         return false;
     }
 
+    public static boolean isBlood(ItemStack itemstack) {
+        if (itemstack != null) {
+            Item item = itemstack.getItem();
+            return item instanceof LOTRItemDagger && ((LOTRItemDagger)item).getDaggerEffect() == LOTRItemDagger.DaggerEffect.BLOOD;
+        }
+        return false;
+    }
+
+    public static boolean isBlood1(ItemStack itemstack) {
+        if (itemstack != null) {
+            Item item = itemstack.getItem();
+            return item instanceof LOTRItemDagger && ((LOTRItemDagger)item).getDaggerEffect() == LOTRItemDagger.DaggerEffect.BLOOD1;
+        }
+        return false;
+    }
+
     public static boolean isPoisoned3(ItemStack itemstack) {
         if (itemstack != null) {
             Item item = itemstack.getItem();
@@ -357,10 +374,11 @@ public class LOTRWeaponStats {
         LOTRWeaponStats.registerMeleeReach(LOTRItemLance.class, 2.0f);
         LOTRWeaponStats.registerMeleeReach(LOTRItemBalrogWhip.class, 1.5f);
         LOTRWeaponStats.registerMeleeExtraKnockback(LOTRItemHammer.class, 1);
+        LOTRWeaponStats.registerMeleeExtraKnockback(LOTRItemHammerUlfang.class, 2);
         LOTRWeaponStats.registerMeleeExtraKnockback(LOTRItemDagger3.class, 1);
         LOTRWeaponStats.registerMeleeExtraKnockback(LOTRItemLance.class, 1);
         MAX_MODIFIABLE_REACH = 2.0f;
-        MAX_MODIFIABLE_SPEED = 2.0f;
+        MAX_MODIFIABLE_SPEED = 1.5f;
         MAX_MODIFIABLE_KNOCKBACK = 3;
     }
 }

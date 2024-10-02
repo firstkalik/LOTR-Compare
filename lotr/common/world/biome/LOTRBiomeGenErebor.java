@@ -66,7 +66,7 @@ extends LOTRBiome {
         this.decorator.biomeGemFactor = 1.5f;
         this.decorator.biomeOreFactor = 1.5f;
         this.decorator.addOre((WorldGenerator)new WorldGenMinable(Blocks.iron_ore, 8), 11.0f, 0, 96);
-        this.decorator.addOre((WorldGenerator)new WorldGenMinable(Blocks.gold_ore, 14), 10.0f, 0, 48);
+        this.decorator.addOre((WorldGenerator)new WorldGenMinable(Blocks.gold_ore, 13), 8.0f, 0, 48);
         this.decorator.addOre((WorldGenerator)new WorldGenMinable(LOTRMod.oreSilver, 14), 3.0f, 0, 48);
         this.decorator.addOre((WorldGenerator)new WorldGenMinable(LOTRMod.oreGlowstone, 4), 9.0f, 0, 48);
         this.decorator.treesPerChunk = 1;

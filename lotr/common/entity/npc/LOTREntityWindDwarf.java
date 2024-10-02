@@ -118,12 +118,12 @@ extends LOTREntityDwarf {
 
     @Override
     protected LOTRChestContents getLarderDrops() {
-        return LOTRChestContents.REDDWARF_SMITHY;
+        return LOTRChestContents.DWARF_SMITHY;
     }
 
     @Override
     protected LOTRChestContents getGenericDrops() {
-        return LOTRChestContents.LOTRChestContents2.REDDWARFTOWER;
+        return LOTRChestContents.DWARF_SMITHY;
     }
 
     @Override

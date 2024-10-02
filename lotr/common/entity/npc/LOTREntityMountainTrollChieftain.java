@@ -35,9 +35,9 @@ import lotr.common.entity.ai.LOTREntityAIBossJumpAttack;
 import lotr.common.entity.ai.LOTREntityAIRangedAttack;
 import lotr.common.entity.npc.LOTRBoss;
 import lotr.common.entity.npc.LOTRBossInfo;
-import lotr.common.entity.npc.LOTREntityMountainTroll;
+import lotr.common.entity.npc.LOTREntityMountainTroll2;
 import lotr.common.entity.npc.LOTREntityNPC;
-import lotr.common.entity.npc.LOTREntityTroll;
+import lotr.common.entity.npc.LOTREntityTroll2;
 import lotr.common.entity.projectile.LOTREntityThrownRock;
 import lotr.common.item.LOTRItemBanner;
 import lotr.common.item.LOTRItemBossTrophy;
@@ -61,7 +61,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
 public class LOTREntityMountainTrollChieftain
-extends LOTREntityMountainTroll
+extends LOTREntityMountainTroll2
 implements LOTRBoss {
     private static int SPAWN_TIME = 100;
     private int trollDeathTick;
@@ -121,7 +121,7 @@ implements LOTRBoss {
 
     @Override
     public int getTotalArmorValue() {
-        return 12;
+        return 15;
     }
 
     public float getArmorLevelChanceModifier() {
@@ -140,7 +140,7 @@ implements LOTRBoss {
     @Override
     protected void applyEntityAttributes() {
         super.applyEntityAttributes();
-        this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue((double)MathHelper.getRandomIntegerInRange((Random)this.rand, (int)50, (int)120));
+        this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue((double)MathHelper.getRandomIntegerInRange((Random)this.rand, (int)150, (int)220));
         this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.2);
         this.getEntityAttribute(npcAttackDamage).setBaseValue(8.0);
         this.getEntityAttribute(thrownRockDamage).setBaseValue(8.0);
@@ -199,17 +199,17 @@ implements LOTRBoss {
         }
         if (!this.worldObj.isRemote && this.getHealth() < this.getMaxHealth()) {
             List nearbyTrolls;
-            LOTREntityTroll troll;
+            LOTREntityTroll2 troll;
             float f = this.getBaseChanceModifier();
             f *= 0.02f;
-            if (this.rand.nextFloat() < f && !(nearbyTrolls = this.worldObj.getEntitiesWithinAABB(LOTREntityTroll.class, this.boundingBox.expand(24.0, 8.0, 24.0))).isEmpty() && !((troll = (LOTREntityTroll)nearbyTrolls.get(this.rand.nextInt(nearbyTrolls.size()))) instanceof LOTREntityMountainTrollChieftain) && troll.isEntityAlive()) {
+            if (this.rand.nextFloat() < f && !(nearbyTrolls = this.worldObj.getEntitiesWithinAABB(LOTREntityTroll2.class, this.boundingBox.expand(24.0, 8.0, 24.0))).isEmpty() && !((troll = (LOTREntityTroll2)nearbyTrolls.get(this.rand.nextInt(nearbyTrolls.size()))) instanceof LOTREntityMountainTrollChieftain) && troll.isEntityAlive()) {
                 this.setHealingEntityID(troll.getEntityId());
                 this.healAmount = 8 + this.rand.nextInt(3);
             }
         }
         if (this.getHealingEntityID() != -1) {
             Entity entity = this.worldObj.getEntityByID(this.getHealingEntityID());
-            if (entity != null && entity instanceof LOTREntityTroll && entity.isEntityAlive()) {
+            if (entity != null && entity instanceof LOTREntityTroll2 && entity.isEntityAlive()) {
                 if (!this.worldObj.isRemote) {
                     if (this.ticksExisted % 20 == 0) {
                         this.heal(3.0f);
@@ -306,7 +306,7 @@ implements LOTRBoss {
         float f = this.getBaseChanceModifier();
         f *= 0.4f;
         int maxNearbyTrolls = 5;
-        List nearbyTrolls = this.worldObj.getEntitiesWithinAABB(LOTREntityTroll.class, this.boundingBox.expand(24.0, 8.0, 24.0));
+        List nearbyTrolls = this.worldObj.getEntitiesWithinAABB(LOTREntityTroll2.class, this.boundingBox.expand(24.0, 8.0, 24.0));
         float nearbyModifier = (float)(maxNearbyTrolls - nearbyTrolls.size()) / (float)maxNearbyTrolls;
         f *= nearbyModifier;
         if (this.rand.nextFloat() < f) {

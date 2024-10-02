@@ -57,6 +57,7 @@ import lotr.common.entity.npc.LOTREntityGaladhrimElf;
 import lotr.common.entity.npc.LOTREntityGondorMan;
 import lotr.common.entity.npc.LOTREntityGondorRenegade;
 import lotr.common.entity.npc.LOTREntityGondorSoldier;
+import lotr.common.entity.npc.LOTREntityGundabadCaveTroll;
 import lotr.common.entity.npc.LOTREntityGundabadOrc;
 import lotr.common.entity.npc.LOTREntityGundabadWarg;
 import lotr.common.entity.npc.LOTREntityHarnedorWarrior;
@@ -67,6 +68,7 @@ import lotr.common.entity.npc.LOTREntityMirkwoodSpider;
 import lotr.common.entity.npc.LOTREntityMordorOrc;
 import lotr.common.entity.npc.LOTREntityMordorWarg;
 import lotr.common.entity.npc.LOTREntityMoredainWarrior;
+import lotr.common.entity.npc.LOTREntityMountainSnowTroll;
 import lotr.common.entity.npc.LOTREntityMountainTroll;
 import lotr.common.entity.npc.LOTREntityNPC;
 import lotr.common.entity.npc.LOTREntityNearHaradrimWarrior;
@@ -79,8 +81,10 @@ import lotr.common.entity.npc.LOTREntityStiffbeard;
 import lotr.common.entity.npc.LOTREntitySwanKnight;
 import lotr.common.entity.npc.LOTREntityTauredainBlowgunner;
 import lotr.common.entity.npc.LOTREntityTroll;
+import lotr.common.entity.npc.LOTREntityTundraSnowTroll;
 import lotr.common.entity.npc.LOTREntityUrukHai;
 import lotr.common.entity.npc.LOTREntityUrukWarg;
+import lotr.common.entity.npc.LOTREntityWickedDwarf2;
 import lotr.common.entity.npc.LOTREntityWoodElf;
 import lotr.common.fac.LOTRFaction;
 import lotr.common.item.LOTRItemBanner;
@@ -119,6 +123,7 @@ public enum LOTRMiniQuestFactory {
     DOL_GULDUR("dolGuldur"),
     DALE("dale"),
     DURIN("durin"),
+    EREBOR("durin"),
     GALADHRIM("galadhrim"),
     DUNLAND("dunland"),
     ISENGARD("isengard"),
@@ -290,7 +295,7 @@ public enum LOTRMiniQuestFactory {
     }
 
     /*
-     * Opcode count of 17656 triggered aggressive code reduction.  Override with --aggressivesizethreshold.
+     * Opcode count of 18260 triggered aggressive code reduction.  Override with --aggressivesizethreshold.
      */
     public static void createMiniQuests() {
         LOTRMiniQuestFactory.registerQuestClass(LOTRMiniQuestCollect.class, 10);
@@ -709,6 +714,9 @@ public enum LOTRMiniQuestFactory {
         AVARI_ELF.addQuest(new LOTRMiniQuestCollect.QFCollect("collectMallornNut").setCollectItem(new ItemStack(LOTRMod.mallornNut), 1, 3).setRewardFactor(5.0f));
         AVARI_ELF.addQuest(new LOTRMiniQuestCollect.QFCollect("collectLorienFlowers").setCollectItem(new ItemStack(LOTRMod.elanor), 2, 7).setRewardFactor(2.5f));
         AVARI_ELF.addQuest(new LOTRMiniQuestCollect.QFCollect("collectLorienFlowers").setCollectItem(new ItemStack(LOTRMod.niphredil), 2, 7).setRewardFactor(2.5f));
+        HIGH_ELF.addQuest(new LOTRMiniQuestCollect.QFCollect("collectPlants").setCollectItem(new ItemStack((Block)Blocks.red_flower, 1, 0), 2, 8).setRewardFactor(1.0f));
+        HIGH_ELF.addQuest(new LOTRMiniQuestCollect.QFCollect("collectPlants").setCollectItem(new ItemStack((Block)Blocks.yellow_flower, 1, 0), 2, 8).setRewardFactor(1.0f));
+        HIGH_ELF.addQuest(new LOTRMiniQuestCollect.QFCollect("collectString").setCollectItem(new ItemStack(Items.string), 5, 20).setRewardFactor(1.0f));
         AVARI_ELF.addQuest(new LOTRMiniQuestCollect.QFCollect("forge").setCollectItem(new ItemStack(LOTRMod.swordAvariElf), 1, 4).setRewardFactor(3.0f));
         AVARI_ELF.addQuest(new LOTRMiniQuestCollect.QFCollect("forge").setCollectItem(new ItemStack(LOTRMod.pikeAvariElf), 1, 4).setRewardFactor(3.0f));
         AVARI_ELF.addQuest(new LOTRMiniQuestCollect.QFCollect("forge").setCollectItem(new ItemStack(LOTRMod.spearAvariElf), 1, 4).setRewardFactor(3.0f));
@@ -719,11 +727,17 @@ public enum LOTRMiniQuestFactory {
         AVARI_ELF.addQuest(new LOTRMiniQuestCollect.QFCollect("collectString").setCollectItem(new ItemStack(Items.string), 5, 20).setRewardFactor(1.0f));
         AVARI_ELF.addQuest(new LOTRMiniQuestCollect.QFCollect("collectOrcItem").setCollectItem(new ItemStack(LOTRMod.helmetOrc), 1, 1).setRewardFactor(10.0f));
         AVARI_ELF.addQuest(new LOTRMiniQuestCollect.QFCollect("collectOrcItem").setCollectItem(new ItemStack(LOTRMod.helmetDolGuldur), 1, 1).setRewardFactor(10.0f));
+        AVARI_ELF.addQuest(new LOTRMiniQuestCollect.QFCollect("collectOrcItem").setCollectItem(new ItemStack(LOTRMod.helmetDurmethOrc), 1, 1).setRewardFactor(10.0f));
         AVARI_ELF.addQuest(new LOTRMiniQuestKillFaction.QFKillFaction("killDolGuldur").setKillFaction(LOTRFaction.MORDOR, 10, 40));
         AVARI_ELF.addQuest(new LOTRMiniQuestKillEntity.QFKillEntity("killOrc").setKillEntity(LOTREntityDurmethOrc.class, 10, 30));
         AVARI_ELF.addQuest(new LOTRMiniQuestKillEntity.QFKillEntity("killOrc").setKillEntity(LOTREntityMordorOrc.class, 10, 40));
         AVARI_ELF.addQuest(new LOTRMiniQuestKillFaction.QFKillFaction("killGundabad").setKillFaction(LOTRFaction.GUNDABAD, 10, 30));
         AVARI_ELF.addQuest(new LOTRMiniQuestKillEntity.QFKillEntity("killWarg").setKillEntity(LOTREntityDurmethWarg.class, 10, 30));
+        AVARI_ELF.addQuest(new LOTRMiniQuestKillEntity.QFKillEntity("killWarg").setKillEntity(LOTREntityGundabadWarg.class, 10, 30));
+        AVARI_ELF.addQuest(new LOTRMiniQuestKillEntity.QFKillEntity("killTroll").setKillEntity(LOTREntityGundabadCaveTroll.class, 10, 20).setRewardFactor(2.0f));
+        AVARI_ELF.addQuest(new LOTRMiniQuestKillEntity.QFKillEntity("killTroll").setKillEntity(LOTREntityMountainSnowTroll.class, 10, 20).setRewardFactor(3.0f));
+        AVARI_ELF.addQuest(new LOTRMiniQuestKillEntity.QFKillEntity("killTroll").setKillEntity(LOTREntityTundraSnowTroll.class, 10, 20).setRewardFactor(3.0f));
+        AVARI_ELF.addQuest(new LOTRMiniQuestKillEntity.QFKillEntity("killDwarf").setKillEntity(LOTREntityWickedDwarf2.class, 5, 15).setRewardFactor(2.0f));
         AVARI_ELF.addQuest(new LOTRMiniQuestBounty.QFBounty("bounty"));
         DOL_GULDUR.setAchievement(LOTRAchievement.doMiniquestDolGuldur);
         DOL_GULDUR.setLore(LOTRLore.LoreCategory.DOL_GULDUR);
@@ -802,6 +816,39 @@ public enum LOTRMiniQuestFactory {
         DALE.addQuest(new LOTRMiniQuestKillEntity.QFKillEntity("killOrc").setKillEntity(LOTREntityDolGuldurOrc.class, 10, 30));
         DALE.addQuest(new LOTRMiniQuestKillEntity.QFKillEntity("killWarg").setKillEntity(LOTREntityGundabadWarg.class, 10, 30));
         DALE.addQuest(new LOTRMiniQuestBounty.QFBounty("bounty"));
+        EREBOR.setAchievement(LOTRAchievement.doMiniquestDwarf);
+        EREBOR.setLore(LOTRLore.LoreCategory.DURIN);
+        EREBOR.addQuest(new LOTRMiniQuestCollect.QFCollect("mineMithril").setCollectItem(new ItemStack(LOTRMod.mithril), 1, 6).setRewardFactor(100.0f));
+        EREBOR.addQuest(new LOTRMiniQuestCollect.QFCollect("collectMineral").setCollectItem(new ItemStack(Items.gold_ingot), 3, 15).setRewardFactor(4.0f));
+        EREBOR.addQuest(new LOTRMiniQuestCollect.QFCollect("collectMineral").setCollectItem(new ItemStack(LOTRMod.goldRaw), 3, 15).setRewardFactor(5.0f));
+        EREBOR.addQuest(new LOTRMiniQuestCollect.QFCollect("collectMineral").setCollectItem(new ItemStack(LOTRMod.silver), 3, 15).setRewardFactor(4.0f));
+        EREBOR.addQuest(new LOTRMiniQuestCollect.QFCollect("collectMineral").setCollectItem(new ItemStack(Items.glowstone_dust), 5, 15).setRewardFactor(2.0f));
+        EREBOR.addQuest(new LOTRMiniQuestCollect.QFCollect("collectMineral").setCollectItem(new ItemStack(LOTRMod.diamond), 1, 3).setRewardFactor(15.0f));
+        EREBOR.addQuest(new LOTRMiniQuestCollect.QFCollect("collectMineral").setCollectItem(new ItemStack(LOTRMod.emerald), 1, 3).setRewardFactor(12.0f));
+        EREBOR.addQuest(new LOTRMiniQuestCollect.QFCollect("collectMineral").setCollectItem(new ItemStack(LOTRMod.ruby), 1, 3).setRewardFactor(12.0f));
+        EREBOR.addQuest(new LOTRMiniQuestCollect.QFCollect("collectMineral").setCollectItem(new ItemStack(LOTRMod.opal), 1, 3).setRewardFactor(10.0f));
+        EREBOR.addQuest(new LOTRMiniQuestCollect.QFCollect("collectMineral").setCollectItem(new ItemStack(LOTRMod.topaz), 1, 6).setRewardFactor(8.0f));
+        EREBOR.addQuest(new LOTRMiniQuestCollect.QFCollect("collectMineral").setCollectItem(new ItemStack(LOTRMod.sapphire), 1, 3).setRewardFactor(10.0f));
+        EREBOR.addQuest(new LOTRMiniQuestCollect.QFCollect("collectMineral").setCollectItem(new ItemStack(LOTRMod.amber), 1, 3).setRewardFactor(8.0f));
+        EREBOR.addQuest(new LOTRMiniQuestCollect.QFCollect("collectMineral").setCollectItem(new ItemStack(LOTRMod.amethyst), 1, 6).setRewardFactor(8.0f));
+        EREBOR.addQuest(new LOTRMiniQuestCollect.QFCollect("forgeDwarfWeapon").setCollectItem(new ItemStack(LOTRMod.hammerDwarven), 1, 3).setRewardFactor(5.0f));
+        EREBOR.addQuest(new LOTRMiniQuestCollect.QFCollect("forgeDwarfWeapon").setCollectItem(new ItemStack(LOTRMod.battleaxeDwarven), 1, 3).setRewardFactor(5.0f));
+        EREBOR.addQuest(new LOTRMiniQuestCollect.QFCollect("forgeDwarfWeapon").setCollectItem(new ItemStack(LOTRMod.throwingAxeDwarven), 1, 4).setRewardFactor(4.0f));
+        EREBOR.addQuest(new LOTRMiniQuestCollect.QFCollect("forgeDwarfWeapon").setCollectItem(new ItemStack(LOTRMod.axeDwarven), 1, 4).setRewardFactor(4.5f));
+        EREBOR.addQuest(new LOTRMiniQuestCollect.QFCollect("forgeDwarfWeapon").setCollectItem(new ItemStack(LOTRMod.swordDwarven), 1, 4).setRewardFactor(4.5f));
+        EREBOR.addQuest(new LOTRMiniQuestCollect.QFCollect("forgeDwarfWeapon").setCollectItem(new ItemStack(LOTRMod.pikeDwarven), 1, 4).setRewardFactor(4.5f));
+        EREBOR.addQuest(new LOTRMiniQuestCollect.QFCollect("forgeDwarfWeapon").setCollectItem(new ItemStack(LOTRMod.spearDwarven), 1, 4).setRewardFactor(4.5f));
+        EREBOR.addQuest(new LOTRMiniQuestCollect.QFCollect("collectDrink").setCollectItem(new ItemStack(LOTRMod.mugKhamBrew), 2, 5).setRewardFactor(4.0f));
+        EREBOR.addQuest(new LOTRMiniQuestCollect.QFCollect("collectDrink").setCollectItem(new ItemStack(LOTRMod.mugDwarvenAle), 2, 5).setRewardFactor(3.0f));
+        EREBOR.addQuest(new LOTRMiniQuestCollect.QFCollect("collectDrink").setCollectItem(new ItemStack(LOTRMod.mugBlueDwarvenTonic), 2, 5).setRewardFactor(3.0f));
+        EREBOR.addQuest(new LOTRMiniQuestCollect.QFCollect("collectDrink").setCollectItem(new ItemStack(LOTRMod.mugRedDwarvenTonic), 2, 5).setRewardFactor(3.0f));
+        EREBOR.addQuest(new LOTRMiniQuestKillFaction.QFKillFaction("killGundabad").setKillFaction(LOTRFaction.GUNDABAD, 20, 50));
+        EREBOR.addQuest(new LOTRMiniQuestKillEntity.QFKillEntity("killOrc").setKillEntity(LOTREntityGundabadOrc.class, 10, 30));
+        EREBOR.addQuest(new LOTRMiniQuestKillEntity.QFKillEntity("killOrc").setKillEntity(LOTREntityDurmethOrc.class, 10, 40));
+        EREBOR.addQuest(new LOTRMiniQuestKillEntity.QFKillEntity("killWarg").setKillEntity(LOTREntityDurmethWarg.class, 10, 40));
+        EREBOR.addQuest(new LOTRMiniQuestKillEntity.QFKillEntity("killWarg").setKillEntity(LOTREntityGundabadWarg.class, 10, 30));
+        EREBOR.addQuest(new LOTRMiniQuestKillEntity.QFKillEntity("killSpider").setKillEntity(LOTREntityMirkwoodSpider.class, 20, 30));
+        EREBOR.addQuest(new LOTRMiniQuestBounty.QFBounty("bounty"));
         DURIN.setAchievement(LOTRAchievement.doMiniquestDwarf);
         DURIN.setLore(LOTRLore.LoreCategory.DURIN);
         DURIN.addQuest(new LOTRMiniQuestCollect.QFCollect("mineMithril").setCollectItem(new ItemStack(LOTRMod.mithril), 1, 6).setRewardFactor(100.0f));
@@ -955,6 +1002,14 @@ public enum LOTRMiniQuestFactory {
         ROHAN_SHIELDMAIDEN.addQuest(new LOTRMiniQuestKillFaction.QFKillFaction("killEnemies").setKillFaction(LOTRFaction.DUNLAND, 5, 20));
         ROHAN_SHIELDMAIDEN.addQuest(new LOTRMiniQuestKillFaction.QFKillFaction("killEnemies").setKillFaction(LOTRFaction.ISENGARD, 5, 20));
         for (List<LOTRMiniQuest.QuestFactoryBase> qfList : LOTRMiniQuestFactory.ROHAN_SHIELDMAIDEN.questFactories.values()) {
+            for (LOTRMiniQuest.QuestFactoryBase qf : qfList) {
+                qf.setRewardFactor(0.0f);
+                qf.setHiring(150.0f);
+            }
+        }
+        ENT.setAchievement(LOTRAchievement.doMiniquestEnt);
+        ENT.addQuest(new LOTRMiniQuestKillFaction.QFKillFaction("killEnemies").setKillFaction(LOTRFaction.ISENGARD, 5, 20));
+        for (List<LOTRMiniQuest.QuestFactoryBase> qfList : LOTRMiniQuestFactory.ENT.questFactories.values()) {
             for (LOTRMiniQuest.QuestFactoryBase qf : qfList) {
                 qf.setRewardFactor(0.0f);
                 qf.setHiring(150.0f);

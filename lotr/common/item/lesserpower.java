@@ -12,10 +12,13 @@
  *  net.minecraft.item.ItemPotion
  *  net.minecraft.item.ItemStack
  *  net.minecraft.potion.PotionEffect
+ *  net.minecraft.util.EnumChatFormatting
+ *  net.minecraft.util.StatCollector
  *  net.minecraft.world.World
  */
 package lotr.common.item;
 
+import java.util.List;
 import lotr.common.LOTRAchievement;
 import lotr.common.LOTRLevelData;
 import lotr.common.LOTRMod;
@@ -30,12 +33,14 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemPotion;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 
 public class lesserpower
 extends LOTRItemBaseRing2 {
     public static int cooldown = 10;
-    public static int defaultCharges = 64;
+    public static int defaultCharges = 32;
 
     public lesserpower() {
         this.setMaxDamage(defaultCharges + 1);
@@ -48,7 +53,7 @@ extends LOTRItemBaseRing2 {
 
     @Override
     public int getBaseRepairCost() {
-        return 5;
+        return 10;
     }
 
     public boolean hitEntity(ItemStack item, EntityLivingBase hitEntity, EntityLivingBase attackingEntity) {
@@ -56,7 +61,16 @@ extends LOTRItemBaseRing2 {
         return true;
     }
 
+    public int getMaxItemUseDuration(ItemStack itemstack) {
+        return 15;
+    }
+
     public ItemStack onItemRightClick(ItemStack srcItemStack, World world, EntityPlayer playerEntity) {
+        playerEntity.setItemInUse(srcItemStack, this.getMaxItemUseDuration(srcItemStack));
+        return srcItemStack;
+    }
+
+    public ItemStack onEaten(ItemStack srcItemStack, World world, EntityPlayer playerEntity) {
         if (!playerEntity.capabilities.isCreativeMode) {
             if (this.isOutOfCharge(srcItemStack)) {
                 this.playSound(noChargeAttackSound, world, playerEntity);
@@ -69,9 +83,16 @@ extends LOTRItemBaseRing2 {
         hp.setItemDamage(16389);
         if (!world.isRemote) {
             LOTRLevelData.getData(playerEntity).addAchievement(LOTRAchievement.useRing);
+            world.spawnEntityInWorld((Entity)new EntityPotion(world, (EntityLivingBase)playerEntity, hp));
+            srcItemStack.damageItem(1, (EntityLivingBase)playerEntity);
         }
-        world.spawnEntityInWorld((Entity)new EntityPotion(world, (EntityLivingBase)playerEntity, hp));
         return srcItemStack;
+    }
+
+    @Override
+    public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List list, boolean advanced) {
+        list.add((Object)EnumChatFormatting.GRAY + StatCollector.translateToLocal((String)"right.name"));
+        list.add((Object)EnumChatFormatting.GREEN + StatCollector.translateToLocalFormatted((String)"lotr.ring.ready", (Object[])new Object[0]));
     }
 
     @Override

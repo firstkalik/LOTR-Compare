@@ -11,9 +11,10 @@
 package lotr.common.world.biome;
 
 import java.util.List;
-import lotr.common.entity.animal.LOTREntityBear2;
 import lotr.common.entity.animal.LOTREntityDeer2;
 import lotr.common.entity.animal.LOTREntityElk;
+import lotr.common.entity.animal.LOTREntityFox;
+import lotr.common.entity.animal.LOTREntityPolarBear;
 import lotr.common.world.biome.LOTRBiomeDecorator;
 import lotr.common.world.biome.LOTRBiomeGenTundra;
 import lotr.common.world.biome.variant.LOTRBiomeVariant;
@@ -34,7 +35,8 @@ extends LOTRBiomeGenTundra {
         this.spawnableCreatureList.add(new BiomeGenBase.SpawnListEntry(EntityWolf.class, 10, 4, 8));
         this.spawnableCreatureList.add(new BiomeGenBase.SpawnListEntry(LOTREntityDeer2.class, 10, 4, 6));
         this.spawnableCreatureList.add(new BiomeGenBase.SpawnListEntry(LOTREntityElk.class, 10, 4, 6));
-        this.spawnableCreatureList.add(new BiomeGenBase.SpawnListEntry(LOTREntityBear2.class, 10, 1, 4));
+        this.spawnableCreatureList.add(new BiomeGenBase.SpawnListEntry(LOTREntityPolarBear.class, 10, 1, 4));
+        this.spawnableCreatureList.add(new BiomeGenBase.SpawnListEntry(LOTREntityFox.class, 4, 1, 4));
         this.spawnableLOTRAmbientList.clear();
         this.addBiomeVariantSet(LOTRBiomeVariant.SET_FOREST);
         this.addBiomeVariant(LOTRBiomeVariant.FOREST);
@@ -43,7 +45,9 @@ extends LOTRBiomeGenTundra {
         this.addBiomeVariant(LOTRBiomeVariant.FOREST_PINE);
         this.decorator.treesPerChunk = 2;
         this.decorator.flowersPerChunk = 2;
-        this.decorator.grassPerChunk = 8;
+        this.decorator.lichenPerChunk = 0;
+        this.decorator.lichenPerChunk2 = 0;
+        this.decorator.grassPerChunk = 4;
         this.decorator.doubleGrassPerChunk = 2;
         this.decorator.clearTrees();
         this.decorator.addTree(LOTRTreeType.SPRUCE, 200);

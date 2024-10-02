@@ -27,7 +27,17 @@ extends LOTRWorldGenHobbitBurrow {
     }
 
     @Override
-    protected void setupRandomBlocks(Random random) {
+    public LOTREntityHobbit createHobbit(World world) {
+        return new LOTREntityBreeHobbit(world);
+    }
+
+    @Override
+    public String[] getHobbitCoupleAndHomeNames(Random random) {
+        return LOTRNames.getBreeHobbitCoupleAndHomeNames(random);
+    }
+
+    @Override
+    public void setupRandomBlocks(Random random) {
         super.setupRandomBlocks(random);
         LOTRWorldGenBreeHouse breeBlockProxy = new LOTRWorldGenBreeHouse(false);
         breeBlockProxy.setupRandomBlocks(random);
@@ -49,16 +59,6 @@ extends LOTRWorldGenHobbitBurrow {
         this.tableBlock = breeBlockProxy.tableBlock;
         this.burrowLoot = LOTRChestContents.BREE_HOUSE;
         this.foodPool = LOTRFoods.BREE;
-    }
-
-    @Override
-    protected LOTREntityHobbit createHobbit(World world) {
-        return new LOTREntityBreeHobbit(world);
-    }
-
-    @Override
-    protected String[] getHobbitCoupleAndHomeNames(Random random) {
-        return LOTRNames.getBreeHobbitCoupleAndHomeNames(random);
     }
 }
 

@@ -14,6 +14,7 @@
  *  net.minecraft.item.ItemStack
  *  net.minecraft.nbt.NBTTagCompound
  *  net.minecraft.util.ChatComponentTranslation
+ *  net.minecraft.util.EnumChatFormatting
  *  net.minecraft.util.IChatComponent
  *  net.minecraft.util.IIcon
  *  net.minecraft.util.StatCollector
@@ -44,6 +45,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.StatCollector;
@@ -193,7 +195,120 @@ extends Item {
     @SideOnly(value=Side.CLIENT)
     public void addInformation(ItemStack itemstack, EntityPlayer entityplayer, List list, boolean flag) {
         LOTRInvasions type = LOTRItemConquestHorn.getInvasionType(itemstack);
-        list.add(type.invasionName());
+        LOTRFaction faction = type.invasionFaction;
+        float[] factionRgb = faction.getFactionRGB_MinBrightness(0.45f);
+        EnumChatFormatting color = this.getColorFromRGB(factionRgb);
+        list.add((Object)color + type.invasionName());
+    }
+
+    private EnumChatFormatting getColorFromRGB(float[] rgb) {
+        int r = (int)(rgb[0] * 255.0f);
+        int g = (int)(rgb[1] * 255.0f);
+        int b = (int)(rgb[2] * 255.0f);
+        if (this.isCloseToColor(r, g, b, 16, 120, 8, 15)) {
+            return EnumChatFormatting.DARK_GREEN;
+        }
+        if (this.isCloseToColor(r, g, b, 119, 145, 119, 15)) {
+            return EnumChatFormatting.DARK_GREEN;
+        }
+        if (this.isCloseToColor(r, g, b, 77, 115, 88, 5)) {
+            return EnumChatFormatting.DARK_GREEN;
+        }
+        if (this.isCloseToColor(r, g, b, 127, 32, 0, 5)) {
+            return EnumChatFormatting.RED;
+        }
+        if (this.isCloseToColor(r, g, b, 73, 183, 82, 15)) {
+            return EnumChatFormatting.GREEN;
+        }
+        if (this.isCloseToColor(r, g, b, 53, 135, 39, 15)) {
+            return EnumChatFormatting.DARK_GREEN;
+        }
+        if (this.isCloseToColor(r, g, b, 53, 115, 76, 15)) {
+            return EnumChatFormatting.DARK_GREEN;
+        }
+        if (this.isCloseToColor(r, g, b, 57, 150, 78, 15)) {
+            return EnumChatFormatting.DARK_GREEN;
+        }
+        if (this.isCloseToColor(r, g, b, 89, 206, 78, 15)) {
+            return EnumChatFormatting.GREEN;
+        }
+        if (this.isCloseToColor(r, g, b, 75, 97, 130, 20)) {
+            return EnumChatFormatting.DARK_BLUE;
+        }
+        if (this.isCloseToColor(r, g, b, 206, 135, 95, 20)) {
+            return EnumChatFormatting.GOLD;
+        }
+        if (this.isCloseToColor(r, g, b, 115, 67, 67, 20)) {
+            return EnumChatFormatting.DARK_GRAY;
+        }
+        if (this.isCloseToColor(r, g, b, 115, 11, 0, 20)) {
+            return EnumChatFormatting.DARK_RED;
+        }
+        if (this.isCloseToColor(r, g, b, 150, 108, 84, 10)) {
+            return EnumChatFormatting.DARK_GRAY;
+        }
+        if (this.isCloseToColor(r, g, b, 249, 249, 249, 10)) {
+            return EnumChatFormatting.WHITE;
+        }
+        if (this.isCloseToColor(r, g, b, 105, 115, 105, 20)) {
+            return EnumChatFormatting.GRAY;
+        }
+        if (this.isCloseToColor(r, g, b, 168, 148, 143, 20)) {
+            return EnumChatFormatting.GRAY;
+        }
+        if (this.isCloseToColor(r, g, b, 124, 36, 27, 20)) {
+            return EnumChatFormatting.DARK_RED;
+        }
+        if (this.isCloseToColor(r, g, b, 89, 100, 115, 20)) {
+            return EnumChatFormatting.DARK_GRAY;
+        }
+        if (this.isCloseToColor(r, g, b, 196, 146, 39, 20)) {
+            return EnumChatFormatting.GOLD;
+        }
+        if (this.isCloseToColor(r, g, b, 115, 51, 109, 20)) {
+            return EnumChatFormatting.LIGHT_PURPLE;
+        }
+        if (this.isCloseToColor(r, g, b, 181, 27, 27, 20)) {
+            return EnumChatFormatting.RED;
+        }
+        if (this.isCloseToColor(r, g, b, 93, 145, 204, 30)) {
+            return EnumChatFormatting.BLUE;
+        }
+        if (this.isCloseToColor(r, g, b, 198, 229, 255, 140)) {
+            return EnumChatFormatting.AQUA;
+        }
+        if (this.isCloseToColor(r, g, b, 217, 176, 90, 20)) {
+            return EnumChatFormatting.GOLD;
+        }
+        if (r > 200 && g < 100 && b < 100) {
+            return EnumChatFormatting.RED;
+        }
+        if (r < 100 && g > 200 && b < 100) {
+            return EnumChatFormatting.GREEN;
+        }
+        if (r < 100 && g < 100 && b > 200) {
+            return EnumChatFormatting.BLUE;
+        }
+        if (r > 200 && g > 200 && b < 100) {
+            return EnumChatFormatting.YELLOW;
+        }
+        if (r < 100 && g > 200 && b > 200) {
+            return EnumChatFormatting.AQUA;
+        }
+        if (r > 200 && g < 100 && b > 200) {
+            return EnumChatFormatting.LIGHT_PURPLE;
+        }
+        if (r > 200 && g > 200 && b > 200) {
+            return EnumChatFormatting.WHITE;
+        }
+        if (r < 100 && g < 100 && b < 100) {
+            return EnumChatFormatting.DARK_GRAY;
+        }
+        return EnumChatFormatting.GRAY;
+    }
+
+    private boolean isCloseToColor(int r1, int g1, int b1, int r2, int g2, int b2, int tolerance) {
+        return Math.abs(r1 - r2) < tolerance && Math.abs(g1 - g2) < tolerance && Math.abs(b1 - b2) < tolerance;
     }
 
     @SideOnly(value=Side.CLIENT)

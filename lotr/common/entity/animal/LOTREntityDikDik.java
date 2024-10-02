@@ -104,7 +104,7 @@ LOTRRandomSkinEntity {
     }
 
     protected void dropFewItems(boolean flag, int i) {
-        int k = 1 + this.rand.nextInt(2) + this.rand.nextInt(i + 1);
+        int k = 1 + this.rand.nextInt(1) + this.rand.nextInt(i + 1);
         for (int j = 0; j < k; ++j) {
             this.dropItem(Items.leather, 1);
         }

@@ -118,14 +118,23 @@ extends LOTRWorldGenBreeStructure {
         for (i1 = 3; i1 <= 6; ++i1) {
             for (step = 0; step < 12 && !this.isOpaque(world, i1, j1 = -1 - step, k1 = 6 + step); ++step) {
                 randPath = random.nextInt(4);
-                if (randPath == 0) {
-                    this.setBlockAndMetadata(world, i1, j1, k1, (Block)Blocks.grass, 0);
-                } else if (randPath == 1) {
-                    this.setBlockAndMetadata(world, i1, j1, k1, Blocks.dirt, 1);
-                } else if (randPath == 2) {
-                    this.setBlockAndMetadata(world, i1, j1, k1, LOTRMod.dirtPath, 0);
-                } else if (randPath == 3) {
-                    this.setBlockAndMetadata(world, i1, j1, k1, Blocks.cobblestone, 0);
+                switch (randPath) {
+                    case 0: {
+                        this.setBlockAndMetadata(world, i1, j1, k1, (Block)Blocks.grass, 0);
+                        break;
+                    }
+                    case 1: {
+                        this.setBlockAndMetadata(world, i1, j1, k1, Blocks.dirt, 1);
+                        break;
+                    }
+                    case 2: {
+                        this.setBlockAndMetadata(world, i1, j1, k1, LOTRMod.dirtPath, 0);
+                        break;
+                    }
+                    case 3: {
+                        this.setBlockAndMetadata(world, i1, j1, k1, Blocks.cobblestone, 0);
+                        break;
+                    }
                 }
                 this.setGrassToDirt(world, i1, j1 - 1, k1);
                 j2 = j1 - 1;
@@ -142,14 +151,23 @@ extends LOTRWorldGenBreeStructure {
             k1 = -5 - step;
             if (this.isOpaque(world, -5, j1, k1)) break;
             randPath = random.nextInt(4);
-            if (randPath == 0) {
-                this.setBlockAndMetadata(world, i12, j1, k1, (Block)Blocks.grass, 0);
-            } else if (randPath == 1) {
-                this.setBlockAndMetadata(world, i12, j1, k1, Blocks.dirt, 1);
-            } else if (randPath == 2) {
-                this.setBlockAndMetadata(world, i12, j1, k1, LOTRMod.dirtPath, 0);
-            } else if (randPath == 3) {
-                this.setBlockAndMetadata(world, i12, j1, k1, Blocks.cobblestone, 0);
+            switch (randPath) {
+                case 0: {
+                    this.setBlockAndMetadata(world, i12, j1, k1, (Block)Blocks.grass, 0);
+                    break;
+                }
+                case 1: {
+                    this.setBlockAndMetadata(world, i12, j1, k1, Blocks.dirt, 1);
+                    break;
+                }
+                case 2: {
+                    this.setBlockAndMetadata(world, i12, j1, k1, LOTRMod.dirtPath, 0);
+                    break;
+                }
+                case 3: {
+                    this.setBlockAndMetadata(world, i12, j1, k1, Blocks.cobblestone, 0);
+                    break;
+                }
             }
             this.setGrassToDirt(world, i12, j1 - 1, k1);
             j2 = j1 - 1;

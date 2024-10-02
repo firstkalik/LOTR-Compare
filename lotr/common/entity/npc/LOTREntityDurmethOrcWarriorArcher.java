@@ -15,7 +15,7 @@ package lotr.common.entity.npc;
 import java.util.Random;
 import lotr.common.LOTRMod;
 import lotr.common.entity.ai.LOTREntityAIRangedAttack;
-import lotr.common.entity.npc.LOTREntityDurmethOrc;
+import lotr.common.entity.npc.LOTREntityDurmethOrcWarrior;
 import lotr.common.entity.npc.LOTREntityNPC;
 import lotr.common.entity.npc.LOTRInventoryNPCItems;
 import lotr.common.item.LOTRItemCrossbow;
@@ -28,7 +28,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 public class LOTREntityDurmethOrcWarriorArcher
-extends LOTREntityDurmethOrc {
+extends LOTREntityDurmethOrcWarrior {
     public LOTREntityDurmethOrcWarriorArcher(World world) {
         super(world);
     }

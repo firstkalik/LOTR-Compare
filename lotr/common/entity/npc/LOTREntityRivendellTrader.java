@@ -10,6 +10,8 @@
  *  net.minecraft.entity.ai.EntityAITasks
  *  net.minecraft.entity.player.EntityPlayer
  *  net.minecraft.item.ItemStack
+ *  net.minecraft.potion.Potion
+ *  net.minecraft.potion.PotionEffect
  *  net.minecraft.util.DamageSource
  *  net.minecraft.util.ResourceLocation
  *  net.minecraft.world.World
@@ -22,6 +24,7 @@ import java.util.Random;
 import lotr.common.LOTRAchievement;
 import lotr.common.LOTRCapes;
 import lotr.common.LOTRLevelData;
+import lotr.common.LOTRPotions;
 import lotr.common.entity.ai.LOTREntityAIAttackOnCollide;
 import lotr.common.entity.animal.LOTREntityHorse;
 import lotr.common.entity.npc.LOTREntityNPC;
@@ -37,6 +40,8 @@ import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityAITasks;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
@@ -104,6 +109,10 @@ implements LOTRTravellingTrader {
     @Override
     public void onDeath(DamageSource damagesource) {
         super.onDeath(damagesource);
+        if (damagesource.getEntity() instanceof EntityPlayer) {
+            EntityPlayer player = (EntityPlayer)damagesource.getEntity();
+            player.addPotionEffect(new PotionEffect(LOTRPotions.curse.id, 24000, 0));
+        }
         if (!this.worldObj.isRemote) {
             this.worldObj.setEntityState((Entity)this, (byte)15);
         }

@@ -41,7 +41,7 @@ extends Block {
 
     public void onBlockDestroyedByPlayer(World world, int i, int j, int k, int meta) {
         if (!world.isRemote && meta == 0 && world.rand.nextBoolean()) {
-            int termites = 1 + world.rand.nextInt(3);
+            int termites = 1 + world.rand.nextInt(5);
             for (int l = 0; l < termites; ++l) {
                 this.spawnTermite(world, i, j, k);
             }

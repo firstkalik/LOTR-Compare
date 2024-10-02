@@ -21,13 +21,13 @@ import java.util.Random;
 import lotr.common.LOTRFoods;
 import lotr.common.LOTRMod;
 import lotr.common.entity.LOTREntityNPCRespawner;
+import lotr.common.entity.npc.LOTREntityDurmethOrcWarrior;
 import lotr.common.entity.npc.LOTREntityIronfistBerserk;
 import lotr.common.entity.npc.LOTREntityIronfistWarrior;
 import lotr.common.entity.npc.LOTREntityNPC;
 import lotr.common.entity.npc.LOTREntityStiffbeardCap;
 import lotr.common.entity.npc.LOTREntityStiffbeardCrossbow;
 import lotr.common.entity.npc.LOTREntityStiffbeardWarrior;
-import lotr.common.entity.npc.LOTREntityWickedDwarf2;
 import lotr.common.item.LOTRItemBanner;
 import lotr.common.tileentity.LOTRTileEntityAlloyForge;
 import lotr.common.world.structure.LOTRChestContents;
@@ -386,7 +386,7 @@ extends LOTRWorldGenStructureBase2 {
     }
 
     private ItemStack[] getDisplayArmorOrNull(World world, Random random) {
-        LOTREntityWickedDwarf2 armorGuard = new LOTREntityWickedDwarf2(world);
+        LOTREntityDurmethOrcWarrior armorGuard = new LOTREntityDurmethOrcWarrior(world);
         armorGuard.onSpawnWithEgg(null);
         int slot = random.nextInt(4) + 1;
         switch (slot) {

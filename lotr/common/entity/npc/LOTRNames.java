@@ -5,6 +5,7 @@
  *  com.google.common.base.Charsets
  *  cpw.mods.fml.common.FMLLog
  *  cpw.mods.fml.common.ModContainer
+ *  net.minecraft.util.StatCollector
  *  org.apache.commons.io.input.BOMInputStream
  */
 package lotr.common.entity.npc;
@@ -36,6 +37,7 @@ import lotr.common.LOTRMod;
 import lotr.common.entity.npc.LOTREntityDwarf;
 import lotr.common.entity.npc.LOTREntityHobbit;
 import lotr.common.entity.npc.LOTRFamilyInfo;
+import net.minecraft.util.StatCollector;
 import org.apache.commons.io.input.BOMInputStream;
 
 public class LOTRNames {
@@ -403,17 +405,22 @@ public class LOTRNames {
         return name;
     }
 
+    public static String getBrownMagName(Random rand, boolean male) {
+        String name = LOTRNames.getRandomName(male ? "brown_mag" : "brown_mag", rand);
+        return name;
+    }
+
     public static String getDwarfName(Random rand, boolean male) {
         String name = LOTRNames.getRandomName(male ? "dwarf_male" : "dwarf_female", rand);
         String parentName = LOTRNames.getRandomName("dwarf_male", rand);
-        return name + (male ? " \u0441\u044b\u043d " : " \u0434\u043e\u0447\u044c ") + parentName;
+        return name + " " + (male ? StatCollector.translateToLocal((String)"lotr.name.son") : StatCollector.translateToLocal((String)"lotr.name.daughter")) + " " + parentName;
     }
 
     public static String getDwarfChildNameForParent(Random rand, boolean male, LOTREntityDwarf parent) {
         String name = LOTRNames.getRandomName(male ? "dwarf_male" : "dwarf_female", rand);
         String parentName = parent.getNPCName();
         parentName = parentName.substring(0, parentName.indexOf(" "));
-        return name + (male ? " \u0441\u044b\u043d " : " \u0434\u043e\u0447\u044c ") + parentName;
+        return name + " " + (male ? StatCollector.translateToLocal((String)"lotr.name.son") : StatCollector.translateToLocal((String)"lotr.name.daughter")) + " " + parentName;
     }
 
     public static String getRhunicName(Random rand, boolean male) {

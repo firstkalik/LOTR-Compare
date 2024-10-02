@@ -37,6 +37,7 @@ import lotr.common.entity.ai.LOTREntityAIRangedAttack;
 import lotr.common.entity.npc.LOTREntityNPC;
 import lotr.common.entity.npc.LOTREntityTroll;
 import lotr.common.entity.projectile.LOTREntityThrownRock2;
+import lotr.common.fac.LOTRFaction;
 import net.minecraft.block.Block;
 import net.minecraft.entity.DataWatcher;
 import net.minecraft.entity.Entity;
@@ -65,6 +66,13 @@ extends LOTREntityTroll {
 
     public LOTREntityMountainSnowTroll(World world) {
         super(world);
+        this.isChilly = true;
+        this.isImmuneToFrost = true;
+    }
+
+    @Override
+    public LOTRFaction getFaction() {
+        return LOTRFaction.GUNDABAD;
     }
 
     @Override

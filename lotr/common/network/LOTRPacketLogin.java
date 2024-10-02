@@ -35,6 +35,8 @@ implements IMessage {
     public boolean enchantingLOTR;
     public boolean conquestDecay;
     public boolean strictFactionTitleRequirements;
+    public boolean enableNPCHiringLimit;
+    public int defaultNPCHiringLimit;
 
     public void toBytes(ByteBuf data) {
         data.writeInt(this.ringPortalX);
@@ -52,6 +54,8 @@ implements IMessage {
         data.writeBoolean(this.enchantingLOTR);
         data.writeBoolean(this.conquestDecay);
         data.writeBoolean(this.strictFactionTitleRequirements);
+        data.writeBoolean(this.enableNPCHiringLimit);
+        data.writeInt(this.defaultNPCHiringLimit);
     }
 
     public void fromBytes(ByteBuf data) {
@@ -96,6 +100,8 @@ implements IMessage {
             LOTRLevelData.clientside_thisServer_enchanting = packet.enchanting;
             LOTRLevelData.clientside_thisServer_enchantingLOTR = packet.enchantingLOTR;
             LOTRLevelData.clientside_thisServer_strictFactionTitleRequirements = packet.strictFactionTitleRequirements;
+            LOTRLevelData.clientside_enableNPCHiringLimit = packet.enableNPCHiringLimit;
+            LOTRLevelData.clientside_defaultNPCHiringLimit = packet.defaultNPCHiringLimit;
             return null;
         }
     }

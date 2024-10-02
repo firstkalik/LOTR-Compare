@@ -18,8 +18,8 @@ import java.util.List;
 import java.util.Random;
 import lotr.common.LOTRAchievement;
 import lotr.common.LOTRMod;
-import lotr.common.entity.animal.LOTREntityBear2;
 import lotr.common.entity.animal.LOTREntityDeer2;
+import lotr.common.entity.animal.LOTREntityPolarBear;
 import lotr.common.world.biome.LOTRBiome;
 import lotr.common.world.biome.LOTRBiomeDecorator;
 import lotr.common.world.biome.LOTRMusicRegion;
@@ -70,7 +70,7 @@ extends LOTRBiome {
         this.spawnableLOTRAmbientList.clear();
         this.npcSpawnList.clear();
         this.biomeColors.setSky(10069160);
-        this.spawnableCreatureList.add(new BiomeGenBase.SpawnListEntry(LOTREntityBear2.class, 1, 2, 4));
+        this.spawnableCreatureList.add(new BiomeGenBase.SpawnListEntry(LOTREntityPolarBear.class, 1, 2, 4));
         this.spawnableCreatureList.add(new BiomeGenBase.SpawnListEntry(LOTREntityDeer2.class, 1, 2, 4));
         LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer = new LOTRBiomeSpawnList.SpawnListContainer[]{LOTRBiomeSpawnList.entry(LOTRSpawnList.ANGBAND, 1).setSpawnChance(550), LOTRBiomeSpawnList.entry(LOTRSpawnList.ANGBAND2, 1).setSpawnChance(600), LOTRBiomeSpawnList.entry(LOTRSpawnList.ANGBANDTROLLS2, 1).setSpawnChance(850), LOTRBiomeSpawnList.entry(LOTRSpawnList.ANGBANDWARGICE, 1).setSpawnChance(950), LOTRBiomeSpawnList.entry(LOTRSpawnList.UTUMNO_MOUNRAIN_SNOW_TROLLS, 1).setSpawnChance(1000)};
         this.npcSpawnList.newFactionList(100).add(arrspawnListContainer);
@@ -78,6 +78,7 @@ extends LOTRBiome {
         this.decorator.treesPerChunk = 0;
         this.decorator.flowersPerChunk = 0;
         this.decorator.grassPerChunk = 0;
+        this.decorator.lichenPerChunk = 0;
         this.decorator.generateWater = false;
         this.decorator.addRandomStructure(new LOTRWorldGenRuinedHouse(false), 1000);
         this.decorator.addRandomStructure(new LOTRWorldGenStoneRuin.UTUMNO(1, 5), 600);

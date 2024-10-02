@@ -257,6 +257,14 @@ extends LOTRTileEntityForgeBase {
             material = new ItemStack(((LOTRItemMountArmor)item).getMountArmorMaterial().func_151685_b());
         }
         if (material != null) {
+            if (item instanceof ItemHoe) {
+                return material;
+            }
+            if (item.getIsRepairable(itemstack, material)) {
+                return material;
+            }
+        }
+        if (material != null) {
             if (item.getIsRepairable(itemstack, material)) {
                 return material;
             }

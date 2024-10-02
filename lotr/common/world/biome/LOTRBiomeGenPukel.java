@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Random;
 import lotr.common.LOTRAchievement;
 import lotr.common.entity.animal.LOTREntityBear;
+import lotr.common.entity.animal.LOTREntityFox;
 import lotr.common.world.biome.LOTRBiome;
 import lotr.common.world.biome.LOTRBiomeDecorator;
 import lotr.common.world.biome.LOTRMusicRegion;
@@ -50,6 +51,7 @@ extends LOTRBiome {
         super(i, major);
         this.spawnableCreatureList.add(new BiomeGenBase.SpawnListEntry(EntityWolf.class, 6, 1, 4));
         this.spawnableCreatureList.add(new BiomeGenBase.SpawnListEntry(LOTREntityBear.class, 4, 1, 4));
+        this.spawnableCreatureList.add(new BiomeGenBase.SpawnListEntry(LOTREntityFox.class, 4, 1, 4));
         this.npcSpawnList.clear();
         this.clearBiomeVariants();
         this.variantChance = 0.6f;

@@ -21,6 +21,7 @@ import com.google.common.math.IntMath;
 import java.util.Random;
 import lotr.common.LOTRFoods;
 import lotr.common.LOTRMod;
+import lotr.common.block.LOTRBlockGateDwarvenIthildin;
 import lotr.common.entity.npc.LOTREntityBanditDwarf;
 import lotr.common.entity.npc.LOTREntityWickedDwarf2;
 import lotr.common.world.structure.LOTRChestContents;
@@ -295,6 +296,7 @@ extends LOTRWorldGenStructureBase2 {
             this.setAir(world, 0, j1, -7);
             this.setBlockAndMetadata(world, 1, j1, -7, this.stoneBlock, this.stoneMeta);
         }
+        this.placeIthildinDoor(world, 0, 1, -7, LOTRMod.gateIronBars, 3, LOTRBlockGateDwarvenIthildin.DoorSize._1x2);
         for (k1 = -4; k1 <= -3; ++k1) {
             for (i1 = -3; i1 <= 3; ++i1) {
                 this.setBlockAndMetadata(world, i1, 1, k1, this.carpetBlock, this.carpetMeta);

@@ -51,7 +51,7 @@ extends LOTRBlockAnimalJar {
         this.setBlockBounds(0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f);
         this.setHardness(0.5f);
         this.setStepSound(Block.soundTypeMetal);
-        this.setCageTypes("bronze", "iron", "silver", "gold");
+        this.setCageTypes("bronze", "iron", "silver", "gold", "mithril");
     }
 
     protected void setCageTypes(String ... s) {

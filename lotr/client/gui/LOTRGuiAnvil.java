@@ -30,6 +30,7 @@ import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import java.util.List;
 import lotr.client.gui.LOTRGuiButtonReforge;
+import lotr.common.LOTRConfig;
 import lotr.common.enchant.LOTREnchantmentHelper;
 import lotr.common.entity.npc.LOTREntityNPC;
 import lotr.common.inventory.LOTRContainerAnvil;
@@ -155,6 +156,18 @@ extends GuiContainer {
         }
         this.textFieldRename.drawTextBox();
         this.textFieldRename.setTextColor(-1);
+        if (LOTRConfig.enableAnvilGui) {
+            this.displayReforgeItemInfo(i, j);
+        }
+    }
+
+    private void displayReforgeItemInfo(int mouseX, int mouseY) {
+        int yPos = this.guiTop + 15;
+        int xPos = this.guiLeft + this.xSize - 7;
+        ItemStack reforgedItem = this.theAnvil.invInput.getStackInSlot(0);
+        if (reforgedItem != null) {
+            this.renderToolTip(reforgedItem, xPos, yPos);
+        }
     }
 
     protected void drawGuiContainerBackgroundLayer(float f, int i, int j) {

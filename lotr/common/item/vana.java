@@ -14,10 +14,13 @@
  *  net.minecraft.item.Item
  *  net.minecraft.item.ItemDye
  *  net.minecraft.item.ItemStack
+ *  net.minecraft.nbt.NBTTagCompound
  *  net.minecraft.potion.Potion
  *  net.minecraft.potion.PotionEffect
  *  net.minecraft.util.ChatComponentText
+ *  net.minecraft.util.EnumChatFormatting
  *  net.minecraft.util.IChatComponent
+ *  net.minecraft.util.StatCollector
  *  net.minecraft.util.Vec3
  *  net.minecraft.world.World
  */
@@ -41,10 +44,13 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
+import net.minecraft.util.StatCollector;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 
@@ -68,6 +74,10 @@ extends valaringbase {
 
     public ItemStack onItemRightClick(ItemStack srcItemStack, World world, EntityPlayer playerEntity) {
         playerEntity.setItemInUse(srcItemStack, this.getMaxItemUseDuration(srcItemStack));
+        NBTTagCompound tagCompound = srcItemStack.getTagCompound();
+        if (!world.isRemote && tagCompound != null && tagCompound.getBoolean("activated") && tagCompound.getInteger("cooldown") > 0) {
+            playerEntity.addChatComponentMessage((IChatComponent)new ChatComponentText((Object)EnumChatFormatting.RED + StatCollector.translateToLocalFormatted((String)"ring.cooldown", (Object[])new Object[]{tagCompound.getInteger("cooldown") / 20})));
+        }
         return srcItemStack;
     }
 
@@ -79,8 +89,7 @@ extends valaringbase {
             }
             srcItemStack.damageItem(this.getUseCost(), (EntityLivingBase)playerEntity);
         }
-        world.playSoundAtEntity((Entity)playerEntity, "lotr:ent.step", 1.0f, (itemRand.nextFloat() - itemRand.nextFloat()) * 0.2f + 1.0f);
-        if (!world.isRemote) {
+        if (!(world.isRemote || srcItemStack.hasTagCompound() && srcItemStack.getTagCompound().getBoolean("activated"))) {
             playerEntity.setItemInUse(srcItemStack, this.getMaxItemUseDuration(srcItemStack));
             float closest = Float.MAX_VALUE;
             Object thisOne = null;
@@ -165,6 +174,14 @@ extends valaringbase {
             LOTRLevelData.getData(playerEntity).addAchievement(LOTRAchievement.useRing);
             playerEntity.addChatMessage((IChatComponent)new ChatComponentText("\u00a7a\u0421\u043f\u043e\u0441\u043e\u0431\u043d\u043e\u0441\u0442\u044c \u0410\u043a\u0442\u0438\u0432\u0438\u0440\u043e\u0432\u0430\u043d\u0430"));
             srcItemStack.damageItem(1, (EntityLivingBase)playerEntity);
+            world.playSoundAtEntity((Entity)playerEntity, "lotr:ent.step", 1.0f, (itemRand.nextFloat() - itemRand.nextFloat()) * 0.2f + 1.0f);
+            NBTTagCompound tagCompound = srcItemStack.getTagCompound();
+            if (tagCompound == null) {
+                tagCompound = new NBTTagCompound();
+            }
+            tagCompound.setBoolean("activated", true);
+            tagCompound.setInteger("cooldown", 1200);
+            srcItemStack.setTagCompound(tagCompound);
         }
         return srcItemStack;
     }
@@ -187,6 +204,35 @@ extends valaringbase {
             }
         }
         return success;
+    }
+
+    @Override
+    public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List list, boolean advanced) {
+        list.add((Object)EnumChatFormatting.GRAY + StatCollector.translateToLocal((String)"right.name"));
+        NBTTagCompound tagCompound = par1ItemStack.getTagCompound();
+        if (tagCompound != null && tagCompound.getInteger("cooldown") > 0) {
+            list.add((Object)EnumChatFormatting.RED + StatCollector.translateToLocalFormatted((String)"ring.add.cooldown", (Object[])new Object[]{tagCompound.getInteger("cooldown") / 20}));
+        }
+        if (tagCompound == null || !tagCompound.getBoolean("activated")) {
+            list.add((Object)EnumChatFormatting.GREEN + StatCollector.translateToLocalFormatted((String)"lotr.ring.ready", (Object[])new Object[0]));
+        }
+    }
+
+    public void onUpdate(ItemStack itemstack, World world, Entity entity, int par4, boolean par5) {
+        int i = (int)entity.posX;
+        int j = (int)entity.posY;
+        int k = (int)entity.posZ;
+        NBTTagCompound tagCompound = itemstack.getTagCompound();
+        if (!world.isRemote && tagCompound != null && tagCompound.getBoolean("activated") && tagCompound.getInteger("cooldown") > 0) {
+            tagCompound.setInteger("cooldown", tagCompound.getInteger("cooldown") - 1);
+            if (tagCompound.getInteger("cooldown") <= 0 && entity instanceof EntityPlayer) {
+                EntityPlayer player = (EntityPlayer)entity;
+                String itemName = itemstack.getDisplayName();
+                String message = String.format(StatCollector.translateToLocal((String)"ring.ready"), itemName);
+                player.addChatComponentMessage((IChatComponent)new ChatComponentText((Object)EnumChatFormatting.GREEN + message));
+                tagCompound.setBoolean("activated", false);
+            }
+        }
     }
 
     protected boolean growBlock(EntityPlayer playerEntity, World world, int targetX, int targetY, int targetZ) {

@@ -35,7 +35,7 @@ extends LOTREntityWarg {
 
     @Override
     public LOTRFaction getFaction() {
-        return LOTRFaction.GUNDABAD;
+        return LOTRFaction.ANGMAR;
     }
 
     @Override

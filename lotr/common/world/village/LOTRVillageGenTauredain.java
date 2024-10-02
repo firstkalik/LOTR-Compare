@@ -33,7 +33,7 @@ extends LOTRVillageGen {
     }
 
     @Override
-    protected LOTRVillageGen.AbstractInstance<?> createVillageInstance(World world, int i, int k, Random random, LocationInfo loc) {
+    public LOTRVillageGen.AbstractInstance<?> createVillageInstance(World world, int i, int k, Random random, LocationInfo loc) {
         return new Instance(this, world, i, k, random, loc);
     }
 
@@ -44,16 +44,7 @@ extends LOTRVillageGen {
         }
 
         @Override
-        protected void setupVillageProperties(Random random) {
-        }
-
-        @Override
-        public boolean isFlat() {
-            return false;
-        }
-
-        @Override
-        protected void addVillageStructures(Random random) {
+        public void addVillageStructures(Random random) {
             int smithyPos = random.nextInt(4);
             this.addStructure(new LOTRWorldGenTauredainChieftainPyramid(false), 0, -11, 0, true);
             this.addStructure(new LOTRWorldGenTauredainVillageTree(false), 0, -16, 2);
@@ -100,13 +91,22 @@ extends LOTRVillageGen {
         }
 
         @Override
-        protected LOTRRoadType getPath(Random random, int i, int k) {
+        public LOTRRoadType getPath(Random random, int i, int k) {
             return null;
+        }
+
+        @Override
+        public boolean isFlat() {
+            return false;
         }
 
         @Override
         public boolean isVillageSpecificSurface(World world, int i, int j, int k) {
             return false;
+        }
+
+        @Override
+        public void setupVillageProperties(Random random) {
         }
     }
 

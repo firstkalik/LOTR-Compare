@@ -421,9 +421,12 @@ public class LOTREntityQuestInfo {
         int z = MathHelper.floor_double((double)this.theNPC.posZ) >> 4;
         PlayerManager playermanager = ((WorldServer)this.theNPC.worldObj).getPlayerManager();
         List players = this.theNPC.worldObj.playerEntities;
-        for (Object obj : players) {
-            EntityPlayerMP entityplayer = (EntityPlayerMP)obj;
+        for (EntityPlayerMP entityplayer : players) {
             if (!playermanager.isPlayerWatchingChunk(entityplayer, x, z)) continue;
+            if (this.playerPacketCache.containsKey(entityplayer.getUniqueID())) {
+                this.playerPacketCache.remove(entityplayer.getUniqueID());
+                continue;
+            }
             this.sendData(entityplayer);
         }
     }

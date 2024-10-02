@@ -144,7 +144,7 @@ extends LOTRWorldGenBreeStructure {
         return true;
     }
 
-    private void spawnAnimal(World world, Random random, int i, int j, int k) {
+    public void spawnAnimal(World world, Random random, int i, int j, int k) {
         int animals = 2;
         for (int l = 0; l < animals; ++l) {
             EntityAnimal animal = LOTRWorldGenBreeBarn.getRandomAnimal(world, random);
@@ -155,17 +155,19 @@ extends LOTRWorldGenBreeStructure {
 
     public static EntityAnimal getRandomAnimal(World world, Random random) {
         int animal = random.nextInt(4);
-        if (animal == 0) {
-            return new EntityCow(world);
-        }
-        if (animal == 1) {
-            return new EntityPig(world);
-        }
-        if (animal == 2) {
-            return new EntitySheep(world);
-        }
-        if (animal == 3) {
-            return new EntityChicken(world);
+        switch (animal) {
+            case 0: {
+                return new EntityCow(world);
+            }
+            case 1: {
+                return new EntityPig(world);
+            }
+            case 2: {
+                return new EntitySheep(world);
+            }
+            case 3: {
+                return new EntityChicken(world);
+            }
         }
         return null;
     }

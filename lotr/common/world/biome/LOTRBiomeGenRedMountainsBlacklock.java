@@ -77,7 +77,7 @@ extends LOTRBiome {
         this.decorator.biomeOreFactor = 2.0f;
         this.decorator.biomeGemFactor = 1.8f;
         this.decorator.addSoil((WorldGenerator)new WorldGenMinable(LOTRMod.rock, 4, 60, Blocks.stone), 12.0f, 0, 96);
-        this.decorator.addOre((WorldGenerator)new WorldGenMinable(LOTRMod.oreGlowstone, 4), 8.0f, 0, 48);
+        this.decorator.addOre((WorldGenerator)new WorldGenMinable(LOTRMod.sarnlumin, 4), 8.0f, 0, 48);
         this.decorator.addOre((WorldGenerator)new WorldGenMinable(LOTRMod.oreSilver, 4), 8.0f, 0, 48);
         this.decorator.addSoil((WorldGenerator)new WorldGenMinable(LOTRMod.rock, 6, 32, Blocks.stone), 1.0f, 0, 100);
         this.decorator.addSoil((WorldGenerator)new WorldGenMinable(LOTRMod.rock, 7, 32, Blocks.stone), 1.0f, 0, 100);
@@ -118,7 +118,7 @@ extends LOTRBiome {
         this.invasionSpawns.addInvasion(LOTRInvasions.AVARI_ELF, LOTREventSpawner.EventChance.HALFTIME);
         this.invasionSpawns.addInvasion(LOTRInvasions.DURMETH_WARG, LOTREventSpawner.EventChance.UNCOMMON);
         this.decorator.addRandomStructure(new LOTRWorldGenStoneRuin.REDDWARVENMOSSY(1, 4), 1500);
-        this.decorator.addRandomStructure(new LOTRWorldGenRedDwarvenTower2(false), 300);
+        this.decorator.addRandomStructure(new LOTRWorldGenRedDwarvenTower2(false), 350);
         this.decorator.addRandomStructure(new LOTRWorldGenRedMountainsSmithy(false), 150);
     }
 
@@ -170,7 +170,7 @@ extends LOTRBiome {
         super.decorate(world, random, i, k);
         for (int l = 0; l < 4; ++l) {
             int i1 = i + random.nextInt(16) + 8;
-            int j1 = 110 + random.nextInt(40);
+            int j1 = 110 + random.nextInt(20);
             int k1 = k + random.nextInt(16) + 8;
             new LOTRWorldGenRedMountainsHouseBlacklock(false).generate(world, random, i1, j1, k1);
         }

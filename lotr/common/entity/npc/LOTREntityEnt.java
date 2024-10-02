@@ -39,19 +39,21 @@ import java.util.Random;
 import java.util.UUID;
 import lotr.common.LOTRAchievement;
 import lotr.common.LOTRCommonProxy;
-import lotr.common.LOTRLevelData;
 import lotr.common.LOTRMod;
+import lotr.common.LOTRPotions;
 import lotr.common.block.LOTRBlockCorruptMallorn;
 import lotr.common.entity.ai.LOTREntityAIAttackOnCollide;
 import lotr.common.entity.ai.LOTREntityAIEntHealSapling;
 import lotr.common.entity.ai.LOTREntityAIFollowHiringPlayer;
 import lotr.common.entity.npc.LOTREntityNPC;
+import lotr.common.entity.npc.LOTREntityQuestInfo;
 import lotr.common.entity.npc.LOTREntityTree;
 import lotr.common.entity.npc.LOTRFamilyInfo;
-import lotr.common.entity.npc.LOTRMercenary;
 import lotr.common.entity.npc.LOTRNames;
 import lotr.common.fac.LOTRFaction;
 import lotr.common.item.LOTRItemEntDraught;
+import lotr.common.quest.LOTRMiniQuest;
+import lotr.common.quest.LOTRMiniQuestFactory;
 import net.minecraft.block.Block;
 import net.minecraft.entity.DataWatcher;
 import net.minecraft.entity.Entity;
@@ -83,8 +85,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
 public class LOTREntityEnt
-extends LOTREntityTree
-implements LOTRMercenary {
+extends LOTREntityTree {
     private Random branchRand = new Random();
     public int eyesClosed;
     public ChunkCoordinates saplingHealTarget;
@@ -92,6 +93,8 @@ implements LOTRMercenary {
 
     public LOTREntityEnt(World world) {
         super(world);
+        this.questInfo.setOfferChance(4000);
+        this.questInfo.setMinAlignment(150.0f);
         this.setSize(1.4f, 4.6f);
         this.getNavigator().setAvoidsWater(true);
         this.tasks.addTask(0, (EntityAIBase)new EntityAISwimming((EntityLiving)this));
@@ -126,6 +129,11 @@ implements LOTRMercenary {
     }
 
     @Override
+    public LOTRMiniQuest createMiniQuest() {
+        return LOTRMiniQuestFactory.ENT.createQuest(this);
+    }
+
+    @Override
     protected void applyEntityAttributes() {
         super.applyEntityAttributes();
         this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue((double)MathHelper.getRandomIntegerInRange((Random)this.rand, (int)100, (int)120));
@@ -138,26 +146,6 @@ implements LOTRMercenary {
     @Override
     public LOTRFaction getFaction() {
         return LOTRFaction.FANGORN;
-    }
-
-    @Override
-    public LOTRFaction getHiringFaction() {
-        return LOTRFaction.FANGORN;
-    }
-
-    @Override
-    public int getMercBaseCost() {
-        return 100;
-    }
-
-    @Override
-    public float getMercAlignmentRequired() {
-        return 1000.0f;
-    }
-
-    @Override
-    public boolean canTradeWith(EntityPlayer entityplayer) {
-        return LOTRLevelData.getData(entityplayer).getAlignment(this.getFaction()) >= 0.0f && this.isFriendly(entityplayer);
     }
 
     @Override
@@ -352,12 +340,16 @@ implements LOTRMercenary {
         if (effect.getPotionID() == Potion.wither.id) {
             return;
         }
+        if (effect.getPotionID() == LOTRPotions.blood.id) {
+            return;
+        }
+        if (effect.getPotionID() == LOTRPotions.infection.id) {
+            return;
+        }
+        if (effect.getPotionID() == LOTRPotions.broken.id) {
+            return;
+        }
         super.addPotionEffect(effect);
-    }
-
-    @Override
-    public void onUnitTrade(EntityPlayer entityplayer) {
-        LOTRLevelData.getData(entityplayer).addAchievement(LOTRAchievement.hireMoredainMercenary);
     }
 }
 

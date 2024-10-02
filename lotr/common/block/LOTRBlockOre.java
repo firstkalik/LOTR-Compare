@@ -54,10 +54,19 @@ extends Block {
         if (this == LOTRMod.oreGold) {
             return LOTRMod.goldRaw;
         }
+        if (this == LOTRMod.oreMithril2) {
+            return LOTRMod.mithrilRaw;
+        }
         if (this == LOTRMod.oreQuendite) {
             return LOTRMod.quenditeCrystal;
         }
         if (this == LOTRMod.oreGlowstone) {
+            return Items.glowstone_dust;
+        }
+        if (this == LOTRMod.luminite) {
+            return Items.glowstone_dust;
+        }
+        if (this == LOTRMod.sarnlumin) {
             return Items.glowstone_dust;
         }
         if (this == LOTRMod.oreGulduril) {
@@ -77,15 +86,24 @@ extends Block {
             return 1 + random.nextInt(2);
         }
         if (this == LOTRMod.oreLavaCoal) {
-            return 1 + random.nextInt(2);
+            return 1 + random.nextInt(1);
         }
         if (this == LOTRMod.oreIron) {
+            return 1 + random.nextInt(1);
+        }
+        if (this == LOTRMod.oreMithril2) {
             return 1 + random.nextInt(1);
         }
         if (this == LOTRMod.oreGold) {
             return 1 + random.nextInt(1);
         }
         if (this == LOTRMod.oreGlowstone) {
+            return 2 + random.nextInt(4);
+        }
+        if (this == LOTRMod.sarnlumin) {
+            return 2 + random.nextInt(4);
+        }
+        if (this == LOTRMod.luminite) {
             return 2 + random.nextInt(4);
         }
         if (this == LOTRMod.oreSulfur || this == LOTRMod.oreSaltpeter) {
@@ -129,6 +147,12 @@ extends Block {
             if (this == LOTRMod.oreGlowstone) {
                 amountXp = MathHelper.getRandomIntegerInRange((Random)world.rand, (int)0, (int)2);
             }
+            if (this == LOTRMod.sarnlumin) {
+                amountXp = MathHelper.getRandomIntegerInRange((Random)world.rand, (int)0, (int)2);
+            }
+            if (this == LOTRMod.luminite) {
+                amountXp = MathHelper.getRandomIntegerInRange((Random)world.rand, (int)0, (int)2);
+            }
             if (this == LOTRMod.oreGulduril) {
                 amountXp = MathHelper.getRandomIntegerInRange((Random)world.rand, (int)0, (int)2);
             }
@@ -145,10 +169,19 @@ extends Block {
             if (this == LOTRMod.oreMithril) {
                 LOTRLevelData.getData(entityplayer).addAchievement(LOTRAchievement.mineMithril);
             }
+            if (this == LOTRMod.oreMithril2) {
+                LOTRLevelData.getData(entityplayer).addAchievement(LOTRAchievement.mineMithrilPlus);
+            }
             if (this == LOTRMod.oreQuendite) {
                 LOTRLevelData.getData(entityplayer).addAchievement(LOTRAchievement.mineQuendite);
             }
             if (this == LOTRMod.oreGlowstone) {
+                LOTRLevelData.getData(entityplayer).addAchievement(LOTRAchievement.mineGlowstone);
+            }
+            if (this == LOTRMod.luminite) {
+                LOTRLevelData.getData(entityplayer).addAchievement(LOTRAchievement.mineGlowstone);
+            }
+            if (this == LOTRMod.sarnlumin) {
                 LOTRLevelData.getData(entityplayer).addAchievement(LOTRAchievement.mineGlowstone);
             }
             if (this == LOTRMod.oreNaurite) {

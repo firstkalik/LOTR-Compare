@@ -17,8 +17,8 @@ import java.util.List;
 import java.util.Random;
 import lotr.common.LOTRAchievement;
 import lotr.common.LOTRMod;
-import lotr.common.entity.animal.LOTREntityBear2;
 import lotr.common.entity.animal.LOTREntityDeer2;
+import lotr.common.entity.animal.LOTREntityPolarBear;
 import lotr.common.entity.npc.LOTREntityBandit;
 import lotr.common.entity.npc.LOTREntityBanditNorth;
 import lotr.common.world.biome.LOTRBiome;
@@ -52,7 +52,7 @@ extends LOTRBiome {
         this.decorator.clearTrees();
         this.spawnableCreatureList.add(new BiomeGenBase.SpawnListEntry(EntityWolf.class, 10, 4, 8));
         this.spawnableCreatureList.add(new BiomeGenBase.SpawnListEntry(LOTREntityDeer2.class, 10, 4, 6));
-        this.spawnableCreatureList.add(new BiomeGenBase.SpawnListEntry(LOTREntityBear2.class, 4, 1, 4));
+        this.spawnableCreatureList.add(new BiomeGenBase.SpawnListEntry(LOTREntityPolarBear.class, 4, 1, 4));
         this.spawnableWaterCreatureList.clear();
         this.spawnableLOTRAmbientList.clear();
         this.spawnableCreatureList.clear();
@@ -64,7 +64,7 @@ extends LOTRBiome {
         this.topBlock = Blocks.snow;
         LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer = new LOTRBiomeSpawnList.SpawnListContainer[]{LOTRBiomeSpawnList.entry(LOTRSpawnList.IRONFIST, 1)};
         this.npcSpawnList.newFactionList(90, 0.0f).add(arrspawnListContainer);
-        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer6 = new LOTRBiomeSpawnList.SpawnListContainer[]{LOTRBiomeSpawnList.entry(LOTRSpawnList.DURMETH_ORCS, 10), LOTRBiomeSpawnList.entry(LOTRSpawnList.DURMETH_WARGS, 8), LOTRBiomeSpawnList.entry(LOTRSpawnList.SNOW_TROLLS, 5)};
+        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer6 = new LOTRBiomeSpawnList.SpawnListContainer[]{LOTRBiomeSpawnList.entry(LOTRSpawnList.DURMETH_ORCS, 10), LOTRBiomeSpawnList.entry(LOTRSpawnList.DURMETH_WARGS, 8), LOTRBiomeSpawnList.entry(LOTRSpawnList.MOUNTAIN_SNOW_TROLLS, 5), LOTRBiomeSpawnList.entry(LOTRSpawnList.DURMETH_ORCS_WARRIORS, 7)};
         this.npcSpawnList.newFactionList(90, 0.0f).add(arrspawnListContainer6);
         LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer2 = new LOTRBiomeSpawnList.SpawnListContainer[]{LOTRBiomeSpawnList.entry(LOTRSpawnList.DURMETH_ORCS, 5)};
         this.npcSpawnList.newFactionList(90, 0.0f).add(arrspawnListContainer2);
@@ -79,6 +79,8 @@ extends LOTRBiome {
         this.biomeColors.setGrass(6908744);
         this.biomeColors.setSky(2364434);
         this.biomeColors.setClouds(2364434);
+        this.decorator.lichenPerChunk = 0;
+        this.decorator.lichenPerChunk2 = 0;
         this.npcSpawnList.conquestGainRate = 0.5f;
         this.decorator.generateWater = true;
         this.decorator.generateLava = true;
@@ -93,7 +95,7 @@ extends LOTRBiome {
         this.decorator.addOre((WorldGenerator)new WorldGenMinable(LOTRMod.oreSilver, 4), 8.0f, 0, 48);
         this.decorator.addRandomStructure(new LOTRWorldGenStoneRuin.REDDWARVENSNOWY(1, 4), 100);
         this.decorator.addRandomStructure(new LOTRWorldGenRedMountainsSmithy2(false), 150);
-        this.decorator.addRandomStructure(new LOTRWorldGenDwarvenMineEntranceRuined2(true), 300);
+        this.decorator.addRandomStructure(new LOTRWorldGenDwarvenMineEntranceRuined2(true), 600);
         this.decorator.addRandomStructure(new LOTRWorldGenRuinedRedDwarvenTower3(false), 250);
         this.setBanditChance(LOTREventSpawner.EventChance.BANDIT_RARE);
         this.setBanditEntityClass(LOTREntityBanditNorth.class);

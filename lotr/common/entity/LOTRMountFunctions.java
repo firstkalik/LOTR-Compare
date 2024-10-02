@@ -98,7 +98,7 @@ public class LOTRMountFunctions {
             if (forward <= 0.0f) {
                 forward *= 0.25f;
             }
-            entity.stepHeight = mount.getStepHeightWhileRiddenByPlayer();
+            entity.stepHeight = 1.0f;
             entity.jumpMovementFactor = entity.getAIMoveSpeed() * 0.1f;
             if (LOTRMountFunctions.canRiderControl_elseNoMotion(entity)) {
                 entity.setAIMoveSpeed((float)entity.getEntityAttribute(SharedMonsterAttributes.movementSpeed).getAttributeValue());

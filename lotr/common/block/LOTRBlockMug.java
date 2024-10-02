@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.Random;
 import lotr.common.LOTRMod;
 import lotr.common.item.LOTRItemBottlePoison;
+import lotr.common.item.LOTRItemGraal;
 import lotr.common.item.LOTRItemMug;
 import lotr.common.tileentity.LOTRTileEntityMug;
 import net.minecraft.block.Block;
@@ -161,6 +162,9 @@ extends BlockContainer {
                 mug.setEmpty();
                 world.playSoundAtEntity((Entity)entityplayer, "lotr:item.mug_fill", 0.5f, 0.8f + world.rand.nextFloat() * 0.4f);
                 return true;
+            }
+            if (itemstack != null && itemstack.getItem() instanceof LOTRItemGraal) {
+                return false;
             }
             if (mug.isEmpty() && LOTRItemMug.isItemFullDrink(itemstack)) {
                 ItemStack emptyMug = LOTRItemMug.getVessel(itemstack).getEmptyVessel();

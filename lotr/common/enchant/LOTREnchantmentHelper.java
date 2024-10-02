@@ -37,6 +37,7 @@ import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
@@ -62,6 +63,8 @@ import lotr.common.enchant.LOTREnchantmentToolSpeed;
 import lotr.common.enchant.LOTREnchantmentType;
 import lotr.common.enchant.LOTREnchantmentWeaponSpecial;
 import lotr.common.item.LOTRItemHammerAule;
+import lotr.common.item.LOTRItemSwordChosenThuringvethil;
+import lotr.common.item.LOTRItemSwordKeranKessertin;
 import lotr.common.item.LOTRMaterial;
 import lotr.common.network.LOTRPacketCancelItemHighlight;
 import lotr.common.network.LOTRPacketHandler;
@@ -324,12 +327,13 @@ public class LOTREnchantmentHelper {
     }
 
     public static void applyRandomEnchantments(ItemStack itemstack, Random random, boolean skilful, boolean keepBanes) {
+        Item.ToolMaterial toolMaterial;
         LOTREnchantment ench;
         if (!keepBanes) {
             LOTREnchantmentHelper.clearEnchantsAndProgress(itemstack);
         } else {
             List<LOTREnchantment> enchants = LOTREnchantmentHelper.getEnchantList(itemstack);
-            for (LOTREnchantment ench2 : enchants) {
+            for (Object ench2 : enchants) {
                 if (ench2.persistsReforge()) continue;
                 LOTREnchantmentHelper.removeEnchant(itemstack, ench2);
             }
@@ -337,17 +341,66 @@ public class LOTREnchantmentHelper {
         if (itemstack.getItem() instanceof ItemSword && LOTRMaterial.getToolMaterialByName(((ItemSword)itemstack.getItem()).getToolMaterialName()) == LOTRMaterial.BARROW.toToolMaterial() && (ench = LOTREnchantment.baneWight).canApply(itemstack, false)) {
             LOTREnchantmentHelper.setHasEnchant(itemstack, ench);
         }
-        if (itemstack.getItem() instanceof LOTRItemHammerAule && LOTRMaterial.getToolMaterialByName(((LOTRItemHammerAule)itemstack.getItem()).getToolMaterialName()) == LOTRMaterial.AULE.toToolMaterial() && (ench = LOTREnchantment.durable5).canApply(itemstack, false)) {
-            LOTREnchantmentHelper.setHasEnchant(itemstack, ench);
+        if (itemstack.getItem() instanceof LOTRItemHammerAule && (toolMaterial = LOTRMaterial.getToolMaterialByName(((LOTRItemHammerAule)itemstack.getItem()).getToolMaterialName())) == LOTRMaterial.AULE.toToolMaterial() && LOTRMaterial.AULE.toToolMaterial().getEnchantability() > 0) {
+            for (LOTREnchantment ench1 : new LOTREnchantment[]{LOTREnchantment.durable5, LOTREnchantment.soulbound, LOTREnchantment.looting3, LOTREnchantment.toolSpeed5, LOTREnchantment.general}) {
+                if (!ench1.canApply(itemstack, false)) continue;
+                LOTREnchantmentHelper.setHasEnchant(itemstack, ench1);
+            }
         }
-        if (itemstack.getItem() instanceof LOTRItemHammerAule && LOTRMaterial.getToolMaterialByName(((LOTRItemHammerAule)itemstack.getItem()).getToolMaterialName()) == LOTRMaterial.AULE.toToolMaterial() && (ench = LOTREnchantment.looting4).canApply(itemstack, false)) {
-            LOTREnchantmentHelper.setHasEnchant(itemstack, ench);
+        if (itemstack.getItem() instanceof LOTRItemSwordChosenThuringvethil && (toolMaterial = LOTRMaterial.getToolMaterialByName(((LOTRItemSwordChosenThuringvethil)itemstack.getItem()).getToolMaterialName())) == LOTRMaterial.UTUMNO_LEGENDARY.toToolMaterial() && LOTRMaterial.UTUMNO_LEGENDARY.toToolMaterial().getEnchantability() > 0) {
+            for (LOTREnchantment ench1 : new LOTREnchantment[]{LOTREnchantment.vampireStrike, LOTREnchantment.soulbound}) {
+                if (!ench1.canApply(itemstack, false)) continue;
+                LOTREnchantmentHelper.setHasEnchant(itemstack, ench1);
+            }
         }
-        if (itemstack.getItem() instanceof LOTRItemHammerAule && LOTRMaterial.getToolMaterialByName(((LOTRItemHammerAule)itemstack.getItem()).getToolMaterialName()) == LOTRMaterial.AULE.toToolMaterial() && (ench = LOTREnchantment.toolSpeed5).canApply(itemstack, false)) {
-            LOTREnchantmentHelper.setHasEnchant(itemstack, ench);
+        if (itemstack.getItem() instanceof LOTRItemSwordKeranKessertin && (toolMaterial = LOTRMaterial.getToolMaterialByName(((LOTRItemSwordKeranKessertin)itemstack.getItem()).getToolMaterialName())) == LOTRMaterial.UTUMNO_LEGENDARY.toToolMaterial() && LOTRMaterial.UTUMNO_LEGENDARY.toToolMaterial().getEnchantability() > 0) {
+            for (LOTREnchantment ench1 : new LOTREnchantment[]{LOTREnchantment.chill, LOTREnchantment.soulbound}) {
+                if (!ench1.canApply(itemstack, false)) continue;
+                LOTREnchantmentHelper.setHasEnchant(itemstack, ench1);
+            }
         }
         if (itemstack.getItem() == LOTRMod.sting && (ench = LOTREnchantment.baneSpider).canApply(itemstack, false)) {
             LOTREnchantmentHelper.setHasEnchant(itemstack, ench);
+        }
+        HashSet<Item> validItems = new HashSet<Item>();
+        validItems.add(LOTRMod.sting);
+        validItems.add(LOTRMod.ringil);
+        validItems.add(LOTRMod.anduril);
+        validItems.add(LOTRMod.gandalfStaffGrey);
+        validItems.add(LOTRMod.gandalfStaffWhite);
+        validItems.add(LOTRMod.gandalfhat);
+        validItems.add(LOTRMod.gandalfbody);
+        validItems.add(LOTRMod.gandalflegs);
+        validItems.add(LOTRMod.gandalfboots);
+        validItems.add(LOTRMod.radagasthat);
+        validItems.add(LOTRMod.radagastbody);
+        validItems.add(LOTRMod.radagastlegs);
+        validItems.add(LOTRMod.radagastboots);
+        validItems.add(LOTRMod.sarumanhat);
+        validItems.add(LOTRMod.sarumanbody);
+        validItems.add(LOTRMod.sarumanlegs);
+        validItems.add(LOTRMod.sarumanboots);
+        validItems.add(LOTRMod.alatarhat);
+        validItems.add(LOTRMod.alatarbody);
+        validItems.add(LOTRMod.alatarlegs);
+        validItems.add(LOTRMod.alatarboots);
+        validItems.add(LOTRMod.palandohat);
+        validItems.add(LOTRMod.palandobody);
+        validItems.add(LOTRMod.palandolegs);
+        validItems.add(LOTRMod.palandoboots);
+        validItems.add(LOTRMod.glamdring);
+        validItems.add(LOTRMod.grond);
+        validItems.add(LOTRMod.sauronMace);
+        validItems.add(LOTRMod.melkor_sword);
+        validItems.add(LOTRMod.battleaxe_melkor);
+        validItems.add(LOTRMod.radaghaststaff);
+        validItems.add(LOTRMod.sarumanstaff);
+        validItems.add(LOTRMod.alatarstaff);
+        validItems.add(LOTRMod.pallandostaff);
+        validItems.add(LOTRMod.bodyBilbo);
+        LOTREnchantment ench1 = LOTREnchantment.soulbound;
+        if (validItems.contains((Object)itemstack.getItem()) && ench1.canApply(itemstack, false)) {
+            LOTREnchantmentHelper.setHasEnchant(itemstack, ench1);
         }
         int enchants = 0;
         float chance = random.nextFloat();

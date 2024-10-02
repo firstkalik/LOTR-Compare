@@ -24,6 +24,9 @@ import java.util.Random;
 import lotr.common.LOTRAchievement;
 import lotr.common.LOTRLevelData;
 import lotr.common.LOTRReflection;
+import lotr.common.enchant.LOTREnchantment;
+import lotr.common.enchant.LOTREnchantmentHelper;
+import lotr.common.enchant.LOTREnchantmentSeaFortune;
 import lotr.common.entity.projectile.LOTRFishing;
 import lotr.common.item.LOTRItemRing;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -104,7 +107,14 @@ extends EntityFishHook {
             float chance = this.worldObj.rand.nextFloat();
             int luck = EnchantmentHelper.func_151386_g((EntityLivingBase)this.field_146042_b);
             int speed = EnchantmentHelper.func_151387_h((EntityLivingBase)this.field_146042_b);
-            LOTRFishing.FishResult result = LOTRFishing.getFishResult(this.rand, chance, luck, speed, true);
+            int seaFortuneLevel = 0;
+            if (this.field_146042_b.getHeldItem() != null) {
+                for (LOTREnchantment enchantment : LOTREnchantmentHelper.getEnchantList(this.field_146042_b.getHeldItem())) {
+                    if (!(enchantment instanceof LOTREnchantmentSeaFortune)) continue;
+                    seaFortuneLevel += ((LOTREnchantmentSeaFortune)enchantment).luckFactor;
+                }
+            }
+            LOTRFishing.FishResult result = LOTRFishing.getFishResult(this.rand, chance, luck, speed, true, seaFortuneLevel);
             ItemStack item = result.fishedItem;
             EntityItem entityitem = new EntityItem(this.worldObj, this.posX, this.posY, this.posZ, item);
             double d0 = this.field_146042_b.posX - this.posX;

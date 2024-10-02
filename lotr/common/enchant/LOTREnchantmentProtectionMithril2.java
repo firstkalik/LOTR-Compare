@@ -65,7 +65,7 @@ extends LOTREnchantmentProtectionSpecial {
 
     @Override
     protected int calcIntProtection() {
-        return 6;
+        return 8;
     }
 }
 

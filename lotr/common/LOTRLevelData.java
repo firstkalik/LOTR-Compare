@@ -101,6 +101,7 @@ public class LOTRLevelData {
     private static int waypointCooldownMax;
     private static int waypointCooldownMin;
     private static boolean gollumSpawned;
+    private static boolean balrogSpawned;
     private static boolean enableAlignmentZones;
     private static float conquestRate;
     public static boolean clientside_thisServer_feastMode;
@@ -108,6 +109,8 @@ public class LOTRLevelData {
     public static boolean clientside_thisServer_enchanting;
     public static boolean clientside_thisServer_strictFactionTitleRequirements;
     public static boolean clientside_thisServer_enchantingLOTR;
+    public static boolean clientside_enableNPCHiringLimit;
+    public static int clientside_defaultNPCHiringLimit;
     private static EnumDifficulty difficulty;
     private static boolean difficultyLock;
     private static Map<UUID, LOTRPlayerData> playerDataMap;
@@ -168,6 +171,9 @@ public class LOTRLevelData {
         try {
             if (needsSave) {
                 File LOTR_dat = LOTRLevelData.getLOTRDat();
+                if (LOTR_dat == null) {
+                    throw new FileNotFoundException("LOTR data file not found.");
+                }
                 if (!LOTR_dat.exists()) {
                     LOTRLevelData.saveNBTToFile(LOTR_dat, new NBTTagCompound());
                 }
@@ -184,6 +190,7 @@ public class LOTRLevelData {
                 levelData.setInteger("WpCdMax", waypointCooldownMax);
                 levelData.setInteger("WpCdMin", waypointCooldownMin);
                 levelData.setBoolean("GollumSpawned", gollumSpawned);
+                levelData.setBoolean("BalrogSpawned", balrogSpawned);
                 levelData.setBoolean("AlignmentZones", enableAlignmentZones);
                 levelData.setFloat("ConqRate", conquestRate);
                 if (difficulty != null) {
@@ -205,7 +212,7 @@ public class LOTRLevelData {
             for (Map.Entry e : playerDataMap.entrySet()) {
                 UUID player = (UUID)e.getKey();
                 LOTRPlayerData pd = (LOTRPlayerData)e.getValue();
-                if (!pd.needsSave()) continue;
+                if (pd == null || !pd.needsSave()) continue;
                 LOTRLevelData.saveData(player);
             }
             if (LOTRSpawnDamping.needsSave) {
@@ -220,15 +227,23 @@ public class LOTRLevelData {
 
     public static void load() {
         try {
-            NBTTagCompound levelData = LOTRLevelData.loadNBTFromFile(LOTRLevelData.getLOTRDat());
+            NBTTagCompound nbt;
+            File lotrDat = LOTRLevelData.getLOTRDat();
+            if (lotrDat == null) {
+                throw new FileNotFoundException("LOTR data file not found.");
+            }
+            NBTTagCompound levelData = LOTRLevelData.loadNBTFromFile(lotrDat);
+            if (levelData == null) {
+                throw new IOException("Failed to load LOTR data.");
+            }
             File oldLOTRDat = new File(DimensionManager.getCurrentSaveRootDirectory(), "LOTR.dat");
             if (oldLOTRDat.exists()) {
-                levelData = LOTRLevelData.loadNBTFromFile(oldLOTRDat);
+                NBTTagCompound oldLevelData = LOTRLevelData.loadNBTFromFile(oldLOTRDat);
                 oldLOTRDat.delete();
-                if (levelData.hasKey("PlayerData")) {
-                    NBTTagList playerDataTags = levelData.getTagList("PlayerData", 10);
+                if (oldLevelData.hasKey("PlayerData")) {
+                    NBTTagList playerDataTags = oldLevelData.getTagList("PlayerData", 10);
                     for (int i = 0; i < playerDataTags.tagCount(); ++i) {
-                        NBTTagCompound nbt = playerDataTags.getCompoundTagAt(i);
+                        nbt = playerDataTags.getCompoundTagAt(i);
                         UUID player = UUID.fromString(nbt.getString("PlayerUUID"));
                         LOTRLevelData.saveNBTToFile(LOTRLevelData.getLOTRPlayerDat(player), nbt);
                     }
@@ -246,6 +261,7 @@ public class LOTRLevelData {
             int n = levelData.hasKey("FastTravel") ? levelData.getInteger("FastTravel") / 20 : (waypointCooldownMax = levelData.hasKey("WpCdMax") ? levelData.getInteger("WpCdMax") : 1800);
             waypointCooldownMin = levelData.hasKey("FastTravelMin") ? levelData.getInteger("FastTravelMin") / 20 : (levelData.hasKey("WpCdMin") ? levelData.getInteger("WpCdMin") : 180);
             gollumSpawned = levelData.getBoolean("GollumSpawned");
+            balrogSpawned = levelData.getBoolean("BalrogSpawned");
             enableAlignmentZones = levelData.hasKey("AlignmentZones") ? levelData.getBoolean("AlignmentZones") : true;
             float f = conquestRate = levelData.hasKey("ConqRate") ? levelData.getFloat("ConqRate") : 1.0f;
             if (levelData.hasKey("SavedDifficulty")) {
@@ -258,7 +274,8 @@ public class LOTRLevelData {
             difficultyLock = levelData.getBoolean("DifficultyLock");
             NBTTagCompound travellingTraderData = levelData.getCompoundTag("TravellingTraders");
             for (LOTRTravellingTraderSpawner trader : LOTREventSpawner.travellingTraders) {
-                NBTTagCompound nbt = travellingTraderData.getCompoundTag(trader.entityClassName);
+                if (!travellingTraderData.hasKey(trader.entityClassName)) continue;
+                nbt = travellingTraderData.getCompoundTag(trader.entityClassName);
                 trader.readFromNBT(nbt);
             }
             LOTRGreyWandererTracker.load(levelData);
@@ -314,6 +331,8 @@ public class LOTRLevelData {
         packet.enchantingLOTR = LOTRConfig.enchantingLOTR;
         packet.strictFactionTitleRequirements = LOTRConfig.strictFactionTitleRequirements;
         LOTRPacketHandler.networkWrapper.sendTo((IMessage)packet, entityplayer);
+        packet.enableNPCHiringLimit = LOTRConfig.getEnableNPCHiringLimit();
+        packet.defaultNPCHiringLimit = LOTRConfig.getDefaultNPCHiringLimit();
     }
 
     public static int getWaypointCooldownMax() {
@@ -613,6 +632,15 @@ public class LOTRLevelData {
 
     public static void setGollumSpawned(boolean flag) {
         gollumSpawned = flag;
+        LOTRLevelData.markDirty();
+    }
+
+    public static boolean balrogSpawned() {
+        return balrogSpawned;
+    }
+
+    public static void setBalrogSpawned(boolean flag) {
+        balrogSpawned = flag;
         LOTRLevelData.markDirty();
     }
 

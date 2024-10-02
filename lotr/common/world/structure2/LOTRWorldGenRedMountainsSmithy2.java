@@ -35,7 +35,7 @@ extends LOTRWorldGenDwarfSmithy2 {
 
     @Override
     protected LOTRChestContents getChestContents() {
-        return LOTRChestContents.REDDWARF_SMITHY;
+        return LOTRChestContents.LOTRChestContents2.REDDWARF_SMITHY;
     }
 
     @Override

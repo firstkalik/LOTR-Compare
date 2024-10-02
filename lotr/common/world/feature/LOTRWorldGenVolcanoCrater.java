@@ -75,7 +75,11 @@ extends WorldGenerator {
                     for (j1 = posY; j1 >= posY - depthHere; --j1) {
                         int jDepth = posY - j1;
                         if (jDepth > 6) {
-                            this.setBlockAndNotifyAdequately(world, i1, j1, k1, Blocks.lava, 0);
+                            if (random.nextInt(100) < 15) {
+                                this.setBlockAndNotifyAdequately(world, i1, j1, k1, LOTRMod.cryingObsidian, 0);
+                            } else {
+                                this.setBlockAndNotifyAdequately(world, i1, j1, k1, Blocks.lava, 0);
+                            }
                             if (!world.getBlock(i1, j1 - 1, k1).isOpaqueCube()) {
                                 this.setBlockAndNotifyAdequately(world, i1, j1 - 1, k1, Blocks.obsidian, 0);
                             }
@@ -83,6 +87,10 @@ extends WorldGenerator {
                             this.setBlockAndNotifyAdequately(world, i1, j1, k1, Blocks.air, 0);
                         }
                         if (jDepth > 4) {
+                            if (random.nextInt(100) < 15) {
+                                this.setBlockAndNotifyAdequately(world, i1, j1 - 1, k1, LOTRMod.cryingObsidian, 0);
+                                continue;
+                            }
                             this.setBlockAndNotifyAdequately(world, i1, j1 - 1, k1, Blocks.obsidian, 0);
                             continue;
                         }

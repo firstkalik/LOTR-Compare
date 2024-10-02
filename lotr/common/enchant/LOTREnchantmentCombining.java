@@ -32,12 +32,14 @@ public class LOTREnchantmentCombining {
         LOTREnchantmentCombining.combine(LOTREnchantment.strong1, LOTREnchantment.strong2, 200);
         LOTREnchantmentCombining.combine(LOTREnchantment.strong2, LOTREnchantment.strong3, 800);
         LOTREnchantmentCombining.combine(LOTREnchantment.strong3, LOTREnchantment.strong4, 1600);
+        LOTREnchantmentCombining.combine(LOTREnchantment.strong4, LOTREnchantment.strong5, 3600);
         LOTREnchantmentCombining.combine(LOTREnchantment.durable1, LOTREnchantment.durable2, 300);
         LOTREnchantmentCombining.combine(LOTREnchantment.durable2, LOTREnchantment.durable3, 1500);
         LOTREnchantmentCombining.combine(LOTREnchantment.knockback1, LOTREnchantment.knockback2, 2500);
         LOTREnchantmentCombining.combine(LOTREnchantment.toolSpeed1, LOTREnchantment.toolSpeed2, 200);
         LOTREnchantmentCombining.combine(LOTREnchantment.toolSpeed2, LOTREnchantment.toolSpeed3, 800);
         LOTREnchantmentCombining.combine(LOTREnchantment.toolSpeed3, LOTREnchantment.toolSpeed4, 1500);
+        LOTREnchantmentCombining.combine(LOTREnchantment.toolSpeed4, LOTREnchantment.toolSpeed5, 3500);
         LOTREnchantmentCombining.combine(LOTREnchantment.looting1, LOTREnchantment.looting2, 400);
         LOTREnchantmentCombining.combine(LOTREnchantment.looting2, LOTREnchantment.looting3, 1500);
         LOTREnchantmentCombining.combine(LOTREnchantment.protect1, LOTREnchantment.protect2, 2000);
@@ -49,6 +51,7 @@ public class LOTREnchantmentCombining {
         LOTREnchantmentCombining.combine(LOTREnchantment.protectRanged2, LOTREnchantment.protectRanged3, 1500);
         LOTREnchantmentCombining.combine(LOTREnchantment.rangedStrong1, LOTREnchantment.rangedStrong2, 400);
         LOTREnchantmentCombining.combine(LOTREnchantment.rangedStrong2, LOTREnchantment.rangedStrong3, 1500);
+        LOTREnchantmentCombining.combine(LOTREnchantment.rangedStrong3, LOTREnchantment.rangedStrong4, 3500);
         LOTREnchantmentCombining.combine(LOTREnchantment.rangedKnockback1, LOTREnchantment.rangedKnockback2, 2500);
     }
 

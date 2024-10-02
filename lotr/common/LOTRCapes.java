@@ -36,6 +36,7 @@ public enum LOTRCapes {
     ALIGNMENT_DALE(LOTRFaction.DALE),
     ALIGNMENT_ESGAROTH(LOTRFaction.DALE),
     ALIGNMENT_DWARF(LOTRFaction.DURINS_FOLK),
+    ALIGNMENT_EREBOR(LOTRFaction.DURINS_FOLK),
     ALIGNMENT_GALADHRIM(LOTRFaction.LOTHLORIEN),
     GALADHRIM_TRADER(LOTRFaction.LOTHLORIEN, "galadhrimTrader"),
     ALIGNMENT_DUNLAND(LOTRFaction.DUNLAND),
@@ -114,6 +115,7 @@ public enum LOTRCapes {
     DEFEAT_MTC,
     DOVAKIN,
     TESTERLOTR,
+    FIRSTKALIK,
     MOD(new String[]{"5e906016-533f-40ef-af3a-9f2a0c9efa4a"});
 
     public CapeType capeType;
@@ -123,6 +125,7 @@ public enum LOTRCapes {
     public ResourceLocation capeTexture;
     public static ResourceLocation GANDALF;
     public static ResourceLocation PALLANDO;
+    public static ResourceLocation RADAGHAST;
     public static ResourceLocation GANDALF_SANTA;
 
     private LOTRCapes(LOTRFaction faction) {
@@ -267,6 +270,9 @@ public enum LOTRCapes {
         if (this == TESTERLOTR) {
             return LOTRLevelData.getData(entityplayer).hasAchievement(LOTRAchievement.tester);
         }
+        if (this == FIRSTKALIK) {
+            return LOTRLevelData.getData(entityplayer).hasAchievement(LOTRAchievement.killDeveloper);
+        }
         if (this.capeType == CapeType.EXCLUSIVE) {
             for (UUID uuid : this.playersForCape) {
                 if (!uuid.equals(entityplayer.getUniqueID())) continue;
@@ -290,6 +296,7 @@ public enum LOTRCapes {
     static {
         GANDALF = new ResourceLocation("lotr:cape/gandalf.png");
         PALLANDO = new ResourceLocation("lotr:cape/pallando.png");
+        RADAGHAST = new ResourceLocation("lotr:cape/radaghast.png");
         GANDALF_SANTA = new ResourceLocation("lotr:cape/santa.png");
     }
 

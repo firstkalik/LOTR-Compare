@@ -28,25 +28,29 @@ public class LOTRComponentBlueDwarvenMineCrossing
 extends StructureComponent {
     private int corridorDirection;
     private boolean isMultipleFloors;
+    private boolean ruined;
 
     public LOTRComponentBlueDwarvenMineCrossing() {
     }
 
-    public LOTRComponentBlueDwarvenMineCrossing(int i, Random random, StructureBoundingBox structureBoundingBox, int j) {
+    public LOTRComponentBlueDwarvenMineCrossing(int i, Random random, StructureBoundingBox structureBoundingBox, int j, boolean r) {
         super(i);
         this.corridorDirection = j;
         this.boundingBox = structureBoundingBox;
         this.isMultipleFloors = this.boundingBox.getYSize() > 3;
+        this.ruined = r;
     }
 
     protected void func_143012_a(NBTTagCompound nbt) {
         nbt.setInteger("Direction", this.corridorDirection);
         nbt.setBoolean("Multiple", this.isMultipleFloors);
+        nbt.setBoolean("Ruined", this.ruined);
     }
 
     protected void func_143011_b(NBTTagCompound nbt) {
         this.corridorDirection = nbt.getInteger("Direction");
         this.isMultipleFloors = nbt.getBoolean("Multiple");
+        this.ruined = nbt.getBoolean("Ruined");
     }
 
     public static StructureBoundingBox findValidPlacement(List list, Random random, int i, int j, int k, int l) {
@@ -86,41 +90,41 @@ extends StructureComponent {
         int i = this.getComponentType();
         switch (this.corridorDirection) {
             case 0: {
-                LOTRStructureBlueDwarvenMinePieces.getNextComponent(component, list, random, this.boundingBox.minX + 1, this.boundingBox.minY, this.boundingBox.maxZ + 1, 0, i, false);
-                LOTRStructureBlueDwarvenMinePieces.getNextComponent(component, list, random, this.boundingBox.minX - 1, this.boundingBox.minY, this.boundingBox.minZ + 1, 1, i, false);
-                LOTRStructureBlueDwarvenMinePieces.getNextComponent(component, list, random, this.boundingBox.maxX + 1, this.boundingBox.minY, this.boundingBox.minZ + 1, 3, i, false);
+                LOTRStructureBlueDwarvenMinePieces.getNextComponent(component, list, random, this.boundingBox.minX + 1, this.boundingBox.minY, this.boundingBox.maxZ + 1, 0, i, this.ruined);
+                LOTRStructureBlueDwarvenMinePieces.getNextComponent(component, list, random, this.boundingBox.minX - 1, this.boundingBox.minY, this.boundingBox.minZ + 1, 1, i, this.ruined);
+                LOTRStructureBlueDwarvenMinePieces.getNextComponent(component, list, random, this.boundingBox.maxX + 1, this.boundingBox.minY, this.boundingBox.minZ + 1, 3, i, this.ruined);
                 break;
             }
             case 1: {
-                LOTRStructureBlueDwarvenMinePieces.getNextComponent(component, list, random, this.boundingBox.minX + 1, this.boundingBox.minY, this.boundingBox.minZ - 1, 2, i, false);
-                LOTRStructureBlueDwarvenMinePieces.getNextComponent(component, list, random, this.boundingBox.minX + 1, this.boundingBox.minY, this.boundingBox.maxZ + 1, 0, i, false);
-                LOTRStructureBlueDwarvenMinePieces.getNextComponent(component, list, random, this.boundingBox.minX - 1, this.boundingBox.minY, this.boundingBox.minZ + 1, 1, i, false);
+                LOTRStructureBlueDwarvenMinePieces.getNextComponent(component, list, random, this.boundingBox.minX + 1, this.boundingBox.minY, this.boundingBox.minZ - 1, 2, i, this.ruined);
+                LOTRStructureBlueDwarvenMinePieces.getNextComponent(component, list, random, this.boundingBox.minX + 1, this.boundingBox.minY, this.boundingBox.maxZ + 1, 0, i, this.ruined);
+                LOTRStructureBlueDwarvenMinePieces.getNextComponent(component, list, random, this.boundingBox.minX - 1, this.boundingBox.minY, this.boundingBox.minZ + 1, 1, i, this.ruined);
                 break;
             }
             case 2: {
-                LOTRStructureBlueDwarvenMinePieces.getNextComponent(component, list, random, this.boundingBox.minX + 1, this.boundingBox.minY, this.boundingBox.minZ - 1, 2, i, false);
-                LOTRStructureBlueDwarvenMinePieces.getNextComponent(component, list, random, this.boundingBox.minX - 1, this.boundingBox.minY, this.boundingBox.minZ + 1, 1, i, false);
-                LOTRStructureBlueDwarvenMinePieces.getNextComponent(component, list, random, this.boundingBox.maxX + 1, this.boundingBox.minY, this.boundingBox.minZ + 1, 3, i, false);
+                LOTRStructureBlueDwarvenMinePieces.getNextComponent(component, list, random, this.boundingBox.minX + 1, this.boundingBox.minY, this.boundingBox.minZ - 1, 2, i, this.ruined);
+                LOTRStructureBlueDwarvenMinePieces.getNextComponent(component, list, random, this.boundingBox.minX - 1, this.boundingBox.minY, this.boundingBox.minZ + 1, 1, i, this.ruined);
+                LOTRStructureBlueDwarvenMinePieces.getNextComponent(component, list, random, this.boundingBox.maxX + 1, this.boundingBox.minY, this.boundingBox.minZ + 1, 3, i, this.ruined);
                 break;
             }
             case 3: {
-                LOTRStructureBlueDwarvenMinePieces.getNextComponent(component, list, random, this.boundingBox.minX + 1, this.boundingBox.minY, this.boundingBox.minZ - 1, 2, i, false);
-                LOTRStructureBlueDwarvenMinePieces.getNextComponent(component, list, random, this.boundingBox.minX + 1, this.boundingBox.minY, this.boundingBox.maxZ + 1, 0, i, false);
-                LOTRStructureBlueDwarvenMinePieces.getNextComponent(component, list, random, this.boundingBox.maxX + 1, this.boundingBox.minY, this.boundingBox.minZ + 1, 3, i, false);
+                LOTRStructureBlueDwarvenMinePieces.getNextComponent(component, list, random, this.boundingBox.minX + 1, this.boundingBox.minY, this.boundingBox.minZ - 1, 2, i, this.ruined);
+                LOTRStructureBlueDwarvenMinePieces.getNextComponent(component, list, random, this.boundingBox.minX + 1, this.boundingBox.minY, this.boundingBox.maxZ + 1, 0, i, this.ruined);
+                LOTRStructureBlueDwarvenMinePieces.getNextComponent(component, list, random, this.boundingBox.maxX + 1, this.boundingBox.minY, this.boundingBox.minZ + 1, 3, i, this.ruined);
             }
         }
         if (this.isMultipleFloors) {
             if (random.nextBoolean()) {
-                LOTRStructureBlueDwarvenMinePieces.getNextComponent(component, list, random, this.boundingBox.minX + 1, this.boundingBox.minY + 3 + 1, this.boundingBox.minZ - 1, 2, i, false);
+                LOTRStructureBlueDwarvenMinePieces.getNextComponent(component, list, random, this.boundingBox.minX + 1, this.boundingBox.minY + 3 + 1, this.boundingBox.minZ - 1, 2, i, this.ruined);
             }
             if (random.nextBoolean()) {
-                LOTRStructureBlueDwarvenMinePieces.getNextComponent(component, list, random, this.boundingBox.minX - 1, this.boundingBox.minY + 3 + 1, this.boundingBox.minZ + 1, 1, i, false);
+                LOTRStructureBlueDwarvenMinePieces.getNextComponent(component, list, random, this.boundingBox.minX - 1, this.boundingBox.minY + 3 + 1, this.boundingBox.minZ + 1, 1, i, this.ruined);
             }
             if (random.nextBoolean()) {
-                LOTRStructureBlueDwarvenMinePieces.getNextComponent(component, list, random, this.boundingBox.maxX + 1, this.boundingBox.minY + 3 + 1, this.boundingBox.minZ + 1, 3, i, false);
+                LOTRStructureBlueDwarvenMinePieces.getNextComponent(component, list, random, this.boundingBox.maxX + 1, this.boundingBox.minY + 3 + 1, this.boundingBox.minZ + 1, 3, i, this.ruined);
             }
             if (random.nextBoolean()) {
-                LOTRStructureBlueDwarvenMinePieces.getNextComponent(component, list, random, this.boundingBox.minX + 1, this.boundingBox.minY + 3 + 1, this.boundingBox.maxZ + 1, 0, i, false);
+                LOTRStructureBlueDwarvenMinePieces.getNextComponent(component, list, random, this.boundingBox.minX + 1, this.boundingBox.minY + 3 + 1, this.boundingBox.maxZ + 1, 0, i, this.ruined);
             }
         }
     }
@@ -131,10 +135,12 @@ extends StructureComponent {
         }
         this.fillWithBlocks(world, structureBoundingBox, this.boundingBox.minX + 1, this.boundingBox.minY, this.boundingBox.minZ, this.boundingBox.maxX - 1, this.boundingBox.maxY, this.boundingBox.maxZ, Blocks.air, Blocks.air, false);
         this.fillWithBlocks(world, structureBoundingBox, this.boundingBox.minX, this.boundingBox.minY, this.boundingBox.minZ + 1, this.boundingBox.maxX, this.boundingBox.maxY, this.boundingBox.maxZ - 1, Blocks.air, Blocks.air, false);
-        this.fillWithBlocks(world, structureBoundingBox, this.boundingBox.minX + 1, this.boundingBox.minY, this.boundingBox.minZ + 1, this.boundingBox.minX + 1, this.boundingBox.maxY, this.boundingBox.minZ + 1, LOTRMod.pillar, Blocks.air, false);
-        this.fillWithBlocks(world, structureBoundingBox, this.boundingBox.minX + 1, this.boundingBox.minY, this.boundingBox.maxZ - 1, this.boundingBox.minX + 1, this.boundingBox.maxY, this.boundingBox.maxZ - 1, LOTRMod.pillar, Blocks.air, false);
-        this.fillWithBlocks(world, structureBoundingBox, this.boundingBox.maxX - 1, this.boundingBox.minY, this.boundingBox.minZ + 1, this.boundingBox.maxX - 1, this.boundingBox.maxY, this.boundingBox.minZ + 1, LOTRMod.pillar, Blocks.air, false);
-        this.fillWithBlocks(world, structureBoundingBox, this.boundingBox.maxX - 1, this.boundingBox.minY, this.boundingBox.maxZ - 1, this.boundingBox.maxX - 1, this.boundingBox.maxY, this.boundingBox.maxZ - 1, LOTRMod.pillar, Blocks.air, false);
+        for (int y = this.boundingBox.minY; y <= this.boundingBox.maxY; ++y) {
+            this.placeBlockAtCurrentPosition(world, LOTRMod.pillar, 3, this.boundingBox.minX + 1, y, this.boundingBox.minZ + 1, structureBoundingBox);
+            this.placeBlockAtCurrentPosition(world, LOTRMod.pillar, 3, this.boundingBox.minX + 1, y, this.boundingBox.maxZ - 1, structureBoundingBox);
+            this.placeBlockAtCurrentPosition(world, LOTRMod.pillar, 3, this.boundingBox.maxX - 1, y, this.boundingBox.minZ + 1, structureBoundingBox);
+            this.placeBlockAtCurrentPosition(world, LOTRMod.pillar, 3, this.boundingBox.maxX - 1, y, this.boundingBox.maxZ - 1, structureBoundingBox);
+        }
         for (int i = this.boundingBox.minX; i <= this.boundingBox.maxX; ++i) {
             for (int j = this.boundingBox.minZ; j <= this.boundingBox.maxZ; ++j) {
                 Block block = this.getBlockAtCurrentPosition(world, i, this.boundingBox.minY - 1, j, structureBoundingBox);
@@ -145,8 +151,15 @@ extends StructureComponent {
                 this.placeBlockAtCurrentPosition(world, Blocks.stone, 0, i, this.boundingBox.maxY + 1, j, structureBoundingBox);
             }
         }
-        this.fillWithBlocks(world, structureBoundingBox, this.boundingBox.minX + 2, this.boundingBox.minY - 1, this.boundingBox.minZ - 1, this.boundingBox.minX + 2, this.boundingBox.minY - 1, this.boundingBox.maxZ + 1, LOTRMod.pillar, Blocks.air, false);
-        this.fillWithBlocks(world, structureBoundingBox, this.boundingBox.minX - 1, this.boundingBox.minY - 1, this.boundingBox.minZ + 2, this.boundingBox.maxX + 1, this.boundingBox.minY - 1, this.boundingBox.minZ + 2, LOTRMod.pillar, Blocks.air, false);
+        for (int z = this.boundingBox.minZ - 1; z <= this.boundingBox.maxZ + 1; ++z) {
+            this.placeBlockAtCurrentPosition(world, LOTRMod.pillar, 3, this.boundingBox.minX + 2, this.boundingBox.minY - 1, z, structureBoundingBox);
+        }
+        for (int x = this.boundingBox.minX - 1; x <= this.boundingBox.maxX + 1; ++x) {
+            this.placeBlockAtCurrentPosition(world, LOTRMod.pillar, 3, x, this.boundingBox.minY - 1, this.boundingBox.minZ + 2, structureBoundingBox);
+        }
+        if (!this.ruined) {
+            this.placeBlockAtCurrentPosition(world, LOTRMod.brick, 14, this.boundingBox.minX + 2, this.boundingBox.minY - 1, this.boundingBox.minZ + 2, structureBoundingBox);
+        }
         return true;
     }
 }

@@ -13,8 +13,10 @@ import lotr.common.entity.animal.LOTREntityBear;
 import lotr.common.entity.animal.LOTREntityButterfly;
 import lotr.common.entity.animal.LOTREntityDeer;
 import lotr.common.entity.animal.LOTREntityElk;
+import lotr.common.entity.animal.LOTREntityFox;
 import lotr.common.entity.animal.LOTREntityGorcrow;
 import lotr.common.entity.animal.LOTREntityRabbit;
+import lotr.common.entity.npc.LOTREntityRadaghast;
 import lotr.common.world.biome.LOTRBiome;
 import lotr.common.world.biome.LOTRBiomeDecorator;
 import lotr.common.world.biome.LOTRBiomeGenMirkwood;
@@ -37,6 +39,7 @@ extends LOTRBiomeGenMirkwood {
         this.spawnableCreatureList.add(new BiomeGenBase.SpawnListEntry(LOTREntityElk.class, 30, 4, 6));
         this.spawnableCreatureList.add(new BiomeGenBase.SpawnListEntry(LOTREntityDeer.class, 20, 4, 6));
         this.spawnableCreatureList.add(new BiomeGenBase.SpawnListEntry(LOTREntityBear.class, 2, 1, 4));
+        this.spawnableCreatureList.add(new BiomeGenBase.SpawnListEntry(LOTREntityFox.class, 4, 1, 4));
         this.spawnableCaveCreatureList.clear();
         this.spawnableLOTRAmbientList.add(new BiomeGenBase.SpawnListEntry(LOTREntityButterfly.class, 10, 4, 4));
         this.spawnableLOTRAmbientList.add(new BiomeGenBase.SpawnListEntry(LOTREntityRabbit.class, 10, 4, 4));
@@ -76,6 +79,7 @@ extends LOTRBiomeGenMirkwood {
         this.decorator.clearRandomStructures();
         this.biomeColors.setGrass(2134297);
         this.biomeColors.setFoliage(2251802);
+        this.registerTravellingTrader(LOTREntityRadaghast.class);
         this.setBanditChance(LOTREventSpawner.EventChance.BANDIT_RARE);
         this.invasionSpawns.addInvasion(LOTRInvasions.WOOD_ELF, LOTREventSpawner.EventChance.UNCOMMON);
         this.invasionSpawns.addInvasion(LOTRInvasions.DOL_GULDUR, LOTREventSpawner.EventChance.UNCOMMON);

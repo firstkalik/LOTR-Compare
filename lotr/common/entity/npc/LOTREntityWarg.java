@@ -345,56 +345,56 @@ implements IInvBasic {
 
     @Override
     public void onLivingUpdate() {
-        boolean isRiderInPrivateArea;
-        EntityPlayer entityplayer;
         super.onLivingUpdate();
-        if (!this.worldObj.isRemote && this.riddenByEntity instanceof EntityPlayer) {
-            entityplayer = (EntityPlayer)this.riddenByEntity;
-            if (LOTRLevelData.getData(entityplayer).getAlignment(this.getFaction()) < 50.0f) {
-                entityplayer.mountEntity(null);
-            } else if (this.isNPCTamed() && this.isMountSaddled()) {
-                LOTRLevelData.getData(entityplayer).addAchievement(LOTRAchievement.rideWarg);
+        if (!this.worldObj.isRemote) {
+            EntityPlayer entityplayer;
+            if (this.riddenByEntity instanceof EntityPlayer) {
+                entityplayer = (EntityPlayer)this.riddenByEntity;
+                if (LOTRLevelData.getData(entityplayer).getAlignment(this.getFaction()) < 50.0f) {
+                    entityplayer.mountEntity(null);
+                } else if (this.isNPCTamed() && this.isMountSaddled()) {
+                    LOTRLevelData.getData(entityplayer).addAchievement(LOTRAchievement.rideWarg);
+                }
             }
-        }
-        if (!this.worldObj.isRemote && this.isStrongOrc) {
-            boolean flag;
-            int i = MathHelper.floor_double((double)this.posX);
-            int j = MathHelper.floor_double((double)this.boundingBox.minY);
-            int k = MathHelper.floor_double((double)this.posZ);
-            BiomeGenBase biome = this.worldObj.getBiomeGenForCoords(i, k);
-            boolean bl = flag = this.worldObj.isDaytime() && this.worldObj.canBlockSeeTheSky(i, j, k);
-            if (biome instanceof LOTRBiome && ((LOTRBiome)biome).canSpawnHostilesInDay()) {
-                flag = true;
+            if (this.isNPCTamed() && this.isMountSaddled() && this.riddenByEntity instanceof EntityPlayer) {
+                entityplayer = (EntityPlayer)this.riddenByEntity;
+                if (this.fallDistance >= 20.0f) {
+                    LOTRLevelData.getData(entityplayer).addAchievement(LOTRAchievement.flyingWarg);
+                }
             }
-            if (flag && this.ticksExisted % 20 == 0) {
-                this.addPotionEffect(new PotionEffect(Potion.resistance.id, 200, 0));
-                this.addPotionEffect(new PotionEffect(Potion.moveSpeed.id, 200, 0));
-                this.addPotionEffect(new PotionEffect(Potion.invisibility.id, 200, 0));
-                this.addPotionEffect(new PotionEffect(Potion.damageBoost.id, 200, 0));
+            if (!(this.riddenByEntity instanceof LOTREntityNPC) && this.riddenByEntity != null && LOTRBannerProtection.isProtected(this.worldObj, (int)this.posX, (int)this.posY, (int)this.posZ, LOTRBannerProtection.forPlayer((EntityPlayer)this.riddenByEntity, LOTRBannerProtection.Permission.FOOD), true)) {
+                this.riddenByEntity.mountEntity(null);
             }
-        }
-        if (this.eatingTick > 0) {
-            if (this.eatingTick % 4 == 0) {
-                this.worldObj.playSoundAtEntity((Entity)this, "random.eat", 0.5f + 0.5f * (float)this.rand.nextInt(2), 0.4f + this.rand.nextFloat() * 0.2f);
+            if (this.isStrongOrc) {
+                boolean flag;
+                int i = MathHelper.floor_double((double)this.posX);
+                int j = MathHelper.floor_double((double)this.boundingBox.minY);
+                int k = MathHelper.floor_double((double)this.posZ);
+                BiomeGenBase biome = this.worldObj.getBiomeGenForCoords(i, k);
+                boolean bl = flag = this.worldObj.isDaytime() && this.worldObj.canBlockSeeTheSky(i, j, k);
+                if (biome instanceof LOTRBiome && ((LOTRBiome)biome).canSpawnHostilesInDay()) {
+                    flag = true;
+                }
+                if (flag && this.ticksExisted % 20 == 0) {
+                    this.addPotionEffect(new PotionEffect(Potion.resistance.id, 200, 0));
+                    this.addPotionEffect(new PotionEffect(Potion.moveSpeed.id, 200, 0));
+                    this.addPotionEffect(new PotionEffect(Potion.invisibility.id, 200, 0));
+                    this.addPotionEffect(new PotionEffect(Potion.damageBoost.id, 200, 0));
+                }
             }
-            --this.eatingTick;
-        }
-        if (!this.worldObj.isRemote && this.riddenByEntity instanceof EntityPlayer) {
-            entityplayer = (EntityPlayer)this.riddenByEntity;
-            if (LOTRLevelData.getData(entityplayer).getAlignment(this.getFaction()) < 50.0f) {
-                entityplayer.mountEntity(null);
-            } else if (this.isNPCTamed() && this.isMountSaddled()) {
-                LOTRLevelData.getData(entityplayer).addAchievement(LOTRAchievement.rideWarg);
+            if (this.eatingTick > 0) {
+                if (this.eatingTick % 4 == 0) {
+                    this.worldObj.playSoundAtEntity((Entity)this, "random.eat", 0.5f + 0.5f * (float)this.rand.nextInt(2), 0.4f + this.rand.nextFloat() * 0.2f);
+                }
+                --this.eatingTick;
             }
-        } else if ((this.worldObj.isRemote || !(this.riddenByEntity instanceof LOTREntityNPC)) && !this.worldObj.isRemote && this.riddenByEntity != null && (isRiderInPrivateArea = LOTRBannerProtection.isProtected(this.worldObj, (int)this.posX, (int)this.posY, (int)this.posZ, LOTRBannerProtection.forPlayer((EntityPlayer)this.riddenByEntity), true))) {
-            this.riddenByEntity.mountEntity(null);
         }
     }
 
     @Override
     public boolean interact(EntityPlayer entityplayer) {
         boolean hasRequiredAlignment;
-        if (!this.worldObj.isRemote && LOTRBannerProtection.isProtected(this.worldObj, (int)this.posX, (int)this.posY, (int)this.posZ, LOTRBannerProtection.forPlayer(entityplayer), true)) {
+        if (!this.worldObj.isRemote && LOTRBannerProtection.isProtected(this.worldObj, (int)this.posX, (int)this.posY, (int)this.posZ, LOTRBannerProtection.forPlayer(entityplayer, LOTRBannerProtection.Permission.FOOD), true)) {
             return true;
         }
         if (this.hiredNPCInfo.isActive) {

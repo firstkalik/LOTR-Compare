@@ -30,6 +30,7 @@ import lotr.common.entity.npc.LOTREntityNPC;
 import lotr.common.entity.npc.LOTREntityOrc;
 import lotr.common.entity.npc.LOTRHiredNPCInfo;
 import lotr.common.entity.npc.LOTRInventoryNPCItems;
+import lotr.common.entity.npc.LOTRMercenary;
 import lotr.common.fac.LOTRFaction;
 import lotr.common.quest.LOTRMiniQuest;
 import lotr.common.quest.LOTRMiniQuestFactory;
@@ -52,7 +53,8 @@ import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 
 public class LOTREntityAngmarOrcWarrior
-extends LOTREntityOrc {
+extends LOTREntityOrc
+implements LOTRMercenary {
     public static float BERSERKER_SCALE = 1.1f;
 
     public LOTREntityAngmarOrcWarrior(World world) {
@@ -86,7 +88,9 @@ extends LOTREntityOrc {
         this.setCurrentItemOrArmor(1, new ItemStack(LOTRMod.bootsMorgul));
         this.setCurrentItemOrArmor(2, new ItemStack(LOTRMod.legsMorgul));
         this.setCurrentItemOrArmor(3, new ItemStack(LOTRMod.bodyMorgul));
-        this.setCurrentItemOrArmor(4, new ItemStack(LOTRMod.helmetMorgul));
+        if (this.rand.nextInt(10) != 0) {
+            this.setCurrentItemOrArmor(4, new ItemStack(LOTRMod.helmetMorgul));
+        }
         return data;
     }
 
@@ -98,7 +102,7 @@ extends LOTREntityOrc {
 
     @Override
     public LOTRFaction getFaction() {
-        return LOTRFaction.GUNDABAD;
+        return LOTRFaction.ANGMAR;
     }
 
     @Override
@@ -108,7 +112,7 @@ extends LOTREntityOrc {
 
     @Override
     protected LOTRAchievement getKillAchievement() {
-        return LOTRAchievement.killAngmarOrc;
+        return LOTRAchievement.killMorgulAngmarOrc;
     }
 
     @Override
@@ -126,7 +130,7 @@ extends LOTREntityOrc {
     @Override
     protected void dropOrcItems(boolean flag, int i) {
         if (this.rand.nextInt(6) == 0) {
-            this.dropChestContents(LOTRChestContents.ANGMAR_TENT, 1, 2 + i);
+            this.dropChestContents(LOTRChestContents.LOTRChestContents2.ANGMAR_MORGUL, 1, 2 + i);
         }
     }
 
@@ -154,9 +158,36 @@ extends LOTREntityOrc {
         return LOTRMiniQuestFactory.ANGMAR.createQuest(this);
     }
 
+    public void addPotionEffect(PotionEffect effect) {
+        if (effect.getPotionID() == Potion.wither.id) {
+            return;
+        }
+        super.addPotionEffect(effect);
+    }
+
     @Override
     public LOTRMiniQuestFactory getBountyHelpSpeechDir() {
         return LOTRMiniQuestFactory.ANGMAR;
+    }
+
+    @Override
+    public int getMercBaseCost() {
+        return 90;
+    }
+
+    @Override
+    public float getMercAlignmentRequired() {
+        return 500.0f;
+    }
+
+    @Override
+    public boolean canTradeWith(EntityPlayer entityplayer) {
+        return LOTRLevelData.getData(entityplayer).getAlignment(this.getFaction()) >= 0.0f && this.isFriendly(entityplayer);
+    }
+
+    @Override
+    public void onUnitTrade(EntityPlayer entityplayer) {
+        LOTRLevelData.getData(entityplayer).addAchievement(LOTRAchievement.hireMorgulMercenary);
     }
 }
 

@@ -559,7 +559,10 @@ public class LOTRReplacedMethods {
             if (thisPotion.id == Potion.weakness.id) {
                 return -0.5 * (double)(level + 1);
             }
-            return 0.5 * (double)(level + 1);
+            if (thisPotion.id == Potion.damageBoost.id) {
+                return 0.2 * (double)(level + 1);
+            }
+            return 0.0;
         }
     }
 

@@ -17,7 +17,9 @@ import lotr.common.LOTRMod;
 import lotr.common.entity.animal.LOTREntityBear;
 import lotr.common.entity.animal.LOTREntityCrebain;
 import lotr.common.entity.animal.LOTREntityDeer;
+import lotr.common.entity.animal.LOTREntityFox;
 import lotr.common.entity.npc.LOTREntityGaladhrimTrader;
+import lotr.common.entity.npc.LOTREntityRadaghast;
 import lotr.common.world.biome.LOTRBiome;
 import lotr.common.world.biome.LOTRBiomeDecorator;
 import lotr.common.world.biome.LOTRMusicRegion;
@@ -41,6 +43,7 @@ extends LOTRBiome {
         this.spawnableCreatureList.add(new BiomeGenBase.SpawnListEntry(LOTREntityDeer.class, 30, 4, 6));
         this.spawnableCreatureList.add(new BiomeGenBase.SpawnListEntry(LOTREntityBear.class, 4, 1, 4));
         this.spawnableLOTRAmbientList.add(new BiomeGenBase.SpawnListEntry(LOTREntityCrebain.class, 6, 4, 4));
+        this.spawnableCreatureList.add(new BiomeGenBase.SpawnListEntry(LOTREntityFox.class, 4, 1, 4));
         LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer = new LOTRBiomeSpawnList.SpawnListContainer[]{LOTRBiomeSpawnList.entry(LOTRSpawnList.ENTS, 10), LOTRBiomeSpawnList.entry(LOTRSpawnList.HUORNS, 20)};
         this.npcSpawnList.newFactionList(100).add(arrspawnListContainer);
         LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer2 = new LOTRBiomeSpawnList.SpawnListContainer[]{LOTRBiomeSpawnList.entry(LOTRSpawnList.GUNDABAD_ORCS, 10), LOTRBiomeSpawnList.entry(LOTRSpawnList.GUNDABAD_WARGS, 2), LOTRBiomeSpawnList.entry(LOTRSpawnList.GUNDABAD_URUKS, 2).setConquestThreshold(50.0f)};
@@ -89,6 +92,7 @@ extends LOTRBiome {
         this.biomeColors.setSky(7774322);
         this.biomeColors.setFog(3308875);
         this.biomeColors.setFoggy(true);
+        this.registerTravellingTrader(LOTREntityRadaghast.class);
         this.registerTravellingTrader(LOTREntityGaladhrimTrader.class);
         this.setBanditChance(LOTREventSpawner.EventChance.NEVER);
     }

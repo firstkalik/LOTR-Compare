@@ -53,7 +53,7 @@ extends LOTRVillageGen {
     }
 
     @Override
-    protected LOTRVillageGen.AbstractInstance<?> createVillageInstance(World world, int i, int k, Random random, LocationInfo loc) {
+    public LOTRVillageGen.AbstractInstance<?> createVillageInstance(World world, int i, int k, Random random, LocationInfo loc) {
         return new Instance(this, world, i, k, random, loc);
     }
 
@@ -65,12 +65,12 @@ extends LOTRVillageGen {
 
     public static class Instance
     extends LOTRVillageGen.AbstractInstance<LOTRVillageGenBree> {
+        public static boolean[][] hobbitPathLookup;
+        public static int[] hobbitBurrowPathPoints;
+        public static int[] hobbitBurrowEndPoints;
         public VillageType villageType;
-        private int innerSize;
-        private boolean hamletHedge;
-        private static boolean[][] hobbitPathLookup;
-        private static int[] hobbitBurrowPathPoints;
-        private static int[] hobbitBurrowEndPoints;
+        public int innerSize;
+        public boolean hamletHedge;
 
         public Instance(LOTRVillageGenBree village, World world, int i, int k, Random random, LocationInfo loc) {
             super(village, world, i, k, random, loc);
@@ -135,14 +135,73 @@ extends LOTRVillageGen {
         }
 
         @Override
-        protected void setupVillageProperties(Random random) {
-            if (this.locationInfo.isFixedLocation()) {
-                this.villageType = VillageType.VILLAGE;
-            } else {
-                this.villageType = VillageType.HAMLET;
-                this.innerSize = MathHelper.getRandomIntegerInRange((Random)random, (int)12, (int)14);
-                this.hamletHedge = random.nextBoolean();
+        public void addVillageStructures(Random random) {
+            if (this.villageType == VillageType.HAMLET) {
+                this.setupHamlet(random);
+            } else if (this.villageType == VillageType.VILLAGE) {
+                this.setupVillage(random);
             }
+        }
+
+        public LOTRWorldGenStructureBase2 getHamletHouse(Random random) {
+            if (random.nextInt(3) == 0) {
+                return new LOTRWorldGenBreeHobbitBurrow(false);
+            }
+            if (random.nextInt(8) == 0) {
+                return new LOTRWorldGenBreeRuffianHouse(false);
+            }
+            return new LOTRWorldGenBreeHouse(false);
+        }
+
+        public LOTRWorldGenStructureBase2 getHamletHouseOrOther(Random random) {
+            if (random.nextInt(3) == 0) {
+                float f = random.nextFloat();
+                if (f < 0.08f) {
+                    return new LOTRWorldGenBreeBarn(false);
+                }
+                if (f < 0.16f) {
+                    return new LOTRWorldGenBreeStable(false);
+                }
+                if (f < 0.4f) {
+                    return new LOTRWorldGenBreeSmithy(false);
+                }
+                if (f < 0.7f) {
+                    return new LOTRWorldGenBreeOffice(false);
+                }
+                return new LOTRWorldGenBreeInn(false);
+            }
+            return this.getHamletHouse(random);
+        }
+
+        @Override
+        public LOTRRoadType getPath(Random random, int i, int k) {
+            int i1 = Math.abs(i);
+            int k1 = Math.abs(k);
+            if (this.villageType == VillageType.HAMLET) {
+                int dSq = i * i + k * k;
+                int imn = this.innerSize + random.nextInt(3);
+                if (dSq < imn * imn) {
+                    return LOTRRoadType.PATH;
+                }
+                if (this.hamletHedge && k < 0 && k > -(this.innerSize + 32 + 2) && i1 <= 2 + random.nextInt(3)) {
+                    return LOTRRoadType.PATH;
+                }
+            }
+            if (this.villageType == VillageType.VILLAGE) {
+                if (i1 <= 192 && k1 <= 3) {
+                    return LOTRRoadType.PAVED_PATH;
+                }
+                if (k >= -192 && k <= 50 && i1 <= 3) {
+                    return LOTRRoadType.PAVED_PATH;
+                }
+                if (i1 <= 70 && Math.abs(k - -100) <= 3) {
+                    return LOTRRoadType.PAVED_PATH;
+                }
+                if (i >= -180 && i <= 180 && k >= -180 && k <= 180 && hobbitPathLookup[k + 180][i + 180]) {
+                    return LOTRRoadType.PAVED_PATH;
+                }
+            }
+            return null;
         }
 
         @Override
@@ -151,15 +210,11 @@ extends LOTRVillageGen {
         }
 
         @Override
-        protected void addVillageStructures(Random random) {
-            if (this.villageType == VillageType.HAMLET) {
-                this.setupHamlet(random);
-            } else if (this.villageType == VillageType.VILLAGE) {
-                this.setupVillage(random);
-            }
+        public boolean isVillageSpecificSurface(World world, int i, int j, int k) {
+            return false;
         }
 
-        private void setupHamlet(Random random) {
+        public void setupHamlet(Random random) {
             this.addStructure(new LOTRWorldGenNPCRespawner(false){
 
                 @Override
@@ -248,37 +303,7 @@ extends LOTRVillageGen {
             }
         }
 
-        private LOTRWorldGenStructureBase2 getHamletHouse(Random random) {
-            if (random.nextInt(3) == 0) {
-                return new LOTRWorldGenBreeHobbitBurrow(false);
-            }
-            if (random.nextInt(8) == 0) {
-                return new LOTRWorldGenBreeRuffianHouse(false);
-            }
-            return new LOTRWorldGenBreeHouse(false);
-        }
-
-        private LOTRWorldGenStructureBase2 getHamletHouseOrOther(Random random) {
-            if (random.nextInt(3) == 0) {
-                float f = random.nextFloat();
-                if (f < 0.08f) {
-                    return new LOTRWorldGenBreeBarn(false);
-                }
-                if (f < 0.16f) {
-                    return new LOTRWorldGenBreeStable(false);
-                }
-                if (f < 0.4f) {
-                    return new LOTRWorldGenBreeSmithy(false);
-                }
-                if (f < 0.7f) {
-                    return new LOTRWorldGenBreeOffice(false);
-                }
-                return new LOTRWorldGenBreeInn(false);
-            }
-            return this.getHamletHouse(random);
-        }
-
-        private void setupVillage(Random random) {
+        public void setupVillage(Random random) {
             int hobbitX;
             int hobbitZ;
             int l;
@@ -463,39 +488,14 @@ extends LOTRVillageGen {
         }
 
         @Override
-        protected LOTRRoadType getPath(Random random, int i, int k) {
-            int i1 = Math.abs(i);
-            int k1 = Math.abs(k);
-            if (this.villageType == VillageType.HAMLET) {
-                int dSq = i * i + k * k;
-                int imn = this.innerSize + random.nextInt(3);
-                if (dSq < imn * imn) {
-                    return LOTRRoadType.PATH;
-                }
-                if (this.hamletHedge && k < 0 && k > -(this.innerSize + 32 + 2) && i1 <= 2 + random.nextInt(3)) {
-                    return LOTRRoadType.PATH;
-                }
+        public void setupVillageProperties(Random random) {
+            if (this.locationInfo.isFixedLocation()) {
+                this.villageType = VillageType.VILLAGE;
+            } else {
+                this.villageType = VillageType.HAMLET;
+                this.innerSize = MathHelper.getRandomIntegerInRange((Random)random, (int)12, (int)14);
+                this.hamletHedge = random.nextBoolean();
             }
-            if (this.villageType == VillageType.VILLAGE) {
-                if (i1 <= 192 && k1 <= 3) {
-                    return LOTRRoadType.PAVED_PATH;
-                }
-                if (k >= -192 && k <= 50 && i1 <= 3) {
-                    return LOTRRoadType.PAVED_PATH;
-                }
-                if (i1 <= 70 && Math.abs(k - -100) <= 3) {
-                    return LOTRRoadType.PAVED_PATH;
-                }
-                if (i >= -180 && i <= 180 && k >= -180 && k <= 180 && hobbitPathLookup[k + 180][i + 180]) {
-                    return LOTRRoadType.PAVED_PATH;
-                }
-            }
-            return null;
-        }
-
-        @Override
-        public boolean isVillageSpecificSurface(World world, int i, int j, int k) {
-            return false;
         }
 
     }

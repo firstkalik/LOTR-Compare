@@ -27,6 +27,7 @@
  *  net.minecraft.world.IBlockAccess
  *  net.minecraft.world.World
  *  net.minecraftforge.common.util.ForgeDirection
+ *  org.apache.commons.lang3.tuple.Pair
  */
 package lotr.common.item;
 
@@ -42,6 +43,7 @@ import lotr.common.LOTRBannerProtection;
 import lotr.common.LOTRConfig;
 import lotr.common.LOTRCreativeTabs;
 import lotr.common.LOTRLevelData;
+import lotr.common.LOTRMod;
 import lotr.common.entity.item.LOTREntityBanner;
 import lotr.common.entity.item.LOTREntityBannerWall;
 import lotr.common.fac.LOTRAlignmentValues;
@@ -67,11 +69,27 @@ import net.minecraft.util.StatCollector;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import org.apache.commons.lang3.tuple.Pair;
 
 public class LOTRItemBanner
 extends Item {
     @SideOnly(value=Side.CLIENT)
     private IIcon[] bannerIcons;
+    private static final Pair<Block, Integer> BRONZE = Pair.of((Object)LOTRMod.blockOreStorage, (Object)2);
+    private static final Pair<Block, Integer> SILVER = Pair.of((Object)LOTRMod.blockOreStorage, (Object)3);
+    private static final Pair<Block, Integer> GOLD = Pair.of((Object)Blocks.gold_block, (Object)0);
+    private static final Pair<Block, Integer> GOLDRAW = Pair.of((Object)LOTRMod.blockOreStorage2, (Object)4);
+    private static final Pair<Block, Integer> GEM0 = Pair.of((Object)LOTRMod.blockGem, (Object)0);
+    private static final Pair<Block, Integer> GEM1 = Pair.of((Object)LOTRMod.blockGem, (Object)1);
+    private static final Pair<Block, Integer> GEM2 = Pair.of((Object)LOTRMod.blockGem, (Object)2);
+    private static final Pair<Block, Integer> GEM3 = Pair.of((Object)LOTRMod.blockGem, (Object)3);
+    private static final Pair<Block, Integer> GEM4 = Pair.of((Object)LOTRMod.blockGem, (Object)4);
+    private static final Pair<Block, Integer> GEM5 = Pair.of((Object)LOTRMod.blockGem, (Object)5);
+    private static final Pair<Block, Integer> GEM6 = Pair.of((Object)LOTRMod.blockGem, (Object)6);
+    private static final Pair<Block, Integer> GEM7 = Pair.of((Object)LOTRMod.blockGem, (Object)7);
+    private static final Pair<Block, Integer> GEM8 = Pair.of((Object)LOTRMod.blockGem, (Object)8);
+    private static final Pair<Block, Integer> GEM9 = Pair.of((Object)LOTRMod.blockGem, (Object)9);
+    private static final Pair<Block, Integer> MITHRIL = Pair.of((Object)LOTRMod.blockOreStorage, (Object)4);
 
     public LOTRItemBanner() {
         this.setCreativeTab((CreativeTabs)LOTRCreativeTabs.tabDeco);
@@ -190,6 +208,18 @@ extends Item {
                         }
                         world.playSoundAtEntity((Entity)banner, Blocks.planks.stepSound.func_150496_b(), (Blocks.planks.stepSound.getVolume() + 1.0f) / 2.0f, Blocks.planks.stepSound.getPitch() * 0.8f);
                         --itemstack.stackSize;
+                        Pair blockPair = Pair.of((Object)block, (Object)meta);
+                        if (blockPair.equals(BRONZE)) {
+                            LOTRLevelData.getData(entityplayer).addAchievement(LOTRAchievement.setBronze);
+                        } else if (blockPair.equals(SILVER)) {
+                            LOTRLevelData.getData(entityplayer).addAchievement(LOTRAchievement.setSilver);
+                        } else if (blockPair.equals(GOLD) || blockPair.equals(GOLDRAW)) {
+                            LOTRLevelData.getData(entityplayer).addAchievement(LOTRAchievement.setGold);
+                        } else if (blockPair.equals(MITHRIL)) {
+                            LOTRLevelData.getData(entityplayer).addAchievement(LOTRAchievement.setMithril);
+                        } else if (blockPair.equals(GEM0) || blockPair.equals(GEM1) || blockPair.equals(GEM2) || blockPair.equals(GEM3) || blockPair.equals(GEM4) || blockPair.equals(GEM5) || blockPair.equals(GEM6) || blockPair.equals(GEM7) || blockPair.equals(GEM8) || blockPair.equals(GEM9)) {
+                            LOTRLevelData.getData(entityplayer).addAchievement(LOTRAchievement.setBlockGem);
+                        }
                         return true;
                     }
                     banner.setDead();
@@ -281,7 +311,7 @@ extends Item {
         RHUN(35, "rhun", LOTRFaction.RHUDEL),
         RIVENDELL(36, "rivendell", LOTRFaction.HIGH_ELF),
         ESGAROTH(37, "esgaroth", LOTRFaction.DALE),
-        UMBAR(38, "umbar", LOTRFaction.NEAR_HARAD),
+        UMBAR(38, "umbar", LOTRFaction.UMBAR),
         HARAD_NOMAD(39, "haradNomad", LOTRFaction.NEAR_HARAD),
         HARAD_GULF(40, "haradGulf", LOTRFaction.NEAR_HARAD),
         BREE(41, "bree", LOTRFaction.BREE),

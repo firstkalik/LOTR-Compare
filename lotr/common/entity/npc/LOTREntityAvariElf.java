@@ -18,6 +18,8 @@
  *  net.minecraft.init.Blocks
  *  net.minecraft.item.Item
  *  net.minecraft.item.ItemStack
+ *  net.minecraft.potion.Potion
+ *  net.minecraft.potion.PotionEffect
  *  net.minecraft.util.AxisAlignedBB
  *  net.minecraft.util.MathHelper
  *  net.minecraft.world.World
@@ -30,6 +32,7 @@ import lotr.common.LOTRAchievement;
 import lotr.common.LOTRFoods;
 import lotr.common.LOTRLevelData;
 import lotr.common.LOTRMod;
+import lotr.common.LOTRPotions;
 import lotr.common.entity.ai.LOTREntityAINearestAttackableTargetBasic;
 import lotr.common.entity.ai.LOTREntityAINearestAttackableTargetWoodElf;
 import lotr.common.entity.ai.LOTREntityAIRangedAttack;
@@ -64,6 +67,8 @@ import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
@@ -80,6 +85,14 @@ extends LOTREntityElf {
     @Override
     protected LOTRFoods getElfDrinks() {
         return LOTRFoods.WOOD_ELF_DRINK;
+    }
+
+    @Override
+    public void addPotionEffect(PotionEffect effect) {
+        if (effect.getPotionID() == LOTRPotions.blood.id) {
+            return;
+        }
+        super.addPotionEffect(effect);
     }
 
     @Override

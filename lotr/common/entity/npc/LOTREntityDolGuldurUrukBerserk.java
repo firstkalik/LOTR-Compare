@@ -59,10 +59,10 @@ extends LOTREntityDolGuldurUruk {
         data = super.onSpawnWithEgg(data);
         this.npcItemsInv.setMeleeWeapon(new ItemStack(LOTRMod.swordDolGuldurUrukPoisoned));
         this.npcItemsInv.setIdleItem(this.npcItemsInv.getMeleeWeapon());
-        this.setCurrentItemOrArmor(1, new ItemStack(LOTRMod.bootsguldururuk));
-        this.setCurrentItemOrArmor(2, new ItemStack(LOTRMod.legsguldururuk));
-        this.setCurrentItemOrArmor(3, new ItemStack(LOTRMod.bodyguldururuk));
-        this.setCurrentItemOrArmor(4, new ItemStack(LOTRMod.helmetguldururuk));
+        this.setCurrentItemOrArmor(1, new ItemStack(LOTRMod.bootsguldururukberserk));
+        this.setCurrentItemOrArmor(2, new ItemStack(LOTRMod.legsguldururukberserk));
+        this.setCurrentItemOrArmor(3, new ItemStack(LOTRMod.bodyguldururukberserk));
+        this.setCurrentItemOrArmor(4, new ItemStack(LOTRMod.helmetguldururukberserk));
         return data;
     }
 

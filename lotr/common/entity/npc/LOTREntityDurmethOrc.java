@@ -3,6 +3,8 @@
  * 
  * Could not load the following classes:
  *  net.minecraft.block.Block
+ *  net.minecraft.block.BlockGrass
+ *  net.minecraft.block.BlockSand
  *  net.minecraft.entity.EntityCreature
  *  net.minecraft.entity.IEntityLivingData
  *  net.minecraft.entity.SharedMonsterAttributes
@@ -16,6 +18,7 @@
  *  net.minecraft.item.Item
  *  net.minecraft.item.ItemArmor
  *  net.minecraft.item.ItemStack
+ *  net.minecraft.util.AxisAlignedBB
  *  net.minecraft.util.MathHelper
  *  net.minecraft.world.World
  */
@@ -35,8 +38,11 @@ import lotr.common.entity.npc.LOTRInventoryNPCItems;
 import lotr.common.fac.LOTRFaction;
 import lotr.common.quest.LOTRMiniQuest;
 import lotr.common.quest.LOTRMiniQuestFactory;
+import lotr.common.world.biome.LOTRBiomeGenNearHarad;
 import lotr.common.world.structure.LOTRChestContents;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockGrass;
+import net.minecraft.block.BlockSand;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -50,11 +56,13 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
 public class LOTREntityDurmethOrc
-extends LOTREntityOrc {
+extends LOTREntityOrc
+implements LOTRBiomeGenNearHarad.ImmuneToFrost {
     private static ItemStack[] weapons = new ItemStack[]{new ItemStack(Items.stone_sword), new ItemStack(Items.stone_axe), new ItemStack(Items.stone_pickaxe), new ItemStack(Items.iron_sword), new ItemStack(Items.iron_axe), new ItemStack(Items.iron_pickaxe), new ItemStack(LOTRMod.daggerIron), new ItemStack(LOTRMod.daggerIronPoisoned), new ItemStack(LOTRMod.battleaxeIron), new ItemStack(LOTRMod.swordBronze), new ItemStack(LOTRMod.axeBronze), new ItemStack(LOTRMod.pickaxeBronze), new ItemStack(LOTRMod.daggerBronze), new ItemStack(LOTRMod.daggerBronzePoisoned), new ItemStack(LOTRMod.battleaxeBronze), new ItemStack(LOTRMod.swordAngmar), new ItemStack(LOTRMod.axeAngmar), new ItemStack(LOTRMod.pickaxeAngmar), new ItemStack(LOTRMod.daggerAngmar), new ItemStack(LOTRMod.daggerAngmarPoisoned), new ItemStack(LOTRMod.battleaxeAngmar), new ItemStack(LOTRMod.hammerAngmar), new ItemStack(LOTRMod.scimitarOrc), new ItemStack(LOTRMod.axeOrc), new ItemStack(LOTRMod.pickaxeOrc), new ItemStack(LOTRMod.daggerOrc), new ItemStack(LOTRMod.daggerOrcPoisoned), new ItemStack(LOTRMod.battleaxeOrc), new ItemStack(LOTRMod.hammerOrc), new ItemStack(LOTRMod.polearmOrc), new ItemStack(LOTRMod.swordDolGuldur), new ItemStack(LOTRMod.axeDolGuldur), new ItemStack(LOTRMod.pickaxeDolGuldur), new ItemStack(LOTRMod.daggerDolGuldur), new ItemStack(LOTRMod.daggerDolGuldurPoisoned), new ItemStack(LOTRMod.battleaxeDolGuldur), new ItemStack(LOTRMod.hammerDolGuldur), new ItemStack(LOTRMod.swordDolGuldurUruk), new ItemStack(LOTRMod.battleaxeDolGuldurUruk), new ItemStack(LOTRMod.hammerDolGuldurUruk), new ItemStack(LOTRMod.pikeDolGuldurUruk), new ItemStack(LOTRMod.daggerDolGuldurUruk), new ItemStack(LOTRMod.daggerDolGuldurUrukPoisoned), new ItemStack(LOTRMod.polearmAngmar), new ItemStack(LOTRMod.pikeDolGuldur)};
     private static ItemStack[] spears = new ItemStack[]{new ItemStack(LOTRMod.spearIron), new ItemStack(LOTRMod.spearBronze), new ItemStack(LOTRMod.spearStone), new ItemStack(LOTRMod.spearAngmar), new ItemStack(LOTRMod.spearOrc), new ItemStack(LOTRMod.spearDolGuldur), new ItemStack(LOTRMod.spearGundabadUruk)};
     private static ItemStack[] helmets = new ItemStack[]{new ItemStack((Item)Items.leather_helmet), new ItemStack(LOTRMod.helmetBronze), new ItemStack(LOTRMod.helmetUrukChainmail), new ItemStack(LOTRMod.helmetFur), new ItemStack(LOTRMod.helmetBone), new ItemStack(LOTRMod.helmetAngmar), new ItemStack(LOTRMod.helmetOrc), new ItemStack(LOTRMod.helmetDolGuldur)};
@@ -134,6 +142,11 @@ extends LOTREntityOrc {
             dirt.setStackDisplayName("\u00a7eCharm");
             this.entityDropItem(dirt, 0.0f);
         }
+        if (this.rand.nextInt(8000) == 0) {
+            dirt = new ItemStack(LOTRMod.magicClover);
+            dirt.setStackDisplayName("\u00a7eClooooooooover");
+            this.entityDropItem(dirt, 0.0f);
+        }
     }
 
     @Override
@@ -158,6 +171,14 @@ extends LOTREntityOrc {
     @Override
     public LOTRMiniQuest createMiniQuest() {
         return LOTRMiniQuestFactory.DURMETH.createQuest(this);
+    }
+
+    @Override
+    public boolean getCanSpawnHere() {
+        int i = MathHelper.floor_double((double)this.posX);
+        int j = MathHelper.floor_double((double)this.boundingBox.minY);
+        int k = MathHelper.floor_double((double)this.posZ);
+        return j > 30 && (this.worldObj.getBlock(i, j - 1, k) == Blocks.snow || this.worldObj.getBlock(i, j - 1, k) == Blocks.grass || this.worldObj.getBlock(i, j - 1, k) == Blocks.sand && this.worldObj.getBlockMetadata(i, j - 1, k) == 0 || this.worldObj.getBlock(i, j - 1, k) == Blocks.sand && this.worldObj.getBlockMetadata(i, j - 1, k) == 1 || this.worldObj.getBlock(i, j - 1, k) == LOTRMod.rock && this.worldObj.getBlockMetadata(i, j - 1, k) == 4);
     }
 
     @Override

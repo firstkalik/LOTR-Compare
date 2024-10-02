@@ -43,7 +43,6 @@ import lotr.common.entity.npc.LOTRFamilyInfo;
 import lotr.common.entity.npc.LOTRInventoryNPCItems;
 import lotr.common.entity.npc.LOTRNames;
 import lotr.common.entity.npc.LOTRTradeEntries;
-import lotr.common.entity.npc.LOTRTradeable;
 import lotr.common.entity.npc.LOTRTravellingTrader;
 import lotr.common.fac.LOTRFaction;
 import net.minecraft.entity.Entity;
@@ -72,8 +71,7 @@ import net.minecraft.world.World;
 
 public class LOTREntityPallando
 extends LOTREntityNPC
-implements LOTRTradeable.Smith,
-LOTRTravellingTrader {
+implements LOTRTravellingTrader {
     public LOTREntityPallando(World world) {
         super(world);
         this.setSize(0.6f, 1.8f);
@@ -190,9 +188,9 @@ LOTRTravellingTrader {
     @Override
     public String getSpeechBank(EntityPlayer entityplayer) {
         if (this.isFriendly(entityplayer)) {
-            return "char/gandalf/friendly";
+            return "char/pallando/friendly";
         }
-        return "char/gandalf/hostile";
+        return "char/pallando/hostile";
     }
 
     @Override
@@ -217,7 +215,7 @@ LOTRTravellingTrader {
 
     @Override
     public String getDepartureSpeech() {
-        return "misc/scrapTrader/departure";
+        return "misc/pallando/depart";
     }
 }
 

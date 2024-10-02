@@ -30,15 +30,10 @@ import net.minecraft.world.World;
 
 public class LOTRWorldGenBreeGatehouse
 extends LOTRWorldGenBreeStructure {
-    private String villageName = "Village";
+    public String villageName = "Village";
 
     public LOTRWorldGenBreeGatehouse(boolean flag) {
         super(flag);
-    }
-
-    public LOTRWorldGenBreeGatehouse setName(String name) {
-        this.villageName = name;
-        return this;
     }
 
     @Override
@@ -137,6 +132,11 @@ extends LOTRWorldGenBreeStructure {
         this.placeWallBanner(world, 4, 6, 1, LOTRItemBanner.BannerType.BREE, 0);
         this.placeWallBanner(world, -4, 6, 6, LOTRItemBanner.BannerType.BREE, 1);
         return true;
+    }
+
+    public LOTRWorldGenBreeGatehouse setName(String name) {
+        this.villageName = name;
+        return this;
     }
 }
 

@@ -12,8 +12,10 @@ package lotr.common.entity.npc;
 import java.util.Random;
 import lotr.common.LOTRMod;
 import lotr.common.LOTRShields;
+import lotr.common.entity.animal.LOTREntityWildBoar;
 import lotr.common.entity.npc.LOTREntityBlueDwarf;
 import lotr.common.entity.npc.LOTRInventoryNPCItems;
+import lotr.common.entity.npc.LOTRNPCMount;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -24,6 +26,13 @@ extends LOTREntityBlueDwarf {
     public LOTREntityBlueDwarfWarrior(World world) {
         super(world);
         this.npcShield = LOTRShields.ALIGNMENT_BLUE_MOUNTAINS;
+    }
+
+    @Override
+    public LOTRNPCMount createMountToRide() {
+        LOTREntityWildBoar boar = new LOTREntityWildBoar(this.worldObj);
+        boar.setMountArmor(new ItemStack(LOTRMod.boarArmorBlueDwarven));
+        return boar;
     }
 
     @Override

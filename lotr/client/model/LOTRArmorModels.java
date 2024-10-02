@@ -117,6 +117,7 @@ public class LOTRArmorModels {
             map.put(LOTRMod.gandalfhat, new LOTRModelWizardHat());
             map.put(LOTRMod.helmetElven, new LOTRModelGaladhrimHelmet(1.0f));
             map.put(LOTRMod.helmetguldururuk, new LOTRModelhelmetguldururuk(1.0f));
+            map.put(LOTRMod.helmetguldururukberserk, new LOTRModelBlackUrukHelmet(1.0f));
             map.put(LOTRMod.helmetAngband, new LOTRModelAngbandHelmet(1.0f));
             map.put(LOTRMod.helmetangbande, new LOTRModelGundabadUrukHelmet(1.0f));
             map.put(LOTRMod.helmetGondorWinged, new LOTRModelWingedHelmet(1.0f));
@@ -134,7 +135,16 @@ public class LOTRArmorModels {
             map.put(LOTRMod.legsHaradRobes, new LOTRModelHaradRobes(0.5f));
             map.put(LOTRMod.bootsHaradRobes, new LOTRModelHaradRobes(1.0f));
             map.put(LOTRMod.helmetGondolin, new LOTRModelGondolinHelmet(1.0f));
+            map.put(LOTRMod.helmetGalvorn, new LOTRModelGondolinHelmet(1.0f));
             map.put(LOTRMod.helmetDain, new LOTRModelGondolinHelmet(1.0f));
+            map.put(LOTRMod.helmetEreborGoldCommander, new LOTRModelGondolinHelmet(1.0f));
+            map.put(LOTRMod.helmetEreborSilverCommander, new LOTRModelGondolinHelmet(1.0f));
+            map.put(LOTRMod.helmetEreborMithrilCommander, new LOTRModelGondolinHelmet(1.0f));
+            map.put(LOTRMod.helmetDwarvenGoldCommander, new LOTRModelGondolinHelmet(1.0f));
+            map.put(LOTRMod.helmetDwarvenSilverCommander, new LOTRModelGondolinHelmet(1.0f));
+            map.put(LOTRMod.helmetDwarvenMithrilCommander, new LOTRModelGondolinHelmet(1.0f));
+            map.put(LOTRMod.helmetBlueDwarvenGoldCommander, new LOTRModelGondolinHelmet(1.0f));
+            map.put(LOTRMod.helmetBlueDwarvenSilverCommander, new LOTRModelGondolinHelmet(1.0f));
             map.put(LOTRMod.helmetRohanMarshal, new LOTRModelRohanMarshalHelmet(1.0f));
             map.put(LOTRMod.helmetTauredainChieftain, new LOTRModelTauredainChieftainHelmet(1.0f));
             map.put(LOTRMod.helmetTauredainGold, new LOTRModelTauredainGoldHelmet(1.0f));

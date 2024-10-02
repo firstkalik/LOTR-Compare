@@ -59,7 +59,7 @@ extends Item {
     }
 
     public int getMaxItemUseDuration(ItemStack itemstack) {
-        return 30;
+        return 20;
     }
 
     public EnumAction getItemUseAction(ItemStack itemstack) {

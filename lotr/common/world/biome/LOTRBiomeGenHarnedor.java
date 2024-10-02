@@ -106,6 +106,7 @@ extends LOTRBiome {
         this.decorator.addTree(LOTRTreeType.ALMOND, 5);
         this.decorator.addTree(LOTRTreeType.PLUM, 5);
         this.registerHaradFlowers();
+        this.addFlower(LOTRMod.miniCactus, 0, 2);
         this.biomeColors.setGrass(14538086);
         this.decorator.addRandomStructure(new LOTRWorldGenNearHaradDesertCamp(false), 3000);
         this.decorator.addRandomStructure(new LOTRWorldGenSmallStoneRuin(false), 600);
@@ -122,7 +123,7 @@ extends LOTRBiome {
         this.invasionSpawns.addInvasion(LOTRInvasions.GONDOR_ITHILIEN, LOTREventSpawner.EventChance.UNCOMMON);
         this.invasionSpawns.addInvasion(LOTRInvasions.NEAR_HARAD_HARNEDOR, LOTREventSpawner.EventChance.UNCOMMON);
         this.invasionSpawns.addInvasion(LOTRInvasions.NEAR_HARAD_COAST, LOTREventSpawner.EventChance.RARE);
-        this.invasionSpawns.addInvasion(LOTRInvasions.NEAR_HARAD_CORSAIR, LOTREventSpawner.EventChance.RARE);
+        this.invasionSpawns.addInvasion(LOTRInvasions.UMBAR_CORSAIR, LOTREventSpawner.EventChance.RARE);
     }
 
     @Override

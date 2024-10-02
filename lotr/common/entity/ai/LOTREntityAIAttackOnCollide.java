@@ -14,7 +14,6 @@
  *  net.minecraft.pathfinding.PathEntity
  *  net.minecraft.pathfinding.PathNavigate
  *  net.minecraft.util.AxisAlignedBB
- *  net.minecraft.util.MathHelper
  *  net.minecraft.world.World
  */
 package lotr.common.entity.ai;
@@ -37,7 +36,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.pathfinding.PathEntity;
 import net.minecraft.pathfinding.PathNavigate;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
 public class LOTREntityAIAttackOnCollide
@@ -84,13 +82,7 @@ extends EntityAIBase {
             return false;
         }
         this.attackTarget = this.theOwner.getAttackTarget();
-        if (this.attackTarget == null || !this.attackTarget.isEntityAlive()) {
-            return false;
-        }
-        if (this.sightNotRequired) {
-            return this.theOwner.isWithinHomeDistance(MathHelper.floor_double((double)this.attackTarget.posX), MathHelper.floor_double((double)this.attackTarget.posY), MathHelper.floor_double((double)this.attackTarget.posZ));
-        }
-        return !this.theOwner.getNavigator().noPath();
+        return this.attackTarget != null && this.attackTarget.isEntityAlive();
     }
 
     public void startExecuting() {

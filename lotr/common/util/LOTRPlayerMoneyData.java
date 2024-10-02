@@ -59,6 +59,15 @@ public class LOTRPlayerMoneyData {
         return ret;
     }
 
+    public void updateBalance(EntityPlayerMP player) {
+        this.sendUpdatedBalance(player);
+    }
+
+    public void sendUpdatedBalance(EntityPlayerMP player) {
+        LOTRPacketMoneyChange packet = new LOTRPacketMoneyChange(this.money);
+        packet.sendTo(player);
+    }
+
     /*
      * WARNING - Removed try catching itself - possible behaviour change.
      */

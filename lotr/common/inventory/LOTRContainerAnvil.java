@@ -671,6 +671,28 @@ extends Container {
         }
     }
 
+    private int getMetaIndexForCost(int cost) {
+        if (cost < 10) {
+            return 0;
+        }
+        if (cost < 100) {
+            return 1;
+        }
+        if (cost < 1000) {
+            return 2;
+        }
+        if (cost < 10000) {
+            return 3;
+        }
+        if (cost < 100000) {
+            return 4;
+        }
+        if (cost < 1000000) {
+            return 5;
+        }
+        return 6;
+    }
+
     public boolean hasMaterialOrCoinAmount(int cost) {
         if (this.isTrader) {
             return LOTRItemCoin.getInventoryValue(this.thePlayer, false) >= cost;
@@ -700,6 +722,22 @@ extends Container {
                     this.invInput.setInventorySlotContents(2, materialItem);
                 }
             }
+        }
+    }
+
+    private void updateItemMetadata(ItemStack itemStack, int cost) {
+        int metaIndex = this.getMetaIndexForCost(cost);
+        itemStack.setItemDamage(metaIndex);
+    }
+
+    public void applyMetadataToItems(int cost) {
+        ItemStack materialItem;
+        ItemStack inputItem = this.invInput.getStackInSlot(0);
+        if (inputItem != null) {
+            this.updateItemMetadata(inputItem, cost);
+        }
+        if ((materialItem = this.invInput.getStackInSlot(2)) != null) {
+            this.updateItemMetadata(materialItem, cost);
         }
     }
 

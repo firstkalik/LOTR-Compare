@@ -20,6 +20,7 @@ import lotr.common.LOTRAchievement;
 import lotr.common.LOTRMod;
 import lotr.common.entity.animal.LOTREntityBear;
 import lotr.common.entity.animal.LOTREntityDeer;
+import lotr.common.entity.animal.LOTREntityFox;
 import lotr.common.world.biome.LOTRBiome;
 import lotr.common.world.biome.LOTRBiomeDecorator;
 import lotr.common.world.biome.LOTRMusicRegion;
@@ -59,6 +60,7 @@ extends LOTRBiome {
         this.spawnableCreatureList.add(new BiomeGenBase.SpawnListEntry(EntityWolf.class, 10, 4, 8));
         this.spawnableCreatureList.add(new BiomeGenBase.SpawnListEntry(LOTREntityDeer.class, 2, 4, 8));
         this.spawnableCreatureList.add(new BiomeGenBase.SpawnListEntry(LOTREntityBear.class, 4, 1, 4));
+        this.spawnableCreatureList.add(new BiomeGenBase.SpawnListEntry(LOTREntityFox.class, 4, 1, 4));
         this.spawnableWaterCreatureList.clear();
         this.spawnableLOTRAmbientList.clear();
         LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer = new LOTRBiomeSpawnList.SpawnListContainer[]{LOTRBiomeSpawnList.entry(LOTRSpawnList.ANGMAR_ORCS, 30), LOTRBiomeSpawnList.entry(LOTRSpawnList.ANGMAR_BOMBARDIERS, 5), LOTRBiomeSpawnList.entry(LOTRSpawnList.ANGMAR_WARGS, 30), LOTRBiomeSpawnList.entry(LOTRSpawnList.TROLLS, 30), LOTRBiomeSpawnList.entry(LOTRSpawnList.HILL_TROLLS, 20), LOTRBiomeSpawnList.entry(LOTRSpawnList.SNOW_TROLLS, 5), LOTRBiomeSpawnList.entry(LOTRSpawnList.ANGMAR_HILLMEN, 20)};

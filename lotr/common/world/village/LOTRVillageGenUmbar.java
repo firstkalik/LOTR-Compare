@@ -51,7 +51,7 @@ extends LOTRVillageGenSouthron {
     }
 
     @Override
-    protected LOTRVillageGen.AbstractInstance<?> createVillageInstance(World world, int i, int k, Random random, LocationInfo loc) {
+    public LOTRVillageGen.AbstractInstance<?> createVillageInstance(World world, int i, int k, Random random, LocationInfo loc) {
         return new InstanceUmbar(this, world, i, k, random, loc);
     }
 
@@ -62,37 +62,70 @@ extends LOTRVillageGenSouthron {
         }
 
         @Override
-        protected void setCivilianSpawnClass(LOTREntityNPCRespawner spawner) {
-            spawner.setSpawnClass(LOTREntityUmbarian.class);
+        public LOTRWorldGenStructureBase2 getBarracks(Random random) {
+            return new LOTRWorldGenUmbarBarracks(false);
         }
 
         @Override
-        protected void setWarriorSpawnClasses(LOTREntityNPCRespawner spawner) {
-            spawner.setSpawnClasses(LOTREntityUmbarWarrior.class, LOTREntityUmbarArcher.class);
+        public LOTRWorldGenStructureBase2 getBazaar(Random random) {
+            return new LOTRWorldGenUmbarBazaar(false);
         }
 
         @Override
-        protected LOTRWorldGenStructureBase2 getWell(Random random) {
-            return new LOTRWorldGenUmbarWell(false);
+        public LOTRWorldGenStructureBase2 getFlowers(Random random) {
+            return new LOTRWorldGenUmbarTownFlowers(false);
         }
 
         @Override
-        protected LOTRWorldGenSouthronVillageSign getSignpost(Random random) {
-            return new LOTRWorldGenUmbarVillageSign(false);
+        public LOTRWorldGenStructureBase2 getFortCorner(Random random) {
+            return new LOTRWorldGenUmbarFortCorner(false);
         }
 
         @Override
-        protected LOTRWorldGenStructureBase2 getMansion(Random random) {
+        public LOTRWorldGenStructureBase2 getFortGate(Random random) {
+            return new LOTRWorldGenUmbarFortGate(false);
+        }
+
+        @Override
+        public LOTRWorldGenStructureBase2 getFortress(Random random) {
+            return new LOTRWorldGenUmbarFortress(false);
+        }
+
+        @Override
+        public LOTRWorldGenStructureBase2 getFortWallLong(Random random) {
+            return new LOTRWorldGenUmbarFortWall.Long(false);
+        }
+
+        @Override
+        public LOTRWorldGenStructureBase2 getFortWallShort(Random random) {
+            return new LOTRWorldGenUmbarFortWall.Short(false);
+        }
+
+        @Override
+        public LOTRWorldGenStructureBase2 getHouse(Random random) {
+            return new LOTRWorldGenUmbarHouse(false);
+        }
+
+        @Override
+        public LOTRWorldGenStructureBase2 getLamp(Random random) {
+            return new LOTRWorldGenUmbarLamp(false);
+        }
+
+        @Override
+        public LOTRWorldGenStructureBase2 getMansion(Random random) {
             return new LOTRWorldGenUmbarMansion(false);
         }
 
         @Override
-        protected LOTRWorldGenStructureBase2 getTavern(Random random) {
-            return new LOTRWorldGenUmbarTavern(false);
+        public LOTRWorldGenStructureBase2 getRandomFarm(Random random) {
+            if (random.nextBoolean()) {
+                return new LOTRWorldGenUmbarFarm(false);
+            }
+            return new LOTRWorldGenUmbarPasture(false);
         }
 
         @Override
-        protected LOTRWorldGenStructureBase2 getRandomHouse(Random random) {
+        public LOTRWorldGenStructureBase2 getRandomHouse(Random random) {
             if (random.nextInt(6) == 0) {
                 return new LOTRWorldGenUmbarSmithy(false);
             }
@@ -103,125 +136,92 @@ extends LOTRVillageGenSouthron {
         }
 
         @Override
-        protected LOTRWorldGenStructureBase2 getRandomFarm(Random random) {
-            if (random.nextBoolean()) {
-                return new LOTRWorldGenUmbarFarm(false);
-            }
-            return new LOTRWorldGenUmbarPasture(false);
+        public LOTRWorldGenSouthronVillageSign getSignpost(Random random) {
+            return new LOTRWorldGenUmbarVillageSign(false);
         }
 
         @Override
-        protected LOTRWorldGenStructureBase2 getHouse(Random random) {
-            return new LOTRWorldGenUmbarHouse(false);
-        }
-
-        @Override
-        protected LOTRWorldGenStructureBase2 getSmithy(Random random) {
+        public LOTRWorldGenStructureBase2 getSmithy(Random random) {
             return new LOTRWorldGenUmbarSmithy(false);
         }
 
         @Override
-        protected LOTRWorldGenStructureBase2 getBazaar(Random random) {
-            return new LOTRWorldGenUmbarBazaar(false);
-        }
-
-        @Override
-        protected LOTRWorldGenStructureBase2 getLamp(Random random) {
-            return new LOTRWorldGenUmbarLamp(false);
-        }
-
-        @Override
-        protected LOTRWorldGenStructureBase2 getFlowers(Random random) {
-            return new LOTRWorldGenUmbarTownFlowers(false);
-        }
-
-        @Override
-        protected LOTRWorldGenStructureBase2 getTree(Random random) {
-            return new LOTRWorldGenUmbarTownTree(false);
-        }
-
-        @Override
-        protected LOTRWorldGenStructureBase2 getStatue(Random random) {
-            return new LOTRWorldGenUmbarStatue(false);
-        }
-
-        @Override
-        protected LOTRWorldGenSouthronTownGate getTownGate(Random random) {
-            return new LOTRWorldGenUmbarTownGate(false);
-        }
-
-        @Override
-        protected LOTRWorldGenStructureBase2 getTownWallShort(Random random) {
-            return new LOTRWorldGenUmbarTownWall.Short(false);
-        }
-
-        @Override
-        protected LOTRWorldGenStructureBase2 getTownWallLong(Random random) {
-            return new LOTRWorldGenUmbarTownWall.Long(false);
-        }
-
-        @Override
-        protected LOTRWorldGenStructureBase2 getTownWallSideMid(Random random) {
-            return new LOTRWorldGenUmbarTownWall.SideMid(false);
-        }
-
-        @Override
-        protected LOTRWorldGenStructureBase2 getTownWallExtra(Random random) {
-            return new LOTRWorldGenUmbarTownWall.Extra(false);
-        }
-
-        @Override
-        protected LOTRWorldGenStructureBase2 getTownWallCorner(Random random) {
-            return new LOTRWorldGenUmbarTownCorner(false);
-        }
-
-        @Override
-        protected void placeChampionRespawner() {
-        }
-
-        @Override
-        protected LOTRWorldGenStructureBase2 getFortress(Random random) {
-            return new LOTRWorldGenUmbarFortress(false);
-        }
-
-        @Override
-        protected LOTRWorldGenStructureBase2 getTower(Random random) {
-            return new LOTRWorldGenUmbarTower(false);
-        }
-
-        @Override
-        protected LOTRWorldGenStructureBase2 getStables(Random random) {
+        public LOTRWorldGenStructureBase2 getStables(Random random) {
             return new LOTRWorldGenUmbarStables(false);
         }
 
         @Override
-        protected LOTRWorldGenStructureBase2 getBarracks(Random random) {
-            return new LOTRWorldGenUmbarBarracks(false);
+        public LOTRWorldGenStructureBase2 getStatue(Random random) {
+            return new LOTRWorldGenUmbarStatue(false);
         }
 
         @Override
-        protected LOTRWorldGenStructureBase2 getTraining(Random random) {
+        public LOTRWorldGenStructureBase2 getTavern(Random random) {
+            return new LOTRWorldGenUmbarTavern(false);
+        }
+
+        @Override
+        public LOTRWorldGenStructureBase2 getTower(Random random) {
+            return new LOTRWorldGenUmbarTower(false);
+        }
+
+        @Override
+        public LOTRWorldGenSouthronTownGate getTownGate(Random random) {
+            return new LOTRWorldGenUmbarTownGate(false);
+        }
+
+        @Override
+        public LOTRWorldGenStructureBase2 getTownWallCorner(Random random) {
+            return new LOTRWorldGenUmbarTownCorner(false);
+        }
+
+        @Override
+        public LOTRWorldGenStructureBase2 getTownWallExtra(Random random) {
+            return new LOTRWorldGenUmbarTownWall.Extra(false);
+        }
+
+        @Override
+        public LOTRWorldGenStructureBase2 getTownWallLong(Random random) {
+            return new LOTRWorldGenUmbarTownWall.Long(false);
+        }
+
+        @Override
+        public LOTRWorldGenStructureBase2 getTownWallShort(Random random) {
+            return new LOTRWorldGenUmbarTownWall.Short(false);
+        }
+
+        @Override
+        public LOTRWorldGenStructureBase2 getTownWallSideMid(Random random) {
+            return new LOTRWorldGenUmbarTownWall.SideMid(false);
+        }
+
+        @Override
+        public LOTRWorldGenStructureBase2 getTraining(Random random) {
             return new LOTRWorldGenUmbarTraining(false);
         }
 
         @Override
-        protected LOTRWorldGenStructureBase2 getFortGate(Random random) {
-            return new LOTRWorldGenUmbarFortGate(false);
+        public LOTRWorldGenStructureBase2 getTree(Random random) {
+            return new LOTRWorldGenUmbarTownTree(false);
         }
 
         @Override
-        protected LOTRWorldGenStructureBase2 getFortWallShort(Random random) {
-            return new LOTRWorldGenUmbarFortWall.Short(false);
+        public LOTRWorldGenStructureBase2 getWell(Random random) {
+            return new LOTRWorldGenUmbarWell(false);
         }
 
         @Override
-        protected LOTRWorldGenStructureBase2 getFortWallLong(Random random) {
-            return new LOTRWorldGenUmbarFortWall.Long(false);
+        public void placeChampionRespawner() {
         }
 
         @Override
-        protected LOTRWorldGenStructureBase2 getFortCorner(Random random) {
-            return new LOTRWorldGenUmbarFortCorner(false);
+        public void setCivilianSpawnClass(LOTREntityNPCRespawner spawner) {
+            spawner.setSpawnClass(LOTREntityUmbarian.class);
+        }
+
+        @Override
+        public void setWarriorSpawnClasses(LOTREntityNPCRespawner spawner) {
+            spawner.setSpawnClasses(LOTREntityUmbarWarrior.class, LOTREntityUmbarArcher.class);
         }
     }
 

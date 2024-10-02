@@ -19,6 +19,7 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import lotr.common.LOTRCommonProxy;
 import lotr.common.LOTRDimension;
 import lotr.common.LOTRLevelData;
 import lotr.common.LOTRMod;
@@ -128,8 +129,23 @@ public class LOTRConfig {
     public static boolean renderspecial;
     public static boolean bMap;
     public static boolean spawnElfFix;
+    public static boolean enableBleeding;
     public static boolean spawnDwarvenMine;
+    public static boolean enableSoulboundClover;
     public static boolean hiredUnitKillsCountForBane;
+    public static int maxHiredNPCs;
+    public static int maxHiredNPCsCost;
+    public static int maxUpHiredNPCs;
+    public static int maxHornCost;
+    public static boolean enableTexture;
+    private static boolean enableNPCHiringLimit;
+    private static int defaultNPCHiringLimit;
+    public static boolean alwaysSetBedSpawn;
+    public static boolean checkBedUnsafe;
+    public static boolean ridersAvoidSuffocation;
+    public static float conquestDecay;
+    public static boolean protectPets;
+    public static boolean enableAnvilGui;
 
     private static void setupCategories() {
         CATEGORY_DIMENSION = LOTRConfig.makeCategory("dimension");
@@ -154,6 +170,20 @@ public class LOTRConfig {
 
     public static void load() {
         LOTRDimension.configureDimensions(config, CATEGORY_DIMENSION);
+        enableAnvilGui = config.get(CATEGORY_GAMEPLAY, "Enable or disable Anvil Gui", false).getBoolean();
+        protectPets = config.get(CATEGORY_GAMEPLAY, "Protect your Pet", ridersAvoidSuffocation).getBoolean();
+        ridersAvoidSuffocation = config.get(CATEGORY_GAMEPLAY, "Riders Avoid Suffocating in Blocks", ridersAvoidSuffocation).getBoolean();
+        alwaysSetBedSpawn = config.get(CATEGORY_GAMEPLAY, "Always Set Bedspawn", alwaysSetBedSpawn).getBoolean();
+        checkBedUnsafe = config.get(CATEGORY_GAMEPLAY, "Check Enemies Near Bed", checkBedUnsafe, "For MiddleEarth Entities").getBoolean();
+        enableNPCHiringLimit = config.get(CATEGORY_GAMEPLAY, "Enable NPC hiring limit", true, "Enables NPC hiring limit for players").getBoolean();
+        defaultNPCHiringLimit = config.get(CATEGORY_GAMEPLAY, "Default NPC hiring limit", 10, "Default NPC hiring limit for players").getInt();
+        maxHiredNPCsCost = config.getInt("maxHiredNPCsCost", CATEGORY_GAMEPLAY, 2, 2, 6, "The maximum number of NPCs Cost");
+        maxHornCost = config.getInt("maxHornCost", CATEGORY_GAMEPLAY, 2, 2, 6, "The maximum number of Horn Cost");
+        maxHiredNPCs = config.getInt("maxHiredNPCs", CATEGORY_GAMEPLAY, maxHiredNPCs, 1, 100, "The maximum number of NPCs hired");
+        maxUpHiredNPCs = config.getInt("maxUpHiredNPCs", CATEGORY_GAMEPLAY, maxHiredNPCs, 0, 100, "The maximum number of additional NPCs hired");
+        enableTexture = config.get(CATEGORY_GAMEPLAY, "Enable Alt Texture", false).getBoolean();
+        enableSoulboundClover = config.get(CATEGORY_GAMEPLAY, "Enable Soulbound Clover", false).getBoolean();
+        enableBleeding = config.get(CATEGORY_GAMEPLAY, "Enable Bleeding", true).getBoolean();
         spawnElfFix = config.get(CATEGORY_GAMEPLAY, "Enable Galadhrim elf Farm", true).getBoolean();
         EnableUtumno = config.get(CATEGORY_GAMEPLAY, "Enable Utumno", true).getBoolean();
         hiredUnitKillsCountForBane = config.get(CATEGORY_GAMEPLAY, "Hired units killed count towards x-bane modifiers", true, "").getBoolean();
@@ -186,7 +216,7 @@ public class LOTRConfig {
         generateFixedSettlements = config.get(CATEGORY_GAMEPLAY, "Generate fixed settlements", true, "Villages in fixed locations, such as Bree").getBoolean();
         changedHunger = config.get(CATEGORY_GAMEPLAY, "Hunger changes", true, "Food meter decreases more slowly").getBoolean();
         canAlwaysEat = config.get(CATEGORY_GAMEPLAY, "Feast Mode", true, "Food can always be eaten regardless of hunger").getBoolean();
-        forceMapLocations = config.get(CATEGORY_GAMEPLAY, "Force Hide/Show Map Locations", 1, "Force hide or show players' map locations. 0 = per-player (default), 1 = force hide, 2 = force show").getInt();
+        forceMapLocations = config.get(CATEGORY_GAMEPLAY, "Force Hide/Show Map Locations", 0, "Force hide or show players' map locations. 0 = per-player (default), 1 = force hide, 2 = force show").getInt();
         enableBandits = config.get(CATEGORY_GAMEPLAY, "Enable Bandits", true).getBoolean();
         enableInvasions = config.get(CATEGORY_GAMEPLAY, "Enable Invasions", true).getBoolean();
         enableUnitLevelling = config.get(CATEGORY_GAMEPLAY, "Enable hired unit levelling", true).getBoolean();
@@ -264,6 +294,20 @@ public class LOTRConfig {
         config.save();
     }
 
+    public static boolean getEnableNPCHiringLimit() {
+        if (LOTRMod.proxy.isClient()) {
+            return LOTRLevelData.clientside_enableNPCHiringLimit;
+        }
+        return enableNPCHiringLimit;
+    }
+
+    public static int getDefaultNPCHiringLimit() {
+        if (LOTRMod.proxy.isClient()) {
+            return LOTRLevelData.clientside_defaultNPCHiringLimit;
+        }
+        return defaultNPCHiringLimit;
+    }
+
     public static void toggleMapLabels() {
         mapLabels = !mapLabels;
         config.getCategory(CATEGORY_GUI).get("Map Labels").set(mapLabels);
@@ -339,6 +383,14 @@ public class LOTRConfig {
 
     static {
         allCategories = new ArrayList<ConfigCategory>();
+        maxHiredNPCs = 5;
+        maxHiredNPCsCost = 20;
+        maxUpHiredNPCs = 2;
+        maxHornCost = 2;
+        alwaysSetBedSpawn = true;
+        checkBedUnsafe = true;
+        ridersAvoidSuffocation = true;
+        conquestDecay = 3600.0f;
     }
 }
 

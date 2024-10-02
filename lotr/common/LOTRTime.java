@@ -98,6 +98,10 @@ public class LOTRTime {
         }
     }
 
+    public static long getWorldTime() {
+        return worldTime;
+    }
+
     static {
         needsLoad = true;
     }

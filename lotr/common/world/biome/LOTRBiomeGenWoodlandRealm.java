@@ -16,6 +16,7 @@ import lotr.common.entity.animal.LOTREntityDeer;
 import lotr.common.entity.animal.LOTREntityElk;
 import lotr.common.entity.npc.LOTREntityDorwinionMerchantElf;
 import lotr.common.entity.npc.LOTREntityGaladhrimTrader;
+import lotr.common.entity.npc.LOTREntityRadaghast;
 import lotr.common.world.biome.LOTRBiome;
 import lotr.common.world.biome.LOTRBiomeDecorator;
 import lotr.common.world.biome.LOTRMusicRegion;
@@ -91,6 +92,7 @@ extends LOTRBiome {
         this.decorator.addRandomStructure(new LOTRWorldGenWoodElvenForge(false), 80);
         this.registerTravellingTrader(LOTREntityGaladhrimTrader.class);
         this.registerTravellingTrader(LOTREntityDorwinionMerchantElf.class);
+        this.registerTravellingTrader(LOTREntityRadaghast.class);
         this.setBanditChance(LOTREventSpawner.EventChance.NEVER);
         this.invasionSpawns.addInvasion(LOTRInvasions.DOL_GULDUR, LOTREventSpawner.EventChance.UNCOMMON);
         this.invasionSpawns.addInvasion(LOTRInvasions.DOL_GULDUR_URUK, LOTREventSpawner.EventChance.COMMON);

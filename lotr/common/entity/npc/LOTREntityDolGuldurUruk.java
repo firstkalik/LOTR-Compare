@@ -80,7 +80,7 @@ extends LOTREntityDolGuldurOrc {
 
     @Override
     protected LOTRAchievement getKillAchievement() {
-        return LOTRAchievement.killGundabadUruk;
+        return LOTRAchievement.killGuldurUruk;
     }
 
     protected float getSoundPitch() {

@@ -68,7 +68,7 @@ import net.minecraft.world.World;
 
 public class LOTRVillageGenGondor
 extends LOTRVillageGen {
-    private LOTRWorldGenGondorStructure.GondorFiefdom villageFief;
+    public LOTRWorldGenGondorStructure.GondorFiefdom villageFief;
 
     public LOTRVillageGenGondor(LOTRBiome biome, LOTRWorldGenGondorStructure.GondorFiefdom fief, float f) {
         super(biome);
@@ -80,7 +80,7 @@ extends LOTRVillageGen {
     }
 
     @Override
-    protected LOTRVillageGen.AbstractInstance<?> createVillageInstance(World world, int i, int k, Random random, LocationInfo loc) {
+    public LOTRVillageGen.AbstractInstance<?> createVillageInstance(World world, int i, int k, Random random, LocationInfo loc) {
         return new Instance(this, world, i, k, random, loc);
     }
 
@@ -94,8 +94,8 @@ extends LOTRVillageGen {
     public static class Instance
     extends LOTRVillageGen.AbstractInstance<LOTRVillageGenGondor> {
         public VillageType villageType;
-        private LOTRWorldGenGondorStructure.GondorFiefdom villageFief;
-        private String[] villageName;
+        public LOTRWorldGenGondorStructure.GondorFiefdom villageFief;
+        public String[] villageName;
 
         public Instance(LOTRVillageGenGondor village, World world, int i, int k, Random random, LocationInfo loc) {
             super(village, world, i, k, random, loc);
@@ -103,18 +103,7 @@ extends LOTRVillageGen {
         }
 
         @Override
-        protected void setupVillageProperties(Random random) {
-            this.villageName = LOTRNames.getGondorVillageName(random);
-            this.villageType = random.nextInt(4) == 0 ? VillageType.FORT : (random.nextInt(4) == 0 ? VillageType.TOWN : VillageType.VILLAGE);
-        }
-
-        @Override
-        public boolean isFlat() {
-            return this.villageType == VillageType.TOWN;
-        }
-
-        @Override
-        protected void addStructure(LOTRWorldGenStructureBase2 structure, int x, int z, int r, boolean force) {
+        public void addStructure(LOTRWorldGenStructureBase2 structure, int x, int z, int r, boolean force) {
             super.addStructure(structure, x, z, r, force);
             if (structure instanceof LOTRWorldGenGondorStructure) {
                 ((LOTRWorldGenGondorStructure)structure).strFief = this.villageFief;
@@ -122,7 +111,7 @@ extends LOTRVillageGen {
         }
 
         @Override
-        protected void addVillageStructures(Random random) {
+        public void addVillageStructures(Random random) {
             if (this.villageType == VillageType.VILLAGE) {
                 this.setupVillage(random);
             } else if (this.villageType == VillageType.TOWN) {
@@ -132,126 +121,40 @@ extends LOTRVillageGen {
             }
         }
 
-        private void setupVillage(Random random) {
-            this.addStructure(new LOTRWorldGenGondorWell(false), 0, -4, 0, true);
-            this.addStructure(new LOTRWorldGenNPCRespawner(false){
-
-                @Override
-                public void setupRespawner(LOTREntityNPCRespawner spawner) {
-                    spawner.setSpawnClass(LOTREntityGondorMan.class);
-                    spawner.setCheckRanges(40, -12, 12, 40);
-                    spawner.setSpawnRanges(20, -6, 6, 64);
-                    spawner.setBlockEnemySpawnRange(60);
+        @Override
+        public LOTRRoadType getPath(Random random, int i, int k) {
+            int i1 = Math.abs(i);
+            int k1 = Math.abs(k);
+            if (this.villageType == VillageType.VILLAGE) {
+                int dSq = i * i + k * k;
+                int imn = 20 + random.nextInt(4);
+                if (dSq < imn * imn) {
+                    return LOTRRoadType.PATH;
                 }
-            }, 0, 0, 0);
-            this.addStructure(new LOTRWorldGenNPCRespawner(false){
-
-                @Override
-                public void setupRespawner(LOTREntityNPCRespawner spawner) {
-                    spawner.setSpawnClass(villageFief.getLevyClasses()[0]);
-                    spawner.setCheckRanges(40, -12, 12, 16);
-                    spawner.setSpawnRanges(20, -6, 6, 64);
-                    spawner.setBlockEnemySpawnRange(60);
-                }
-            }, 0, 0, 0);
-            this.addStructure(new LOTRWorldGenGondorCottage(false), -21, 0, 1);
-            this.addStructure(new LOTRWorldGenGondorCottage(false), 0, -21, 2);
-            this.addStructure(new LOTRWorldGenGondorCottage(false), 21, 0, 3);
-            this.addStructure(new LOTRWorldGenGondorTavern(false), 0, 21, 0);
-            if (random.nextBoolean()) {
-                if (random.nextInt(3) == 0) {
-                    this.addStructure(LOTRWorldGenGondorMarketStall.getRandomStall(random, false), -9, -12, 1);
-                }
-                if (random.nextInt(3) == 0) {
-                    this.addStructure(LOTRWorldGenGondorMarketStall.getRandomStall(random, false), 9, -12, 3);
-                }
-                if (random.nextInt(3) == 0) {
-                    this.addStructure(LOTRWorldGenGondorMarketStall.getRandomStall(random, false), -9, 12, 1);
-                }
-                if (random.nextInt(3) == 0) {
-                    this.addStructure(LOTRWorldGenGondorMarketStall.getRandomStall(random, false), 9, 12, 3);
+                int omn = 53 - random.nextInt(4);
+                int omx = 60 + random.nextInt(4);
+                if (dSq > omn * omn && dSq < omx * omx || dSq < 2809 && Math.abs(i1 - k1) <= 2 + random.nextInt(4)) {
+                    return LOTRRoadType.PATH;
                 }
             }
-            int houses = 20;
-            float frac = 1.0f / (float)houses;
-            float turn = 0.0f;
-            while (turn < 1.0f) {
-                int l;
-                int k;
-                int i;
-                float turnR = (float)Math.toRadians((turn += frac) * 360.0f);
-                float sin = MathHelper.sin((float)turnR);
-                float cos = MathHelper.cos((float)turnR);
-                int r = 0;
-                float turn8 = turn * 8.0f;
-                if (turn8 >= 1.0f && turn8 < 3.0f) {
-                    r = 0;
-                } else if (turn8 >= 3.0f && turn8 < 5.0f) {
-                    r = 1;
-                } else if (turn8 >= 5.0f && turn8 < 7.0f) {
-                    r = 2;
-                } else if (turn8 >= 7.0f || turn8 < 1.0f) {
-                    r = 3;
+            if (this.villageType == VillageType.TOWN && i1 <= 80 && k1 <= 80) {
+                return LOTRRoadType.COBBLESTONE;
+            }
+            if (this.villageType == VillageType.FORT) {
+                if (i1 <= 1 && (k >= 13 || k <= -12) && k1 <= 36) {
+                    return this.instanceVillageBiome.getRoadBlock();
                 }
-                if (random.nextBoolean()) {
-                    l = 61;
-                    i = Math.round((float)l * cos);
-                    k = Math.round((float)l * sin);
-                    this.addStructure(this.getRandomHouse(random), i, k, r);
-                    continue;
+                if (k1 <= 1 && i1 >= 12 && i1 <= 36) {
+                    return this.instanceVillageBiome.getRoadBlock();
                 }
-                if (random.nextInt(3) == 0) continue;
-                l = 65;
-                i = Math.round((float)l * cos);
-                k = Math.round((float)l * sin);
-                this.addStructure(new LOTRWorldGenHayBales(false), i, k, r);
+                if (k >= 26 && k <= 28 && i1 <= 12) {
+                    return this.instanceVillageBiome.getRoadBlock();
+                }
             }
-            int signPos = Math.round(50.0f * MathHelper.cos((float)((float)Math.toRadians(45.0))));
-            int signDisp = Math.round(7.0f * MathHelper.cos((float)((float)Math.toRadians(45.0))));
-            this.addStructure(new LOTRWorldGenGondorVillageSign(false).setSignText(this.villageName), -signPos, -signPos + signDisp, 1);
-            this.addStructure(new LOTRWorldGenGondorVillageSign(false).setSignText(this.villageName), signPos, -signPos + signDisp, 3);
-            this.addStructure(new LOTRWorldGenGondorVillageSign(false).setSignText(this.villageName), -signPos, signPos - signDisp, 1);
-            this.addStructure(new LOTRWorldGenGondorVillageSign(false).setSignText(this.villageName), signPos, signPos - signDisp, 3);
-            int farmX = 38;
-            int farmZ = 17;
-            int farmSize = 6;
-            if (random.nextBoolean()) {
-                this.addStructure(this.getRandomFarm(random), -farmX + farmSize, -farmZ, 1);
-            }
-            if (random.nextBoolean()) {
-                this.addStructure(this.getRandomFarm(random), -farmZ + farmSize, -farmX, 1);
-            }
-            if (random.nextBoolean()) {
-                this.addStructure(this.getRandomFarm(random), farmX - farmSize, -farmZ, 3);
-            }
-            if (random.nextBoolean()) {
-                this.addStructure(this.getRandomFarm(random), farmZ - farmSize, -farmX, 3);
-            }
-            if (random.nextBoolean()) {
-                this.addStructure(this.getRandomFarm(random), -farmX + farmSize, farmZ, 1);
-            }
-            if (random.nextBoolean()) {
-                this.addStructure(this.getRandomFarm(random), farmX - farmSize, farmZ, 3);
-            }
+            return null;
         }
 
-        private LOTRWorldGenStructureBase2 getRandomHouse(Random random) {
-            if (random.nextInt(5) == 0) {
-                int i = random.nextInt(3);
-                if (i == 0) {
-                    return new LOTRWorldGenGondorStables(false);
-                }
-                if (i == 1) {
-                    return new LOTRWorldGenGondorSmithy(false);
-                }
-                if (i == 2) {
-                    return new LOTRWorldGenGondorBarn(false);
-                }
-            }
-            return new LOTRWorldGenGondorHouse(false);
-        }
-
-        private LOTRWorldGenStructureBase2 getRandomFarm(Random random) {
+        public LOTRWorldGenStructureBase2 getRandomFarm(Random random) {
             if (random.nextBoolean()) {
                 if (random.nextBoolean()) {
                     return new LOTRWorldGenGondorVillageFarm.Animals(false);
@@ -261,7 +164,154 @@ extends LOTRVillageGen {
             return new LOTRWorldGenGondorVillageFarm.Tree(false);
         }
 
-        private void setupTown(Random random) {
+        public LOTRWorldGenStructureBase2 getRandomHouse(Random random) {
+            if (random.nextInt(5) == 0) {
+                int i = random.nextInt(3);
+                switch (i) {
+                    case 0: {
+                        return new LOTRWorldGenGondorStables(false);
+                    }
+                    case 1: {
+                        return new LOTRWorldGenGondorSmithy(false);
+                    }
+                    case 2: {
+                        return new LOTRWorldGenGondorBarn(false);
+                    }
+                }
+            }
+            return new LOTRWorldGenGondorHouse(false);
+        }
+
+        public LOTRWorldGenStructureBase2 getVillageFortress() {
+            if (this.villageFief == LOTRWorldGenGondorStructure.GondorFiefdom.GONDOR) {
+                return new LOTRWorldGenGondorFortress(false);
+            }
+            if (this.villageFief == LOTRWorldGenGondorStructure.GondorFiefdom.LOSSARNACH) {
+                return new LOTRWorldGenLossarnachFortress(false);
+            }
+            if (this.villageFief == LOTRWorldGenGondorStructure.GondorFiefdom.LEBENNIN) {
+                return new LOTRWorldGenLebenninFortress(false);
+            }
+            if (this.villageFief == LOTRWorldGenGondorStructure.GondorFiefdom.PELARGIR) {
+                return new LOTRWorldGenPelargirFortress(false);
+            }
+            if (this.villageFief == LOTRWorldGenGondorStructure.GondorFiefdom.PINNATH_GELIN) {
+                return new LOTRWorldGenPinnathGelinFortress(false);
+            }
+            if (this.villageFief == LOTRWorldGenGondorStructure.GondorFiefdom.BLACKROOT_VALE) {
+                return new LOTRWorldGenBlackrootFortress(false);
+            }
+            if (this.villageFief == LOTRWorldGenGondorStructure.GondorFiefdom.LAMEDON) {
+                return new LOTRWorldGenLamedonFortress(false);
+            }
+            if (this.villageFief == LOTRWorldGenGondorStructure.GondorFiefdom.DOL_AMROTH) {
+                return new LOTRWorldGenDolAmrothStables(false);
+            }
+            return null;
+        }
+
+        public LOTRWorldGenStructureBase2 getVillageWatchtower() {
+            if (this.villageFief == LOTRWorldGenGondorStructure.GondorFiefdom.GONDOR) {
+                return new LOTRWorldGenGondorWatchtower(false);
+            }
+            if (this.villageFief == LOTRWorldGenGondorStructure.GondorFiefdom.LOSSARNACH) {
+                return new LOTRWorldGenLossarnachWatchtower(false);
+            }
+            if (this.villageFief == LOTRWorldGenGondorStructure.GondorFiefdom.LEBENNIN) {
+                return new LOTRWorldGenLebenninWatchtower(false);
+            }
+            if (this.villageFief == LOTRWorldGenGondorStructure.GondorFiefdom.PELARGIR) {
+                return new LOTRWorldGenPelargirWatchtower(false);
+            }
+            if (this.villageFief == LOTRWorldGenGondorStructure.GondorFiefdom.PINNATH_GELIN) {
+                return new LOTRWorldGenPinnathGelinWatchtower(false);
+            }
+            if (this.villageFief == LOTRWorldGenGondorStructure.GondorFiefdom.BLACKROOT_VALE) {
+                return new LOTRWorldGenBlackrootWatchtower(false);
+            }
+            if (this.villageFief == LOTRWorldGenGondorStructure.GondorFiefdom.LAMEDON) {
+                return new LOTRWorldGenLamedonWatchtower(false);
+            }
+            if (this.villageFief == LOTRWorldGenGondorStructure.GondorFiefdom.DOL_AMROTH) {
+                return new LOTRWorldGenDolAmrothWatchtower(false);
+            }
+            return null;
+        }
+
+        @Override
+        public boolean isFlat() {
+            return this.villageType == VillageType.TOWN;
+        }
+
+        @Override
+        public boolean isVillageSpecificSurface(World world, int i, int j, int k) {
+            Block block = world.getBlock(i, j, k);
+            return this.villageType == VillageType.TOWN && block == Blocks.cobblestone;
+        }
+
+        public void setupFortVillage(Random random) {
+            this.addStructure(new LOTRWorldGenNPCRespawner(false){
+
+                @Override
+                public void setupRespawner(LOTREntityNPCRespawner spawner) {
+                    spawner.setSpawnClass(LOTREntityGondorMan.class);
+                    spawner.setCheckRanges(50, -12, 12, 16);
+                    spawner.setSpawnRanges(30, -6, 6, 40);
+                    spawner.setBlockEnemySpawnRange(60);
+                }
+            }, 0, 0, 0);
+            for (int i1 : new int[]{-20, 20}) {
+                for (int k1 : new int[]{-20, 20}) {
+                    this.addStructure(new LOTRWorldGenNPCRespawner(false){
+
+                        @Override
+                        public void setupRespawner(LOTREntityNPCRespawner spawner) {
+                            spawner.setSpawnClasses(villageFief.getSoldierClasses()[0], villageFief.getSoldierClasses()[1]);
+                            spawner.setCheckRanges(20, -12, 12, 16);
+                            spawner.setSpawnRanges(20, -6, 6, 40);
+                            spawner.setBlockEnemySpawnRange(40);
+                        }
+                    }, i1, k1, 0);
+                }
+            }
+            this.addStructure(this.getVillageFortress(), 0, 12, 2, true);
+            this.addStructure(new LOTRWorldGenGondorFortGate(false), 0, -37, 0, true);
+            this.addStructure(new LOTRWorldGenGondorFortWall.Right(false), -11, -37, 0, true);
+            this.addStructure(new LOTRWorldGenGondorFortWall.Left(false), 11, -37, 0, true);
+            this.addStructure(this.getVillageWatchtower(), -23, -33, 2, true);
+            this.addStructure(this.getVillageWatchtower(), 23, -33, 2, true);
+            this.addStructure(new LOTRWorldGenGondorFortGate(false), -37, 0, 3, true);
+            this.addStructure(new LOTRWorldGenGondorFortWall.Left(false), -37, -11, 3, true);
+            this.addStructure(new LOTRWorldGenGondorFortWall.Right(false), -37, 11, 3, true);
+            this.addStructure(this.getVillageWatchtower(), -33, -23, 1, true);
+            this.addStructure(this.getVillageWatchtower(), -33, 23, 1, true);
+            this.addStructure(new LOTRWorldGenGondorFortGate(false), 0, 37, 2, true);
+            this.addStructure(new LOTRWorldGenGondorFortWall.Left(false), -11, 37, 2, true);
+            this.addStructure(new LOTRWorldGenGondorFortWall.Right(false), 11, 37, 2, true);
+            this.addStructure(this.getVillageWatchtower(), -23, 33, 0, true);
+            this.addStructure(this.getVillageWatchtower(), 23, 33, 0, true);
+            this.addStructure(new LOTRWorldGenGondorFortGate(false), 37, 0, 1, true);
+            this.addStructure(new LOTRWorldGenGondorFortWall.Right(false), 37, -11, 1, true);
+            this.addStructure(new LOTRWorldGenGondorFortWall.Left(false), 37, 11, 1, true);
+            this.addStructure(this.getVillageWatchtower(), 33, -23, 3, true);
+            this.addStructure(this.getVillageWatchtower(), 33, 23, 3, true);
+            this.addStructure(new LOTRWorldGenGondorFortWallCorner(false), -30, -30, 3);
+            this.addStructure(new LOTRWorldGenGondorFortWallCorner(false), -30, 30, 2);
+            this.addStructure(new LOTRWorldGenGondorFortWallCorner(false), 30, 30, 1);
+            this.addStructure(new LOTRWorldGenGondorFortWallCorner(false), 30, -30, 0);
+            this.addStructure(new LOTRWorldGenGondorStables(false), -24, 2, 0);
+            this.addStructure(new LOTRWorldGenGondorStables(false), -24, -2, 2);
+            this.addStructure(new LOTRWorldGenGondorSmithy(false), 24, 1, 0);
+            this.addStructure(new LOTRWorldGenGondorSmithy(false), 24, -1, 2);
+            this.addStructure(new LOTRWorldGenGondorStoneHouse(false), -3, -25, 1);
+            this.addStructure(new LOTRWorldGenGondorStoneHouse(false), 3, -25, 3);
+            this.addStructure(new LOTRWorldGenGondorVillageFarm.Crops(false), -18, -21, 1);
+            this.addStructure(new LOTRWorldGenGondorVillageFarm.Crops(false), 18, -21, 3);
+            this.addStructure(new LOTRWorldGenGondorWell(false), -12, 27, 1);
+            this.addStructure(new LOTRWorldGenGondorWell(false), 12, 27, 3);
+        }
+
+        public void setupTown(Random random) {
             int wallX;
             int l;
             boolean outerTavern = random.nextBoolean();
@@ -485,164 +535,113 @@ extends LOTRVillageGen {
             this.addStructure(LOTRWorldGenGondorTownWall.RightEndShort(false), -wallEndX, -wallZ, 0, true);
         }
 
-        private void setupFortVillage(Random random) {
+        public void setupVillage(Random random) {
+            this.addStructure(new LOTRWorldGenGondorWell(false), 0, -4, 0, true);
             this.addStructure(new LOTRWorldGenNPCRespawner(false){
 
                 @Override
                 public void setupRespawner(LOTREntityNPCRespawner spawner) {
                     spawner.setSpawnClass(LOTREntityGondorMan.class);
-                    spawner.setCheckRanges(50, -12, 12, 16);
-                    spawner.setSpawnRanges(30, -6, 6, 40);
+                    spawner.setCheckRanges(40, -12, 12, 40);
+                    spawner.setSpawnRanges(20, -6, 6, 64);
                     spawner.setBlockEnemySpawnRange(60);
                 }
             }, 0, 0, 0);
-            for (int i1 : new int[]{-20, 20}) {
-                for (int k1 : new int[]{-20, 20}) {
-                    this.addStructure(new LOTRWorldGenNPCRespawner(false){
+            this.addStructure(new LOTRWorldGenNPCRespawner(false){
 
-                        @Override
-                        public void setupRespawner(LOTREntityNPCRespawner spawner) {
-                            spawner.setSpawnClasses(villageFief.getSoldierClasses()[0], villageFief.getSoldierClasses()[1]);
-                            spawner.setCheckRanges(20, -12, 12, 16);
-                            spawner.setSpawnRanges(20, -6, 6, 40);
-                            spawner.setBlockEnemySpawnRange(40);
-                        }
-                    }, i1, k1, 0);
+                @Override
+                public void setupRespawner(LOTREntityNPCRespawner spawner) {
+                    spawner.setSpawnClass(villageFief.getLevyClasses()[0]);
+                    spawner.setCheckRanges(40, -12, 12, 16);
+                    spawner.setSpawnRanges(20, -6, 6, 64);
+                    spawner.setBlockEnemySpawnRange(60);
+                }
+            }, 0, 0, 0);
+            this.addStructure(new LOTRWorldGenGondorCottage(false), -21, 0, 1);
+            this.addStructure(new LOTRWorldGenGondorCottage(false), 0, -21, 2);
+            this.addStructure(new LOTRWorldGenGondorCottage(false), 21, 0, 3);
+            this.addStructure(new LOTRWorldGenGondorTavern(false), 0, 21, 0);
+            if (random.nextBoolean()) {
+                if (random.nextInt(3) == 0) {
+                    this.addStructure(LOTRWorldGenGondorMarketStall.getRandomStall(random, false), -9, -12, 1);
+                }
+                if (random.nextInt(3) == 0) {
+                    this.addStructure(LOTRWorldGenGondorMarketStall.getRandomStall(random, false), 9, -12, 3);
+                }
+                if (random.nextInt(3) == 0) {
+                    this.addStructure(LOTRWorldGenGondorMarketStall.getRandomStall(random, false), -9, 12, 1);
+                }
+                if (random.nextInt(3) == 0) {
+                    this.addStructure(LOTRWorldGenGondorMarketStall.getRandomStall(random, false), 9, 12, 3);
                 }
             }
-            this.addStructure(this.getVillageFortress(), 0, 12, 2, true);
-            this.addStructure(new LOTRWorldGenGondorFortGate(false), 0, -37, 0, true);
-            this.addStructure(new LOTRWorldGenGondorFortWall.Right(false), -11, -37, 0, true);
-            this.addStructure(new LOTRWorldGenGondorFortWall.Left(false), 11, -37, 0, true);
-            this.addStructure(this.getVillageWatchtower(), -23, -33, 2, true);
-            this.addStructure(this.getVillageWatchtower(), 23, -33, 2, true);
-            this.addStructure(new LOTRWorldGenGondorFortGate(false), -37, 0, 3, true);
-            this.addStructure(new LOTRWorldGenGondorFortWall.Left(false), -37, -11, 3, true);
-            this.addStructure(new LOTRWorldGenGondorFortWall.Right(false), -37, 11, 3, true);
-            this.addStructure(this.getVillageWatchtower(), -33, -23, 1, true);
-            this.addStructure(this.getVillageWatchtower(), -33, 23, 1, true);
-            this.addStructure(new LOTRWorldGenGondorFortGate(false), 0, 37, 2, true);
-            this.addStructure(new LOTRWorldGenGondorFortWall.Left(false), -11, 37, 2, true);
-            this.addStructure(new LOTRWorldGenGondorFortWall.Right(false), 11, 37, 2, true);
-            this.addStructure(this.getVillageWatchtower(), -23, 33, 0, true);
-            this.addStructure(this.getVillageWatchtower(), 23, 33, 0, true);
-            this.addStructure(new LOTRWorldGenGondorFortGate(false), 37, 0, 1, true);
-            this.addStructure(new LOTRWorldGenGondorFortWall.Right(false), 37, -11, 1, true);
-            this.addStructure(new LOTRWorldGenGondorFortWall.Left(false), 37, 11, 1, true);
-            this.addStructure(this.getVillageWatchtower(), 33, -23, 3, true);
-            this.addStructure(this.getVillageWatchtower(), 33, 23, 3, true);
-            this.addStructure(new LOTRWorldGenGondorFortWallCorner(false), -30, -30, 3);
-            this.addStructure(new LOTRWorldGenGondorFortWallCorner(false), -30, 30, 2);
-            this.addStructure(new LOTRWorldGenGondorFortWallCorner(false), 30, 30, 1);
-            this.addStructure(new LOTRWorldGenGondorFortWallCorner(false), 30, -30, 0);
-            this.addStructure(new LOTRWorldGenGondorStables(false), -24, 2, 0);
-            this.addStructure(new LOTRWorldGenGondorStables(false), -24, -2, 2);
-            this.addStructure(new LOTRWorldGenGondorSmithy(false), 24, 1, 0);
-            this.addStructure(new LOTRWorldGenGondorSmithy(false), 24, -1, 2);
-            this.addStructure(new LOTRWorldGenGondorStoneHouse(false), -3, -25, 1);
-            this.addStructure(new LOTRWorldGenGondorStoneHouse(false), 3, -25, 3);
-            this.addStructure(new LOTRWorldGenGondorVillageFarm.Crops(false), -18, -21, 1);
-            this.addStructure(new LOTRWorldGenGondorVillageFarm.Crops(false), 18, -21, 3);
-            this.addStructure(new LOTRWorldGenGondorWell(false), -12, 27, 1);
-            this.addStructure(new LOTRWorldGenGondorWell(false), 12, 27, 3);
-        }
-
-        private LOTRWorldGenStructureBase2 getVillageFortress() {
-            if (this.villageFief == LOTRWorldGenGondorStructure.GondorFiefdom.GONDOR) {
-                return new LOTRWorldGenGondorFortress(false);
+            int houses = 20;
+            float frac = 1.0f / (float)houses;
+            float turn = 0.0f;
+            while (turn < 1.0f) {
+                int l;
+                int k;
+                int i;
+                float turnR = (float)Math.toRadians((turn += frac) * 360.0f);
+                float sin = MathHelper.sin((float)turnR);
+                float cos = MathHelper.cos((float)turnR);
+                int r = 0;
+                float turn8 = turn * 8.0f;
+                if (turn8 >= 1.0f && turn8 < 3.0f) {
+                    r = 0;
+                } else if (turn8 >= 3.0f && turn8 < 5.0f) {
+                    r = 1;
+                } else if (turn8 >= 5.0f && turn8 < 7.0f) {
+                    r = 2;
+                } else if (turn8 >= 7.0f || turn8 < 1.0f) {
+                    r = 3;
+                }
+                if (random.nextBoolean()) {
+                    l = 61;
+                    i = Math.round((float)l * cos);
+                    k = Math.round((float)l * sin);
+                    this.addStructure(this.getRandomHouse(random), i, k, r);
+                    continue;
+                }
+                if (random.nextInt(3) == 0) continue;
+                l = 65;
+                i = Math.round((float)l * cos);
+                k = Math.round((float)l * sin);
+                this.addStructure(new LOTRWorldGenHayBales(false), i, k, r);
             }
-            if (this.villageFief == LOTRWorldGenGondorStructure.GondorFiefdom.LOSSARNACH) {
-                return new LOTRWorldGenLossarnachFortress(false);
+            int signPos = Math.round(50.0f * MathHelper.cos((float)((float)Math.toRadians(45.0))));
+            int signDisp = Math.round(7.0f * MathHelper.cos((float)((float)Math.toRadians(45.0))));
+            this.addStructure(new LOTRWorldGenGondorVillageSign(false).setSignText(this.villageName), -signPos, -signPos + signDisp, 1);
+            this.addStructure(new LOTRWorldGenGondorVillageSign(false).setSignText(this.villageName), signPos, -signPos + signDisp, 3);
+            this.addStructure(new LOTRWorldGenGondorVillageSign(false).setSignText(this.villageName), -signPos, signPos - signDisp, 1);
+            this.addStructure(new LOTRWorldGenGondorVillageSign(false).setSignText(this.villageName), signPos, signPos - signDisp, 3);
+            int farmX = 38;
+            int farmZ = 17;
+            int farmSize = 6;
+            if (random.nextBoolean()) {
+                this.addStructure(this.getRandomFarm(random), -farmX + farmSize, -farmZ, 1);
             }
-            if (this.villageFief == LOTRWorldGenGondorStructure.GondorFiefdom.LEBENNIN) {
-                return new LOTRWorldGenLebenninFortress(false);
+            if (random.nextBoolean()) {
+                this.addStructure(this.getRandomFarm(random), -farmZ + farmSize, -farmX, 1);
             }
-            if (this.villageFief == LOTRWorldGenGondorStructure.GondorFiefdom.PELARGIR) {
-                return new LOTRWorldGenPelargirFortress(false);
+            if (random.nextBoolean()) {
+                this.addStructure(this.getRandomFarm(random), farmX - farmSize, -farmZ, 3);
             }
-            if (this.villageFief == LOTRWorldGenGondorStructure.GondorFiefdom.PINNATH_GELIN) {
-                return new LOTRWorldGenPinnathGelinFortress(false);
+            if (random.nextBoolean()) {
+                this.addStructure(this.getRandomFarm(random), farmZ - farmSize, -farmX, 3);
             }
-            if (this.villageFief == LOTRWorldGenGondorStructure.GondorFiefdom.BLACKROOT_VALE) {
-                return new LOTRWorldGenBlackrootFortress(false);
+            if (random.nextBoolean()) {
+                this.addStructure(this.getRandomFarm(random), -farmX + farmSize, farmZ, 1);
             }
-            if (this.villageFief == LOTRWorldGenGondorStructure.GondorFiefdom.LAMEDON) {
-                return new LOTRWorldGenLamedonFortress(false);
+            if (random.nextBoolean()) {
+                this.addStructure(this.getRandomFarm(random), farmX - farmSize, farmZ, 3);
             }
-            if (this.villageFief == LOTRWorldGenGondorStructure.GondorFiefdom.DOL_AMROTH) {
-                return new LOTRWorldGenDolAmrothStables(false);
-            }
-            return null;
-        }
-
-        private LOTRWorldGenStructureBase2 getVillageWatchtower() {
-            if (this.villageFief == LOTRWorldGenGondorStructure.GondorFiefdom.GONDOR) {
-                return new LOTRWorldGenGondorWatchtower(false);
-            }
-            if (this.villageFief == LOTRWorldGenGondorStructure.GondorFiefdom.LOSSARNACH) {
-                return new LOTRWorldGenLossarnachWatchtower(false);
-            }
-            if (this.villageFief == LOTRWorldGenGondorStructure.GondorFiefdom.LEBENNIN) {
-                return new LOTRWorldGenLebenninWatchtower(false);
-            }
-            if (this.villageFief == LOTRWorldGenGondorStructure.GondorFiefdom.PELARGIR) {
-                return new LOTRWorldGenPelargirWatchtower(false);
-            }
-            if (this.villageFief == LOTRWorldGenGondorStructure.GondorFiefdom.PINNATH_GELIN) {
-                return new LOTRWorldGenPinnathGelinWatchtower(false);
-            }
-            if (this.villageFief == LOTRWorldGenGondorStructure.GondorFiefdom.BLACKROOT_VALE) {
-                return new LOTRWorldGenBlackrootWatchtower(false);
-            }
-            if (this.villageFief == LOTRWorldGenGondorStructure.GondorFiefdom.LAMEDON) {
-                return new LOTRWorldGenLamedonWatchtower(false);
-            }
-            if (this.villageFief == LOTRWorldGenGondorStructure.GondorFiefdom.DOL_AMROTH) {
-                return new LOTRWorldGenDolAmrothWatchtower(false);
-            }
-            return null;
         }
 
         @Override
-        protected LOTRRoadType getPath(Random random, int i, int k) {
-            int i1 = Math.abs(i);
-            int k1 = Math.abs(k);
-            if (this.villageType == VillageType.VILLAGE) {
-                int dSq = i * i + k * k;
-                int imn = 20 + random.nextInt(4);
-                if (dSq < imn * imn) {
-                    return LOTRRoadType.PATH;
-                }
-                int omn = 53 - random.nextInt(4);
-                int omx = 60 + random.nextInt(4);
-                if (dSq > omn * omn && dSq < omx * omx) {
-                    return LOTRRoadType.PATH;
-                }
-                if (dSq < 2809 && Math.abs(i1 - k1) <= 2 + random.nextInt(4)) {
-                    return LOTRRoadType.PATH;
-                }
-            }
-            if (this.villageType == VillageType.TOWN && i1 <= 80 && k1 <= 80) {
-                return LOTRRoadType.COBBLESTONE;
-            }
-            if (this.villageType == VillageType.FORT) {
-                if (i1 <= 1 && (k >= 13 || k <= -12) && k1 <= 36) {
-                    return this.instanceVillageBiome.getRoadBlock();
-                }
-                if (k1 <= 1 && i1 >= 12 && i1 <= 36) {
-                    return this.instanceVillageBiome.getRoadBlock();
-                }
-                if (k >= 26 && k <= 28 && i1 <= 12) {
-                    return this.instanceVillageBiome.getRoadBlock();
-                }
-            }
-            return null;
-        }
-
-        @Override
-        public boolean isVillageSpecificSurface(World world, int i, int j, int k) {
-            Block block = world.getBlock(i, j, k);
-            return this.villageType == VillageType.TOWN && block == Blocks.cobblestone;
+        public void setupVillageProperties(Random random) {
+            this.villageName = LOTRNames.getGondorVillageName(random);
+            this.villageType = random.nextInt(4) == 0 ? VillageType.FORT : (random.nextInt(4) == 0 ? VillageType.TOWN : VillageType.VILLAGE);
         }
 
     }

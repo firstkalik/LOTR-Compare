@@ -13,11 +13,16 @@
  *  net.minecraft.item.Item
  *  net.minecraft.item.ItemStack
  *  net.minecraft.potion.PotionEffect
+ *  net.minecraft.util.EnumChatFormatting
+ *  net.minecraft.util.StatCollector
  *  net.minecraft.world.World
  */
 package lotr.common.item;
 
 import java.util.ArrayList;
+import java.util.List;
+import lotr.common.LOTRDimension;
+import lotr.common.LOTRMod;
 import lotr.common.item.LOTRItemBaseRing2;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
@@ -30,6 +35,8 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 
 public class farin
@@ -75,8 +82,11 @@ extends LOTRItemBaseRing2 {
     }
 
     protected boolean mineBlock(EntityPlayer playerEntity, World world, int targetX, int targetY, int targetZ) {
+        if (LOTRDimension.getCurrentDimension(world) == LOTRDimension.UTUMNO) {
+            return false;
+        }
         Block targetBlock = world.getBlock(targetX, targetY, targetZ);
-        if (targetBlock == Blocks.bedrock) {
+        if (targetBlock == Blocks.bedrock || targetBlock == LOTRMod.oreMithril2) {
             return true;
         }
         int targetMeta = world.getBlockMetadata(targetX, targetY, targetZ);
@@ -91,6 +101,12 @@ extends LOTRItemBaseRing2 {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List list, boolean advanced) {
+        list.add((Object)EnumChatFormatting.GRAY + StatCollector.translateToLocal((String)"right.name"));
+        list.add((Object)EnumChatFormatting.GREEN + StatCollector.translateToLocalFormatted((String)"lotr.ring.ready", (Object[])new Object[0]));
     }
 }
 

@@ -12,13 +12,11 @@
  *  net.minecraft.init.Items
  *  net.minecraft.item.Item
  *  net.minecraft.item.ItemStack
- *  net.minecraft.nbt.NBTTagCompound
  *  net.minecraft.util.MathHelper
  *  net.minecraft.world.World
  */
 package lotr.common.entity.animal;
 
-import java.io.PrintStream;
 import java.util.Random;
 import lotr.common.entity.ai.LOTREntityAIAttackOnCollide;
 import lotr.common.entity.animal.LOTREntityHorse;
@@ -32,7 +30,6 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
@@ -60,7 +57,7 @@ extends LOTREntityHorse {
     @Override
     protected void applyEntityAttributes() {
         super.applyEntityAttributes();
-        this.getEntityAttribute(SharedMonsterAttributes.attackDamage).setBaseValue(6.0);
+        this.getEntityAttribute(SharedMonsterAttributes.attackDamage).setBaseValue(3.0);
     }
 
     @Override
@@ -69,9 +66,7 @@ extends LOTREntityHorse {
         maxHealth = Math.min(maxHealth, 25.0);
         this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(maxHealth);
         double speed = this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).getAttributeValue();
-        speed *= 1.0;
-        speed = this.clampChildSpeed(speed);
-        this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(speed);
+        this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(speed *= 1.0);
     }
 
     @Override
@@ -86,24 +81,7 @@ extends LOTREntityHorse {
 
     @Override
     protected double clampChildSpeed(double speed) {
-        return MathHelper.clamp_double((double)speed, (double)0.08, (double)0.29);
-    }
-
-    @Override
-    public void readEntityFromNBT(NBTTagCompound nbt) {
-        super.readEntityFromNBT(nbt);
-        boolean doBoarNerf = true;
-        if (doBoarNerf) {
-            double d;
-            double speed = this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).getAttributeValue();
-            double clampedSpeed = this.clampChildSpeed(speed);
-            if (d < speed) {
-                System.out.println("Reducing boar movement speed from " + speed);
-                speed = clampedSpeed;
-                this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(speed);
-                System.out.println("Movement speed now " + this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).getAttributeValue());
-            }
-        }
+        return MathHelper.clamp_double((double)speed, (double)0.08, (double)0.35);
     }
 
     @Override
@@ -121,25 +99,25 @@ extends LOTREntityHorse {
             }
             this.dropItem(Items.porkchop, 1);
         }
+        int k = 1 + this.rand.nextInt(2) + this.rand.nextInt(i + 1);
+        for (int j = 0; j < k; ++j) {
+            this.dropItem(Items.leather, 1);
+        }
     }
 
     protected String getLivingSound() {
-        super.getLivingSound();
         return "mob.pig.say";
     }
 
     protected String getHurtSound() {
-        super.getHurtSound();
         return "mob.pig.say";
     }
 
     protected String getDeathSound() {
-        super.getDeathSound();
         return "mob.pig.death";
     }
 
     protected String getAngrySoundName() {
-        super.getAngrySoundName();
         return "mob.pig.say";
     }
 

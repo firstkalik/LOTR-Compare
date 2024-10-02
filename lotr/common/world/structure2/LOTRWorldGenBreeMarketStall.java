@@ -48,53 +48,19 @@ import net.minecraft.world.World;
 
 public abstract class LOTRWorldGenBreeMarketStall
 extends LOTRWorldGenBreeStructure {
-    private static final Class[] allStallTypes = new Class[]{Baker.class, Butcher.class, Brewer.class, Mason.class, Lumber.class, Smith.class, Florist.class, Farmer.class};
-    protected Block wool1Block;
-    protected int wool1Meta;
-    protected Block wool2Block;
-    protected int wool2Meta;
-
-    public static LOTRWorldGenBreeMarketStall getRandomStall(Random random, boolean flag) {
-        try {
-            Class cls = allStallTypes[random.nextInt(allStallTypes.length)];
-            return (LOTRWorldGenBreeMarketStall)((Object)cls.getConstructor(Boolean.TYPE).newInstance(flag));
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    public static LOTRWorldGenBreeMarketStall[] getRandomStalls(Random random, boolean flag, int num) {
-        List<Class> types = Arrays.asList(Arrays.copyOf(allStallTypes, allStallTypes.length));
-        Collections.shuffle(types, random);
-        LOTRWorldGenBreeMarketStall[] ret = new LOTRWorldGenBreeMarketStall[num];
-        for (int i = 0; i < ret.length; ++i) {
-            int listIndex = i % types.size();
-            Class cls = types.get(listIndex);
-            try {
-                ret[i] = (LOTRWorldGenBreeMarketStall)((Object)cls.getConstructor(Boolean.TYPE).newInstance(flag));
-                continue;
-            }
-            catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        return ret;
-    }
+    public static Class[] allStallTypes = new Class[]{Baker.class, Butcher.class, Brewer.class, Mason.class, Lumber.class, Smith.class, Florist.class, Farmer.class};
+    public Block wool1Block;
+    public int wool1Meta;
+    public Block wool2Block;
+    public int wool2Meta;
 
     public LOTRWorldGenBreeMarketStall(boolean flag) {
         super(flag);
     }
 
-    @Override
-    protected void setupRandomBlocks(Random random) {
-        super.setupRandomBlocks(random);
-        this.wool1Block = Blocks.wool;
-        this.wool1Meta = 14;
-        this.wool2Block = Blocks.wool;
-        this.wool2Meta = 0;
-    }
+    public abstract LOTREntityNPC createTrader(World var1, Random var2);
+
+    public abstract void decorateStall(World var1, Random var2);
 
     @Override
     public boolean generateWithSetRotation(World world, Random random, int i, int j, int k, int rotation) {
@@ -235,107 +201,70 @@ extends LOTRWorldGenBreeStructure {
         return true;
     }
 
-    protected abstract void decorateStall(World var1, Random var2);
+    @Override
+    public void setupRandomBlocks(Random random) {
+        super.setupRandomBlocks(random);
+        this.wool1Block = Blocks.wool;
+        this.wool1Meta = 14;
+        this.wool2Block = Blocks.wool;
+        this.wool2Meta = 0;
+    }
 
-    protected abstract LOTREntityNPC createTrader(World var1, Random var2);
-
-    public static class Baker
-    extends LOTRWorldGenBreeMarketStall {
-        public Baker(boolean flag) {
-            super(flag);
+    public static LOTRWorldGenBreeMarketStall getRandomStall(Random random, boolean flag) {
+        try {
+            Class cls = allStallTypes[random.nextInt(allStallTypes.length)];
+            return (LOTRWorldGenBreeMarketStall)((Object)cls.getConstructor(Boolean.TYPE).newInstance(flag));
         }
-
-        @Override
-        protected void setupRandomBlocks(Random random) {
-            super.setupRandomBlocks(random);
-            this.wool1Block = Blocks.wool;
-            this.wool1Meta = 4;
-        }
-
-        @Override
-        protected void decorateStall(World world, Random random) {
-            this.placePlate_item(world, random, -1, 2, -2, LOTRMod.woodPlateBlock, this.getRandomBakeryItem(random), true);
-            this.placePlate_item(world, random, 1, 2, 2, LOTRMod.ceramicPlateBlock, this.getRandomBakeryItem(random), true);
-            this.placePlate_item(world, random, -2, 2, 1, LOTRMod.plateBlock, this.getRandomBakeryItem(random), true);
-            this.setBlockAndMetadata(world, 1, 2, -2, LOTRWorldGenBreeStructure.getRandomPieBlock(random), 0);
-            this.setBlockAndMetadata(world, -2, 2, -1, LOTRWorldGenBreeStructure.getRandomPieBlock(random), 0);
-            this.setBlockAndMetadata(world, 2, 2, 1, LOTRWorldGenBreeStructure.getRandomPieBlock(random), 0);
-        }
-
-        protected ItemStack getRandomBakeryItem(Random random) {
-            ItemStack[] foods = new ItemStack[]{new ItemStack(Items.bread), new ItemStack(LOTRMod.cornBread), new ItemStack(LOTRMod.hobbitPancake), new ItemStack(LOTRMod.hobbitPancakeMapleSyrup)};
-            ItemStack ret = foods[random.nextInt(foods.length)].copy();
-            ret.stackSize = 1 + random.nextInt(3);
-            return ret;
-        }
-
-        @Override
-        protected LOTREntityNPC createTrader(World world, Random random) {
-            return random.nextBoolean() ? new LOTREntityBreeHobbitBaker(world) : new LOTREntityBreeBaker(world);
+        catch (Exception e) {
+            e.printStackTrace();
+            return null;
         }
     }
 
-    public static class Butcher
-    extends LOTRWorldGenBreeMarketStall {
-        public Butcher(boolean flag) {
-            super(flag);
+    public static LOTRWorldGenBreeMarketStall[] getRandomStalls(Random random, boolean flag, int num) {
+        List<Class> types = Arrays.asList(Arrays.copyOf(allStallTypes, allStallTypes.length));
+        Collections.shuffle(types, random);
+        LOTRWorldGenBreeMarketStall[] ret = new LOTRWorldGenBreeMarketStall[num];
+        for (int i = 0; i < ret.length; ++i) {
+            int listIndex = i % types.size();
+            Class cls = types.get(listIndex);
+            try {
+                ret[i] = (LOTRWorldGenBreeMarketStall)((Object)cls.getConstructor(Boolean.TYPE).newInstance(flag));
+                continue;
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
         }
-
-        @Override
-        protected void setupRandomBlocks(Random random) {
-            super.setupRandomBlocks(random);
-            this.wool1Block = Blocks.wool;
-            this.wool1Meta = 14;
-        }
-
-        @Override
-        protected void decorateStall(World world, Random random) {
-            this.placePlate_item(world, random, -1, 2, -2, LOTRMod.plateBlock, this.getRandomButcherItem(random), true);
-            this.placePlate_item(world, random, 1, 2, -2, LOTRMod.ceramicPlateBlock, this.getRandomButcherItem(random), true);
-            this.placePlate_item(world, random, -2, 2, 0, LOTRMod.woodPlateBlock, this.getRandomButcherItem(random), true);
-            this.placePlate_item(world, random, 2, 2, 1, LOTRMod.plateBlock, this.getRandomButcherItem(random), true);
-            this.placePlate_item(world, random, 0, 2, 2, LOTRMod.ceramicPlateBlock, this.getRandomButcherItem(random), true);
-        }
-
-        protected ItemStack getRandomButcherItem(Random random) {
-            ItemStack[] foods = new ItemStack[]{new ItemStack(Items.beef), new ItemStack(Items.porkchop), new ItemStack(LOTRMod.gammon), new ItemStack(Items.chicken), new ItemStack(LOTRMod.muttonRaw), new ItemStack(LOTRMod.rabbitRaw), new ItemStack(LOTRMod.deerRaw)};
-            ItemStack ret = foods[random.nextInt(foods.length)].copy();
-            ret.stackSize = 1 + random.nextInt(3);
-            return ret;
-        }
-
-        @Override
-        protected LOTREntityNPC createTrader(World world, Random random) {
-            return random.nextBoolean() ? new LOTREntityBreeHobbitButcher(world) : new LOTREntityBreeButcher(world);
-        }
+        return ret;
     }
 
-    public static class Brewer
+    public static class Smith
     extends LOTRWorldGenBreeMarketStall {
-        public Brewer(boolean flag) {
+        public Smith(boolean flag) {
             super(flag);
         }
 
         @Override
-        protected void setupRandomBlocks(Random random) {
+        public LOTREntityNPC createTrader(World world, Random random) {
+            return new LOTREntityBreeBlacksmith(world);
+        }
+
+        @Override
+        public void decorateStall(World world, Random random) {
+            this.placeWeaponRack(world, 1, 2, -2, 7, new ItemStack(LOTRMod.ironCrossbow));
+            this.placeWeaponRack(world, -2, 2, 1, 3, new ItemStack(LOTRMod.battleaxeIron));
+            this.placeWeaponRack(world, 2, 2, 1, 1, new ItemStack(Items.iron_sword));
+            LOTREntityBreeGuard armorGuard = new LOTREntityBreeGuard(world);
+            armorGuard.onSpawnWithEgg(null);
+            this.placeArmorStand(world, 0, 1, 1, 0, new ItemStack[]{armorGuard.getEquipmentInSlot(4), armorGuard.getEquipmentInSlot(3), null, null});
+        }
+
+        @Override
+        public void setupRandomBlocks(Random random) {
             super.setupRandomBlocks(random);
             this.wool1Block = Blocks.wool;
-            this.wool1Meta = 1;
-        }
-
-        @Override
-        protected void decorateStall(World world, Random random) {
-            this.placeMug(world, random, -1, 2, -2, 0, LOTRFoods.BREE_DRINK);
-            this.placeMug(world, random, 1, 2, -2, 0, LOTRFoods.BREE_DRINK);
-            this.placeMug(world, random, 1, 2, 2, 2, LOTRFoods.BREE_DRINK);
-            this.setBlockAndMetadata(world, -1, 1, -1, LOTRMod.barrel, 3);
-            this.setBlockAndMetadata(world, -2, 2, 1, LOTRMod.barrel, 2);
-            this.setBlockAndMetadata(world, 2, 2, 1, LOTRMod.barrel, 5);
-        }
-
-        @Override
-        protected LOTREntityNPC createTrader(World world, Random random) {
-            return random.nextBoolean() ? new LOTREntityBreeHobbitBrewer(world) : new LOTREntityBreeBrewer(world);
+            this.wool1Meta = 7;
         }
     }
 
@@ -346,14 +275,12 @@ extends LOTRWorldGenBreeStructure {
         }
 
         @Override
-        protected void setupRandomBlocks(Random random) {
-            super.setupRandomBlocks(random);
-            this.wool1Block = Blocks.wool;
-            this.wool1Meta = 8;
+        public LOTREntityNPC createTrader(World world, Random random) {
+            return new LOTREntityBreeMason(world);
         }
 
         @Override
-        protected void decorateStall(World world, Random random) {
+        public void decorateStall(World world, Random random) {
             this.setBlockAndMetadata(world, 0, 1, 1, this.brickBlock, this.brickMeta);
             this.setBlockAndMetadata(world, 0, 2, 1, this.brickBlock, this.brickMeta);
             this.setGrassToDirt(world, 0, 0, 1);
@@ -364,8 +291,10 @@ extends LOTRWorldGenBreeStructure {
         }
 
         @Override
-        protected LOTREntityNPC createTrader(World world, Random random) {
-            return new LOTREntityBreeMason(world);
+        public void setupRandomBlocks(Random random) {
+            super.setupRandomBlocks(random);
+            this.wool1Block = Blocks.wool;
+            this.wool1Meta = 8;
         }
     }
 
@@ -376,14 +305,12 @@ extends LOTRWorldGenBreeStructure {
         }
 
         @Override
-        protected void setupRandomBlocks(Random random) {
-            super.setupRandomBlocks(random);
-            this.wool1Block = Blocks.wool;
-            this.wool1Meta = 12;
+        public LOTREntityNPC createTrader(World world, Random random) {
+            return new LOTREntityBreeLumberman(world);
         }
 
         @Override
-        protected void decorateStall(World world, Random random) {
+        public void decorateStall(World world, Random random) {
             this.setBlockAndMetadata(world, 0, 1, 1, Blocks.log, 0);
             this.setGrassToDirt(world, 0, 0, 1);
             this.setBlockAndMetadata(world, -1, 1, -1, LOTRMod.wood5, 4);
@@ -392,37 +319,10 @@ extends LOTRWorldGenBreeStructure {
         }
 
         @Override
-        protected LOTREntityNPC createTrader(World world, Random random) {
-            return new LOTREntityBreeLumberman(world);
-        }
-    }
-
-    public static class Smith
-    extends LOTRWorldGenBreeMarketStall {
-        public Smith(boolean flag) {
-            super(flag);
-        }
-
-        @Override
-        protected void setupRandomBlocks(Random random) {
+        public void setupRandomBlocks(Random random) {
             super.setupRandomBlocks(random);
             this.wool1Block = Blocks.wool;
-            this.wool1Meta = 7;
-        }
-
-        @Override
-        protected void decorateStall(World world, Random random) {
-            this.placeWeaponRack(world, 1, 2, -2, 7, new ItemStack(LOTRMod.ironCrossbow));
-            this.placeWeaponRack(world, -2, 2, 1, 3, new ItemStack(LOTRMod.battleaxeIron));
-            this.placeWeaponRack(world, 2, 2, 1, 1, new ItemStack(Items.iron_sword));
-            LOTREntityBreeGuard armorGuard = new LOTREntityBreeGuard(world);
-            armorGuard.onSpawnWithEgg(null);
-            this.placeArmorStand(world, 0, 1, 1, 0, new ItemStack[]{armorGuard.getEquipmentInSlot(4), armorGuard.getEquipmentInSlot(3), null, null});
-        }
-
-        @Override
-        protected LOTREntityNPC createTrader(World world, Random random) {
-            return new LOTREntityBreeBlacksmith(world);
+            this.wool1Meta = 12;
         }
     }
 
@@ -433,14 +333,12 @@ extends LOTRWorldGenBreeStructure {
         }
 
         @Override
-        protected void setupRandomBlocks(Random random) {
-            super.setupRandomBlocks(random);
-            this.wool1Block = Blocks.wool;
-            this.wool1Meta = 10;
+        public LOTREntityNPC createTrader(World world, Random random) {
+            return random.nextBoolean() ? new LOTREntityBreeHobbitFlorist(world) : new LOTREntityBreeFlorist(world);
         }
 
         @Override
-        protected void decorateStall(World world, Random random) {
+        public void decorateStall(World world, Random random) {
             this.placeRandomFlowerPot(world, random, -1, 2, -2);
             this.placeRandomFlowerPot(world, random, 1, 2, -2);
             this.placeRandomFlowerPot(world, random, -2, 2, 0);
@@ -449,8 +347,10 @@ extends LOTRWorldGenBreeStructure {
         }
 
         @Override
-        protected LOTREntityNPC createTrader(World world, Random random) {
-            return random.nextBoolean() ? new LOTREntityBreeHobbitFlorist(world) : new LOTREntityBreeFlorist(world);
+        public void setupRandomBlocks(Random random) {
+            super.setupRandomBlocks(random);
+            this.wool1Block = Blocks.wool;
+            this.wool1Meta = 10;
         }
     }
 
@@ -461,14 +361,12 @@ extends LOTRWorldGenBreeStructure {
         }
 
         @Override
-        protected void setupRandomBlocks(Random random) {
-            super.setupRandomBlocks(random);
-            this.wool1Block = Blocks.wool;
-            this.wool1Meta = 13;
+        public LOTREntityNPC createTrader(World world, Random random) {
+            return new LOTREntityBreeFarmer(world);
         }
 
         @Override
-        protected void decorateStall(World world, Random random) {
+        public void decorateStall(World world, Random random) {
             this.placePlate_item(world, random, -1, 2, -2, LOTRMod.plateBlock, this.getRandomFarmerItem(random), true);
             this.placePlate_item(world, random, 0, 2, -2, LOTRMod.woodPlateBlock, this.getRandomFarmerItem(random), true);
             this.placePlate_item(world, random, -2, 2, -1, LOTRMod.woodPlateBlock, this.getRandomFarmerItem(random), true);
@@ -478,7 +376,7 @@ extends LOTRWorldGenBreeStructure {
             this.setGrassToDirt(world, -1, 0, -1);
         }
 
-        protected ItemStack getRandomFarmerItem(Random random) {
+        public ItemStack getRandomFarmerItem(Random random) {
             ItemStack[] foods = new ItemStack[]{new ItemStack(Items.carrot), new ItemStack(Items.potato), new ItemStack(LOTRMod.lettuce), new ItemStack(LOTRMod.turnip), new ItemStack(LOTRMod.leek), new ItemStack(Items.apple), new ItemStack(LOTRMod.appleGreen), new ItemStack(LOTRMod.pear), new ItemStack(LOTRMod.plum)};
             ItemStack ret = foods[random.nextInt(foods.length)].copy();
             ret.stackSize = 1 + random.nextInt(3);
@@ -486,8 +384,110 @@ extends LOTRWorldGenBreeStructure {
         }
 
         @Override
-        protected LOTREntityNPC createTrader(World world, Random random) {
-            return new LOTREntityBreeFarmer(world);
+        public void setupRandomBlocks(Random random) {
+            super.setupRandomBlocks(random);
+            this.wool1Block = Blocks.wool;
+            this.wool1Meta = 13;
+        }
+    }
+
+    public static class Butcher
+    extends LOTRWorldGenBreeMarketStall {
+        public Butcher(boolean flag) {
+            super(flag);
+        }
+
+        @Override
+        public LOTREntityNPC createTrader(World world, Random random) {
+            return random.nextBoolean() ? new LOTREntityBreeHobbitButcher(world) : new LOTREntityBreeButcher(world);
+        }
+
+        @Override
+        public void decorateStall(World world, Random random) {
+            this.placePlate_item(world, random, -1, 2, -2, LOTRMod.plateBlock, this.getRandomButcherItem(random), true);
+            this.placePlate_item(world, random, 1, 2, -2, LOTRMod.ceramicPlateBlock, this.getRandomButcherItem(random), true);
+            this.placePlate_item(world, random, -2, 2, 0, LOTRMod.woodPlateBlock, this.getRandomButcherItem(random), true);
+            this.placePlate_item(world, random, 2, 2, 1, LOTRMod.plateBlock, this.getRandomButcherItem(random), true);
+            this.placePlate_item(world, random, 0, 2, 2, LOTRMod.ceramicPlateBlock, this.getRandomButcherItem(random), true);
+        }
+
+        public ItemStack getRandomButcherItem(Random random) {
+            ItemStack[] foods = new ItemStack[]{new ItemStack(Items.beef), new ItemStack(Items.porkchop), new ItemStack(LOTRMod.gammon), new ItemStack(Items.chicken), new ItemStack(LOTRMod.muttonRaw), new ItemStack(LOTRMod.rabbitRaw), new ItemStack(LOTRMod.deerRaw)};
+            ItemStack ret = foods[random.nextInt(foods.length)].copy();
+            ret.stackSize = 1 + random.nextInt(3);
+            return ret;
+        }
+
+        @Override
+        public void setupRandomBlocks(Random random) {
+            super.setupRandomBlocks(random);
+            this.wool1Block = Blocks.wool;
+            this.wool1Meta = 14;
+        }
+    }
+
+    public static class Brewer
+    extends LOTRWorldGenBreeMarketStall {
+        public Brewer(boolean flag) {
+            super(flag);
+        }
+
+        @Override
+        public LOTREntityNPC createTrader(World world, Random random) {
+            return random.nextBoolean() ? new LOTREntityBreeHobbitBrewer(world) : new LOTREntityBreeBrewer(world);
+        }
+
+        @Override
+        public void decorateStall(World world, Random random) {
+            this.placeMug(world, random, -1, 2, -2, 0, LOTRFoods.BREE_DRINK);
+            this.placeMug(world, random, 1, 2, -2, 0, LOTRFoods.BREE_DRINK);
+            this.placeMug(world, random, 1, 2, 2, 2, LOTRFoods.BREE_DRINK);
+            this.setBlockAndMetadata(world, -1, 1, -1, LOTRMod.barrel, 3);
+            this.setBlockAndMetadata(world, -2, 2, 1, LOTRMod.barrel, 2);
+            this.setBlockAndMetadata(world, 2, 2, 1, LOTRMod.barrel, 5);
+        }
+
+        @Override
+        public void setupRandomBlocks(Random random) {
+            super.setupRandomBlocks(random);
+            this.wool1Block = Blocks.wool;
+            this.wool1Meta = 1;
+        }
+    }
+
+    public static class Baker
+    extends LOTRWorldGenBreeMarketStall {
+        public Baker(boolean flag) {
+            super(flag);
+        }
+
+        @Override
+        public LOTREntityNPC createTrader(World world, Random random) {
+            return random.nextBoolean() ? new LOTREntityBreeHobbitBaker(world) : new LOTREntityBreeBaker(world);
+        }
+
+        @Override
+        public void decorateStall(World world, Random random) {
+            this.placePlate_item(world, random, -1, 2, -2, LOTRMod.woodPlateBlock, this.getRandomBakeryItem(random), true);
+            this.placePlate_item(world, random, 1, 2, 2, LOTRMod.ceramicPlateBlock, this.getRandomBakeryItem(random), true);
+            this.placePlate_item(world, random, -2, 2, 1, LOTRMod.plateBlock, this.getRandomBakeryItem(random), true);
+            this.setBlockAndMetadata(world, 1, 2, -2, LOTRWorldGenBreeStructure.getRandomPieBlock(random), 0);
+            this.setBlockAndMetadata(world, -2, 2, -1, LOTRWorldGenBreeStructure.getRandomPieBlock(random), 0);
+            this.setBlockAndMetadata(world, 2, 2, 1, LOTRWorldGenBreeStructure.getRandomPieBlock(random), 0);
+        }
+
+        public ItemStack getRandomBakeryItem(Random random) {
+            ItemStack[] foods = new ItemStack[]{new ItemStack(Items.bread), new ItemStack(LOTRMod.cornBread), new ItemStack(LOTRMod.hobbitPancake), new ItemStack(LOTRMod.hobbitPancakeMapleSyrup)};
+            ItemStack ret = foods[random.nextInt(foods.length)].copy();
+            ret.stackSize = 1 + random.nextInt(3);
+            return ret;
+        }
+
+        @Override
+        public void setupRandomBlocks(Random random) {
+            super.setupRandomBlocks(random);
+            this.wool1Block = Blocks.wool;
+            this.wool1Meta = 4;
         }
     }
 

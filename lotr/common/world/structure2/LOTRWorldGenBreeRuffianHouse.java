@@ -34,15 +34,10 @@ import net.minecraft.world.World;
 
 public class LOTRWorldGenBreeRuffianHouse
 extends LOTRWorldGenBreeStructure {
-    private String fixedName;
+    public String fixedName;
 
     public LOTRWorldGenBreeRuffianHouse(boolean flag) {
         super(flag);
-    }
-
-    public LOTRWorldGenBreeRuffianHouse setRuffianName(String name) {
-        this.fixedName = name;
-        return this;
     }
 
     @Override
@@ -152,17 +147,26 @@ extends LOTRWorldGenBreeStructure {
         for (i1 = 4; i1 <= 6; ++i1) {
             for (step = 0; step < 12 && !this.isOpaque(world, i1, j1 = -1 - step, k1 = 5 + step); ++step) {
                 randPath = random.nextInt(4);
-                if (randPath == 0) {
-                    this.setBlockAndMetadata(world, i1, j1, k1, (Block)Blocks.grass, 0);
-                } else if (randPath == 1) {
-                    this.setBlockAndMetadata(world, i1, j1, k1, Blocks.dirt, 1);
-                } else if (randPath == 2) {
-                    this.setBlockAndMetadata(world, i1, j1, k1, LOTRMod.dirtPath, 0);
-                } else if (randPath == 3) {
-                    if (random.nextBoolean()) {
-                        this.setBlockAndMetadata(world, i1, j1, k1, Blocks.cobblestone, 0);
-                    } else {
+                switch (randPath) {
+                    case 0: {
+                        this.setBlockAndMetadata(world, i1, j1, k1, (Block)Blocks.grass, 0);
+                        break;
+                    }
+                    case 1: {
+                        this.setBlockAndMetadata(world, i1, j1, k1, Blocks.dirt, 1);
+                        break;
+                    }
+                    case 2: {
+                        this.setBlockAndMetadata(world, i1, j1, k1, LOTRMod.dirtPath, 0);
+                        break;
+                    }
+                    case 3: {
+                        if (random.nextBoolean()) {
+                            this.setBlockAndMetadata(world, i1, j1, k1, Blocks.cobblestone, 0);
+                            break;
+                        }
                         this.setBlockAndMetadata(world, i1, j1, k1, Blocks.mossy_cobblestone, 0);
+                        break;
                     }
                 }
                 this.setGrassToDirt(world, i1, j1 - 1, k1);
@@ -180,17 +184,26 @@ extends LOTRWorldGenBreeStructure {
             k1 = -5 - step;
             if (this.isOpaque(world, -5, j1, k1)) break;
             randPath = random.nextInt(4);
-            if (randPath == 0) {
-                this.setBlockAndMetadata(world, i12, j1, k1, (Block)Blocks.grass, 0);
-            } else if (randPath == 1) {
-                this.setBlockAndMetadata(world, i12, j1, k1, Blocks.dirt, 1);
-            } else if (randPath == 2) {
-                this.setBlockAndMetadata(world, i12, j1, k1, LOTRMod.dirtPath, 0);
-            } else if (randPath == 3) {
-                if (random.nextBoolean()) {
-                    this.setBlockAndMetadata(world, i12, j1, k1, Blocks.cobblestone, 0);
-                } else {
+            switch (randPath) {
+                case 0: {
+                    this.setBlockAndMetadata(world, i12, j1, k1, (Block)Blocks.grass, 0);
+                    break;
+                }
+                case 1: {
+                    this.setBlockAndMetadata(world, i12, j1, k1, Blocks.dirt, 1);
+                    break;
+                }
+                case 2: {
+                    this.setBlockAndMetadata(world, i12, j1, k1, LOTRMod.dirtPath, 0);
+                    break;
+                }
+                case 3: {
+                    if (random.nextBoolean()) {
+                        this.setBlockAndMetadata(world, i12, j1, k1, Blocks.cobblestone, 0);
+                        break;
+                    }
                     this.setBlockAndMetadata(world, i12, j1, k1, Blocks.mossy_cobblestone, 0);
+                    break;
                 }
             }
             this.setGrassToDirt(world, i12, j1 - 1, k1);
@@ -238,6 +251,11 @@ extends LOTRWorldGenBreeStructure {
         this.spawnNPCAndSetHome(ruffian, world, 0, 1, 0, 16);
         this.placeSign(world, 2, 2, -8, Blocks.standing_sign, 9, LOTRNames.getBreeRuffianSign(random));
         return true;
+    }
+
+    public LOTRWorldGenBreeRuffianHouse setRuffianName(String name) {
+        this.fixedName = name;
+        return this;
     }
 }
 

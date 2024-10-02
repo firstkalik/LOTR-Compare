@@ -11,12 +11,14 @@
  *  cpw.mods.fml.common.gameevent.TickEvent$PlayerTickEvent
  *  cpw.mods.fml.common.gameevent.TickEvent$WorldTickEvent
  *  net.minecraft.block.Block
+ *  net.minecraft.block.BlockFire
  *  net.minecraft.block.material.Material
  *  net.minecraft.entity.Entity
  *  net.minecraft.entity.item.EntityFireworkRocket
  *  net.minecraft.entity.item.EntityItem
  *  net.minecraft.entity.player.EntityPlayer
  *  net.minecraft.entity.player.EntityPlayerMP
+ *  net.minecraft.entity.player.InventoryPlayer
  *  net.minecraft.init.Blocks
  *  net.minecraft.init.Items
  *  net.minecraft.item.Item
@@ -38,6 +40,7 @@
  *  net.minecraft.world.World
  *  net.minecraft.world.WorldProvider
  *  net.minecraft.world.WorldServer
+ *  net.minecraft.world.biome.BiomeGenBase
  *  net.minecraft.world.storage.WorldInfo
  *  net.minecraftforge.common.DimensionManager
  */
@@ -51,6 +54,7 @@ import cpw.mods.fml.common.gameevent.TickEvent;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
+import lotr.common.LOTRAchievement;
 import lotr.common.LOTRBannerProtection;
 import lotr.common.LOTRDate;
 import lotr.common.LOTRDimension;
@@ -73,17 +77,20 @@ import lotr.common.world.LOTRUtumnoLevel;
 import lotr.common.world.LOTRWorldInfo;
 import lotr.common.world.LOTRWorldProvider;
 import lotr.common.world.LOTRWorldProviderUtumno;
+import lotr.common.world.biome.LOTRBiomeGenGorgoroth;
 import lotr.common.world.biome.variant.LOTRBiomeVariantStorage;
 import lotr.common.world.map.LOTRConquestGrid;
 import lotr.common.world.spawning.LOTREventSpawner;
 import lotr.common.world.spawning.LOTRSpawnerNPCs;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockFire;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityFireworkRocket;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -105,6 +112,7 @@ import net.minecraft.world.Teleporter;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldProvider;
 import net.minecraft.world.WorldServer;
+import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.storage.WorldInfo;
 import net.minecraftforge.common.DimensionManager;
 
@@ -294,6 +302,51 @@ public class LOTRTickHandlerServer {
                 if ((heldItem = entityplayer.getHeldItem()) != null && (heldItem.getItem() instanceof ItemWritableBook || heldItem.getItem() instanceof ItemEditableBook)) {
                     entityplayer.func_143004_u();
                 }
+                if (entityplayer.dimension == LOTRDimension.MIDDLE_EARTH.dimensionID) {
+                    items = world.getEntitiesWithinAABB(EntityItem.class, entityplayer.boundingBox.expand(16.0, 16.0, 16.0));
+                    for (Object obj : items) {
+                        EntityItem item1 = (EntityItem)obj;
+                        if (item1.getEntityItem() == null || item1.getEntityItem().getItem() != LOTRMod.theOneRing || !item1.isBurning()) continue;
+                        int fireX = MathHelper.floor_double((double)item1.posX);
+                        int fireY = MathHelper.floor_double((double)item1.posY);
+                        int fireZ = MathHelper.floor_double((double)item1.posZ);
+                        for (int x = -1; x <= 1; ++x) {
+                            for (int y = -1; y <= 1; ++y) {
+                                for (int z = -1; z <= 1; ++z) {
+                                    Block block = world.getBlock(fireX + x, fireY + y, fireZ + z);
+                                    if (block == Blocks.fire) {
+                                        world.setBlockToAir(fireX + x, fireY + y, fireZ + z);
+                                        continue;
+                                    }
+                                    if (block != Blocks.lava) continue;
+                                    world.setBlock(fireX + x, fireY + y, fireZ + z, Blocks.obsidian);
+                                }
+                            }
+                        }
+                        BiomeGenBase biome = world.getBiomeGenForCoords(MathHelper.floor_double((double)entityplayer.posX), MathHelper.floor_double((double)entityplayer.posZ));
+                        boolean ringRemoved = false;
+                        if (biome instanceof LOTRBiomeGenGorgoroth) {
+                            for (int i = 0; i < entityplayer.inventory.getSizeInventory(); ++i) {
+                                ItemStack itemStack = entityplayer.inventory.getStackInSlot(i);
+                                if (itemStack == null || itemStack.getItem() != LOTRMod.theOneRing) continue;
+                                entityplayer.inventory.setInventorySlotContents(i, null);
+                                ringRemoved = true;
+                                break;
+                            }
+                        }
+                        if (!ringRemoved && biome instanceof LOTRBiomeGenGorgoroth) continue;
+                        item1.setDead();
+                        if (ringRemoved) {
+                            ItemStack ringStack = new ItemStack(LOTRMod.goldRing);
+                            world.spawnEntityInWorld((Entity)new EntityItem(world, item1.posX, item1.posY, item1.posZ, ringStack));
+                            LOTRLevelData.getData((EntityPlayer)entityplayer).addAchievement(LOTRAchievement.destroyRing);
+                            continue;
+                        }
+                        LOTRLevelData.getData((EntityPlayer)entityplayer).addAchievement(LOTRAchievement.burnRing);
+                        ItemStack ringStack = item1.getEntityItem();
+                        world.spawnEntityInWorld((Entity)new EntityItem(world, item1.posX, item1.posY, item1.posZ, ringStack));
+                    }
+                }
                 if (entityplayer.dimension == 0 && LOTRLevelData.madePortal == 0) {
                     items = world.getEntitiesWithinAABB(EntityItem.class, entityplayer.boundingBox.expand(16.0, 16.0, 16.0));
                     for (Object obj : items) {
@@ -311,10 +364,10 @@ public class LOTRTickHandlerServer {
                 if (entityplayer.dimension == 0 || entityplayer.dimension == LOTRDimension.MIDDLE_EARTH.dimensionID) {
                     items = world.getEntitiesWithinAABB(EntityItem.class, entityplayer.boundingBox.expand(16.0, 16.0, 16.0));
                     for (Object obj : items) {
-                        int[] portalLocation;
-                        int k1;
                         int i1;
                         boolean foundPortalLocation;
+                        int[] portalLocation;
+                        int k1;
                         item = (EntityItem)obj;
                         if (item.getEntityItem() == null) continue;
                         int i = MathHelper.floor_double((double)item.posX);

@@ -10,6 +10,7 @@ package lotr.common.world.biome;
 
 import java.util.List;
 import lotr.common.LOTRAchievement;
+import lotr.common.entity.animal.LOTREntityFrog;
 import lotr.common.entity.animal.LOTREntitySwan;
 import lotr.common.world.biome.LOTRBiomeDecorator;
 import lotr.common.world.biome.LOTRBiomeGenEriador;
@@ -27,6 +28,7 @@ public class LOTRBiomeGenSwanfleet
 extends LOTRBiomeGenEriador {
     public LOTRBiomeGenSwanfleet(int i, boolean major) {
         super(i, major);
+        this.spawnableCreatureList.add(new BiomeGenBase.SpawnListEntry(LOTREntityFrog.class, 8, 1, 3));
         this.spawnableLOTRAmbientList.add(new BiomeGenBase.SpawnListEntry(LOTREntitySwan.class, 20, 4, 8));
         this.clearBiomeVariants();
         this.variantChance = 1.0f;

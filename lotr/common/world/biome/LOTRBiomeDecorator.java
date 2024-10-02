@@ -35,6 +35,7 @@ import lotr.common.world.LOTRChunkProvider;
 import lotr.common.world.LOTRWorldChunkManager;
 import lotr.common.world.biome.LOTRBiome;
 import lotr.common.world.biome.LOTRBiomeGenMordor;
+import lotr.common.world.biome.WorldGenLimitedFlowers;
 import lotr.common.world.biome.variant.LOTRBiomeVariant;
 import lotr.common.world.feature.LOTRTreeType;
 import lotr.common.world.feature.LOTRWorldGenBerryBush;
@@ -44,6 +45,8 @@ import lotr.common.world.feature.LOTRWorldGenBushes;
 import lotr.common.world.feature.LOTRWorldGenCaveCobwebs;
 import lotr.common.world.feature.LOTRWorldGenCorn;
 import lotr.common.world.feature.LOTRWorldGenFallenLeaves;
+import lotr.common.world.feature.LOTRWorldGenLichen;
+import lotr.common.world.feature.LOTRWorldGenLichen2;
 import lotr.common.world.feature.LOTRWorldGenLogs;
 import lotr.common.world.feature.LOTRWorldGenReeds;
 import lotr.common.world.feature.LOTRWorldGenSand;
@@ -116,6 +119,10 @@ public class LOTRBiomeDecorator {
     private WorldGenerator vinesGen = new WorldGenVines();
     private WorldGenerator cactusGen = new WorldGenCactus();
     private WorldGenerator melonGen = new WorldGenMelon();
+    private WorldGenerator lichenGen = new LOTRWorldGenLichen();
+    private WorldGenerator lichenGen2 = new LOTRWorldGenLichen2();
+    public int lichenPerChunk = 6;
+    public int lichenPerChunk2 = 3;
     public int sandPerChunk = 4;
     public int clayPerChunk = 3;
     public int quagmirePerChunk = 0;
@@ -144,6 +151,7 @@ public class LOTRBiomeDecorator {
     public boolean generateLava = true;
     public boolean generateCobwebs = true;
     public boolean generateAthelas = false;
+    public boolean generateCloverPlus = true;
     public boolean generatekhamCrop = true;
     public boolean whiteSand = false;
     private int treeClusterSize;
@@ -189,11 +197,11 @@ public class LOTRBiomeDecorator {
         this.addOre((WorldGenerator)new WorldGenMinable(Blocks.coal_ore, 16), 40.0f, 0, 128);
         this.addOre((WorldGenerator)new WorldGenMinable(LOTRMod.oreCopper, 8), 16.0f, 0, 128);
         this.addOre((WorldGenerator)new WorldGenMinable(LOTRMod.oreTin, 8), 16.0f, 0, 128);
-        this.addOre((WorldGenerator)new WorldGenMinable(LOTRMod.oreIron, 8), 5.0f, 0, 64);
+        this.addOre((WorldGenerator)new WorldGenMinable(LOTRMod.oreIron, 8), 3.0f, 0, 64);
         this.addOre((WorldGenerator)new WorldGenMinable(Blocks.iron_ore, 8), 20.0f, 0, 64);
-        this.addOre((WorldGenerator)new WorldGenMinable(LOTRMod.oreGold, 8), 1.0f, 0, 32);
+        this.addOre((WorldGenerator)new WorldGenMinable(LOTRMod.oreGold, 8), 0.8f, 0, 32);
         this.addOre((WorldGenerator)new WorldGenMinable(Blocks.gold_ore, 8), 2.0f, 0, 32);
-        this.addOre((WorldGenerator)new WorldGenMinable(LOTRMod.oreLavaCoal, 8), 1.0f, 0, 16);
+        this.addOre((WorldGenerator)new WorldGenMinable(LOTRMod.oreLavaCoal, 8), 0.8f, 0, 16);
         this.addOre((WorldGenerator)new WorldGenMinable(LOTRMod.oreSulfur, 8), 2.0f, 0, 64);
         this.addOre((WorldGenerator)new WorldGenMinable(LOTRMod.oreSaltpeter, 8), 2.0f, 0, 64);
         this.addOre((WorldGenerator)new WorldGenMinable(LOTRMod.oreSalt, 12), 2.0f, 0, 64);
@@ -313,27 +321,28 @@ public class LOTRBiomeDecorator {
         int l5;
         int i5;
         int i3;
-        int k2;
         int k5;
         int i2;
         int k;
-        int k4;
         int l3;
         int i4;
-        int j;
+        int l7;
+        int l2;
         int l;
         int k7;
-        int i;
         int l6;
-        int l7;
         int j3;
-        int l2;
+        int k2;
         int l4;
+        int k4;
         int j2;
         int cluster;
         int k3;
+        int j;
         int j4;
         WorldGenerator house;
+        int i;
+        int i10;
         LOTRBiomeVariant biomeVariant = ((LOTRWorldChunkManager)this.worldObj.getWorldChunkManager()).getBiomeVariantAt(this.chunkX + 8, this.chunkZ + 8);
         this.generateOres();
         biomeVariant.decorateVariant(this.worldObj, this.rand, this.chunkX, this.chunkZ, this.biome);
@@ -482,10 +491,10 @@ public class LOTRBiomeDecorator {
             this.logGen.generate(this.worldObj, this.rand, i9, this.worldObj.getHeightValue(i9, k9), k9);
         }
         for (l = 0; l < this.vinesPerChunk; ++l) {
-            int i10 = this.chunkX + this.rand.nextInt(16) + 8;
+            int i102 = this.chunkX + this.rand.nextInt(16) + 8;
             int j7 = 64;
             k = this.chunkZ + this.rand.nextInt(16) + 8;
-            this.vinesGen.generate(this.worldObj, this.rand, i10, j7, k);
+            this.vinesGen.generate(this.worldObj, this.rand, i102, j7, k);
         }
         int flowers = this.flowersPerChunk;
         flowers = Math.round((float)flowers * biomeVariant.flowerFactor);
@@ -639,6 +648,12 @@ public class LOTRBiomeDecorator {
             k4 = this.chunkZ + this.rand.nextInt(16) + 8;
             new WorldGenFlowers(LOTRMod.athelas).generate(this.worldObj, this.rand, i4, j2, k4);
         }
+        if (this.generateCloverPlus && this.rand.nextInt(1) == 0) {
+            int i41 = this.chunkX + this.rand.nextInt(16) + 8;
+            int j21 = this.rand.nextInt(128);
+            int k41 = this.chunkZ + this.rand.nextInt(16) + 8;
+            new WorldGenLimitedFlowers(LOTRMod.clover, 1).generate(this.worldObj, this.rand, i41, j21, k41);
+        }
         if (this.generatekhamCrop && this.rand.nextInt(30) == 0) {
             i4 = this.chunkX + this.rand.nextInt(16) + 8;
             j2 = this.rand.nextInt(128);
@@ -723,6 +738,16 @@ public class LOTRBiomeDecorator {
                 k2 = this.chunkZ + this.rand.nextInt(16) + 8;
                 biomeVariant.boulderGen.generate(this.worldObj, this.rand, i, this.worldObj.getHeightValue(i, k2), k2);
             }
+        }
+        for (l5 = 0; l5 < this.lichenPerChunk; ++l5) {
+            i10 = this.chunkX + this.rand.nextInt(16) + 8;
+            int k51 = this.chunkZ + this.rand.nextInt(16) + 8;
+            this.lichenGen.generate(this.worldObj, this.rand, i10, 64, k51);
+        }
+        for (l5 = 0; l5 < this.lichenPerChunk2; ++l5) {
+            i10 = this.chunkX + this.rand.nextInt(16) + 8;
+            int k51 = this.chunkZ + this.rand.nextInt(16) + 8;
+            this.lichenGen2.generate(this.worldObj, this.rand, i10, 64, k51);
         }
     }
 

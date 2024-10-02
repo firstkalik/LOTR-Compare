@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Random;
 import lotr.common.LOTRAchievement;
 import lotr.common.LOTRMod;
+import lotr.common.entity.animal.LOTREntityFox;
 import lotr.common.entity.animal.LOTREntityHorse;
 import lotr.common.entity.npc.LOTREntityScrapTrader;
 import lotr.common.world.biome.LOTRBiome;
@@ -52,9 +53,12 @@ extends LOTRBiomeGenGondor {
     public LOTRBiomeGenAnfalas(int i, boolean major) {
         super(i, major);
         this.spawnableCreatureList.add(new BiomeGenBase.SpawnListEntry(LOTREntityHorse.class, 30, 2, 6));
+        this.spawnableCreatureList.add(new BiomeGenBase.SpawnListEntry(LOTREntityFox.class, 4, 1, 4));
         this.npcSpawnList.clear();
         LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer4 = new LOTRBiomeSpawnList.SpawnListContainer[]{LOTRBiomeSpawnList.entry(LOTRSpawnList.HARNEDHRIM, 2), LOTRBiomeSpawnList.entry(LOTRSpawnList.HARNEDOR_WARRIORS, 10).setConquestThreshold(100.0f), LOTRBiomeSpawnList.entry(LOTRSpawnList.COAST_SOUTHRONS, 2), LOTRBiomeSpawnList.entry(LOTRSpawnList.SOUTHRON_WARRIORS, 10).setConquestThreshold(100.0f)};
         this.npcSpawnList.newFactionList(0).add(arrspawnListContainer4);
+        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer5 = new LOTRBiomeSpawnList.SpawnListContainer[]{LOTRBiomeSpawnList.entry(LOTRSpawnList.CORSAIRS, 10), LOTRBiomeSpawnList.entry(LOTRSpawnList.UMBAR_SOLDIERS, 10).setConquestThreshold(50.0f), LOTRBiomeSpawnList.entry(LOTRSpawnList.GONDOR_RENEGADES, 10).setConquestThreshold(50.0f)};
+        this.npcSpawnList.newFactionList(0).add(arrspawnListContainer5);
         this.npcSpawnList.conquestGainRate = 0.5f;
         this.addBiomeVariantSet(LOTRBiomeVariant.SET_NORMAL);
         this.addBiomeVariant(LOTRBiomeVariant.SHRUBLAND_OAK);

@@ -185,7 +185,10 @@ implements IInventory {
             if (item instanceof LOTRItemRedBook || item == LOTRMod.mithrilBook) {
                 return true;
             }
-            if (item instanceof LOTRItemRedBook || item == LOTRMod.mithrilBook2) {
+            if (item instanceof LOTRItemRedBook || item == LOTRMod.diggingBook) {
+                return true;
+            }
+            if (item instanceof LOTRItemRedBook || item == LOTRMod.diggingBook2) {
                 return true;
             }
             if (item instanceof LOTRItemRedBook || item == LOTRMod.eru) {

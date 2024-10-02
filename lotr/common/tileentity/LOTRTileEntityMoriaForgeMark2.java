@@ -32,6 +32,9 @@ extends LOTRTileEntityAlloyForgeBase {
         if (itemstack.getItem() == Item.getItemFromBlock((Block)LOTRMod.oreMithril)) {
             return new ItemStack(LOTRMod.mithril, 1);
         }
+        if (itemstack.getItem() == Item.getItemFromBlock((Block)LOTRMod.oreMithril2)) {
+            return new ItemStack(LOTRMod.mithril, 1);
+        }
         if (itemstack.getItem() == Item.getItemFromBlock((Block)LOTRMod.oreSilver)) {
             return new ItemStack(LOTRMod.silver, 1);
         }
@@ -47,6 +50,9 @@ extends LOTRTileEntityAlloyForgeBase {
         if (itemstack.getItem() == LOTRMod.goldRaw) {
             return new ItemStack(Items.gold_ingot, 1);
         }
+        if (itemstack.getItem() == LOTRMod.mithrilRaw) {
+            return new ItemStack(LOTRMod.mithril, 1);
+        }
         return super.getSmeltingResult(itemstack);
     }
 
@@ -61,13 +67,22 @@ extends LOTRTileEntityAlloyForgeBase {
         if (this.isSilverOre(itemstack) && this.isSilverNugget(alloyItem)) {
             return new ItemStack(LOTRMod.silver, 2);
         }
+        if (this.isGoldOre(itemstack) && this.isGoldNugget(alloyItem) || this.isGoldNugget(itemstack) && this.isGoldOre(alloyItem)) {
+            return new ItemStack(Items.gold_ingot, 2);
+        }
+        if (this.isIronOre(itemstack) && this.isIronNugget(alloyItem) || this.isIronNugget(itemstack) && this.isIronOre(alloyItem)) {
+            return new ItemStack(Items.iron_ingot, 2);
+        }
         if (this.isGold1(itemstack) && this.isGoldNugget(alloyItem) || this.isGoldNugget(itemstack) && this.isGold1(alloyItem)) {
             return new ItemStack(Items.gold_ingot, 2);
         }
         if (this.isIron1(itemstack) && this.isIronNugget(alloyItem) || this.isIronNugget(itemstack) && this.isIron1(alloyItem)) {
             return new ItemStack(Items.iron_ingot, 2);
         }
-        if (this.isMithril1(itemstack) && this.isMithrilNugget(alloyItem)) {
+        if (this.isMithril(itemstack) && this.isMithrilNugget(alloyItem)) {
+            return new ItemStack(LOTRMod.mithril, 2);
+        }
+        if (this.isMithrilNugget(itemstack) && this.isMithrilPlus(alloyItem) || this.isMithrilPlus(itemstack) && this.isMithrilNugget(alloyItem)) {
             return new ItemStack(LOTRMod.mithril, 2);
         }
         if (this.isCopper(itemstack) && this.isTin(itemstack) || this.isTin(itemstack) && this.isCopper(itemstack)) {

@@ -7,6 +7,8 @@
  *  net.minecraft.block.material.Material
  *  net.minecraft.init.Blocks
  *  net.minecraft.world.World
+ *  net.minecraft.world.biome.BiomeGenBase
+ *  net.minecraft.world.biome.BiomeGenBase$SpawnListEntry
  *  net.minecraft.world.gen.feature.WorldGenMinable
  *  net.minecraft.world.gen.feature.WorldGenerator
  */
@@ -15,6 +17,7 @@ package lotr.common.world.biome;
 import java.util.List;
 import java.util.Random;
 import lotr.common.LOTRMod;
+import lotr.common.entity.animal.LOTREntityFrog;
 import lotr.common.world.biome.LOTRBiome;
 import lotr.common.world.biome.LOTRBiomeDecorator;
 import lotr.common.world.biome.LOTRBiomeGenFarHarad;
@@ -25,6 +28,7 @@ import net.minecraft.block.BlockSand;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.gen.feature.WorldGenMinable;
 import net.minecraft.world.gen.feature.WorldGenerator;
 
@@ -35,6 +39,7 @@ extends LOTRBiomeGenFarHarad {
         this.topBlock = Blocks.sand;
         this.spawnableWaterCreatureList.clear();
         this.spawnableLOTRAmbientList.clear();
+        this.spawnableCreatureList.add(new BiomeGenBase.SpawnListEntry(LOTREntityFrog.class, 8, 1, 3));
         this.decorator.addSoil((WorldGenerator)new WorldGenMinable(Blocks.dirt, 1, 60, (Block)Blocks.sand), 12.0f, 60, 90);
         this.decorator.quagmirePerChunk = 1;
         this.decorator.treesPerChunk = 5;

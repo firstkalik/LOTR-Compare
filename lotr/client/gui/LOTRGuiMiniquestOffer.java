@@ -2,6 +2,7 @@
  * Decompiled with CFR 0.148.
  * 
  * Could not load the following classes:
+ *  com.mojang.realmsclient.gui.ChatFormatting
  *  net.minecraft.client.Minecraft
  *  net.minecraft.client.entity.EntityClientPlayerMP
  *  net.minecraft.client.gui.FontRenderer
@@ -25,6 +26,7 @@
  */
 package lotr.client.gui;
 
+import com.mojang.realmsclient.gui.ChatFormatting;
 import java.util.List;
 import java.util.Random;
 import lotr.client.gui.LOTRGuiButtonRedBook;
@@ -95,9 +97,11 @@ extends LOTRGuiScreenBase {
     public void initGui() {
         this.guiLeft = (this.width - this.xSize) / 2;
         this.guiTop = (this.height - this.ySize) / 2;
-        this.buttonAccept = new LOTRGuiButtonRedBook(0, this.guiLeft + this.xSize / 2 - 20 - 80, this.guiTop + this.ySize - 30, 80, 20, StatCollector.translateToLocal((String)"lotr.gui.miniquestOffer.accept"));
+        String acceptText = (Object)ChatFormatting.DARK_GREEN + StatCollector.translateToLocal((String)"lotr.gui.miniquestOffer.accept");
+        String declineText = (Object)ChatFormatting.RED + StatCollector.translateToLocal((String)"lotr.gui.miniquestOffer.decline");
+        this.buttonAccept = new LOTRGuiButtonRedBook(0, this.guiLeft + this.xSize / 2 - 20 - 80, this.guiTop + this.ySize - 30, 80, 20, acceptText);
         this.buttonList.add(this.buttonAccept);
-        this.buttonDecline = new LOTRGuiButtonRedBook(1, this.guiLeft + this.xSize / 2 + 20, this.guiTop + this.ySize - 30, 80, 20, StatCollector.translateToLocal((String)"lotr.gui.miniquestOffer.decline"));
+        this.buttonDecline = new LOTRGuiButtonRedBook(1, this.guiLeft + this.xSize / 2 + 20, this.guiTop + this.ySize - 30, 80, 20, declineText);
         this.buttonList.add(this.buttonDecline);
     }
 

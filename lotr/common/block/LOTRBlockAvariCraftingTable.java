@@ -42,8 +42,8 @@ extends LOTRBlockCraftingTable {
     @Override
     public boolean onBlockActivated(World world, int i, int j, int k, EntityPlayer entityplayer, int side, float f, float f1, float f2) {
         boolean hasRequiredAlignment2;
-        boolean hasRequiredAlignment = LOTRLevelData.getData(entityplayer).getAlignment(this.tableFaction) >= 1.0f;
-        boolean bl = hasRequiredAlignment2 = LOTRLevelData.getData(entityplayer).getAlignment(LOTRFaction.RED_MOUNTAINS) >= 1.0f;
+        boolean hasRequiredAlignment = LOTRLevelData.getData(entityplayer).getAlignment(this.tableFaction) >= 100.0f;
+        boolean bl = hasRequiredAlignment2 = LOTRLevelData.getData(entityplayer).getAlignment(LOTRFaction.RED_MOUNTAINS) >= 100.0f;
         if (hasRequiredAlignment || hasRequiredAlignment2) {
             if (!world.isRemote) {
                 entityplayer.openGui((Object)LOTRMod.instance, this.tableGUIID, world, i, j, k);
@@ -56,7 +56,7 @@ extends LOTRBlockCraftingTable {
                 world.spawnParticle("smoke", d, d1, d2, 0.0, 0.0, 0.0);
             }
             if (!world.isRemote) {
-                LOTRAlignmentValues.notifyAlignmentNotHighEnough(entityplayer, 10.0f, this.tableFaction, LOTRFaction.RED_MOUNTAINS);
+                LOTRAlignmentValues.notifyAlignmentNotHighEnough(entityplayer, 100.0f, this.tableFaction, LOTRFaction.RED_MOUNTAINS);
             }
         }
         return true;

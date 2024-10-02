@@ -41,7 +41,7 @@ extends LOTREntityDwarf {
         super(world);
         this.addTargetTasks(true, LOTREntityAINearestAttackableTargetWoodElf.class);
         this.familyInfo.marriageEntityClass = LOTREntityIronfist.class;
-        this.familyInfo.marriageAchievement = LOTRAchievement.marryHarnaugrimDwarf;
+        this.familyInfo.marriageAchievement = LOTRAchievement.marryMornaugrimDwarf;
     }
 
     @Override
@@ -121,7 +121,7 @@ extends LOTREntityDwarf {
 
     @Override
     protected LOTRChestContents getLarderDrops() {
-        return LOTRChestContents.REDDWARF_SMITHY;
+        return LOTRChestContents.LOTRChestContents2.REDDWARF_SMITHY;
     }
 
     @Override

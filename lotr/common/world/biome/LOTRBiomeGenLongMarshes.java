@@ -10,6 +10,7 @@ package lotr.common.world.biome;
 
 import java.util.List;
 import lotr.common.LOTRAchievement;
+import lotr.common.entity.animal.LOTREntityFrog;
 import lotr.common.entity.animal.LOTREntityGorcrow;
 import lotr.common.world.biome.LOTRBiome;
 import lotr.common.world.biome.LOTRBiomeDecorator;
@@ -28,6 +29,7 @@ extends LOTRBiomeGenWilderlandNorth {
     public LOTRBiomeGenLongMarshes(int i, boolean major) {
         super(i, major);
         this.spawnableLOTRAmbientList.add(new BiomeGenBase.SpawnListEntry(LOTREntityGorcrow.class, 8, 4, 4));
+        this.spawnableCreatureList.add(new BiomeGenBase.SpawnListEntry(LOTREntityFrog.class, 8, 1, 3));
         this.clearBiomeVariants();
         this.variantChance = 1.0f;
         this.addBiomeVariantSet(LOTRBiomeVariant.SET_SWAMP);

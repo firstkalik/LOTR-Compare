@@ -33,22 +33,14 @@ import net.minecraft.world.World;
 
 public class LOTRWorldGenBreeInn
 extends LOTRWorldGenBreeStructure {
-    private boolean hasPresets = false;
-    private String[] presetInnName;
-    private String presetInnkeeperName;
-    private boolean presetIsMaleKeeper;
-    private boolean presetIsHobbitKeeper;
+    public boolean hasPresets = false;
+    public String[] presetInnName;
+    public String presetInnkeeperName;
+    public boolean presetIsMaleKeeper;
+    public boolean presetIsHobbitKeeper;
 
     public LOTRWorldGenBreeInn(boolean flag) {
         super(flag);
-    }
-
-    public void setPresets(String[] innName, String innkeeperName, boolean innkeeperMale, boolean hobbit) {
-        this.hasPresets = true;
-        this.presetInnName = innName;
-        this.presetInnkeeperName = innkeeperName;
-        this.presetIsMaleKeeper = innkeeperMale;
-        this.presetIsHobbitKeeper = hobbit;
     }
 
     @Override
@@ -182,7 +174,7 @@ extends LOTRWorldGenBreeStructure {
         return true;
     }
 
-    private void placeFoodOrDrink(World world, Random random, int i, int j, int k) {
+    public void placeFoodOrDrink(World world, Random random, int i, int j, int k) {
         if (random.nextBoolean()) {
             if (random.nextBoolean()) {
                 this.placeMug(world, random, i, j, k, random.nextInt(4), LOTRFoods.BREE_DRINK);
@@ -196,6 +188,14 @@ extends LOTRWorldGenBreeStructure {
                 }
             }
         }
+    }
+
+    public void setPresets(String[] innName, String innkeeperName, boolean innkeeperMale, boolean hobbit) {
+        this.hasPresets = true;
+        this.presetInnName = innName;
+        this.presetInnkeeperName = innkeeperName;
+        this.presetIsMaleKeeper = innkeeperMale;
+        this.presetIsHobbitKeeper = hobbit;
     }
 }
 

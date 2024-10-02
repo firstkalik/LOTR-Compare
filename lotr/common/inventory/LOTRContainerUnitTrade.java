@@ -57,7 +57,7 @@ extends Container {
         this.alignmentRewardInv = new InventoryBasic("specialItem", false, this.alignmentRewardSlots);
         if (hasReward) {
             this.addSlotToContainer((Slot)new LOTRSlotAlignmentReward(this, this.alignmentRewardInv, 0, 174, 78, this.theUnitTrader, reward.copy()));
-            if (!world.isRemote && LOTRLevelData.getData(entityplayer).getAlignment(this.traderFaction) >= 1500.0f) {
+            if (!world.isRemote && LOTRLevelData.getData(entityplayer).getAlignment(this.traderFaction) >= 3000.0f) {
                 this.alignmentRewardInv.setInventorySlotContents(0, reward.copy());
             }
         }

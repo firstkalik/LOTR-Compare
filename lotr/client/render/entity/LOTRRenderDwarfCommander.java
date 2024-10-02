@@ -2,28 +2,22 @@
  * Decompiled with CFR 0.148.
  * 
  * Could not load the following classes:
- *  net.minecraft.client.Minecraft
  *  net.minecraft.client.model.ModelBase
  *  net.minecraft.client.model.ModelBiped
  *  net.minecraft.client.model.ModelRenderer
- *  net.minecraft.entity.Entity
  *  net.minecraft.entity.EntityLiving
  *  net.minecraft.entity.EntityLivingBase
  *  net.minecraft.util.ResourceLocation
  */
 package lotr.client.render.entity;
 
-import lotr.client.LOTRSpeechClient;
 import lotr.client.model.LOTRModelDwarf;
 import lotr.client.render.entity.LOTRRenderDwarf;
 import lotr.common.entity.npc.LOTREntityBlacklock;
 import lotr.common.entity.npc.LOTREntityBlueDwarf;
-import lotr.common.entity.npc.LOTREntityNPC;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.model.ModelRenderer;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.ResourceLocation;
@@ -44,15 +38,6 @@ extends LOTRRenderDwarf {
     }
 
     @Override
-    public void doRender(EntityLiving entity, double d, double d1, double d2, float f, float f1) {
-        LOTREntityNPC legend = (LOTREntityNPC)entity;
-        super.doRender((EntityLiving)legend, d, d1, d2, f, f1);
-        if (Minecraft.isGuiEnabled() && !LOTRSpeechClient.hasSpeech(legend)) {
-            this.func_147906_a((Entity)legend, legend.getCommandSenderName(), d, d1 + 0.2, d2, 64);
-        }
-    }
-
-    @Override
     public int shouldRenderPass(EntityLiving entity, int pass, float f) {
         if (pass == 0) {
             this.bindTexture(this.getCloakTexture((EntityLivingBase)entity));
@@ -68,7 +53,20 @@ extends LOTRRenderDwarf {
             this.cloakModel.isRiding = this.mainModel.isRiding;
             this.cloakModel.isChild = this.mainModel.isChild;
             this.cloakModel.heldItemRight = this.modelBipedMain.heldItemRight;
-            return 1;
+        } else if (pass == 1) {
+            this.bindTexture(this.getCloakTexture((EntityLivingBase)entity));
+            this.modelBipedMain.bipedHead.showModel = true;
+            this.modelBipedMain.bipedHeadwear.showModel = true;
+            this.modelBipedMain.bipedBody.showModel = true;
+            this.modelBipedMain.bipedRightArm.showModel = true;
+            this.modelBipedMain.bipedLeftArm.showModel = true;
+            this.modelBipedMain.bipedRightLeg.showModel = true;
+            this.modelBipedMain.bipedLeftLeg.showModel = true;
+            this.setRenderPassModel((ModelBase)this.modelBipedMain);
+            this.modelBipedMain.onGround = this.mainModel.onGround;
+            this.modelBipedMain.isRiding = this.mainModel.isRiding;
+            this.modelBipedMain.isChild = this.mainModel.isChild;
+            this.modelBipedMain.heldItemRight = this.mainModel.textureHeight;
         }
         return super.shouldRenderPass(entity, pass, f);
     }

@@ -46,29 +46,21 @@ import net.minecraft.world.biome.WorldChunkManager;
 import net.minecraft.world.storage.WorldInfo;
 
 public abstract class LOTRVillageGen {
-    protected LOTRBiome villageBiome;
-    private List<BiomeGenBase> spawnBiomes;
-    private static Random villageRand = new Random();
-    protected int gridScale;
-    protected int gridRandomDisplace;
-    protected float spawnChance;
-    protected int villageChunkRadius;
-    protected int fixedVillageChunkRadius;
-    private List<LocationInfo> fixedLocations = new ArrayList<LocationInfo>();
-    public static final double SQRT2 = Math.sqrt(2.0);
+    public static Random villageRand = new Random();
+    public static double SQRT2 = Math.sqrt(2.0);
+    public LOTRBiome villageBiome;
+    public List<BiomeGenBase> spawnBiomes;
+    public int gridScale;
+    public int gridRandomDisplace;
+    public float spawnChance;
+    public int villageChunkRadius;
+    public int fixedVillageChunkRadius;
+    public List<LocationInfo> fixedLocations = new ArrayList<LocationInfo>();
 
     public LOTRVillageGen(LOTRBiome biome) {
         this.villageBiome = biome;
         this.spawnBiomes = new ArrayList<BiomeGenBase>();
         this.spawnBiomes.add(this.villageBiome);
-    }
-
-    public LocationInfo addFixedLocation(LOTRWaypoint wp, int rotation, String name) {
-        return this.addFixedLocation(wp, 0, 0, rotation, name);
-    }
-
-    public LocationInfo addFixedLocationMapOffset(LOTRWaypoint wp, int addX, int addZ, int rotation, String name) {
-        return this.addFixedLocation(wp, addX * LOTRGenLayerWorld.scale, addZ * LOTRGenLayerWorld.scale, rotation, name);
     }
 
     public LocationInfo addFixedLocation(LOTRWaypoint wp, int addX, int addZ, int rotation, String name) {
@@ -77,96 +69,12 @@ public abstract class LOTRVillageGen {
         return loc;
     }
 
-    public final AbstractInstance<?> createAndSetupVillageInstance(World world, int i, int k, Random random, LocationInfo location) {
-        AbstractInstance<?> instance = this.createVillageInstance(world, i, k, random, location);
-        instance.setupBaseAndVillageProperties();
-        return instance;
+    public LocationInfo addFixedLocation(LOTRWaypoint wp, int rotation, String name) {
+        return this.addFixedLocation(wp, 0, 0, rotation, name);
     }
 
-    protected abstract AbstractInstance<?> createVillageInstance(World var1, int var2, int var3, Random var4, LocationInfo var5);
-
-    private static void seedVillageRand(World world, int i, int k) {
-        long seed = (long)i * 6890360793007L + (long)k * 456879569029062L + world.getWorldInfo().getSeed() + 274893855L;
-        villageRand.setSeed(seed);
-    }
-
-    private LocationInfo isVillageCentre(World world, int chunkX, int chunkZ) {
-        LOTRWorldChunkManager worldChunkMgr = (LOTRWorldChunkManager)world.getWorldChunkManager();
-        LOTRVillagePositionCache cache = worldChunkMgr.getVillageCache(this);
-        LocationInfo cacheLocation = cache.getLocationAt(chunkX, chunkZ);
-        if (cacheLocation != null) {
-            return cacheLocation;
-        }
-        if (LOTRVillageGen.hasFixedSettlements(world)) {
-            for (LocationInfo loc : this.fixedLocations) {
-                int locChunkX = loc.posX >> 4;
-                int locChunkZ = loc.posZ >> 4;
-                if (chunkX == locChunkX && chunkZ == locChunkZ) {
-                    return cache.markResult(chunkX, chunkZ, loc);
-                }
-                int locCheckSize = Math.max(this.villageChunkRadius, this.fixedVillageChunkRadius);
-                if (Math.abs(chunkX - locChunkX) > locCheckSize || Math.abs(chunkZ - locChunkZ) > locCheckSize) continue;
-                return cache.markResult(chunkX, chunkZ, LocationInfo.NONE_HERE);
-            }
-        }
-        int i2 = MathHelper.floor_double((double)((double)chunkX / (double)this.gridScale));
-        int k2 = MathHelper.floor_double((double)((double)chunkZ / (double)this.gridScale));
-        LOTRVillageGen.seedVillageRand(world, i2, k2);
-        i2 *= this.gridScale;
-        k2 *= this.gridScale;
-        if (chunkX == (i2 += MathHelper.getRandomIntegerInRange((Random)villageRand, (int)(-this.gridRandomDisplace), (int)this.gridRandomDisplace)) && chunkZ == (k2 += MathHelper.getRandomIntegerInRange((Random)villageRand, (int)(-this.gridRandomDisplace), (int)this.gridRandomDisplace))) {
-            int i1 = chunkX * 16 + 8;
-            int k1 = chunkZ * 16 + 8;
-            int villageRange = this.villageChunkRadius * 16;
-            if (villageRand.nextFloat() < this.spawnChance) {
-                int diagRange = (int)Math.round((double)(villageRange + 8) * SQRT2);
-                boolean anythingNear = false;
-                boolean bl = anythingNear = LOTRRoads.isRoadNear(i1, k1, diagRange) >= 0.0f;
-                if (!anythingNear && !(anythingNear = LOTRMountains.mountainNear(i1, k1, diagRange))) {
-                    anythingNear = LOTRFixedStructures.structureNear(world, i1, k1, diagRange);
-                }
-                if (!anythingNear) {
-                    LOTRVillageGen.seedVillageRand(world, i1, k1);
-                    LocationInfo loc = LocationInfo.RANDOM_GEN_HERE;
-                    AbstractInstance<?> instance = this.createAndSetupVillageInstance(world, i1, k1, villageRand, loc);
-                    boolean flat = instance.isFlat();
-                    if (worldChunkMgr.areBiomesViable(i1, k1, villageRange, this.spawnBiomes) && worldChunkMgr.areVariantsSuitableVillage(i1, k1, villageRange, flat)) {
-                        return cache.markResult(chunkX, chunkZ, loc);
-                    }
-                }
-            }
-        }
-        return cache.markResult(chunkX, chunkZ, LocationInfo.NONE_HERE);
-    }
-
-    private List<AbstractInstance<?>> getNearbyVillages(World world, int chunkX, int chunkZ) {
-        ArrayList<AbstractInstance<?>> villages = new ArrayList<AbstractInstance<?>>();
-        int checkRange = Math.max(this.villageChunkRadius, this.fixedVillageChunkRadius);
-        for (int i = chunkX - checkRange; i <= chunkX + checkRange; ++i) {
-            for (int k = chunkZ - checkRange; k <= chunkZ + checkRange; ++k) {
-                int centreX;
-                int centreZ;
-                LocationInfo loc = this.isVillageCentre(world, i, k);
-                if (!loc.isPresent()) continue;
-                if (loc.isFixedLocation()) {
-                    centreX = loc.posX;
-                    centreZ = loc.posZ;
-                } else {
-                    centreX = (i << 4) + 8;
-                    centreZ = (k << 4) + 8;
-                }
-                LOTRVillageGen.seedVillageRand(world, centreX, centreZ);
-                AbstractInstance<?> instance = this.createAndSetupVillageInstance(world, centreX, centreZ, villageRand, loc);
-                villages.add(instance);
-            }
-        }
-        return villages;
-    }
-
-    public List<AbstractInstance<?>> getNearbyVillagesAtPosition(World world, int i, int k) {
-        int chunkX = i >> 4;
-        int chunkZ = k >> 4;
-        return this.getNearbyVillages(world, chunkX, chunkZ);
+    public LocationInfo addFixedLocationMapOffset(LOTRWaypoint wp, int addX, int addZ, int rotation, String name) {
+        return this.addFixedLocation(wp, addX * LOTRGenLayerWorld.scale, addZ * LOTRGenLayerWorld.scale, rotation, name);
     }
 
     public boolean anyFixedVillagesAt(World world, int i, int k) {
@@ -182,6 +90,26 @@ public abstract class LOTRVillageGen {
             return true;
         }
         return false;
+    }
+
+    public AbstractInstance<?> createAndSetupVillageInstance(World world, int i, int k, Random random, LocationInfo location) {
+        AbstractInstance<?> instance = this.createVillageInstance(world, i, k, random, location);
+        instance.setupBaseAndVillageProperties();
+        return instance;
+    }
+
+    public abstract AbstractInstance<?> createVillageInstance(World var1, int var2, int var3, Random var4, LocationInfo var5);
+
+    public void generateCompleteVillageInstance(AbstractInstance<?> instance, World world, int i, int k) {
+        instance.setupVillageStructures();
+        int checkRange = Math.max(this.villageChunkRadius, this.fixedVillageChunkRadius);
+        for (int i1 = -checkRange; i1 <= checkRange; ++i1) {
+            for (int k1 = -checkRange; k1 <= checkRange; ++k1) {
+                int i2 = i - 8 + i1 * 16;
+                int k2 = k - 8 + k1 * 16;
+                this.generateInstanceInChunk(instance, world, i2, k2);
+            }
+        }
     }
 
     public void generateInChunk(World world, int i, int k) {
@@ -228,7 +156,7 @@ public abstract class LOTRVillageGen {
         }
     }
 
-    private Object[] getHeight_getPath_isSlab(AbstractInstance<?> instance, World world, int i, int k, BiomeGenBase biome) {
+    public Object[] getHeight_getPath_isSlab(AbstractInstance<?> instance, World world, int i, int k, BiomeGenBase biome) {
         instance.setupWorldPositionSeed(i, k);
         int[] coords = instance.getRelativeCoords(i, k);
         int i1 = coords[0];
@@ -273,7 +201,37 @@ public abstract class LOTRVillageGen {
         return ret;
     }
 
-    private int getTopTerrainBlock(World world, int i, int k, BiomeGenBase biome, boolean acceptSlab) {
+    public List<AbstractInstance<?>> getNearbyVillages(World world, int chunkX, int chunkZ) {
+        ArrayList<AbstractInstance<?>> villages = new ArrayList<AbstractInstance<?>>();
+        int checkRange = Math.max(this.villageChunkRadius, this.fixedVillageChunkRadius);
+        for (int i = chunkX - checkRange; i <= chunkX + checkRange; ++i) {
+            for (int k = chunkZ - checkRange; k <= chunkZ + checkRange; ++k) {
+                int centreX;
+                int centreZ;
+                LocationInfo loc = this.isVillageCentre(world, i, k);
+                if (!loc.isPresent()) continue;
+                if (loc.isFixedLocation()) {
+                    centreX = loc.posX;
+                    centreZ = loc.posZ;
+                } else {
+                    centreX = (i << 4) + 8;
+                    centreZ = (k << 4) + 8;
+                }
+                LOTRVillageGen.seedVillageRand(world, centreX, centreZ);
+                AbstractInstance<?> instance = this.createAndSetupVillageInstance(world, centreX, centreZ, villageRand, loc);
+                villages.add(instance);
+            }
+        }
+        return villages;
+    }
+
+    public List<AbstractInstance<?>> getNearbyVillagesAtPosition(World world, int i, int k) {
+        int chunkX = i >> 4;
+        int chunkZ = k >> 4;
+        return this.getNearbyVillages(world, chunkX, chunkZ);
+    }
+
+    public int getTopTerrainBlock(World world, int i, int k, BiomeGenBase biome, boolean acceptSlab) {
         int j = world.getTopSolidOrLiquidBlock(i, k) - 1;
         while (!world.getBlock(i, j + 1, k).getMaterial().isLiquid()) {
             Block block = world.getBlock(i, j, k);
@@ -286,30 +244,72 @@ public abstract class LOTRVillageGen {
         return -1;
     }
 
-    public void generateCompleteVillageInstance(AbstractInstance<?> instance, World world, int i, int k) {
-        instance.setupVillageStructures();
-        int checkRange = Math.max(this.villageChunkRadius, this.fixedVillageChunkRadius);
-        for (int i1 = -checkRange; i1 <= checkRange; ++i1) {
-            for (int k1 = -checkRange; k1 <= checkRange; ++k1) {
-                int i2 = i - 8 + i1 * 16;
-                int k2 = k - 8 + k1 * 16;
-                this.generateInstanceInChunk(instance, world, i2, k2);
+    public LocationInfo isVillageCentre(World world, int chunkX, int chunkZ) {
+        LOTRWorldChunkManager worldChunkMgr = (LOTRWorldChunkManager)world.getWorldChunkManager();
+        LOTRVillagePositionCache cache = worldChunkMgr.getVillageCache(this);
+        LocationInfo cacheLocation = cache.getLocationAt(chunkX, chunkZ);
+        if (cacheLocation != null) {
+            return cacheLocation;
+        }
+        if (LOTRVillageGen.hasFixedSettlements(world)) {
+            for (LocationInfo loc : this.fixedLocations) {
+                int locChunkX = loc.posX >> 4;
+                int locChunkZ = loc.posZ >> 4;
+                if (chunkX == locChunkX && chunkZ == locChunkZ) {
+                    return cache.markResult(chunkX, chunkZ, loc);
+                }
+                int locCheckSize = Math.max(this.villageChunkRadius, this.fixedVillageChunkRadius);
+                if (Math.abs(chunkX - locChunkX) > locCheckSize || Math.abs(chunkZ - locChunkZ) > locCheckSize) continue;
+                return cache.markResult(chunkX, chunkZ, LocationInfo.NONE_HERE);
             }
         }
+        int i2 = MathHelper.floor_double((double)((double)chunkX / (double)this.gridScale));
+        int k2 = MathHelper.floor_double((double)((double)chunkZ / (double)this.gridScale));
+        LOTRVillageGen.seedVillageRand(world, i2, k2);
+        i2 *= this.gridScale;
+        k2 *= this.gridScale;
+        if (chunkX == (i2 += MathHelper.getRandomIntegerInRange((Random)villageRand, (int)(-this.gridRandomDisplace), (int)this.gridRandomDisplace)) && chunkZ == (k2 += MathHelper.getRandomIntegerInRange((Random)villageRand, (int)(-this.gridRandomDisplace), (int)this.gridRandomDisplace))) {
+            int i1 = chunkX * 16 + 8;
+            int k1 = chunkZ * 16 + 8;
+            int villageRange = this.villageChunkRadius * 16;
+            if (villageRand.nextFloat() < this.spawnChance) {
+                boolean anythingNear;
+                int diagRange = (int)Math.round((double)(villageRange + 8) * SQRT2);
+                boolean bl = anythingNear = LOTRRoads.isRoadNear(i1, k1, diagRange) >= 0.0f;
+                if (!anythingNear && !(anythingNear = LOTRMountains.mountainNear(i1, k1, diagRange))) {
+                    anythingNear = LOTRFixedStructures.structureNear(world, i1, k1, diagRange);
+                }
+                if (!anythingNear) {
+                    LOTRVillageGen.seedVillageRand(world, i1, k1);
+                    LocationInfo loc = LocationInfo.RANDOM_GEN_HERE;
+                    AbstractInstance<?> instance = this.createAndSetupVillageInstance(world, i1, k1, villageRand, loc);
+                    boolean flat = instance.isFlat();
+                    if (worldChunkMgr.areBiomesViable(i1, k1, villageRange, this.spawnBiomes) && worldChunkMgr.areVariantsSuitableVillage(i1, k1, villageRange, flat)) {
+                        return cache.markResult(chunkX, chunkZ, loc);
+                    }
+                }
+            }
+        }
+        return cache.markResult(chunkX, chunkZ, LocationInfo.NONE_HERE);
     }
 
-    private static boolean hasFixedSettlements(World world) {
+    public static boolean hasFixedSettlements(World world) {
         if (!LOTRConfig.generateFixedSettlements) {
             return false;
         }
         return world.getWorldInfo().getTerrainType() != LOTRMod.worldTypeMiddleEarthClassic;
     }
 
-    private static class StructureInfo {
-        public final LOTRWorldGenStructureBase2 structure;
-        public final int posX;
-        public final int posZ;
-        public final int rotation;
+    public static void seedVillageRand(World world, int i, int k) {
+        long seed = (long)i * 6890360793007L + (long)k * 456879569029062L + world.getWorldInfo().getSeed() + 274893855L;
+        villageRand.setSeed(seed);
+    }
+
+    public static class StructureInfo {
+        public LOTRWorldGenStructureBase2 structure;
+        public int posX;
+        public int posZ;
+        public int rotation;
 
         public StructureInfo(LOTRWorldGenStructureBase2 s, int x, int z, int r) {
             this.structure = s;
@@ -320,17 +320,17 @@ public abstract class LOTRVillageGen {
     }
 
     public static abstract class AbstractInstance<V extends LOTRVillageGen> {
-        protected LOTRBiome instanceVillageBiome;
-        private World theWorld;
-        private Random instanceRand;
-        private long instanceRandSeed;
-        private int centreX;
-        private int centreZ;
-        private int rotationMode;
-        private List<StructureInfo> structures = new ArrayList<StructureInfo>();
-        protected final LocationInfo locationInfo;
+        public LOTRBiome instanceVillageBiome;
+        public World theWorld;
+        public Random instanceRand;
+        public long instanceRandSeed;
+        public int centreX;
+        public int centreZ;
+        public int rotationMode;
+        public List<StructureInfo> structures = new ArrayList<StructureInfo>();
+        public LocationInfo locationInfo;
 
-        protected AbstractInstance(V village, World world, int i, int k, Random random, LocationInfo loc) {
+        public AbstractInstance(V village, World world, int i, int k, Random random, LocationInfo loc) {
             this.instanceVillageBiome = ((LOTRVillageGen)village).villageBiome;
             this.theWorld = world;
             this.instanceRand = new Random();
@@ -340,49 +340,11 @@ public abstract class LOTRVillageGen {
             this.locationInfo = loc;
         }
 
-        protected final void setupBaseAndVillageProperties() {
-            this.setupVillageSeed();
-            this.rotationMode = this.locationInfo.isFixedLocation() ? (this.locationInfo.rotation + 2) % 4 : this.instanceRand.nextInt(4);
-            this.setupVillageProperties(this.instanceRand);
-        }
-
-        protected abstract void setupVillageProperties(Random var1);
-
-        private void setupVillageSeed() {
-            long seed = (long)this.centreX * 580682095692076767L + (long)this.centreZ * 12789948968296726L + this.theWorld.getWorldInfo().getSeed() + 49920968939865L;
-            this.instanceRand.setSeed(seed += this.instanceRandSeed);
-        }
-
-        public void setRotation(int i) {
-            this.rotationMode = i;
-        }
-
-        private void setupWorldPositionSeed(int i, int k) {
-            this.setupVillageSeed();
-            int[] coords = this.getRelativeCoords(i, k);
-            int i1 = coords[0];
-            int k1 = coords[1];
-            long seed1 = this.instanceRand.nextLong();
-            long seed2 = this.instanceRand.nextLong();
-            long seed = (long)i1 * seed1 + (long)k1 * seed2 ^ this.theWorld.getWorldInfo().getSeed();
-            this.instanceRand.setSeed(seed);
-        }
-
-        public abstract boolean isFlat();
-
-        protected final void setupVillageStructures() {
-            this.setupVillageSeed();
-            this.structures.clear();
-            this.addVillageStructures(this.instanceRand);
-        }
-
-        protected abstract void addVillageStructures(Random var1);
-
-        protected void addStructure(LOTRWorldGenStructureBase2 structure, int x, int z, int r) {
+        public void addStructure(LOTRWorldGenStructureBase2 structure, int x, int z, int r) {
             this.addStructure(structure, x, z, r, false);
         }
 
-        protected void addStructure(LOTRWorldGenStructureBase2 structure, int x, int z, int r, boolean force) {
+        public void addStructure(LOTRWorldGenStructureBase2 structure, int x, int z, int r, boolean force) {
             structure.villageInstance = this;
             boolean bl = structure.restrictions = !force;
             if (force) {
@@ -391,38 +353,11 @@ public abstract class LOTRVillageGen {
             this.structures.add(new StructureInfo(structure, x, z, r));
         }
 
-        protected abstract LOTRRoadType getPath(Random var1, int var2, int var3);
+        public abstract void addVillageStructures(Random var1);
 
-        public abstract boolean isVillageSpecificSurface(World var1, int var2, int var3, int var4);
+        public abstract LOTRRoadType getPath(Random var1, int var2, int var3);
 
-        private int[] getWorldCoords(int xRel, int zRel) {
-            int xWorld = this.centreX;
-            int zWorld = this.centreZ;
-            switch (this.rotationMode) {
-                case 0: {
-                    xWorld = this.centreX - xRel;
-                    zWorld = this.centreZ - zRel;
-                    break;
-                }
-                case 1: {
-                    xWorld = this.centreX + zRel;
-                    zWorld = this.centreZ - xRel;
-                    break;
-                }
-                case 2: {
-                    xWorld = this.centreX + xRel;
-                    zWorld = this.centreZ + zRel;
-                    break;
-                }
-                case 3: {
-                    xWorld = this.centreX - zRel;
-                    zWorld = this.centreZ + xRel;
-                }
-            }
-            return new int[]{xWorld, zWorld};
-        }
-
-        private int[] getRelativeCoords(int xWorld, int zWorld) {
+        public int[] getRelativeCoords(int xWorld, int zWorld) {
             int xRel = 0;
             int zRel = 0;
             switch (this.rotationMode) {
@@ -449,8 +384,73 @@ public abstract class LOTRVillageGen {
             return new int[]{xRel, zRel};
         }
 
-        private int getStructureRotation(int r) {
-            return (r + (this.rotationMode + 2)) % 4;
+        public int getStructureRotation(int r) {
+            return (r + this.rotationMode + 2) % 4;
+        }
+
+        public int[] getWorldCoords(int xRel, int zRel) {
+            int xWorld = this.centreX;
+            int zWorld = this.centreZ;
+            switch (this.rotationMode) {
+                case 0: {
+                    xWorld = this.centreX - xRel;
+                    zWorld = this.centreZ - zRel;
+                    break;
+                }
+                case 1: {
+                    xWorld = this.centreX + zRel;
+                    zWorld = this.centreZ - xRel;
+                    break;
+                }
+                case 2: {
+                    xWorld = this.centreX + xRel;
+                    zWorld = this.centreZ + zRel;
+                    break;
+                }
+                case 3: {
+                    xWorld = this.centreX - zRel;
+                    zWorld = this.centreZ + xRel;
+                }
+            }
+            return new int[]{xWorld, zWorld};
+        }
+
+        public abstract boolean isFlat();
+
+        public abstract boolean isVillageSpecificSurface(World var1, int var2, int var3, int var4);
+
+        public void setRotation(int i) {
+            this.rotationMode = i;
+        }
+
+        public void setupBaseAndVillageProperties() {
+            this.setupVillageSeed();
+            this.rotationMode = this.locationInfo.isFixedLocation() ? (this.locationInfo.rotation + 2) % 4 : this.instanceRand.nextInt(4);
+            this.setupVillageProperties(this.instanceRand);
+        }
+
+        public abstract void setupVillageProperties(Random var1);
+
+        public void setupVillageSeed() {
+            long seed = (long)this.centreX * 580682095692076767L + (long)this.centreZ * 12789948968296726L + this.theWorld.getWorldInfo().getSeed() + 49920968939865L;
+            this.instanceRand.setSeed(seed += this.instanceRandSeed);
+        }
+
+        public void setupVillageStructures() {
+            this.setupVillageSeed();
+            this.structures.clear();
+            this.addVillageStructures(this.instanceRand);
+        }
+
+        public void setupWorldPositionSeed(int i, int k) {
+            this.setupVillageSeed();
+            int[] coords = this.getRelativeCoords(i, k);
+            int i1 = coords[0];
+            int k1 = coords[1];
+            long seed1 = this.instanceRand.nextLong();
+            long seed2 = this.instanceRand.nextLong();
+            long seed = (long)i1 * seed1 + (long)k1 * seed2 ^ this.theWorld.getWorldInfo().getSeed();
+            this.instanceRand.setSeed(seed);
         }
     }
 

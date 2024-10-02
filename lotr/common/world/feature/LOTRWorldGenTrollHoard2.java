@@ -35,19 +35,70 @@ extends WorldGenerator {
         int maxCaveHeight = height - 4;
         int chests = 2 + random.nextInt(5);
         int chestsGenerated = 0;
-        block0: for (l = 0; l < 64; ++l) {
+        block13: for (l = 0; l < 64; ++l) {
+            Block treasureBlock;
             i1 = i + MathHelper.getRandomIntegerInRange((Random)random, (int)-3, (int)3);
             j1 = j + MathHelper.getRandomIntegerInRange((Random)random, (int)-3, (int)3);
             k1 = k + MathHelper.getRandomIntegerInRange((Random)random, (int)-3, (int)3);
             if (j1 > maxCaveHeight || !world.isAirBlock(i1, j1, k1) || world.getBlock(i1, j1 - 1, k1) != Blocks.stone) continue;
-            Block treasureBlock = random.nextInt(5) == 0 ? LOTRMod.treasureCopper : (random.nextBoolean() ? LOTRMod.treasureSilver : LOTRMod.treasureGold);
+            int randomNum = random.nextInt(12);
+            switch (randomNum) {
+                case 0: {
+                    treasureBlock = LOTRMod.treasureSilver;
+                    break;
+                }
+                case 1: {
+                    treasureBlock = LOTRMod.treasureCopper;
+                    break;
+                }
+                case 2: {
+                    treasureBlock = LOTRMod.treasureDiamond;
+                    break;
+                }
+                case 3: {
+                    treasureBlock = LOTRMod.treasureAmber;
+                    break;
+                }
+                case 4: {
+                    treasureBlock = LOTRMod.treasureAmethyst;
+                    break;
+                }
+                case 5: {
+                    treasureBlock = LOTRMod.treasureEmerald;
+                    break;
+                }
+                case 6: {
+                    treasureBlock = LOTRMod.treasureOpal;
+                    break;
+                }
+                case 7: {
+                    treasureBlock = LOTRMod.treasureRuby;
+                    break;
+                }
+                case 8: {
+                    treasureBlock = LOTRMod.treasureSapphire;
+                    break;
+                }
+                case 9: 
+                case 10: {
+                    treasureBlock = LOTRMod.treasureSilver;
+                    break;
+                }
+                case 11: {
+                    treasureBlock = LOTRMod.treasureGold;
+                    break;
+                }
+                default: {
+                    treasureBlock = LOTRMod.treasureGold;
+                }
+            }
             int top = j1 + random.nextInt(3);
             for (int j2 = j1; j2 <= top; ++j2) {
                 int treasureMeta = 7;
                 if (j2 == top) {
                     treasureMeta = random.nextInt(7);
                 }
-                if (!world.isAirBlock(i1, j2, k1)) continue block0;
+                if (!world.isAirBlock(i1, j2, k1)) continue block13;
                 this.setBlockAndNotifyAdequately(world, i1, j2, k1, treasureBlock, treasureMeta);
             }
         }

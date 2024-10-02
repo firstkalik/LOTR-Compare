@@ -200,8 +200,16 @@ extends LOTRTileEntityForgeBase2 {
         return itemstack.getItem() == Item.getItemFromBlock((Block)LOTRMod.oreMithril) || itemstack.getItem() == LOTRMod.mithril;
     }
 
+    protected boolean isMithril3(ItemStack itemstack) {
+        return itemstack.getItem() == Item.getItemFromBlock((Block)LOTRMod.oreMithril2) || itemstack.getItem() == LOTRMod.mithril;
+    }
+
     protected boolean isMithrilNugget(ItemStack itemstack) {
         return itemstack.getItem() == LOTRMod.mithrilNugget;
+    }
+
+    protected boolean isMithrilIngot(ItemStack itemstack) {
+        return itemstack.getItem() == LOTRMod.mithril;
     }
 
     protected boolean isOrcSteel(ItemStack itemstack) {

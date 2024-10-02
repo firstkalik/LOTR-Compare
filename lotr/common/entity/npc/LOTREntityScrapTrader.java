@@ -25,6 +25,8 @@
  *  net.minecraft.item.Item
  *  net.minecraft.item.ItemStack
  *  net.minecraft.pathfinding.PathNavigate
+ *  net.minecraft.potion.Potion
+ *  net.minecraft.potion.PotionEffect
  *  net.minecraft.util.DamageSource
  *  net.minecraft.util.MathHelper
  *  net.minecraft.world.World
@@ -38,6 +40,7 @@ import lotr.common.LOTRDimension;
 import lotr.common.LOTRFoods;
 import lotr.common.LOTRLevelData;
 import lotr.common.LOTRMod;
+import lotr.common.LOTRPotions;
 import lotr.common.entity.ai.LOTREntityAIAttackOnCollide;
 import lotr.common.entity.ai.LOTREntityAIDrink;
 import lotr.common.entity.ai.LOTREntityAIEat;
@@ -76,6 +79,8 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.pathfinding.PathNavigate;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
@@ -111,6 +116,15 @@ LOTRTradeable.Smith {
         LOTREntityHorse horse = (LOTREntityHorse)super.createMountToRide();
         horse.setMountArmor(null);
         return horse;
+    }
+
+    @Override
+    public void onDeath(DamageSource source) {
+        super.onDeath(source);
+        if (source.getEntity() instanceof EntityPlayer) {
+            EntityPlayer player = (EntityPlayer)source.getEntity();
+            player.addPotionEffect(new PotionEffect(LOTRPotions.curse.id, 24000, 0));
+        }
     }
 
     @Override

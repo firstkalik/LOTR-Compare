@@ -329,6 +329,28 @@ implements ISimpleBlockRenderingHandler {
         }
     }
 
+    private void renderKelp(IBlockAccess world, int i, int j, int k, Block block, RenderBlocks renderblocks) {
+        block.setBlockBoundsBasedOnState(world, i, j, k);
+        renderblocks.setRenderBoundsFromBlock(block);
+        Tessellator tessellator = Tessellator.instance;
+        tessellator.setBrightness(block.getMixedBrightnessForBlock(world, i, j, k));
+        int c = block.colorMultiplier(world, i, j, k);
+        float r = (float)(c >> 16 & 0xFF) / 255.0f;
+        float g = (float)(c >> 8 & 0xFF) / 255.0f;
+        float b = (float)(c & 0xFF) / 255.0f;
+        if (EntityRenderer.anaglyphEnable) {
+            float r1 = (r * 30.0f + g * 59.0f + b * 11.0f) / 100.0f;
+            float g1 = (r * 30.0f + g * 70.0f) / 100.0f;
+            float b1 = (r * 30.0f + b * 70.0f) / 100.0f;
+            r = r1;
+            g = g1;
+            b = b1;
+        }
+        tessellator.setColorOpaque_F(r, g, b);
+        IIcon iicon = renderblocks.getBlockIcon(block, world, i, j, k, 0);
+        renderblocks.drawCrossedSquares(iicon, (double)i, (double)j, (double)k, 1.0f);
+    }
+
     private void renderBarrel(IBlockAccess world, int i, int j, int k, Block block, RenderBlocks renderblocks) {
         int ao = LOTRRenderBlocks.getAO();
         LOTRRenderBlocks.setAO(0);

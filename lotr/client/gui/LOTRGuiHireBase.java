@@ -19,16 +19,19 @@
  *  net.minecraft.entity.Entity
  *  net.minecraft.entity.EntityLiving
  *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.entity.player.EntityPlayerMP
  *  net.minecraft.inventory.Container
  *  net.minecraft.inventory.Slot
  *  net.minecraft.item.Item
  *  net.minecraft.item.ItemStack
+ *  net.minecraft.server.management.PlayerManager
  *  net.minecraft.util.EnumChatFormatting
  *  net.minecraft.util.MathHelper
  *  net.minecraft.util.ResourceLocation
  *  net.minecraft.util.StatCollector
  *  net.minecraft.util.StringUtils
  *  net.minecraft.world.World
+ *  net.minecraft.world.WorldServer
  *  org.lwjgl.opengl.GL11
  */
 package lotr.client.gui;
@@ -36,13 +39,17 @@ package lotr.client.gui;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import java.util.List;
+import java.util.UUID;
 import lotr.client.LOTRClientProxy;
 import lotr.client.gui.LOTRGuiUnitTradeButton;
+import lotr.common.LOTRConfig;
 import lotr.common.LOTRLevelData;
 import lotr.common.LOTRMod;
+import lotr.common.LOTRPlayerData;
 import lotr.common.LOTRSquadrons;
 import lotr.common.entity.npc.LOTREntityNPC;
 import lotr.common.entity.npc.LOTRHireableBase;
+import lotr.common.entity.npc.LOTRHiredNPCInfo;
 import lotr.common.entity.npc.LOTRUnitTradeEntries;
 import lotr.common.entity.npc.LOTRUnitTradeEntry;
 import lotr.common.fac.LOTRAlignmentValues;
@@ -51,6 +58,7 @@ import lotr.common.inventory.LOTRContainerUnitTrade;
 import lotr.common.inventory.LOTRSlotAlignmentReward;
 import lotr.common.network.LOTRPacketBuyUnit;
 import lotr.common.network.LOTRPacketHandler;
+import lotr.common.network.LOTRPacketHiredInfo;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.client.gui.FontRenderer;
@@ -66,16 +74,19 @@ import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.server.management.PlayerManager;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 import net.minecraft.util.StringUtils;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
 import org.lwjgl.opengl.GL11;
 
 public abstract class LOTRGuiHireBase
@@ -93,6 +104,15 @@ extends GuiContainer {
     private LOTRGuiUnitTradeButton buttonLeftUnit;
     private LOTRGuiUnitTradeButton buttonRightUnit;
     private GuiTextField squadronNameField;
+    private static final int BASE_MAX_HIRED_NPCS = LOTRConfig.maxHiredNPCs;
+    private static final int ADDITIONAL_NPCS_PER_1000_REP = 5;
+    private static final int REP_PER_ADDITIONAL_NPC = 1000;
+    private LOTREntityNPC theEntity;
+    private boolean resendBasicData = true;
+    public int xpLevel = 1;
+    private LOTRHiredNPCInfo.Task hiredTask = LOTRHiredNPCInfo.Task.WARRIOR;
+    private String hiredSquadron;
+    private UUID hiringPlayerUUID;
 
     public LOTRGuiHireBase(EntityPlayer entityplayer, LOTRHireableBase trader, World world) {
         super((Container)new LOTRContainerUnitTrade(entityplayer, trader, world));
@@ -137,22 +157,27 @@ extends GuiContainer {
         this.squadronNameField.updateCursorCounter();
     }
 
-    protected void drawGuiContainerForegroundLayer(int i, int j) {
+    protected void drawGuiContainerForegroundLayer(int mouseX, int mouseY) {
         LOTRUnitTradeEntry curTrade = this.currentTrade();
         this.drawCenteredString(this.theUnitTrader.getNPCName(), 110, 11, 4210752);
         this.fontRendererObj.drawString(StatCollector.translateToLocal((String)"container.inventory"), 30, 162, 4210752);
         this.drawCenteredString(curTrade.getUnitTradeName(), 138, 50, 4210752);
         int reqX = 64;
+        int reqX1 = 116;
         int reqXText = reqX + 19;
+        int reqXText1 = reqX1 + 19;
         int reqY = 65;
+        int reqY1 = 48;
         int reqYTextBelow = 4;
+        int reqYTextBelow1 = 4;
         int reqGap = 18;
+        int cost = curTrade.getCost((EntityPlayer)this.mc.thePlayer, this.theUnitTrader);
+        int metaIndex = cost < 10 ? 0 : (cost < 100 ? 1 : (cost < 1000 ? 2 : (cost < 10000 ? 3 : (cost < 100000 ? 4 : (cost < 1000000 ? 5 : 6)))));
         GL11.glEnable((int)2896);
         GL11.glEnable((int)2884);
-        itemRender.renderItemAndEffectIntoGUI(this.fontRendererObj, this.mc.getTextureManager(), new ItemStack(LOTRMod.silverCoin), reqX, reqY);
+        itemRender.renderItemAndEffectIntoGUI(this.fontRendererObj, this.mc.getTextureManager(), new ItemStack(LOTRMod.silverCoin, 1, metaIndex), reqX, reqY);
         GL11.glDisable((int)2896);
         GL11.glColor4f((float)1.0f, (float)1.0f, (float)1.0f, (float)1.0f);
-        int cost = curTrade.getCost((EntityPlayer)this.mc.thePlayer, this.theUnitTrader);
         this.fontRendererObj.drawString(String.valueOf(cost), reqXText, reqY + reqYTextBelow, 4210752);
         GL11.glColor4f((float)1.0f, (float)1.0f, (float)1.0f, (float)1.0f);
         this.mc.getTextureManager().bindTexture(LOTRClientProxy.alignmentTexture);
@@ -163,14 +188,14 @@ extends GuiContainer {
         if (curTrade.getPledgeType() != LOTRUnitTradeEntry.PledgeType.NONE) {
             GL11.glColor4f((float)1.0f, (float)1.0f, (float)1.0f, (float)1.0f);
             this.mc.getTextureManager().bindTexture(LOTRClientProxy.alignmentTexture);
-            this.drawTexturedModalRect(reqX, reqY += reqGap, 0, 212, 16, 16);
+            this.drawTexturedModalRect(reqX1, reqY1 += reqGap, 0, 212, 16, 16);
             String pledge = StatCollector.translateToLocal((String)"container.lotr.unitTrade.pledge");
-            this.fontRendererObj.drawString(pledge, reqXText, reqY + reqYTextBelow, 4210752);
-            int i2 = i - this.guiLeft - reqX;
-            int j2 = j - this.guiTop - reqY;
+            this.fontRendererObj.drawString(pledge, reqXText1, reqY1 + reqYTextBelow1, 4210752);
+            int i2 = mouseX - this.guiLeft - reqX1;
+            int j2 = mouseY - this.guiTop - reqY1;
             if (i2 >= 0 && i2 < 16 && j2 >= 0 && j2 < 16) {
                 String pledgeDesc = curTrade.getPledgeType().getCommandReqText(this.traderFaction);
-                this.drawCreativeTabHoveringText(pledgeDesc, i - this.guiLeft, j - this.guiTop);
+                this.drawCreativeTabHoveringText(pledgeDesc, mouseX - this.guiLeft, mouseY - this.guiTop);
                 GL11.glDisable((int)2896);
                 GL11.glColor4f((float)1.0f, (float)1.0f, (float)1.0f, (float)1.0f);
             }
@@ -178,23 +203,24 @@ extends GuiContainer {
         if (((LOTRContainerUnitTrade)this.inventorySlots).alignmentRewardSlots > 0) {
             Slot slot = this.inventorySlots.getSlot(0);
             boolean hasRewardCost = slot.getHasStack();
+            int rewardCost = LOTRSlotAlignmentReward.REWARD_COST;
+            int rewardMetaIndex = rewardCost < 10 ? 0 : (rewardCost < 100 ? 1 : (rewardCost < 1000 ? 2 : (rewardCost < 10000 ? 3 : (rewardCost < 100000 ? 4 : (rewardCost < 1000000 ? 5 : 6)))));
             if (hasRewardCost) {
                 GL11.glEnable((int)2896);
                 GL11.glEnable((int)2884);
-                itemRender.renderItemAndEffectIntoGUI(this.fontRendererObj, this.mc.getTextureManager(), new ItemStack(LOTRMod.silverCoin), 160, 100);
+                itemRender.renderItemAndEffectIntoGUI(this.fontRendererObj, this.mc.getTextureManager(), new ItemStack(LOTRMod.silverCoin, 1, rewardMetaIndex), 160, 100);
                 GL11.glDisable((int)2896);
                 GL11.glColor4f((float)1.0f, (float)1.0f, (float)1.0f, (float)1.0f);
-                cost = LOTRSlotAlignmentReward.REWARD_COST;
-                this.fontRendererObj.drawString(String.valueOf(cost), 179, 104, 4210752);
-            } else if (!slot.getHasStack() && LOTRLevelData.getData((EntityPlayer)this.mc.thePlayer).getAlignment(this.traderFaction) < 1500.0f && this.func_146978_c(slot.xDisplayPosition, slot.yDisplayPosition, 16, 16, i, j)) {
-                this.drawCreativeTabHoveringText(StatCollector.translateToLocalFormatted((String)"container.lotr.unitTrade.requiresAlignment", (Object[])new Object[]{Float.valueOf(1500.0f)}), i - this.guiLeft, j - this.guiTop);
+                this.fontRendererObj.drawString(String.valueOf(rewardCost), 179, 104, 4210752);
+            } else if (!slot.getHasStack() && LOTRLevelData.getData((EntityPlayer)this.mc.thePlayer).getAlignment(this.traderFaction) < 3000.0f && this.func_146978_c(slot.xDisplayPosition, slot.yDisplayPosition, 16, 16, mouseX, mouseY)) {
+                this.drawCreativeTabHoveringText(StatCollector.translateToLocalFormatted((String)"container.lotr.unitTrade.requiresAlignment", (Object[])new Object[]{Float.valueOf(3000.0f)}), mouseX - this.guiLeft, mouseY - this.guiTop);
                 GL11.glDisable((int)2896);
                 GL11.glColor4f((float)1.0f, (float)1.0f, (float)1.0f, (float)1.0f);
             }
         }
         if (curTrade.hasExtraInfo()) {
             String extraInfo = curTrade.getFormattedExtraInfo();
-            boolean mouseover = i >= this.guiLeft + 49 && i < this.guiLeft + 49 + 9 && j >= this.guiTop + 106 && j < this.guiTop + 106 + 7;
+            boolean mouseover = mouseX >= this.guiLeft + 49 && mouseX < this.guiLeft + 49 + 9 && mouseY >= this.guiTop + 106 && mouseY < this.guiTop + 106 + 7;
             GL11.glColor4f((float)1.0f, (float)1.0f, (float)1.0f, (float)1.0f);
             this.mc.getTextureManager().bindTexture(guiTexture);
             this.drawTexturedModalRect(49, 106, 220, 38 + (mouseover ? 1 : 0) * 7, 9, 7);
@@ -202,11 +228,76 @@ extends GuiContainer {
                 float z = this.zLevel;
                 int stringWidth = 200;
                 List desc = this.fontRendererObj.listFormattedStringToWidth(extraInfo, stringWidth);
-                this.func_146283_a(desc, i - this.guiLeft, j - this.guiTop);
+                this.func_146283_a(desc, mouseX - this.guiLeft, mouseY - this.guiTop);
                 GL11.glDisable((int)2896);
                 GL11.glColor4f((float)1.0f, (float)1.0f, (float)1.0f, (float)1.0f);
                 this.zLevel = z;
             }
+        }
+        LOTRPlayerData playerData = LOTRLevelData.getData((EntityPlayer)this.mc.thePlayer);
+        int maxHiredNPCs = this.getMaxHiredNPCs((EntityPlayer)this.mc.thePlayer, this.theUnitTrader.getFaction());
+        int hiredNPCCount = playerData.getGlobalHiredNPCCount();
+        String npcCountText = StatCollector.translateToLocalFormatted((String)"gui.hiredNPCCount", (Object[])new Object[]{hiredNPCCount, maxHiredNPCs});
+        this.fontRendererObj.drawString(npcCountText, 64, this.ySize - 154 + 2, 4210752);
+        float alignment1 = playerData.getAlignment(this.theUnitTrader.getFaction());
+        int repToNextLimit = 1000 - (int)alignment1 % 1000;
+        String repCountText = StatCollector.translateToLocalFormatted((String)"gui.repToNextLimit", (Object[])new Object[]{repToNextLimit});
+        this.fontRendererObj.drawString(repCountText, 23, this.ySize - 228 + 2, 4210752);
+    }
+
+    private void markDirty() {
+        if (!this.theEntity.worldObj.isRemote) {
+            if (this.theEntity.ticksExisted > 0) {
+                this.resendBasicData = true;
+            } else {
+                this.sendBasicDataToAllWatchers();
+            }
+        }
+    }
+
+    public String getSquadron() {
+        return this.hiredSquadron;
+    }
+
+    private void updateHiredNPCCount() {
+        LOTRPlayerData playerData = LOTRLevelData.getData((EntityPlayer)this.mc.thePlayer);
+        int currentHiredNPCCount = playerData.getGlobalHiredNPCCount();
+    }
+
+    public void setSquadron(String s) {
+        this.hiredSquadron = s;
+        this.markDirty();
+    }
+
+    public void sendBasicData(EntityPlayerMP entityplayer) {
+        LOTRPacketHiredInfo packet = new LOTRPacketHiredInfo(this.theEntity.getEntityId(), this.hiringPlayerUUID, this.hiredTask, this.getSquadron(), this.xpLevel);
+        LOTRPacketHandler.networkWrapper.sendTo((IMessage)packet, entityplayer);
+    }
+
+    private int getMaxHiredNPCs(EntityPlayer entityplayer, LOTRFaction faction) {
+        LOTRPlayerData playerData = LOTRLevelData.getData(entityplayer);
+        float alignment = playerData.getAlignment(faction);
+        int additionalNPCs = (int)(alignment / 1000.0f) * 5;
+        return BASE_MAX_HIRED_NPCS + additionalNPCs;
+    }
+
+    private void sendBasicDataToAllWatchers() {
+        int x = MathHelper.floor_double((double)this.theEntity.posX) >> 4;
+        int z = MathHelper.floor_double((double)this.theEntity.posZ) >> 4;
+        PlayerManager playermanager = ((WorldServer)this.theEntity.worldObj).getPlayerManager();
+        List players = this.theEntity.worldObj.playerEntities;
+        for (Object obj : players) {
+            EntityPlayerMP entityplayer = (EntityPlayerMP)obj;
+            if (!playermanager.isPlayerWatchingChunk(entityplayer, x, z)) continue;
+            this.sendBasicData(entityplayer);
+        }
+    }
+
+    private void updateGlobalHiredNPCCount(int delta) {
+        LOTRPlayerData playerData;
+        if (this.hiringPlayerUUID != null && (playerData = LOTRLevelData.getData(this.hiringPlayerUUID)) != null) {
+            playerData.updateGlobalHiredNPCCount(delta);
+            this.markDirty();
         }
     }
 
@@ -218,7 +309,7 @@ extends GuiContainer {
         if (((LOTRContainerUnitTrade)this.inventorySlots).alignmentRewardSlots > 0) {
             Slot slot = this.inventorySlots.getSlot(0);
             this.drawTexturedModalRect(this.guiLeft + slot.xDisplayPosition - 3, this.guiTop + slot.yDisplayPosition - 3, this.xSize, 16, 22, 22);
-            if (!slot.getHasStack() && LOTRLevelData.getData((EntityPlayer)this.mc.thePlayer).getAlignment(this.traderFaction) < 1500.0f) {
+            if (!slot.getHasStack() && LOTRLevelData.getData((EntityPlayer)this.mc.thePlayer).getAlignment(this.traderFaction) < 3000.0f) {
                 this.drawTexturedModalRect(this.guiLeft + slot.xDisplayPosition, this.guiTop + slot.yDisplayPosition, this.xSize, 0, 16, 16);
             }
         }
@@ -324,6 +415,7 @@ extends GuiContainer {
                 String squadron = this.squadronNameField.getText();
                 LOTRPacketBuyUnit packet = new LOTRPacketBuyUnit(this.currentTradeEntryIndex, squadron);
                 LOTRPacketHandler.networkWrapper.sendToServer((IMessage)packet);
+                this.updateHiredNPCCount();
             } else if (button == this.buttonRightUnit && this.currentTradeEntryIndex < this.trades.tradeEntries.length - 1) {
                 ++this.currentTradeEntryIndex;
             }

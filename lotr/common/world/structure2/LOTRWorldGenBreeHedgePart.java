@@ -21,24 +21,10 @@ import net.minecraft.world.World;
 
 public class LOTRWorldGenBreeHedgePart
 extends LOTRWorldGenBreeStructure {
-    private boolean grassOnly = false;
+    public boolean grassOnly = false;
 
     public LOTRWorldGenBreeHedgePart(boolean flag) {
         super(flag);
-    }
-
-    public LOTRWorldGenBreeHedgePart setGrassOnly() {
-        this.grassOnly = true;
-        return this;
-    }
-
-    @Override
-    protected void setupRandomBlocks(Random random) {
-        super.setupRandomBlocks(random);
-        this.fenceBlock = Blocks.fence;
-        this.fenceMeta = 0;
-        this.beamBlock = LOTRMod.woodBeamV1;
-        this.beamMeta = 0;
     }
 
     @Override
@@ -62,7 +48,7 @@ extends LOTRWorldGenBreeStructure {
         }
         boolean hasBeams = random.nextInt(4) == 0;
         int height = 3 + random.nextInt(2);
-        for (j1 = 1; j1 <= height; ++j1) {
+        block6: for (j1 = 1; j1 <= height; ++j1) {
             if (hasBeams && j1 <= 2) {
                 this.setBlockAndMetadata(world, 0, j1, 0, this.beamBlock, this.beamMeta);
                 this.setGrassToDirt(world, 0, j1 - 1, 0);
@@ -73,22 +59,40 @@ extends LOTRWorldGenBreeStructure {
                 continue;
             }
             int randLeaf = random.nextInt(4);
-            if (randLeaf == 0) {
-                this.setBlockAndMetadata(world, 0, j1, 0, (Block)Blocks.leaves, 4);
-                continue;
+            switch (randLeaf) {
+                case 0: {
+                    this.setBlockAndMetadata(world, 0, j1, 0, (Block)Blocks.leaves, 4);
+                    continue block6;
+                }
+                case 1: {
+                    this.setBlockAndMetadata(world, 0, j1, 0, LOTRMod.leaves2, 5);
+                    continue block6;
+                }
+                case 2: {
+                    this.setBlockAndMetadata(world, 0, j1, 0, LOTRMod.leaves4, 4);
+                    continue block6;
+                }
+                default: {
+                    if (randLeaf != 3) continue block6;
+                    this.setBlockAndMetadata(world, 0, j1, 0, LOTRMod.leaves7, 4);
+                }
             }
-            if (randLeaf == 1) {
-                this.setBlockAndMetadata(world, 0, j1, 0, LOTRMod.leaves2, 5);
-                continue;
-            }
-            if (randLeaf == 2) {
-                this.setBlockAndMetadata(world, 0, j1, 0, LOTRMod.leaves4, 4);
-                continue;
-            }
-            if (randLeaf != 3) continue;
-            this.setBlockAndMetadata(world, 0, j1, 0, LOTRMod.leaves7, 4);
         }
         return true;
+    }
+
+    public LOTRWorldGenBreeHedgePart setGrassOnly() {
+        this.grassOnly = true;
+        return this;
+    }
+
+    @Override
+    public void setupRandomBlocks(Random random) {
+        super.setupRandomBlocks(random);
+        this.fenceBlock = Blocks.fence;
+        this.fenceMeta = 0;
+        this.beamBlock = LOTRMod.woodBeamV1;
+        this.beamMeta = 0;
     }
 }
 

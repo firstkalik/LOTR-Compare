@@ -11,6 +11,7 @@
  */
 package lotr.common.item;
 
+import lotr.common.block.LOTRBlockLeavesBase;
 import lotr.common.item.LOTRItemPickaxe;
 import lotr.common.item.LOTRMaterial;
 import net.minecraft.block.Block;
@@ -40,6 +41,12 @@ extends LOTRItemPickaxe {
             return this.efficiencyOnProperMaterial;
         }
         if (block == Blocks.melon_block) {
+            return 10.0f;
+        }
+        if (block == Blocks.pumpkin) {
+            return 10.0f;
+        }
+        if (block instanceof LOTRBlockLeavesBase) {
             return 10.0f;
         }
         return f;

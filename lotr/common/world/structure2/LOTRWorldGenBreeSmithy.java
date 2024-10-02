@@ -109,17 +109,17 @@ extends LOTRWorldGenBreeStructure {
         return true;
     }
 
-    private ItemStack getDisplayWeaponOrNull(Random random) {
-        return random.nextBoolean() ? this.getRandomBreeWeapon(random) : null;
-    }
-
-    private ItemStack[] getDisplayArmorOrNull(World world, Random random) {
+    public ItemStack[] getDisplayArmorOrNull(World world, Random random) {
         if (random.nextBoolean()) {
             LOTREntityBreeGuard armorGuard = new LOTREntityBreeGuard(world);
             armorGuard.onSpawnWithEgg(null);
             return new ItemStack[]{armorGuard.getEquipmentInSlot(4), armorGuard.getEquipmentInSlot(3), null, null};
         }
         return null;
+    }
+
+    public ItemStack getDisplayWeaponOrNull(Random random) {
+        return random.nextBoolean() ? this.getRandomBreeWeapon(random) : null;
     }
 }
 

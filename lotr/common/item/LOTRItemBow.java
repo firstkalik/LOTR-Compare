@@ -127,14 +127,13 @@ extends ItemBow {
             arrowItem = new ItemStack(Items.arrow);
         }
         if (arrowItem != null) {
-            EntityArrow arrow;
             float charge = (float)useTick / (float)this.getMaxDrawTime();
             if (charge < 0.65f) {
                 return;
             }
             charge = (charge * charge + charge * 2.0f) / 3.0f;
             charge = Math.min(charge, 1.0f);
-            EntityArrow entityArrow = arrowItem.getItem() == LOTRMod.arrowPoisoned2 ? new LOTREntityArrowMorgul(world, (EntityLivingBase)entityplayer, charge * 2.0f * LOTRItemBow.getLaunchSpeedFactor(itemstack)) : (arrowItem.getItem() == LOTRMod.arrowPoisoned ? new LOTREntityArrowPoisoned(world, (EntityLivingBase)entityplayer, charge * 2.0f * LOTRItemBow.getLaunchSpeedFactor(itemstack)) : (arrowItem.getItem() == LOTRMod.arrowWeak ? new LOTREntityArrowWeak(world, (EntityLivingBase)entityplayer, charge * 2.0f * LOTRItemBow.getLaunchSpeedFactor(itemstack)) : (arrowItem.getItem() == LOTRMod.arrowSlow ? new LOTREntityArrowSlow(world, (EntityLivingBase)entityplayer, charge * 2.0f * LOTRItemBow.getLaunchSpeedFactor(itemstack)) : (arrowItem.getItem() == LOTRMod.arrowExplosion ? new LOTREntityArrowExplosion(world, (EntityLivingBase)entityplayer, charge * 2.0f * LOTRItemBow.getLaunchSpeedFactor(itemstack)) : (arrowItem.getItem() == LOTRMod.arrowAvari ? new LOTREntityArrowAvari(world, (EntityLivingBase)entityplayer, charge * 2.0f * LOTRItemBow.getLaunchSpeedFactor(itemstack)) : (arrowItem.getItem() == LOTRMod.arrowHunger ? new LOTREntityArrowHunger(world, (EntityLivingBase)entityplayer, charge * 2.0f * LOTRItemBow.getLaunchSpeedFactor(itemstack)) : (arrow = arrowItem.getItem() == LOTRMod.arrowFire ? new LOTREntityArrowFire(world, (EntityLivingBase)entityplayer, charge * 2.0f * LOTRItemBow.getLaunchSpeedFactor(itemstack)) : new EntityArrow(world, (EntityLivingBase)entityplayer, charge * 2.0f * LOTRItemBow.getLaunchSpeedFactor(itemstack)))))))));
+            EntityArrow arrow = arrowItem.getItem() == LOTRMod.arrowMorgul ? new LOTREntityArrowMorgul(world, (EntityLivingBase)entityplayer, charge * 2.0f * LOTRItemBow.getLaunchSpeedFactor(itemstack)) : (arrowItem.getItem() == LOTRMod.arrowPoisoned ? new LOTREntityArrowPoisoned(world, (EntityLivingBase)entityplayer, charge * 2.0f * LOTRItemBow.getLaunchSpeedFactor(itemstack)) : (arrowItem.getItem() == LOTRMod.arrowWeak ? new LOTREntityArrowWeak(world, (EntityLivingBase)entityplayer, charge * 2.0f * LOTRItemBow.getLaunchSpeedFactor(itemstack)) : (arrowItem.getItem() == LOTRMod.arrowSlow ? new LOTREntityArrowSlow(world, (EntityLivingBase)entityplayer, charge * 2.0f * LOTRItemBow.getLaunchSpeedFactor(itemstack)) : (arrowItem.getItem() == LOTRMod.arrowExplosion ? new LOTREntityArrowExplosion(world, (EntityLivingBase)entityplayer, charge * 2.0f * LOTRItemBow.getLaunchSpeedFactor(itemstack)) : (arrowItem.getItem() == LOTRMod.arrowAvari ? new LOTREntityArrowAvari(world, (EntityLivingBase)entityplayer, charge * 2.0f * LOTRItemBow.getLaunchSpeedFactor(itemstack)) : (arrowItem.getItem() == LOTRMod.arrowHunger ? new LOTREntityArrowHunger(world, (EntityLivingBase)entityplayer, charge * 2.0f * LOTRItemBow.getLaunchSpeedFactor(itemstack)) : (arrowItem.getItem() == LOTRMod.arrowFire ? new LOTREntityArrowFire(world, (EntityLivingBase)entityplayer, charge * 2.0f * LOTRItemBow.getLaunchSpeedFactor(itemstack)) : new EntityArrow(world, (EntityLivingBase)entityplayer, charge * 2.0f * LOTRItemBow.getLaunchSpeedFactor(itemstack)))))))));
             if (arrow.getDamage() < 1.0) {
                 arrow.setDamage(1.0);
             }
@@ -147,9 +146,13 @@ extends ItemBow {
             if (!shouldConsume) {
                 arrow.canBePickedUp = 2;
             } else if (arrowSlot >= 0) {
-                --arrowItem.stackSize;
-                if (arrowItem.stackSize <= 0) {
-                    entityplayer.inventory.mainInventory[arrowSlot] = null;
+                if (!LOTREnchantmentHelper.hasEnchant(itemstack, LOTREnchantment.rangedInfinity)) {
+                    --arrowItem.stackSize;
+                    if (arrowItem.stackSize <= 0) {
+                        entityplayer.inventory.mainInventory[arrowSlot] = null;
+                    }
+                } else {
+                    arrow.canBePickedUp = 0;
                 }
             }
             if (!world.isRemote) {
@@ -210,7 +213,7 @@ extends ItemBow {
     private int getInvArrowSlot(EntityPlayer entityplayer) {
         for (int slot = 0; slot < entityplayer.inventory.mainInventory.length; ++slot) {
             ItemStack invItem = entityplayer.inventory.mainInventory[slot];
-            if (invItem == null || invItem.getItem() != Items.arrow && invItem.getItem() != LOTRMod.arrowPoisoned && invItem.getItem() != LOTRMod.arrowFire && invItem.getItem() != LOTRMod.arrowWeak && invItem.getItem() != LOTRMod.arrowSlow && invItem.getItem() != LOTRMod.arrowExplosion && invItem.getItem() != LOTRMod.arrowAvari && invItem.getItem() != LOTRMod.arrowHunger && invItem.getItem() != LOTRMod.arrowPoisoned2) continue;
+            if (invItem == null || invItem.getItem() != Items.arrow && invItem.getItem() != LOTRMod.arrowPoisoned && invItem.getItem() != LOTRMod.arrowFire && invItem.getItem() != LOTRMod.arrowWeak && invItem.getItem() != LOTRMod.arrowSlow && invItem.getItem() != LOTRMod.arrowExplosion && invItem.getItem() != LOTRMod.arrowAvari && invItem.getItem() != LOTRMod.arrowHunger && invItem.getItem() != LOTRMod.arrowMorgul) continue;
             return slot;
         }
         return -1;

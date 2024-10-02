@@ -215,12 +215,24 @@ extends LOTRTileEntityForgeBase {
         return itemstack.getItem() == Item.getItemFromBlock((Block)LOTRMod.oreMithril) || itemstack.getItem() == LOTRMod.mithril;
     }
 
-    protected boolean isMithril1(ItemStack itemstack) {
+    protected boolean isMithrilPlus(ItemStack itemstack) {
+        return itemstack.getItem() == Item.getItemFromBlock((Block)LOTRMod.oreMithril2) || itemstack.getItem() == LOTRMod.mithrilRaw;
+    }
+
+    protected boolean isMithril4(ItemStack itemstack) {
         return itemstack.getItem() == Item.getItemFromBlock((Block)LOTRMod.oreMithril);
+    }
+
+    protected boolean isMithrilRaw(ItemStack itemstack) {
+        return itemstack.getItem() == LOTRMod.mithrilRaw;
     }
 
     protected boolean isMithrilOre(ItemStack itemstack) {
         return LOTRMod.isOreNameEqual(itemstack, "oreMithril");
+    }
+
+    protected boolean isMithrilOre2(ItemStack itemstack) {
+        return LOTRMod.isOreNameEqual(itemstack, "oreMithril2");
     }
 
     protected boolean isMithrilNugget(ItemStack itemstack) {

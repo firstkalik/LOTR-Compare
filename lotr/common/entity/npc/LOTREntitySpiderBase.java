@@ -254,14 +254,14 @@ extends LOTREntityNPCRideable {
             } else {
                 this.setSpiderClimbing(this.isCollidedHorizontally);
             }
-            if (this.riddenByEntity instanceof EntityPlayer) {
-                EntityPlayer player = (EntityPlayer)this.riddenByEntity;
-                if (LOTRBannerProtection.isProtected(this.worldObj, (int)this.posX, (int)this.posY, (int)this.posZ, LOTRBannerProtection.forPlayer(player), true)) {
-                    this.riddenByEntity.mountEntity(null);
+            if (rider instanceof EntityPlayer) {
+                EntityPlayer player = (EntityPlayer)rider;
+                if (LOTRBannerProtection.isProtected(this.worldObj, (int)this.posX, (int)this.posY, (int)this.posZ, LOTRBannerProtection.forPlayer(player, LOTRBannerProtection.Permission.FULL), true)) {
+                    rider.mountEntity(null);
                     return;
                 }
                 if (LOTRLevelData.getData(player).getAlignment(this.getFaction()) < 50.0f) {
-                    this.riddenByEntity.mountEntity(null);
+                    rider.mountEntity(null);
                 }
             }
         }
@@ -279,7 +279,7 @@ extends LOTREntityNPCRideable {
             }
             return true;
         }
-        if (!this.worldObj.isRemote && LOTRBannerProtection.isProtected(this.worldObj, (int)this.posX, (int)this.posY, (int)this.posZ, LOTRBannerProtection.forPlayer(entityplayer), true)) {
+        if (!this.worldObj.isRemote && LOTRBannerProtection.isProtected(this.worldObj, (int)this.posX, (int)this.posY, (int)this.posZ, LOTRBannerProtection.forPlayer(entityplayer, LOTRBannerProtection.Permission.FULL), true)) {
             return true;
         }
         if (this.worldObj.isRemote || this.hiredNPCInfo.isActive) {

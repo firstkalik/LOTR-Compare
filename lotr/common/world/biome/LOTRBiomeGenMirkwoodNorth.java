@@ -8,6 +8,7 @@
 package lotr.common.world.biome;
 
 import java.util.List;
+import lotr.common.entity.animal.LOTREntityFox;
 import lotr.common.entity.animal.LOTREntityGorcrow;
 import lotr.common.world.biome.LOTRBiomeDecorator;
 import lotr.common.world.biome.LOTRBiomeGenMirkwood;
@@ -24,6 +25,7 @@ extends LOTRBiomeGenMirkwood {
     public LOTRBiomeGenMirkwoodNorth(int i, boolean major) {
         super(i, major);
         this.spawnableLOTRAmbientList.add(new BiomeGenBase.SpawnListEntry(LOTREntityGorcrow.class, 4, 4, 4));
+        this.spawnableCreatureList.add(new BiomeGenBase.SpawnListEntry(LOTREntityFox.class, 4, 1, 4));
         this.addBiomeVariantSet(LOTRBiomeVariant.SET_FOREST);
         this.decorator.treesPerChunk = 12;
         this.decorator.willowPerChunk = 1;

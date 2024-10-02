@@ -23,11 +23,8 @@ import lotr.common.entity.LOTRRandomSkinEntity;
 import lotr.common.entity.npc.LOTREntityBlacklock;
 import lotr.common.entity.npc.LOTREntityBlueDwarf;
 import lotr.common.entity.npc.LOTREntityDwarf;
-import lotr.common.entity.npc.LOTREntityDwarfBerserk;
 import lotr.common.entity.npc.LOTREntityEreborDwarf;
-import lotr.common.entity.npc.LOTREntityEreborDwarfBerserk;
 import lotr.common.entity.npc.LOTREntityIronfist;
-import lotr.common.entity.npc.LOTREntityIronfistBerserk;
 import lotr.common.entity.npc.LOTREntityStiffbeard;
 import lotr.common.entity.npc.LOTREntityStonefoot;
 import lotr.common.entity.npc.LOTREntityWindDwarf;
@@ -161,15 +158,6 @@ extends LOTRRenderBiped {
         LOTREntityDwarf dwarf = (LOTREntityDwarf)entity;
         if (LOTRMod.isAprilFools()) {
             GL11.glRotatef((float)180.0f, (float)0.0f, (float)0.0f, (float)1.0f);
-        } else if (dwarf instanceof LOTREntityIronfistBerserk) {
-            float scale = LOTREntityIronfistBerserk.BERSERKER_SCALE;
-            GL11.glScalef((float)scale, (float)scale, (float)scale);
-        } else if (dwarf instanceof LOTREntityEreborDwarfBerserk) {
-            float scale = LOTREntityEreborDwarfBerserk.BERSERKER_SCALE;
-            GL11.glScalef((float)scale, (float)scale, (float)scale);
-        } else if (dwarf instanceof LOTREntityDwarfBerserk) {
-            float scale = LOTREntityDwarfBerserk.BERSERKER_SCALE;
-            GL11.glScalef((float)scale, (float)scale, (float)scale);
         }
     }
 

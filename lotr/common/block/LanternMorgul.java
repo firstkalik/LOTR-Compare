@@ -2,6 +2,8 @@
  * Decompiled with CFR 0.148.
  * 
  * Could not load the following classes:
+ *  cpw.mods.fml.common.FMLCommonHandler
+ *  cpw.mods.fml.relauncher.Side
  *  net.minecraft.block.Block
  *  net.minecraft.block.material.Material
  *  net.minecraft.creativetab.CreativeTabs
@@ -16,6 +18,8 @@
  */
 package lotr.common.block;
 
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.relauncher.Side;
 import java.util.List;
 import java.util.Random;
 import lotr.client.LOTRClientProxy;
@@ -165,7 +169,10 @@ extends Block {
 
     public int getRenderType() {
         if (LOTRConfig.renderspecial) {
-            return LOTRClientProxy.LanternMorgulModel;
+            if (FMLCommonHandler.instance().getEffectiveSide().isClient()) {
+                return LOTRClientProxy.LanternMallornModel;
+            }
+            return super.getRenderType();
         }
         return -1;
     }

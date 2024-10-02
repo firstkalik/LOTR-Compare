@@ -19,6 +19,7 @@
  *  net.minecraft.util.MovingObjectPosition
  *  net.minecraft.util.MovingObjectPosition$MovingObjectType
  *  net.minecraft.world.World
+ *  net.minecraft.world.biome.BiomeGenBase
  *  net.minecraftforge.common.FishingHooks
  *  net.minecraftforge.common.FishingHooks$FishableCategory
  */
@@ -27,9 +28,15 @@ package lotr.common.item;
 import java.util.Random;
 import lotr.common.LOTRAchievement;
 import lotr.common.LOTRLevelData;
+import lotr.common.enchant.LOTREnchantment;
+import lotr.common.enchant.LOTREnchantmentHelper;
+import lotr.common.enchant.LOTREnchantmentSeaFortune;
 import lotr.common.entity.projectile.LOTRFishing;
 import lotr.common.item.LOTRItemPolearm;
 import lotr.common.item.LOTRMaterial;
+import lotr.common.world.biome.LOTRBiomeGenLake;
+import lotr.common.world.biome.LOTRBiomeGenOcean;
+import lotr.common.world.biome.LOTRBiomeGenRiver;
 import net.minecraft.block.material.Material;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
@@ -45,6 +52,7 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraftforge.common.FishingHooks;
 
 public class LOTRItemTrident
@@ -99,7 +107,14 @@ extends LOTRItemPolearm {
                         float chance = world.rand.nextFloat();
                         int luck = EnchantmentHelper.func_151386_g((EntityLivingBase)entityplayer);
                         int speed = EnchantmentHelper.func_151387_h((EntityLivingBase)entityplayer);
-                        LOTRFishing.FishResult result = LOTRFishing.getFishResult(world.rand, chance, luck, speed, false);
+                        int seaFortuneLevel = 0;
+                        if (entityplayer.getHeldItem() != null) {
+                            for (LOTREnchantment enchantment : LOTREnchantmentHelper.getEnchantList(entityplayer.getHeldItem())) {
+                                if (!(enchantment instanceof LOTREnchantmentSeaFortune)) continue;
+                                seaFortuneLevel += ((LOTREnchantmentSeaFortune)enchantment).luckFactor;
+                            }
+                        }
+                        LOTRFishing.FishResult result = LOTRFishing.getFishResult(world.rand, chance, luck, speed, false, seaFortuneLevel);
                         EntityItem fish = new EntityItem(world, (double)i + 0.5, (double)j + 0.5, (double)k + 0.5, result.fishedItem);
                         double d = entityplayer.posX - fish.posX;
                         double d1 = entityplayer.posY - fish.posY;
@@ -122,6 +137,10 @@ extends LOTRItemPolearm {
     }
 
     private boolean canFishAt(World world, int i, int j, int k) {
+        BiomeGenBase biome = world.getBiomeGenForCoords(i, k);
+        if (!(biome instanceof LOTRBiomeGenRiver || biome instanceof LOTRBiomeGenOcean || biome instanceof LOTRBiomeGenLake)) {
+            return false;
+        }
         double d = (double)i + 0.5;
         double d1 = (double)j + 0.5;
         double d2 = (double)k + 0.5;

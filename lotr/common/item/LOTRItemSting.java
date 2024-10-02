@@ -4,7 +4,6 @@
  * Could not load the following classes:
  *  net.minecraft.block.Block
  *  net.minecraft.creativetab.CreativeTabs
- *  net.minecraft.init.Blocks
  *  net.minecraft.item.Item
  *  net.minecraft.item.ItemStack
  */
@@ -17,7 +16,6 @@ import lotr.common.item.LOTRMaterial;
 import lotr.common.item.LOTRStoryItem;
 import net.minecraft.block.Block;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
@@ -33,9 +31,6 @@ implements LOTRStoryItem {
 
     public float func_150893_a(ItemStack itemstack, Block block) {
         if (block == LOTRMod.webUngoliant) {
-            return 15.0f;
-        }
-        if (block == Blocks.melon_block) {
             return 15.0f;
         }
         return super.func_150893_a(itemstack, block);

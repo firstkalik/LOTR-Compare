@@ -56,7 +56,7 @@ extends LOTREntityBlackUruk {
     @Override
     public IEntityLivingData onSpawnWithEgg(IEntityLivingData data) {
         data = super.onSpawnWithEgg(data);
-        this.npcItemsInv.setMeleeWeapon(new ItemStack(LOTRMod.scimitarBlackUruk));
+        this.npcItemsInv.setMeleeWeapon(new ItemStack(LOTRMod.scimitarBlackUrukBerserker));
         this.npcItemsInv.setIdleItem(this.npcItemsInv.getMeleeWeapon());
         this.setCurrentItemOrArmor(1, new ItemStack(LOTRMod.bootsBlackUruk));
         this.setCurrentItemOrArmor(2, new ItemStack(LOTRMod.legsBlackUruk));

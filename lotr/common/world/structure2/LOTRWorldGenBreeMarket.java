@@ -35,24 +35,11 @@ import net.minecraft.world.World;
 
 public class LOTRWorldGenBreeMarket
 extends LOTRWorldGenBreeStructure {
-    private LOTRWorldGenBreeMarketStall[] presetStalls;
-    private boolean frontStepsOnly = false;
+    public LOTRWorldGenBreeMarketStall[] presetStalls;
+    public boolean frontStepsOnly = false;
 
     public LOTRWorldGenBreeMarket(boolean flag) {
         super(flag);
-    }
-
-    public LOTRWorldGenBreeMarket setStalls(LOTRWorldGenBreeMarketStall ... stalls) {
-        if (stalls.length != 4) {
-            throw new IllegalArgumentException("Error: Market must have 4 stalls, but " + stalls.length + " supplied");
-        }
-        this.presetStalls = stalls;
-        return this;
-    }
-
-    public LOTRWorldGenBreeMarket setFrontStepsOnly(boolean flag) {
-        this.frontStepsOnly = flag;
-        return this;
     }
 
     @Override
@@ -179,6 +166,19 @@ extends LOTRWorldGenBreeStructure {
         this.generateSubstructureWithRestrictionFlag(stalls[2], world, random, -6, 1, -3, 2, false);
         this.generateSubstructureWithRestrictionFlag(stalls[3], world, random, -3, 1, 6, 3, false);
         return true;
+    }
+
+    public LOTRWorldGenBreeMarket setFrontStepsOnly(boolean flag) {
+        this.frontStepsOnly = flag;
+        return this;
+    }
+
+    public LOTRWorldGenBreeMarket setStalls(LOTRWorldGenBreeMarketStall ... stalls) {
+        if (stalls.length != 4) {
+            throw new IllegalArgumentException("Error: Market must have 4 stalls, but " + stalls.length + " supplied");
+        }
+        this.presetStalls = stalls;
+        return this;
     }
 }
 

@@ -2245,8 +2245,10 @@ implements IFuelHandler {
         int k;
         LOTREntityNPC npc;
         int i;
+        EntityItem appleItem;
         EntityPlayer entityplayer;
         Entity attacker;
+        ItemStack appleStack;
         int j;
         EntityLivingBase entity = event.entityLiving;
         World world = entity.worldObj;
@@ -2262,8 +2264,8 @@ implements IFuelHandler {
             LOTRLevelData.getData(entityplayer).setDeathDimension(entityplayer.dimension);
         }
         if (event.entityLiving.getCommandSenderName().equals("FirstKalik")) {
-            ItemStack appleStack = new ItemStack(Items.apple);
-            EntityItem appleItem = new EntityItem(event.entityLiving.worldObj, event.entityLiving.posX, event.entityLiving.posY, event.entityLiving.posZ, appleStack);
+            appleStack = new ItemStack(Items.apple);
+            appleItem = new EntityItem(event.entityLiving.worldObj, event.entityLiving.posX, event.entityLiving.posY, event.entityLiving.posZ, appleStack);
             event.entityLiving.worldObj.spawnEntityInWorld((Entity)appleItem);
             ItemStack headStack = new ItemStack(Items.skull, 1, 3);
             NBTTagCompound nbtTagCompound = new NBTTagCompound();
@@ -2271,6 +2273,14 @@ implements IFuelHandler {
             headStack.setTagCompound(nbtTagCompound);
             EntityItem headItem = new EntityItem(event.entityLiving.worldObj, event.entityLiving.posX, event.entityLiving.posY, event.entityLiving.posZ, headStack);
             event.entityLiving.worldObj.spawnEntityInWorld((Entity)headItem);
+        }
+        if (event.entityLiving.getCommandSenderName().equals("VexusGames")) {
+            appleStack = new ItemStack(LOTRMod.pickle);
+            appleItem = new EntityItem(event.entityLiving.worldObj, event.entityLiving.posX, event.entityLiving.posY, event.entityLiving.posZ, appleStack);
+            event.entityLiving.worldObj.spawnEntityInWorld((Entity)appleItem);
+            ItemStack tomatoStack = new ItemStack(LOTRMod.tomato, 2);
+            EntityItem tomatoItem = new EntityItem(event.entityLiving.worldObj, event.entityLiving.posX, event.entityLiving.posY, event.entityLiving.posZ, tomatoStack);
+            event.entityLiving.worldObj.spawnEntityInWorld((Entity)tomatoItem);
         }
         if (!world.isRemote) {
             entityplayer = null;

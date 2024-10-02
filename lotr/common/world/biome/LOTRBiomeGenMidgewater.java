@@ -10,6 +10,7 @@ package lotr.common.world.biome;
 
 import java.util.List;
 import lotr.common.LOTRAchievement;
+import lotr.common.entity.animal.LOTREntityFrog;
 import lotr.common.entity.animal.LOTREntityMidges;
 import lotr.common.world.biome.LOTRBiome;
 import lotr.common.world.biome.LOTRBiomeDecorator;
@@ -33,6 +34,7 @@ extends LOTRBiome {
         this.spawnableCreatureList.clear();
         this.spawnableWaterCreatureList.clear();
         this.spawnableLOTRAmbientList.clear();
+        this.spawnableCreatureList.add(new BiomeGenBase.SpawnListEntry(LOTREntityFrog.class, 8, 1, 3));
         this.spawnableLOTRAmbientList.add(new BiomeGenBase.SpawnListEntry(LOTREntityMidges.class, 10, 4, 4));
         LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer = new LOTRBiomeSpawnList.SpawnListContainer[]{LOTRBiomeSpawnList.entry(LOTRSpawnList.RANGERS_NORTH, 10).setSpawnChance(500)};
         this.npcSpawnList.newFactionList(8).add(arrspawnListContainer);

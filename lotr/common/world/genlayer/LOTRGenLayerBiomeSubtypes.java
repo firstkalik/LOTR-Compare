@@ -44,6 +44,8 @@ extends LOTRGenLayer {
                     newBiome = LOTRBiome.shireWoodlands.biomeID;
                 } else if (biome == LOTRBiome.forodwaithMountains.biomeID && variant < 5) {
                     newBiome = LOTRBiome.forodwaithGlacier.biomeID;
+                } else if (biome == LOTRBiome.redMountains4.biomeID && variant < 5) {
+                    newBiome = LOTRBiome.redGlacier.biomeID;
                 } else if (biome == LOTRBiome.farHarad.biomeID && variant < 20) {
                     newBiome = LOTRBiome.farHaradForest.biomeID;
                 } else if (biome == LOTRBiome.farHaradJungle.biomeID && variant < 15) {

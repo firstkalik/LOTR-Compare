@@ -5,6 +5,7 @@
  *  net.minecraft.block.Block
  *  net.minecraft.block.material.Material
  *  net.minecraft.entity.EntityLivingBase
+ *  net.minecraft.init.Blocks
  *  net.minecraft.item.EnumAction
  *  net.minecraft.item.Item
  *  net.minecraft.item.Item$ToolMaterial
@@ -18,6 +19,7 @@ import lotr.common.item.LOTRMaterial;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -42,6 +44,12 @@ extends LOTRItemSword {
         float f = super.func_150893_a(itemstack, block);
         if (f == 1.0f && block != null && (block.getMaterial() == Material.wood || block.getMaterial() == Material.plants || block.getMaterial() == Material.vine)) {
             return this.efficiencyOnProperMaterial;
+        }
+        if (block == Blocks.melon_block) {
+            return 10.0f;
+        }
+        if (block == Blocks.pumpkin) {
+            return 10.0f;
         }
         return f;
     }

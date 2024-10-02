@@ -30,7 +30,7 @@ extends LOTRTileEntityAlloyForgeBase2 {
     @Override
     public ItemStack getSmeltingResult(ItemStack itemstack) {
         if (itemstack.getItem() == Item.getItemFromBlock((Block)LOTRMod.oreMithril)) {
-            return new ItemStack(LOTRMod.mithrilNugget, 6);
+            return new ItemStack(LOTRMod.mithril, 1);
         }
         if (itemstack.getItem() == Item.getItemFromBlock((Block)LOTRMod.oreSilver)) {
             return new ItemStack(LOTRMod.silver, 2);
@@ -63,6 +63,9 @@ extends LOTRTileEntityAlloyForgeBase2 {
         }
         if (this.isIron1(itemstack) && this.isIronNugget(alloyItem) || this.isIronNugget(itemstack) && this.isIron1(alloyItem)) {
             return new ItemStack(Items.iron_ingot, 2);
+        }
+        if (this.isMithril3(itemstack) && this.isMithrilIngot(alloyItem) || this.isMithrilIngot(itemstack) && this.isMithril3(alloyItem)) {
+            return new ItemStack(LOTRMod.mithril, 3);
         }
         return super.getAlloySmeltingResult(itemstack, alloyItem);
     }

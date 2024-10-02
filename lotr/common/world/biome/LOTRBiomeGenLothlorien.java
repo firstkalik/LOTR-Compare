@@ -22,6 +22,7 @@ import lotr.common.entity.animal.LOTREntityHorse;
 import lotr.common.entity.animal.LOTREntityRabbit;
 import lotr.common.entity.animal.LOTREntitySwan;
 import lotr.common.entity.npc.LOTREntityHobbitBartender2;
+import lotr.common.entity.npc.LOTREntityRadaghast;
 import lotr.common.entity.npc.LOTREntityRivendellTrader;
 import lotr.common.world.biome.LOTRBiome;
 import lotr.common.world.biome.LOTRBiomeDecorator;
@@ -97,6 +98,7 @@ extends LOTRBiome {
         this.biomeColors.setGrass(11527451);
         this.biomeColors.setFog(16770660);
         this.decorator.addRandomStructure(new LOTRWorldGenGaladhrimForge(false), 120);
+        this.registerTravellingTrader(LOTREntityRadaghast.class);
         this.registerTravellingTrader(LOTREntityRivendellTrader.class);
         this.registerTravellingTrader(LOTREntityHobbitBartender2.class);
         this.setBanditChance(LOTREventSpawner.EventChance.NEVER);

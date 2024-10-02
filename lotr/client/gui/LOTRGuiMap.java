@@ -380,8 +380,8 @@ extends LOTRGuiMenuBase {
         mapWidgets.add(this.widgetHideSWP);
         this.widgetUnhideSWP = new LOTRGuiMapWidget(-16, 20, 10, "unhideSWP", 20, 10);
         mapWidgets.add(this.widgetUnhideSWP);
-        this.widgetButton = new LOTRGuiMapWidget(48, 6, 10, "buttonMap", 60, 10);
-        this.widgetBMap = new LOTRGuiMapWidget(62, 6, 10, "beautifulMap", 70, 10);
+        this.widgetButton = new LOTRGuiMapWidget(48, 6, 10, "beautifulMap", 60, 10);
+        this.widgetBMap = new LOTRGuiMapWidget(62, 6, 10, "buttonMap", 70, 10);
         mapWidgets.add(this.widgetBMap);
         mapWidgets.add(this.widgetButton);
         if (this.isConquestGrid) {

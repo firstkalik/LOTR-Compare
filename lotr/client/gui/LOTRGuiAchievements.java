@@ -14,6 +14,7 @@
  *  net.minecraft.client.renderer.texture.TextureManager
  *  net.minecraft.entity.player.EntityPlayer
  *  net.minecraft.item.ItemStack
+ *  net.minecraft.util.EnumChatFormatting
  *  net.minecraft.util.ResourceLocation
  *  net.minecraft.util.StatCollector
  *  net.minecraft.world.World
@@ -30,6 +31,7 @@ import java.util.List;
 import lotr.client.gui.LOTRGuiButtonAchievements;
 import lotr.client.gui.LOTRGuiMenuBase;
 import lotr.common.LOTRAchievement;
+import lotr.common.LOTRColorUtils;
 import lotr.common.LOTRDimension;
 import lotr.common.LOTRLevelData;
 import net.minecraft.client.Minecraft;
@@ -43,6 +45,7 @@ import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
@@ -53,6 +56,7 @@ public class LOTRGuiAchievements
 extends LOTRGuiMenuBase {
     public static ResourceLocation pageTexture = new ResourceLocation("lotr:gui/achievements/page.png");
     public static ResourceLocation iconsTexture = new ResourceLocation("lotr:gui/achievements/icons.png");
+    public static ResourceLocation iconsTextureRare = new ResourceLocation("lotr:gui/achievements/icons1.png");
     private static LOTRDimension currentDimension;
     private static LOTRDimension prevDimension;
     private static LOTRAchievement.Category currentCategory;
@@ -240,9 +244,13 @@ extends LOTRGuiMenuBase {
                 Gui.drawRect((int)iconLeft, (int)iconTop, (int)(iconLeft + 16), (int)(iconTop + 16), (int)-2013265920);
                 GL11.glPopMatrix();
             }
+            int titleColor = 8019267;
+            if (achievement.isRare) {
+                titleColor = LOTRColorUtils.getColorForFormatting(EnumChatFormatting.DARK_PURPLE);
+            }
             GL11.glColor4f((float)1.0f, (float)1.0f, (float)1.0f, (float)1.0f);
             int textColour = hasAchievement ? 8019267 : 5652783;
-            this.mc.fontRenderer.drawString(achievement.getTitle((EntityPlayer)this.mc.thePlayer), this.guiLeft + 33, this.guiTop + offset + 5, textColour);
+            this.mc.fontRenderer.drawString(achievement.getTitle((EntityPlayer)this.mc.thePlayer), this.guiLeft + 33, this.guiTop + offset + 5, titleColor);
             this.mc.fontRenderer.drawSplitString(achievement.getDescription((EntityPlayer)this.mc.thePlayer), this.guiLeft + 12, this.guiTop + offset + 24, 184, textColour);
             GL11.glColor4f((float)1.0f, (float)1.0f, (float)1.0f, (float)1.0f);
             if (!hasAchievement) continue;

@@ -47,6 +47,7 @@ extends LOTRBiomeGenLastDesert {
         this.decorator.deadBushPerChunk = 1;
         this.decorator.clearRandomStructures();
         this.decorator.clearVillages();
+        this.addFlower(LOTRMod.miniCactus, 0, 2);
     }
 
     @Override

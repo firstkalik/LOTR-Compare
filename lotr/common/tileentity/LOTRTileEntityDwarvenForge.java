@@ -28,6 +28,9 @@ extends LOTRTileEntityAlloyForgeBase {
         if (itemstack.getItem() == Item.getItemFromBlock((Block)LOTRMod.oreMithril)) {
             return new ItemStack(LOTRMod.mithril, 1);
         }
+        if (itemstack.getItem() == Item.getItemFromBlock((Block)LOTRMod.oreMithril2)) {
+            return new ItemStack(LOTRMod.mithril, 1);
+        }
         return super.getSmeltingResult(itemstack);
     }
 

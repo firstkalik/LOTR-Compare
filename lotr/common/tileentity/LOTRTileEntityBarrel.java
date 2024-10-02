@@ -187,10 +187,12 @@ implements IInventory {
             return StatCollector.translateToLocal((String)"container.lotr.barrel.empty");
         }
         if (this.barrelMode == 1 && brewingItem != null) {
-            return StatCollector.translateToLocalFormatted((String)"container.lotr.barrel.brewing", (Object[])new Object[]{brewingItem.getDisplayName(), LOTRItemMug.getStrengthSubtitle(brewingItem)});
+            String strengthSubtitle = LOTRItemMug.getStrengthSubtitle(brewingItem);
+            return StatCollector.translateToLocalFormatted((String)"container.lotr.barrel.brewing", (Object[])new Object[]{brewingItem.getDisplayName(), strengthSubtitle});
         }
         if (this.barrelMode == 2 && brewingItem != null) {
-            return StatCollector.translateToLocalFormatted((String)"container.lotr.barrel.full", (Object[])new Object[]{brewingItem.getDisplayName(), LOTRItemMug.getStrengthSubtitle(brewingItem), brewingItem.stackSize});
+            String strengthSubtitle = LOTRItemMug.getStrengthSubtitle(brewingItem);
+            return StatCollector.translateToLocalFormatted((String)"container.lotr.barrel.full", (Object[])new Object[]{brewingItem.getDisplayName(), strengthSubtitle, brewingItem.stackSize});
         }
         return "";
     }

@@ -55,12 +55,15 @@ extends LOTRItemSword {
         BlockDispenser.dispenseBehaviorRegistry.putObject((Object)this, (Object)new LOTRDispenseSpear());
     }
 
-    public void onPlayerStoppedUsing(ItemStack itemstack, World world, EntityPlayer entityplayer, int i) {
+    public void onPlayerStoppedUsing(ItemStack itemstack, World world, EntityPlayer entityplayer, int useDuration) {
         if (entityplayer.getHeldItem() != itemstack) {
             return;
         }
-        int useTick = this.getMaxItemUseDuration(itemstack) - i;
-        float charge = (float)useTick / (float)this.getMaxDrawTime();
+        int useTick = this.getMaxItemUseDuration(itemstack) - useDuration;
+        if (useTick < 10) {
+            return;
+        }
+        float charge = (float)(useTick -= 10) / (float)this.getMaxDrawTime();
         if (charge < 0.1f) {
             return;
         }

@@ -214,11 +214,11 @@ implements LOTRAnimalSpawnConditions {
         for (l = 0; l < furs; ++l) {
             this.dropItem(Items.bone, 1);
         }
-        int k = 1 + this.rand.nextInt(3) + this.rand.nextInt(i + 1);
+        int k = 1 + this.rand.nextInt(1) + this.rand.nextInt(i + 1);
         for (int j = 0; j < k; ++j) {
             this.dropItem(Items.leather, 1);
         }
-        int meat = this.rand.nextInt(3) + this.rand.nextInt(1 + i);
+        int meat = this.rand.nextInt(1) + this.rand.nextInt(1 + i);
         for (int l2 = 0; l2 < meat; ++l2) {
             if (this.isBurning()) {
                 this.dropItem(LOTRMod.bearCooked, 1);

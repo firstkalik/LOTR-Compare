@@ -254,7 +254,7 @@ implements IClassTransformer {
         newMethod.instructions.add((AbstractInsnNode)new MethodInsnNode(184, "lotr/common/coremod/LOTRReplacedMethods$Gui", "drawCenteredStringWithoutShadow", "(Lnet/minecraft/client/gui/FontRenderer;Ljava/lang/String;III)V", false));
         newMethod.instructions.add((AbstractInsnNode)new InsnNode(177));
         classNode.methods.add(newMethod);
-        System.out.println("Hummel009: Added method " + newMethod.name);
+        System.out.println("FirstKalik: Added method " + newMethod.name);
         ClassWriter writer = new ClassWriter(0);
         classNode.accept((ClassVisitor)writer);
         return writer.toByteArray();
@@ -283,7 +283,7 @@ implements IClassTransformer {
                 if (!"(Lnet/minecraft/client/gui/FontRenderer;Ljava/lang/String;III)V".equals(methodInsnNode.desc)) continue;
                 methodInsnNode.name = "drawCenteredStringWithoutShadow";
             }
-            System.out.println("Hummel009: Patched method " + method.name);
+            System.out.println("FirstKalik: Patched method " + method.name);
             break;
         }
         ClassWriter writer = new ClassWriter(1);
@@ -1039,9 +1039,9 @@ implements IClassTransformer {
         ClassReader classReader = new ClassReader(bytes);
         classReader.accept((ClassVisitor)classNode, 0);
         for (MethodNode method : classNode.methods) {
-            reference _block;
             boolean[] _blocks;
             Object _door;
+            reference _block;
             if (!method.name.equals(targetMethodName) && !method.name.equals(targetMethodNameObf) || !method.desc.equals(targetMethodSign) && !method.desc.equals(targetMethodSignObf)) continue;
             FieldInsnNode nodeFound1 = null;
             FieldInsnNode nodeFound2 = null;

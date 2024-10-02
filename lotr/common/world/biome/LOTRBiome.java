@@ -158,6 +158,8 @@ import lotr.common.world.biome.LOTRBiomeGenIthilien;
 import lotr.common.world.biome.LOTRBiomeGenIthilienHills;
 import lotr.common.world.biome.LOTRBiomeGenIthilienWasteland;
 import lotr.common.world.biome.LOTRBiomeGenKanuka;
+import lotr.common.world.biome.LOTRBiomeGenKhand;
+import lotr.common.world.biome.LOTRBiomeGenKhandHills;
 import lotr.common.world.biome.LOTRBiomeGenLake;
 import lotr.common.world.biome.LOTRBiomeGenLamedon;
 import lotr.common.world.biome.LOTRBiomeGenLamedonHills;
@@ -206,6 +208,7 @@ import lotr.common.world.biome.LOTRBiomeGenPelennor;
 import lotr.common.world.biome.LOTRBiomeGenPertorogwaith;
 import lotr.common.world.biome.LOTRBiomeGenPinnathGelin;
 import lotr.common.world.biome.LOTRBiomeGenPukel;
+import lotr.common.world.biome.LOTRBiomeGenRedGlacier;
 import lotr.common.world.biome.LOTRBiomeGenRedMountainsBlacklock;
 import lotr.common.world.biome.LOTRBiomeGenRedMountainsFoothillsBlacklock;
 import lotr.common.world.biome.LOTRBiomeGenRedMountainsFoothillsStiffbeard;
@@ -213,6 +216,7 @@ import lotr.common.world.biome.LOTRBiomeGenRedMountainsFoothillsStonefoot;
 import lotr.common.world.biome.LOTRBiomeGenRedMountainsIronfist;
 import lotr.common.world.biome.LOTRBiomeGenRedMountainsStiffbeard;
 import lotr.common.world.biome.LOTRBiomeGenRedMountainsStonefoot;
+import lotr.common.world.biome.LOTRBiomeGenRedSemiDesert;
 import lotr.common.world.biome.LOTRBiomeGenRhun;
 import lotr.common.world.biome.LOTRBiomeGenRhunForest;
 import lotr.common.world.biome.LOTRBiomeGenRhunForest2;
@@ -400,10 +404,12 @@ extends BiomeGenBase {
     public static LOTRBiome notDeepOcean;
     public static LOTRBiome middleDeepOcean;
     public static LOTRBiome rhunSemiDesert;
+    public static LOTRBiome nearHaradRedSemiDesert;
     public static LOTRBiome anfalas;
     public static LOTRBiome breeland;
     public static LOTRBiome chetwood;
     public static LOTRBiome forodwaithGlacier;
+    public static LOTRBiome redGlacier;
     public static LOTRBiome whiteMountainsFoothills;
     public static LOTRBiome beach;
     public static LOTRBiome beachGravel;
@@ -515,6 +521,8 @@ extends BiomeGenBase {
     public static LOTRBiome snowtaiga;
     public static LOTRBiome forohel;
     public static LOTRBiome snowtundra;
+    public static LOTRBiome khand;
+    public static LOTRBiome khandHills;
     public LOTRDimension biomeDimension;
     public LOTRBiomeDecorator decorator;
     public int topBlockMeta = 0;
@@ -751,6 +759,10 @@ extends BiomeGenBase {
         middleDeepOcean = new LOTRBiomeGenOcean(223, false).setTemperatureRainfall(0.85f, 0.8f).setMinMaxHeight(-0.75f, 0.3f).setColor(153997).setBiomeName("ocean");
         rhunSemiDesert = new LOTRBiomeGenRhunSemiDesert(224, true).setTemperatureRainfall(1.5f, 0.2f).setMinMaxHeight(0.2f, 0.1f).setColor(12037994).setBiomeName("rhunSemiDesert");
         anfalas = new LOTRBiomeGenAnfalas(225, true).setTemperatureRainfall(0.9f, 0.9f).setMinMaxHeight(0.07f, 0.2f).setColor(9152597).setBiomeName("anfalas");
+        nearHaradRedSemiDesert = new LOTRBiomeGenRedSemiDesert(174, true).setTemperatureRainfall(1.5f, 0.1f).setMinMaxHeight(0.2f, 0.0f).setColor(12618825).setBiomeName("nearHaradRedSemiDesert");
+        khand = new LOTRBiomeGenKhand(175, true).setTemperatureRainfall(1.5f, 0.2f).setMinMaxHeight(0.2f, 0.1f).setColor(11052646).setBiomeName("khand");
+        khandHills = new LOTRBiomeGenKhandHills(176, true).setTemperatureRainfall(1.5f, 0.2f).setMinMaxHeight(0.6f, 0.8f).setColor(9671001).setBiomeName("khandHills");
+        redGlacier = new LOTRBiomeGenRedGlacier(177, true).setTemperatureRainfall(0.0f, 0.1f).setMinMaxHeight(1.4f, 1.5f).setColor(14605789).setBiomeName("redGlacier");
     }
 
     public LOTRBiome(int i, boolean major) {

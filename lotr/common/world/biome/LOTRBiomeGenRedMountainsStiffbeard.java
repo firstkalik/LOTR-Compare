@@ -71,7 +71,7 @@ extends LOTRBiome {
         this.addBiomeVariant(LOTRBiomeVariant.DEADFOREST_OAK_SPRUCE, 0.2f);
         LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer = new LOTRBiomeSpawnList.SpawnListContainer[]{LOTRBiomeSpawnList.entry(LOTRSpawnList.STIFFBEARD, 20)};
         this.npcSpawnList.newFactionList(90, 0.0f).add(arrspawnListContainer);
-        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer6 = new LOTRBiomeSpawnList.SpawnListContainer[]{LOTRBiomeSpawnList.entry(LOTRSpawnList.DURMETH_ORCS, 5), LOTRBiomeSpawnList.entry(LOTRSpawnList.CAVE, 1)};
+        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer6 = new LOTRBiomeSpawnList.SpawnListContainer[]{LOTRBiomeSpawnList.entry(LOTRSpawnList.DURMETH_ORCS, 5), LOTRBiomeSpawnList.entry(LOTRSpawnList.CAVE, 1), LOTRBiomeSpawnList.entry(LOTRSpawnList.DURMETH_ORCS_WARRIORS, 2)};
         this.npcSpawnList.newFactionList(90, 0.0f).add(arrspawnListContainer6);
         LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer2 = new LOTRBiomeSpawnList.SpawnListContainer[]{LOTRBiomeSpawnList.entry(LOTRSpawnList.DURMETH_ORCS, 5)};
         this.npcSpawnList.newFactionList(90, 0.0f).add(arrspawnListContainer2);
@@ -80,7 +80,7 @@ extends LOTRBiome {
         this.decorator.biomeOreFactor = 2.0f;
         this.decorator.biomeGemFactor = 1.8f;
         this.decorator.addSoil((WorldGenerator)new WorldGenMinable(LOTRMod.rock, 4, 60, Blocks.stone), 12.0f, 0, 96);
-        this.decorator.addOre((WorldGenerator)new WorldGenMinable(LOTRMod.oreGlowstone, 4), 8.0f, 0, 48);
+        this.decorator.addOre((WorldGenerator)new WorldGenMinable(LOTRMod.sarnlumin, 4), 8.0f, 0, 48);
         this.decorator.addOre((WorldGenerator)new WorldGenMinable(LOTRMod.oreSilver, 4), 8.0f, 0, 48);
         this.decorator.addSoil((WorldGenerator)new WorldGenMinable(LOTRMod.rock, 6, 32, Blocks.stone), 1.0f, 0, 100);
         this.decorator.addSoil((WorldGenerator)new WorldGenMinable(LOTRMod.rock, 7, 32, Blocks.stone), 1.0f, 0, 100);
@@ -88,6 +88,7 @@ extends LOTRBiome {
         this.decorator.treesPerChunk = 1;
         this.decorator.flowersPerChunk = 1;
         this.decorator.grassPerChunk = 4;
+        this.decorator.lichenPerChunk = 2;
         this.decorator.doubleGrassPerChunk = 1;
         this.decorator.addTree(LOTRTreeType.OAK, 300);
         this.decorator.addTree(LOTRTreeType.OAK_LARGE, 50);
@@ -120,7 +121,7 @@ extends LOTRBiome {
         this.invasionSpawns.addInvasion(LOTRInvasions.DURMETH_WARG, LOTREventSpawner.EventChance.COMMON);
         this.decorator.addRandomStructure(new LOTRWorldGenStoneRuin.REDDWARVENMOSSY(1, 4), 1000);
         this.decorator.addRandomStructure(new LOTRWorldGenRedMountainsSmithy(false), 200);
-        this.decorator.addRandomStructure(new LOTRWorldGenDwarvenMineEntrance2(false), 500);
+        this.decorator.addRandomStructure(new LOTRWorldGenDwarvenMineEntrance2(false), 700);
         this.decorator.addRandomStructure(new LOTRWorldGenRuinedRedDwarvenTower(false), 300);
     }
 
@@ -172,7 +173,7 @@ extends LOTRBiome {
         super.decorate(world, random, i, k);
         for (int l = 0; l < 4; ++l) {
             int i1 = i + random.nextInt(16) + 8;
-            int j1 = 110 + random.nextInt(40);
+            int j1 = 110 + random.nextInt(20);
             int k1 = k + random.nextInt(16) + 8;
             new LOTRWorldGenRedMountainsHouseStiffbeard(false).generate(world, random, i1, j1, k1);
         }

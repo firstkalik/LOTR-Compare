@@ -321,7 +321,7 @@ implements LOTRNPCMount {
             this.setMountArmorWatched(armor);
             if (this.riddenByEntity instanceof EntityPlayer) {
                 EntityPlayer player = (EntityPlayer)this.riddenByEntity;
-                if (LOTRBannerProtection.isProtected(this.worldObj, (int)this.posX, (int)this.posY, (int)this.posZ, LOTRBannerProtection.forPlayer(player), true)) {
+                if (LOTRBannerProtection.isProtected(this.worldObj, (int)this.posX, (int)this.posY, (int)this.posZ, LOTRBannerProtection.forPlayer(player, LOTRBannerProtection.Permission.FOOD), true)) {
                     this.riddenByEntity.mountEntity(null);
                     return;
                 }
@@ -439,7 +439,7 @@ implements LOTRNPCMount {
     }
 
     public boolean interact(EntityPlayer entityplayer) {
-        if (!this.worldObj.isRemote && LOTRBannerProtection.isProtected(this.worldObj, (int)this.posX, (int)this.posY, (int)this.posZ, LOTRBannerProtection.forPlayer(entityplayer), true)) {
+        if (!this.worldObj.isRemote && LOTRBannerProtection.isProtected(this.worldObj, (int)this.posX, (int)this.posY, (int)this.posZ, LOTRBannerProtection.forPlayer(entityplayer, LOTRBannerProtection.Permission.FOOD), true)) {
             return true;
         }
         if (!this.getMountable()) {
@@ -581,11 +581,6 @@ implements LOTRNPCMount {
 
     public boolean shouldDismountInWater(Entity rider) {
         return false;
-    }
-
-    @Override
-    public float getStepHeightWhileRiddenByPlayer() {
-        return 1.0f;
     }
 }
 

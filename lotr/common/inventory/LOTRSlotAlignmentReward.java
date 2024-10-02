@@ -11,6 +11,7 @@
  */
 package lotr.common.inventory;
 
+import lotr.common.LOTRConfig;
 import lotr.common.LOTRLevelData;
 import lotr.common.entity.npc.LOTREntityNPC;
 import lotr.common.entity.npc.LOTRHireableBase;
@@ -28,7 +29,7 @@ import net.minecraft.world.World;
 
 public class LOTRSlotAlignmentReward
 extends LOTRSlotProtected {
-    public static int REWARD_COST = 2000;
+    public static int REWARD_COST;
     private LOTRContainerUnitTrade theContainer;
     private LOTRHireableBase theTrader;
     private LOTREntityNPC theLivingTrader;
@@ -40,6 +41,29 @@ extends LOTRSlotProtected {
         this.theTrader = entity;
         this.theLivingTrader = (LOTREntityNPC)((Object)this.theTrader);
         this.alignmentReward = item.copy();
+        REWARD_COST = (int)(2000.0 * (1.0 + (double)(LOTRConfig.maxHiredNPCsCost - 1) * 0.5));
+    }
+
+    private int getMetaIndexForRewardCost(int cost) {
+        if (cost < 10) {
+            return 0;
+        }
+        if (cost < 100) {
+            return 1;
+        }
+        if (cost < 1000) {
+            return 2;
+        }
+        if (cost < 10000) {
+            return 3;
+        }
+        if (cost < 100000) {
+            return 4;
+        }
+        if (cost < 1000000) {
+            return 5;
+        }
+        return 6;
     }
 
     public boolean canTakeStack(EntityPlayer entityplayer) {
@@ -62,7 +86,9 @@ extends LOTRSlotProtected {
         }
         super.onPickupFromSlot(entityplayer, itemstack);
         if (!entityplayer.worldObj.isRemote) {
+            int metaIndex = this.getMetaIndexForRewardCost(REWARD_COST);
             ItemStack reward = this.alignmentReward.copy();
+            reward.setItemDamage(metaIndex);
             this.putStack(reward);
             ((EntityPlayerMP)entityplayer).sendContainerToPlayer((Container)this.theContainer);
         }

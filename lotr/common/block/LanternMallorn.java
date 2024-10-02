@@ -2,6 +2,8 @@
  * Decompiled with CFR 0.148.
  * 
  * Could not load the following classes:
+ *  cpw.mods.fml.common.FMLCommonHandler
+ *  cpw.mods.fml.relauncher.Side
  *  net.minecraft.block.Block
  *  net.minecraft.block.material.Material
  *  net.minecraft.creativetab.CreativeTabs
@@ -16,6 +18,8 @@
  */
 package lotr.common.block;
 
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.relauncher.Side;
 import java.util.List;
 import java.util.Random;
 import lotr.client.LOTRClientProxy;
@@ -122,22 +126,26 @@ extends Block {
     }
 
     public void addCollisionBoxesToList(World world, int x, int y, int z, AxisAlignedBB mask, List list, Entity entity) {
-        if (world.getBlockMetadata(x, y, z) == 1) {
-            LanternMallorn.setBlockBoundsWithState(this, 1, true);
-            super.addCollisionBoxesToList(world, x, y, z, mask, list, entity);
-            LanternMallorn.setBlockBoundsWithState(this, 1, false);
-            super.addCollisionBoxesToList(world, x, y, z, mask, list, entity);
+        AxisAlignedBB topBB;
+        AxisAlignedBB bodyBB;
+        int meta = world.getBlockMetadata(x, y, z);
+        if (meta == 1) {
+            bodyBB = AxisAlignedBB.getBoundingBox((double)((float)x + 0.3125f), (double)((float)y + 0.0625f), (double)((float)z + 0.3125f), (double)((float)x + 0.6875f), (double)((float)y + 0.5f), (double)((float)z + 0.6875f));
+            topBB = AxisAlignedBB.getBoundingBox((double)((float)x + 0.375f), (double)((float)y + 0.5f), (double)((float)z + 0.375f), (double)((float)x + 0.625f), (double)((float)y + 0.625f), (double)((float)z + 0.625f));
         } else {
-            LanternMallorn.setBlockBoundsWithState(this, 0, true);
-            super.addCollisionBoxesToList(world, x, y, z, mask, list, entity);
-            LanternMallorn.setBlockBoundsWithState(this, 0, false);
-            super.addCollisionBoxesToList(world, x, y, z, mask, list, entity);
+            bodyBB = AxisAlignedBB.getBoundingBox((double)((float)x + 0.3125f), (double)((float)y + 0.0f), (double)((float)z + 0.3125f), (double)((float)x + 0.6875f), (double)((float)y + 0.4375f), (double)((float)z + 0.6875f));
+            topBB = AxisAlignedBB.getBoundingBox((double)((float)x + 0.375f), (double)((float)y + 0.4375f), (double)((float)z + 0.375f), (double)((float)x + 0.625f), (double)((float)y + 0.5625f), (double)((float)z + 0.625f));
         }
-        LanternMallorn.setBlockBoundsWithState(this, 0, true);
+        if (bodyBB != null && mask.intersectsWith(bodyBB)) {
+            list.add(bodyBB);
+        }
+        if (topBB != null && mask.intersectsWith(topBB)) {
+            list.add(topBB);
+        }
     }
 
     public AxisAlignedBB getSelectedBoundingBoxFromPool(World world, int x, int y, int z) {
-        LanternMallorn.setBlockBoundsWithState(this, world.getBlockMetadata(x, y, z), true);
+        this.setBlockBoundsBasedOnState((IBlockAccess)world, x, y, z);
         return super.getSelectedBoundingBoxFromPool(world, x, y, z);
     }
 
@@ -165,7 +173,10 @@ extends Block {
 
     public int getRenderType() {
         if (LOTRConfig.renderspecial) {
-            return LOTRClientProxy.LanternMallornModel;
+            if (FMLCommonHandler.instance().getEffectiveSide().isClient()) {
+                return LOTRClientProxy.LanternMallornModel;
+            }
+            return super.getRenderType();
         }
         return -1;
     }

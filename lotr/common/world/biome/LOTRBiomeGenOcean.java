@@ -6,6 +6,7 @@
  *  net.minecraft.block.BlockSand
  *  net.minecraft.entity.passive.EntitySquid
  *  net.minecraft.init.Blocks
+ *  net.minecraft.world.IBlockAccess
  *  net.minecraft.world.World
  *  net.minecraft.world.biome.BiomeGenBase
  *  net.minecraft.world.biome.BiomeGenBase$SpawnListEntry
@@ -24,6 +25,7 @@ import lotr.common.world.biome.LOTRBiome;
 import lotr.common.world.biome.LOTRBiomeDecorator;
 import lotr.common.world.biome.LOTRMusicRegion;
 import lotr.common.world.feature.LOTRTreeType;
+import lotr.common.world.feature.LOTRWorldGenKelp;
 import lotr.common.world.feature.LOTRWorldGenSeaBlock;
 import lotr.common.world.map.LOTRWaypoint;
 import lotr.common.world.spawning.LOTRBiomeSpawnList;
@@ -36,6 +38,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockSand;
 import net.minecraft.entity.passive.EntitySquid;
 import net.minecraft.init.Blocks;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.gen.feature.WorldGenAbstractTree;
@@ -47,6 +50,7 @@ extends LOTRBiome {
     private static Random iceRand = new Random();
     private WorldGenerator spongeGen = new LOTRWorldGenSeaBlock(Blocks.sponge, 0, 24);
     private WorldGenerator coralGen = new LOTRWorldGenSeaBlock(LOTRMod.coralReef, 0, 64);
+    private WorldGenerator kelp = new LOTRWorldGenKelp(LOTRMod.kelp, 0, 8, 15);
 
     public LOTRBiomeGenOcean(int i, boolean major) {
         super(i, major);
@@ -56,7 +60,8 @@ extends LOTRBiome {
         this.decorator.addOre((WorldGenerator)new WorldGenMinable(LOTRMod.oreSalt, 16), 6.0f, 0, 64);
         this.decorator.addOre((WorldGenerator)new WorldGenMinable(LOTRMod.oreSalt, 8, (Block)Blocks.sand), 0.5f, 56, 80);
         this.decorator.addOre((WorldGenerator)new WorldGenMinable(LOTRMod.oreSalt, 8, LOTRMod.whiteSand), 0.5f, 56, 80);
-        this.decorator.addOre((WorldGenerator)new WorldGenMinable(LOTRMod.oreMithril, 8), 0.25f, 0, 16);
+        this.decorator.addOre((WorldGenerator)new WorldGenMinable(LOTRMod.oreMithril, 6), 0.2f, 0, 16);
+        this.decorator.addOre((WorldGenerator)new WorldGenMinable(LOTRMod.oreMithril2, 4), 0.1f, 0, 16);
         this.decorator.treesPerChunk = 1;
         this.decorator.willowPerChunk = 1;
         this.decorator.flowersPerChunk = 2;
@@ -99,9 +104,15 @@ extends LOTRBiome {
 
     @Override
     public void decorate(World world, Random random, int i, int k) {
+        int i3;
+        int i1;
+        int j3;
         int j1;
         int k1;
-        int i1;
+        int k3;
+        int i2 = i + random.nextInt(16) + 8;
+        int k2 = k + random.nextInt(16) + 8;
+        int j2 = world.getTopSolidOrLiquidBlock(i2, k2);
         super.decorate(world, random, i, k);
         if (i < LOTRWaypoint.MITHLOND_SOUTH.getXCoord() && k > LOTRWaypoint.SOUTH_FOROCHEL.getZCoord() && k < LOTRWaypoint.ERYN_VORN.getZCoord() && random.nextInt(200) == 0) {
             i1 = i + random.nextInt(16) + 8;
@@ -115,6 +126,23 @@ extends LOTRBiome {
             }
             if (random.nextInt(4) == 0 && ((j1 = world.getTopSolidOrLiquidBlock(i1 = i + random.nextInt(16) + 8, k1 = k + random.nextInt(16) + 8)) < 60 || random.nextBoolean())) {
                 this.coralGen.generate(world, random, i1, j1, k1);
+            }
+            if (random.nextInt(4) == 0 && this != LOTRBiome.deepOcean) {
+                this.kelp.generate(world, random, i2, j2, k2);
+            }
+            for (int attempt = 0; attempt < 5; ++attempt) {
+                Block blockBelow;
+                int seaGrassZ;
+                int seaGrassX = i + random.nextInt(16) + 8;
+                int seaGrassY = world.getTopSolidOrLiquidBlock(seaGrassX, seaGrassZ = k + random.nextInt(16) + 8);
+                if (seaGrassY > 57 || (blockBelow = world.getBlock(seaGrassX, seaGrassY - 1, seaGrassZ)) != Blocks.dirt && blockBelow != Blocks.sand && blockBelow != Blocks.clay) continue;
+                world.setBlock(seaGrassX, seaGrassY, seaGrassZ, LOTRMod.seaGrass);
+            }
+        }
+        if ((j3 = world.getTopSolidOrLiquidBlock(i3 = i + random.nextInt(16) + 8, k3 = k + random.nextInt(16) + 8)) <= 43 && (world.getBlock(i3, j3 - 1, k3) == Blocks.sand || world.getBlock(i3, j3 - 1, k3) == Blocks.dirt)) {
+            int height = j3 + 8 + random.nextInt(4);
+            for (int j21 = j3; j21 < height && !LOTRMod.isOpaque2((IBlockAccess)world, i3, j21, k3); ++j21) {
+                world.setBlock(i3, j21, k3, LOTRMod.kelp);
             }
         }
         if (k >= 64000) {

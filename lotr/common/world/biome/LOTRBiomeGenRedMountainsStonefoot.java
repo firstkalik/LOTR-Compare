@@ -80,7 +80,7 @@ extends LOTRBiome {
         this.decorator.addSoil((WorldGenerator)new WorldGenMinable(LOTRMod.rock, 7, 32, Blocks.stone), 1.0f, 0, 100);
         this.decorator.addSoil((WorldGenerator)new WorldGenMinable(LOTRMod.rock, 8, 32, Blocks.stone), 1.0f, 0, 100);
         this.decorator.addSoil((WorldGenerator)new WorldGenMinable(LOTRMod.rock, 4, 60, Blocks.stone), 12.0f, 0, 96);
-        this.decorator.addOre((WorldGenerator)new WorldGenMinable(LOTRMod.oreGlowstone, 4), 8.0f, 0, 48);
+        this.decorator.addOre((WorldGenerator)new WorldGenMinable(LOTRMod.sarnlumin, 4), 8.0f, 0, 48);
         this.decorator.treesPerChunk = 1;
         this.decorator.flowersPerChunk = 1;
         this.decorator.grassPerChunk = 8;
@@ -169,7 +169,7 @@ extends LOTRBiome {
         super.decorate(world, random, i, k);
         for (int l = 0; l < 4; ++l) {
             int i1 = i + random.nextInt(16) + 8;
-            int j1 = 110 + random.nextInt(40);
+            int j1 = 110 + random.nextInt(20);
             int k1 = k + random.nextInt(16) + 8;
             new LOTRWorldGenRedMountainsHouseStonefoot(false).generate(world, random, i1, j1, k1);
         }

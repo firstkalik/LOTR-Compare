@@ -38,7 +38,7 @@ extends LOTREntityDwarf {
     public LOTREntityBlacklock(World world) {
         super(world);
         this.familyInfo.marriageEntityClass = LOTREntityBlacklock.class;
-        this.familyInfo.marriageAchievement = LOTRAchievement.marryHarnaugrimDwarf;
+        this.familyInfo.marriageAchievement = LOTRAchievement.marryMornaugrimDwarf;
     }
 
     @Override
@@ -118,7 +118,7 @@ extends LOTREntityDwarf {
 
     @Override
     protected LOTRChestContents getLarderDrops() {
-        return LOTRChestContents.REDDWARF_SMITHY;
+        return LOTRChestContents.LOTRChestContents2.REDDWARF_SMITHY;
     }
 
     @Override

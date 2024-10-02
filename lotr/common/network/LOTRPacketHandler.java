@@ -23,6 +23,7 @@ import lotr.common.network.LOTRPacketAlignmentBonus;
 import lotr.common.network.LOTRPacketAlignmentChoiceOffer;
 import lotr.common.network.LOTRPacketAlignmentChoices;
 import lotr.common.network.LOTRPacketAlignmentSee;
+import lotr.common.network.LOTRPacketAlignmentSee2;
 import lotr.common.network.LOTRPacketAnvilEngraveOwner;
 import lotr.common.network.LOTRPacketAnvilReforge;
 import lotr.common.network.LOTRPacketAnvilRename;
@@ -120,6 +121,7 @@ import lotr.common.network.LOTRPacketNPCSpeech;
 import lotr.common.network.LOTRPacketNPCSquadron;
 import lotr.common.network.LOTRPacketOpenSignEditor;
 import lotr.common.network.LOTRPacketOptions;
+import lotr.common.network.LOTRPacketParticles;
 import lotr.common.network.LOTRPacketPledge;
 import lotr.common.network.LOTRPacketPledgeSet;
 import lotr.common.network.LOTRPacketPortalPos;
@@ -159,6 +161,7 @@ public class LOTRPacketHandler {
 
     public LOTRPacketHandler() {
         int id = 0;
+        networkWrapper.registerMessage(LOTRPacketParticles.Handler.class, LOTRPacketParticles.class, id++, Side.CLIENT);
         networkWrapper.registerMessage(LOTRPacketLogin.Handler.class, LOTRPacketLogin.class, id++, Side.CLIENT);
         networkWrapper.registerMessage(LOTRPacketLoginPlayerData.Handler.class, LOTRPacketLoginPlayerData.class, id++, Side.CLIENT);
         networkWrapper.registerMessage(LOTRPacketPortalPos.Handler.class, LOTRPacketPortalPos.class, id++, Side.CLIENT);
@@ -218,6 +221,7 @@ public class LOTRPacketHandler {
         networkWrapper.registerMessage(LOTRPacketMiniquestTrackClient.Handler.class, LOTRPacketMiniquestTrackClient.class, id++, Side.CLIENT);
         networkWrapper.registerMessage(LOTRPacketOpenSignEditor.Handler.class, LOTRPacketOpenSignEditor.class, id++, Side.CLIENT);
         networkWrapper.registerMessage(LOTRPacketAlignmentSee.Handler.class, LOTRPacketAlignmentSee.class, id++, Side.CLIENT);
+        networkWrapper.registerMessage(LOTRPacketAlignmentSee2.Handler.class, LOTRPacketAlignmentSee2.class, id++, Side.CLIENT);
         networkWrapper.registerMessage(LOTRPacketFellowship.Handler.class, LOTRPacketFellowship.class, id++, Side.CLIENT);
         networkWrapper.registerMessage(LOTRPacketFellowshipRemove.Handler.class, LOTRPacketFellowshipRemove.class, id++, Side.CLIENT);
         networkWrapper.registerMessage(LOTRPacketFellowshipNotification.Handler.class, LOTRPacketFellowshipNotification.class, id++, Side.CLIENT);

@@ -53,6 +53,7 @@
  *  net.minecraft.util.EnumChatFormatting
  *  net.minecraft.util.IChatComponent
  *  net.minecraft.util.MathHelper
+ *  net.minecraft.util.StatCollector
  *  net.minecraft.world.EnumDifficulty
  *  net.minecraft.world.WorldProvider
  *  net.minecraftforge.client.event.GuiOpenEvent
@@ -151,6 +152,7 @@ import net.minecraft.util.ChatStyle;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IChatComponent;
 import net.minecraft.util.MathHelper;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.WorldProvider;
 import net.minecraftforge.client.event.GuiOpenEvent;
@@ -171,6 +173,11 @@ public class LOTRGuiHandler {
     public static final Set<Class<? extends GuiContainer>> pouchRestock_leftPositionGUIs = new HashSet<Class<? extends GuiContainer>>();
     public static final Set<Class<? extends GuiContainer>> pouchRestock_sidePositionGUIs = new HashSet<Class<? extends GuiContainer>>();
     private int descScrollIndex = -1;
+    private static LOTRAchievement.Category currentCategory;
+    private int currentCategoryTakenCount;
+    private int currentCategoryUntakenCount;
+    private ArrayList currentCategoryTakenAchievements = new ArrayList();
+    private ArrayList currentCategoryUntakenAchievements = new ArrayList();
 
     public LOTRGuiHandler() {
         FMLCommonHandler.instance().bus().register((Object)this);
@@ -365,6 +372,7 @@ public class LOTRGuiHandler {
                 for (IInventory inv : differentInvs) {
                     int coins = LOTRItemCoin.getContainerValue(inv, true);
                     if (coins <= 0) continue;
+                    int metaIndex = coins < 10 ? 0 : (coins < 100 ? 1 : (coins < 1000 ? 2 : (coins < 10000 ? 3 : (coins < 100000 ? 4 : (coins < 1000000 ? 5 : 6)))));
                     String sCoins = String.valueOf(coins);
                     int sCoinsW = mc.fontRenderer.getStringWidth(sCoins);
                     int border = 2;
@@ -412,7 +420,7 @@ public class LOTRGuiHandler {
                     GL11.glPushMatrix();
                     GL11.glTranslatef((float)0.0f, (float)0.0f, (float)500.0f);
                     GL11.glColor4f((float)1.0f, (float)1.0f, (float)1.0f, (float)1.0f);
-                    itemRenderer.renderItemIntoGUI(mc.fontRenderer, mc.getTextureManager(), new ItemStack(LOTRMod.silverCoin), x, y);
+                    itemRenderer.renderItemIntoGUI(mc.fontRenderer, mc.getTextureManager(), new ItemStack(LOTRMod.silverCoin, 1, metaIndex), x, y);
                     GL11.glColor4f((float)1.0f, (float)1.0f, (float)1.0f, (float)1.0f);
                     GL11.glDisable((int)2896);
                     mc.fontRenderer.drawString(sCoins, x + 16 + 2, y + (16 - mc.fontRenderer.FONT_HEIGHT + 2) / 2, 16777215);
@@ -429,8 +437,8 @@ public class LOTRGuiHandler {
 
     @SubscribeEvent
     public void postDrawScreen(GuiScreenEvent.DrawScreenEvent.Post event) {
-        IChatComponent component;
         HoverEvent hoverevent;
+        IChatComponent component;
         Minecraft mc = Minecraft.getMinecraft();
         EntityClientPlayerMP entityplayer = mc.thePlayer;
         GuiScreen gui = event.gui;
@@ -446,17 +454,46 @@ public class LOTRGuiHandler {
                 LOTRAchievement.Category category = LOTRAchievement.categoryForName(categoryName);
                 int achievementID = Integer.parseInt(unformattedText.substring(splitIndex + 1));
                 LOTRAchievement achievement = LOTRAchievement.achievementForCategoryAndID(category, achievementID);
-                ChatComponentTranslation name = new ChatComponentTranslation("lotr.gui.achievements.hover.name", new Object[]{achievement.getAchievementChatComponent((EntityPlayer)entityplayer)});
-                ChatComponentTranslation subtitle = new ChatComponentTranslation("lotr.gui.achievements.hover.subtitle", new Object[]{achievement.getDimension().getDimensionName(), category.getDisplayName()});
-                subtitle.getChatStyle().setItalic(Boolean.valueOf(true));
-                String desc = achievement.getDescription((EntityPlayer)entityplayer);
-                ArrayList list = Lists.newArrayList((Object[])new String[]{name.getFormattedText(), subtitle.getFormattedText()});
-                list.addAll(mc.fontRenderer.listFormattedStringToWidth(desc, 150));
-                proxyGui.func_146283_a(list, mouseX, mouseY);
+                if (achievement != null) {
+                    if (currentCategory != category) {
+                        currentCategory = category;
+                        this.updateAchievementCounts(category);
+                    }
+                    ChatComponentTranslation name = new ChatComponentTranslation("lotr.gui.achievements.hover.name", new Object[]{achievement.getAchievementChatComponent((EntityPlayer)entityplayer)});
+                    String categoryNameTranslated = StatCollector.translateToLocal((String)("lotr.achievement.category." + category.codeName()));
+                    String countText = String.format("(%s/%s)", this.currentCategoryTakenCount, this.currentCategoryTakenCount + this.currentCategoryUntakenCount);
+                    ChatComponentTranslation name2 = new ChatComponentTranslation("lotr.gui.achievements.hover1.name", new Object[]{categoryNameTranslated + " " + countText, achievement.getAchievementChatComponent((EntityPlayer)entityplayer).getFormattedText()});
+                    String dimensionName = achievement.getDimension().getDimensionName();
+                    ChatComponentTranslation subtitle = new ChatComponentTranslation("lotr.gui.achievements.hover.subtitle", new Object[]{dimensionName, categoryNameTranslated});
+                    subtitle.getChatStyle().setItalic(Boolean.valueOf(true));
+                    String desc = achievement.getDescription((EntityPlayer)entityplayer);
+                    ArrayList list = Lists.newArrayList((Object[])new String[]{name.getFormattedText(), name2.getFormattedText(), subtitle.getFormattedText()});
+                    list.addAll(mc.fontRenderer.listFormattedStringToWidth(desc, 450));
+                    proxyGui.func_146283_a(list, mouseX, mouseY);
+                } else {
+                    proxyGui.drawCreativeTabHoveringText((Object)EnumChatFormatting.RED + "Invalid LOTRAchievement!", mouseX, mouseY);
+                }
             }
             catch (Exception e) {
                 proxyGui.drawCreativeTabHoveringText((Object)EnumChatFormatting.RED + "Invalid LOTRAchievement!", mouseX, mouseY);
             }
+        }
+    }
+
+    private void updateAchievementCounts(LOTRAchievement.Category category) {
+        this.currentCategoryTakenCount = 0;
+        this.currentCategoryUntakenCount = 0;
+        this.currentCategoryTakenAchievements.clear();
+        this.currentCategoryUntakenAchievements.clear();
+        for (LOTRAchievement achievement : category.list) {
+            if (!achievement.canPlayerEarn((EntityPlayer)Minecraft.getMinecraft().thePlayer)) continue;
+            if (LOTRLevelData.getData((EntityPlayer)Minecraft.getMinecraft().thePlayer).hasAchievement(achievement)) {
+                this.currentCategoryTakenAchievements.add(achievement);
+                ++this.currentCategoryTakenCount;
+                continue;
+            }
+            this.currentCategoryUntakenAchievements.add(achievement);
+            ++this.currentCategoryUntakenCount;
         }
     }
 

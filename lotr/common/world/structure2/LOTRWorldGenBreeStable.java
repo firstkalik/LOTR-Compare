@@ -144,7 +144,7 @@ extends LOTRWorldGenBreeStructure {
         return true;
     }
 
-    private void spawnHorse(World world, Random random, int i, int j, int k) {
+    public void spawnHorse(World world, Random random, int i, int j, int k) {
         int horses = 1 + random.nextInt(2);
         for (int l = 0; l < horses; ++l) {
             LOTREntityHorse horse = new LOTREntityHorse(world);

@@ -72,8 +72,8 @@ extends LOTRBiome {
         this.setBanditEntityClass(LOTREntityBanditRhun.class);
         this.setBanditChance(LOTREventSpawner.EventChance.BANDIT_RARE);
         this.decorator.addRandomStructure(new LOTRWorldGenAvariElfHouse(false), 16);
-        this.decorator.addRandomStructure(new LOTRWorldGenAvariElfTower(false), 200);
-        this.decorator.addRandomStructure(new LOTRWorldGenAvariElvenForge(false), 50);
+        this.decorator.addRandomStructure(new LOTRWorldGenAvariElfTower(false), 100);
+        this.decorator.addRandomStructure(new LOTRWorldGenAvariElvenForge(false), 25);
         this.registerRhunForestFlowers();
         this.biomeColors.resetGrass();
     }

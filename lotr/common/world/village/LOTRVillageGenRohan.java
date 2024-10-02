@@ -51,7 +51,7 @@ extends LOTRVillageGen {
     }
 
     @Override
-    protected LOTRVillageGen.AbstractInstance<?> createVillageInstance(World world, int i, int k, Random random, LocationInfo loc) {
+    public LOTRVillageGen.AbstractInstance<?> createVillageInstance(World world, int i, int k, Random random, LocationInfo loc) {
         return new Instance(this, world, i, k, random, loc);
     }
 
@@ -64,18 +64,81 @@ extends LOTRVillageGen {
     public static class Instance
     extends LOTRVillageGen.AbstractInstance<LOTRVillageGenRohan> {
         public VillageType villageType;
-        private String[] villageName;
-        private boolean palisade;
+        public String[] villageName;
+        public boolean palisade;
 
         public Instance(LOTRVillageGenRohan village, World world, int i, int k, Random random, LocationInfo loc) {
             super(village, world, i, k, random, loc);
         }
 
         @Override
-        protected void setupVillageProperties(Random random) {
-            this.villageName = LOTRNames.getRohanVillageName(random);
-            this.villageType = random.nextInt(3) == 0 ? VillageType.FORT : VillageType.VILLAGE;
-            this.palisade = random.nextBoolean();
+        public void addVillageStructures(Random random) {
+            if (this.villageType == VillageType.VILLAGE) {
+                this.setupVillage(random);
+            } else if (this.villageType == VillageType.FORT) {
+                this.setupFort(random);
+            }
+        }
+
+        @Override
+        public LOTRRoadType getPath(Random random, int i, int k) {
+            int i1 = Math.abs(i);
+            int k1 = Math.abs(k);
+            if (this.villageType == VillageType.VILLAGE) {
+                int dSq = i * i + k * k;
+                int imn = 20 + random.nextInt(4);
+                if (dSq < imn * imn) {
+                    return LOTRRoadType.PATH;
+                }
+                int omn = 50 - random.nextInt(4);
+                int omx = 56 + random.nextInt(4);
+                if (dSq > omn * omn && dSq < omx * omx || dSq < 2500 && Math.abs(i1 - k1) <= 2 + random.nextInt(4)) {
+                    return LOTRRoadType.PATH;
+                }
+                if (this.palisade && k < -56 && k > -81 && i1 <= 2 + random.nextInt(4)) {
+                    return LOTRRoadType.PATH;
+                }
+            }
+            if (this.villageType == VillageType.FORT) {
+                if (k <= -14 && k >= -49 && i1 <= 2) {
+                    return LOTRRoadType.ROHAN;
+                }
+                if (k <= -14 && k >= -17 && i1 <= 37) {
+                    return LOTRRoadType.PATH;
+                }
+                if (k >= -14 && k <= 20 && i1 >= 19 && i1 <= 22) {
+                    return LOTRRoadType.PATH;
+                }
+                if (k >= 20 && k <= 23 && i1 <= 37) {
+                    return LOTRRoadType.PATH;
+                }
+            }
+            return null;
+        }
+
+        public LOTRWorldGenStructureBase2 getRandomFarm(Random random) {
+            if (random.nextInt(3) == 0) {
+                return new LOTRWorldGenRohanVillagePasture(false);
+            }
+            return new LOTRWorldGenRohanVillageFarm(false);
+        }
+
+        public LOTRWorldGenStructureBase2 getRandomHouse(Random random) {
+            if (random.nextInt(4) == 0) {
+                int i = random.nextInt(3);
+                switch (i) {
+                    case 0: {
+                        return new LOTRWorldGenRohanSmithy(false);
+                    }
+                    case 1: {
+                        return new LOTRWorldGenRohanStables(false);
+                    }
+                    case 2: {
+                        return new LOTRWorldGenRohanBarn(false);
+                    }
+                }
+            }
+            return new LOTRWorldGenRohanHouse(false);
         }
 
         @Override
@@ -84,15 +147,69 @@ extends LOTRVillageGen {
         }
 
         @Override
-        protected void addVillageStructures(Random random) {
-            if (this.villageType == VillageType.VILLAGE) {
-                this.setupVillage(random);
-            } else if (this.villageType == VillageType.FORT) {
-                this.setupFort(random);
+        public boolean isVillageSpecificSurface(World world, int i, int j, int k) {
+            return false;
+        }
+
+        public void setupFort(Random random) {
+            int wallZ;
+            int l2;
+            int farmX;
+            int wallX;
+            int l;
+            this.addStructure(new LOTRWorldGenRohanFortress(false), 0, -13, 0, true);
+            this.addStructure(new LOTRWorldGenNPCRespawner(false){
+
+                @Override
+                public void setupRespawner(LOTREntityNPCRespawner spawner) {
+                    spawner.setSpawnClasses(LOTREntityRohirrimWarrior.class, LOTREntityRohirrimArcher.class);
+                    spawner.setCheckRanges(40, -12, 12, 30);
+                    spawner.setSpawnRanges(32, -6, 6, 64);
+                    spawner.setBlockEnemySpawnRange(60);
+                }
+            }, 0, 0, 0);
+            this.addStructure(new LOTRWorldGenRohanGatehouse(false), 0, -53, 0, true);
+            int towerX = 46;
+            for (int i1 : new int[]{-towerX, towerX}) {
+                this.addStructure(new LOTRWorldGenRohanWatchtower(false), i1, -towerX, 0, true);
+                this.addStructure(new LOTRWorldGenRohanWatchtower(false), i1, towerX, 2, true);
+            }
+            for (int i1 : new int[]{-35, 35}) {
+                this.addStructure(new LOTRWorldGenRohanStables(false), i1, -14, 0, true);
+            }
+            int farmZ = -20;
+            for (l = 0; l <= 1; ++l) {
+                farmX = 30 - l * 12;
+                this.addStructure(new LOTRWorldGenRohanVillageFarm(false), -farmX, farmZ, 2);
+                this.addStructure(new LOTRWorldGenRohanVillageFarm(false), farmX, farmZ, 2);
+            }
+            farmZ = 26;
+            for (l = -2; l <= 2; ++l) {
+                farmX = l * 12;
+                this.addStructure(new LOTRWorldGenRohanVillageFarm(false), -farmX, farmZ, 0);
+                this.addStructure(new LOTRWorldGenRohanVillageFarm(false), farmX, farmZ, 0);
+            }
+            for (int i1 : new int[]{-51, 51}) {
+                for (int k1 : new int[]{-51, 51}) {
+                    this.addStructure(new LOTRWorldGenRohanFortCorner(false), i1, k1, 0, true);
+                }
+            }
+            for (l2 = 0; l2 <= 4; ++l2) {
+                wallX = 13 + l2 * 8;
+                wallZ = -51;
+                this.addStructure(new LOTRWorldGenRohanFortWall(false, -3, 4), -wallX, wallZ, 0, true);
+                this.addStructure(new LOTRWorldGenRohanFortWall(false, -4, 3), wallX, wallZ, 0, true);
+            }
+            for (l2 = -5; l2 <= 5; ++l2) {
+                wallX = l2 * 9;
+                wallZ = 51;
+                this.addStructure(new LOTRWorldGenRohanFortWall(false), wallX, wallZ, 2, true);
+                this.addStructure(new LOTRWorldGenRohanFortWall(false), -wallZ, wallX, 3, true);
+                this.addStructure(new LOTRWorldGenRohanFortWall(false), wallZ, wallX, 1, true);
             }
         }
 
-        private void setupVillage(Random random) {
+        public void setupVillage(Random random) {
             this.addStructure(new LOTRWorldGenMeadHall(false), 0, 2, 0, true);
             this.addStructure(new LOTRWorldGenNPCRespawner(false){
 
@@ -196,129 +313,11 @@ extends LOTRVillageGen {
             }
         }
 
-        private LOTRWorldGenStructureBase2 getRandomHouse(Random random) {
-            if (random.nextInt(4) == 0) {
-                int i = random.nextInt(3);
-                if (i == 0) {
-                    return new LOTRWorldGenRohanSmithy(false);
-                }
-                if (i == 1) {
-                    return new LOTRWorldGenRohanStables(false);
-                }
-                if (i == 2) {
-                    return new LOTRWorldGenRohanBarn(false);
-                }
-            }
-            return new LOTRWorldGenRohanHouse(false);
-        }
-
-        private LOTRWorldGenStructureBase2 getRandomFarm(Random random) {
-            if (random.nextInt(3) == 0) {
-                return new LOTRWorldGenRohanVillagePasture(false);
-            }
-            return new LOTRWorldGenRohanVillageFarm(false);
-        }
-
-        private void setupFort(Random random) {
-            int wallZ;
-            int l2;
-            int farmX;
-            int wallX;
-            int l;
-            this.addStructure(new LOTRWorldGenRohanFortress(false), 0, -13, 0, true);
-            this.addStructure(new LOTRWorldGenNPCRespawner(false){
-
-                @Override
-                public void setupRespawner(LOTREntityNPCRespawner spawner) {
-                    spawner.setSpawnClasses(LOTREntityRohirrimWarrior.class, LOTREntityRohirrimArcher.class);
-                    spawner.setCheckRanges(40, -12, 12, 30);
-                    spawner.setSpawnRanges(32, -6, 6, 64);
-                    spawner.setBlockEnemySpawnRange(60);
-                }
-            }, 0, 0, 0);
-            this.addStructure(new LOTRWorldGenRohanGatehouse(false), 0, -53, 0, true);
-            int towerX = 46;
-            for (int i1 : new int[]{-towerX, towerX}) {
-                this.addStructure(new LOTRWorldGenRohanWatchtower(false), i1, -towerX, 0, true);
-                this.addStructure(new LOTRWorldGenRohanWatchtower(false), i1, towerX, 2, true);
-            }
-            for (int i1 : new int[]{-35, 35}) {
-                this.addStructure(new LOTRWorldGenRohanStables(false), i1, -14, 0, true);
-            }
-            int farmZ = -20;
-            for (l = 0; l <= 1; ++l) {
-                farmX = 30 - l * 12;
-                this.addStructure(new LOTRWorldGenRohanVillageFarm(false), -farmX, farmZ, 2);
-                this.addStructure(new LOTRWorldGenRohanVillageFarm(false), farmX, farmZ, 2);
-            }
-            farmZ = 26;
-            for (l = -2; l <= 2; ++l) {
-                farmX = l * 12;
-                this.addStructure(new LOTRWorldGenRohanVillageFarm(false), -farmX, farmZ, 0);
-                this.addStructure(new LOTRWorldGenRohanVillageFarm(false), farmX, farmZ, 0);
-            }
-            for (int i1 : new int[]{-51, 51}) {
-                for (int k1 : new int[]{-51, 51}) {
-                    this.addStructure(new LOTRWorldGenRohanFortCorner(false), i1, k1, 0, true);
-                }
-            }
-            for (l2 = 0; l2 <= 4; ++l2) {
-                wallX = 13 + l2 * 8;
-                wallZ = -51;
-                this.addStructure(new LOTRWorldGenRohanFortWall(false, -3, 4), -wallX, wallZ, 0, true);
-                this.addStructure(new LOTRWorldGenRohanFortWall(false, -4, 3), wallX, wallZ, 0, true);
-            }
-            for (l2 = -5; l2 <= 5; ++l2) {
-                wallX = l2 * 9;
-                wallZ = 51;
-                this.addStructure(new LOTRWorldGenRohanFortWall(false), wallX, wallZ, 2, true);
-                this.addStructure(new LOTRWorldGenRohanFortWall(false), -wallZ, wallX, 3, true);
-                this.addStructure(new LOTRWorldGenRohanFortWall(false), wallZ, wallX, 1, true);
-            }
-        }
-
         @Override
-        protected LOTRRoadType getPath(Random random, int i, int k) {
-            int i1 = Math.abs(i);
-            int k1 = Math.abs(k);
-            if (this.villageType == VillageType.VILLAGE) {
-                int dSq = i * i + k * k;
-                int imn = 20 + random.nextInt(4);
-                if (dSq < imn * imn) {
-                    return LOTRRoadType.PATH;
-                }
-                int omn = 50 - random.nextInt(4);
-                int omx = 56 + random.nextInt(4);
-                if (dSq > omn * omn && dSq < omx * omx) {
-                    return LOTRRoadType.PATH;
-                }
-                if (dSq < 2500 && Math.abs(i1 - k1) <= 2 + random.nextInt(4)) {
-                    return LOTRRoadType.PATH;
-                }
-                if (this.palisade && k < -56 && k > -81 && i1 <= 2 + random.nextInt(4)) {
-                    return LOTRRoadType.PATH;
-                }
-            }
-            if (this.villageType == VillageType.FORT) {
-                if (k <= -14 && k >= -49 && i1 <= 2) {
-                    return LOTRRoadType.ROHAN;
-                }
-                if (k <= -14 && k >= -17 && i1 <= 37) {
-                    return LOTRRoadType.PATH;
-                }
-                if (k >= -14 && k <= 20 && i1 >= 19 && i1 <= 22) {
-                    return LOTRRoadType.PATH;
-                }
-                if (k >= 20 && k <= 23 && i1 <= 37) {
-                    return LOTRRoadType.PATH;
-                }
-            }
-            return null;
-        }
-
-        @Override
-        public boolean isVillageSpecificSurface(World world, int i, int j, int k) {
-            return false;
+        public void setupVillageProperties(Random random) {
+            this.villageName = LOTRNames.getRohanVillageName(random);
+            this.villageType = random.nextInt(3) == 0 ? VillageType.FORT : VillageType.VILLAGE;
+            this.palisade = random.nextBoolean();
         }
 
     }

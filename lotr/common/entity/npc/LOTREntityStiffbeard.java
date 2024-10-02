@@ -24,6 +24,7 @@ import lotr.common.entity.npc.LOTRInventoryNPCItems;
 import lotr.common.fac.LOTRFaction;
 import lotr.common.quest.LOTRMiniQuest;
 import lotr.common.quest.LOTRMiniQuestFactory;
+import lotr.common.world.biome.LOTRBiomeGenNearHarad;
 import lotr.common.world.structure.LOTRChestContents;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.item.EntityItem;
@@ -34,11 +35,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 public class LOTREntityStiffbeard
-extends LOTREntityDwarf {
+extends LOTREntityDwarf
+implements LOTRBiomeGenNearHarad.ImmuneToFrost {
     public LOTREntityStiffbeard(World world) {
         super(world);
         this.familyInfo.marriageEntityClass = LOTREntityStiffbeard.class;
-        this.familyInfo.marriageAchievement = LOTRAchievement.marryHarnaugrimDwarf;
+        this.familyInfo.marriageAchievement = LOTRAchievement.marryMornaugrimDwarf;
     }
 
     @Override
@@ -118,7 +120,7 @@ extends LOTREntityDwarf {
 
     @Override
     protected LOTRChestContents getLarderDrops() {
-        return LOTRChestContents.REDDWARF_SMITHY;
+        return LOTRChestContents.LOTRChestContents2.REDDWARF_SMITHY;
     }
 
     @Override

@@ -39,7 +39,7 @@ extends LOTRVillageGen {
     }
 
     @Override
-    protected LOTRVillageGen.AbstractInstance<?> createVillageInstance(World world, int i, int k, Random random, LocationInfo loc) {
+    public LOTRVillageGen.AbstractInstance<?> createVillageInstance(World world, int i, int k, Random random, LocationInfo loc) {
         return new Instance(this, world, i, k, random, loc);
     }
 
@@ -51,18 +51,56 @@ extends LOTRVillageGen {
     public static class Instance
     extends LOTRVillageGen.AbstractInstance<LOTRVillageGenDunedain> {
         public VillageType villageType;
-        private int innerSize;
-        private boolean palisade;
+        public int innerSize;
+        public boolean palisade;
 
         public Instance(LOTRVillageGenDunedain village, World world, int i, int k, Random random, LocationInfo loc) {
             super(village, world, i, k, random, loc);
         }
 
         @Override
-        protected void setupVillageProperties(Random random) {
-            this.villageType = VillageType.VILLAGE;
-            this.innerSize = MathHelper.getRandomIntegerInRange((Random)random, (int)12, (int)20);
-            this.palisade = random.nextBoolean();
+        public void addVillageStructures(Random random) {
+            if (this.villageType == VillageType.VILLAGE) {
+                this.setupVillage(random);
+            }
+        }
+
+        @Override
+        public LOTRRoadType getPath(Random random, int i, int k) {
+            int i1 = Math.abs(i);
+            int k1 = Math.abs(k);
+            if (this.villageType == VillageType.VILLAGE) {
+                int dSq = i * i + k * k;
+                if (i1 <= 2 && k1 <= 2) {
+                    return null;
+                }
+                int imn = this.innerSize + random.nextInt(3);
+                if (dSq < imn * imn) {
+                    return LOTRRoadType.PATH;
+                }
+                if (this.palisade && k < 0 && k > -(this.innerSize + 12 + 16) && i1 <= 2 + random.nextInt(3)) {
+                    return LOTRRoadType.PATH;
+                }
+            }
+            return null;
+        }
+
+        public LOTRWorldGenStructureBase2 getRandomHouse(Random random) {
+            if (random.nextInt(3) == 0) {
+                int i = random.nextInt(3);
+                switch (i) {
+                    case 0: {
+                        return new LOTRWorldGenRangerSmithy(false);
+                    }
+                    case 1: {
+                        return new LOTRWorldGenRangerStables(false);
+                    }
+                    case 2: {
+                        return new LOTRWorldGenRangerLodge(false);
+                    }
+                }
+            }
+            return new LOTRWorldGenRangerHouse(false);
         }
 
         @Override
@@ -71,13 +109,11 @@ extends LOTRVillageGen {
         }
 
         @Override
-        protected void addVillageStructures(Random random) {
-            if (this.villageType == VillageType.VILLAGE) {
-                this.setupVillage(random);
-            }
+        public boolean isVillageSpecificSurface(World world, int i, int j, int k) {
+            return false;
         }
 
-        private void setupVillage(Random random) {
+        public void setupVillage(Random random) {
             this.addStructure(new LOTRWorldGenNPCRespawner(false){
 
                 @Override
@@ -160,45 +196,11 @@ extends LOTRVillageGen {
             }
         }
 
-        private LOTRWorldGenStructureBase2 getRandomHouse(Random random) {
-            if (random.nextInt(3) == 0) {
-                int i = random.nextInt(3);
-                if (i == 0) {
-                    return new LOTRWorldGenRangerSmithy(false);
-                }
-                if (i == 1) {
-                    return new LOTRWorldGenRangerStables(false);
-                }
-                if (i == 2) {
-                    return new LOTRWorldGenRangerLodge(false);
-                }
-            }
-            return new LOTRWorldGenRangerHouse(false);
-        }
-
         @Override
-        protected LOTRRoadType getPath(Random random, int i, int k) {
-            int i1 = Math.abs(i);
-            int k1 = Math.abs(k);
-            if (this.villageType == VillageType.VILLAGE) {
-                int dSq = i * i + k * k;
-                if (i1 <= 2 && k1 <= 2) {
-                    return null;
-                }
-                int imn = this.innerSize + random.nextInt(3);
-                if (dSq < imn * imn) {
-                    return LOTRRoadType.PATH;
-                }
-                if (this.palisade && k < 0 && k > -(this.innerSize + 12 + 16) && i1 <= 2 + random.nextInt(3)) {
-                    return LOTRRoadType.PATH;
-                }
-            }
-            return null;
-        }
-
-        @Override
-        public boolean isVillageSpecificSurface(World world, int i, int j, int k) {
-            return false;
+        public void setupVillageProperties(Random random) {
+            this.villageType = VillageType.VILLAGE;
+            this.innerSize = MathHelper.getRandomIntegerInRange((Random)random, (int)12, (int)20);
+            this.palisade = random.nextBoolean();
         }
 
     }

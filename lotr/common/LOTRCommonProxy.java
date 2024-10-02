@@ -8,6 +8,8 @@
  *  cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper
  *  net.minecraft.block.Block
  *  net.minecraft.client.Minecraft
+ *  net.minecraft.client.gui.GuiIngame
+ *  net.minecraft.client.gui.GuiNewChat
  *  net.minecraft.client.gui.inventory.GuiChest
  *  net.minecraft.client.gui.inventory.GuiDispenser
  *  net.minecraft.entity.Entity
@@ -25,7 +27,9 @@
  *  net.minecraft.potion.PotionEffect
  *  net.minecraft.tileentity.TileEntity
  *  net.minecraft.tileentity.TileEntityDispenser
+ *  net.minecraft.util.ChatComponentText
  *  net.minecraft.util.IChatComponent
+ *  net.minecraft.util.StatCollector
  *  net.minecraft.world.EnumDifficulty
  *  net.minecraft.world.World
  */
@@ -138,6 +142,8 @@ import lotr.common.world.map.LOTRAbstractWaypoint;
 import lotr.common.world.map.LOTRConquestZone;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiIngame;
+import net.minecraft.client.gui.GuiNewChat;
 import net.minecraft.client.gui.inventory.GuiChest;
 import net.minecraft.client.gui.inventory.GuiDispenser;
 import net.minecraft.entity.Entity;
@@ -155,7 +161,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityDispenser;
+import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.IChatComponent;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
 
@@ -786,6 +794,11 @@ implements IGuiHandler {
     }
 
     public void cancelItemHighlight() {
+    }
+
+    public void displayAlignmentSee(String username, int currentHiredNPCs, int maxHiredNPCs, int getCustomMaxHiredNPCs) {
+        String message = StatCollector.translateToLocalFormatted((String)"message.unitSee", (Object[])new Object[]{username, currentHiredNPCs, maxHiredNPCs, getCustomMaxHiredNPCs});
+        Minecraft.getMinecraft().ingameGUI.getChatGUI().printChatMessage((IChatComponent)new ChatComponentText(message));
     }
 
     public void receiveConquestGrid(LOTRFaction conqFac, List<LOTRConquestZone> allZones) {

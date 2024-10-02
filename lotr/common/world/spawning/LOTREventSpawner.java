@@ -9,9 +9,11 @@
  *  net.minecraft.entity.Entity
  *  net.minecraft.entity.EntityList
  *  net.minecraft.entity.EntityLiving
+ *  net.minecraft.entity.EntityLivingBase
  *  net.minecraft.entity.IEntityLivingData
  *  net.minecraft.entity.player.EntityPlayer
  *  net.minecraft.entity.player.PlayerCapabilities
+ *  net.minecraft.potion.Potion
  *  net.minecraft.util.AxisAlignedBB
  *  net.minecraft.util.MathHelper
  *  net.minecraft.world.ChunkCoordIntPair
@@ -29,10 +31,14 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
 import lotr.common.LOTRConfig;
 import lotr.common.LOTRGreyWandererTracker;
 import lotr.common.LOTRLevelData;
 import lotr.common.LOTRMod;
+import lotr.common.LOTRPotions;
 import lotr.common.entity.LOTREntities;
 import lotr.common.entity.LOTREntityInvasionSpawner;
 import lotr.common.entity.npc.LOTREntityBandit;
@@ -50,9 +56,11 @@ import net.minecraft.command.IEntitySelector;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.PlayerCapabilities;
+import net.minecraft.potion.Potion;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.ChunkCoordIntPair;
@@ -103,12 +111,16 @@ public class LOTREventSpawner {
             LOTRBiomeInvasionSpawns invasionSpawns = ((LOTRBiome)biome).invasionSpawns;
             for (EventChance invChance : EventChance.values()) {
                 int range;
+                boolean playerHasEffect;
                 List<LOTRInvasions> invList = invasionSpawns.getInvasionsForChance(invChance);
                 if (invList.isEmpty()) continue;
                 final LOTRInvasions invasionType = invList.get(rand.nextInt(invList.size()));
                 double chance = invChance.chancesPerSecondPerChunk[16];
                 if (!world.isDaytime() && LOTRWorldProvider.isLunarEclipse()) {
                     chance *= 5.0;
+                }
+                if (playerHasEffect = world.playerEntities.stream().filter(player -> player instanceof EntityPlayer).map(player -> (EntityPlayer)player).anyMatch(player -> ((EntityLivingBase)player).isPotionActive(LOTRPotions.curse))) {
+                    chance = EventChance.COMMON.chancesPerSecondPerChunk[16];
                 }
                 if (rand.nextDouble() >= chance || world.selectEntitiesWithinAABB(EntityPlayer.class, AxisAlignedBB.getBoundingBox((double)(i - 48), (double)0.0, (double)(k - (range = 48)), (double)(i + range), (double)world.getHeight(), (double)(k + range)), new IEntitySelector(){
 
@@ -151,13 +163,17 @@ public class LOTREventSpawner {
             LOTRBiome lotrbiome = (LOTRBiome)biome;
             Class<? extends LOTREntityBandit> banditClass = lotrbiome.getBanditEntityClass();
             double chance = lotrbiome.getBanditChance().chancesPerSecondPerChunk[16];
+            boolean playerHasEffect = world.playerEntities.stream().filter(player -> player instanceof EntityPlayer).map(player -> (EntityPlayer)player).anyMatch(player -> ((EntityLivingBase)player).isPotionActive(LOTRPotions.curse));
+            if (playerHasEffect) {
+                chance = EventChance.BANDIT_COMMON.chancesPerSecondPerChunk[16];
+            }
             if (chance <= 0.0 || world.rand.nextDouble() >= chance || world.selectEntitiesWithinAABB(EntityPlayer.class, AxisAlignedBB.getBoundingBox((double)(i - 48), (double)0.0, (double)(k - (range = 48)), (double)(i + range), (double)world.getHeight(), (double)(k + range)), LOTRMod.selectNonCreativePlayers()).isEmpty()) continue;
             int banditsSpawned = 0;
             int maxBandits = MathHelper.getRandomIntegerInRange((Random)world.rand, (int)1, (int)4);
             for (int attempts = 0; attempts < 32; ++attempts) {
-                int k1;
-                LOTREntityBandit bandit;
                 Block block;
+                LOTREntityBandit bandit;
+                int k1;
                 int i1 = i + MathHelper.getRandomIntegerInRange((Random)rand, (int)-32, (int)32);
                 int j1 = world.getHeightValue(i1, k1 = k + MathHelper.getRandomIntegerInRange((Random)rand, (int)-32, (int)32));
                 if (j1 <= 60 || (block = world.getBlock(i1, j1 - 1, k1)) != biome.topBlock && block != biome.fillerBlock || world.getBlock(i1, j1, k1).isNormalCube() || world.getBlock(i1, j1 + 1, k1).isNormalCube() || (bandit = (LOTREntityBandit)EntityList.createEntityByName((String)LOTREntities.getStringFromClass(banditClass), (World)world)) == null) continue;
@@ -175,11 +191,13 @@ public class LOTREventSpawner {
     public static enum EventChance {
         NEVER(0.0f, 0),
         RARE(0.1f, 3600),
+        NOTRARE(0.2f, 3600),
         UNCOMMON(0.3f, 3600),
-        HALFTIME(0.5f, 3600),
+        HALFTIME(0.6f, 3600),
         COMMON(0.9f, 3600),
         BANDIT_RARE(0.1f, 3600),
         BANDIT_UNCOMMON(0.3f, 3600),
+        BANDIT_HALFTIME(0.5f, 3600),
         BANDIT_COMMON(0.8f, 3600),
         BANDIT_UNBELIEVABLE(1.0f, 3600);
 

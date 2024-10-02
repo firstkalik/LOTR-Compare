@@ -37,6 +37,10 @@ extends LOTRItemFood {
         return this;
     }
 
+    public int getMaxItemUseDuration(ItemStack itemstack) {
+        return 20;
+    }
+
     @Override
     public ItemStack onEaten(ItemStack itemstack, World world, EntityPlayer entityplayer) {
         ItemStack ret = super.onEaten(itemstack, world, entityplayer);

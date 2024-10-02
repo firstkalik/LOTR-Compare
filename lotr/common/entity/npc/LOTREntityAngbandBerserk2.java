@@ -154,8 +154,7 @@ implements LOTRMercenary {
             if (entity instanceof EntityLivingBase && (duration = (difficulty = this.worldObj.difficultySetting.getDifficultyId()) * (difficulty + 5) / 2) > 0) {
                 ((EntityLivingBase)entity).addPotionEffect(new PotionEffect(Potion.moveSlowdown.id, duration * 20, 0));
                 ((EntityLivingBase)entity).addPotionEffect(new PotionEffect(Potion.weakness.id, duration * 20, 0));
-                ((EntityLivingBase)entity).addPotionEffect(new PotionEffect(Potion.poison.id, duration * 40, 0));
-                ((EntityLivingBase)entity).addPotionEffect(new PotionEffect(Potion.wither.id, duration * 40, 0));
+                ((EntityLivingBase)entity).addPotionEffect(new PotionEffect(Potion.poison.id, duration * 20, 0));
             }
             float attackDamage = (float)this.getEntityAttribute(LOTREntityNPC.npcAttackDamage).getAttributeValue();
             float knockbackModifier = 1.25f * attackDamage;
@@ -206,7 +205,7 @@ implements LOTRMercenary {
 
     @Override
     public int getMercBaseCost() {
-        return 500;
+        return 150;
     }
 
     @Override

@@ -11,6 +11,7 @@
  *  net.minecraft.entity.ai.EntityAIBase
  *  net.minecraft.entity.ai.EntityAILookIdle
  *  net.minecraft.entity.ai.EntityAIOpenDoor
+ *  net.minecraft.entity.ai.EntityAIPanic
  *  net.minecraft.entity.ai.EntityAISwimming
  *  net.minecraft.entity.ai.EntityAITasks
  *  net.minecraft.entity.ai.EntityAIWander
@@ -62,6 +63,7 @@ import net.minecraft.entity.ai.EntityAIAvoidEntity;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityAILookIdle;
 import net.minecraft.entity.ai.EntityAIOpenDoor;
+import net.minecraft.entity.ai.EntityAIPanic;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAITasks;
 import net.minecraft.entity.ai.EntityAIWander;
@@ -93,6 +95,7 @@ implements IPickpocketable {
         this.getNavigator().setBreakDoors(true);
         this.tasks.addTask(0, (EntityAIBase)new EntityAISwimming((EntityLiving)this));
         this.tasks.addTask(1, (EntityAIBase)new LOTREntityAIHiredRemainStill(this));
+        this.tasks.addTask(1, this.createBreeAttackAI());
         int p = this.addBreeAttackAI(2);
         this.addBreeHiringAI(p + 1);
         this.tasks.addTask(p + 2, (EntityAIBase)new EntityAIOpenDoor((EntityLiving)this, true));
@@ -106,6 +109,10 @@ implements IPickpocketable {
         this.tasks.addTask(p + 7, (EntityAIBase)new EntityAIWatchClosest((EntityLiving)this, EntityLiving.class, 8.0f, 0.02f));
         this.tasks.addTask(p + 8, (EntityAIBase)new EntityAILookIdle((EntityLiving)this));
         this.addTargetTasks(false);
+    }
+
+    protected EntityAIBase createBreeAttackAI() {
+        return new EntityAIPanic((EntityCreature)this, 1.7);
     }
 
     protected int addBreeAttackAI(int prio) {

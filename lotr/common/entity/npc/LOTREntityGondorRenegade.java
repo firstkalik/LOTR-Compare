@@ -67,7 +67,7 @@ extends LOTREntityGondorSoldier {
 
     @Override
     public LOTRFaction getFaction() {
-        return LOTRFaction.NEAR_HARAD;
+        return LOTRFaction.UMBAR;
     }
 
     @Override

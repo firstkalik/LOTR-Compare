@@ -13,7 +13,9 @@
  *  net.minecraft.inventory.IInventory
  *  net.minecraft.item.Item
  *  net.minecraft.item.ItemStack
+ *  net.minecraft.util.EnumChatFormatting
  *  net.minecraft.util.IIcon
+ *  net.minecraft.util.StatCollector
  */
 package lotr.common.item;
 
@@ -32,7 +34,9 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IIcon;
+import net.minecraft.util.StatCollector;
 
 public class LOTRItemCoin
 extends Item {
@@ -199,6 +203,27 @@ extends Item {
         for (int i = 0; i < values.length; ++i) {
             this.coinIcons[i] = iconregister.registerIcon(this.getIconString() + "_" + values[i]);
         }
+    }
+
+    @SideOnly(value=Side.CLIENT)
+    public void addInformation(ItemStack itemstack, EntityPlayer player, List list, boolean advanced) {
+        int i = itemstack.getItemDamage();
+        if (i >= values.length) {
+            i = 0;
+        }
+        String localizedText = StatCollector.translateToLocal((String)"item.lotrCoin.number");
+        list.add((Object)EnumChatFormatting.GRAY + String.format(localizedText, (Object)EnumChatFormatting.YELLOW + String.valueOf(values[i]) + (Object)EnumChatFormatting.GRAY));
+        int stackValue = LOTRItemCoin.getStackValue(itemstack, false);
+        String stackValueText = StatCollector.translateToLocal((String)"item.lotrCoin.total");
+        list.add((Object)EnumChatFormatting.GRAY + String.format(stackValueText, (Object)EnumChatFormatting.GOLD + String.valueOf(stackValue) + (Object)EnumChatFormatting.GRAY));
+    }
+
+    public static int getMetaIndexForCost(int cost) {
+        for (int i = values.length - 1; i >= 0; --i) {
+            if (cost < values[i]) continue;
+            return i;
+        }
+        return 0;
     }
 
     @SideOnly(value=Side.CLIENT)

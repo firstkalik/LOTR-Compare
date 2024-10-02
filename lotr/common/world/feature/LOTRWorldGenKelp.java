@@ -31,7 +31,7 @@ extends WorldGenerator {
         this.meta = meta;
         this.minTreeHeight = minTreeHeight;
         this.maxTreeHeight = maxTreeHeight;
-        this.tries = 24;
+        this.tries = 12;
     }
 
     public boolean generate(World world, Random random, int x, int y, int z) {
@@ -39,8 +39,8 @@ extends WorldGenerator {
         for (int l = 0; l < this.tries; ++l) {
             int j1;
             int k1;
-            int i1 = x - random.nextInt(6) + random.nextInt(6);
-            if (!this.block.canBlockStay(world, i1, j1 = world.getTopSolidOrLiquidBlock(i1, k1 = z - random.nextInt(6) + random.nextInt(6)), k1)) continue;
+            int i1 = x - random.nextInt(12) + random.nextInt(12);
+            if (!this.block.canBlockStay(world, i1, j1 = world.getTopSolidOrLiquidBlock(i1, k1 = z - random.nextInt(12) + random.nextInt(12)), k1)) continue;
             for (int j2 = 0; j2 < l1 && world.getBlock(i1, j1 + j2 + 2, k1) == Blocks.water; ++j2) {
                 world.setBlock(i1, j1 + j2, k1, this.block, this.meta, 2);
             }
