@@ -94,17 +94,6 @@ extends LOTRItemSword {
         entity.addPotionEffect(poison);
     }
 
-    public static void applyStandardDrunk(EntityLivingBase entity) {
-        EnumDifficulty difficulty = entity.worldObj.difficultySetting;
-        int duration = 1 + difficulty.getDifficultyId() * 2;
-        PotionEffect poison = new PotionEffect(LOTRPotions.drunk.id, (duration + itemRand.nextInt(duration)) * 20);
-        entity.addPotionEffect(poison);
-        PotionEffect nausea = new PotionEffect(Potion.confusion.id, (duration + itemRand.nextInt(duration)) * 20, 10);
-        entity.addPotionEffect(nausea);
-        PotionEffect slowness = new PotionEffect(Potion.moveSlowdown.id, (duration + itemRand.nextInt(duration)) * 20, 1);
-        entity.addPotionEffect(slowness);
-    }
-
     public static void applyStandardPoison1(EntityLivingBase entity) {
         EnumDifficulty difficulty = entity.worldObj.difficultySetting;
         int duration = 1 + difficulty.getDifficultyId() * 2;

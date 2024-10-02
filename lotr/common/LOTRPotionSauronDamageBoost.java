@@ -16,7 +16,7 @@ import net.minecraft.util.ResourceLocation;
 public class LOTRPotionSauronDamageBoost
 extends LOTRCustomPotion {
     public LOTRPotionSauronDamageBoost(int id, boolean isBadEffect, int potionColor, ResourceLocation tex, String namePot) {
-        super(39, false, 4720135, tex, namePot);
+        super(39, isBadEffect, 4720135, tex, namePot);
         this.setPotionName("potion.lotr.meleeDamageBoostSauron");
         this.setEffectiveness(1.0);
     }

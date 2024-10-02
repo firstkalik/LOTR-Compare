@@ -39,7 +39,6 @@ import java.util.Random;
 import lotr.common.LOTRAchievement;
 import lotr.common.LOTRCommonProxy;
 import lotr.common.LOTRMod;
-import lotr.common.LOTRPotions;
 import lotr.common.entity.ai.LOTREntityAIAttackOnCollide;
 import lotr.common.entity.ai.LOTREntityAIFollowHiringPlayer;
 import lotr.common.entity.ai.LOTREntityAIHiredRemainStill;
@@ -237,13 +236,6 @@ extends LOTREntityNPC {
     @Override
     public boolean canReEquipHired(int slot, ItemStack itemstack) {
         return false;
-    }
-
-    public void addPotionEffect(PotionEffect effect) {
-        if (effect.getPotionID() == LOTRPotions.blood.id) {
-            return;
-        }
-        super.addPotionEffect(effect);
     }
 }
 

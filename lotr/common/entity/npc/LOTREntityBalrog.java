@@ -39,7 +39,6 @@
  */
 package lotr.common.entity.npc;
 
-import java.io.PrintStream;
 import java.util.Random;
 import lotr.common.LOTRAchievement;
 import lotr.common.LOTRLevelData;
@@ -363,14 +362,6 @@ extends LOTREntityNPC {
 
     protected float getSoundVolume() {
         return 1.5f;
-    }
-
-    @Override
-    public boolean getCanSpawnHere() {
-        Block block = this.worldObj.getBlock(MathHelper.floor_double((double)this.posX), MathHelper.floor_double((double)this.posY) - 1, MathHelper.floor_double((double)this.posZ));
-        boolean isSuitableBlock = block.getMaterial() == Material.grass || block.getMaterial() == Material.ground || block.getMaterial() == Material.snow || block.getMaterial() == Material.rock;
-        System.out.println("Balrog getCanSpawnHere check: block under entity is " + block.getLocalizedName() + ", suitable for spawn: " + isSuitableBlock);
-        return isSuitableBlock;
     }
 
     protected void func_145780_a(int i, int j, int k, Block block) {

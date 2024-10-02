@@ -27,7 +27,7 @@ extends SpellBase {
         int j = (int)(entity.prevPosY + (entity.posY - entity.prevPosY) * (double)var4 + 1.62 - (double)entity.yOffset);
         int k = (int)(entity.prevPosZ + (entity.posZ - entity.prevPosZ) * (double)var4);
         if (entity instanceof EntityLivingBase) {
-            entity.addPotionEffect(new PotionEffect(1, 4800, 1));
+            entity.addPotionEffect(new PotionEffect(1, 4800, 0));
         }
         entity.attackEntityFrom(DamageSource.generic, 2.0f);
         itemStack.damageItem(8, (EntityLivingBase)entity);

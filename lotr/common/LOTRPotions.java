@@ -22,8 +22,8 @@ import lotr.common.LOTRPotionBowDamageBoost;
 import lotr.common.LOTRPotionBroken;
 import lotr.common.LOTRPotionCurse;
 import lotr.common.LOTRPotionDamageBoost;
-import lotr.common.LOTRPotionDrunk;
 import lotr.common.LOTRPotionExplode;
+import lotr.common.LOTRPotionFire;
 import lotr.common.LOTRPotionFrostResistance;
 import lotr.common.LOTRPotionHero;
 import lotr.common.LOTRPotionImmune;
@@ -50,6 +50,7 @@ public class LOTRPotions {
     public static Potion frostResistance;
     public static Potion Repair;
     public static Potion Slowfall;
+    public static Potion Fire;
     public static Potion explode;
     public static Potion blood;
     public static Potion immune;
@@ -61,13 +62,13 @@ public class LOTRPotions {
     public static Potion curse;
     public static Potion hero;
     public static Potion infection;
-    public static Potion drunk;
 
     public static void registerPotion() {
         killingPoison = new LOTRPotionPoisonKilling();
         frostResistance = new LOTRPotionFrostResistance(31, false, 8171463, new ResourceLocation("lotr", "potions/frostResistance.png"), "potion.lotr.frostResistance");
         Repair = new LOTRPotionRepair(32, false, 8171463, new ResourceLocation("lotr", "potions/Repair.png"), "potion.lotr.repair");
         Slowfall = new LOTRPotionSlowfall(33, false, 8171463, new ResourceLocation("lotr", "potions/Slowfall.png"), "potion.lotr.slowfall");
+        Fire = new LOTRPotionFire();
         explode = new LOTRPotionExplode(35, false, 8171463, new ResourceLocation("lotr", "potions/explode.png"), "potion.lotr.explosion");
         blood = new LOTRPotionBleeding(36, false, 8171463, new ResourceLocation("lotr", "potions/blood.png"), "potion.lotr.bleeding");
         bowDamageBoost = new LOTRPotionBowDamageBoost(37, false, 8171463, new ResourceLocation("lotr", "potions/bowDamageBoost.png"), "potion.lotr.bowDamageBoost");
@@ -79,7 +80,6 @@ public class LOTRPotions {
         curse = new LOTRPotionCurse(43, false, 8171463, new ResourceLocation("lotr", "potions/curse.png"), "potion.lotr.curse");
         hero = new LOTRPotionHero(44, false, 8171463, new ResourceLocation("lotr", "potions/hero.png"), "potion.lotr.hero");
         infection = new LOTRPotionInfection(46, false, 8171463, new ResourceLocation("lotr", "potions/infection.png"), "potion.lotr.infection");
-        drunk = new LOTRPotionDrunk(47, false, 3626338, new ResourceLocation("lotr", "potions/drunk.png"), "potion.lotr.drunk");
     }
 
     public static void addPoisonEffect(EntityPlayer entityplayer, ItemStack itemstack) {

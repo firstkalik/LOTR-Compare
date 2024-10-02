@@ -23,7 +23,7 @@ import net.minecraft.world.IBlockAccess;
 public class LOTRBlockWall10
 extends LOTRBlockWallBase {
     public LOTRBlockWall10() {
-        super(LOTRMod.brick10, 6);
+        super(LOTRMod.brick10, 3);
     }
 
     @SideOnly(value=Side.CLIENT)
@@ -36,15 +36,6 @@ extends LOTRBlockWallBase {
         }
         if (j == 2) {
             return LOTRMod.brick10.getIcon(i, 3);
-        }
-        if (j == 3) {
-            return LOTRMod.brick11.getIcon(i, 0);
-        }
-        if (j == 4) {
-            return LOTRMod.brick11.getIcon(i, 1);
-        }
-        if (j == 5) {
-            return LOTRMod.brick11.getIcon(i, 2);
         }
         return super.getIcon(i, j);
     }

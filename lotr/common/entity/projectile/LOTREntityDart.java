@@ -74,9 +74,6 @@ extends LOTREntityProjectileBase {
         if (!this.worldObj.isRemote && entity instanceof EntityLivingBase && (itemstack = this.getProjectileItem()) != null && (item = itemstack.getItem()) instanceof LOTRItemDart && ((LOTRItemDart)item).isPoisoned) {
             LOTRItemDagger.applyStandardPoison((EntityLivingBase)entity);
         }
-        if (!this.worldObj.isRemote && entity instanceof EntityLivingBase && (itemstack = this.getProjectileItem()) != null && (item = itemstack.getItem()) instanceof LOTRItemDart && ((LOTRItemDart)item).isDrunk) {
-            LOTRItemDagger.applyStandardDrunk((EntityLivingBase)entity);
-        }
         super.onCollideWithTarget(entity);
     }
 

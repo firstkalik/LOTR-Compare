@@ -8,7 +8,7 @@ import lotr.common.block.LOTRBlockBrickBase;
 public class LOTRBlockBrick11
 extends LOTRBlockBrickBase {
     public LOTRBlockBrick11() {
-        this.setBrickNames("prismarine", "prismarineBrick", "brickDarkPrismarine");
+        this.setBrickNames("sarnkaranSnowy");
     }
 }
 

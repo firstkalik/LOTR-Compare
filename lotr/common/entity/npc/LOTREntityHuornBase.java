@@ -21,8 +21,6 @@
  *  net.minecraft.entity.ai.attributes.IAttributeInstance
  *  net.minecraft.init.Blocks
  *  net.minecraft.pathfinding.PathNavigate
- *  net.minecraft.potion.Potion
- *  net.minecraft.potion.PotionEffect
  *  net.minecraft.util.AxisAlignedBB
  *  net.minecraft.util.DamageSource
  *  net.minecraft.util.MathHelper
@@ -34,7 +32,6 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import java.util.Random;
 import lotr.client.LOTRTickHandlerClient;
-import lotr.common.LOTRPotions;
 import lotr.common.entity.ai.LOTREntityAIAttackOnCollide;
 import lotr.common.entity.ai.LOTREntityAIFollowHiringPlayer;
 import lotr.common.entity.ai.LOTREntityAIHiredRemainStill;
@@ -56,8 +53,6 @@ import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.init.Blocks;
 import net.minecraft.pathfinding.PathNavigate;
-import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
@@ -173,23 +168,6 @@ extends LOTREntityTree {
 
     protected String getDeathSound() {
         return Blocks.log.stepSound.getBreakSound();
-    }
-
-    @Override
-    public void addPotionEffect(PotionEffect effect) {
-        if (effect.getPotionID() == Potion.wither.id) {
-            return;
-        }
-        if (effect.getPotionID() == LOTRPotions.blood.id) {
-            return;
-        }
-        if (effect.getPotionID() == LOTRPotions.infection.id) {
-            return;
-        }
-        if (effect.getPotionID() == LOTRPotions.broken.id) {
-            return;
-        }
-        super.addPotionEffect(effect);
     }
 
     protected float getSoundPitch() {

@@ -116,83 +116,8 @@ extends Item {
 
     @SideOnly(value=Side.CLIENT)
     public void addInformation(ItemStack itemstack, EntityPlayer entityplayer, List list, boolean flag) {
-        int color = itemstack.getTagCompound() != null ? itemstack.getTagCompound().getInteger("SmokeColour") : 0;
-        String colorName = StatCollector.translateToLocal((String)(this.getUnlocalizedName() + ".subtitle." + color));
-        String coloredText = "";
-        switch (color) {
-            case 0: {
-                coloredText = "\u00a7f" + colorName;
-                break;
-            }
-            case 1: {
-                coloredText = "\u00a76" + colorName;
-                break;
-            }
-            case 2: {
-                coloredText = "\u00a7d" + colorName;
-                break;
-            }
-            case 3: {
-                coloredText = "\u00a7b" + colorName;
-                break;
-            }
-            case 4: {
-                coloredText = "\u00a7e" + colorName;
-                break;
-            }
-            case 5: {
-                coloredText = "\u00a7a" + colorName;
-                break;
-            }
-            case 6: {
-                coloredText = "\u00a75" + colorName;
-                break;
-            }
-            case 7: {
-                coloredText = "\u00a78" + colorName;
-                break;
-            }
-            case 8: {
-                coloredText = "\u00a77" + colorName;
-                break;
-            }
-            case 9: {
-                coloredText = "\u00a79" + colorName;
-                break;
-            }
-            case 10: {
-                coloredText = "\u00a7d" + colorName;
-                break;
-            }
-            case 11: {
-                coloredText = "\u00a71" + colorName;
-                break;
-            }
-            case 12: {
-                coloredText = "\u00a76" + colorName;
-                break;
-            }
-            case 13: {
-                coloredText = "\u00a72" + colorName;
-                break;
-            }
-            case 14: {
-                coloredText = "\u00a7c" + colorName;
-                break;
-            }
-            case 15: {
-                coloredText = "\u00a78" + colorName;
-                break;
-            }
-            case 16: {
-                coloredText = "\u00a7e" + colorName;
-                break;
-            }
-            default: {
-                coloredText = "\u00a7f" + colorName;
-            }
-        }
-        list.add(coloredText);
+        int color = LOTRItemHobbitPipe.getSmokeColor(itemstack);
+        list.add(StatCollector.translateToLocal((String)(this.getUnlocalizedName() + ".subtitle." + color)));
     }
 
     @SideOnly(value=Side.CLIENT)

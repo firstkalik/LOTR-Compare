@@ -4,8 +4,10 @@
  * Could not load the following classes:
  *  cpw.mods.fml.relauncher.Side
  *  cpw.mods.fml.relauncher.SideOnly
+ *  net.minecraft.client.Minecraft
  *  net.minecraft.entity.EntityLivingBase
  *  net.minecraft.potion.Potion
+ *  net.minecraft.potion.PotionEffect
  *  net.minecraft.util.DamageSource
  *  net.minecraft.util.ResourceLocation
  *  net.minecraft.world.World
@@ -15,9 +17,13 @@ package lotr.common;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import java.util.Random;
+import lotr.common.LOTRCommonProxy;
 import lotr.common.LOTRCustomPotion;
+import lotr.common.LOTRMod;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
@@ -28,7 +34,7 @@ extends LOTRCustomPotion {
     public static int delayTicks = 20;
 
     public LOTRPotionExplode(int id, boolean isBadEffect, int potionColor, ResourceLocation tex, String namePot) {
-        super(35, true, 4720135, tex, namePot);
+        super(35, isBadEffect, 4720135, tex, namePot);
         this.setPotionName("potion.lotr.explosion");
         this.setIconIndex(0, 5);
     }
@@ -85,8 +91,14 @@ extends LOTRCustomPotion {
 
     @SideOnly(value=Side.CLIENT)
     @Override
-    public int getStatusIconIndex() {
-        return 0;
+    public boolean hasStatusIcon() {
+        return false;
+    }
+
+    @SideOnly(value=Side.CLIENT)
+    @Override
+    public void renderInventoryEffect(int x, int y, PotionEffect effect, Minecraft mc) {
+        LOTRMod.proxy.renderCustomPotionEffect(x, y, effect, mc);
     }
 }
 

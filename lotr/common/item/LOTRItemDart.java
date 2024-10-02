@@ -26,7 +26,6 @@ import net.minecraft.world.World;
 public class LOTRItemDart
 extends Item {
     public boolean isPoisoned = false;
-    public boolean isDrunk = false;
 
     public LOTRItemDart() {
         this.setCreativeTab((CreativeTabs)LOTRCreativeTabs.tabCombat);
@@ -35,11 +34,6 @@ extends Item {
 
     public LOTRItemDart setPoisoned() {
         this.isPoisoned = true;
-        return this;
-    }
-
-    public LOTRItemDart setDrunk() {
-        this.isDrunk = true;
         return this;
     }
 

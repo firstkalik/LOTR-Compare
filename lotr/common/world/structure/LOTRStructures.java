@@ -18,7 +18,6 @@ import java.util.Random;
 import lotr.common.LOTRConfig;
 import lotr.common.world.biome.LOTRBiome;
 import lotr.common.world.mapgen.bluedwarvenmine.LOTRMapGenBlueDwarvenMine;
-import lotr.common.world.mapgen.bluedwarvenmine.LOTRWorldGenBlueMountainsMineEntrance;
 import lotr.common.world.mapgen.dwarvenmine.LOTRMapGenDwarvenMine;
 import lotr.common.world.mapgen.reddwarvenmine.LOTRMapGenRedDwarvenMine;
 import lotr.common.world.mapgen.tpyr.LOTRMapGenTauredainPyramid;
@@ -1100,7 +1099,6 @@ public class LOTRStructures {
         LOTRStructures.registerStructure(2037, LOTRWorldGenAvariElvenForge.class, "AvariElvenForge", 10056783, 16764574);
         LOTRStructures.registerStructure(2038, LOTRWorldGenMoredainMercTent2.class, "DarkElfMercTent", 10713966, 15357473);
         LOTRStructures.registerStructure(2039, LOTRWorldGenMoredainMercCamp2.class, "DarkElfMercCamp", 10713966, 15357473);
-        LOTRStructures.registerStructure(2040, LOTRWorldGenBlueMountainsMineEntrance.class, "BlueMountainsEntrance", 10397380, 7633815);
         LOTRMapGenDwarvenMine.register();
         LOTRMapGenBlueDwarvenMine.register();
         LOTRMapGenRedDwarvenMine.register();

@@ -23,7 +23,7 @@ import net.minecraft.util.IIcon;
 public class LOTRBlockSlab121
 extends LOTRBlockSlabBase {
     public LOTRBlockSlab121(boolean flag) {
-        super(flag, Material.rock, 8);
+        super(flag, Material.rock, 7);
     }
 
     @SideOnly(value=Side.CLIENT)
@@ -48,9 +48,6 @@ extends LOTRBlockSlabBase {
         }
         if (j == 6) {
             return LOTRMod.brick10.getIcon(i, 5);
-        }
-        if (j == 7) {
-            return LOTRMod.brick11.getIcon(i, 2);
         }
         return super.getIcon(i, j);
     }

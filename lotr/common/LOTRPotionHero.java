@@ -14,7 +14,7 @@ import net.minecraft.util.ResourceLocation;
 public class LOTRPotionHero
 extends LOTRCustomPotion {
     public LOTRPotionHero(int id, boolean isBadEffect, int potionColor, ResourceLocation tex, String namePot) {
-        super(id, false, potionColor, tex, namePot);
+        super(id, isBadEffect, potionColor, tex, namePot);
         this.setPotionName("potion.lotr.hero");
     }
 

@@ -572,11 +572,6 @@ public abstract class LOTRMiniQuest {
                 dropItems.add(mithrilBook.copy());
                 this.itemsRewarded.add(mithrilBook.copy());
             }
-            if (npc instanceof LOTREntityEreborDwarf && rand.nextInt(110) == 0) {
-                mithrilBook = new ItemStack(LOTRMod.thorinrune);
-                dropItems.add(mithrilBook.copy());
-                this.itemsRewarded.add(mithrilBook.copy());
-            }
             if (npc instanceof LOTREntityAngbandOrc && rand.nextInt(110) == 0) {
                 mithrilBook = new ItemStack(LOTRMod.chilling);
                 dropItems.add(mithrilBook.copy());
@@ -591,21 +586,23 @@ public abstract class LOTRMiniQuest {
                 ItemStack sword = new ItemStack(LOTRMod.swordDolGuldurUrukPoisoned);
                 dropItems.add(sword.copy());
                 this.itemsRewarded.add(sword.copy());
-            }
-            if (npc instanceof LOTREntityDolGuldurUruk && rand.nextInt(50) == 0) {
+            } else if (npc instanceof LOTREntityDolGuldurUruk && rand.nextInt(50) == 1) {
                 ItemStack hammer = new ItemStack(LOTRMod.hammerDolGuldurUrukPoisoned);
                 dropItems.add(hammer.copy());
                 this.itemsRewarded.add(hammer.copy());
-            }
-            if (npc instanceof LOTREntityDolGuldurUruk && rand.nextInt(50) == 0) {
+            } else if (npc instanceof LOTREntityDolGuldurUruk && rand.nextInt(50) == 2) {
                 ItemStack battleaxe = new ItemStack(LOTRMod.battleaxeDolGuldurUrukPoisoned);
                 dropItems.add(battleaxe.copy());
                 this.itemsRewarded.add(battleaxe.copy());
-            }
-            if (npc instanceof LOTREntityDolGuldurUruk && rand.nextInt(50) == 0) {
+            } else if (npc instanceof LOTREntityDolGuldurUruk && rand.nextInt(50) == 3) {
                 ItemStack pike = new ItemStack(LOTRMod.pikeDolGuldurUrukPoisoned);
                 dropItems.add(pike.copy());
                 this.itemsRewarded.add(pike.copy());
+            }
+            if (npc instanceof LOTREntityEreborDwarf && rand.nextInt(110) == 0) {
+                mithrilBook = new ItemStack(LOTRMod.thorinrune);
+                dropItems.add(mithrilBook.copy());
+                this.itemsRewarded.add(mithrilBook.copy());
             }
         }
         if (!dropItems.isEmpty()) {

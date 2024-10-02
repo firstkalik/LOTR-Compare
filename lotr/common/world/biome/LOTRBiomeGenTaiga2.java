@@ -46,7 +46,6 @@ extends LOTRBiomeGenTundra {
         this.decorator.treesPerChunk = 2;
         this.decorator.flowersPerChunk = 2;
         this.decorator.lichenPerChunk = 0;
-        this.decorator.lichenPerChunk2 = 0;
         this.decorator.grassPerChunk = 4;
         this.decorator.doubleGrassPerChunk = 2;
         this.decorator.clearTrees();

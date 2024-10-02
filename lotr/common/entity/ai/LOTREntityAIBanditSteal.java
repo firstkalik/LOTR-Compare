@@ -31,72 +31,11 @@ import lotr.common.LOTRLevelData;
 import lotr.common.entity.npc.IBandit;
 import lotr.common.entity.npc.LOTREntityNPC;
 import lotr.common.inventory.LOTRInventoryNPC;
-import lotr.common.item.D1;
-import lotr.common.item.D2;
-import lotr.common.item.D3;
-import lotr.common.item.D4;
-import lotr.common.item.D5;
-import lotr.common.item.D6;
-import lotr.common.item.D7;
-import lotr.common.item.H1;
 import lotr.common.item.LOTRItemCoin;
 import lotr.common.item.LOTRItemGem;
 import lotr.common.item.LOTRItemPouch;
 import lotr.common.item.LOTRItemRing;
 import lotr.common.item.LOTRValuableItems;
-import lotr.common.item.Naria;
-import lotr.common.item.Nenia;
-import lotr.common.item.Thorin;
-import lotr.common.item.Vilia;
-import lotr.common.item.arven;
-import lotr.common.item.aule;
-import lotr.common.item.elrond;
-import lotr.common.item.elrondsilver;
-import lotr.common.item.este;
-import lotr.common.item.farin;
-import lotr.common.item.haldir;
-import lotr.common.item.irmo;
-import lotr.common.item.khain;
-import lotr.common.item.kibil;
-import lotr.common.item.lesserfire;
-import lotr.common.item.lesserivisible;
-import lotr.common.item.lesserjump;
-import lotr.common.item.lesserlight;
-import lotr.common.item.lessermining;
-import lotr.common.item.lessernightvision;
-import lotr.common.item.lesserpower;
-import lotr.common.item.lesserresistance;
-import lotr.common.item.lessersaturation;
-import lotr.common.item.lesserspeed;
-import lotr.common.item.lesserstrenght;
-import lotr.common.item.lessersuicide;
-import lotr.common.item.lesserwatherbreathing;
-import lotr.common.item.light;
-import lotr.common.item.linhir;
-import lotr.common.item.manve;
-import lotr.common.item.melkor;
-import lotr.common.item.melkor2;
-import lotr.common.item.namo;
-import lotr.common.item.narchuil;
-import lotr.common.item.nessa;
-import lotr.common.item.nienna;
-import lotr.common.item.numenor;
-import lotr.common.item.orome;
-import lotr.common.item.ringBarachir;
-import lotr.common.item.ringShaman;
-import lotr.common.item.ringSmithing;
-import lotr.common.item.sarumanring;
-import lotr.common.item.theOneRing;
-import lotr.common.item.thorinrune;
-import lotr.common.item.thranduilmithril;
-import lotr.common.item.thranduilsilver;
-import lotr.common.item.thranduilsnake;
-import lotr.common.item.tulkas;
-import lotr.common.item.ulmo;
-import lotr.common.item.vaire;
-import lotr.common.item.vana;
-import lotr.common.item.varda;
-import lotr.common.item.yavanna;
 import lotr.common.recipe.LOTRRecipes;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -193,17 +132,9 @@ extends EntityAIBase {
         InventoryPlayer inv = this.targetPlayer.inventory;
         int thefts = MathHelper.getRandomIntegerInRange((Random)this.theBanditAsNPC.getRNG(), (int)1, (int)this.theBandit.getMaxThefts());
         boolean stolenSomething = false;
-        Class[] stealableItems = new Class[]{theOneRing.class, ringBarachir.class, ringShaman.class, ringSmithing.class, Vilia.class, Nenia.class, Naria.class, D1.class, D2.class, D3.class, D4.class, D5.class, D6.class, D7.class, H1.class, sarumanring.class, elrond.class, elrondsilver.class, narchuil.class, numenor.class, Thorin.class, thorinrune.class, arven.class, thranduilsilver.class, thranduilsnake.class, thranduilmithril.class, lesserfire.class, lesserivisible.class, lesserjump.class, lesserlight.class, lessernightvision.class, lesserpower.class, lessermining.class, lessersaturation.class, lesserresistance.class, lesserspeed.class, lesserstrenght.class, lesserwatherbreathing.class, lessersuicide.class, aule.class, este.class, irmo.class, manve.class, melkor.class, melkor2.class, namo.class, nessa.class, nienna.class, orome.class, tulkas.class, ulmo.class, vaire.class, vana.class, varda.class, yavanna.class, light.class, linhir.class, farin.class, haldir.class, khain.class, kibil.class};
         for (int i = 0; i < thefts; ++i) {
-            for (Class itemClass : stealableItems) {
-                if (!this.tryStealItem(inv, itemClass)) continue;
-                stolenSomething = true;
-                break;
-            }
-            if (stolenSomething) continue;
             if (this.tryStealItem(inv, LOTRItemCoin.class)) {
                 stolenSomething = true;
-                continue;
             }
             if (this.tryStealItem(inv, LOTRItemGem.class)) {
                 stolenSomething = true;
@@ -229,7 +160,11 @@ extends EntityAIBase {
                 stolenSomething = true;
                 continue;
             }
-            if (!this.tryStealItem(inv, LOTRItemPouch.class)) continue;
+            if (this.tryStealItem(inv, LOTRItemPouch.class)) {
+                stolenSomething = true;
+                continue;
+            }
+            if (!this.tryStealItem(inv)) continue;
             stolenSomething = true;
         }
         if (stolenSomething) {

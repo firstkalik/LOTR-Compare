@@ -1635,15 +1635,12 @@ public class LOTRPlayerData {
         if (entityplayer.inventory.hasItemStack(new ItemStack(LOTRMod.pouch, 1, 2))) {
             this.addAchievement(LOTRAchievement.getPouch);
         }
-        if (entityplayer.inventory.hasItem(LOTRMod.theOneRing)) {
+        if (entityplayer.inventory.hasItem(LOTRMod.LOTRRingOne)) {
             this.addAchievement(LOTRAchievement.getOne);
         }
         if (entityplayer.inventory.hasItem(LOTRMod.vilia)) {
             this.addAchievement(LOTRAchievement.getThree);
             this.addAchievement(LOTRAchievement.getVilia);
-        }
-        if (entityplayer.inventory.hasItem(LOTRMod.steelbow)) {
-            this.addAchievement(LOTRAchievement.getNumenorBow);
         }
         if (entityplayer.inventory.hasItem(LOTRMod.nenia)) {
             this.addAchievement(LOTRAchievement.getThree);
@@ -3265,7 +3262,7 @@ public class LOTRPlayerData {
         EntityPlayer entityplayer;
         this.alcoholTolerance = i;
         this.markDirty();
-        if (this.alcoholTolerance >= 400 && (entityplayer = this.getPlayer()) != null && !entityplayer.worldObj.isRemote) {
+        if (this.alcoholTolerance >= 250 && (entityplayer = this.getPlayer()) != null && !entityplayer.worldObj.isRemote) {
             this.addAchievement(LOTRAchievement.gainHighAlcoholTolerance);
         }
     }

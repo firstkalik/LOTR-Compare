@@ -20,7 +20,7 @@ extends LOTREntityDwarf {
     public LOTREntityEreborDwarf(World world) {
         super(world);
         this.familyInfo.marriageEntityClass = LOTREntityEreborDwarf.class;
-        this.familyInfo.marriageAchievement = LOTRAchievement.marryEreborDwarf;
+        this.familyInfo.marriageAchievement = LOTRAchievement.marryDwarf;
     }
 
     @Override
@@ -30,7 +30,7 @@ extends LOTREntityDwarf {
 
     @Override
     protected LOTRAchievement getKillAchievement() {
-        return LOTRAchievement.killEreborDwarf;
+        return LOTRAchievement.killDwarf;
     }
 
     @Override
@@ -40,12 +40,12 @@ extends LOTREntityDwarf {
 
     @Override
     public LOTRMiniQuest createMiniQuest() {
-        return LOTRMiniQuestFactory.EREBOR.createQuest(this);
+        return LOTRMiniQuestFactory.DURIN.createQuest(this);
     }
 
     @Override
     public LOTRMiniQuestFactory getBountyHelpSpeechDir() {
-        return LOTRMiniQuestFactory.EREBOR;
+        return LOTRMiniQuestFactory.DURIN;
     }
 }
 

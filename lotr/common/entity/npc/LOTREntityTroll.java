@@ -177,7 +177,7 @@ extends LOTREntityNPC {
 
     @Override
     public LOTRFaction getFaction() {
-        return LOTRFaction.ANGMAR;
+        return LOTRFaction.GUNDABAD;
     }
 
     protected boolean hasTrollName() {

@@ -118,7 +118,7 @@ extends LOTREntityDwarf {
 
     @Override
     protected LOTRChestContents getLarderDrops() {
-        return LOTRChestContents.LOTRChestContents2.REDDWARF_SMITHY;
+        return LOTRChestContents.REDDWARF_SMITHY;
     }
 
     @Override

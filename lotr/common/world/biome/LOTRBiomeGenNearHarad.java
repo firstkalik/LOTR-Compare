@@ -96,7 +96,6 @@ extends LOTRBiome {
         this.decorator.cactiPerChunk = 0;
         this.decorator.deadBushPerChunk = 0;
         this.decorator.lichenPerChunk = 0;
-        this.decorator.lichenPerChunk2 = 0;
         this.decorator.addTree(LOTRTreeType.OAK_DEAD, 800);
         this.decorator.addTree(LOTRTreeType.OAK_DESERT, 200);
         this.registerHaradFlowers();

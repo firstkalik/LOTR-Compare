@@ -21,15 +21,12 @@
  *  net.minecraft.init.Items
  *  net.minecraft.item.Item
  *  net.minecraft.item.ItemStack
- *  net.minecraft.potion.Potion
- *  net.minecraft.potion.PotionEffect
  *  net.minecraft.util.MathHelper
  *  net.minecraft.world.World
  */
 package lotr.common.entity.npc;
 
 import java.util.Random;
-import lotr.common.LOTRPotions;
 import lotr.common.entity.ai.LOTREntityAIAttackOnCollide;
 import lotr.common.entity.ai.LOTREntityAIFollowHiringPlayer;
 import lotr.common.entity.npc.LOTREntityNPC;
@@ -54,8 +51,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
@@ -150,16 +145,6 @@ extends LOTREntityNPC {
 
     protected String getDeathSound() {
         return "mob.skeleton.death";
-    }
-
-    public void addPotionEffect(PotionEffect effect) {
-        if (effect.getPotionID() == LOTRPotions.blood.id) {
-            return;
-        }
-        if (effect.getPotionID() == LOTRPotions.infection.id) {
-            return;
-        }
-        super.addPotionEffect(effect);
     }
 
     public EnumCreatureAttribute getCreatureAttribute() {

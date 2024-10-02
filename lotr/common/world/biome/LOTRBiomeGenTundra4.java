@@ -91,8 +91,7 @@ extends LOTRBiome {
         this.addBiomeVariant(LOTRBiomeVariant.DEADFOREST_SPRUCE);
         this.addBiomeVariant(LOTRBiomeVariant.DEADFOREST_OAK_SPRUCE);
         this.decorator.treesPerChunk = 0;
-        this.decorator.lichenPerChunk = 1;
-        this.decorator.lichenPerChunk2 = 1;
+        this.decorator.lichenPerChunk = 0;
         this.decorator.flowersPerChunk = 2;
         this.decorator.grassPerChunk = 4;
         this.decorator.doubleGrassPerChunk = 1;

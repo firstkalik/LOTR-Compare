@@ -27,7 +27,7 @@ import net.minecraft.world.IBlockAccess;
 public class LOTRBlockSlab122
 extends LOTRBlockSlabBase {
     public LOTRBlockSlab122(boolean flag) {
-        super(flag, Material.rock, 8);
+        super(flag, Material.rock, 6);
     }
 
     @SideOnly(value=Side.CLIENT)
@@ -49,12 +49,6 @@ extends LOTRBlockSlabBase {
         }
         if (j == 5) {
             return LOTRMod.brick8.getIcon(i, 1);
-        }
-        if (j == 6) {
-            return LOTRMod.brick11.getIcon(i, 0);
-        }
-        if (j == 7) {
-            return LOTRMod.brick11.getIcon(i, 1);
         }
         return super.getIcon(i, j);
     }

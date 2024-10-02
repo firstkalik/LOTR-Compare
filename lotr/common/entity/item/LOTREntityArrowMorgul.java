@@ -81,7 +81,7 @@ implements IEntityAdditionalSpawnData {
         if (!this.worldObj.isRemote && isInGround && this.arrowShake <= 0) {
             boolean pickup;
             boolean bl2 = pickup = this.canBePickedUp == 1 || this.canBePickedUp == 2 && entityplayer.capabilities.isCreativeMode;
-            if (this.canBePickedUp == 1 && !entityplayer.inventory.addItemStackToInventory(new ItemStack(LOTRMod.arrowMorgul, 1))) {
+            if (this.canBePickedUp == 1 && !entityplayer.inventory.addItemStackToInventory(new ItemStack(LOTRMod.arrowPoisoned2, 1))) {
                 pickup = false;
             }
             if (pickup) {

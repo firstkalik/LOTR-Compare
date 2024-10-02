@@ -75,10 +75,8 @@ extends LOTRBiome {
         this.spawnableCreatureList.add(new BiomeGenBase.SpawnListEntry(LOTREntityPolarBear.class, 4, 1, 4));
         this.spawnableLOTRAmbientList.clear();
         this.npcSpawnList.clear();
-        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer1 = new LOTRBiomeSpawnList.SpawnListContainer[]{LOTRBiomeSpawnList.entry(LOTRSpawnList.MOUNTAIN_SNOW_TROLLS, 10).setSpawnChance(100000)};
+        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer1 = new LOTRBiomeSpawnList.SpawnListContainer[]{LOTRBiomeSpawnList.entry(LOTRSpawnList.SNOW_TROLLS, 10).setSpawnChance(100000), LOTRBiomeSpawnList.entry(LOTRSpawnList.MOUNTAIN_SNOW_TROLLS, 10).setSpawnChance(100000)};
         this.npcSpawnList.newFactionList(100).add(arrspawnListContainer1);
-        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer11 = new LOTRBiomeSpawnList.SpawnListContainer[]{LOTRBiomeSpawnList.entry(LOTRSpawnList.SNOW_TROLLS, 10).setSpawnChance(100000)};
-        this.npcSpawnList.newFactionList(100).add(arrspawnListContainer11);
         this.variantChance = 0.2f;
         this.addBiomeVariant(LOTRBiomeVariant.FOREST_LIGHT);
         this.addBiomeVariant(LOTRBiomeVariant.STEPPE);

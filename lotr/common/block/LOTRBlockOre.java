@@ -63,12 +63,6 @@ extends Block {
         if (this == LOTRMod.oreGlowstone) {
             return Items.glowstone_dust;
         }
-        if (this == LOTRMod.luminite) {
-            return Items.glowstone_dust;
-        }
-        if (this == LOTRMod.sarnlumin) {
-            return Items.glowstone_dust;
-        }
         if (this == LOTRMod.oreGulduril) {
             return LOTRMod.guldurilCrystal;
         }
@@ -98,12 +92,6 @@ extends Block {
             return 1 + random.nextInt(1);
         }
         if (this == LOTRMod.oreGlowstone) {
-            return 2 + random.nextInt(4);
-        }
-        if (this == LOTRMod.sarnlumin) {
-            return 2 + random.nextInt(4);
-        }
-        if (this == LOTRMod.luminite) {
             return 2 + random.nextInt(4);
         }
         if (this == LOTRMod.oreSulfur || this == LOTRMod.oreSaltpeter) {
@@ -147,12 +135,6 @@ extends Block {
             if (this == LOTRMod.oreGlowstone) {
                 amountXp = MathHelper.getRandomIntegerInRange((Random)world.rand, (int)0, (int)2);
             }
-            if (this == LOTRMod.sarnlumin) {
-                amountXp = MathHelper.getRandomIntegerInRange((Random)world.rand, (int)0, (int)2);
-            }
-            if (this == LOTRMod.luminite) {
-                amountXp = MathHelper.getRandomIntegerInRange((Random)world.rand, (int)0, (int)2);
-            }
             if (this == LOTRMod.oreGulduril) {
                 amountXp = MathHelper.getRandomIntegerInRange((Random)world.rand, (int)0, (int)2);
             }
@@ -176,12 +158,6 @@ extends Block {
                 LOTRLevelData.getData(entityplayer).addAchievement(LOTRAchievement.mineQuendite);
             }
             if (this == LOTRMod.oreGlowstone) {
-                LOTRLevelData.getData(entityplayer).addAchievement(LOTRAchievement.mineGlowstone);
-            }
-            if (this == LOTRMod.luminite) {
-                LOTRLevelData.getData(entityplayer).addAchievement(LOTRAchievement.mineGlowstone);
-            }
-            if (this == LOTRMod.sarnlumin) {
                 LOTRLevelData.getData(entityplayer).addAchievement(LOTRAchievement.mineGlowstone);
             }
             if (this == LOTRMod.oreNaurite) {

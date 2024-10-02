@@ -12,6 +12,9 @@ import java.util.Random;
 import lotr.common.world.mapgen.bluedwarvenmine.LOTRComponentBlueDwarvenMineCorridor;
 import lotr.common.world.mapgen.bluedwarvenmine.LOTRComponentBlueDwarvenMineCrossing;
 import lotr.common.world.mapgen.bluedwarvenmine.LOTRComponentBlueDwarvenMineStairs;
+import lotr.common.world.mapgen.dwarvenmine.LOTRComponentDwarvenMineCorridor;
+import lotr.common.world.mapgen.dwarvenmine.LOTRComponentDwarvenMineCrossing;
+import lotr.common.world.mapgen.dwarvenmine.LOTRComponentDwarvenMineStairs;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraft.world.gen.structure.StructureComponent;
 
@@ -21,17 +24,17 @@ public class LOTRStructureBlueDwarvenMinePieces {
         if (l >= 80) {
             StructureBoundingBox structureboundingbox = LOTRComponentBlueDwarvenMineCrossing.findValidPlacement(list, random, i, j, k, direction);
             if (structureboundingbox != null) {
-                return new LOTRComponentBlueDwarvenMineCrossing(iteration, random, structureboundingbox, direction, ruined);
+                return new LOTRComponentDwarvenMineCrossing(iteration, random, structureboundingbox, direction, ruined);
             }
         } else if (l >= 70) {
             StructureBoundingBox structureboundingbox = LOTRComponentBlueDwarvenMineStairs.findValidPlacement(list, random, i, j, k, direction);
             if (structureboundingbox != null) {
-                return new LOTRComponentBlueDwarvenMineStairs(iteration, random, structureboundingbox, direction, ruined);
+                return new LOTRComponentDwarvenMineStairs(iteration, random, structureboundingbox, direction, ruined);
             }
         } else {
             StructureBoundingBox structureboundingbox = LOTRComponentBlueDwarvenMineCorridor.findValidPlacement(list, random, i, j, k, direction);
             if (structureboundingbox != null) {
-                return new LOTRComponentBlueDwarvenMineCorridor(iteration, random, structureboundingbox, direction, ruined);
+                return new LOTRComponentDwarvenMineCorridor(iteration, random, structureboundingbox, direction, ruined);
             }
         }
         return null;

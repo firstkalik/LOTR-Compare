@@ -184,35 +184,16 @@ public class LOTRPlayerDeathHandler {
         if (event.entity instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer)event.entity;
             if (!player.worldObj.isRemote && player.getHealth() - event.ammount <= 2.0f) {
-                int i;
-                ItemStack itemStack;
-                boolean usedTotem = false;
-                for (i = 0; i < player.inventory.getSizeInventory(); ++i) {
-                    itemStack = player.inventory.getStackInSlot(i);
-                    if (itemStack == null || itemStack.getItem() != LOTRMod.totemOfUndyingPlus) continue;
+                for (int i = 0; i < player.inventory.getSizeInventory(); ++i) {
+                    ItemStack itemStack = player.inventory.getStackInSlot(i);
+                    if (itemStack == null || itemStack.getItem() != LOTRMod.totemOfUndying) continue;
                     player.worldObj.playSoundAtEntity((Entity)player, "lotr:misc.totem", 1.0f, 1.0f);
                     player.clearActivePotions();
                     player.setHealth(Math.min(player.getMaxHealth(), player.getHealth() + 8.0f));
-                    player.addPotionEffect(new PotionEffect(Potion.regeneration.id, 1200, 0));
-                    player.addPotionEffect(new PotionEffect(Potion.resistance.id, 1200, 0));
                     LOTRLevelData.getData(player).addAchievement(LOTRAchievement.usetotemOfUndying);
                     player.inventory.decrStackSize(i, 1);
                     event.setCanceled(true);
-                    usedTotem = true;
-                    break;
-                }
-                if (!usedTotem) {
-                    for (i = 0; i < player.inventory.getSizeInventory(); ++i) {
-                        itemStack = player.inventory.getStackInSlot(i);
-                        if (itemStack == null || itemStack.getItem() != LOTRMod.totemOfUndying) continue;
-                        player.worldObj.playSoundAtEntity((Entity)player, "lotr:misc.totem", 1.0f, 1.0f);
-                        player.clearActivePotions();
-                        player.setHealth(Math.min(player.getMaxHealth(), player.getHealth() + 8.0f));
-                        LOTRLevelData.getData(player).addAchievement(LOTRAchievement.usetotemOfUndying);
-                        player.inventory.decrStackSize(i, 1);
-                        event.setCanceled(true);
-                        return;
-                    }
+                    return;
                 }
             }
         }
@@ -227,20 +208,18 @@ public class LOTRPlayerDeathHandler {
             int k = MathHelper.floor_double((double)player.posZ);
             World world = player.worldObj;
             BiomeGenBase biome = world.getBiomeGenForCoords(i, k);
-            if (event.source == DamageSource.fall) {
-                if (!player.worldObj.isRemote && player.getHealth() - event.ammount <= 2.0f && biome instanceof LOTRBiome && !player.capabilities.isCreativeMode && (double)player.fallDistance <= 35.0) {
-                    player.addPotionEffect(new PotionEffect(Potion.moveSlowdown.id, 600, 2));
-                    player.addPotionEffect(new PotionEffect(LOTRPotions.vulnerability.id, 1200, 0));
-                    player.addPotionEffect(new PotionEffect(LOTRPotions.broken.id, 2400, 0));
-                    player.worldObj.playSoundAtEntity((Entity)player, "lotr:misc.bone", 0.8f, 0.9f);
-                    LOTRLevelData.getData(player).addAchievement(LOTRAchievement.highground);
-                }
-                if (player.getHealth() - event.ammount <= 2.0f && biome instanceof LOTRBiome && !player.capabilities.isCreativeMode && (double)player.fallDistance > 20.0) {
-                    player.addPotionEffect(new PotionEffect(Potion.moveSlowdown.id, 600, 2));
-                    player.addPotionEffect(new PotionEffect(LOTRPotions.vulnerability.id, 1200, 0));
-                    player.addPotionEffect(new PotionEffect(LOTRPotions.broken.id, 2400, 0));
-                    player.worldObj.playSoundAtEntity((Entity)player, "lotr:misc.bone", 0.8f, 0.9f);
-                }
+            if (!player.worldObj.isRemote && player.getHealth() - event.ammount <= 2.0f && biome instanceof LOTRBiome && !player.capabilities.isCreativeMode && (double)player.fallDistance <= 35.0) {
+                player.addPotionEffect(new PotionEffect(Potion.moveSlowdown.id, 600, 2));
+                player.addPotionEffect(new PotionEffect(LOTRPotions.vulnerability.id, 1200, 0));
+                player.addPotionEffect(new PotionEffect(LOTRPotions.broken.id, 2400, 0));
+                player.worldObj.playSoundAtEntity((Entity)player, "lotr:misc.bone", 0.8f, 0.9f);
+                LOTRLevelData.getData(player).addAchievement(LOTRAchievement.highground);
+            }
+            if (player.getHealth() - event.ammount <= 2.0f && biome instanceof LOTRBiome && !player.capabilities.isCreativeMode && (double)player.fallDistance > 20.0) {
+                player.addPotionEffect(new PotionEffect(Potion.moveSlowdown.id, 600, 2));
+                player.addPotionEffect(new PotionEffect(LOTRPotions.vulnerability.id, 1200, 0));
+                player.addPotionEffect(new PotionEffect(LOTRPotions.broken.id, 2400, 0));
+                player.worldObj.playSoundAtEntity((Entity)player, "lotr:misc.bone", 0.8f, 0.9f);
             }
         }
     }
@@ -316,33 +295,46 @@ public class LOTRPlayerDeathHandler {
     }
 
     @SubscribeEvent
-    public void onPlayerWakeUp(PlayerWakeUpEvent event) {
+    public void onPlayerSleepInBed(PlayerSleepInBedEvent event) {
         EntityPlayer player = event.entityPlayer;
         World world = player.worldObj;
         int i = (int)player.posX;
         int j = (int)player.posY;
         int k = (int)player.posZ;
         long worldTime = LOTRTime.getWorldTime();
-        if (!world.isRemote) {
-            LOTRLevelData.getData(player).addAchievement(LOTRAchievement.sweetDreams);
+        if (world.provider.canRespawnHere() && worldTime % (long)LOTRTime.DAY_LENGTH >= 12541L && worldTime % (long)LOTRTime.DAY_LENGTH <= 48000L) {
+            world.playSoundEffect((double)i + 0.5, (double)j + 0.5, (double)k + 0.5, "lotr:misc.sleep1", 0.5f, 1.0f);
         }
-        if (world.isRemote) {
+    }
+
+    @SubscribeEvent
+    public void onPlayerWakeUp(PlayerWakeUpEvent event) {
+        block4: {
+            EntityPlayer player = event.entityPlayer;
+            World world = player.worldObj;
+            int i = (int)player.posX;
+            int j = (int)player.posY;
+            int k = (int)player.posZ;
+            long worldTime = LOTRTime.getWorldTime();
+            if (!world.provider.canRespawnHere()) break block4;
             if (worldTime % (long)LOTRTime.DAY_LENGTH >= 0L && worldTime % (long)LOTRTime.DAY_LENGTH <= 20000L) {
+                world.playSound((double)i + 0.5, (double)j + 0.5, (double)k + 0.5, "lotr:misc.sleep", 0.5f, 1.0f, false);
+                LOTRLevelData.getData(player).addAchievement(LOTRAchievement.sweetDreams);
+                player.addPotionEffect(new PotionEffect(Potion.regeneration.id, 240, 1));
+                player.addPotionEffect(new PotionEffect(Potion.field_76443_y.id, 120, 0));
+                player.setHealth(player.getMaxHealth());
                 for (int l = 0; l < 10; ++l) {
                     double d0 = player.posX + (world.rand.nextDouble() - 0.5) * 2.0;
                     double d1 = player.posY + world.rand.nextDouble() * 2.0;
                     double d2 = player.posZ + (world.rand.nextDouble() - 0.5) * 2.0;
                     world.spawnParticle("heart", d0, d1, d2, 0.0, 0.0, 0.0);
-                    player.setHealth(player.getMaxHealth());
                 }
-                world.playSound((double)i + 0.5, (double)j + 0.5, (double)k + 0.5, "lotr:misc.sleep", 0.5f, 1.0f, false);
             } else {
                 for (int l = 0; l < 10; ++l) {
                     double d0 = player.posX + (world.rand.nextDouble() - 0.5) * 2.0;
                     double d1 = player.posY + world.rand.nextDouble() * 2.0;
                     double d2 = player.posZ + (world.rand.nextDouble() - 0.5) * 2.0;
                     world.spawnParticle("crit", d0, d1, d2, 0.0, 0.0, 0.0);
-                    world.playSound((double)i + 0.5, (double)j + 0.5, (double)k + 0.5, "game.player.hurt", 0.9f, 1.0f, false);
                 }
             }
         }
@@ -383,28 +375,17 @@ public class LOTRPlayerDeathHandler {
     }
 
     private boolean shouldSaveInventory(EntityPlayer player) {
-        int size;
-        ItemStack stack;
-        int i;
         if (LOTRConfig.enableSoulboundClover || player.inventory.hasItem(LOTRMod.magicCloverPlus)) {
-            size = player.inventory.getSizeInventory();
-            for (i = 0; i < size; ++i) {
-                stack = player.inventory.getStackInSlot(i);
-                if (stack == null || stack.getItem() != LOTRMod.magicCloverPlus) continue;
-                stack.damageItem(1, (EntityLivingBase)player);
-                if (stack.getItemDamage() >= stack.getMaxDamage()) {
-                    player.inventory.setInventorySlotContents(i, null);
-                }
-                return true;
-            }
-        } else if (player.inventory.hasItem(LOTRMod.magicClover)) {
+            return true;
+        }
+        if (player.inventory.hasItem(LOTRMod.magicClover)) {
             LOTRLevelData.getData(player).addAchievement(LOTRAchievement.usemagicClover);
             player.inventory.consumeInventoryItem(LOTRMod.magicClover);
             return true;
         }
-        size = player.inventory.getSizeInventory();
-        for (i = 0; i < size; ++i) {
-            stack = player.inventory.getStackInSlot(i);
+        int size = player.inventory.getSizeInventory();
+        for (int i = 0; i < size; ++i) {
+            ItemStack stack = player.inventory.getStackInSlot(i);
             if (stack == null || !LOTRPlayerDeathHandler.hasEnchantment(stack, "soulbound")) continue;
             return true;
         }

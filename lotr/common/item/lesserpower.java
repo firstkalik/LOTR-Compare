@@ -12,13 +12,10 @@
  *  net.minecraft.item.ItemPotion
  *  net.minecraft.item.ItemStack
  *  net.minecraft.potion.PotionEffect
- *  net.minecraft.util.EnumChatFormatting
- *  net.minecraft.util.StatCollector
  *  net.minecraft.world.World
  */
 package lotr.common.item;
 
-import java.util.List;
 import lotr.common.LOTRAchievement;
 import lotr.common.LOTRLevelData;
 import lotr.common.LOTRMod;
@@ -33,8 +30,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemPotion;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 
 public class lesserpower
@@ -87,12 +82,6 @@ extends LOTRItemBaseRing2 {
             srcItemStack.damageItem(1, (EntityLivingBase)playerEntity);
         }
         return srcItemStack;
-    }
-
-    @Override
-    public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List list, boolean advanced) {
-        list.add((Object)EnumChatFormatting.GRAY + StatCollector.translateToLocal((String)"right.name"));
-        list.add((Object)EnumChatFormatting.GREEN + StatCollector.translateToLocalFormatted((String)"lotr.ring.ready", (Object[])new Object[0]));
     }
 
     @Override

@@ -7,7 +7,6 @@
  *  net.minecraft.entity.Entity
  *  net.minecraft.entity.EntityLivingBase
  *  net.minecraft.entity.player.EntityPlayer
- *  net.minecraft.entity.player.InventoryPlayer
  *  net.minecraft.entity.player.PlayerCapabilities
  *  net.minecraft.item.Item
  *  net.minecraft.item.ItemStack
@@ -31,7 +30,6 @@ import lotr.common.item.Wand;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.entity.player.PlayerCapabilities;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -64,10 +62,9 @@ extends Wand {
     }
 
     public void onUpdate(ItemStack itemstack, World world, Entity entity, int par4, boolean par5) {
-        if (entity instanceof EntityPlayer) {
-            EntityPlayer player = (EntityPlayer)entity;
-            boolean hasRing = player.inventory.hasItemStack(itemstack);
-            player.stepHeight = !hasRing ? (player.onGround && player.moveForward > 0.0f ? 0.5f : 0.5f) : (player.onGround && player.moveForward > 0.0f ? 1.0f : 0.5f);
+        EntityPlayer player = (EntityPlayer)entity;
+        if (player instanceof EntityPlayer && player.onGround && player.moveForward > 0.0f) {
+            player.stepHeight = 1.0f;
         }
         if (entity instanceof EntityLivingBase) {
             ((EntityLivingBase)entity).addPotionEffect(new PotionEffect(31, 300, 0));
@@ -115,7 +112,6 @@ extends Wand {
         super.addInformation(itemstack, entityplayer, list, flag);
         list.add(StatCollector.translateToLocal((String)"melkor.name"));
         list.add((Object)EnumChatFormatting.GRAY + StatCollector.translateToLocal((String)"right.name"));
-        list.add((Object)EnumChatFormatting.GREEN + StatCollector.translateToLocalFormatted((String)"lotr.ring.ready", (Object[])new Object[0]));
     }
 
     @Override

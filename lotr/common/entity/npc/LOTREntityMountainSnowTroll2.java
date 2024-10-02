@@ -24,6 +24,7 @@ public class LOTREntityMountainSnowTroll2
 extends LOTREntityMountainSnowTroll {
     public LOTREntityMountainSnowTroll2(World world) {
         super(world);
+        this.isChilly = true;
     }
 
     @Override

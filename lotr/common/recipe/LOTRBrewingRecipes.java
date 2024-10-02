@@ -84,7 +84,6 @@ public class LOTRBrewingRecipes {
         LOTRBrewingRecipes.addBrewingRecipe(new ItemStack(LOTRMod.mugSourMilk, BARREL_CAPACITY), new Object[]{Items.milk_bucket, Items.milk_bucket, Items.milk_bucket, Items.milk_bucket, Items.milk_bucket, Items.milk_bucket});
         LOTRBrewingRecipes.addBrewingRecipe(new ItemStack(LOTRMod.mugPomegranateWine, BARREL_CAPACITY), new Object[]{LOTRMod.pomegranate, LOTRMod.pomegranate, LOTRMod.pomegranate, LOTRMod.pomegranate, LOTRMod.pomegranate, LOTRMod.pomegranate});
         LOTRBrewingRecipes.addBrewingRecipe(new ItemStack(LOTRMod.mugChili, BARREL_CAPACITY), new Object[]{LOTRMod.chili, LOTRMod.chili, LOTRMod.chili, Items.sugar, Items.sugar, Items.sugar});
-        LOTRBrewingRecipes.addBrewingRecipe(new ItemStack(LOTRMod.mugPoison, BARREL_CAPACITY), new Object[]{LOTRMod.morgulFlower, LOTRMod.morgulFlower, LOTRMod.morgulFlower, LOTRMod.morgulShroom, new ItemStack((Block)Blocks.red_mushroom, 1, 0), LOTRMod.morgulShroom});
     }
 
     private static void addBrewingRecipe(ItemStack result, Object ... ingredients) {

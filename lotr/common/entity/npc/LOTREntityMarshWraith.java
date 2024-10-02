@@ -25,8 +25,6 @@
  *  net.minecraft.item.Item
  *  net.minecraft.item.ItemStack
  *  net.minecraft.nbt.NBTTagCompound
- *  net.minecraft.potion.Potion
- *  net.minecraft.potion.PotionEffect
  *  net.minecraft.util.AxisAlignedBB
  *  net.minecraft.util.DamageSource
  *  net.minecraft.util.MathHelper
@@ -38,7 +36,6 @@ import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 import lotr.common.LOTRAchievement;
-import lotr.common.LOTRPotions;
 import lotr.common.enchant.LOTREnchantment;
 import lotr.common.enchant.LOTREnchantmentHelper;
 import lotr.common.entity.ai.LOTREntityAIRangedAttack;
@@ -69,8 +66,6 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
@@ -281,13 +276,6 @@ extends LOTREntityNPC {
     }
 
     protected void func_145780_a(int i, int j, int k, Block block) {
-    }
-
-    public void addPotionEffect(PotionEffect effect) {
-        if (effect.getPotionID() == LOTRPotions.blood.id) {
-            return;
-        }
-        super.addPotionEffect(effect);
     }
 
     @Override

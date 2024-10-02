@@ -16,7 +16,7 @@ import net.minecraft.util.ResourceLocation;
 public class LOTRPotionBowDamageBoost
 extends LOTRCustomPotion {
     public LOTRPotionBowDamageBoost(int id, boolean isBadEffect, int potionColor, ResourceLocation tex, String namePot) {
-        super(37, false, 4720135, tex, namePot);
+        super(37, isBadEffect, 4720135, tex, namePot);
         this.setEffectiveness(1.0);
     }
 
