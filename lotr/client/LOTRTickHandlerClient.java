@@ -127,6 +127,7 @@ import lotr.common.LOTRCommonProxy;
 import lotr.common.LOTRConfig;
 import lotr.common.LOTRDate;
 import lotr.common.LOTRDimension;
+import lotr.common.LOTRDrunkenMovementHandler;
 import lotr.common.LOTRLevelData;
 import lotr.common.LOTRMod;
 import lotr.common.LOTRPlayerData;
@@ -153,6 +154,7 @@ import lotr.common.item.LOTRItemBanner;
 import lotr.common.item.LOTRItemBlowgun;
 import lotr.common.item.LOTRItemBow;
 import lotr.common.item.LOTRItemCrossbow;
+import lotr.common.item.LOTRItemGraal;
 import lotr.common.item.LOTRItemMap;
 import lotr.common.item.LOTRItemOwnership;
 import lotr.common.item.LOTRItemSpear;
@@ -313,15 +315,15 @@ public class LOTRTickHandlerClient {
 
     @SubscribeEvent
     public void onClientTick(TickEvent.ClientTickEvent event) {
-        block78: {
-            GuiScreen guiscreen;
+        block82: {
             Minecraft minecraft;
-            block79: {
+            GuiScreen guiscreen;
+            block83: {
                 EntityClientPlayerMP entityplayer;
                 WorldClient world;
                 int i;
-                block80: {
-                    block81: {
+                block84: {
+                    block85: {
                         minecraft = Minecraft.getMinecraft();
                         entityplayer = minecraft.thePlayer;
                         world = minecraft.theWorld;
@@ -353,7 +355,7 @@ public class LOTRTickHandlerClient {
                                 mc.thePlayer.movementInput = input;
                             }
                         }
-                        if (event.phase != TickEvent.Phase.END) break block78;
+                        if (event.phase != TickEvent.Phase.END) break block82;
                         LOTRTileEntityMobSpawnerRenderer.onClientTick();
                         if (minecraft.currentScreen == null) {
                             this.lastGuiOpen = null;
@@ -374,11 +376,11 @@ public class LOTRTickHandlerClient {
                         } else {
                             LOTRBlockLeavesBase.setAllGraphicsLevels(minecraft.gameSettings.fancyGraphics);
                         }
-                        if (entityplayer == null || world == null) break block79;
+                        if (entityplayer == null || world == null) break block83;
                         if (LOTRConfig.checkUpdates) {
                             LOTRVersionChecker.checkForUpdates();
                         }
-                        if (this.isGamePaused(minecraft)) break block80;
+                        if (this.isGamePaused(minecraft)) break block84;
                         miniquestTracker.update(minecraft, (EntityPlayer)entityplayer);
                         LOTRAlignmentTicker.updateAll((EntityPlayer)entityplayer, false);
                         if (alignDrainTick > 0 && --alignDrainTick <= 0) {
@@ -538,13 +540,13 @@ public class LOTRTickHandlerClient {
                             --this.newDate;
                         }
                         this.ambienceTicker.updateAmbience((World)world, (EntityPlayer)entityplayer);
-                        if (scrapTraderMisbehaveTick <= 0) break block81;
-                        if (--scrapTraderMisbehaveTick > 0) break block80;
+                        if (scrapTraderMisbehaveTick <= 0) break block85;
+                        if (--scrapTraderMisbehaveTick > 0) break block84;
                         world.provider.lightBrightnessTable = Arrays.copyOf(this.storedLightTable, this.storedLightTable.length);
                         Entity scrap = world.getEntityByID(this.storedScrapID);
-                        if (scrap == null) break block80;
+                        if (scrap == null) break block84;
                         scrap.ignoreFrustumCheck = false;
-                        break block80;
+                        break block84;
                     }
                     MovingObjectPosition target = minecraft.objectMouseOver;
                     if (target != null && target.typeOfHit == MovingObjectPosition.MovingObjectType.ENTITY && target.entityHit instanceof LOTREntityScrapTrader) {
@@ -625,6 +627,16 @@ public class LOTRTickHandlerClient {
                 this.lastGuiOpen = guiscreen;
             }
             anyWightsViewed = false;
+            Minecraft mc = Minecraft.getMinecraft();
+            if (mc.thePlayer != null) {
+                if (mc.thePlayer.movementInput instanceof LOTRDrunkenMovementHandler) {
+                    ((LOTRDrunkenMovementHandler)mc.thePlayer.movementInput).resetShuffledKeys((EntityPlayerSP)mc.thePlayer);
+                } else if (LOTRDrunkenMovementHandler.shouldHandleDrunkenMovement((EntityPlayerSP)mc.thePlayer)) {
+                    LOTRDrunkenMovementHandler drunkenInput = new LOTRDrunkenMovementHandler(mc.gameSettings);
+                    drunkenInput.copyMovementData(mc.thePlayer.movementInput);
+                    mc.thePlayer.movementInput = drunkenInput;
+                }
+            }
         }
     }
 
@@ -1254,16 +1266,151 @@ public class LOTRTickHandlerClient {
 
     @SubscribeEvent
     public void onRenderGameOverlayText(RenderGameOverlayEvent.Text event) {
+        FontRenderer fr;
         Minecraft mc = Minecraft.getMinecraft();
         EntityClientPlayerMP entityplayer = mc.thePlayer;
         if (mc.thePlayer.getHeldItem() != null && mc.thePlayer.getHeldItem().getItem() instanceof LOTRItemMap && mc.thePlayer.getHeldItem().hasTagCompound()) {
-            FontRenderer fr = mc.fontRenderer;
+            fr = mc.fontRenderer;
             int coordX = mc.thePlayer.getHeldItem().getTagCompound().getInteger("targetX");
             int coordZ = mc.thePlayer.getHeldItem().getTagCompound().getInteger("targetZ");
             String coordsText = (Object)EnumChatFormatting.GOLD + "X: " + coordX + ", Z: " + coordZ;
             int yOffset = entityplayer.capabilities.isCreativeMode ? 36 : 48;
             fr.drawStringWithShadow(coordsText, event.resolution.getScaledWidth() / 2 - fr.getStringWidth(coordsText) / 2, event.resolution.getScaledHeight() - yOffset, 16766720);
         }
+        if (mc.thePlayer.getHeldItem() != null && mc.thePlayer.getHeldItem().getItem() instanceof LOTRItemGraal && mc.thePlayer.getHeldItem().hasTagCompound()) {
+            fr = mc.fontRenderer;
+            NBTTagCompound nbt = mc.thePlayer.getHeldItem().getTagCompound();
+            int hasDrink = nbt.getInteger("hasDrink");
+            if (hasDrink > 0) {
+                String potion1Key = nbt.getString("potion1");
+                String potion2Key = hasDrink >= 2 ? nbt.getString("potion2") : null;
+                String potion3Key = hasDrink == 3 ? nbt.getString("potion3") : null;
+                String localizedPotion1 = this.getLocalizedDrinkInfo(potion1Key, nbt);
+                String localizedPotion2 = potion2Key != null ? this.getLocalizedDrinkInfo(potion2Key, nbt) : null;
+                String localizedPotion3 = potion3Key != null ? this.getLocalizedDrinkInfo(potion3Key, nbt) : null;
+                boolean isCreativeMode = entityplayer.capabilities.isCreativeMode;
+                this.renderLocalizedDrinkInfo(fr, localizedPotion1, event.resolution.getScaledWidth(), event.resolution.getScaledHeight(), -73, isCreativeMode);
+                if (localizedPotion2 != null) {
+                    this.renderLocalizedDrinkInfo(fr, localizedPotion2, event.resolution.getScaledWidth(), event.resolution.getScaledHeight(), -86, isCreativeMode);
+                }
+                if (localizedPotion3 != null) {
+                    this.renderLocalizedDrinkInfo(fr, localizedPotion3, event.resolution.getScaledWidth(), event.resolution.getScaledHeight(), -99, isCreativeMode);
+                }
+            }
+        }
+    }
+
+    private String getLocalizedDrinkInfo(String potionKey, NBTTagCompound nbt) {
+        String localizedPotionName = StatCollector.translateToLocal((String)(potionKey + ".name"));
+        float strength = nbt.hasKey(potionKey + "_strength") ? nbt.getFloat(potionKey + "_strength") : 0.0f;
+        int strengthIndex = this.getStrengthIndex(strength);
+        EnumChatFormatting typeColor = this.getDrinkColor(potionKey, strengthIndex);
+        EnumChatFormatting strengthColor = this.getStrengthColor(strengthIndex);
+        String strengthLocalized = this.getLocalizedStrength(strength);
+        return (Object)typeColor + localizedPotionName;
+    }
+
+    private EnumChatFormatting getDrinkColor(String potionKey, int strengthIndex) {
+        if (potionKey.contains("AthelasBrew")) {
+            return EnumChatFormatting.GREEN;
+        }
+        if (potionKey.contains("BlueDwarvenTonic")) {
+            return EnumChatFormatting.LIGHT_PURPLE;
+        }
+        if (potionKey.contains("DwarvenTonic")) {
+            return EnumChatFormatting.BLUE;
+        }
+        if (potionKey.contains("KhamBrew")) {
+            return EnumChatFormatting.GOLD;
+        }
+        if (potionKey.contains("ValinorBrew")) {
+            return EnumChatFormatting.AQUA;
+        }
+        if (potionKey.contains("Miruvor")) {
+            return EnumChatFormatting.YELLOW;
+        }
+        if (potionKey.contains("MorgulDraught")) {
+            return EnumChatFormatting.DARK_GREEN;
+        }
+        if (potionKey.contains("OrcDraught")) {
+            return EnumChatFormatting.RED;
+        }
+        if (potionKey.contains("RedDwarvenTonic")) {
+            return EnumChatFormatting.DARK_PURPLE;
+        }
+        if (potionKey.contains("TauredainCocoa")) {
+            return EnumChatFormatting.DARK_RED;
+        }
+        if (potionKey.contains("TorogDraught")) {
+            return EnumChatFormatting.GOLD;
+        }
+        if (potionKey.contains("UrukDraught")) {
+            return EnumChatFormatting.DARK_GRAY;
+        }
+        return EnumChatFormatting.GRAY;
+    }
+
+    private EnumChatFormatting getStrengthColor(int index) {
+        switch (index) {
+            case 0: {
+                return EnumChatFormatting.GREEN;
+            }
+            case 1: {
+                return EnumChatFormatting.YELLOW;
+            }
+            case 2: {
+                return EnumChatFormatting.GOLD;
+            }
+            case 3: {
+                return EnumChatFormatting.RED;
+            }
+            case 4: {
+                return EnumChatFormatting.DARK_RED;
+            }
+        }
+        return EnumChatFormatting.WHITE;
+    }
+
+    private int getStrengthIndex(float strength) {
+        if (strength >= 3.0f) {
+            return 4;
+        }
+        if (strength >= 2.0f) {
+            return 3;
+        }
+        if (strength >= 1.0f) {
+            return 2;
+        }
+        if (strength >= 0.5f) {
+            return 1;
+        }
+        return 0;
+    }
+
+    private String getLocalizedStrength(float strength) {
+        if (strength == 0.25f) {
+            return StatCollector.translateToLocal((String)"item.lotr.drink.weak");
+        }
+        if (strength == 0.5f) {
+            return StatCollector.translateToLocal((String)"item.lotr.drink.light");
+        }
+        if (strength == 1.0f) {
+            return StatCollector.translateToLocal((String)"item.lotr.drink.moderate");
+        }
+        if (strength == 2.0f) {
+            return StatCollector.translateToLocal((String)"item.lotr.drink.strong");
+        }
+        if (strength == 3.0f) {
+            return StatCollector.translateToLocal((String)"item.lotr.drink.potent");
+        }
+        return "";
+    }
+
+    private void renderLocalizedDrinkInfo(FontRenderer fr, String localizedInfo, int screenWidth, int screenHeight, int yOffset, boolean isCreativeMode) {
+        if (isCreativeMode) {
+            yOffset += 14;
+        }
+        fr.drawStringWithShadow(localizedInfo, screenWidth / 2 - fr.getStringWidth(localizedInfo) / 2, screenHeight + yOffset, 16777215);
     }
 
     @SubscribeEvent

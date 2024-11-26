@@ -197,11 +197,11 @@ public class LOTRBiomeDecorator {
         this.addOre((WorldGenerator)new WorldGenMinable(Blocks.coal_ore, 16), 40.0f, 0, 128);
         this.addOre((WorldGenerator)new WorldGenMinable(LOTRMod.oreCopper, 8), 16.0f, 0, 128);
         this.addOre((WorldGenerator)new WorldGenMinable(LOTRMod.oreTin, 8), 16.0f, 0, 128);
-        this.addOre((WorldGenerator)new WorldGenMinable(LOTRMod.oreIron, 8), 3.0f, 0, 64);
+        this.addOre((WorldGenerator)new WorldGenMinable(LOTRMod.oreIron, 4), 2.0f, 0, 64);
         this.addOre((WorldGenerator)new WorldGenMinable(Blocks.iron_ore, 8), 20.0f, 0, 64);
-        this.addOre((WorldGenerator)new WorldGenMinable(LOTRMod.oreGold, 8), 0.8f, 0, 32);
+        this.addOre((WorldGenerator)new WorldGenMinable(LOTRMod.oreGold, 4), 1.0f, 0, 32);
         this.addOre((WorldGenerator)new WorldGenMinable(Blocks.gold_ore, 8), 2.0f, 0, 32);
-        this.addOre((WorldGenerator)new WorldGenMinable(LOTRMod.oreLavaCoal, 8), 0.8f, 0, 16);
+        this.addOre((WorldGenerator)new WorldGenMinable(LOTRMod.oreLavaCoal, 8), 1.0f, 0, 16);
         this.addOre((WorldGenerator)new WorldGenMinable(LOTRMod.oreSulfur, 8), 2.0f, 0, 64);
         this.addOre((WorldGenerator)new WorldGenMinable(LOTRMod.oreSaltpeter, 8), 2.0f, 0, 64);
         this.addOre((WorldGenerator)new WorldGenMinable(LOTRMod.oreSalt, 12), 2.0f, 0, 64);

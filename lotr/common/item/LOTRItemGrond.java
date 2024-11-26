@@ -12,6 +12,7 @@
  *  net.minecraft.entity.EntityLiving
  *  net.minecraft.entity.EntityLivingBase
  *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.entity.player.PlayerCapabilities
  *  net.minecraft.item.EnumAction
  *  net.minecraft.item.Item
  *  net.minecraft.item.ItemStack
@@ -43,6 +44,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.PlayerCapabilities;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -66,6 +68,10 @@ implements LOTRStoryItem {
         if (p_77663_3_ instanceof EntityPlayer) {
             float high_elf = LOTRLevelData.getData((EntityPlayer)p_77663_3_).getAlignment(LOTRFaction.UTUMNO);
             if (p_77663_3_.ticksExisted % 180 != 0) {
+                return;
+            }
+            EntityPlayer player = (EntityPlayer)p_77663_3_;
+            if (player.capabilities.isCreativeMode) {
                 return;
             }
             if (high_elf <= 5000.0f) {

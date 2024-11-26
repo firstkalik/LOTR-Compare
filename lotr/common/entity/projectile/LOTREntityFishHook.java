@@ -10,6 +10,7 @@
  *  net.minecraft.entity.item.EntityXPOrb
  *  net.minecraft.entity.player.EntityPlayer
  *  net.minecraft.entity.projectile.EntityFishHook
+ *  net.minecraft.init.Items
  *  net.minecraft.item.Item
  *  net.minecraft.item.ItemStack
  *  net.minecraft.stats.StatBase
@@ -37,6 +38,7 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityXPOrb;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityFishHook;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.stats.StatBase;
@@ -130,6 +132,9 @@ extends EntityFishHook {
             this.field_146042_b.addStat(result.category.stat, 1);
             if (item.getItem() instanceof LOTRItemRing) {
                 LOTRLevelData.getData(this.field_146042_b).addAchievement(LOTRAchievement.fishRing);
+            }
+            if (item.getItem() == Items.fish) {
+                LOTRLevelData.getData(this.field_146042_b).addAchievement(LOTRAchievement.fishBusiness);
             }
             damage = 1;
         }

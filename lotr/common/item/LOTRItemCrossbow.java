@@ -157,13 +157,12 @@ extends ItemBow {
                 boltItem = new ItemStack(LOTRMod.crossbowBolt);
             }
             if (boltItem != null) {
-                if (shouldConsume && boltSlot >= 0 && !LOTREnchantmentHelper.hasEnchant(itemstack, LOTREnchantment.rangedInfinity)) {
+                boolean consumeBolt = true;
+                if (consumeBolt && shouldConsume && boltSlot >= 0 && !LOTREnchantmentHelper.hasEnchant(itemstack, LOTREnchantment.rangedInfinity)) {
                     --boltItem.stackSize;
                     if (boltItem.stackSize <= 0) {
                         entityplayer.inventory.mainInventory[boltSlot] = null;
                     }
-                } else {
-                    boltItem.stackSize = 0;
                 }
                 if (!world.isRemote) {
                     this.setLoaded(itemstack, boltItem.copy());
@@ -223,7 +222,7 @@ extends ItemBow {
     }
 
     private boolean shouldConsumeBolt(ItemStack itemstack, EntityPlayer entityplayer) {
-        return !entityplayer.capabilities.isCreativeMode && EnchantmentHelper.getEnchantmentLevel((int)Enchantment.infinity.effectId, (ItemStack)itemstack) == 0;
+        return !entityplayer.capabilities.isCreativeMode && EnchantmentHelper.getEnchantmentLevel((int)Enchantment.infinity.effectId, (ItemStack)itemstack) == 0 && !LOTREnchantmentHelper.hasEnchant(itemstack, LOTREnchantment.rangedInfinity);
     }
 
     private int getInvBoltSlot(EntityPlayer entityplayer) {

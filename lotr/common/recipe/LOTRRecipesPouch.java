@@ -19,6 +19,7 @@ import lotr.common.fac.LOTRFaction;
 import lotr.common.inventory.LOTRInventoryPouch;
 import lotr.common.item.LOTRItemDye;
 import lotr.common.item.LOTRItemPouch;
+import lotr.common.item.LOTRItemPouchMim;
 import net.minecraft.block.BlockColored;
 import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.inventory.InventoryCrafting;
@@ -51,7 +52,7 @@ implements IRecipe {
         for (int i = 0; i < inv.getSizeInventory(); ++i) {
             ItemStack itemstack = inv.getStackInSlot(i);
             if (itemstack == null) continue;
-            if (itemstack.getItem() instanceof LOTRItemPouch) {
+            if (itemstack.getItem() instanceof LOTRItemPouch || itemstack.getItem() instanceof LOTRItemPouchMim) {
                 pouches.add(itemstack);
                 continue;
             }
@@ -88,7 +89,7 @@ implements IRecipe {
         for (int i = 0; i < inv.getSizeInventory(); ++i) {
             ItemStack itemstack = inv.getStackInSlot(i);
             if (itemstack == null) continue;
-            if (itemstack.getItem() instanceof LOTRItemPouch) {
+            if (itemstack.getItem() instanceof LOTRItemPouch || itemstack.getItem() instanceof LOTRItemPouchMim) {
                 pouches.add(itemstack);
                 int pouchColor = LOTRItemPouch.getPouchColor(itemstack);
                 float r = (float)(pouchColor >> 16 & 0xFF) / 255.0f;

@@ -69,7 +69,7 @@ extends LOTREntityDwarf {
 
     @Override
     protected LOTRAchievement getKillAchievement() {
-        return LOTRAchievement.killDwarf;
+        return LOTRAchievement.killRedDwarf;
     }
 
     @Override
@@ -121,7 +121,7 @@ extends LOTREntityDwarf {
 
     @Override
     protected LOTRChestContents getLarderDrops() {
-        return LOTRChestContents.REDDWARF_SMITHY;
+        return LOTRChestContents.LOTRChestContents2.REDDWARF_SMITHY;
     }
 
     @Override

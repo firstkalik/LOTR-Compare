@@ -19,7 +19,7 @@ public class LOTRModChecker {
         if (hasNEI == -1) {
             try {
                 if (Class.forName("codechicken.nei.api.API") != null) {
-                    LOTRLog.logger.info("LOTR: Found NEI installed");
+                    LOTRLog.logger.info("LOTR+: Found NEI installed");
                     hasNEI = 1;
                 } else {
                     hasNEI = 0;
@@ -36,9 +36,9 @@ public class LOTRModChecker {
         if (isCauldron == -1) {
             try {
                 if (Class.forName("kcauldron.KCauldronClassTransformer") != null) {
-                    System.out.println("LOTR: Found Cauldron installed");
+                    System.out.println("LOTR+: Found Cauldron installed");
                     if (LOTRLog.logger != null) {
-                        LOTRLog.logger.info("LOTR: Found Cauldron installed");
+                        LOTRLog.logger.info("LOTR+: Found Cauldron installed");
                     }
                     isCauldron = 1;
                     return true;
@@ -49,9 +49,9 @@ public class LOTRModChecker {
             }
             try {
                 if (Class.forName("thermos.ThermosClassTransformer") != null) {
-                    System.out.println("LOTR: Found Thermos installed");
+                    System.out.println("LOTR+: Found Thermos installed");
                     if (LOTRLog.logger != null) {
-                        LOTRLog.logger.info("LOTR: Found Thermos installed");
+                        LOTRLog.logger.info("LOTR+: Found Thermos installed");
                     }
                     isCauldron = 1;
                     return true;

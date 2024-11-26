@@ -77,20 +77,20 @@ implements IMessage {
                 return null;
             }
             LOTRPlayerData playerData = LOTRLevelData.getData((EntityPlayer)entityplayer);
+            boolean isCustom = packet.isCustom;
+            int waypointID = packet.wpID;
+            LOTRAbstractWaypoint waypoint = null;
             if (playerData.isFastTravelDisabled()) {
                 entityplayer.addChatMessage((IChatComponent)new ChatComponentTranslation("lotr.fasttravel.disabled", new Object[0]));
                 return null;
             }
-            boolean isCustom = packet.isCustom;
-            int waypointID = packet.wpID;
-            LOTRAbstractWaypoint waypoint = null;
             if (!isCustom) {
                 if (waypointID >= 0 && waypointID < LOTRWaypoint.values().length) {
                     waypoint = LOTRWaypoint.values()[waypointID];
                 }
             } else {
                 UUID sharingPlayer = packet.sharingPlayer;
-                LOTRAbstractWaypoint lOTRAbstractWaypoint = waypoint = sharingPlayer != null ? playerData.getSharedCustomWaypointByID(sharingPlayer, waypointID) : playerData.getCustomWaypointByID(waypointID);
+                waypoint = sharingPlayer != null ? playerData.getSharedCustomWaypointByID(sharingPlayer, waypointID) : playerData.getCustomWaypointByID(waypointID);
             }
             if (waypoint != null && waypoint.hasPlayerUnlocked((EntityPlayer)entityplayer)) {
                 if (playerData.getTimeSinceFT() < playerData.getWaypointFTTime(waypoint, (EntityPlayer)entityplayer)) {
@@ -101,6 +101,9 @@ implements IMessage {
                     if (!canTravel) {
                         entityplayer.closeScreen();
                         entityplayer.addChatMessage((IChatComponent)new ChatComponentTranslation("lotr.fastTravel.underAttack", new Object[0]));
+                    } else if (entityplayer.isPlayerSleeping()) {
+                        entityplayer.closeScreen();
+                        entityplayer.addChatMessage((IChatComponent)new ChatComponentTranslation("lotr.fastTravel.inBed", new Object[0]));
                     } else {
                         playerData.setTargetFTWaypoint(waypoint);
                     }

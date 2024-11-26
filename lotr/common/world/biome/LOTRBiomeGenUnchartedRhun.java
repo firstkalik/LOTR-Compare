@@ -54,8 +54,12 @@ extends LOTRBiome {
         this.npcSpawnList.clear();
         LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer = new LOTRBiomeSpawnList.SpawnListContainer[]{LOTRBiomeSpawnList.entry(LOTRSpawnList.DURMETH_ORCS, 10).setSpawnChance(500), LOTRBiomeSpawnList.entry(LOTRSpawnList.DURMETH_WARGS, 5).setSpawnChance(700)};
         this.npcSpawnList.newFactionList(100).add(arrspawnListContainer);
+        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer61 = new LOTRBiomeSpawnList.SpawnListContainer[]{LOTRBiomeSpawnList.entry(LOTRSpawnList.AVARI_ELF_WARRIORS, 10)};
+        this.npcSpawnList.newFactionList(0).add(arrspawnListContainer61);
         LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer6 = new LOTRBiomeSpawnList.SpawnListContainer[]{LOTRBiomeSpawnList.entry(LOTRSpawnList.BLACKLOCK, 10), LOTRBiomeSpawnList.entry(LOTRSpawnList.STIFFBEARD, 10), LOTRBiomeSpawnList.entry(LOTRSpawnList.STONEFOOT, 10), LOTRBiomeSpawnList.entry(LOTRSpawnList.IRONFIST, 10)};
         this.npcSpawnList.newFactionList(0).add(arrspawnListContainer6);
+        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer3 = new LOTRBiomeSpawnList.SpawnListContainer[]{LOTRBiomeSpawnList.entry(LOTRSpawnList.DURMETH_ORCS, 10), LOTRBiomeSpawnList.entry(LOTRSpawnList.DURMETH_WARGS, 3), LOTRBiomeSpawnList.entry(LOTRSpawnList.CAVE, 3).setConquestThreshold(200.0f), LOTRBiomeSpawnList.entry(LOTRSpawnList.DURMETH_ORCS_WARRIORS, 5).setConquestThreshold(100.0f)};
+        this.npcSpawnList.newFactionList(0).add(arrspawnListContainer3);
         this.variantChance = 0.3f;
         this.addBiomeVariantSet(LOTRBiomeVariant.SET_NORMAL_OAK_SPRUCE);
         this.addBiomeVariant(LOTRBiomeVariant.DENSEFOREST_SPRUCE, 3.0f);
@@ -103,6 +107,7 @@ extends LOTRBiome {
         this.invasionSpawns.addInvasion(LOTRInvasions.STIFFBEARD, LOTREventSpawner.EventChance.RARE);
         this.invasionSpawns.addInvasion(LOTRInvasions.STONEFOOT, LOTREventSpawner.EventChance.RARE);
         this.invasionSpawns.addInvasion(LOTRInvasions.DURMETH_WARG, LOTREventSpawner.EventChance.RARE);
+        this.invasionSpawns.addInvasion(LOTRInvasions.DURMETH_URUK, LOTREventSpawner.EventChance.UNCOMMON);
     }
 
     @Override

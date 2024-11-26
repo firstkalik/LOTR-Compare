@@ -14,7 +14,7 @@ import net.minecraft.util.ResourceLocation;
 public class LOTRPotionImmune
 extends LOTRCustomPotion {
     public LOTRPotionImmune(int id, boolean isBadEffect, int potionColor, ResourceLocation tex, String namePot) {
-        super(id, isBadEffect, potionColor, tex, namePot);
+        super(id, false, potionColor, tex, namePot);
         this.setPotionName("potion.lotr.immune");
     }
 

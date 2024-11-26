@@ -398,6 +398,20 @@ public class LOTREnchantmentHelper {
         validItems.add(LOTRMod.alatarstaff);
         validItems.add(LOTRMod.pallandostaff);
         validItems.add(LOTRMod.bodyBilbo);
+        validItems.add(LOTRMod.d1);
+        validItems.add(LOTRMod.d2);
+        validItems.add(LOTRMod.d3);
+        validItems.add(LOTRMod.d4);
+        validItems.add(LOTRMod.d5);
+        validItems.add(LOTRMod.d6);
+        validItems.add(LOTRMod.d7);
+        validItems.add(LOTRMod.naria);
+        validItems.add(LOTRMod.nenia);
+        validItems.add(LOTRMod.vilia);
+        validItems.add(LOTRMod.arcenstone);
+        validItems.add(LOTRMod.theOneRing);
+        validItems.add(LOTRMod.h1);
+        validItems.add(LOTRMod.bundle);
         LOTREnchantment ench1 = LOTREnchantment.soulbound;
         if (validItems.contains((Object)itemstack.getItem()) && ench1.canApply(itemstack, false)) {
             LOTREnchantmentHelper.setHasEnchant(itemstack, ench1);
@@ -710,6 +724,14 @@ public class LOTREnchantmentHelper {
                     }
                     if (enchBane == LOTREnchantment.baneSpider) {
                         LOTRLevelData.getData(entityplayer).addAchievement(LOTRAchievement.enchantBaneSpider);
+                        continue;
+                    }
+                    if (enchBane == LOTREnchantment.baneBalrog) {
+                        LOTRLevelData.getData(entityplayer).addAchievement(LOTRAchievement.enchantBaneBalrog);
+                        continue;
+                    }
+                    if (enchBane == LOTREnchantment.baneHobbit) {
+                        LOTRLevelData.getData(entityplayer).addAchievement(LOTRAchievement.enchantBaneHobbit);
                         continue;
                     }
                     if (enchBane != LOTREnchantment.baneWight) continue;

@@ -14,6 +14,7 @@ import lotr.common.entity.animal.LOTREntityFox;
 import lotr.common.entity.animal.LOTREntityHorse;
 import lotr.common.entity.npc.LOTREntityBlueDwarfMerchant;
 import lotr.common.entity.npc.LOTREntityDaleMerchant;
+import lotr.common.entity.npc.LOTREntityEreborDwarfMerchant;
 import lotr.common.entity.npc.LOTREntityGaladhrimTrader;
 import lotr.common.entity.npc.LOTREntityHobbitBartender2;
 import lotr.common.entity.npc.LOTREntityIronHillsMerchant;
@@ -95,6 +96,7 @@ extends LOTRBiome {
         this.decorator.addVillage(villageGen);
         this.registerTravellingTrader(LOTREntityGaladhrimTrader.class);
         this.registerTravellingTrader(LOTREntityBlueDwarfMerchant.class);
+        this.registerTravellingTrader(LOTREntityEreborDwarfMerchant.class);
         this.registerTravellingTrader(LOTREntityIronHillsMerchant.class);
         this.registerTravellingTrader(LOTREntityScrapTrader.class);
         this.registerTravellingTrader(LOTREntityDaleMerchant.class);

@@ -55,6 +55,11 @@ extends LOTREntitySkeletalWraith {
     }
 
     @Override
+    public boolean canReEquipHired(int slot, ItemStack itemstack) {
+        return false;
+    }
+
+    @Override
     public LOTRFaction getFaction() {
         return LOTRFaction.UTUMNO;
     }

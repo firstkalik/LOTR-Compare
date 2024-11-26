@@ -91,6 +91,7 @@ extends LOTREntityNPCRideable {
     public static int VENOM_BLINDNESS = 3;
     public static int VENOM_NAUSEA = 4;
     public static int VENOM_WEAKNESS = 5;
+    public static int VENOM_VULN = 6;
 
     public LOTREntitySpiderBase(World world) {
         super(world);
@@ -341,6 +342,8 @@ extends LOTREntityNPCRideable {
                     ((EntityLivingBase)entity).addPotionEffect(new PotionEffect(Potion.confusion.id, duration * 20, 0));
                 } else if (this.getSpiderType() == VENOM_WEAKNESS) {
                     ((EntityLivingBase)entity).addPotionEffect(new PotionEffect(Potion.weakness.id, duration * 20, 0));
+                } else if (this.getSpiderType() == VENOM_VULN) {
+                    ((EntityLivingBase)entity).addPotionEffect(new PotionEffect(LOTRPotions.infection.id, duration * 20, 0));
                 }
             }
             return true;
@@ -424,6 +427,9 @@ extends LOTREntityNPCRideable {
             return false;
         }
         if (this.getSpiderType() == VENOM_WEAKNESS && effect.getPotionID() == Potion.weakness.id) {
+            return false;
+        }
+        if (this.getSpiderType() == VENOM_VULN && effect.getPotionID() == LOTRPotions.infection.id) {
             return false;
         }
         return super.isPotionApplicable(effect);

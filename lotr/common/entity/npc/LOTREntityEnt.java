@@ -343,6 +343,12 @@ extends LOTREntityTree {
         if (effect.getPotionID() == LOTRPotions.blood.id) {
             return;
         }
+        if (effect.getPotionID() == LOTRPotions.infection.id) {
+            return;
+        }
+        if (effect.getPotionID() == LOTRPotions.broken.id) {
+            return;
+        }
         super.addPotionEffect(effect);
     }
 }

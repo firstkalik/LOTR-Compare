@@ -12,12 +12,12 @@ import lotr.common.LOTRMod;
 import lotr.common.entity.npc.LOTREntityBlacklockSmith;
 import lotr.common.entity.npc.LOTREntityDwarf;
 import lotr.common.world.structure.LOTRChestContents;
-import lotr.common.world.structure2.LOTRWorldGenDwarfSmithy;
+import lotr.common.world.structure2.LOTRWorldGenDwarfSmithyRebdBase;
 import net.minecraft.block.Block;
 import net.minecraft.world.World;
 
 public class LOTRWorldGenRedMountainsSmithy
-extends LOTRWorldGenDwarfSmithy {
+extends LOTRWorldGenDwarfSmithyRebdBase {
     public LOTRWorldGenRedMountainsSmithy(boolean flag) {
         super(flag);
         this.baseBrickBlock = LOTRMod.smoothStone;
@@ -42,7 +42,7 @@ extends LOTRWorldGenDwarfSmithy {
 
     @Override
     protected LOTRChestContents getChestContents() {
-        return LOTRChestContents.REDDWARF_SMITHY;
+        return LOTRChestContents.LOTRChestContents2.REDDWARF_SMITHY;
     }
 
     @Override

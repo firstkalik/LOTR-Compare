@@ -16,7 +16,7 @@ package lotr.common.world.mapgen.bluedwarvenmine;
 import java.util.List;
 import java.util.Random;
 import lotr.common.LOTRMod;
-import lotr.common.world.mapgen.bluedwarvenmine.LOTRStructureBlueDwarvenMinePieces;
+import lotr.common.world.mapgen.winddwarvenmine.LOTRStructureWindDwarvenMinePieces;
 import lotr.common.world.structure.LOTRChestContents;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -30,6 +30,7 @@ import net.minecraft.world.gen.structure.StructureComponent;
 public class LOTRComponentBlueDwarvenMineCorridor
 extends StructureComponent {
     private int sectionCount;
+    private boolean ruined;
 
     public LOTRComponentBlueDwarvenMineCorridor() {
     }
@@ -87,50 +88,50 @@ extends StructureComponent {
             switch (this.coordBaseMode) {
                 case 0: {
                     if (j <= 1) {
-                        LOTRStructureBlueDwarvenMinePieces.getNextComponent(component, list, random, this.boundingBox.minX, this.boundingBox.minY - 1 + random.nextInt(3), this.boundingBox.maxZ + 1, this.coordBaseMode, i, false);
+                        LOTRStructureWindDwarvenMinePieces.getNextComponent(component, list, random, this.boundingBox.minX, this.boundingBox.minY - 1 + random.nextInt(3), this.boundingBox.maxZ + 1, this.coordBaseMode, i, false);
                         break;
                     }
                     if (j == 2) {
-                        LOTRStructureBlueDwarvenMinePieces.getNextComponent(component, list, random, this.boundingBox.minX - 1, this.boundingBox.minY - 1 + random.nextInt(3), this.boundingBox.maxZ - 3, 1, i, false);
+                        LOTRStructureWindDwarvenMinePieces.getNextComponent(component, list, random, this.boundingBox.minX - 1, this.boundingBox.minY - 1 + random.nextInt(3), this.boundingBox.maxZ - 3, 1, i, false);
                         break;
                     }
-                    LOTRStructureBlueDwarvenMinePieces.getNextComponent(component, list, random, this.boundingBox.maxX + 1, this.boundingBox.minY - 1 + random.nextInt(3), this.boundingBox.maxZ - 3, 3, i, false);
+                    LOTRStructureWindDwarvenMinePieces.getNextComponent(component, list, random, this.boundingBox.maxX + 1, this.boundingBox.minY - 1 + random.nextInt(3), this.boundingBox.maxZ - 3, 3, i, false);
                     break;
                 }
                 case 1: {
                     if (j <= 1) {
-                        LOTRStructureBlueDwarvenMinePieces.getNextComponent(component, list, random, this.boundingBox.minX - 1, this.boundingBox.minY - 1 + random.nextInt(3), this.boundingBox.minZ, this.coordBaseMode, i, false);
+                        LOTRStructureWindDwarvenMinePieces.getNextComponent(component, list, random, this.boundingBox.minX - 1, this.boundingBox.minY - 1 + random.nextInt(3), this.boundingBox.minZ, this.coordBaseMode, i, false);
                         break;
                     }
                     if (j == 2) {
-                        LOTRStructureBlueDwarvenMinePieces.getNextComponent(component, list, random, this.boundingBox.minX, this.boundingBox.minY - 1 + random.nextInt(3), this.boundingBox.minZ - 1, 2, i, false);
+                        LOTRStructureWindDwarvenMinePieces.getNextComponent(component, list, random, this.boundingBox.minX, this.boundingBox.minY - 1 + random.nextInt(3), this.boundingBox.minZ - 1, 2, i, false);
                         break;
                     }
-                    LOTRStructureBlueDwarvenMinePieces.getNextComponent(component, list, random, this.boundingBox.minX, this.boundingBox.minY - 1 + random.nextInt(3), this.boundingBox.maxZ + 1, 0, i, false);
+                    LOTRStructureWindDwarvenMinePieces.getNextComponent(component, list, random, this.boundingBox.minX, this.boundingBox.minY - 1 + random.nextInt(3), this.boundingBox.maxZ + 1, 0, i, false);
                     break;
                 }
                 case 2: {
                     if (j <= 1) {
-                        LOTRStructureBlueDwarvenMinePieces.getNextComponent(component, list, random, this.boundingBox.minX, this.boundingBox.minY - 1 + random.nextInt(3), this.boundingBox.minZ - 1, this.coordBaseMode, i, false);
+                        LOTRStructureWindDwarvenMinePieces.getNextComponent(component, list, random, this.boundingBox.minX, this.boundingBox.minY - 1 + random.nextInt(3), this.boundingBox.minZ - 1, this.coordBaseMode, i, false);
                         break;
                     }
                     if (j == 2) {
-                        LOTRStructureBlueDwarvenMinePieces.getNextComponent(component, list, random, this.boundingBox.minX - 1, this.boundingBox.minY - 1 + random.nextInt(3), this.boundingBox.minZ, 1, i, false);
+                        LOTRStructureWindDwarvenMinePieces.getNextComponent(component, list, random, this.boundingBox.minX - 1, this.boundingBox.minY - 1 + random.nextInt(3), this.boundingBox.minZ, 1, i, false);
                         break;
                     }
-                    LOTRStructureBlueDwarvenMinePieces.getNextComponent(component, list, random, this.boundingBox.maxX + 1, this.boundingBox.minY - 1 + random.nextInt(3), this.boundingBox.minZ, 3, i, false);
+                    LOTRStructureWindDwarvenMinePieces.getNextComponent(component, list, random, this.boundingBox.maxX + 1, this.boundingBox.minY - 1 + random.nextInt(3), this.boundingBox.minZ, 3, i, false);
                     break;
                 }
                 case 3: {
                     if (j <= 1) {
-                        LOTRStructureBlueDwarvenMinePieces.getNextComponent(component, list, random, this.boundingBox.maxX + 1, this.boundingBox.minY - 1 + random.nextInt(3), this.boundingBox.minZ, this.coordBaseMode, i, false);
+                        LOTRStructureWindDwarvenMinePieces.getNextComponent(component, list, random, this.boundingBox.maxX + 1, this.boundingBox.minY - 1 + random.nextInt(3), this.boundingBox.minZ, this.coordBaseMode, i, false);
                         break;
                     }
                     if (j == 2) {
-                        LOTRStructureBlueDwarvenMinePieces.getNextComponent(component, list, random, this.boundingBox.maxX - 3, this.boundingBox.minY - 1 + random.nextInt(3), this.boundingBox.minZ - 1, 2, i, false);
+                        LOTRStructureWindDwarvenMinePieces.getNextComponent(component, list, random, this.boundingBox.maxX - 3, this.boundingBox.minY - 1 + random.nextInt(3), this.boundingBox.minZ - 1, 2, i, false);
                         break;
                     }
-                    LOTRStructureBlueDwarvenMinePieces.getNextComponent(component, list, random, this.boundingBox.maxX - 3, this.boundingBox.minY - 1 + random.nextInt(3), this.boundingBox.maxZ + 1, 0, i, false);
+                    LOTRStructureWindDwarvenMinePieces.getNextComponent(component, list, random, this.boundingBox.maxX - 3, this.boundingBox.minY - 1 + random.nextInt(3), this.boundingBox.maxZ + 1, 0, i, false);
                 }
             }
             if (i >= 12) break block24;
@@ -139,9 +140,9 @@ extends StructureComponent {
                 while (k + 3 <= this.boundingBox.maxX) {
                     int l = random.nextInt(5);
                     if (l == 0) {
-                        LOTRStructureBlueDwarvenMinePieces.getNextComponent(component, list, random, k, this.boundingBox.minY, this.boundingBox.minZ - 1, 2, i + 1, false);
+                        LOTRStructureWindDwarvenMinePieces.getNextComponent(component, list, random, k, this.boundingBox.minY, this.boundingBox.minZ - 1, 2, i + 1, false);
                     } else if (l == 1) {
-                        LOTRStructureBlueDwarvenMinePieces.getNextComponent(component, list, random, k, this.boundingBox.minY, this.boundingBox.maxZ + 1, 0, i + 1, false);
+                        LOTRStructureWindDwarvenMinePieces.getNextComponent(component, list, random, k, this.boundingBox.minY, this.boundingBox.maxZ + 1, 0, i + 1, false);
                     }
                     k += 4;
                 }
@@ -150,9 +151,9 @@ extends StructureComponent {
                 while (k + 3 <= this.boundingBox.maxZ) {
                     int l = random.nextInt(5);
                     if (l == 0) {
-                        LOTRStructureBlueDwarvenMinePieces.getNextComponent(component, list, random, this.boundingBox.minX - 1, this.boundingBox.minY, k, 1, i + 1, false);
+                        LOTRStructureWindDwarvenMinePieces.getNextComponent(component, list, random, this.boundingBox.minX - 1, this.boundingBox.minY, k, 1, i + 1, false);
                     } else if (l == 1) {
-                        LOTRStructureBlueDwarvenMinePieces.getNextComponent(component, list, random, this.boundingBox.maxX + 1, this.boundingBox.minY, k, 3, i + 1, false);
+                        LOTRStructureWindDwarvenMinePieces.getNextComponent(component, list, random, this.boundingBox.maxX + 1, this.boundingBox.minY, k, 3, i + 1, false);
                     }
                     k += 4;
                 }
@@ -169,21 +170,24 @@ extends StructureComponent {
         for (int l = 0; l < this.sectionCount; ++l) {
             int k = 2 + l * 4;
             for (int i : new int[]{0, 2}) {
-                int wallHeight = random.nextInt(3) & 2;
+                int wallHeight = this.ruined ? random.nextInt(3) : 2;
                 for (int j = 0; j <= wallHeight; ++j) {
-                    this.placeBlockAtCurrentPosition(world, LOTRMod.wall, 14, i, j, k, structureBoundingBox);
+                    this.placeBlockAtCurrentPosition(world, LOTRMod.wallStone9, 1, i, j, k, structureBoundingBox);
                 }
             }
-            this.fillWithBlocks(world, structureBoundingBox, -1, 0, k, -1, 2, k, LOTRMod.pillar, Blocks.air, false);
-            this.fillWithBlocks(world, structureBoundingBox, 3, 0, k, 3, 2, k, LOTRMod.pillar, Blocks.air, false);
-            this.fillWithBlocks(world, structureBoundingBox, 1, -1, k - 2, 1, -1, k + 2, LOTRMod.pillar, Blocks.air, false);
+            for (int j = 0; j <= 2; ++j) {
+                this.placeBlockAtCurrentPosition(world, LOTRMod.pillar4, 3, -1, j, k, structureBoundingBox);
+                this.placeBlockAtCurrentPosition(world, LOTRMod.pillar4, 3, 3, j, k, structureBoundingBox);
+            }
+            this.placeBlockAtCurrentPosition(world, LOTRMod.pillar4, 3, 1, -1, k - 2, structureBoundingBox);
+            this.placeBlockAtCurrentPosition(world, LOTRMod.pillar4, 3, 1, -1, k + 2, structureBoundingBox);
             if (this.getBlockAtCurrentPosition(world, 1, -1, k - 3, structureBoundingBox) != Blocks.air) {
-                this.placeBlockAtCurrentPosition(world, LOTRMod.pillar, 3, 1, -1, k - 3, structureBoundingBox);
+                this.placeBlockAtCurrentPosition(world, LOTRMod.pillar4, 3, 1, -1, k - 3, structureBoundingBox);
             }
             if (this.getBlockAtCurrentPosition(world, 1, -1, k + 3, structureBoundingBox) != Blocks.air) {
-                this.placeBlockAtCurrentPosition(world, LOTRMod.pillar, 3, 1, -1, k + 3, structureBoundingBox);
+                this.placeBlockAtCurrentPosition(world, LOTRMod.pillar4, 3, 1, -1, k + 3, structureBoundingBox);
             }
-            this.placeBlockAtCurrentPosition(world, LOTRMod.brick3, 12, 1, -1, k, structureBoundingBox);
+            this.placeBlockAtCurrentPosition(world, LOTRMod.brick9, 4, 1, -1, k, structureBoundingBox);
             if (random.nextInt(80) == 0) {
                 this.placeBlockAtCurrentPosition(world, Blocks.crafting_table, 0, 2, 0, k - 1, structureBoundingBox);
             }
@@ -191,30 +195,19 @@ extends StructureComponent {
                 this.placeBlockAtCurrentPosition(world, Blocks.crafting_table, 0, 0, 0, k + 1, structureBoundingBox);
             }
             if (random.nextInt(120) == 0) {
-                this.generateStructureChestContents(world, structureBoundingBox, random, 2, 0, k - 1, LOTRChestContents.DWARVEN_MINE_CORRIDOR.items, LOTRChestContents.getRandomItemAmount(LOTRChestContents.DWARVEN_MINE_CORRIDOR, random));
+                this.generateStructureChestContents(world, structureBoundingBox, random, 2, 0, k - 1, LOTRChestContents.LOTRChestContents2.BLUE_DWARVEN_MINE_CORRIDOR.items, LOTRChestContents.getRandomItemAmount(LOTRChestContents.LOTRChestContents2.BLUE_DWARVEN_MINE_CORRIDOR, random));
             }
             if (random.nextInt(120) != 0) continue;
-            this.generateStructureChestContents(world, structureBoundingBox, random, 0, 0, k + 1, LOTRChestContents.DWARVEN_MINE_CORRIDOR.items, LOTRChestContents.getRandomItemAmount(LOTRChestContents.DWARVEN_MINE_CORRIDOR, random));
+            this.generateStructureChestContents(world, structureBoundingBox, random, 0, 0, k + 1, LOTRChestContents.LOTRChestContents2.BLUE_DWARVEN_MINE_CORRIDOR.items, LOTRChestContents.getRandomItemAmount(LOTRChestContents.LOTRChestContents2.BLUE_DWARVEN_MINE_CORRIDOR, random));
         }
         for (int k = 0; k <= length; ++k) {
-            Block block;
             for (int i = -1; i <= 3; ++i) {
-                block = this.getBlockAtCurrentPosition(world, i, -1, k, structureBoundingBox);
+                Block block = this.getBlockAtCurrentPosition(world, i, -1, k, structureBoundingBox);
                 if (block.getMaterial().isReplaceable() || block.getMaterial() == Material.sand) {
                     this.placeBlockAtCurrentPosition(world, Blocks.stone, 0, i, -1, k, structureBoundingBox);
                 }
-                int j = 3;
-                block = this.getBlockAtCurrentPosition(world, i, 3, k, structureBoundingBox);
-                if (!block.getMaterial().isReplaceable() && block.getMaterial() != Material.sand) continue;
-                this.placeBlockAtCurrentPosition(world, Blocks.stone, 0, i, j, k, structureBoundingBox);
-            }
-            for (int j = 0; j <= 2; ++j) {
-                block = this.getBlockAtCurrentPosition(world, -1, j, k, structureBoundingBox);
-                if (block.getMaterial().isReplaceable() || block.getMaterial() == Material.sand) {
-                    this.placeBlockAtCurrentPosition(world, Blocks.stone, 0, -1, j, k, structureBoundingBox);
-                }
-                if (!(block = this.getBlockAtCurrentPosition(world, 3, j, k, structureBoundingBox)).getMaterial().isReplaceable() && block.getMaterial() != Material.sand) continue;
-                this.placeBlockAtCurrentPosition(world, Blocks.stone, 0, 3, j, k, structureBoundingBox);
+                if (!(block = this.getBlockAtCurrentPosition(world, i, 3, k, structureBoundingBox)).getMaterial().isReplaceable() && block.getMaterial() != Material.sand) continue;
+                this.placeBlockAtCurrentPosition(world, Blocks.stone, 0, i, 3, k, structureBoundingBox);
             }
         }
         return true;

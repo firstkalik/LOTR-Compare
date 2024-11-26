@@ -53,6 +53,7 @@ import lotr.common.entity.npc.LOTREntityBlueDwarfWarrior;
 import lotr.common.entity.npc.LOTREntityBreeGuard;
 import lotr.common.entity.npc.LOTREntityBreeHobbit;
 import lotr.common.entity.npc.LOTREntityBreeMan;
+import lotr.common.entity.npc.LOTREntityCaveSpider;
 import lotr.common.entity.npc.LOTREntityCorsair;
 import lotr.common.entity.npc.LOTREntityDaleArcher;
 import lotr.common.entity.npc.LOTREntityDaleLevyman;
@@ -326,7 +327,7 @@ public class LOTRSpawnList {
     public static final LOTRSpawnList BLACKLOCK = new LOTRSpawnList(new LOTRSpawnEntry(LOTREntityBlacklock.class, 100, 4, 4), new LOTRSpawnEntry(LOTREntityRedDwarfMiner.class, 100, 1, 3), new LOTRSpawnEntry(LOTREntityBlacklockWarrior.class, 20, 4, 4), new LOTRSpawnEntry(LOTREntityBlacklockAxeThrower.class, 10, 4, 4));
     public static final LOTRSpawnList STONEFOOT = new LOTRSpawnList(new LOTRSpawnEntry(LOTREntityStonefoot.class, 100, 4, 4), new LOTRSpawnEntry(LOTREntityRedDwarfMiner.class, 15, 1, 3), new LOTRSpawnEntry(LOTREntityStonefootWarrior.class, 20, 4, 4), new LOTRSpawnEntry(LOTREntityStonefootFlameThrower.class, 10, 4, 4));
     public static final LOTRSpawnList IRONFIST = new LOTRSpawnList(new LOTRSpawnEntry(LOTREntityIronfist.class, 100, 4, 4), new LOTRSpawnEntry(LOTREntityIronfistWarrior.class, 20, 4, 4), new LOTRSpawnEntry(LOTREntityIronfistBerserk.class, 10, 4, 4));
-    public static final LOTRSpawnList STIFFBEARD = new LOTRSpawnList(new LOTRSpawnEntry(LOTREntityStiffbeard.class, 100, 4, 4), new LOTRSpawnEntry(LOTREntityRedDwarfMiner.class, 15, 1, 3), new LOTRSpawnEntry(LOTREntityStiffbeardWarrior.class, 20, 4, 4), new LOTRSpawnEntry(LOTREntityStiffbeardCrossbow.class, 10, 4, 4));
+    public static final LOTRSpawnList STIFFBEARD = new LOTRSpawnList(new LOTRSpawnEntry(LOTREntityStiffbeard.class, 100, 4, 4), new LOTRSpawnEntry(LOTREntityRedDwarfMiner.class, 15, 1, 3), new LOTRSpawnEntry(LOTREntityStiffbeardWarrior.class, 30, 4, 4), new LOTRSpawnEntry(LOTREntityStiffbeardCrossbow.class, 15, 4, 4));
     public static final LOTRSpawnList ANGBAND = new LOTRSpawnList(new LOTRSpawnEntry(LOTREntityAngbandOrc.class, 10, 2, 4), new LOTRSpawnEntry(LOTREntityAngbandOrcArcher.class, 20, 2, 4), new LOTRSpawnEntry(LOTREntityAngbandBerserk2.class, 10, 1, 1));
     public static final LOTRSpawnList EREBOR = new LOTRSpawnList(new LOTRSpawnEntry(LOTREntityEreborDwarf.class, 100, 4, 4), new LOTRSpawnEntry(LOTREntityEreborDwarfWarrior.class, 20, 4, 4), new LOTRSpawnEntry(LOTREntityEreborFlameThrower.class, 10, 1, 3), new LOTRSpawnEntry(LOTREntityRedDwarfAxe4.class, 10, 1, 3), new LOTRSpawnEntry(LOTREntityRedDwarfWarrior3.class, 10, 1, 3), new LOTRSpawnEntry(LOTREntityRedDwarfAxe3.class, 10, 1, 3), new LOTRSpawnEntry(LOTREntityEreborDwarfAxeThrower.class, 10, 4, 4), new LOTRSpawnEntry(LOTREntityEreborDwarfBerserk.class, 10, 4, 4));
     public static final LOTRSpawnList ANGBAND1 = new LOTRSpawnList(new LOTRSpawnEntry(LOTREntityAngbandUruc.class, 10, 2, 4), new LOTRSpawnEntry(LOTREntityAngbandCrossbow.class, 10, 2, 4), new LOTRSpawnEntry(LOTREntityAngbandBerserk.class, 10, 2, 4));
@@ -350,6 +351,7 @@ public class LOTRSpawnList {
     public static final LOTRSpawnList AVARI_ELVES = new LOTRSpawnList(new LOTRSpawnEntry(LOTREntityAvariElf.class, 10, 1, 4));
     public static final LOTRSpawnList AVARI_ELF_WARRIORS = new LOTRSpawnList(new LOTRSpawnEntry(LOTREntityAvariElfScout.class, 10, 2, 4), new LOTRSpawnEntry(LOTREntityAvariElfWarrior.class, 5, 2, 4));
     public static final LOTRSpawnList GONDOR_RENEGADES = new LOTRSpawnList(new LOTRSpawnEntry(LOTREntityGondorRenegade.class, 10, 1, 4));
+    public static final LOTRSpawnList CAVE_SPIDERS = new LOTRSpawnList(new LOTRSpawnEntry(LOTREntityCaveSpider.class, 20, 1, 3));
     private final List<LOTRSpawnEntry> spawnList;
     private LOTRFaction discoveredFaction;
 

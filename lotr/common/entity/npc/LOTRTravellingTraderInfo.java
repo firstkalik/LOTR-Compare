@@ -48,6 +48,7 @@ public class LOTRTravellingTraderInfo {
     private LOTRTravellingTrader theTrader;
     public int timeUntilDespawn = -1;
     private List escortUUIDs = new ArrayList();
+    private boolean hasDied = false;
 
     public LOTRTravellingTraderInfo(LOTRTravellingTrader entity) {
         this.theEntity = (LOTREntityNPC)((Object)entity);
@@ -117,7 +118,8 @@ public class LOTRTravellingTraderInfo {
     }
 
     public void onDeath() {
-        if (!this.theEntity.worldObj.isRemote && this.timeUntilDespawn >= 0) {
+        if (!this.theEntity.worldObj.isRemote && this.timeUntilDespawn >= 0 && !this.hasDied) {
+            this.hasDied = true;
             LOTRSpeech.messageAllPlayers(this.theEntity.func_110142_aN().func_151521_b());
             this.removeEscorts();
         }

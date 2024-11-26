@@ -13,6 +13,7 @@
 package lotr.common.quest;
 
 import java.util.Random;
+import lotr.common.LOTRMod;
 import lotr.common.LOTRPlayerData;
 import lotr.common.entity.npc.LOTREntityNPC;
 import lotr.common.quest.LOTRMiniQuest;
@@ -86,6 +87,21 @@ extends LOTRMiniQuest {
 
     @Override
     public ItemStack getQuestIcon() {
+        if (this.killTarget >= 10 && this.killTarget < 16) {
+            return new ItemStack(LOTRMod.daggerIron);
+        }
+        if (this.killTarget >= 16 && this.killTarget < 20) {
+            return new ItemStack(Items.iron_sword);
+        }
+        if (this.killTarget >= 20 && this.killTarget < 30) {
+            return new ItemStack(LOTRMod.swordMithril);
+        }
+        if (this.killTarget >= 30 && this.killTarget < 40) {
+            return new ItemStack(LOTRMod.battleaxeMithril);
+        }
+        if (this.killTarget >= 40 && this.killTarget < 60) {
+            return new ItemStack(LOTRMod.hammerMithril);
+        }
         return new ItemStack(Items.iron_sword);
     }
 

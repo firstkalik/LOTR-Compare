@@ -237,7 +237,7 @@ implements LOTRBoss {
             this.dropItem(LOTRMod.bodyBilbo, 1);
         }
         for (l = 1; l < bones; ++l) {
-            this.dropItem(LOTRMod.LOTRRingOne, 1);
+            this.dropItem(LOTRMod.theOneRing, 1);
         }
         if (flag) {
             int rareDropChance = 0 - i * 4;

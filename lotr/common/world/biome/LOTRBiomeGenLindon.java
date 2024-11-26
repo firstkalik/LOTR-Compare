@@ -16,6 +16,7 @@ import lotr.common.LOTRMod;
 import lotr.common.entity.animal.LOTREntityHorse;
 import lotr.common.entity.animal.LOTREntitySeagull;
 import lotr.common.entity.npc.LOTREntityBlueDwarfMerchant;
+import lotr.common.entity.npc.LOTREntityEreborDwarfMerchant;
 import lotr.common.entity.npc.LOTREntityGaladhrimTrader;
 import lotr.common.entity.npc.LOTREntityRivendellTrader;
 import lotr.common.world.biome.LOTRBiome;
@@ -93,6 +94,7 @@ extends LOTRBiome {
         this.decorator.addRandomStructure(new LOTRWorldGenHighElvenTower(false), 900);
         this.registerTravellingTrader(LOTREntityGaladhrimTrader.class);
         this.registerTravellingTrader(LOTREntityBlueDwarfMerchant.class);
+        this.registerTravellingTrader(LOTREntityEreborDwarfMerchant.class);
         this.registerTravellingTrader(LOTREntityRivendellTrader.class);
         this.setBanditChance(LOTREventSpawner.EventChance.NEVER);
         this.invasionSpawns.addInvasion(LOTRInvasions.GUNDABAD, LOTREventSpawner.EventChance.RARE);

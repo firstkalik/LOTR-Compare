@@ -105,7 +105,7 @@ extends LOTRWorldGenStructureBase {
             }
         }
         int j12 = world.getTopSolidOrLiquidBlock(i, k);
-        this.setBlockAndNotifyAdequately(world, i, j12, k, Blocks.glowstone, 0);
+        this.setBlockAndNotifyAdequately(world, i, j12, k, LOTRMod.seaLantern, 0);
         this.setBlockAndNotifyAdequately(world, i, j12 + 1, k, LOTRMod.chestStone, 0);
         LOTRChestContents.fillChest(world, random, i, j12 + 1, k, LOTRChestContents.UNDERWATER_ELVEN_RUIN);
         return true;

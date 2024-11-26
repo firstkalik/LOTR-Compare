@@ -130,16 +130,29 @@ extends StructureComponent {
     }
 
     public boolean addComponentParts(World world, Random random, StructureBoundingBox structureBoundingBox) {
+        int i;
         if (this.isLiquidInStructureBoundingBox(world, structureBoundingBox)) {
             return false;
         }
-        this.fillWithBlocks(world, structureBoundingBox, this.boundingBox.minX + 1, this.boundingBox.minY, this.boundingBox.minZ, this.boundingBox.maxX - 1, this.boundingBox.maxY, this.boundingBox.maxZ, Blocks.air, Blocks.air, false);
-        this.fillWithBlocks(world, structureBoundingBox, this.boundingBox.minX, this.boundingBox.minY, this.boundingBox.minZ + 1, this.boundingBox.maxX, this.boundingBox.maxY, this.boundingBox.maxZ - 1, Blocks.air, Blocks.air, false);
-        this.fillWithBlocks(world, structureBoundingBox, this.boundingBox.minX + 1, this.boundingBox.minY, this.boundingBox.minZ + 1, this.boundingBox.minX + 1, this.boundingBox.maxY, this.boundingBox.minZ + 1, LOTRMod.pillar4, Blocks.air, false);
-        this.fillWithBlocks(world, structureBoundingBox, this.boundingBox.minX + 1, this.boundingBox.minY, this.boundingBox.maxZ - 1, this.boundingBox.minX + 1, this.boundingBox.maxY, this.boundingBox.maxZ - 1, LOTRMod.pillar4, Blocks.air, false);
-        this.fillWithBlocks(world, structureBoundingBox, this.boundingBox.maxX - 1, this.boundingBox.minY, this.boundingBox.minZ + 1, this.boundingBox.maxX - 1, this.boundingBox.maxY, this.boundingBox.minZ + 1, LOTRMod.pillar4, Blocks.air, false);
-        this.fillWithBlocks(world, structureBoundingBox, this.boundingBox.maxX - 1, this.boundingBox.minY, this.boundingBox.maxZ - 1, this.boundingBox.maxX - 1, this.boundingBox.maxY, this.boundingBox.maxZ - 1, LOTRMod.pillar4, Blocks.air, false);
-        for (int i = this.boundingBox.minX; i <= this.boundingBox.maxX; ++i) {
+        for (int x = this.boundingBox.minX + 1; x <= this.boundingBox.maxX - 1; ++x) {
+            for (int z = this.boundingBox.minZ + 1; z <= this.boundingBox.maxZ - 1; ++z) {
+                this.placeBlockAtCurrentPosition(world, Blocks.air, 0, x, this.boundingBox.minY, z, structureBoundingBox);
+                this.placeBlockAtCurrentPosition(world, Blocks.air, 0, x, this.boundingBox.maxY, z, structureBoundingBox);
+            }
+        }
+        for (i = this.boundingBox.minX + 1; i <= this.boundingBox.maxX - 1; ++i) {
+            this.placeBlockAtCurrentPosition(world, LOTRMod.pillar, 4, i, this.boundingBox.minY, this.boundingBox.minZ + 1, structureBoundingBox);
+            this.placeBlockAtCurrentPosition(world, LOTRMod.pillar, 4, i, this.boundingBox.maxY, this.boundingBox.maxZ - 1, structureBoundingBox);
+        }
+        for (int j = this.boundingBox.minZ + 1; j <= this.boundingBox.maxZ - 1; ++j) {
+            this.placeBlockAtCurrentPosition(world, LOTRMod.pillar, 4, this.boundingBox.minX + 1, this.boundingBox.minY, j, structureBoundingBox);
+            this.placeBlockAtCurrentPosition(world, LOTRMod.pillar, 4, this.boundingBox.maxX - 1, this.boundingBox.maxY, j, structureBoundingBox);
+        }
+        this.placeBlockAtCurrentPosition(world, LOTRMod.pillar, 4, this.boundingBox.minX + 1, this.boundingBox.minY, this.boundingBox.minZ + 1, structureBoundingBox);
+        this.placeBlockAtCurrentPosition(world, LOTRMod.pillar, 4, this.boundingBox.minX + 1, this.boundingBox.maxY, this.boundingBox.maxZ - 1, structureBoundingBox);
+        this.placeBlockAtCurrentPosition(world, LOTRMod.pillar, 4, this.boundingBox.maxX - 1, this.boundingBox.minY, this.boundingBox.minZ + 1, structureBoundingBox);
+        this.placeBlockAtCurrentPosition(world, LOTRMod.pillar, 4, this.boundingBox.maxX - 1, this.boundingBox.maxY, this.boundingBox.maxZ - 1, structureBoundingBox);
+        for (i = this.boundingBox.minX; i <= this.boundingBox.maxX; ++i) {
             for (int j = this.boundingBox.minZ; j <= this.boundingBox.maxZ; ++j) {
                 Block block = this.getBlockAtCurrentPosition(world, i, this.boundingBox.minY - 1, j, structureBoundingBox);
                 if (block.getMaterial().isReplaceable() || block.getMaterial() == Material.sand) {
@@ -149,8 +162,10 @@ extends StructureComponent {
                 this.placeBlockAtCurrentPosition(world, Blocks.stone, 0, i, this.boundingBox.maxY + 1, j, structureBoundingBox);
             }
         }
-        this.fillWithBlocks(world, structureBoundingBox, this.boundingBox.minX + 2, this.boundingBox.minY - 1, this.boundingBox.minZ - 1, this.boundingBox.minX + 2, this.boundingBox.minY - 1, this.boundingBox.maxZ + 1, LOTRMod.pillar4, Blocks.air, false);
-        this.fillWithBlocks(world, structureBoundingBox, this.boundingBox.minX - 1, this.boundingBox.minY - 1, this.boundingBox.minZ + 2, this.boundingBox.maxX + 1, this.boundingBox.minY - 1, this.boundingBox.minZ + 2, LOTRMod.pillar4, Blocks.air, false);
+        this.placeBlockAtCurrentPosition(world, LOTRMod.pillar, 4, this.boundingBox.minX + 2, this.boundingBox.minY - 1, this.boundingBox.minZ - 1, structureBoundingBox);
+        this.placeBlockAtCurrentPosition(world, LOTRMod.pillar, 4, this.boundingBox.minX + 2, this.boundingBox.minY - 1, this.boundingBox.maxZ + 1, structureBoundingBox);
+        this.placeBlockAtCurrentPosition(world, LOTRMod.pillar, 4, this.boundingBox.minX - 1, this.boundingBox.minY - 1, this.boundingBox.minZ + 2, structureBoundingBox);
+        this.placeBlockAtCurrentPosition(world, LOTRMod.pillar, 4, this.boundingBox.maxX + 1, this.boundingBox.minY - 1, this.boundingBox.minZ + 2, structureBoundingBox);
         if (!this.ruined) {
             this.placeBlockAtCurrentPosition(world, LOTRMod.brick7, 0, this.boundingBox.minX + 2, this.boundingBox.minY - 1, this.boundingBox.minZ + 2, structureBoundingBox);
         }

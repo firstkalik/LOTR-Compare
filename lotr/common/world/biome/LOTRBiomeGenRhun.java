@@ -87,6 +87,9 @@ extends LOTRBiome {
         this.registerTravellingTrader(LOTREntityPallando.class);
         this.setBanditEntityClass(LOTREntityBanditRhun.class);
         this.setBanditChance(LOTREventSpawner.EventChance.BANDIT_RARE);
+        this.invasionSpawns.addInvasion(LOTRInvasions.AVARI_ELF, LOTREventSpawner.EventChance.RARE);
+        this.invasionSpawns.addInvasion(LOTRInvasions.IRONFIST, LOTREventSpawner.EventChance.RARE);
+        this.invasionSpawns.addInvasion(LOTRInvasions.STIFFBEARD, LOTREventSpawner.EventChance.RARE);
         this.invasionSpawns.addInvasion(LOTRInvasions.RHUN, LOTREventSpawner.EventChance.RARE);
     }
 

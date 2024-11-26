@@ -1039,9 +1039,9 @@ implements IClassTransformer {
         ClassReader classReader = new ClassReader(bytes);
         classReader.accept((ClassVisitor)classNode, 0);
         for (MethodNode method : classNode.methods) {
-            reference _block;
             boolean[] _blocks;
             Object _door;
+            reference _block;
             if (!method.name.equals(targetMethodName) && !method.name.equals(targetMethodNameObf) || !method.desc.equals(targetMethodSign) && !method.desc.equals(targetMethodSignObf)) continue;
             FieldInsnNode nodeFound1 = null;
             FieldInsnNode nodeFound2 = null;

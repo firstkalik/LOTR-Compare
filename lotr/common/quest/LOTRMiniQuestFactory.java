@@ -40,13 +40,17 @@ import lotr.common.entity.animal.LOTREntityRabbit;
 import lotr.common.entity.npc.LOTREntityAngmarHillman;
 import lotr.common.entity.npc.LOTREntityAngmarOrc;
 import lotr.common.entity.npc.LOTREntityAngmarWarg;
+import lotr.common.entity.npc.LOTREntityAvariElf;
 import lotr.common.entity.npc.LOTREntityBandit;
 import lotr.common.entity.npc.LOTREntityBanditHarad;
 import lotr.common.entity.npc.LOTREntityBarrowWight;
+import lotr.common.entity.npc.LOTREntityBlacklock;
 import lotr.common.entity.npc.LOTREntityBlacklockWarrior;
+import lotr.common.entity.npc.LOTREntityCaveSpider;
 import lotr.common.entity.npc.LOTREntityDaleMan;
 import lotr.common.entity.npc.LOTREntityDaleSoldier;
 import lotr.common.entity.npc.LOTREntityDarkHuorn;
+import lotr.common.entity.npc.LOTREntityDesertSpider;
 import lotr.common.entity.npc.LOTREntityDolAmrothSoldier;
 import lotr.common.entity.npc.LOTREntityDolGuldurOrc;
 import lotr.common.entity.npc.LOTREntityDurmethOrc;
@@ -62,6 +66,7 @@ import lotr.common.entity.npc.LOTREntityGundabadOrc;
 import lotr.common.entity.npc.LOTREntityGundabadWarg;
 import lotr.common.entity.npc.LOTREntityHarnedorWarrior;
 import lotr.common.entity.npc.LOTREntityHighElf;
+import lotr.common.entity.npc.LOTREntityIronfist;
 import lotr.common.entity.npc.LOTREntityIsengardSnaga;
 import lotr.common.entity.npc.LOTREntityLossarnachAxeman;
 import lotr.common.entity.npc.LOTREntityMirkwoodSpider;
@@ -78,6 +83,7 @@ import lotr.common.entity.npc.LOTREntityRivendellElf;
 import lotr.common.entity.npc.LOTREntityRohirrimWarrior;
 import lotr.common.entity.npc.LOTREntityScrapTrader;
 import lotr.common.entity.npc.LOTREntityStiffbeard;
+import lotr.common.entity.npc.LOTREntityStonefoot;
 import lotr.common.entity.npc.LOTREntitySwanKnight;
 import lotr.common.entity.npc.LOTREntityTauredainBlowgunner;
 import lotr.common.entity.npc.LOTREntityTroll;
@@ -295,7 +301,7 @@ public enum LOTRMiniQuestFactory {
     }
 
     /*
-     * Opcode count of 18260 triggered aggressive code reduction.  Override with --aggressivesizethreshold.
+     * Opcode count of 18390 triggered aggressive code reduction.  Override with --aggressivesizethreshold.
      */
     public static void createMiniQuests() {
         LOTRMiniQuestFactory.registerQuestClass(LOTRMiniQuestCollect.class, 10);
@@ -738,6 +744,7 @@ public enum LOTRMiniQuestFactory {
         AVARI_ELF.addQuest(new LOTRMiniQuestKillEntity.QFKillEntity("killTroll").setKillEntity(LOTREntityMountainSnowTroll.class, 10, 20).setRewardFactor(3.0f));
         AVARI_ELF.addQuest(new LOTRMiniQuestKillEntity.QFKillEntity("killTroll").setKillEntity(LOTREntityTundraSnowTroll.class, 10, 20).setRewardFactor(3.0f));
         AVARI_ELF.addQuest(new LOTRMiniQuestKillEntity.QFKillEntity("killDwarf").setKillEntity(LOTREntityWickedDwarf2.class, 5, 15).setRewardFactor(2.0f));
+        AVARI_ELF.addQuest(new LOTRMiniQuestKillEntity.QFKillEntity("killSpider").setKillEntity(LOTREntityCaveSpider.class, 10, 40).setRewardFactor(1.2f));
         AVARI_ELF.addQuest(new LOTRMiniQuestBounty.QFBounty("bounty"));
         DOL_GULDUR.setAchievement(LOTRAchievement.doMiniquestDolGuldur);
         DOL_GULDUR.setLore(LOTRLore.LoreCategory.DOL_GULDUR);
@@ -1431,6 +1438,8 @@ public enum LOTRMiniQuestFactory {
         REDMOUNTAINS.addQuest(new LOTRMiniQuestKillEntity.QFKillEntity("killWarg").setKillEntity(LOTREntityGundabadWarg.class, 10, 30));
         REDMOUNTAINS.addQuest(new LOTRMiniQuestKillEntity.QFKillEntity("killOrc").setKillEntity(LOTREntityDurmethOrc.class, 10, 40));
         REDMOUNTAINS.addQuest(new LOTRMiniQuestKillEntity.QFKillEntity("killWarg").setKillEntity(LOTREntityDurmethWarg.class, 10, 40));
+        REDMOUNTAINS.addQuest(new LOTRMiniQuestKillEntity.QFKillEntity("killSpider").setKillEntity(LOTREntityCaveSpider.class, 10, 40).setRewardFactor(1.2f));
+        REDMOUNTAINS.addQuest(new LOTRMiniQuestKillEntity.QFKillEntity("killDesertSpider").setKillEntity(LOTREntityDesertSpider.class, 10, 40).setRewardFactor(1.2f));
         REDMOUNTAINS.addQuest(new LOTRMiniQuestBounty.QFBounty("bounty"));
         WIND.setAchievement(LOTRAchievement.doMiniquestWind);
         WIND.setLore(LOTRLore.LoreCategory.WIND_MOUNTAINS);
@@ -1463,6 +1472,8 @@ public enum LOTRMiniQuestFactory {
         WIND.addQuest(new LOTRMiniQuestKillEntity.QFKillEntity("killWarg").setKillEntity(LOTREntityGundabadWarg.class, 10, 30));
         WIND.addQuest(new LOTRMiniQuestKillEntity.QFKillEntity("killOrc").setKillEntity(LOTREntityDurmethOrc.class, 10, 40));
         WIND.addQuest(new LOTRMiniQuestKillEntity.QFKillEntity("killWarg").setKillEntity(LOTREntityDurmethWarg.class, 10, 40));
+        WIND.addQuest(new LOTRMiniQuestKillEntity.QFKillEntity("killSpider").setKillEntity(LOTREntityCaveSpider.class, 10, 40).setRewardFactor(1.2f));
+        WIND.addQuest(new LOTRMiniQuestKillEntity.QFKillEntity("killDesertSpider").setKillEntity(LOTREntityCaveSpider.class, 10, 40).setRewardFactor(1.2f));
         WIND.addQuest(new LOTRMiniQuestBounty.QFBounty("bounty"));
         DURMETH.setAchievement(LOTRAchievement.doMiniquestDurmeth);
         DURMETH.setLore(LOTRLore.LoreCategory.DURMETH);
@@ -1483,15 +1494,20 @@ public enum LOTRMiniQuestFactory {
         DURMETH.addQuest(new LOTRMiniQuestCollect.QFCollect("collectMineral").setCollectItem(new ItemStack(LOTRMod.diamond), 1, 3).setRewardFactor(15.0f));
         DURMETH.addQuest(new LOTRMiniQuestCollect.QFCollect("collectMineral").setCollectItem(new ItemStack(LOTRMod.ruby), 1, 3).setRewardFactor(12.0f));
         DURMETH.addQuest(new LOTRMiniQuestKillFaction.QFKillFaction("killEnemy").setKillFaction(LOTRFaction.DURINS_FOLK, 10, 40).setRewardFactor(1.0f));
-        DURMETH.addQuest(new LOTRMiniQuestKillFaction.QFKillFaction("killEnemy").setKillFaction(LOTRFaction.RED_MOUNTAINS, 10, 40).setRewardFactor(1.0f));
+        DURMETH.addQuest(new LOTRMiniQuestKillFaction.QFKillFaction("killEnemy").setKillFaction(LOTRFaction.RED_MOUNTAINS, 10, 60).setRewardFactor(1.0f));
+        DURMETH.addQuest(new LOTRMiniQuestKillFaction.QFKillFaction("killEnemy").setKillFaction(LOTRFaction.AVARI, 10, 40).setRewardFactor(1.0f));
         DURMETH.addQuest(new LOTRMiniQuestKillFaction.QFKillFaction("killEnemy").setKillFaction(LOTRFaction.HIGH_ELF, 10, 40).setRewardFactor(1.0f));
         DURMETH.addQuest(new LOTRMiniQuestKillFaction.QFKillFaction("killEnemy").setKillFaction(LOTRFaction.LOTHLORIEN, 10, 40).setRewardFactor(1.0f));
         DURMETH.addQuest(new LOTRMiniQuestKillEntity.QFKillEntity("killRanger").setKillEntity(LOTREntityRangerNorth.class, 10, 30));
-        DURMETH.addQuest(new LOTRMiniQuestKillEntity.QFKillEntity("killElf").setKillEntity(LOTREntityHighElf.class, 10, 30));
-        DURMETH.addQuest(new LOTRMiniQuestKillEntity.QFKillEntity("killElf").setKillEntity(LOTREntityRivendellElf.class, 10, 30));
-        DURMETH.addQuest(new LOTRMiniQuestKillEntity.QFKillEntity("killElf").setKillEntity(LOTREntityGaladhrimElf.class, 10, 30));
-        DURMETH.addQuest(new LOTRMiniQuestKillEntity.QFKillEntity("killDwarf").setKillEntity(LOTREntityDwarf.class, 10, 30));
-        DURMETH.addQuest(new LOTRMiniQuestKillEntity.QFKillEntity("killDwarf").setKillEntity(LOTREntityStiffbeard.class, 10, 30));
+        DURMETH.addQuest(new LOTRMiniQuestKillEntity.QFKillEntity("killElf").setKillEntity(LOTREntityHighElf.class, 10, 30).setRewardFactor(1.6f));
+        DURMETH.addQuest(new LOTRMiniQuestKillEntity.QFKillEntity("killElf").setKillEntity(LOTREntityRivendellElf.class, 10, 30).setRewardFactor(1.6f));
+        DURMETH.addQuest(new LOTRMiniQuestKillEntity.QFKillEntity("killElf").setKillEntity(LOTREntityGaladhrimElf.class, 10, 30).setRewardFactor(1.6f));
+        DURMETH.addQuest(new LOTRMiniQuestKillEntity.QFKillEntity("killElf").setKillEntity(LOTREntityAvariElf.class, 10, 40).setRewardFactor(1.5f));
+        DURMETH.addQuest(new LOTRMiniQuestKillEntity.QFKillEntity("killDwarf").setKillEntity(LOTREntityStiffbeard.class, 10, 45).setRewardFactor(1.5f));
+        DURMETH.addQuest(new LOTRMiniQuestKillEntity.QFKillEntity("killDwarf").setKillEntity(LOTREntityIronfist.class, 10, 50).setRewardFactor(1.5f));
+        DURMETH.addQuest(new LOTRMiniQuestKillEntity.QFKillEntity("killDwarf").setKillEntity(LOTREntityBlacklock.class, 10, 42).setRewardFactor(1.5f));
+        DURMETH.addQuest(new LOTRMiniQuestKillEntity.QFKillEntity("killDwarf").setKillEntity(LOTREntityStonefoot.class, 10, 40).setRewardFactor(1.5f));
+        DURMETH.addQuest(new LOTRMiniQuestKillEntity.QFKillEntity("killDwarf").setKillEntity(LOTREntityDwarf.class, 10, 40).setRewardFactor(1.6f));
         DURMETH.addQuest(new LOTRMiniQuestBounty.QFBounty("bounty"));
         NOMAD.setAchievement(LOTRAchievement.doMiniquestNearHarad);
         NOMAD.setLore(LOTRLore.LoreCategory.NOMAD);

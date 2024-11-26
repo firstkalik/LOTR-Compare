@@ -48,7 +48,7 @@ extends LOTRWorldGenDwarfHouse2 {
         this.larderContents = LOTRChestContents.LOTRChestContents2.BANDITDWARF;
         this.personalContents = LOTRChestContents.LOTRChestContents2.BANDITDWARF;
         this.plateFoods = LOTRFoods.DWARF;
-        this.drinkFoods = LOTRFoods.ORC_DRINK;
+        this.drinkFoods = LOTRFoods.WICKED_DRINK;
     }
 
     @Override

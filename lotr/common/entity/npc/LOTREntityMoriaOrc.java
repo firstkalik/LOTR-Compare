@@ -26,6 +26,8 @@ import lotr.common.LOTRAchievement;
 import lotr.common.LOTRLevelData;
 import lotr.common.LOTRMod;
 import lotr.common.entity.ai.LOTREntityAIAttackOnCollide;
+import lotr.common.entity.ai.LOTREntityAINearestAttackableTargetBasic;
+import lotr.common.entity.ai.LOTREntityAINearestAttackableTargetTroll;
 import lotr.common.entity.npc.LOTREntityNPC;
 import lotr.common.entity.npc.LOTREntityOrc;
 import lotr.common.entity.npc.LOTRHiredNPCInfo;
@@ -62,6 +64,7 @@ extends LOTREntityOrc {
 
     public LOTREntityMoriaOrc(World world) {
         super(world);
+        this.addTargetTasks(true, LOTREntityAINearestAttackableTargetTroll.class);
     }
 
     @Override

@@ -84,6 +84,10 @@ public class LOTRBrewingRecipes {
         LOTRBrewingRecipes.addBrewingRecipe(new ItemStack(LOTRMod.mugSourMilk, BARREL_CAPACITY), new Object[]{Items.milk_bucket, Items.milk_bucket, Items.milk_bucket, Items.milk_bucket, Items.milk_bucket, Items.milk_bucket});
         LOTRBrewingRecipes.addBrewingRecipe(new ItemStack(LOTRMod.mugPomegranateWine, BARREL_CAPACITY), new Object[]{LOTRMod.pomegranate, LOTRMod.pomegranate, LOTRMod.pomegranate, LOTRMod.pomegranate, LOTRMod.pomegranate, LOTRMod.pomegranate});
         LOTRBrewingRecipes.addBrewingRecipe(new ItemStack(LOTRMod.mugChili, BARREL_CAPACITY), new Object[]{LOTRMod.chili, LOTRMod.chili, LOTRMod.chili, Items.sugar, Items.sugar, Items.sugar});
+        LOTRBrewingRecipes.addBrewingRecipe(new ItemStack(LOTRMod.mugPoison, BARREL_CAPACITY), new Object[]{LOTRMod.morgulRose, LOTRMod.morgulRose, LOTRMod.morgulRose, LOTRMod.morgulRose, LOTRMod.morgulRose, LOTRMod.morgulRose});
+        LOTRBrewingRecipes.addBrewingRecipe(new ItemStack(LOTRMod.mugFireTequila, BARREL_CAPACITY), new Object[]{LOTRMod.lavaCoal, LOTRMod.lavaCoal, LOTRMod.lavaCoal, LOTRMod.lavaCoal, LOTRMod.lavaCoal, LOTRMod.lavaCoal});
+        LOTRBrewingRecipes.addBrewingRecipe(new ItemStack(LOTRMod.mugValinorBrew, BARREL_CAPACITY), new Object[]{LOTRMod.khamRaw, LOTRMod.torchflower, LOTRMod.khamRaw, LOTRMod.athelas, LOTRMod.DragonTalon, LOTRMod.mithrilNugget});
+        LOTRBrewingRecipes.addBrewingRecipe(new ItemStack(LOTRMod.mugDragonBrew, BARREL_CAPACITY), new Object[]{LOTRMod.DragonTalon, LOTRMod.khamRaw, LOTRMod.DragonTalon, LOTRMod.athelas, LOTRMod.DragonScoutScale, LOTRMod.mithrilNugget});
     }
 
     private static void addBrewingRecipe(ItemStack result, Object ... ingredients) {

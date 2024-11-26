@@ -52,7 +52,7 @@ extends LOTRWorldGenDwarvenTower2 {
         } else {
             int randomBars = random.nextInt(4);
             if (randomBars == 0) {
-                this.barsBlock = LOTRMod.winddwarfBars;
+                this.barsBlock = LOTRMod.greydwarfBars;
             } else if (randomBars == 1) {
                 this.barsBlock = LOTRMod.orcSteelBars;
             } else if (randomBars == 2) {
@@ -63,17 +63,17 @@ extends LOTRWorldGenDwarvenTower2 {
         }
         boolean bl = this.isGundabad = random.nextInt(3) == 0;
         if (this.isGundabad) {
-            this.gateBlock = LOTRMod.gateOrc;
+            this.gateBlock = random.nextBoolean() ? LOTRMod.gateOrc : Blocks.air;
             this.tableBlock = LOTRMod.gundabadTable;
             this.forgeBlock = LOTRMod.orcForge;
             this.bannerType = LOTRItemBanner.BannerType.GUNDABAD;
             this.chestContents = LOTRChestContents.GUNDABAD_TENT;
         } else {
-            this.gateBlock = LOTRMod.gateDwarven;
+            this.gateBlock = LOTRMod.gateIronBars;
             this.tableBlock = LOTRMod.dwarvenTable;
             this.forgeBlock = LOTRMod.dwarvenForge;
             this.bannerType = null;
-            this.chestContents = LOTRChestContents.LOTRChestContents2.DWARVEN_TOWER2;
+            this.chestContents = LOTRChestContents.LOTRChestContents2.GREY_DWARVEN_TOWER;
         }
     }
 

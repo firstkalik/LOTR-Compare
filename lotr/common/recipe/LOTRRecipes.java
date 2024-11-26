@@ -288,11 +288,13 @@ public class LOTRRecipes {
     }
 
     /*
-     * Opcode count of 24942 triggered aggressive code reduction.  Override with --aggressivesizethreshold.
+     * Opcode count of 26703 triggered aggressive code reduction.  Override with --aggressivesizethreshold.
      */
     private static void createStandardRecipes() {
         int i2;
         int i;
+        GameRegistry.addRecipe((ItemStack)new ItemStack(LOTRMod.decoratedPot), (Object[])new Object[]{" X ", "X X", "XXX", Character.valueOf('X'), LOTRMod.anglePotterySherd});
+        GameRegistry.addRecipe((IRecipe)new ShapedOreRecipe(new ItemStack(LOTRMod.spyglass, 1), new Object[]{" X ", " Y ", " Y ", Character.valueOf('X'), LOTRMod.amethyst, Character.valueOf('Y'), LOTRMod.copper}));
         GameRegistry.addRecipe((IRecipe)new ShapedOreRecipe(new ItemStack(LOTRMod.blubberTorch, 4), new Object[]{"X", "Y", Character.valueOf('X'), LOTRMod.blubber, Character.valueOf('Y'), "stickWood"}));
         GameRegistry.addRecipe((IRecipe)new ShapedOreRecipe(new ItemStack(LOTRMod.arrowSlow, 4), new Object[]{" X ", "XYX", " X ", Character.valueOf('X'), Items.arrow, Character.valueOf('Y'), LOTRMod.snowdrift}));
         GameRegistry.addRecipe((IRecipe)new ShapedOreRecipe(new ItemStack(LOTRMod.cloth, 1), new Object[]{"XXX", Character.valueOf('X'), Blocks.wool}));
@@ -447,6 +449,18 @@ public class LOTRRecipes {
         GameRegistry.addShapelessRecipe((ItemStack)new ItemStack(Items.dye, 3, 15), (Object[])new Object[]{LOTRMod.elfBone});
         GameRegistry.addShapelessRecipe((ItemStack)new ItemStack(Items.dye, 2, 15), (Object[])new Object[]{LOTRMod.dwarfBone});
         GameRegistry.addShapelessRecipe((ItemStack)new ItemStack(Items.dye, 2, 15), (Object[])new Object[]{LOTRMod.hobbitBone});
+        for (i = 0; i <= 15; ++i) {
+            GameRegistry.addRecipe((IRecipe)new ShapedOreRecipe(new ItemStack(LOTRMod.concrete, 8, i), new Object[]{"XXX", "XYX", "XXX", Character.valueOf('X'), new ItemStack(LOTRMod.concretePowder, 1, i), Character.valueOf('Y'), Items.water_bucket}));
+            GameRegistry.addRecipe((IRecipe)new ShapedOreRecipe(new ItemStack(LOTRMod.concretePowder, 8, i), new Object[]{"XXX", "XYY", "YYZ", Character.valueOf('X'), new ItemStack((Block)Blocks.sand, 1, 0), Character.valueOf('Y'), new ItemStack(Blocks.gravel, 1, 0), Character.valueOf('Z'), dyeOreNames[BlockColored.func_150032_b((int)i)]}));
+            GameRegistry.addRecipe((IRecipe)new ShapedOreRecipe(new ItemStack(LOTRMod.concretePowder, 8, i), new Object[]{"ZXX", "XXY", "YYY", Character.valueOf('X'), new ItemStack((Block)Blocks.sand, 1, 0), Character.valueOf('Y'), new ItemStack(Blocks.gravel, 1, 0), Character.valueOf('Z'), dyeOreNames[BlockColored.func_150032_b((int)i)]}));
+            GameRegistry.addRecipe((IRecipe)new ShapedOreRecipe(new ItemStack(LOTRMod.concretePowder, 8, i), new Object[]{"YZX", "XXX", "YYY", Character.valueOf('X'), new ItemStack((Block)Blocks.sand, 1, 0), Character.valueOf('Y'), new ItemStack(Blocks.gravel, 1, 0), Character.valueOf('Z'), dyeOreNames[BlockColored.func_150032_b((int)i)]}));
+            GameRegistry.addRecipe((IRecipe)new ShapedOreRecipe(new ItemStack(LOTRMod.concretePowder, 8, i), new Object[]{"YYZ", "XXX", "XYY", Character.valueOf('X'), new ItemStack((Block)Blocks.sand, 1, 0), Character.valueOf('Y'), new ItemStack(Blocks.gravel, 1, 0), Character.valueOf('Z'), dyeOreNames[BlockColored.func_150032_b((int)i)]}));
+            GameRegistry.addRecipe((IRecipe)new ShapedOreRecipe(new ItemStack(LOTRMod.concretePowder, 8, i), new Object[]{"YYY", "ZXX", "XXY", Character.valueOf('X'), new ItemStack((Block)Blocks.sand, 1, 0), Character.valueOf('Y'), new ItemStack(Blocks.gravel, 1, 0), Character.valueOf('Z'), dyeOreNames[BlockColored.func_150032_b((int)i)]}));
+            GameRegistry.addRecipe((IRecipe)new ShapedOreRecipe(new ItemStack(LOTRMod.concretePowder, 8, i), new Object[]{"YYY", "YZX", "XXX", Character.valueOf('X'), new ItemStack((Block)Blocks.sand, 1, 0), Character.valueOf('Y'), new ItemStack(Blocks.gravel, 1, 0), Character.valueOf('Z'), dyeOreNames[BlockColored.func_150032_b((int)i)]}));
+            GameRegistry.addRecipe((IRecipe)new ShapedOreRecipe(new ItemStack(LOTRMod.concretePowder, 8, i), new Object[]{"XYY", "YYZ", "XXX", Character.valueOf('X'), new ItemStack((Block)Blocks.sand, 1, 0), Character.valueOf('Y'), new ItemStack(Blocks.gravel, 1, 0), Character.valueOf('Z'), dyeOreNames[BlockColored.func_150032_b((int)i)]}));
+            GameRegistry.addRecipe((IRecipe)new ShapedOreRecipe(new ItemStack(LOTRMod.concretePowder, 8, i), new Object[]{"XXY", "YYY", "ZXX", Character.valueOf('X'), new ItemStack((Block)Blocks.sand, 1, 0), Character.valueOf('Y'), new ItemStack(Blocks.gravel, 1, 0), Character.valueOf('Z'), dyeOreNames[BlockColored.func_150032_b((int)i)]}));
+            GameRegistry.addRecipe((IRecipe)new ShapedOreRecipe(new ItemStack(LOTRMod.concretePowder, 8, i), new Object[]{"XXX", "YYY", "YZX", Character.valueOf('X'), new ItemStack((Block)Blocks.sand, 1, 0), Character.valueOf('Y'), new ItemStack(Blocks.gravel, 1, 0), Character.valueOf('Z'), dyeOreNames[BlockColored.func_150032_b((int)i)]}));
+        }
         GameRegistry.addRecipe((IRecipe)new ShapedOreRecipe(new ItemStack(LOTRMod.commandHorn), new Object[]{"XYX", Character.valueOf('X'), "ingotBronze", Character.valueOf('Y'), "horn"}));
         GameRegistry.addRecipe((IRecipe)new ShapedOreRecipe(new ItemStack(Items.arrow, 4), new Object[]{"X", "Y", "Z", Character.valueOf('X'), "arrowTip", Character.valueOf('Y'), "stickWood", Character.valueOf('Z'), "feather"}));
         GameRegistry.addRecipe((IRecipe)new ShapedOreRecipe(new ItemStack(LOTRMod.crossbowBolt, 4), new Object[]{"X", "Y", "Z", Character.valueOf('X'), "ingotIron", Character.valueOf('Y'), "stickWood", Character.valueOf('Z'), "feather"}));
@@ -522,6 +536,8 @@ public class LOTRRecipes {
             if (i == 1) continue;
             GameRegistry.addRecipe((IRecipe)new ShapedOreRecipe(new ItemStack(LOTRMod.fence, 3, i), new Object[]{"XYX", "XYX", Character.valueOf('X'), new ItemStack(LOTRMod.planks, 1, i), Character.valueOf('Y'), "stickWood"}));
         }
+        GameRegistry.addShapelessRecipe((ItemStack)new ItemStack(Items.dye, 2, 14), (Object[])new Object[]{new ItemStack(LOTRMod.torchflower, 1, 0)});
+        GameRegistry.addShapelessRecipe((ItemStack)new ItemStack(Items.dye, 2, 6), (Object[])new Object[]{new ItemStack(LOTRMod.doubleFlower, 1, 4)});
         GameRegistry.addShapelessRecipe((ItemStack)new ItemStack(LOTRMod.dye, 2, 0), (Object[])new Object[]{new ItemStack(LOTRMod.doubleFlower, 1, 1)});
         GameRegistry.addRecipe((ItemStack)new ItemStack(LOTRMod.pillar, 3, 3), (Object[])new Object[]{"X", "X", "X", Character.valueOf('X'), new ItemStack(LOTRMod.rock, 1, 3)});
         GameRegistry.addRecipe((ItemStack)new ItemStack(LOTRMod.slabSingle3, 6, 2), (Object[])new Object[]{"XXX", Character.valueOf('X'), new ItemStack(LOTRMod.pillar, 1, 3)});
@@ -1063,6 +1079,22 @@ public class LOTRRecipes {
             GameRegistry.addRecipe((IRecipe)new ShapedOreRecipe(new ItemStack(LOTRMod.stainedGlass, 8, i2), new Object[]{"XXX", "XYX", "XXX", Character.valueOf('X'), LOTRMod.glass, Character.valueOf('Y'), dyeOreNames[BlockColored.func_150031_c((int)i2)]}));
             GameRegistry.addRecipe((IRecipe)new ShapedOreRecipe(new ItemStack(LOTRMod.stainedGlassPane, 16, i2), new Object[]{"XXX", "XXX", Character.valueOf('X'), new ItemStack(LOTRMod.stainedGlass, 1, i2)}));
         }
+        GameRegistry.addRecipe((ItemStack)new ItemStack(LOTRMod.stairsWoolWhite, 6), (Object[])new Object[]{"X  ", "XX ", "XXX", Character.valueOf('X'), new ItemStack(Blocks.wool, 1, 0)});
+        GameRegistry.addRecipe((ItemStack)new ItemStack(LOTRMod.stairsWoolOrange, 6), (Object[])new Object[]{"X  ", "XX ", "XXX", Character.valueOf('X'), new ItemStack(Blocks.wool, 1, 1)});
+        GameRegistry.addRecipe((ItemStack)new ItemStack(LOTRMod.stairsWoolMagenta, 6), (Object[])new Object[]{"X  ", "XX ", "XXX", Character.valueOf('X'), new ItemStack(Blocks.wool, 1, 2)});
+        GameRegistry.addRecipe((ItemStack)new ItemStack(LOTRMod.stairsWoolLightBlue, 6), (Object[])new Object[]{"X  ", "XX ", "XXX", Character.valueOf('X'), new ItemStack(Blocks.wool, 1, 3)});
+        GameRegistry.addRecipe((ItemStack)new ItemStack(LOTRMod.stairsWoolYellow, 6), (Object[])new Object[]{"X  ", "XX ", "XXX", Character.valueOf('X'), new ItemStack(Blocks.wool, 1, 4)});
+        GameRegistry.addRecipe((ItemStack)new ItemStack(LOTRMod.stairsWoolLime, 6), (Object[])new Object[]{"X  ", "XX ", "XXX", Character.valueOf('X'), new ItemStack(Blocks.wool, 1, 5)});
+        GameRegistry.addRecipe((ItemStack)new ItemStack(LOTRMod.stairsWoolPink, 6), (Object[])new Object[]{"X  ", "XX ", "XXX", Character.valueOf('X'), new ItemStack(Blocks.wool, 1, 6)});
+        GameRegistry.addRecipe((ItemStack)new ItemStack(LOTRMod.stairsWoolGray, 6), (Object[])new Object[]{"X  ", "XX ", "XXX", Character.valueOf('X'), new ItemStack(Blocks.wool, 1, 7)});
+        GameRegistry.addRecipe((ItemStack)new ItemStack(LOTRMod.stairsWoolSilver, 6), (Object[])new Object[]{"X  ", "XX ", "XXX", Character.valueOf('X'), new ItemStack(Blocks.wool, 1, 8)});
+        GameRegistry.addRecipe((ItemStack)new ItemStack(LOTRMod.stairsWoolCyan, 6), (Object[])new Object[]{"X  ", "XX ", "XXX", Character.valueOf('X'), new ItemStack(Blocks.wool, 1, 9)});
+        GameRegistry.addRecipe((ItemStack)new ItemStack(LOTRMod.stairsWoolPurple, 6), (Object[])new Object[]{"X  ", "XX ", "XXX", Character.valueOf('X'), new ItemStack(Blocks.wool, 1, 10)});
+        GameRegistry.addRecipe((ItemStack)new ItemStack(LOTRMod.stairsWoolBlue, 6), (Object[])new Object[]{"X  ", "XX ", "XXX", Character.valueOf('X'), new ItemStack(Blocks.wool, 1, 11)});
+        GameRegistry.addRecipe((ItemStack)new ItemStack(LOTRMod.stairsWoolBrown, 6), (Object[])new Object[]{"X  ", "XX ", "XXX", Character.valueOf('X'), new ItemStack(Blocks.wool, 1, 12)});
+        GameRegistry.addRecipe((ItemStack)new ItemStack(LOTRMod.stairsWoolGreen, 6), (Object[])new Object[]{"X  ", "XX ", "XXX", Character.valueOf('X'), new ItemStack(Blocks.wool, 1, 13)});
+        GameRegistry.addRecipe((ItemStack)new ItemStack(LOTRMod.stairsWoolRed, 6), (Object[])new Object[]{"X  ", "XX ", "XXX", Character.valueOf('X'), new ItemStack(Blocks.wool, 1, 14)});
+        GameRegistry.addRecipe((ItemStack)new ItemStack(LOTRMod.stairsWoolBlack, 6), (Object[])new Object[]{"X  ", "XX ", "XXX", Character.valueOf('X'), new ItemStack(Blocks.wool, 1, 15)});
         GameRegistry.addRecipe((ItemStack)new ItemStack(LOTRMod.rope, 3), (Object[])new Object[]{"X", "X", "X", Character.valueOf('X'), Items.string});
         GameRegistry.addRecipe((ItemStack)new ItemStack(LOTRMod.mithrilMail, 8), (Object[])new Object[]{"XX", "XX", Character.valueOf('X'), LOTRMod.mithril});
         GameRegistry.addRecipe((ItemStack)new ItemStack(LOTRMod.mithril, 2), (Object[])new Object[]{"XX", "XX", Character.valueOf('X'), LOTRMod.mithrilMail});
@@ -1187,6 +1219,20 @@ public class LOTRRecipes {
         GameRegistry.addRecipe((IRecipe)new ShapedOreRecipe(new ItemStack(LOTRMod.trapdoorKanuka, 2), new Object[]{"XXX", "XXX", Character.valueOf('X'), new ItemStack(LOTRMod.planks3, 1, 5)}));
         GameRegistry.addRecipe((IRecipe)new ShapedOreRecipe(new ItemStack(LOTRMod.trapdoorRotten, 2), new Object[]{"XXX", "XXX", Character.valueOf('X'), new ItemStack(LOTRMod.planksRotten, 1, 0)}));
         GameRegistry.addShapelessRecipe((ItemStack)new ItemStack(Items.dye, 1, 5), (Object[])new Object[]{LOTRMod.lavender});
+        GameRegistry.addRecipe((IRecipe)new ShapedOreRecipe(new ItemStack(LOTRMod.slabSingle122, 6, 6), new Object[]{"XXX", Character.valueOf('X'), new ItemStack(LOTRMod.brick11, 1, 0)}));
+        GameRegistry.addRecipe((IRecipe)new ShapedOreRecipe(new ItemStack(LOTRMod.slabSingle122, 6, 7), new Object[]{"XXX", Character.valueOf('X'), new ItemStack(LOTRMod.brick11, 1, 1)}));
+        GameRegistry.addRecipe((IRecipe)new ShapedOreRecipe(new ItemStack(LOTRMod.slabSingle121, 6, 7), new Object[]{"XXX", Character.valueOf('X'), new ItemStack(LOTRMod.brick11, 1, 2)}));
+        GameRegistry.addRecipe((ItemStack)new ItemStack(LOTRMod.stairsPrismarine, 4), (Object[])new Object[]{"X  ", "XX ", "XXX", Character.valueOf('X'), new ItemStack(LOTRMod.brick11, 1, 0)});
+        GameRegistry.addRecipe((ItemStack)new ItemStack(LOTRMod.stairsbrickPrismarine, 4), (Object[])new Object[]{"X  ", "XX ", "XXX", Character.valueOf('X'), new ItemStack(LOTRMod.brick11, 1, 1)});
+        GameRegistry.addRecipe((ItemStack)new ItemStack(LOTRMod.stairsbrickDarkPrismarine, 4), (Object[])new Object[]{"X  ", "XX ", "XXX", Character.valueOf('X'), new ItemStack(LOTRMod.brick11, 1, 2)});
+        GameRegistry.addRecipe((IRecipe)new ShapedOreRecipe(new ItemStack(LOTRMod.wallStone10, 6, 3), new Object[]{"XXX", "XXX", Character.valueOf('X'), new ItemStack(LOTRMod.brick11, 1, 0)}));
+        GameRegistry.addRecipe((IRecipe)new ShapedOreRecipe(new ItemStack(LOTRMod.wallStone10, 6, 4), new Object[]{"XXX", "XXX", Character.valueOf('X'), new ItemStack(LOTRMod.brick11, 1, 1)}));
+        GameRegistry.addRecipe((IRecipe)new ShapedOreRecipe(new ItemStack(LOTRMod.wallStone10, 6, 5), new Object[]{"XXX", "XXX", Character.valueOf('X'), new ItemStack(LOTRMod.brick11, 1, 2)}));
+        GameRegistry.addRecipe((ItemStack)new ItemStack(LOTRMod.brick11, 4, 2), (Object[])new Object[]{" x ", "xyx", " x ", Character.valueOf('x'), LOTRMod.prismarineShard, Character.valueOf('y'), new ItemStack(Items.dye, 1, 0)});
+        GameRegistry.addShapelessRecipe((ItemStack)new ItemStack(LOTRMod.brick11, 4, 0), (Object[])new Object[]{LOTRMod.prismarineShard, LOTRMod.prismarineShard, LOTRMod.prismarineShard, LOTRMod.prismarineShard});
+        GameRegistry.addRecipe((ItemStack)new ItemStack(LOTRMod.brick11, 4, 1), (Object[])new Object[]{"xxx", "xxx", "xxx", Character.valueOf('x'), LOTRMod.prismarineShard});
+        GameRegistry.addRecipe((ItemStack)new ItemStack(LOTRMod.seaLantern, 1), (Object[])new Object[]{"YXY", "XXX", "YXY", Character.valueOf('X'), new ItemStack(LOTRMod.prismarineCrystals, 1, 0), Character.valueOf('Y'), new ItemStack(LOTRMod.prismarineShard, 1, 0)});
+        GameRegistry.addRecipe((IRecipe)new ShapedOreRecipe(new ItemStack(LOTRMod.scaffolding_block, 6), new Object[]{"XZX", "XXX", "X X", Character.valueOf('X'), "stickWood", Character.valueOf('Z'), Items.string}));
     }
 
     private static void createPoisonedDaggerRecipes() {
@@ -1520,6 +1566,15 @@ public class LOTRRecipes {
         LOTRRecipes.addRecipeTo(commonDwarfRecipes, (IRecipe)new ShapedOreRecipe(new ItemStack(LOTRMod.dwarvenForge), new Object[]{"XXX", "X X", "XXX", Character.valueOf('X'), new ItemStack(LOTRMod.brick, 1, 6)}));
         LOTRRecipes.addRecipeTo(commonDwarfRecipes, (IRecipe)new ShapedOreRecipe(new ItemStack(LOTRMod.slabSingle2, 6, 0), new Object[]{"XXX", Character.valueOf('X'), new ItemStack(LOTRMod.pillar, 1, 0)}));
         LOTRRecipes.addRecipeTo(commonDwarfRecipes, (IRecipe)new ShapedOreRecipe(new ItemStack(LOTRMod.dwarvenDoor), new Object[]{"XX", "XX", "XX", Character.valueOf('X'), Blocks.stone}));
+        LOTRRecipes.addRecipeTo(commonDwarfRecipes, (IRecipe)new ShapedOreRecipe(new ItemStack(LOTRMod.dwarvenDoor1), new Object[]{"XX", "XX", "XX", Character.valueOf('X'), new ItemStack(LOTRMod.rock, 1, 0)}));
+        LOTRRecipes.addRecipeTo(commonDwarfRecipes, (IRecipe)new ShapedOreRecipe(new ItemStack(LOTRMod.dwarvenDoor2), new Object[]{"XX", "XX", "XX", Character.valueOf('X'), new ItemStack(LOTRMod.rock, 1, 1)}));
+        LOTRRecipes.addRecipeTo(commonDwarfRecipes, (IRecipe)new ShapedOreRecipe(new ItemStack(LOTRMod.dwarvenDoor3), new Object[]{"XX", "XX", "XX", Character.valueOf('X'), new ItemStack(LOTRMod.rock, 1, 2)}));
+        LOTRRecipes.addRecipeTo(commonDwarfRecipes, (IRecipe)new ShapedOreRecipe(new ItemStack(LOTRMod.dwarvenDoor4), new Object[]{"XX", "XX", "XX", Character.valueOf('X'), new ItemStack(LOTRMod.rock, 1, 3)}));
+        LOTRRecipes.addRecipeTo(commonDwarfRecipes, (IRecipe)new ShapedOreRecipe(new ItemStack(LOTRMod.dwarvenDoor5), new Object[]{"XX", "XX", "XX", Character.valueOf('X'), new ItemStack(LOTRMod.rock, 1, 4)}));
+        LOTRRecipes.addRecipeTo(commonDwarfRecipes, (IRecipe)new ShapedOreRecipe(new ItemStack(LOTRMod.dwarvenDoor6), new Object[]{"XX", "XX", "XX", Character.valueOf('X'), new ItemStack(LOTRMod.rock, 1, 5)}));
+        LOTRRecipes.addRecipeTo(commonDwarfRecipes, (IRecipe)new ShapedOreRecipe(new ItemStack(LOTRMod.dwarvenDoor7), new Object[]{"XX", "XX", "XX", Character.valueOf('X'), new ItemStack(LOTRMod.rock, 1, 6)}));
+        LOTRRecipes.addRecipeTo(commonDwarfRecipes, (IRecipe)new ShapedOreRecipe(new ItemStack(LOTRMod.dwarvenDoor8), new Object[]{"XX", "XX", "XX", Character.valueOf('X'), new ItemStack(LOTRMod.rock, 1, 7)}));
+        LOTRRecipes.addRecipeTo(commonDwarfRecipes, (IRecipe)new ShapedOreRecipe(new ItemStack(LOTRMod.dwarvenDoor9), new Object[]{"XX", "XX", "XX", Character.valueOf('X'), new ItemStack(LOTRMod.rock, 1, 8)}));
         LOTRRecipes.addRecipeTo(commonDwarfRecipes, (IRecipe)new ShapedOreRecipe(new ItemStack(LOTRMod.dwarvenDoorIthildin), new Object[]{"XX", "XY", "XX", Character.valueOf('X'), Blocks.stone, Character.valueOf('Y'), new ItemStack(LOTRMod.ithildin, 1, 0)}));
         LOTRRecipes.addRecipeTo(commonDwarfRecipes, (IRecipe)new ShapedOreRecipe(new ItemStack(LOTRMod.dwarvenBedItem), new Object[]{"XXX", "YYY", Character.valueOf('X'), Blocks.wool, Character.valueOf('Y'), "plankWood"}));
         LOTRRecipes.addRecipeTo(commonDwarfRecipes, (IRecipe)new ShapedOreRecipe(new ItemStack(LOTRMod.brick, 1, 8), new Object[]{" X ", "XYX", " X ", Character.valueOf('X'), "nuggetSilver", Character.valueOf('Y'), new ItemStack(LOTRMod.brick, 1, 6)}));
@@ -2340,6 +2395,7 @@ public class LOTRRecipes {
         blueMountainsRecipes.add((IRecipe)new ShapedOreRecipe(new ItemStack(LOTRMod.helmetBlueDwarvenSilverCommander), new Object[]{"X", "Y", Character.valueOf('Y'), LOTRMod.bdsilverhelmet, Character.valueOf('X'), LOTRMod.swanFeather}));
         blueMountainsRecipes.add((IRecipe)new ShapedOreRecipe(new ItemStack(LOTRMod.boarArmorBlueDwarvenGold), new Object[]{"XXX", "XYX", "XXX", Character.valueOf('X'), Items.gold_nugget, Character.valueOf('Y'), LOTRMod.boarArmorBlueDwarven}));
         blueMountainsRecipes.add((IRecipe)new ShapedOreRecipe(new ItemStack(LOTRMod.boarArmorBlueDwarvenSilver), new Object[]{"XXX", "XYX", "XXX", Character.valueOf('X'), LOTRMod.silverNugget, Character.valueOf('Y'), LOTRMod.boarArmorBlueDwarven}));
+        blueMountainsRecipes.add((IRecipe)new ShapedOreRecipe(new ItemStack(LOTRMod.brick8, 1, 2), new Object[]{" X ", "XYX", " X ", Character.valueOf('X'), Items.glowstone_dust, Character.valueOf('Y'), new ItemStack(LOTRMod.brick, 1, 14)}));
     }
 
     private static void createRangerRecipes() {
@@ -2413,7 +2469,7 @@ public class LOTRRecipes {
         dolGuldurRecipes.add((IRecipe)new ShapedOreRecipe(new ItemStack(LOTRMod.hammerDolGuldurUruk), new Object[]{"XYX", "XYX", " Y ", Character.valueOf('X'), LOTRMod.urukSteel, Character.valueOf('Y'), "stickWood"}));
         dolGuldurRecipes.add((IRecipe)new ShapedOreRecipe(new ItemStack(LOTRMod.pikeDolGuldurUruk), new Object[]{"  X", " YX", "Y  ", Character.valueOf('X'), LOTRMod.urukSteel, Character.valueOf('Y'), "stickWood"}));
         dolGuldurRecipes.add((IRecipe)new ShapedOreRecipe(new ItemStack(LOTRMod.DolGuldurUrukBow), new Object[]{" XY", "X Y", " XY", Character.valueOf('X'), LOTRMod.urukSteel, Character.valueOf('Y'), Items.string}));
-        dolGuldurRecipes.add((IRecipe)new ShapedOreRecipe(new ItemStack(LOTRMod.arrowPoisoned2, 4), new Object[]{" X ", "XYX", " X ", Character.valueOf('X'), Items.arrow, Character.valueOf('Y'), new ItemStack(LOTRMod.mugPoison, 1, 4)}));
+        dolGuldurRecipes.add((IRecipe)new ShapedOreRecipe(new ItemStack(LOTRMod.arrowMorgul, 4), new Object[]{" X ", "XYX", " X ", Character.valueOf('X'), Items.arrow, Character.valueOf('Y'), new ItemStack(LOTRMod.mugPoison, 1, 4)}));
         dolGuldurRecipes.add((IRecipe)new ShapedOreRecipe(new ItemStack(LOTRMod.twoHandedSwordDolGuldur), new Object[]{"  X", "XX ", "YX ", Character.valueOf('X'), LOTRMod.orcSteel, Character.valueOf('Y'), "stickWood"}));
         dolGuldurRecipes.add((IRecipe)new ShapedOreRecipe(new ItemStack(LOTRMod.helmetguldururukberserk), new Object[]{"XXX", "X X", Character.valueOf('X'), LOTRMod.morgulSteel}));
         dolGuldurRecipes.add((IRecipe)new ShapedOreRecipe(new ItemStack(LOTRMod.bodyguldururukberserk), new Object[]{"X X", "XXX", "XXX", Character.valueOf('X'), LOTRMod.morgulSteel}));
@@ -2550,7 +2606,8 @@ public class LOTRRecipes {
         tauredainRecipes.add((IRecipe)new ShapedOreRecipe(new ItemStack(LOTRMod.helmetTauredainChieftain), new Object[]{"X", "Y", Character.valueOf('X'), new ItemStack(LOTRMod.doubleFlower, 1, 3), Character.valueOf('Y'), new ItemStack(LOTRMod.helmetTauredain, 1, 0)}));
         tauredainRecipes.add((IRecipe)new ShapedOreRecipe(new ItemStack(LOTRMod.tauredainBlowgun), new Object[]{"XYY", Character.valueOf('X'), "stickWood", Character.valueOf('Y'), LOTRMod.reeds}));
         tauredainRecipes.add((IRecipe)new ShapedOreRecipe(new ItemStack(LOTRMod.tauredainDart, 4), new Object[]{"X", "Y", "Z", Character.valueOf('X'), LOTRMod.obsidianShard, Character.valueOf('Y'), "stickWood", Character.valueOf('Z'), "feather"}));
-        tauredainRecipes.add((IRecipe)new ShapedOreRecipe(new ItemStack(LOTRMod.tauredainDartPoisoned, 4), new Object[]{" X ", "XYX", " X ", Character.valueOf('X'), LOTRMod.tauredainDart, Character.valueOf('Y'), "poison"}));
+        tauredainRecipes.add((IRecipe)new ShapedOreRecipe(new ItemStack(LOTRMod.tauredainDartPoisoned, 8), new Object[]{"XXX", "XYX", "XXX", Character.valueOf('X'), LOTRMod.tauredainDart, Character.valueOf('Y'), "poison"}));
+        tauredainRecipes.add((IRecipe)new ShapedOreRecipe(new ItemStack(LOTRMod.tauredainDartDrunk, 8), new Object[]{"XXX", "XYX", "XXX", Character.valueOf('X'), LOTRMod.tauredainDart, Character.valueOf('Y'), new ItemStack(LOTRMod.mugAlcohol1000, 1, 4)}));
         tauredainRecipes.add((IRecipe)new ShapedOreRecipe(new ItemStack(LOTRMod.tauredainDartTrap), new Object[]{"XXX", "XYX", "XXX", Character.valueOf('X'), new ItemStack(LOTRMod.brick4, 1, 0), Character.valueOf('Y'), new ItemStack(LOTRMod.tauredainBlowgun, 1, 0)}));
         tauredainRecipes.add((IRecipe)new ShapedOreRecipe(new ItemStack(LOTRMod.pillar, 3, 14), new Object[]{"X", "X", "X", Character.valueOf('X'), Blocks.stone}));
         tauredainRecipes.add((IRecipe)new ShapedOreRecipe(new ItemStack(LOTRMod.slabSingle8, 6, 5), new Object[]{"XXX", Character.valueOf('X'), new ItemStack(LOTRMod.pillar, 1, 14)}));
@@ -2569,6 +2626,7 @@ public class LOTRRecipes {
     }
 
     private static void createDaleRecipes() {
+        daleRecipes.add((IRecipe)new ShapedOreRecipe(new ItemStack(LOTRMod.bardBow), new Object[]{"  X", " YS", "ZSS", Character.valueOf('X'), new ItemStack(LOTRMod.bowPart, 1, 0), Character.valueOf('Y'), new ItemStack(LOTRMod.bowPart, 1, 1), Character.valueOf('Z'), new ItemStack(LOTRMod.bowPart, 1, 2), Character.valueOf('S'), new ItemStack(Items.string, 1, 0)}));
         daleRecipes.add((IRecipe)new ShapedOreRecipe(new ItemStack(LOTRMod.daleTable), new Object[]{"XX", "XX", Character.valueOf('X'), "plankWood"}));
         daleRecipes.add((IRecipe)new ShapedOreRecipe(new ItemStack(LOTRMod.banner, 1, LOTRItemBanner.BannerType.DALE.bannerID), new Object[]{"X", "Y", "Z", Character.valueOf('X'), Blocks.wool, Character.valueOf('Y'), "stickWood", Character.valueOf('Z'), "plankWood"}));
         daleRecipes.add((IRecipe)new ShapedOreRecipe(new ItemStack(LOTRMod.brick5, 4, 1), new Object[]{"XX", "XX", Character.valueOf('X'), Blocks.stone}));
@@ -2609,6 +2667,7 @@ public class LOTRRecipes {
     }
 
     private static void createereborRecipes() {
+        ereborRecipes.add((IRecipe)new ShapedOreRecipe(new ItemStack(LOTRMod.arrowDragon, 1), new Object[]{" X ", "XYX", " X ", Character.valueOf('X'), Items.arrow, Character.valueOf('Y'), LOTRMod.DragonTalon}));
         ereborRecipes.add((IRecipe)new ShapedOreRecipe(new ItemStack(LOTRMod.erebortable), new Object[]{"XX", "YY", Character.valueOf('X'), "plankWood", Character.valueOf('Y'), new ItemStack(LOTRMod.brick, 1, 6)}));
         ereborRecipes.add((IRecipe)new ShapedOreRecipe(new ItemStack(LOTRMod.shovelDwarven), new Object[]{"X", "Y", "Y", Character.valueOf('X'), LOTRMod.dwarfSteel, Character.valueOf('Y'), "stickWood"}));
         ereborRecipes.add((IRecipe)new ShapedOreRecipe(new ItemStack(LOTRMod.pickaxeDwarven), new Object[]{"XXX", " Y ", " Y ", Character.valueOf('X'), LOTRMod.dwarfSteel, Character.valueOf('Y'), "stickWood"}));

@@ -4,30 +4,28 @@
  * Could not load the following classes:
  *  cpw.mods.fml.relauncher.Side
  *  cpw.mods.fml.relauncher.SideOnly
- *  net.minecraft.client.Minecraft
  *  net.minecraft.entity.EntityLivingBase
+ *  net.minecraft.item.Item
  *  net.minecraft.item.ItemStack
  *  net.minecraft.potion.Potion
- *  net.minecraft.potion.PotionEffect
  *  net.minecraft.util.ResourceLocation
  */
 package lotr.common;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import lotr.common.LOTRCommonProxy;
 import lotr.common.LOTRCustomPotion;
 import lotr.common.LOTRMod;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
-import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ResourceLocation;
 
 public class LOTRPotionRepair
 extends LOTRCustomPotion {
-    public static int repairTime = 80;
+    public static int repairTime = 120;
+    private static final Item[] repairExceptions = new Item[]{LOTRMod.totemOfUndyingPlus, LOTRMod.magicCloverPlus};
 
     public LOTRPotionRepair(int id, boolean isBadEffect, int potionColor, ResourceLocation tex, String namePot) {
         super(32, false, 7829367, tex, namePot);
@@ -44,23 +42,25 @@ extends LOTRCustomPotion {
         if (entity.ticksExisted % repairTime == 0) {
             for (int i = 0; i < 5; ++i) {
                 ItemStack stack = entity.getEquipmentInSlot(i);
-                if (stack == null || !stack.isItemStackDamageable() || stack.getItemDamage() <= 0) continue;
-                int damage = Math.max(0, stack.getItemDamage() - (amplifier + 1));
+                if (stack == null || !stack.isItemStackDamageable() || stack.getItemDamage() <= 0 || this.isInRepairExceptions(stack.getItem())) continue;
+                int damage = Math.max(0, stack.getItemDamage() - 3);
                 stack.setItemDamage(damage);
             }
         }
     }
 
-    @SideOnly(value=Side.CLIENT)
-    @Override
-    public boolean hasStatusIcon() {
+    private boolean isInRepairExceptions(Item item) {
+        for (Item exception : repairExceptions) {
+            if (item != exception) continue;
+            return true;
+        }
         return false;
     }
 
     @SideOnly(value=Side.CLIENT)
     @Override
-    public void renderInventoryEffect(int x, int y, PotionEffect effect, Minecraft mc) {
-        LOTRMod.proxy.renderCustomPotionEffect(x, y, effect, mc);
+    public int getStatusIconIndex() {
+        return 0;
     }
 }
 

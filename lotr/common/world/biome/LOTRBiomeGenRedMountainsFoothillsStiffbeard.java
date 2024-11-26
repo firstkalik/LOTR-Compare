@@ -13,6 +13,9 @@ import lotr.common.LOTRAchievement;
 import lotr.common.world.biome.LOTRBiomeDecorator;
 import lotr.common.world.biome.LOTRBiomeGenRedMountainsStiffbeard;
 import lotr.common.world.biome.variant.LOTRBiomeVariant;
+import lotr.common.world.spawning.LOTRBiomeInvasionSpawns;
+import lotr.common.world.spawning.LOTREventSpawner;
+import lotr.common.world.spawning.LOTRInvasions;
 import lotr.common.world.structure2.LOTRWorldGenDwarvenMineEntranceRuined2;
 import lotr.common.world.structure2.LOTRWorldGenRedMountainsHouseStiffbeard;
 import lotr.common.world.structure2.LOTRWorldGenRedMountainsSmithy;
@@ -31,6 +34,7 @@ extends LOTRBiomeGenRedMountainsStiffbeard {
         this.decorator.addRandomStructure(new LOTRWorldGenRedMountainsSmithy(false), 300);
         this.decorator.addRandomStructure(new LOTRWorldGenDwarvenMineEntranceRuined2(false), 200);
         this.decorator.addRandomStructure(new LOTRWorldGenRedMountainsSmithy2(false), 200);
+        this.invasionSpawns.addInvasion(LOTRInvasions.RHUN, LOTREventSpawner.EventChance.RARE);
     }
 
     @Override

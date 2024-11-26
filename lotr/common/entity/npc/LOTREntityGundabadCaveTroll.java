@@ -2,12 +2,15 @@
  * Decompiled with CFR 0.148.
  * 
  * Could not load the following classes:
+ *  net.minecraft.block.Block
+ *  net.minecraft.block.BlockGrass
  *  net.minecraft.entity.Entity
  *  net.minecraft.entity.EntityLivingBase
  *  net.minecraft.entity.SharedMonsterAttributes
  *  net.minecraft.entity.ai.attributes.IAttribute
  *  net.minecraft.entity.ai.attributes.IAttributeInstance
  *  net.minecraft.entity.player.EntityPlayer
+ *  net.minecraft.init.Blocks
  *  net.minecraft.potion.Potion
  *  net.minecraft.potion.PotionEffect
  *  net.minecraft.util.AxisAlignedBB
@@ -18,15 +21,19 @@
 package lotr.common.entity.npc;
 
 import lotr.common.LOTRAchievement;
+import lotr.common.LOTRMod;
 import lotr.common.entity.npc.LOTREntityTroll;
 import lotr.common.fac.LOTRFaction;
 import lotr.common.world.biome.LOTRBiome;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockGrass;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.AxisAlignedBB;
@@ -115,6 +122,21 @@ extends LOTREntityTroll {
         this.worldObj.playSoundAtEntity((Entity)this, "lotr:troll.transform", this.getSoundVolume(), this.getSoundPitch());
         this.worldObj.setEntityState((Entity)this, (byte)15);
         this.setDead();
+    }
+
+    @Override
+    public boolean getCanSpawnHere() {
+        int i = MathHelper.floor_double((double)this.posX);
+        int j = MathHelper.floor_double((double)this.boundingBox.minY);
+        int k = MathHelper.floor_double((double)this.posZ);
+        if (this.worldObj.isDaytime() && this.worldObj.canBlockSeeTheSky(i, j, k)) {
+            return false;
+        }
+        BiomeGenBase biome = this.worldObj.getBiomeGenForCoords(i, k);
+        if (!(biome instanceof LOTRBiome && ((LOTRBiome)biome).canSpawnHostilesInDay() || !this.worldObj.isDaytime())) {
+            return false;
+        }
+        return j > 40 && j <= 135 && (this.worldObj.getBlock(i, j - 1, k) == Blocks.stone || this.worldObj.getBlock(i, j - 1, k) == Blocks.snow || this.worldObj.getBlock(i, j - 1, k) == Blocks.grass || this.worldObj.getBlock(i, j - 1, k) == LOTRMod.rock && this.worldObj.getBlockMetadata(i, j - 1, k) == 4 || this.worldObj.getBlock(i, j - 1, k) == LOTRMod.pillar4 && this.worldObj.getBlockMetadata(i, j - 1, k) == 3);
     }
 
     @Override

@@ -232,9 +232,9 @@ public enum LOTRInvasions {
     HIGH_ELF_RIVENDELL(LOTRFaction.HIGH_ELF, "rivendell"),
     GUNDABAD(LOTRFaction.GUNDABAD),
     GUNDABAD_WARG(LOTRFaction.GUNDABAD, "warg"),
-    ANGMAR(LOTRFaction.GUNDABAD, "orcs"),
-    ANGMAR_HILLMEN(LOTRFaction.GUNDABAD, "hillmen"),
-    ANGMAR_WARG(LOTRFaction.GUNDABAD, "wargs"),
+    ANGMAR(LOTRFaction.ANGMAR, "orcs"),
+    ANGMAR_HILLMEN(LOTRFaction.ANGMAR, "hillmen"),
+    ANGMAR_WARG(LOTRFaction.ANGMAR, "wargs"),
     WOOD_ELF(LOTRFaction.WOOD_ELF),
     DOL_GULDUR(LOTRFaction.DOL_GULDUR),
     DOL_GULDUR_URUK(LOTRFaction.DOL_GULDUR),
@@ -279,6 +279,7 @@ public enum LOTRInvasions {
     ANGBAND1(LOTRFaction.UTUMNO, "utumno_spiders"),
     ANGBAND2(LOTRFaction.UTUMNO, "utumno_wargs"),
     DURMETH(LOTRFaction.GUNDABAD, "durmeth"),
+    DURMETH_URUK(LOTRFaction.GUNDABAD, "durmeth_uruk"),
     MORIA(LOTRFaction.GUNDABAD, "moria"),
     DURMETH_WARG(LOTRFaction.GUNDABAD, "durmeth_wargs"),
     AVARI_ELF(LOTRFaction.AVARI),
@@ -608,7 +609,7 @@ public enum LOTRInvasions {
         LOTRInvasions.DURMETH.invasionIcon = LOTRMod.hammerGundabadUruk;
         LOTRInvasions.DURMETH.invasionMobs.add(new InvasionSpawnEntry(LOTREntityDurmethOrc.class, 20));
         LOTRInvasions.DURMETH.invasionMobs.add(new InvasionSpawnEntry(LOTREntityDurmethOrcArcher.class, 15));
-        LOTRInvasions.DURMETH.invasionMobs.add(new InvasionSpawnEntry(LOTREntityDurmethOrcWarrior.class, 15));
+        LOTRInvasions.DURMETH.invasionMobs.add(new InvasionSpawnEntry(LOTREntityDurmethOrcWarrior.class, 10));
         LOTRInvasions.DURMETH.invasionMobs.add(new InvasionSpawnEntry(LOTREntityDurmethOrcWarriorArcher.class, 10));
         LOTRInvasions.DURMETH.invasionMobs.add(new InvasionSpawnEntry(LOTREntityWickedDwarf2.class, 15));
         LOTRInvasions.DURMETH.invasionMobs.add(new InvasionSpawnEntry(LOTREntityDurmethWarg.class, 20));
@@ -617,6 +618,11 @@ public enum LOTRInvasions {
         LOTRInvasions.DURMETH.invasionMobs.add(new InvasionSpawnEntry(LOTREntityGundabadCaveTroll.class, 3));
         LOTRInvasions.DURMETH.invasionMobs.add(new InvasionSpawnEntry(LOTREntityTundraSnowTroll.class, 2));
         LOTRInvasions.DURMETH.invasionMobs.add(new InvasionSpawnEntry(LOTREntitySnowTroll.class, 2));
+        LOTRInvasions.DURMETH_URUK.invasionIcon = LOTRMod.swordGundabadUruk;
+        LOTRInvasions.DURMETH_URUK.invasionMobs.add(new InvasionSpawnEntry(LOTREntityDurmethOrcWarrior.class, 10));
+        LOTRInvasions.DURMETH_URUK.invasionMobs.add(new InvasionSpawnEntry(LOTREntityDurmethOrcWarriorArcher.class, 10));
+        LOTRInvasions.DURMETH_URUK.invasionMobs.add(new InvasionSpawnEntry(LOTREntityDurmethWarriorBannerBearer.class, 3));
+        LOTRInvasions.DURMETH_URUK.invasionMobs.add(new InvasionSpawnEntry(LOTREntityGundabadCaveTroll.class, 3));
         LOTRInvasions.DURMETH_WARG.invasionIcon = LOTRMod.wargBone;
         LOTRInvasions.DURMETH_WARG.invasionMobs.add(new InvasionSpawnEntry(LOTREntityDurmethWarg.class, 10));
         LOTRInvasions.MORIA.invasionIcon = LOTRMod.battleaxeGundabadUruk;

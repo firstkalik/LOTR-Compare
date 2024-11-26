@@ -22,6 +22,7 @@ import lotr.common.entity.animal.LOTREntityHorse;
 import lotr.common.entity.npc.LOTREntityDaleMerchant;
 import lotr.common.entity.npc.LOTREntityDorwinionMerchantElf;
 import lotr.common.entity.npc.LOTREntityDorwinionMerchantMan;
+import lotr.common.entity.npc.LOTREntityEreborDwarfMerchant;
 import lotr.common.entity.npc.LOTREntityGaladhrimTrader;
 import lotr.common.entity.npc.LOTREntityHobbitBartender2;
 import lotr.common.entity.npc.LOTREntityIronHillsMerchant;
@@ -108,6 +109,7 @@ extends LOTRBiome {
         this.decorator.addRandomStructure(new LOTRWorldGenSmallStoneRuin(false), 500);
         this.registerTravellingTrader(LOTREntityGaladhrimTrader.class);
         this.registerTravellingTrader(LOTREntityIronHillsMerchant.class);
+        this.registerTravellingTrader(LOTREntityEreborDwarfMerchant.class);
         this.registerTravellingTrader(LOTREntityScrapTrader.class);
         this.registerTravellingTrader(LOTREntityDorwinionMerchantElf.class);
         this.registerTravellingTrader(LOTREntityDaleMerchant.class);

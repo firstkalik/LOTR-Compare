@@ -94,6 +94,17 @@ extends LOTRItemSword {
         entity.addPotionEffect(poison);
     }
 
+    public static void applyStandardDrunk(EntityLivingBase entity) {
+        EnumDifficulty difficulty = entity.worldObj.difficultySetting;
+        int duration = 1 + difficulty.getDifficultyId() * 2;
+        PotionEffect poison = new PotionEffect(LOTRPotions.drunk.id, (duration + itemRand.nextInt(duration)) * 20);
+        entity.addPotionEffect(poison);
+        PotionEffect nausea = new PotionEffect(Potion.confusion.id, (duration + itemRand.nextInt(duration)) * 20, 10);
+        entity.addPotionEffect(nausea);
+        PotionEffect slowness = new PotionEffect(Potion.moveSlowdown.id, (duration + itemRand.nextInt(duration)) * 20, 1);
+        entity.addPotionEffect(slowness);
+    }
+
     public static void applyStandardPoison1(EntityLivingBase entity) {
         EnumDifficulty difficulty = entity.worldObj.difficultySetting;
         int duration = 1 + difficulty.getDifficultyId() * 2;
@@ -120,7 +131,7 @@ extends LOTRItemSword {
     public static void applyStandardWeak(EntityLivingBase entity) {
         EnumDifficulty difficulty = entity.worldObj.difficultySetting;
         int duration = 1 + difficulty.getDifficultyId() * 2;
-        PotionEffect poison2 = new PotionEffect(LOTRPotions.vulnerability.id, (duration + itemRand.nextInt(duration)) * 20);
+        PotionEffect poison2 = new PotionEffect(LOTRPotions.vulnerability.id, (duration + itemRand.nextInt(duration)) * 40);
         PotionEffect poison21 = new PotionEffect(Potion.weakness.id, (duration + itemRand.nextInt(duration)) * 20);
         entity.addPotionEffect(poison21);
     }
@@ -137,12 +148,10 @@ extends LOTRItemSword {
         EnumDifficulty difficulty = entity.worldObj.difficultySetting;
         int duration = 4 + difficulty.getDifficultyId() * 2;
         int chance = entity.worldObj.rand.nextInt(100);
-        PotionEffect poisonEffect = new PotionEffect(Potion.poison.id, (duration + itemRand.nextInt(duration)) * 20);
         if (chance <= 30) {
-            PotionEffect bloodEffect = new PotionEffect(LOTRPotions.blood.id, (duration + entity.worldObj.rand.nextInt(duration)) * 20);
+            PotionEffect bloodEffect = new PotionEffect(LOTRPotions.blood.id, (duration + entity.worldObj.rand.nextInt(duration)) * 20, 1);
             entity.addPotionEffect(bloodEffect);
         }
-        entity.addPotionEffect(poisonEffect);
     }
 
     public static void applyStandardBlood1(EntityLivingBase entity) {

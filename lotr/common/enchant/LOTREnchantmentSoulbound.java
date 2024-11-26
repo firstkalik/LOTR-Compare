@@ -7,13 +7,13 @@
  *  net.minecraft.nbt.NBTTagCompound
  *  net.minecraft.util.EnumChatFormatting
  *  net.minecraft.util.StatCollector
- *  org.apache.commons.lang3.ArrayUtils
  */
 package lotr.common.enchant;
 
 import java.time.Duration;
 import java.time.Instant;
-import java.util.List;
+import java.util.ArrayList;
+import lotr.common.LOTRMod;
 import lotr.common.enchant.LOTREnchantment;
 import lotr.common.enchant.LOTREnchantmentType;
 import net.minecraft.item.Item;
@@ -21,11 +21,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
-import org.apache.commons.lang3.ArrayUtils;
 
 public class LOTREnchantmentSoulbound
 extends LOTREnchantment {
-    Item[] bannedItems = new Item[0];
     private final int level = 1;
 
     public LOTREnchantmentSoulbound(String s) {
@@ -87,15 +85,57 @@ extends LOTREnchantment {
 
     @Override
     public boolean canApply(ItemStack itemstack, boolean considering) {
-        boolean check = false;
-        for (LOTREnchantmentType type : this.itemTypes) {
-            if (!type.canApply(itemstack, considering)) continue;
-            check = true;
-        }
-        if (ArrayUtils.contains((Object[])this.bannedItems, (Object)itemstack.getItem())) {
-            check = false;
-        }
-        return check;
+        ArrayList<Item> validItems = new ArrayList<Item>();
+        validItems.add(LOTRMod.sting);
+        validItems.add(LOTRMod.ringil);
+        validItems.add(LOTRMod.anduril);
+        validItems.add(LOTRMod.gandalfStaffGrey);
+        validItems.add(LOTRMod.gandalfStaffWhite);
+        validItems.add(LOTRMod.gandalfhat);
+        validItems.add(LOTRMod.gandalfbody);
+        validItems.add(LOTRMod.gandalflegs);
+        validItems.add(LOTRMod.gandalfboots);
+        validItems.add(LOTRMod.radagasthat);
+        validItems.add(LOTRMod.radagastbody);
+        validItems.add(LOTRMod.radagastlegs);
+        validItems.add(LOTRMod.radagastboots);
+        validItems.add(LOTRMod.sarumanhat);
+        validItems.add(LOTRMod.sarumanbody);
+        validItems.add(LOTRMod.sarumanlegs);
+        validItems.add(LOTRMod.sarumanboots);
+        validItems.add(LOTRMod.alatarhat);
+        validItems.add(LOTRMod.alatarbody);
+        validItems.add(LOTRMod.alatarlegs);
+        validItems.add(LOTRMod.alatarboots);
+        validItems.add(LOTRMod.palandohat);
+        validItems.add(LOTRMod.palandobody);
+        validItems.add(LOTRMod.palandolegs);
+        validItems.add(LOTRMod.palandoboots);
+        validItems.add(LOTRMod.glamdring);
+        validItems.add(LOTRMod.grond);
+        validItems.add(LOTRMod.sauronMace);
+        validItems.add(LOTRMod.melkor_sword);
+        validItems.add(LOTRMod.battleaxe_melkor);
+        validItems.add(LOTRMod.radaghaststaff);
+        validItems.add(LOTRMod.sarumanstaff);
+        validItems.add(LOTRMod.alatarstaff);
+        validItems.add(LOTRMod.pallandostaff);
+        validItems.add(LOTRMod.bodyBilbo);
+        validItems.add(LOTRMod.d1);
+        validItems.add(LOTRMod.d2);
+        validItems.add(LOTRMod.d3);
+        validItems.add(LOTRMod.d4);
+        validItems.add(LOTRMod.d5);
+        validItems.add(LOTRMod.d6);
+        validItems.add(LOTRMod.d7);
+        validItems.add(LOTRMod.naria);
+        validItems.add(LOTRMod.nenia);
+        validItems.add(LOTRMod.vilia);
+        validItems.add(LOTRMod.arcenstone);
+        validItems.add(LOTRMod.theOneRing);
+        validItems.add(LOTRMod.h1);
+        validItems.add(LOTRMod.bundle);
+        return validItems.contains((Object)itemstack.getItem());
     }
 }
 

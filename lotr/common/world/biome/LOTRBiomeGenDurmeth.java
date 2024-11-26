@@ -62,8 +62,10 @@ extends LOTRBiome {
         this.npcSpawnList.clear();
         LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer = new LOTRBiomeSpawnList.SpawnListContainer[]{LOTRBiomeSpawnList.entry(LOTRSpawnList.DURMETH_ORCS, 30), LOTRBiomeSpawnList.entry(LOTRSpawnList.DURMETH_WARGS, 30), LOTRBiomeSpawnList.entry(LOTRSpawnList.DURMETH_ORCS_WARRIORS, 20)};
         this.npcSpawnList.newFactionList(100).add(arrspawnListContainer);
-        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer6 = new LOTRBiomeSpawnList.SpawnListContainer[]{LOTRBiomeSpawnList.entry(LOTRSpawnList.BLACKLOCK, 10), LOTRBiomeSpawnList.entry(LOTRSpawnList.STIFFBEARD, 10), LOTRBiomeSpawnList.entry(LOTRSpawnList.STONEFOOT, 10)};
+        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer6 = new LOTRBiomeSpawnList.SpawnListContainer[]{LOTRBiomeSpawnList.entry(LOTRSpawnList.BLACKLOCK, 10), LOTRBiomeSpawnList.entry(LOTRSpawnList.STIFFBEARD, 10), LOTRBiomeSpawnList.entry(LOTRSpawnList.STONEFOOT, 10), LOTRBiomeSpawnList.entry(LOTRSpawnList.IRONFIST, 10)};
         this.npcSpawnList.newFactionList(0).add(arrspawnListContainer6);
+        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer61 = new LOTRBiomeSpawnList.SpawnListContainer[]{LOTRBiomeSpawnList.entry(LOTRSpawnList.AVARI_ELF_WARRIORS, 10)};
+        this.npcSpawnList.newFactionList(0).add(arrspawnListContainer61);
         this.npcSpawnList.conquestGainRate = 0.5f;
         this.addBiomeVariant(LOTRBiomeVariant.FOREST);
         this.addBiomeVariant(LOTRBiomeVariant.FOREST_LIGHT);
@@ -83,10 +85,11 @@ extends LOTRBiome {
         this.decorator.addTree(LOTRTreeType.CHARRED, 150);
         this.decorator.addTree(LOTRTreeType.FIR, 100);
         this.decorator.addTree(LOTRTreeType.PINE, 200);
-        this.biomeColors.setGrass(6908744);
-        this.biomeColors.setSky(2364434);
+        this.biomeColors.setGrass(3820832);
+        this.biomeColors.setSky(0);
         this.biomeColors.setClouds(2364434);
         this.biomeColors.setFog(2364434);
+        this.biomeColors.setFoggy(true);
         this.decorator.addRandomStructure(new LOTRWorldGenDurmethCamp(false), 300);
         this.setBanditChance(LOTREventSpawner.EventChance.BANDIT_RARE);
         this.setBanditEntityClass(LOTREntityBanditRhun.class);

@@ -47,13 +47,76 @@ import java.util.Random;
 import java.util.UUID;
 import lotr.common.LOTRMod;
 import lotr.common.block.LOTRBlockBerryBush;
+import lotr.common.block.LOTRBlockBerryBush2;
 import lotr.common.entity.LOTREntities;
 import lotr.common.entity.LOTRRandomSkinEntity;
 import lotr.common.entity.LOTRScarecrows;
 import lotr.common.entity.animal.LOTRAmbientCreature;
 import lotr.common.entity.animal.LOTRAmbientSpawnChecks;
 import lotr.common.inventory.LOTREntityInventory;
+import lotr.common.item.D1;
+import lotr.common.item.D2;
+import lotr.common.item.D3;
+import lotr.common.item.D4;
+import lotr.common.item.D5;
+import lotr.common.item.D6;
+import lotr.common.item.D7;
+import lotr.common.item.H1;
 import lotr.common.item.LOTRValuableItems;
+import lotr.common.item.Naria;
+import lotr.common.item.Nenia;
+import lotr.common.item.Thorin;
+import lotr.common.item.Vilia;
+import lotr.common.item.arven;
+import lotr.common.item.aule;
+import lotr.common.item.bright;
+import lotr.common.item.elrond;
+import lotr.common.item.elrondsilver;
+import lotr.common.item.este;
+import lotr.common.item.farin;
+import lotr.common.item.haldir;
+import lotr.common.item.irmo;
+import lotr.common.item.khain;
+import lotr.common.item.kibil;
+import lotr.common.item.lesserfire;
+import lotr.common.item.lesserivisible;
+import lotr.common.item.lesserjump;
+import lotr.common.item.lesserlight;
+import lotr.common.item.lessermining;
+import lotr.common.item.lessernightvision;
+import lotr.common.item.lesserpower;
+import lotr.common.item.lesserresistance;
+import lotr.common.item.lessersaturation;
+import lotr.common.item.lesserspeed;
+import lotr.common.item.lesserstrenght;
+import lotr.common.item.lessersuicide;
+import lotr.common.item.lesserwatherbreathing;
+import lotr.common.item.light;
+import lotr.common.item.linhir;
+import lotr.common.item.manve;
+import lotr.common.item.melkor;
+import lotr.common.item.melkor2;
+import lotr.common.item.namo;
+import lotr.common.item.narchuil;
+import lotr.common.item.nessa;
+import lotr.common.item.nienna;
+import lotr.common.item.numenor;
+import lotr.common.item.orome;
+import lotr.common.item.ringBarachir;
+import lotr.common.item.ringShaman;
+import lotr.common.item.ringSmithing;
+import lotr.common.item.sarumanring;
+import lotr.common.item.theOneRing;
+import lotr.common.item.thorinrune;
+import lotr.common.item.thranduilmithril;
+import lotr.common.item.thranduilsilver;
+import lotr.common.item.thranduilsnake;
+import lotr.common.item.tulkas;
+import lotr.common.item.ulmo;
+import lotr.common.item.vaire;
+import lotr.common.item.vana;
+import lotr.common.item.varda;
+import lotr.common.item.yavanna;
 import lotr.common.world.biome.LOTRBiomeGenFarHarad;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockCrops;
@@ -205,7 +268,16 @@ LOTRRandomSkinEntity {
             return item instanceof IPlantable && ((IPlantable)item).getPlantType((IBlockAccess)this.worldObj, -1, -1, -1) == EnumPlantType.Crop;
         }
         if (type == BirdType.CROW) {
-            return item instanceof ItemFood || LOTRMod.isOreNameEqual(itemstack, "bone");
+            if (item instanceof ItemFood || LOTRMod.isOreNameEqual(itemstack, "bone")) {
+                return true;
+            }
+            Class[] stealableItems = new Class[]{theOneRing.class, ringBarachir.class, ringShaman.class, ringSmithing.class, Vilia.class, Nenia.class, Naria.class, D1.class, D2.class, D3.class, D4.class, D5.class, D6.class, D7.class, H1.class, sarumanring.class, elrond.class, elrondsilver.class, narchuil.class, numenor.class, Thorin.class, thorinrune.class, arven.class, thranduilsilver.class, thranduilsnake.class, thranduilmithril.class, lesserfire.class, lesserivisible.class, lesserjump.class, lesserlight.class, lessernightvision.class, lesserpower.class, lessermining.class, lessersaturation.class, lesserresistance.class, lesserspeed.class, lesserstrenght.class, lesserwatherbreathing.class, lessersuicide.class, aule.class, este.class, irmo.class, manve.class, melkor.class, melkor2.class, namo.class, nessa.class, nienna.class, orome.class, tulkas.class, ulmo.class, vaire.class, vana.class, varda.class, yavanna.class, light.class, linhir.class, farin.class, haldir.class, khain.class, bright.class, kibil.class};
+            if (this.getStolenItem() == null || this.getStolenItem().stackSize <= 0) {
+                for (Class stealableItem : stealableItems) {
+                    if (!item.getClass().equals((Object)stealableItem)) continue;
+                    return true;
+                }
+            }
         }
         if (type == BirdType.MAGPIE) {
             return LOTRValuableItems.canMagpieSteal(itemstack);
@@ -218,7 +290,10 @@ LOTRRandomSkinEntity {
     }
 
     public void setStolenItem(ItemStack itemstack) {
-        this.setCurrentItemOrArmor(4, itemstack);
+        ItemStack currentStolenItem = this.getStolenItem();
+        if (currentStolenItem == null || currentStolenItem.stackSize <= 0) {
+            this.setCurrentItemOrArmor(4, itemstack);
+        }
     }
 
     public void onUpdate() {
@@ -499,9 +574,12 @@ LOTRRandomSkinEntity {
         if (block instanceof BlockCrops) {
             return true;
         }
-        if (block instanceof LOTRBlockBerryBush) {
+        if (block instanceof LOTRBlockBerryBush || block instanceof LOTRBlockBerryBush2) {
             int meta = this.worldObj.getBlockMetadata(i, j, k);
-            return LOTRBlockBerryBush.hasBerries(meta);
+            if (block instanceof LOTRBlockBerryBush) {
+                return LOTRBlockBerryBush.hasBerries(meta);
+            }
+            return LOTRBlockBerryBush2.hasBerries(meta);
         }
         return false;
     }
@@ -511,6 +589,10 @@ LOTRRandomSkinEntity {
         if (block instanceof LOTRBlockBerryBush) {
             int meta = this.worldObj.getBlockMetadata(i, j, k);
             meta = LOTRBlockBerryBush.setHasBerries(meta, false);
+            this.worldObj.setBlockMetadataWithNotify(i, j, k, meta, 3);
+        } else if (block instanceof LOTRBlockBerryBush2) {
+            int meta = this.worldObj.getBlockMetadata(i, j, k);
+            meta = LOTRBlockBerryBush2.setHasBerries(meta, false);
             this.worldObj.setBlockMetadataWithNotify(i, j, k, meta, 3);
         } else {
             this.worldObj.setBlockToAir(i, j, k);

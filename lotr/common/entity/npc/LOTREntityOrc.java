@@ -21,6 +21,7 @@
  *  net.minecraft.entity.ai.attributes.IAttribute
  *  net.minecraft.entity.ai.attributes.IAttributeInstance
  *  net.minecraft.entity.item.EntityItem
+ *  net.minecraft.entity.passive.EntitySheep
  *  net.minecraft.entity.player.EntityPlayer
  *  net.minecraft.init.Items
  *  net.minecraft.item.Item
@@ -50,6 +51,8 @@ import lotr.common.entity.ai.LOTREntityAINearestAttackableTargetBasic;
 import lotr.common.entity.ai.LOTREntityAINearestAttackableTargetOrc;
 import lotr.common.entity.ai.LOTREntityAIOrcAvoidGoodPlayer;
 import lotr.common.entity.ai.LOTREntityAIOrcSkirmish;
+import lotr.common.entity.animal.LOTREntityDeer;
+import lotr.common.entity.animal.LOTREntityHorse;
 import lotr.common.entity.animal.LOTREntityRabbit;
 import lotr.common.entity.item.LOTREntityOrcBomb;
 import lotr.common.entity.npc.LOTREntityBlackUruk;
@@ -82,6 +85,7 @@ import net.minecraft.entity.ai.EntityAIWatchClosest2;
 import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -126,6 +130,9 @@ extends LOTREntityNPC {
         this.targetTasks.addTask(target + 1, (EntityAIBase)new LOTREntityAIOrcSkirmish(this, true));
         if (!this.isOrcBombardier()) {
             this.targetTasks.addTask(target + 2, (EntityAIBase)new LOTREntityAINearestAttackableTargetOrc(this, LOTREntityRabbit.class, 2000, false));
+            this.targetTasks.addTask(target + 2, (EntityAIBase)new LOTREntityAINearestAttackableTargetOrc(this, EntitySheep.class, 2000, false));
+            this.targetTasks.addTask(target + 2, (EntityAIBase)new LOTREntityAINearestAttackableTargetOrc(this, LOTREntityDeer.class, 2000, false));
+            this.targetTasks.addTask(target + 2, (EntityAIBase)new LOTREntityAINearestAttackableTargetOrc(this, LOTREntityHorse.class, 2000, false));
         }
         this.spawnsInDarkness = true;
     }

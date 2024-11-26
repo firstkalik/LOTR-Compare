@@ -58,8 +58,12 @@ extends LOTRBiome {
         this.npcSpawnList.newFactionList(100).add(arrspawnListContainer);
         LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer2 = new LOTRBiomeSpawnList.SpawnListContainer[]{LOTRBiomeSpawnList.entry(LOTRSpawnList.DURMETH_ORCS, 10), LOTRBiomeSpawnList.entry(LOTRSpawnList.DURMETH_WARGS, 2)};
         this.npcSpawnList.newFactionList(0).add(arrspawnListContainer2);
-        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer4 = new LOTRBiomeSpawnList.SpawnListContainer[]{LOTRBiomeSpawnList.entry(LOTRSpawnList.MORDOR_ORCS, 10), LOTRBiomeSpawnList.entry(LOTRSpawnList.MORDOR_WARGS, 2), LOTRBiomeSpawnList.entry(LOTRSpawnList.BLACK_URUKS, 2).setConquestThreshold(50.0f), LOTRBiomeSpawnList.entry(LOTRSpawnList.OLOG_HAI, 1).setConquestThreshold(200.0f)};
-        this.npcSpawnList.newFactionList(0).add(arrspawnListContainer4);
+        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer3 = new LOTRBiomeSpawnList.SpawnListContainer[]{LOTRBiomeSpawnList.entry(LOTRSpawnList.DURMETH_ORCS, 10), LOTRBiomeSpawnList.entry(LOTRSpawnList.DURMETH_WARGS, 3), LOTRBiomeSpawnList.entry(LOTRSpawnList.CAVE, 3).setConquestThreshold(200.0f), LOTRBiomeSpawnList.entry(LOTRSpawnList.DURMETH_ORCS_WARRIORS, 5).setConquestThreshold(100.0f)};
+        this.npcSpawnList.newFactionList(0).add(arrspawnListContainer3);
+        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer61 = new LOTRBiomeSpawnList.SpawnListContainer[]{LOTRBiomeSpawnList.entry(LOTRSpawnList.EASTERLINGS, 2).setConquestThreshold(100.0f), LOTRBiomeSpawnList.entry(LOTRSpawnList.EASTERLING_WARRIORS, 10), LOTRBiomeSpawnList.entry(LOTRSpawnList.EASTERLING_GOLD_WARRIORS, 2).setConquestThreshold(50.0f)};
+        this.npcSpawnList.newFactionList(0).add(arrspawnListContainer61);
+        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer31 = new LOTRBiomeSpawnList.SpawnListContainer[]{LOTRBiomeSpawnList.entry(LOTRSpawnList.MORDOR_ORCS, 20).setConquestThreshold(50.0f), LOTRBiomeSpawnList.entry(LOTRSpawnList.MORDOR_BOMBARDIERS, 1).setConquestThreshold(50.0f), LOTRBiomeSpawnList.entry(LOTRSpawnList.MORDOR_WARGS, 4).setConquestThreshold(50.0f), LOTRBiomeSpawnList.entry(LOTRSpawnList.BLACK_URUKS, 1).setConquestThreshold(50.0f), LOTRBiomeSpawnList.entry(LOTRSpawnList.BLACK_URUKS, 2).setConquestThreshold(100.0f), LOTRBiomeSpawnList.entry(LOTRSpawnList.OLOG_HAI, 1).setConquestThreshold(200.0f)};
+        this.npcSpawnList.newFactionList(0).add(arrspawnListContainer31);
         this.variantChance = 0.3f;
         this.addBiomeVariantSet(LOTRBiomeVariant.SET_NORMAL_OAK_SPRUCE);
         this.addBiomeVariant(LOTRBiomeVariant.DENSEFOREST_SPRUCE, 3.0f);
@@ -95,7 +99,8 @@ extends LOTRBiome {
         this.registerTravellingTrader(LOTREntityRedDwarfMerchant.class);
         this.setBanditChance(LOTREventSpawner.EventChance.BANDIT_RARE);
         this.setBanditEntityClass(LOTREntityBanditRhun.class);
-        this.invasionSpawns.addInvasion(LOTRInvasions.DURMETH, LOTREventSpawner.EventChance.COMMON);
+        this.invasionSpawns.addInvasion(LOTRInvasions.DURMETH, LOTREventSpawner.EventChance.UNCOMMON);
+        this.invasionSpawns.addInvasion(LOTRInvasions.DURMETH_URUK, LOTREventSpawner.EventChance.HALFTIME);
         this.invasionSpawns.addInvasion(LOTRInvasions.DURMETH_WARG, LOTREventSpawner.EventChance.COMMON);
     }
 

@@ -12,6 +12,7 @@ package lotr.common.block;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import java.io.PrintStream;
 import lotr.client.render.LOTRConnectedTextures;
 import lotr.common.block.LOTRBlockBrickBase;
 import lotr.common.block.LOTRConnectedBlock;
@@ -28,16 +29,28 @@ implements LOTRConnectedBlock {
 
     @SideOnly(value=Side.CLIENT)
     @Override
-    public void registerBlockIcons(IIconRegister iconregister) {
+    public void registerBlockIcons(IIconRegister iconRegister) {
         this.brickIcons = new IIcon[this.brickNames.length];
         for (int i = 0; i < this.brickNames.length; ++i) {
-            LOTRConnectedTextures.registerConnectedIcons(iconregister, this, i, false);
+            try {
+                LOTRConnectedTextures.registerConnectedIcons(iconRegister, this, i, false);
+                continue;
+            }
+            catch (Exception e) {
+                System.err.println("Error registering icon for brick: " + this.brickNames[i] + " - " + e.getMessage());
+            }
         }
     }
 
     @SideOnly(value=Side.CLIENT)
     public IIcon getIcon(IBlockAccess world, int i, int j, int k, int side) {
-        return LOTRConnectedTextures.getConnectedIconBlock(this, world, i, j, k, side, false);
+        try {
+            return LOTRConnectedTextures.getConnectedIconBlock(this, world, i, j, k, side, false);
+        }
+        catch (Exception e) {
+            System.err.println("Error getting connected icon at [" + i + ", " + j + ", " + k + "] side " + side + ": " + e.getMessage());
+            return null;
+        }
     }
 
     @SideOnly(value=Side.CLIENT)
@@ -58,17 +71,29 @@ implements LOTRConnectedBlock {
             arrarrbl3[2] = new boolean[]{false, true, false};
         }
         boolean[][] adjacentFlags = arrarrbl;
-        return LOTRConnectedTextures.getConnectedIconItem(this, j, adjacentFlags);
+        try {
+            return LOTRConnectedTextures.getConnectedIconItem(this, j, adjacentFlags);
+        }
+        catch (Exception e) {
+            System.err.println("Error getting icon for item render: side " + i + ", meta " + j + " - " + e.getMessage());
+            return null;
+        }
     }
 
     @Override
     public String getConnectedName(int meta) {
-        return this.textureName + "_" + this.brickNames[meta];
+        return this.textureName + "_" + (meta < this.brickNames.length ? this.brickNames[meta] : "unknown");
     }
 
     @Override
     public boolean areBlocksConnected(IBlockAccess world, int i, int j, int k, int i1, int j1, int k1) {
-        return LOTRConnectedBlock.Checks.matchBlockAndMeta(this, world, i, j, k, i1, j1, k1);
+        try {
+            return LOTRConnectedBlock.Checks.matchBlockAndMeta(this, world, i, j, k, i1, j1, k1);
+        }
+        catch (Exception e) {
+            System.err.println("Error checking block connection at [" + i + ", " + j + ", " + k + "] to [" + i1 + ", " + j1 + ", " + k1 + "]: " + e.getMessage());
+            return false;
+        }
     }
 }
 

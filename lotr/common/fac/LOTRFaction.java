@@ -59,7 +59,7 @@ public enum LOTRFaction {
     BLUE_MOUNTAINS(6132172, LOTRDimension.DimensionRegion.WEST, new LOTRMapRegion(650, 600, 125), EnumSet.of(FactionType.TYPE_FREE, FactionType.TYPE_DWARF)),
     HIGH_ELF(13035007, LOTRDimension.DimensionRegion.WEST, new LOTRMapRegion(570, 770, 200), EnumSet.of(FactionType.TYPE_FREE, FactionType.TYPE_ELF)),
     GUNDABAD(9858132, LOTRDimension.DimensionRegion.WEST, new LOTRMapRegion(1160, 670, 150), EnumSet.of(FactionType.TYPE_ORC)),
-    ANGMAR(0, null, null, true, true, -1, null, null),
+    ANGMAR(7836023, LOTRDimension.DimensionRegion.WEST, new LOTRMapRegion(1080, 600, 125), EnumSet.of(FactionType.TYPE_ORC, FactionType.TYPE_TROLL)),
     UMBAR(8331264, LOTRDimension.DimensionRegion.SOUTH, new LOTRMapRegion(1200, 1689, 150), EnumSet.of(FactionType.TYPE_MAN)),
     WOOD_ELF(3774030, LOTRDimension.DimensionRegion.WEST, new LOTRMapRegion(1400, 640, 75), EnumSet.of(FactionType.TYPE_FREE, FactionType.TYPE_ELF)),
     DOL_GULDUR(3488580, LOTRDimension.DimensionRegion.WEST, new LOTRMapRegion(1380, 870, 100), EnumSet.of(FactionType.TYPE_ORC)),
@@ -381,7 +381,7 @@ public enum LOTRFaction {
         LOTRFactionRelations.setDefaultRelations(TAURETHRIM, HALF_TROLL, LOTRFactionRelations.Relation.MORTAL_ENEMY);
         LOTRFactionRelations.setDefaultRelations(RED_MOUNTAINS, GUNDABAD, LOTRFactionRelations.Relation.MORTAL_ENEMY);
         LOTRFactionRelations.setDefaultRelations(RED_MOUNTAINS, MORDOR, LOTRFactionRelations.Relation.MORTAL_ENEMY);
-        LOTRFactionRelations.setDefaultRelations(RED_MOUNTAINS, RHUDEL, LOTRFactionRelations.Relation.NEUTRAL);
+        LOTRFactionRelations.setDefaultRelations(RED_MOUNTAINS, RHUDEL, LOTRFactionRelations.Relation.ENEMY);
         LOTRFactionRelations.setDefaultRelations(RED_MOUNTAINS, RANGER_NORTH, LOTRFactionRelations.Relation.NEUTRAL);
         LOTRFactionRelations.setDefaultRelations(RED_MOUNTAINS, HOBBIT, LOTRFactionRelations.Relation.NEUTRAL);
         LOTRFactionRelations.setDefaultRelations(RED_MOUNTAINS, HIGH_ELF, LOTRFactionRelations.Relation.ALLY);
@@ -430,7 +430,7 @@ public enum LOTRFaction {
         LOTRFactionRelations.setDefaultRelations(UTUMNO, WOOD_ELF, LOTRFactionRelations.Relation.MORTAL_ENEMY);
         LOTRFactionRelations.setDefaultRelations(UTUMNO, AVARI, LOTRFactionRelations.Relation.MORTAL_ENEMY);
         LOTRFactionRelations.setDefaultRelations(WIND, MORDOR, LOTRFactionRelations.Relation.MORTAL_ENEMY);
-        LOTRFactionRelations.setDefaultRelations(WIND, RHUDEL, LOTRFactionRelations.Relation.NEUTRAL);
+        LOTRFactionRelations.setDefaultRelations(WIND, RHUDEL, LOTRFactionRelations.Relation.ENEMY);
         LOTRFactionRelations.setDefaultRelations(WIND, RANGER_NORTH, LOTRFactionRelations.Relation.NEUTRAL);
         LOTRFactionRelations.setDefaultRelations(WIND, HOBBIT, LOTRFactionRelations.Relation.NEUTRAL);
         LOTRFactionRelations.setDefaultRelations(WIND, HIGH_ELF, LOTRFactionRelations.Relation.ALLY);

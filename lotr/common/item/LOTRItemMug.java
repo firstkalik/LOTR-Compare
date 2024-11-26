@@ -7,6 +7,7 @@
  *  net.minecraft.block.Block
  *  net.minecraft.block.Block$SoundType
  *  net.minecraft.block.material.Material
+ *  net.minecraft.client.entity.EntityPlayerSP
  *  net.minecraft.client.renderer.texture.IIconRegister
  *  net.minecraft.creativetab.CreativeTabs
  *  net.minecraft.entity.Entity
@@ -49,11 +50,13 @@ import lotr.common.LOTRAchievement;
 import lotr.common.LOTRCreativeTabs;
 import lotr.common.LOTRLevelData;
 import lotr.common.LOTRMod;
+import lotr.common.LOTRPotions;
 import lotr.common.LOTRReflection;
 import lotr.common.block.LOTRBlockMug;
 import lotr.common.entity.npc.LOTREntityNPC;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
@@ -84,7 +87,7 @@ import net.minecraft.world.World;
 
 public class LOTRItemMug
 extends Item {
-    private static String[] strengthNames = new String[]{"weak", "light", "moderate", "strong", "potent"};
+    private static String[] strengthNames = new String[]{"item.lotr.drink.weak", "item.lotr.drink.light", "item.lotr.drink.moderate", "item.lotr.drink.strong", "item.lotr.drink.potent"};
     private static float[] strengths = new float[]{0.25f, 0.5f, 1.0f, 2.0f, 3.0f};
     private static float[] foodStrengths = new float[]{0.5f, 0.75f, 1.0f, 1.25f, 1.5f};
     public static int vesselMeta = 100;
@@ -105,6 +108,13 @@ extends Item {
     protected List<PotionEffect> potionEffects = new ArrayList<PotionEffect>();
     protected int damageAmount;
     protected boolean curesEffects;
+
+    public static float getAlcoholicity(ItemStack itemstack) {
+        if (itemstack != null && itemstack.getItem() instanceof LOTRItemMug) {
+            return ((LOTRItemMug)itemstack.getItem()).alcoholicity;
+        }
+        return 0.0f;
+    }
 
     public LOTRItemMug(boolean full, boolean food, boolean brew, float alc) {
         if (full) {
@@ -135,8 +145,8 @@ extends Item {
         return this;
     }
 
-    public LOTRItemMug addPotionEffect(int i, int j) {
-        this.potionEffects.add(new PotionEffect(i, j * 20));
+    public LOTRItemMug addPotionEffect(int potionID, int duration, int amplifier) {
+        this.potionEffects.add(new PotionEffect(potionID, duration * 20, amplifier));
         return this;
     }
 
@@ -299,22 +309,25 @@ extends Item {
         }
     }
 
-    private List<PotionEffect> convertPotionEffectsForStrength(float strength) {
-        ArrayList<PotionEffect> list = new ArrayList<PotionEffect>();
-        for (PotionEffect base : this.potionEffects) {
-            PotionEffect modified = new PotionEffect(base.getPotionID(), (int)((float)base.getDuration() * strength));
-            list.add(modified);
+    protected List<PotionEffect> convertPotionEffectsForStrength(float strength) {
+        ArrayList<PotionEffect> scaledEffects = new ArrayList<PotionEffect>();
+        for (PotionEffect effect : this.potionEffects) {
+            int potionID = effect.getPotionID();
+            int duration = (int)((float)effect.getDuration() * strength);
+            int baseAmplifier = effect.getAmplifier();
+            int amplifier = strength <= 1.0f ? Math.max(baseAmplifier - 1, 0) : (strength >= 2.0f && strength < 3.0f ? baseAmplifier : Math.min(baseAmplifier + 1, baseAmplifier));
+            scaledEffects.add(new PotionEffect(potionID, duration, amplifier));
         }
-        return list;
+        return scaledEffects;
     }
 
     public static String getStrengthSubtitle(ItemStack itemstack) {
-        Item item;
-        if (itemstack != null && (item = itemstack.getItem()) instanceof LOTRItemMug && ((LOTRItemMug)item).isBrewable) {
-            int i = LOTRItemMug.getStrengthMeta(itemstack);
-            return StatCollector.translateToLocal((String)("item.lotr.drink." + strengthNames[i]));
+        int strengthLevel = itemstack.getItemDamage();
+        String[] strengthKeys = new String[]{"item.lotr.drink.weak", "item.lotr.drink.light", "item.lotr.drink.moderate", "item.lotr.drink.strong", "item.lotr.drink.potent"};
+        if (strengthLevel >= 0 && strengthLevel < strengthKeys.length) {
+            return StatCollector.translateToLocal((String)strengthKeys[strengthLevel]);
         }
-        return null;
+        return StatCollector.translateToLocal((String)"item.lotr.drink.unknown");
     }
 
     public String getItemStackDisplayName(ItemStack itemstack) {
@@ -331,15 +344,51 @@ extends Item {
     public void addInformation(ItemStack itemstack, EntityPlayer entityplayer, List list, boolean flag) {
         if (this.isBrewable) {
             float strength = LOTRItemMug.getStrength(itemstack);
-            list.add(LOTRItemMug.getStrengthSubtitle(itemstack));
+            int strengthIndex = this.getStrengthIndex(strength);
+            String strengthLocalized = StatCollector.translateToLocal((String)strengthNames[strengthIndex]);
+            EnumChatFormatting color = this.getStrengthColor(strengthIndex);
+            list.add((Object)color + strengthLocalized + (Object)EnumChatFormatting.RESET);
             if (this.alcoholicity > 0.0f) {
                 EnumChatFormatting c = EnumChatFormatting.GREEN;
                 float f = this.alcoholicity * strength * 10.0f;
                 c = f < 2.0f ? EnumChatFormatting.GREEN : (f < 5.0f ? EnumChatFormatting.YELLOW : (f < 10.0f ? EnumChatFormatting.GOLD : (f < 20.0f ? EnumChatFormatting.RED : EnumChatFormatting.DARK_RED)));
                 list.add((Object)c + StatCollector.translateToLocal((String)"item.lotr.drink.alcoholicity") + ": " + String.format("%.2f", Float.valueOf(f)) + "%");
+                if (entityplayer instanceof EntityPlayerSP) {
+                    int alcoholTolerance = LOTRLevelData.getData((EntityPlayer)((EntityPlayerSP)entityplayer)).getAlcoholTolerance();
+                    list.add((Object)EnumChatFormatting.RED + StatCollector.translateToLocal((String)"item.lotr.drink.tolerance") + ": " + alcoholTolerance);
+                }
             }
             LOTRItemMug.addPotionEffectsToTooltip(itemstack, entityplayer, list, flag, this.convertPotionEffectsForStrength(strength));
         }
+    }
+
+    private EnumChatFormatting getStrengthColor(int index) {
+        switch (index) {
+            case 0: {
+                return EnumChatFormatting.GREEN;
+            }
+            case 1: {
+                return EnumChatFormatting.YELLOW;
+            }
+            case 2: {
+                return EnumChatFormatting.GOLD;
+            }
+            case 3: {
+                return EnumChatFormatting.RED;
+            }
+            case 4: {
+                return EnumChatFormatting.DARK_RED;
+            }
+        }
+        return EnumChatFormatting.WHITE;
+    }
+
+    private int getStrengthIndex(float strength) {
+        for (int i = strengths.length - 1; i >= 0; --i) {
+            if (!(strength >= strengths[i])) continue;
+            return i;
+        }
+        return 0;
     }
 
     public static void addPotionEffectsToTooltip(ItemStack itemstack, EntityPlayer entityplayer, List list, boolean flag, List itemEffects) {
@@ -495,6 +544,7 @@ extends Item {
             if (!world.isRemote && itemRand.nextFloat() < alcoholPower && (duration = (int)(60.0f * (1.0f + itemRand.nextFloat() * 0.5f) * alcoholPower)) >= 1) {
                 int durationTicks = duration * 20;
                 entityplayer.addPotionEffect(new PotionEffect(Potion.confusion.id, durationTicks));
+                entityplayer.addPotionEffect(new PotionEffect(LOTRPotions.drunk.id, durationTicks));
                 LOTRLevelData.getData(entityplayer).addAchievement(LOTRAchievement.getDrunk);
                 int toleranceAdd = Math.round((float)duration / 20.0f);
                 LOTRLevelData.getData(entityplayer).setAlcoholTolerance(tolerance += toleranceAdd);

@@ -17,6 +17,7 @@
  *  net.minecraft.item.Item
  *  net.minecraft.item.ItemDye
  *  net.minecraft.item.ItemStack
+ *  net.minecraft.nbt.NBTTagCompound
  *  net.minecraft.potion.PotionEffect
  *  net.minecraft.util.ChatComponentText
  *  net.minecraft.util.DamageSource
@@ -37,7 +38,7 @@ import lotr.common.LOTRLevelData;
 import lotr.common.LOTRMod;
 import lotr.common.fac.LOTRFaction;
 import lotr.common.item.LOTRItemBaseRing2;
-import lotr.common.item.LOTRRingOne;
+import lotr.common.item.theOneRing;
 import lotr.common.network.LOTRPacketHandler;
 import lotr.common.network.LOTRPacketWeaponFX;
 import net.minecraft.block.Block;
@@ -51,6 +52,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.DamageSource;
@@ -233,17 +235,21 @@ extends LOTRItemBaseRing2 {
 
     public ItemStack onItemRightClick(ItemStack srcItemStack, World world, EntityPlayer playerEntity) {
         playerEntity.setItemInUse(srcItemStack, this.getMaxItemUseDuration(srcItemStack));
-        if (srcItemStack.getItem() instanceof LOTRRingOne) {
+        if (srcItemStack.getItem() instanceof theOneRing) {
             boolean hasRing = false;
             for (int i = 0; i < playerEntity.inventory.getSizeInventory(); ++i) {
                 ItemStack itemStack = playerEntity.inventory.getStackInSlot(i);
-                if (itemStack == null || !(itemStack.getItem() instanceof LOTRRingOne)) continue;
+                if (itemStack == null || !(itemStack.getItem() instanceof theOneRing)) continue;
                 hasRing = true;
                 break;
             }
             if (!hasRing) {
                 return srcItemStack;
             }
+        }
+        NBTTagCompound tagCompound = srcItemStack.getTagCompound();
+        if (!world.isRemote && tagCompound != null && tagCompound.getBoolean("activated") && tagCompound.getInteger("cooldown") > 0) {
+            playerEntity.addChatComponentMessage((IChatComponent)new ChatComponentText((Object)EnumChatFormatting.RED + StatCollector.translateToLocalFormatted((String)"ring.cooldown", (Object[])new Object[]{tagCompound.getInteger("cooldown") / 20})));
         }
         return super.onItemRightClick(srcItemStack, world, playerEntity);
     }
@@ -256,11 +262,10 @@ extends LOTRItemBaseRing2 {
             }
             srcItemStack.damageItem(this.getUseCost(), (EntityLivingBase)playerEntity);
         }
-        world.playSoundAtEntity((Entity)playerEntity, "lotr:dwarf.attack", 1.0f, (itemRand.nextFloat() - itemRand.nextFloat()) * 0.2f + 1.0f);
-        if (!world.isRemote) {
+        if (!(world.isRemote || srcItemStack.hasTagCompound() && srcItemStack.getTagCompound().getBoolean("activated"))) {
             playerEntity.addPotionEffect(new PotionEffect(38, 2400, 0));
             playerEntity.addPotionEffect(new PotionEffect(21, 48000, 0));
-            playerEntity.addPotionEffect(new PotionEffect(5, 4800, 0));
+            playerEntity.addPotionEffect(new PotionEffect(5, 4800, 2));
             playerEntity.attackEntityFrom(DamageSource.generic, 5.0f);
             LOTRLevelData.getData(playerEntity).addAchievement(LOTRAchievement.useRing);
             playerEntity.addChatMessage((IChatComponent)new ChatComponentText("\u00a7a\u0421\u043f\u043e\u0441\u043e\u0431\u043d\u043e\u0441\u0442\u044c \u0410\u043a\u0442\u0438\u0432\u0438\u0440\u043e\u0432\u0430\u043d\u0430"));
@@ -268,6 +273,14 @@ extends LOTRItemBaseRing2 {
             LOTRPacketWeaponFX packet = new LOTRPacketWeaponFX(LOTRPacketWeaponFX.Type.INFERNAL, (Entity)playerEntity);
             LOTRPacketHandler.networkWrapper.sendToAllAround((IMessage)packet, LOTRPacketHandler.nearEntity((Entity)playerEntity, 64.0));
         }
+        world.playSoundAtEntity((Entity)playerEntity, "lotr:dwarf.attack", 1.0f, (itemRand.nextFloat() - itemRand.nextFloat()) * 0.2f + 1.0f);
+        NBTTagCompound tagCompound = srcItemStack.getTagCompound();
+        if (tagCompound == null) {
+            tagCompound = new NBTTagCompound();
+        }
+        tagCompound.setBoolean("activated", true);
+        tagCompound.setInteger("cooldown", 2400);
+        srcItemStack.setTagCompound(tagCompound);
         return srcItemStack;
     }
 
@@ -400,9 +413,16 @@ extends LOTRItemBaseRing2 {
     }
 
     @Override
-    public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List list, boolean par4) {
+    public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List list, boolean advanced) {
         list.add(StatCollector.translateToLocal((String)"hearth.name"));
         list.add((Object)EnumChatFormatting.GRAY + StatCollector.translateToLocal((String)"right.name"));
+        NBTTagCompound tagCompound = par1ItemStack.getTagCompound();
+        if (tagCompound != null && tagCompound.getInteger("cooldown") > 0) {
+            list.add((Object)EnumChatFormatting.RED + StatCollector.translateToLocalFormatted((String)"ring.add.cooldown", (Object[])new Object[]{tagCompound.getInteger("cooldown") / 20}));
+        }
+        if (tagCompound == null || !tagCompound.getBoolean("activated")) {
+            list.add((Object)EnumChatFormatting.GREEN + StatCollector.translateToLocalFormatted((String)"lotr.ring.ready", (Object[])new Object[0]));
+        }
     }
 
     public boolean itemInteractionForEntity(ItemStack itemStack, EntityPlayer player, EntityLivingBase Entity2) {

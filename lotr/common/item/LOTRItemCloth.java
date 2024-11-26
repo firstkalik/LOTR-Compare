@@ -35,7 +35,7 @@ public class LOTRItemCloth
 extends Item {
     public LOTRItemCloth() {
         this.setCreativeTab((CreativeTabs)LOTRCreativeTabs.tabMaterials);
-        this.maxStackSize = 16;
+        this.maxStackSize = 4;
     }
 
     public ItemStack onEaten(ItemStack item, World world, EntityPlayer player) {
@@ -46,6 +46,7 @@ extends Item {
             player.removePotionEffect(36);
         }
         player.removePotionEffect(41);
+        player.heal(2.0f);
         player.addPotionEffect(new PotionEffect(10, 600, 0));
         world.playSoundAtEntity((Entity)player, "lotr:bandage", 1.0f, world.rand.nextFloat() * 0.1f + 0.9f);
         LOTRLevelData.getData(player).addAchievement(LOTRAchievement.useBandage);

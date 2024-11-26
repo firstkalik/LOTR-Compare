@@ -73,7 +73,7 @@ extends LOTRWorldGenDwarvenTower {
             this.tableBlock = LOTRMod.dwarvenTable;
             this.forgeBlock = LOTRMod.dwarvenForge;
             this.bannerType = null;
-            this.chestContents = LOTRChestContents.LOTRChestContents2.DWARVEN_TOWER2;
+            this.chestContents = LOTRChestContents.LOTRChestContents2.GREY_DWARVEN_TOWER;
         }
     }
 

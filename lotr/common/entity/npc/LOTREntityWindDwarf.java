@@ -3,6 +3,9 @@
  * 
  * Could not load the following classes:
  *  net.minecraft.entity.IEntityLivingData
+ *  net.minecraft.entity.SharedMonsterAttributes
+ *  net.minecraft.entity.ai.attributes.IAttribute
+ *  net.minecraft.entity.ai.attributes.IAttributeInstance
  *  net.minecraft.entity.item.EntityItem
  *  net.minecraft.entity.player.EntityPlayer
  *  net.minecraft.init.Items
@@ -26,6 +29,9 @@ import lotr.common.quest.LOTRMiniQuest;
 import lotr.common.quest.LOTRMiniQuestFactory;
 import lotr.common.world.structure.LOTRChestContents;
 import net.minecraft.entity.IEntityLivingData;
+import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.IAttribute;
+import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -38,12 +44,18 @@ extends LOTREntityDwarf {
     public LOTREntityWindDwarf(World world) {
         super(world);
         this.familyInfo.marriageEntityClass = LOTREntityWindDwarf.class;
-        this.familyInfo.marriageAchievement = LOTRAchievement.marryDwarf;
+        this.familyInfo.marriageAchievement = LOTRAchievement.marryWindDwarf;
     }
 
     @Override
     protected LOTRFoods getDwarfFoods() {
         return LOTRFoods.DWARF;
+    }
+
+    @Override
+    protected void applyEntityAttributes() {
+        super.applyEntityAttributes();
+        this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.21);
     }
 
     @Override
@@ -66,7 +78,7 @@ extends LOTREntityDwarf {
 
     @Override
     protected LOTRAchievement getKillAchievement() {
-        return LOTRAchievement.killDwarf;
+        return LOTRAchievement.killWindDwarf;
     }
 
     @Override
@@ -118,12 +130,12 @@ extends LOTREntityDwarf {
 
     @Override
     protected LOTRChestContents getLarderDrops() {
-        return LOTRChestContents.REDDWARF_SMITHY;
+        return LOTRChestContents.DWARF_SMITHY;
     }
 
     @Override
     protected LOTRChestContents getGenericDrops() {
-        return LOTRChestContents.LOTRChestContents2.REDDWARFTOWER;
+        return LOTRChestContents.DWARF_SMITHY;
     }
 
     @Override

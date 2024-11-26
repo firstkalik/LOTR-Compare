@@ -5,6 +5,7 @@
  *  net.minecraft.block.Block
  *  net.minecraft.block.BlockBush
  *  net.minecraft.block.BlockDoublePlant
+ *  net.minecraft.block.BlockFire
  *  net.minecraft.block.BlockFlower
  *  net.minecraft.block.BlockGrass
  *  net.minecraft.block.BlockLeaves
@@ -54,6 +55,7 @@ import lotr.common.world.biome.LOTRBiome;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;
 import net.minecraft.block.BlockDoublePlant;
+import net.minecraft.block.BlockFire;
 import net.minecraft.block.BlockFlower;
 import net.minecraft.block.BlockGrass;
 import net.minecraft.block.BlockLeaves;
@@ -93,6 +95,8 @@ public class LOTRAchievement {
     public static LOTRAchievement enterMiddleEarth;
     public static LOTRAchievement enterMoria;
     public static LOTRAchievement Thorin;
+    public static LOTRAchievement useArcenstoneRare;
+    public static LOTRAchievement useArcenstone;
     public static LOTRAchievement engraveOwnership;
     public static LOTRAchievement mod;
     public static LOTRAchievement translator;
@@ -156,6 +160,8 @@ public class LOTRAchievement {
     public static LOTRAchievement enchantBaneWarg;
     public static LOTRAchievement enchantBaneTroll;
     public static LOTRAchievement enchantBaneSpider;
+    public static LOTRAchievement enchantBaneBalrog;
+    public static LOTRAchievement enchantBaneHobbit;
     public static LOTRAchievement enchantBaneWight;
     public static LOTRAchievement getDrunk;
     public static LOTRAchievement reforge;
@@ -807,6 +813,32 @@ public class LOTRAchievement {
     public static LOTRAchievement killMorgulAngmarOrc;
     public static LOTRAchievement killGuldurUruk;
     public static LOTRAchievement climbRedMountains;
+    public static LOTRAchievement killEreborDwarf;
+    public static LOTRAchievement marryEreborDwarf;
+    public static LOTRAchievement burnRing;
+    public static LOTRAchievement destroyRing;
+    public static LOTRAchievement treasureMillionere;
+    public static LOTRAchievement getNumenorBow;
+    public static LOTRAchievement killRedDwarf;
+    public static LOTRAchievement useGraal;
+    public static LOTRAchievement hireWindDwarfAxe;
+    public static LOTRAchievement killWindDwarf;
+    public static LOTRAchievement marryWindDwarf;
+    public static LOTRAchievement killCaveSpider;
+    public static LOTRAchievement fishBusiness;
+    public static LOTRAchievement craftPot;
+    public static LOTRAchievement salvageSherd;
+    public static LOTRAchievement killDragon;
+    public static LOTRAchievement killDragonScout;
+    public static LOTRAchievement killDragonHunter;
+    public static LOTRAchievement killDragonAlpha;
+    public static LOTRAchievement killDragonAnkalagon;
+    public static LOTRAchievement sellArrowDragon;
+    public static LOTRAchievement useArrowDragon;
+    public static LOTRAchievement playerDeathDragon;
+    public static LOTRAchievement playerDeathDragonFire;
+    public static LOTRAchievement marathon;
+    public static LOTRAchievement tradeEreborDwarfMerchant;
     private EnumChatFormatting color = EnumChatFormatting.YELLOW;
     public boolean isRare = false;
 
@@ -1014,7 +1046,7 @@ public class LOTRAchievement {
         killWarg = new LOTRAchievement(Category.GENERAL, 17, LOTRMod.wargBone, "killWarg").setRequiresAnyEnemy(LOTRFaction.getAllOfType(LOTRFaction.FactionType.TYPE_ORC)).createTitle();
         useSpearFromFar = new LOTRAchievement(Category.GENERAL, 18, LOTRMod.spearIron, "useSpearFromFar");
         wearFullMithril = new LOTRAchievement(Category.GENERAL, 19, LOTRMod.bodyMithril, "wearFullMithril").setRare();
-        gainHighAlcoholTolerance = new LOTRAchievement(Category.GENERAL, 20, LOTRMod.mugRum, "gainHighAlcoholTolerance").createTitle("alcoholic");
+        gainHighAlcoholTolerance = new LOTRAchievement(Category.GENERAL, 20, LOTRMod.mugRum, "gainHighAlcoholTolerance").createTitle("alcoholic").setRare();
         craftSaddle = new LOTRAchievement(Category.GENERAL, 21, Items.saddle, "craftSaddle");
         craftBronze = new LOTRAchievement(Category.GENERAL, 22, LOTRMod.bronze, "craftBronze");
         drinkOrcDraught = new LOTRAchievement(Category.GENERAL, 23, LOTRMod.mugOrcDraught, "drinkOrcDraught");
@@ -1071,7 +1103,7 @@ public class LOTRAchievement {
         defeatInvasion = new LOTRAchievement(Category.GENERAL, 74, Items.stone_sword, "defeatInvasion");
         pickpocket = new LOTRAchievement(Category.GENERAL, 75, LOTRMiniQuestPickpocket.createPickpocketIcon(), "pickpocket").createTitle("pickpocket");
         combineSmithScrolls = new LOTRAchievement(Category.GENERAL, 76, LOTRMod.modTemplate, "combineSmithScrolls");
-        engraveOwnership = new LOTRAchievement(Category.GENERAL, 77, LOTRMod.LOTRRingOne, "engraveOwnership");
+        engraveOwnership = new LOTRAchievement(Category.GENERAL, 77, LOTRMod.theOneRing, "engraveOwnership");
         killHobbit = new LOTRAchievement(Category.SHIRE, 0, LOTRMod.hobbitBone, "killHobbit").setRequiresEnemy(LOTRFaction.HOBBIT).createTitle();
         sellPipeweedLeaf = new LOTRAchievement(Category.SHIRE, 1, LOTRMod.pipeweedLeaf, "sellPipeweedLeaf").setRequiresAlly(LOTRFaction.HOBBIT);
         marryHobbit = new LOTRAchievement(Category.SHIRE, 2, LOTRMod.hobbitRing, "marryHobbit").setRequiresAlly(LOTRFaction.HOBBIT);
@@ -1559,7 +1591,7 @@ public class LOTRAchievement {
         killDurmethWarg = new LOTRAchievement(Category.RHUN, 35, LOTRMod.wargBone, "killDurmethWarg").setRequiresEnemy(LOTRFaction.GUNDABAD);
         enterRhunSemiDesert = new LOTRAchievement(Category.RHUN, 37, (Block)Blocks.sand, "enterRhunSemiDesert").setBiomeAchievement();
         enterSun = new LOTRAchievement(Category.GENERAL, 81, (Block)Blocks.sand, "enterSun").setBiomeAchievement().setRare();
-        getOne = new LOTRAchievement(Category.GENERAL, 82, LOTRMod.LOTRRingOne, "getOne").setRare().setRing();
+        getOne = new LOTRAchievement(Category.GENERAL, 82, LOTRMod.theOneRing, "getOne").setRare().setRing();
         getThree = new LOTRAchievement(Category.GENERAL, 83, LOTRMod.nenia, "getThree").setRare().setRing();
         getSeven = new LOTRAchievement(Category.GENERAL, 84, LOTRMod.d1, "getSeven").setRare().setRing();
         getNine = new LOTRAchievement(Category.GENERAL, 85, LOTRMod.h1, "getNine").setRare().setRing();
@@ -1570,7 +1602,7 @@ public class LOTRAchievement {
         wearAngbande = new LOTRAchievement(Category.FORODWAITH, 23, LOTRMod.bodyangbande, "wearAngbande");
         wearBoldog = new LOTRAchievement(Category.FORODWAITH, 24, LOTRMod.bodyboldog, "wearBoldog");
         getSilmaril = new LOTRAchievement(Category.GENERAL, 88, LOTRMod.silmaril_fire, "getSilmaril").setRare();
-        useRing = new LOTRAchievement(Category.GENERAL, 89, LOTRMod.LOTRRingOne, "useRing");
+        useRing = new LOTRAchievement(Category.GENERAL, 89, LOTRMod.theOneRing, "useRing");
         playerRespawn = new LOTRAchievement(Category.GENERAL, 90, LOTRMod.gandalfStaffWhite, "playerRespawn");
         playerDeath = new LOTRAchievement(Category.GENERAL, 91, LOTRMod.gandalfStaffGrey, "playerDeath");
         enterForestShelter = new LOTRAchievement(Category.ANDUIN_VALLEY, 4, new ItemStack(LOTRMod.sapling7, 1, 1), "enterForestShelter").setBiomeAchievement();
@@ -1580,7 +1612,7 @@ public class LOTRAchievement {
         enterRohanGate = new LOTRAchievement(Category.DUNLAND, 11, Items.stone_sword, "enterRohanGate").setBiomeAchievement();
         wearFullIstari = new LOTRAchievement(Category.GENERAL, 92, LOTRMod.gandalfhat, "wearIstari");
         doMiniquestWind = new LOTRAchievement(Category.OROCARNI, 24, LOTRMod.redBook, "doMiniquestWind").setRequiresAlly(LOTRFaction.WIND);
-        useOneRing = new LOTRAchievement(Category.GENERAL, 93, LOTRMod.LOTRRingOne, "useOneRing").setRequiresAlly(LOTRFaction.GONDOR, LOTRFaction.HOBBIT).setRare();
+        useOneRing = new LOTRAchievement(Category.GENERAL, 93, LOTRMod.theOneRing, "useOneRing").setRequiresAlly(LOTRFaction.GONDOR, LOTRFaction.HOBBIT).setRare();
         killSauron = new LOTRAchievement(Category.MORDOR, 31, LOTRMod.sauronMace, "killSauron").setRare();
         killBoldog = new LOTRAchievement(Category.FORODWAITH, 25, LOTRMod.hammerBoldog, "killBoldog");
         tradePallando = new LOTRAchievement(Category.GENERAL, 94, LOTRMod.pallandostaff, "tradePallando");
@@ -1638,7 +1670,7 @@ public class LOTRAchievement {
         earnManyCoins3 = new LOTRAchievement(Category.GENERAL, 108, new ItemStack(LOTRMod.silverCoin, 1, 4), "earnManyCoins3").createTitle();
         earnManyCoins4 = new LOTRAchievement(Category.GENERAL, 109, new ItemStack(LOTRMod.silverCoin, 1, 5), "earnManyCoins4").createTitle().setRare();
         wearFullChainmailBronze = new LOTRAchievement(Category.GENERAL, 110, LOTRMod.bodyBronzeChainmail, "wearFullChainmailBronze");
-        wearFullChainmailDwarf = new LOTRAchievement(Category.IRON_HILLS, 111, LOTRMod.bodyDwarvenChainmail, "wearFullChainmailDwarf");
+        wearFullChainmailDwarf = new LOTRAchievement(Category.IRON_HILLS, 29, LOTRMod.bodyDwarvenChainmail, "wearFullChainmailDwarf");
         wearFullChainmailOrc = new LOTRAchievement(Category.MORDOR, 34, LOTRMod.bodyOrcChainmail, "wearFullChainmailOrc");
         wearFullChainmailUruk = new LOTRAchievement(Category.ROHAN, 33, LOTRMod.bodyUrukChainmail, "wearFullChainmailUruk");
         wearFullChainmailBlackUruk = new LOTRAchievement(Category.MORDOR, 35, LOTRMod.bodyBlackUrukChainmail, "wearFullChainmailBlackUruk");
@@ -1674,7 +1706,7 @@ public class LOTRAchievement {
         sweetDreams = new LOTRAchievement(Category.GENERAL, 127, LOTRMod.AvariBedItem, "sweetDreams");
         useArrowExplosion = new LOTRAchievement(Category.GENERAL, 128, LOTRMod.arrowExplosion, "useArrowExplosion");
         useArrowFire = new LOTRAchievement(Category.GENERAL, 129, LOTRMod.arrowFire, "useArrowFire");
-        useArrowMorgul = new LOTRAchievement(Category.GENERAL, 130, LOTRMod.arrowPoisoned2, "useArrowMorgul");
+        useArrowMorgul = new LOTRAchievement(Category.GENERAL, 130, LOTRMod.arrowMorgul, "useArrowMorgul");
         drinkMithril = new LOTRAchievement(Category.GENERAL, 131, LOTRMod.gobletMithril, "drinkMithril").setRare();
         killDurmethOrcWarrior = new LOTRAchievement(Category.OROCARNI, 44, LOTRMod.orcBone, "killDurmethOrcWarrior").setRequiresAnyEnemy(LOTRFaction.getAllOfType(LOTRFaction.FactionType.TYPE_ORC)).createTitle();
         wearFullAragorn = new LOTRAchievement(Category.GONDOR, 50, LOTRMod.helmetAragorn, "wearFullAragorn");
@@ -1707,7 +1739,7 @@ public class LOTRAchievement {
         getDwarven5 = new LOTRAchievement(Category.GENERAL, 155, LOTRMod.d5, "getDwarven5").setRare().setRing();
         getDwarven6 = new LOTRAchievement(Category.GENERAL, 156, LOTRMod.d6, "getDwarven6").setRare().setRing();
         getDwarven7 = new LOTRAchievement(Category.GENERAL, 157, LOTRMod.d7, "getDwarven7").setRare().setRing();
-        theLordofTheRings = new LOTRAchievement(Category.GENERAL, 158, LOTRMod.LOTRRingOne, "theLordofTheRings").setRare();
+        theLordofTheRings = new LOTRAchievement(Category.GENERAL, 158, LOTRMod.theOneRing, "theLordofTheRings").setRare();
         sellMushroom = new LOTRAchievement(Category.GENERAL, 159, new ItemStack((Block)Blocks.red_mushroom, 1, 0), "sellMushroom");
         flyingWarg = new LOTRAchievement(Category.GENERAL, 160, LOTRMod.wargBone, "flyingWarg").setRare();
         hireMorgulMercenary = new LOTRAchievement(Category.ANGMAR, 14, LOTRMod.silverCoin, "hireMorgulMercenary").setRequiresAlly(LOTRFaction.GUNDABAD);
@@ -1717,7 +1749,37 @@ public class LOTRAchievement {
         treasureRare = new LOTRAchievement(Category.GENERAL, 162, LOTRMod.treasureMap, "treasureRare").setRare();
         treasureUltraRare = new LOTRAchievement(Category.GENERAL, 163, LOTRMod.treasureMap, "treasureUltraRare").setRare();
         theVergeofDeath = new LOTRAchievement(Category.UTUMNO, 18, Items.skull, "theVergeofDeath").setRare().createTitle();
-        climbRedMountains = new LOTRAchievement(Category.MISTY_MOUNTAINS, 18, Blocks.snow, "climbRedMountains").setRare();
+        climbRedMountains = new LOTRAchievement(Category.OROCARNI, 46, Blocks.snow, "climbRedMountains").setRare();
+        useArcenstoneRare = new LOTRAchievement(Category.IRON_HILLS, 33, new ItemStack(LOTRMod.blockOreStorage, 1, 4), "useArcenstoneRare").setRequiresAlly(LOTRFaction.DURINS_FOLK).setRare();
+        useArcenstone = new LOTRAchievement(Category.IRON_HILLS, 34, new ItemStack(LOTRMod.treasureGold, 1, 1), "useArcenstone").setRequiresAlly(LOTRFaction.DURINS_FOLK).setRare();
+        killEreborDwarf = new LOTRAchievement(Category.IRON_HILLS, 35, LOTRMod.dwarfBone, "killEreborDwarf").setRequiresEnemy(LOTRFaction.DURINS_FOLK);
+        marryEreborDwarf = new LOTRAchievement(Category.IRON_HILLS, 36, LOTRMod.dwarvenRing, "marryEreborDwarf").setRequiresAnyAlly(LOTRFaction.getAllOfType(LOTRFaction.FactionType.TYPE_DWARF));
+        burnRing = new LOTRAchievement(Category.GENERAL, 164, (Block)Blocks.fire, "burnRing").setRare();
+        destroyRing = new LOTRAchievement(Category.GENERAL, 165, LOTRMod.theOneRing, "destroyRing").setRare();
+        treasureMillionere = new LOTRAchievement(Category.GENERAL, 166, new ItemStack(LOTRMod.silverCoin, 1, 6), "treasureMillionere");
+        getNumenorBow = new LOTRAchievement(Category.GENERAL, 167, LOTRMod.steelbow, "getNumenorBow");
+        killRedDwarf = new LOTRAchievement(Category.OROCARNI, 47, LOTRMod.dwarfBone, "killRedDwarf").setRequiresEnemy(LOTRFaction.RED_MOUNTAINS).createTitle();
+        useGraal = new LOTRAchievement(Category.GENERAL, 168, LOTRMod.graalGold, "useGraal");
+        hireWindDwarfAxe = new LOTRAchievement(Category.OROCARNI, 48, LOTRMod.throwingAxeMithril, "hireWindDwarfAxe").setRequiresAlly(LOTRFaction.WIND);
+        killWindDwarf = new LOTRAchievement(Category.OROCARNI, 49, LOTRMod.dwarfBone, "killWindDawrf").setRequiresEnemy(LOTRFaction.WIND);
+        marryWindDwarf = new LOTRAchievement(Category.OROCARNI, 50, LOTRMod.dwarvenRing, "marryWindDwarf").setRequiresAnyAlly(LOTRFaction.getAllOfType(LOTRFaction.FactionType.TYPE_DWARF));
+        killCaveSpider = new LOTRAchievement(Category.OROCARNI, 51, Blocks.web, "killCaveSpider");
+        fishBusiness = new LOTRAchievement(Category.GENERAL, 169, (Item)Items.fishing_rod, "fishBusiness");
+        craftPot = new LOTRAchievement(Category.GENERAL, 170, LOTRMod.decoratedPot, "craftPot");
+        salvageSherd = new LOTRAchievement(Category.GENERAL, 171, LOTRMod.brush, "salvageSherd");
+        killDragon = new LOTRAchievement(Category.RHOVANION, 13, LOTRMod.DragonTalon, "killDragon");
+        killDragonScout = new LOTRAchievement(Category.RHOVANION, 14, LOTRMod.DragonScoutScale, "killDragonScout");
+        killDragonHunter = new LOTRAchievement(Category.RHOVANION, 15, LOTRMod.DragonHunterScale, "killDragonHunter");
+        killDragonAlpha = new LOTRAchievement(Category.RHOVANION, 16, LOTRMod.DragonAlphaScale, "killDragonAlpha");
+        killDragonAnkalagon = new LOTRAchievement(Category.RHOVANION, 17, LOTRMod.DragonAnkalagonScale, "killDragonAnkalagon");
+        sellArrowDragon = new LOTRAchievement(Category.IRON_HILLS, 37, LOTRMod.arrowDragon, "sellArrowDragon");
+        useArrowDragon = new LOTRAchievement(Category.IRON_HILLS, 38, LOTRMod.arrowDragon, "useArrowDragon");
+        playerDeathDragon = new LOTRAchievement(Category.RHOVANION, 18, LOTRMod.DragonTalon, "playerDeathDragon");
+        playerDeathDragonFire = new LOTRAchievement(Category.RHOVANION, 19, Items.fire_charge, "playerDeathDragonFire");
+        enchantBaneBalrog = new LOTRAchievement(Category.GENERAL, 172, LOTRMod.balrogFire, "enchantBaneBalrog").setRequiresAnyEnemy(LOTRFaction.getAllOfType(LOTRFaction.FactionType.TYPE_ORC)).createTitle();
+        enchantBaneHobbit = new LOTRAchievement(Category.GENERAL, 173, LOTRMod.leatherHat, "enchantBaneHobbit").setRequiresAnyEnemy(LOTRFaction.getAllOfType(LOTRFaction.FactionType.TYPE_FREE)).createTitle();
+        marathon = new LOTRAchievement(Category.GENERAL, 174, (Item)Items.golden_boots, "marathon");
+        tradeEreborDwarfMerchant = new LOTRAchievement(Category.IRON_HILLS, 39, LOTRMod.silverCoin, "tradeEreborDwarfMerchant").setRequiresAlly(LOTRFaction.DURINS_FOLK);
     }
 
     public static Category categoryForName(String name) {

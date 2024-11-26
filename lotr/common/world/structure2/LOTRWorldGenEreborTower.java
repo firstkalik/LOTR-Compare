@@ -61,7 +61,7 @@ extends LOTRWorldGenStructureBase2 {
     protected int glowBrickMeta = 12;
     protected Block plateBlock;
     protected LOTRItemBanner.BannerType bannerType = LOTRItemBanner.BannerType.EREBOR;
-    protected LOTRChestContents chestContents = LOTRChestContents.DWARVEN_TOWER;
+    protected LOTRChestContents chestContents = LOTRChestContents.LOTRChestContents2.EREBOR_DWARVEN_TOWER;
     protected boolean ruined = false;
 
     public LOTRWorldGenEreborTower(boolean flag) {

@@ -49,7 +49,11 @@ extends LOTREntityDwarf {
     @Override
     public IEntityLivingData onSpawnWithEgg(IEntityLivingData data) {
         data = super.onSpawnWithEgg(data);
-        this.npcItemsInv.setMeleeWeapon(new ItemStack(LOTRMod.daggerRed));
+        if (this.worldObj.rand.nextInt(5) == 0) {
+            this.npcItemsInv.setMeleeWeapon(new ItemStack(LOTRMod.daggerRedPoisoned));
+        } else {
+            this.npcItemsInv.setMeleeWeapon(new ItemStack(LOTRMod.daggerRed));
+        }
         this.npcItemsInv.setIdleItem(null);
         return data;
     }
@@ -66,7 +70,7 @@ extends LOTREntityDwarf {
 
     @Override
     protected LOTRAchievement getKillAchievement() {
-        return LOTRAchievement.killDwarf;
+        return LOTRAchievement.killRedDwarf;
     }
 
     @Override
@@ -118,7 +122,7 @@ extends LOTREntityDwarf {
 
     @Override
     protected LOTRChestContents getLarderDrops() {
-        return LOTRChestContents.REDDWARF_SMITHY;
+        return LOTRChestContents.LOTRChestContents2.REDDWARF_SMITHY;
     }
 
     @Override

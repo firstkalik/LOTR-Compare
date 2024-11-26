@@ -61,7 +61,7 @@ extends LOTRWorldGenStructureBase2 {
     }
 
     protected LOTRChestContents getChestContents() {
-        return LOTRChestContents.DWARF_SMITHY;
+        return LOTRChestContents.LOTRChestContents2.EREBOR_DWARF_SMITHY;
     }
 
     @Override
@@ -200,8 +200,8 @@ extends LOTRWorldGenStructureBase2 {
         this.setBlockAndMetadata(world, 0, 6, 4, this.brickStairBlock, 3);
         this.setBlockAndMetadata(world, 0, 1, -4, this.gateBlock, 0);
         this.setAir(world, 0, 2, -4);
-        this.setBlockAndMetadata(world, -2, 2, -3, Blocks.torch, 2);
-        this.setBlockAndMetadata(world, 2, 2, -3, Blocks.torch, 1);
+        this.setBlockAndMetadata(world, -2, 2, -3, LOTRMod.dwarvenTorch, 2);
+        this.setBlockAndMetadata(world, 2, 2, -3, LOTRMod.dwarvenTorch, 1);
         this.setBlockAndMetadata(world, 0, 1, -1, Blocks.anvil, 1);
         for (int i13 : new int[]{-3, 3}) {
             this.setBlockAndMetadata(world, i13, 1, -1, Blocks.anvil, 0);

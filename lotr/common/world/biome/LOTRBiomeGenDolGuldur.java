@@ -3,6 +3,9 @@
  * 
  * Could not load the following classes:
  *  net.minecraft.block.Block
+ *  net.minecraft.block.BlockGrass
+ *  net.minecraft.init.Blocks
+ *  net.minecraft.world.World
  *  net.minecraft.world.biome.BiomeGenBase
  *  net.minecraft.world.biome.BiomeGenBase$SpawnListEntry
  *  net.minecraft.world.gen.feature.WorldGenMinable
@@ -28,6 +31,9 @@ import lotr.common.world.structure2.LOTRWorldGenDolGuldurTower;
 import lotr.common.world.structure2.LOTRWorldGenSmallStoneRuin;
 import lotr.common.world.structure2.LOTRWorldGenStoneRuin;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockGrass;
+import net.minecraft.init.Blocks;
+import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.gen.feature.WorldGenMinable;
 import net.minecraft.world.gen.feature.WorldGenerator;
@@ -51,9 +57,11 @@ extends LOTRBiomeGenMirkwoodCorrupted {
         this.decorator.addOre((WorldGenerator)new WorldGenMinable(LOTRMod.oreGulduril, 8), 8.0f, 0, 32);
         this.decorator.treesPerChunk = 1;
         this.decorator.vinesPerChunk = 2;
-        this.decorator.flowersPerChunk = 0;
+        this.decorator.flowersPerChunk = 1;
         this.decorator.grassPerChunk = 6;
         this.decorator.doubleGrassPerChunk = 1;
+        this.flowers.clear();
+        this.addFlower(LOTRMod.morgulRose, 0, 20);
         this.decorator.clearTrees();
         this.decorator.addTree(LOTRTreeType.MIRK_OAK, 200);
         this.decorator.addTree(LOTRTreeType.MIRK_OAK_DEAD, 1000);
@@ -84,6 +92,11 @@ extends LOTRBiomeGenMirkwoodCorrupted {
     @Override
     public float getTreeIncreaseChance() {
         return 0.25f;
+    }
+
+    public static boolean isSurfaceGuldurBlock(World world, int i, int j, int k) {
+        Block block = world.getBlock(i, j, k);
+        return block == Blocks.grass;
     }
 
     @Override

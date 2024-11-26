@@ -128,6 +128,7 @@ public class LOTRConfig {
     public static boolean EnableUtumno;
     public static boolean renderspecial;
     public static boolean bMap;
+    public static boolean enableCloth;
     public static boolean spawnElfFix;
     public static boolean enableBleeding;
     public static boolean spawnDwarvenMine;
@@ -172,6 +173,7 @@ public class LOTRConfig {
         LOTRDimension.configureDimensions(config, CATEGORY_DIMENSION);
         enableAnvilGui = config.get(CATEGORY_GAMEPLAY, "Enable or disable Anvil Gui", false).getBoolean();
         protectPets = config.get(CATEGORY_GAMEPLAY, "Protect your Pet", ridersAvoidSuffocation).getBoolean();
+        enableCloth = config.get(CATEGORY_GAMEPLAY, "Enable Cloth Auto-Heal", true).getBoolean();
         ridersAvoidSuffocation = config.get(CATEGORY_GAMEPLAY, "Riders Avoid Suffocating in Blocks", ridersAvoidSuffocation).getBoolean();
         alwaysSetBedSpawn = config.get(CATEGORY_GAMEPLAY, "Always Set Bedspawn", alwaysSetBedSpawn).getBoolean();
         checkBedUnsafe = config.get(CATEGORY_GAMEPLAY, "Check Enemies Near Bed", checkBedUnsafe, "For MiddleEarth Entities").getBoolean();
@@ -383,7 +385,7 @@ public class LOTRConfig {
 
     static {
         allCategories = new ArrayList<ConfigCategory>();
-        maxHiredNPCs = 5;
+        maxHiredNPCs = 10;
         maxHiredNPCsCost = 20;
         maxUpHiredNPCs = 2;
         maxHornCost = 2;

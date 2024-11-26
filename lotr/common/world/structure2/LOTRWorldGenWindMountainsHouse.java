@@ -54,10 +54,10 @@ extends LOTRWorldGenDwarfHouse6 {
         this.chandelierMeta = 0;
         this.tableBlock = LOTRMod.windtable;
         this.barsBlock = LOTRMod.winddwarfBars;
-        this.larderContents = LOTRChestContents.WIND_TOWER;
-        this.personalContents = LOTRChestContents.WIND_TOWER;
+        this.larderContents = LOTRChestContents.LOTRChestContents2.WIND_TOWER;
+        this.personalContents = LOTRChestContents.LOTRChestContents2.WIND_TOWER;
         this.plateFoods = LOTRFoods.DWARF;
-        this.drinkFoods = LOTRFoods.DWARF_DRINK;
+        this.drinkFoods = LOTRFoods.WIND_DRINK;
     }
 
     @Override

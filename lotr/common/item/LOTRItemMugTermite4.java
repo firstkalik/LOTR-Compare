@@ -11,7 +11,6 @@
  *  net.minecraft.entity.Entity
  *  net.minecraft.entity.player.EntityPlayer
  *  net.minecraft.item.ItemStack
- *  net.minecraft.potion.Potion
  *  net.minecraft.util.EnumChatFormatting
  *  net.minecraft.util.StatCollector
  *  net.minecraft.world.World
@@ -27,14 +26,12 @@ import java.util.List;
 import java.util.Random;
 import lotr.common.LOTRAchievement;
 import lotr.common.LOTRLevelData;
-import lotr.common.LOTRReflection;
 import lotr.common.item.LOTRItemMug;
 import lotr.common.network.LOTRPacketHandler;
 import lotr.common.network.LOTRPacketWeaponFX;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.potion.Potion;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
@@ -49,18 +46,12 @@ extends LOTRItemMug {
     public ItemStack onEaten(ItemStack itemstack, World world, EntityPlayer entityplayer) {
         ItemStack result = super.onEaten(itemstack, world, entityplayer);
         LOTRLevelData.getData(entityplayer).addAchievement(LOTRAchievement.drinkFire);
-        if (!world.isRemote && world.rand.nextInt(2) == 0) {
+        if (!world.isRemote && world.rand.nextInt(5) == 0) {
             entityplayer.setFire(250);
             LOTRPacketWeaponFX packet = new LOTRPacketWeaponFX(LOTRPacketWeaponFX.Type.INFERNAL, (Entity)entityplayer);
             LOTRPacketHandler.networkWrapper.sendToAllAround((IMessage)packet, LOTRPacketHandler.nearEntity((Entity)entityplayer, 64.0));
-        }
-        if (!world.isRemote) {
-            for (Potion potion : Potion.potionTypes) {
-                if (potion == null || !LOTRReflection.isBadEffect(potion)) continue;
-                LOTRPacketWeaponFX packet = new LOTRPacketWeaponFX(LOTRPacketWeaponFX.Type.MACE_SAURON, (Entity)entityplayer);
-                LOTRPacketHandler.networkWrapper.sendToAllAround((IMessage)packet, LOTRPacketHandler.nearEntity((Entity)entityplayer, 64.0));
-                entityplayer.removePotionEffect(potion.id);
-            }
+            LOTRPacketWeaponFX packet1 = new LOTRPacketWeaponFX(LOTRPacketWeaponFX.Type.MACE_SAURON, (Entity)entityplayer);
+            LOTRPacketHandler.networkWrapper.sendToAllAround((IMessage)packet1, LOTRPacketHandler.nearEntity((Entity)entityplayer, 64.0));
         }
         return result;
     }

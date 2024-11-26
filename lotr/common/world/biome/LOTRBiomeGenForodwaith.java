@@ -64,13 +64,16 @@ extends LOTRBiome {
         this.spawnableWaterCreatureList.clear();
         this.spawnableCaveCreatureList.clear();
         this.spawnableLOTRAmbientList.clear();
-        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer = new LOTRBiomeSpawnList.SpawnListContainer[]{LOTRBiomeSpawnList.entry(LOTRSpawnList.SNOW_TROLLS, 10).setSpawnChance(100000), LOTRBiomeSpawnList.entry(LOTRSpawnList.MOUNTAIN_SNOW_TROLLS, 10).setSpawnChance(100000)};
-        this.npcSpawnList.newFactionList(100).add(arrspawnListContainer);
+        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer1 = new LOTRBiomeSpawnList.SpawnListContainer[]{LOTRBiomeSpawnList.entry(LOTRSpawnList.MOUNTAIN_SNOW_TROLLS, 10).setSpawnChance(100000)};
+        this.npcSpawnList.newFactionList(100).add(arrspawnListContainer1);
+        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer11 = new LOTRBiomeSpawnList.SpawnListContainer[]{LOTRBiomeSpawnList.entry(LOTRSpawnList.SNOW_TROLLS, 10).setSpawnChance(100000)};
+        this.npcSpawnList.newFactionList(100).add(arrspawnListContainer11);
         this.decorator.addSoil((WorldGenerator)new WorldGenMinable(Blocks.packed_ice, 16), 40.0f, 32, 256);
         this.decorator.treesPerChunk = 0;
         this.decorator.flowersPerChunk = 0;
         this.decorator.grassPerChunk = 0;
         this.decorator.lichenPerChunk = 0;
+        this.decorator.lichenPerChunk2 = 0;
         this.decorator.generateWater = false;
         this.biomeColors.setSky(10069160);
         this.decorator.addRandomStructure(new LOTRWorldGenRuinedHouse(false), 4000);

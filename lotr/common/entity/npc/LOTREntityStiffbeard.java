@@ -68,7 +68,7 @@ implements LOTRBiomeGenNearHarad.ImmuneToFrost {
 
     @Override
     protected LOTRAchievement getKillAchievement() {
-        return LOTRAchievement.killDwarf;
+        return LOTRAchievement.killRedDwarf;
     }
 
     @Override
@@ -120,7 +120,7 @@ implements LOTRBiomeGenNearHarad.ImmuneToFrost {
 
     @Override
     protected LOTRChestContents getLarderDrops() {
-        return LOTRChestContents.REDDWARF_SMITHY;
+        return LOTRChestContents.LOTRChestContents2.REDDWARF_SMITHY;
     }
 
     @Override

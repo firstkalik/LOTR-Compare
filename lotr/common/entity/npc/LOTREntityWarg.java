@@ -19,6 +19,7 @@
  *  net.minecraft.entity.ai.attributes.IAttribute
  *  net.minecraft.entity.ai.attributes.IAttributeInstance
  *  net.minecraft.entity.item.EntityItem
+ *  net.minecraft.entity.passive.EntitySheep
  *  net.minecraft.entity.player.EntityPlayer
  *  net.minecraft.entity.player.InventoryPlayer
  *  net.minecraft.init.Items
@@ -80,6 +81,7 @@ import net.minecraft.entity.ai.EntityAIWatchClosest2;
 import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Items;
@@ -125,14 +127,17 @@ implements IInvBasic {
         if (!(this instanceof LOTREntityWargBombardier)) {
             this.targetTasks.addTask(target + 1, (EntityAIBase)new LOTREntityAINearestAttackableTargetBasic(this, LOTREntityRabbit.class, 500, false));
             this.targetTasks.addTask(target + 1, (EntityAIBase)new LOTREntityAINearestAttackableTargetBasic(this, LOTREntityDeer.class, 1000, false));
+            this.targetTasks.addTask(target + 1, (EntityAIBase)new LOTREntityAINearestAttackableTargetBasic(this, EntitySheep.class, 1000, false));
         }
         if (!(this instanceof LOTREntityWargBombardier2)) {
             this.targetTasks.addTask(target + 1, (EntityAIBase)new LOTREntityAINearestAttackableTargetBasic(this, LOTREntityRabbit.class, 500, false));
             this.targetTasks.addTask(target + 1, (EntityAIBase)new LOTREntityAINearestAttackableTargetBasic(this, LOTREntityDeer.class, 1000, false));
+            this.targetTasks.addTask(target + 1, (EntityAIBase)new LOTREntityAINearestAttackableTargetBasic(this, EntitySheep.class, 1000, false));
         }
         if (!(this instanceof LOTREntityWargBombardier4)) {
             this.targetTasks.addTask(target + 1, (EntityAIBase)new LOTREntityAINearestAttackableTargetBasic(this, LOTREntityRabbit.class, 500, false));
             this.targetTasks.addTask(target + 1, (EntityAIBase)new LOTREntityAINearestAttackableTargetBasic(this, LOTREntityDeer.class, 1000, false));
+            this.targetTasks.addTask(target + 1, (EntityAIBase)new LOTREntityAINearestAttackableTargetBasic(this, EntitySheep.class, 1000, false));
         }
         this.isImmuneToFrost = true;
         this.spawnsInDarkness = true;

@@ -96,7 +96,7 @@ extends LOTREnchantment {
         if (entity instanceof EntityPlayerMP) {
             LOTRDamage.doFrostDamage((EntityPlayerMP)entity);
         }
-        int duration = 2;
+        int duration = 4;
         entity.addPotionEffect(new PotionEffect(Potion.wither.id, duration * 20, 1));
     }
 

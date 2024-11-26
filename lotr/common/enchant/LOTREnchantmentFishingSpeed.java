@@ -28,16 +28,12 @@ extends LOTREnchantment {
 
     @Override
     public boolean canApply(ItemStack itemstack, boolean considering) {
-        boolean canApply = false;
-        if (itemstack.getItem() instanceof ItemFishingRod) {
-            canApply = true;
-        }
-        return canApply;
+        return itemstack.getItem() instanceof ItemFishingRod;
     }
 
     @Override
     public String getDescription(ItemStack itemstack) {
-        return StatCollector.translateToLocalFormatted((String)"lotr.enchant.fishingSpeed.desc", (Object[])new Object[]{this.speedFactor * 5});
+        return StatCollector.translateToLocalFormatted((String)"lotr.enchant.fishingSpeed.desc", (Object[])new Object[]{this.speedFactor * 3});
     }
 
     @Override

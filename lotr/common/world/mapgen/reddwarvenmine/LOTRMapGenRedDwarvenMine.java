@@ -21,6 +21,7 @@ import lotr.common.world.biome.LOTRBiomeGenRedMountainsBlacklock;
 import lotr.common.world.biome.LOTRBiomeGenRedMountainsFoothillsBlacklock;
 import lotr.common.world.biome.LOTRBiomeGenRedMountainsFoothillsStiffbeard;
 import lotr.common.world.biome.LOTRBiomeGenRedMountainsFoothillsStonefoot;
+import lotr.common.world.biome.LOTRBiomeGenRedMountainsIronfist;
 import lotr.common.world.biome.LOTRBiomeGenRedMountainsStiffbeard;
 import lotr.common.world.biome.LOTRBiomeGenRedMountainsStonefoot;
 import lotr.common.world.mapgen.reddwarvenmine.LOTRComponentRedDwarvenMineCorridor;
@@ -53,6 +54,9 @@ extends MapGenStructure {
                 boolean ruined = false;
                 if (biome instanceof LOTRBiomeGenRedMountainsStonefoot || biome instanceof LOTRBiomeGenRedMountainsFoothillsStonefoot) {
                     mine = true;
+                }
+                if (biome instanceof LOTRBiomeGenRedMountainsIronfist) {
+                    ruined = true;
                 }
                 if (biome instanceof LOTRBiomeGenRedMountainsBlacklock || biome instanceof LOTRBiomeGenRedMountainsFoothillsBlacklock) {
                     mine = true;

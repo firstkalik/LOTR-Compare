@@ -50,7 +50,6 @@ import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.eventhandler.Event;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
-import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -241,9 +240,17 @@ extends Entity {
         int r = (int)(rgb[0] * 255.0f);
         int g = (int)(rgb[1] * 255.0f);
         int b = (int)(rgb[2] * 255.0f);
-        System.out.println("RGB: " + r + ", " + g + ", " + b);
         if (this.isCloseToColor(r, g, b, 16, 120, 8, 15)) {
             return EnumChatFormatting.DARK_GREEN;
+        }
+        if (this.isCloseToColor(r, g, b, 119, 145, 119, 15)) {
+            return EnumChatFormatting.DARK_GREEN;
+        }
+        if (this.isCloseToColor(r, g, b, 77, 115, 88, 5)) {
+            return EnumChatFormatting.DARK_GREEN;
+        }
+        if (this.isCloseToColor(r, g, b, 127, 32, 0, 5)) {
+            return EnumChatFormatting.RED;
         }
         if (this.isCloseToColor(r, g, b, 73, 183, 82, 15)) {
             return EnumChatFormatting.GREEN;

@@ -19,6 +19,7 @@
  *  net.minecraft.inventory.Container
  *  net.minecraft.item.Item
  *  net.minecraft.item.ItemStack
+ *  net.minecraft.nbt.NBTTagCompound
  *  net.minecraft.tileentity.TileEntity
  *  net.minecraft.util.IIcon
  *  net.minecraft.util.MathHelper
@@ -35,6 +36,8 @@ import lotr.common.LOTRCreativeTabs;
 import lotr.common.LOTRMod;
 import lotr.common.item.LOTRItemBarrel;
 import lotr.common.item.LOTRItemBottlePoison;
+import lotr.common.item.LOTRItemGraal;
+import lotr.common.item.LOTRItemGraalMithril;
 import lotr.common.item.LOTRItemMug;
 import lotr.common.recipe.LOTRBrewingRecipes;
 import lotr.common.tileentity.LOTRTileEntityBarrel;
@@ -52,6 +55,7 @@ import net.minecraft.entity.player.PlayerCapabilities;
 import net.minecraft.inventory.Container;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
@@ -142,6 +146,31 @@ extends BlockContainer {
                     entityplayer.inventory.setInventorySlotContents(entityplayer.inventory.currentItem, playerDrink);
                 } else if (!entityplayer.inventory.addItemStackToInventory(playerDrink)) {
                     entityplayer.dropPlayerItemWithRandomChoice(playerDrink, false);
+                }
+                barrel.consumeMugRefill();
+                world.playSoundEffect((double)i + 0.5, (double)j + 0.5, (double)k + 0.5, "lotr:item.mug_fill", 0.5f, 0.8f + world.rand.nextFloat() * 0.4f);
+                return true;
+            }
+            if (!(barrelDrink == null || !(item instanceof LOTRItemGraal) || itemstack.hasTagCompound() && itemstack.getTagCompound().getInteger("hasDrink") >= ((LOTRItemGraal)item).getMaxDrinks() || !(LOTRItemMug.getAlcoholicity(barrelDrink) <= 0.0f) && barrelDrink.getItem() != LOTRMod.mugDwarvenTonic && barrelDrink.getItem() != LOTRMod.mugBlueDwarvenTonic && barrelDrink.getItem() != LOTRMod.mugRedDwarvenTonic)) {
+                ItemStack playerDrink = barrelDrink.copy();
+                NBTTagCompound tagCompound = itemstack.getTagCompound();
+                if (tagCompound == null) {
+                    tagCompound = new NBTTagCompound();
+                }
+                itemstack.setTagCompound(tagCompound);
+                int currentDrinks = itemstack.getTagCompound().getInteger("hasDrink");
+                if (currentDrinks == 0) {
+                    tagCompound.setInteger("hasDrink", 1);
+                    tagCompound.setFloat("strength1", LOTRItemMug.getStrength(playerDrink));
+                    tagCompound.setString("potion1", playerDrink.getUnlocalizedName());
+                } else if (currentDrinks == 1) {
+                    tagCompound.setInteger("hasDrink", 2);
+                    tagCompound.setFloat("strength2", LOTRItemMug.getStrength(playerDrink));
+                    tagCompound.setString("potion2", playerDrink.getUnlocalizedName());
+                } else if (currentDrinks == 2 && item instanceof LOTRItemGraalMithril) {
+                    tagCompound.setInteger("hasDrink", 3);
+                    tagCompound.setFloat("strength3", LOTRItemMug.getStrength(playerDrink));
+                    tagCompound.setString("potion3", playerDrink.getUnlocalizedName());
                 }
                 barrel.consumeMugRefill();
                 world.playSoundEffect((double)i + 0.5, (double)j + 0.5, (double)k + 0.5, "lotr:item.mug_fill", 0.5f, 0.8f + world.rand.nextFloat() * 0.4f);

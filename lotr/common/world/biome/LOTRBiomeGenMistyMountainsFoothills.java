@@ -51,6 +51,7 @@ extends LOTRBiome {
         LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer6 = new LOTRBiomeSpawnList.SpawnListContainer[]{LOTRBiomeSpawnList.entry(LOTRSpawnList.BLACKLOCK, 10), LOTRBiomeSpawnList.entry(LOTRSpawnList.STIFFBEARD, 10), LOTRBiomeSpawnList.entry(LOTRSpawnList.STONEFOOT, 10)};
         this.npcSpawnList.newFactionList(0).add(arrspawnListContainer6);
         this.variantChance = 0.1f;
+        this.decorator.lichenPerChunk = 3;
         this.addBiomeVariantSet(LOTRBiomeVariant.SET_MOUNTAINS);
         this.addBiomeVariant(LOTRBiomeVariant.FOREST_LARCH, 0.3f);
         this.addBiomeVariant(LOTRBiomeVariant.FOREST_PINE, 0.3f);

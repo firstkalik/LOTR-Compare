@@ -467,7 +467,7 @@ extends LOTRWorldGenStructureBase2 {
         } else if (randomFeature == 3) {
             this.setBlockAndMetadata(world, i, j, k, this.plankSlabBlock, this.plankSlabMeta | 8);
             if (!this.ruined) {
-                this.placePlateWithCertainty(world, random, i, j + 1, k, this.plateBlock, LOTRFoods.DWARF);
+                this.placePlateWithCertainty(world, random, i, j + 1, k, this.plateBlock, LOTRFoods.REDDWARF_DRINK);
             }
         } else if (randomFeature == 4) {
             this.setBlockAndMetadata(world, i, j, k, this.plankSlabBlock, this.plankSlabMeta | 8);

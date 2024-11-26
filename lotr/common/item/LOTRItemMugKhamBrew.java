@@ -19,9 +19,9 @@ import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.World;
 
-public class LOTRItemMugTermite2
+public class LOTRItemMugKhamBrew
 extends LOTRItemMug {
-    public LOTRItemMugTermite2(float f) {
+    public LOTRItemMugKhamBrew(float f) {
         super(f);
     }
 

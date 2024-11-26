@@ -28,7 +28,7 @@ extends LOTRBlockCraftingTable {
     private IIcon[] tableIcons;
 
     public LOTRBlockAngmarTable() {
-        super(Material.rock, LOTRFaction.GUNDABAD, 23);
+        super(Material.rock, LOTRFaction.ANGMAR, 23);
         this.setStepSound(Block.soundTypeStone);
     }
 

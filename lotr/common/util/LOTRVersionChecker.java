@@ -48,7 +48,7 @@ public class LOTRVersionChecker {
                         }
                         updateReader.close();
                         updateVersion = updateVersion.trim();
-                        String currentVersion = "Update v1.1 for Minecraft 1.7.10";
+                        String currentVersion = "Update v1.12 for Minecraft 1.7.10";
                         if (!updateVersion.equals(currentVersion)) {
                             ChatComponentText component = new ChatComponentText("LOTR+");
                             component.getChatStyle().setColor(EnumChatFormatting.GOLD);

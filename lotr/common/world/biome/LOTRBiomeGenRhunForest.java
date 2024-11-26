@@ -34,8 +34,12 @@ extends LOTRBiomeGenRhun {
         this.spawnableCreatureList.add(new BiomeGenBase.SpawnListEntry(LOTREntityDeer.class, 20, 4, 6));
         LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer2 = new LOTRBiomeSpawnList.SpawnListContainer[]{LOTRBiomeSpawnList.entry(LOTRSpawnList.DURMETH_ORCS, 10), LOTRBiomeSpawnList.entry(LOTRSpawnList.DURMETH_WARGS, 2), LOTRBiomeSpawnList.entry(LOTRSpawnList.CAVE, 1).setConquestThreshold(100.0f)};
         this.npcSpawnList.newFactionList(0).add(arrspawnListContainer2);
-        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer3 = new LOTRBiomeSpawnList.SpawnListContainer[]{LOTRBiomeSpawnList.entry(LOTRSpawnList.MIRKWOOD_SPIDERS, 10), LOTRBiomeSpawnList.entry(LOTRSpawnList.DOL_GULDUR_ORCS, 10), LOTRBiomeSpawnList.entry(LOTRSpawnList.MIRK_TROLLS, 1).setConquestThreshold(100.0f)};
+        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer3 = new LOTRBiomeSpawnList.SpawnListContainer[]{LOTRBiomeSpawnList.entry(LOTRSpawnList.MORDOR_ORCS, 10), LOTRBiomeSpawnList.entry(LOTRSpawnList.MORDOR_WARGS, 10), LOTRBiomeSpawnList.entry(LOTRSpawnList.MORDOR_TROLL, 1).setConquestThreshold(100.0f)};
         this.npcSpawnList.newFactionList(0).add(arrspawnListContainer3);
+        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer61 = new LOTRBiomeSpawnList.SpawnListContainer[]{LOTRBiomeSpawnList.entry(LOTRSpawnList.AVARI_ELF_WARRIORS, 10)};
+        this.npcSpawnList.newFactionList(0).add(arrspawnListContainer61);
+        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer6 = new LOTRBiomeSpawnList.SpawnListContainer[]{LOTRBiomeSpawnList.entry(LOTRSpawnList.BLACKLOCK, 10), LOTRBiomeSpawnList.entry(LOTRSpawnList.STIFFBEARD, 10), LOTRBiomeSpawnList.entry(LOTRSpawnList.STONEFOOT, 10), LOTRBiomeSpawnList.entry(LOTRSpawnList.IRONFIST, 10)};
+        this.npcSpawnList.newFactionList(0).add(arrspawnListContainer6);
         this.clearBiomeVariants();
         this.addBiomeVariantSet(LOTRBiomeVariant.SET_FOREST);
         this.decorator.treesPerChunk = 8;

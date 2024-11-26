@@ -169,7 +169,7 @@ public class LOTREventSpawner {
             }
             if (chance <= 0.0 || world.rand.nextDouble() >= chance || world.selectEntitiesWithinAABB(EntityPlayer.class, AxisAlignedBB.getBoundingBox((double)(i - 48), (double)0.0, (double)(k - (range = 48)), (double)(i + range), (double)world.getHeight(), (double)(k + range)), LOTRMod.selectNonCreativePlayers()).isEmpty()) continue;
             int banditsSpawned = 0;
-            int maxBandits = MathHelper.getRandomIntegerInRange((Random)world.rand, (int)1, (int)4);
+            int maxBandits = MathHelper.getRandomIntegerInRange((Random)world.rand, (int)1, (int)6);
             for (int attempts = 0; attempts < 32; ++attempts) {
                 Block block;
                 LOTREntityBandit bandit;
@@ -195,6 +195,7 @@ public class LOTREventSpawner {
         UNCOMMON(0.3f, 3600),
         HALFTIME(0.6f, 3600),
         COMMON(0.9f, 3600),
+        UBELIEVEBLE(1.0f, 3600),
         BANDIT_RARE(0.1f, 3600),
         BANDIT_UNCOMMON(0.3f, 3600),
         BANDIT_HALFTIME(0.5f, 3600),

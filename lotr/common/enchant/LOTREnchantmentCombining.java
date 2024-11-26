@@ -53,6 +53,10 @@ public class LOTREnchantmentCombining {
         LOTREnchantmentCombining.combine(LOTREnchantment.rangedStrong2, LOTREnchantment.rangedStrong3, 1500);
         LOTREnchantmentCombining.combine(LOTREnchantment.rangedStrong3, LOTREnchantment.rangedStrong4, 3500);
         LOTREnchantmentCombining.combine(LOTREnchantment.rangedKnockback1, LOTREnchantment.rangedKnockback2, 2500);
+        LOTREnchantmentCombining.combine(LOTREnchantment.fishingSpeed1, LOTREnchantment.fishingSpeed2, 400);
+        LOTREnchantmentCombining.combine(LOTREnchantment.fishingSpeed2, LOTREnchantment.fishingSpeed3, 1500);
+        LOTREnchantmentCombining.combine(LOTREnchantment.seaFortune1, LOTREnchantment.seaFortune2, 400);
+        LOTREnchantmentCombining.combine(LOTREnchantment.seaFortune2, LOTREnchantment.seaFortune3, 1500);
     }
 
     public static CombineRecipe getCombinationResult(ItemStack item1, ItemStack item2) {

@@ -129,42 +129,60 @@ extends Item {
         lootList.add(new ItemStack(Items.iron_ingot, rand.nextInt(1) + 1));
         lootList.add(new ItemStack(Items.gold_ingot, rand.nextInt(1) + 1));
         lootList.add(new ItemStack(Items.gold_nugget, rand.nextInt(1) + 1));
-        if (rand.nextDouble() < 0.5) {
+        if (rand.nextDouble() < 0.3) {
             lootList.add(new ItemStack(LOTRMod.silverRing, rand.nextInt(1) + 1));
             lootList.add(new ItemStack(LOTRMod.goldRing, rand.nextInt(1) + 1));
             lootList.add(new ItemStack(LOTRMod.mithrilRing));
             lootList.add(new ItemStack(LOTRMod.mithrilNugget));
+            lootList.add(new ItemStack(LOTRMod.gobletSilver));
+            lootList.add(new ItemStack(LOTRMod.gobletGold));
             lootList.add(new ItemStack(LOTRMod.silverCoin, rand.nextInt(20) + 1, 1));
             lootList.add(new ItemStack(LOTRMod.silver, rand.nextInt(1) + 1));
-            if (rand.nextDouble() < 0.15) {
+            if (rand.nextDouble() < 0.1) {
                 lootList.add(new ItemStack(LOTRMod.totemOfUndying));
                 lootList.add(new ItemStack(LOTRMod.treasureMap));
                 lootList.add(new ItemStack(LOTRMod.silverCoin, rand.nextInt(10) + 1, 2));
                 lootList.add(new ItemStack(LOTRMod.magicClover));
                 lootList.add(new ItemStack(LOTRMod.mithril));
-                LOTRLevelData.getData(player).addAchievement(LOTRAchievement.treasureRare);
+                lootList.add(new ItemStack(LOTRMod.gobletMithril, rand.nextInt(1) + 2));
                 world.playSoundAtEntity((Entity)player, "random.levelup", 0.5f, 1.0f);
             }
-            if (rand.nextDouble() < 0.085) {
+            if (rand.nextDouble() < 0.092) {
+                lootList.add(new ItemStack(LOTRMod.treasureMap));
                 lootList.add(new ItemStack(LOTRMod.treasureMap));
                 lootList.add(new ItemStack(LOTRMod.ring_bright));
                 lootList.add(new ItemStack(LOTRMod.totemOfUndying, rand.nextInt(1) + 1));
+                lootList.add(new ItemStack(LOTRMod.totemOfUndyingPlus, rand.nextInt(1) + 1));
                 lootList.add(new ItemStack(LOTRMod.magicClover, rand.nextInt(1) + 1));
                 lootList.add(new ItemStack(LOTRMod.diggingBook2));
                 lootList.add(new ItemStack(LOTRMod.mithrilRaw));
+                lootList.add(new ItemStack(LOTRMod.graalGold));
                 LOTRLevelData.getData(player).addAchievement(LOTRAchievement.treasureRare);
                 world.playSoundAtEntity((Entity)player, "lotr:item.levelup", 0.5f, 1.0f);
             }
-            if (rand.nextDouble() < 0.01) {
-                lootList.add(new ItemStack(LOTRMod.treasureMap, rand.nextInt(1) + 1));
+            if (rand.nextDouble() < 0.08) {
+                lootList.add(new ItemStack(LOTRMod.treasureMap));
+                lootList.add(new ItemStack(LOTRMod.treasureMap));
                 lootList.add(new ItemStack(LOTRMod.ring_bright));
                 lootList.add(new ItemStack(LOTRMod.silverCoin, rand.nextInt(10) + 1, 3));
                 lootList.add(new ItemStack(LOTRMod.totemOfUndying, rand.nextInt(1) + 2));
+                lootList.add(new ItemStack(LOTRMod.totemOfUndyingPlus, rand.nextInt(1) + 2));
+                lootList.add(new ItemStack(LOTRMod.magicClover, rand.nextInt(1) + 3));
                 lootList.add(new ItemStack(LOTRMod.magicCloverPlus));
-                lootList.add(new ItemStack(LOTRMod.diggingBook2));
-                lootList.add(new ItemStack(LOTRMod.soulboundBook));
+                lootList.add(new ItemStack(LOTRMod.graalMithril));
+                lootList.add(new ItemStack(LOTRMod.diggingBook2, rand.nextInt(1) + 2));
+                lootList.add(new ItemStack(LOTRMod.soulboundBook, rand.nextInt(1) + 2));
                 LOTRLevelData.getData(player).addAchievement(LOTRAchievement.treasureUltraRare);
                 world.playSoundAtEntity((Entity)player, "lotr:item.levelupskyrim", 0.5f, 1.0f);
+            }
+            if (rand.nextDouble() < 0.008) {
+                ItemStack coinStack = new ItemStack(LOTRMod.silverCoin, 1, 6);
+                if (player.inventory.addItemStackToInventory(coinStack)) {
+                    LOTRLevelData.getData(player).addAchievement(LOTRAchievement.treasureMillionere);
+                    world.playSoundAtEntity((Entity)player, "lotr:item.millionere", 0.5f, 1.0f);
+                } else {
+                    player.dropPlayerItemWithRandomChoice(coinStack, false);
+                }
             }
         }
         return lootList;

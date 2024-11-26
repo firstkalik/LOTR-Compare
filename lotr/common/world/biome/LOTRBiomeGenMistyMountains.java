@@ -65,6 +65,7 @@ extends LOTRBiome {
         this.decorator.addOre((WorldGenerator)new WorldGenMinable(LOTRMod.oreMithril, 6), 0.28f, 0, 16);
         this.decorator.addOre((WorldGenerator)new WorldGenMinable(LOTRMod.oreGlowstone, 4), 8.0f, 0, 48);
         this.decorator.flowersPerChunk = 1;
+        this.decorator.lichenPerChunk = 0;
         this.decorator.grassPerChunk = 3;
         this.decorator.doubleGrassPerChunk = 1;
         this.decorator.generateWater = false;

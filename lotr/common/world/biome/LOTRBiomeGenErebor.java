@@ -101,6 +101,7 @@ extends LOTRBiome {
         this.setBanditChance(LOTREventSpawner.EventChance.BANDIT_UNCOMMON);
         this.invasionSpawns.addInvasion(LOTRInvasions.GUNDABAD, LOTREventSpawner.EventChance.RARE);
         this.invasionSpawns.addInvasion(LOTRInvasions.DURMETH, LOTREventSpawner.EventChance.RARE);
+        this.invasionSpawns.addInvasion(LOTRInvasions.DURMETH_URUK, LOTREventSpawner.EventChance.RARE);
         this.invasionSpawns.addInvasion(LOTRInvasions.DURMETH_WARG, LOTREventSpawner.EventChance.RARE);
         this.invasionSpawns.addInvasion(LOTRInvasions.ANGBAND, LOTREventSpawner.EventChance.RARE);
         this.invasionSpawns.addInvasion(LOTRInvasions.DOL_GULDUR, LOTREventSpawner.EventChance.RARE);

@@ -5,6 +5,7 @@
  *  net.minecraft.entity.EntityLivingBase
  *  net.minecraft.entity.EnumCreatureAttribute
  *  net.minecraft.item.ItemStack
+ *  net.minecraft.util.EnumChatFormatting
  *  net.minecraft.util.MathHelper
  *  net.minecraft.util.StatCollector
  *  net.minecraft.world.World
@@ -24,6 +25,7 @@ import lotr.common.world.LOTRWorldProviderUtumno;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureAttribute;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
@@ -100,7 +102,8 @@ extends LOTREnchantmentDamage {
 
     @Override
     public String getDescription(ItemStack itemstack) {
-        return StatCollector.translateToLocalFormatted((String)("lotr.enchant." + this.enchantName + ".desc"), (Object[])new Object[]{this.formatAdditive(this.baneDamage)});
+        String formattedBaneDamage = (Object)EnumChatFormatting.GOLD + this.formatAdditive(this.baneDamage) + (Object)EnumChatFormatting.GRAY;
+        return StatCollector.translateToLocalFormatted((String)("lotr.enchant." + this.enchantName + ".desc"), (Object[])new Object[]{formattedBaneDamage});
     }
 
     @Override

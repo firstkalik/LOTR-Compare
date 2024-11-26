@@ -47,7 +47,7 @@ extends LOTREntitySpiderBase {
 
     @Override
     public float getAlignmentBonus() {
-        return 1.0f;
+        return 0.0f;
     }
 
     @Override

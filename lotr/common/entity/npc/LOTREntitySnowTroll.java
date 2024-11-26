@@ -36,6 +36,7 @@ import lotr.common.entity.ai.LOTREntityAIRangedAttack;
 import lotr.common.entity.npc.LOTREntityNPC;
 import lotr.common.entity.npc.LOTREntityTroll;
 import lotr.common.entity.projectile.LOTREntityTrollSnowball;
+import lotr.common.fac.LOTRFaction;
 import net.minecraft.entity.DataWatcher;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
@@ -64,6 +65,11 @@ extends LOTREntityTroll {
     public LOTREntitySnowTroll(World world) {
         super(world);
         this.isImmuneToFrost = true;
+    }
+
+    @Override
+    public LOTRFaction getFaction() {
+        return LOTRFaction.ANGMAR;
     }
 
     @Override

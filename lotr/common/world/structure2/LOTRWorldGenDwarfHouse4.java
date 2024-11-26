@@ -303,14 +303,14 @@ extends LOTRWorldGenStructureBase2 {
             this.setBlockAndMetadata(world, 5, j1, -5, this.pillarBlock, this.pillarMeta);
             this.setBlockAndMetadata(world, 5, j1, 5, this.pillarBlock, this.pillarMeta);
         }
-        this.setBlockAndMetadata(world, -4, 2, -5, Blocks.torch, 2);
-        this.setBlockAndMetadata(world, -5, 2, -4, Blocks.torch, 3);
-        this.setBlockAndMetadata(world, -4, 2, 5, Blocks.torch, 2);
-        this.setBlockAndMetadata(world, -5, 2, 4, Blocks.torch, 4);
-        this.setBlockAndMetadata(world, 4, 2, -5, Blocks.torch, 1);
-        this.setBlockAndMetadata(world, 5, 2, -4, Blocks.torch, 3);
-        this.setBlockAndMetadata(world, 4, 2, 5, Blocks.torch, 1);
-        this.setBlockAndMetadata(world, 5, 2, 4, Blocks.torch, 4);
+        this.setBlockAndMetadata(world, -4, 2, -5, LOTRMod.reddwarvenTorchSilver, 2);
+        this.setBlockAndMetadata(world, -5, 2, -4, LOTRMod.reddwarvenTorchSilver, 3);
+        this.setBlockAndMetadata(world, -4, 2, 5, LOTRMod.reddwarvenTorchSilver, 2);
+        this.setBlockAndMetadata(world, -5, 2, 4, LOTRMod.reddwarvenTorchSilver, 4);
+        this.setBlockAndMetadata(world, 4, 2, -5, LOTRMod.reddwarvenTorchSilver, 1);
+        this.setBlockAndMetadata(world, 5, 2, -4, LOTRMod.reddwarvenTorchSilver, 3);
+        this.setBlockAndMetadata(world, 4, 2, 5, LOTRMod.reddwarvenTorchSilver, 1);
+        this.setBlockAndMetadata(world, 5, 2, 4, LOTRMod.reddwarvenTorchSilver, 4);
         for (i13 = -4; i13 <= 4; ++i13) {
             this.setBlockAndMetadata(world, i13, 3, -5, this.brickStairBlock, 7);
             this.setBlockAndMetadata(world, i13, 3, 5, this.brickStairBlock, 6);
@@ -395,9 +395,9 @@ extends LOTRWorldGenStructureBase2 {
             this.setBlockAndMetadata(world, -2, j1, -5, this.pillarBlock, this.pillarMeta);
             this.setBlockAndMetadata(world, -2, j1, 5, this.pillarBlock, this.pillarMeta);
         }
-        this.setBlockAndMetadata(world, -5, -2, 4, Blocks.torch, 4);
-        this.setBlockAndMetadata(world, -2, -2, 4, Blocks.torch, 4);
-        this.setBlockAndMetadata(world, -2, -2, -4, Blocks.torch, 3);
+        this.setBlockAndMetadata(world, -5, -2, 4, LOTRMod.reddwarvenTorchSilver, 4);
+        this.setBlockAndMetadata(world, -2, -2, 4, LOTRMod.reddwarvenTorchSilver, 4);
+        this.setBlockAndMetadata(world, -2, -2, -4, LOTRMod.reddwarvenTorchSilver, 3);
         for (k1 = -4; k1 <= 4; ++k1) {
             if (IntMath.mod((int)k1, (int)2) == 1) {
                 this.setBlockAndMetadata(world, -2, -3, k1, this.plankSlabBlock, this.plankSlabMeta | 8);
@@ -434,10 +434,10 @@ extends LOTRWorldGenStructureBase2 {
             this.setBlockAndMetadata(world, 2, j1, -5, this.pillarBlock, this.pillarMeta);
             this.setBlockAndMetadata(world, 2, j1, 5, this.pillarBlock, this.pillarMeta);
         }
-        this.setBlockAndMetadata(world, 5, -2, 4, Blocks.torch, 4);
-        this.setBlockAndMetadata(world, 2, -2, 4, Blocks.torch, 4);
-        this.setBlockAndMetadata(world, 5, -2, -4, Blocks.torch, 3);
-        this.setBlockAndMetadata(world, 2, -2, -4, Blocks.torch, 3);
+        this.setBlockAndMetadata(world, 5, -2, 4, LOTRMod.reddwarvenTorchSilver, 4);
+        this.setBlockAndMetadata(world, 2, -2, 4, LOTRMod.reddwarvenTorchSilver, 4);
+        this.setBlockAndMetadata(world, 5, -2, -4, LOTRMod.reddwarvenTorchSilver, 3);
+        this.setBlockAndMetadata(world, 2, -2, -4, LOTRMod.reddwarvenTorchSilver, 3);
         for (k1 = -4; k1 <= 4; ++k1) {
             this.setBlockAndMetadata(world, 2, -3, k1, this.plankBlock, this.plankMeta);
             this.setBlockAndMetadata(world, 2, -1, k1, this.brickStairBlock, 4);

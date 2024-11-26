@@ -43,7 +43,7 @@ extends LOTRBlockGate {
     @SideOnly(value=Side.CLIENT)
     @Override
     public void registerBlockIcons(IIconRegister iconregister) {
-        LOTRConnectedTextures.registerNonConnectedGateIcons(iconregister, this, 0, LOTRMod.rock.getIcon(0, 4).getIconName());
+        LOTRConnectedTextures.registerNonConnectedGateIcons(iconregister, this, 0, LOTRMod.rock.getIcon(0, 1).getIconName());
     }
 
     @SideOnly(value=Side.CLIENT)
@@ -53,13 +53,13 @@ extends LOTRBlockGate {
         if (open) {
             return LOTRConnectedTextures.getConnectedIconBlock(this, world, i, j, k, side, false);
         }
-        return LOTRMod.rock.getIcon(i, 4);
+        return LOTRMod.rock.getIcon(i, 1);
     }
 
     @SideOnly(value=Side.CLIENT)
     @Override
     public IIcon getIcon(int i, int j) {
-        return LOTRMod.rock.getIcon(i, 4);
+        return LOTRMod.rock.getIcon(i, 1);
     }
 
     @Override

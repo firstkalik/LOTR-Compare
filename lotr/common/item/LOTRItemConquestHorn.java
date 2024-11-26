@@ -208,6 +208,15 @@ extends Item {
         if (this.isCloseToColor(r, g, b, 16, 120, 8, 15)) {
             return EnumChatFormatting.DARK_GREEN;
         }
+        if (this.isCloseToColor(r, g, b, 119, 145, 119, 15)) {
+            return EnumChatFormatting.DARK_GREEN;
+        }
+        if (this.isCloseToColor(r, g, b, 77, 115, 88, 5)) {
+            return EnumChatFormatting.DARK_GREEN;
+        }
+        if (this.isCloseToColor(r, g, b, 127, 32, 0, 5)) {
+            return EnumChatFormatting.RED;
+        }
         if (this.isCloseToColor(r, g, b, 73, 183, 82, 15)) {
             return EnumChatFormatting.GREEN;
         }

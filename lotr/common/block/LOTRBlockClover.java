@@ -4,8 +4,10 @@
  * Could not load the following classes:
  *  cpw.mods.fml.relauncher.Side
  *  cpw.mods.fml.relauncher.SideOnly
+ *  net.minecraft.block.Block
  *  net.minecraft.client.renderer.texture.IIconRegister
  *  net.minecraft.creativetab.CreativeTabs
+ *  net.minecraft.entity.player.EntityPlayer
  *  net.minecraft.item.Item
  *  net.minecraft.item.ItemStack
  *  net.minecraft.util.AxisAlignedBB
@@ -19,12 +21,21 @@ package lotr.common.block;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
+import java.util.Set;
 import lotr.common.LOTRCommonProxy;
+import lotr.common.LOTRLevelData;
 import lotr.common.LOTRMod;
+import lotr.common.LOTRPlayerData;
 import lotr.common.block.LOTRBlockFlower;
+import lotr.common.fac.LOTRFaction;
+import lotr.common.world.biome.LOTRBiomeSunLands;
+import net.minecraft.block.Block;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
@@ -43,6 +54,41 @@ extends LOTRBlockFlower {
 
     public LOTRBlockClover() {
         this.setBlockBounds(0.2f, 0.0f, 0.2f, 0.8f, 0.4f, 0.8f);
+    }
+
+    public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {
+        ArrayList<ItemStack> drops = new ArrayList<ItemStack>();
+        if (metadata == 1 && world.getBiomeGenForCoords(x, z) instanceof LOTRBiomeSunLands) {
+            LOTRPlayerData playerData;
+            EntityPlayer player = world.getClosestPlayer((double)x, (double)y, (double)z, 16.0);
+            if (player != null && (playerData = LOTRLevelData.getData(player)) != null) {
+                LOTRFaction pledgeFaction = playerData.getPledgeFaction();
+                if (pledgeFaction != null) {
+                    float reputation = playerData.getAlignment(pledgeFaction);
+                    Set<LOTRFaction.FactionType> factionTypesSet = pledgeFaction.getFactionTypes();
+                    EnumSet<LOTRFaction.FactionType> factionTypes = EnumSet.copyOf(factionTypesSet);
+                    LOTRFaction.FactionType factionType = this.getPriorityFactionType(factionTypes);
+                    if (reputation >= 10000.0f && factionType == LOTRFaction.FactionType.TYPE_FREE) {
+                        if (player.isSneaking()) {
+                            drops.add(new ItemStack(LOTRMod.magicCloverPlus));
+                        } else {
+                            drops.add(new ItemStack((Block)this, 1, metadata));
+                        }
+                    } else {
+                        drops.add(new ItemStack((Block)this, 1, metadata));
+                    }
+                } else {
+                    drops.add(new ItemStack((Block)this, 1, metadata));
+                }
+            }
+        } else {
+            drops.add(new ItemStack((Block)this, 1, metadata));
+        }
+        return drops;
+    }
+
+    private LOTRFaction.FactionType getPriorityFactionType(EnumSet<LOTRFaction.FactionType> factionTypes) {
+        return LOTRFaction.FactionType.TYPE_FREE;
     }
 
     @SideOnly(value=Side.CLIENT)

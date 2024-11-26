@@ -96,6 +96,9 @@ implements LOTRTradeable.Smith {
     @Override
     public void onPlayerTrade(EntityPlayer entityplayer, LOTRTradeEntries.TradeType type, ItemStack itemstack) {
         LOTRLevelData.getData(entityplayer).addAchievement(LOTRAchievement.tradeEreborDwarfSmith);
+        if (type == LOTRTradeEntries.TradeType.BUY && itemstack.getItem() == LOTRMod.arrowDragon) {
+            LOTRLevelData.getData(entityplayer).addAchievement(LOTRAchievement.sellArrowDragon);
+        }
     }
 
     @Override

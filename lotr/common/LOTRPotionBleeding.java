@@ -9,6 +9,7 @@
  *  net.minecraft.entity.Entity
  *  net.minecraft.entity.EntityLivingBase
  *  net.minecraft.potion.Potion
+ *  net.minecraft.potion.PotionEffect
  *  net.minecraft.util.DamageSource
  *  net.minecraft.util.ResourceLocation
  *  net.minecraft.world.World
@@ -27,6 +28,7 @@ import lotr.common.network.LOTRPacketParticles;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
@@ -76,6 +78,9 @@ extends LOTRCustomPotion {
 
     public void performEffect(EntityLivingBase entity, int amplifier) {
         float halfHeart;
+        String effectName = this.getEffectName(amplifier + 1);
+        entity.getActivePotionEffect((Potion)this).getEffectName();
+        this.setPotionName(effectName);
         float currentHealth = entity.getHealth();
         int effectLevel = amplifier + 1;
         float red = 0.8f;
@@ -108,6 +113,21 @@ extends LOTRCustomPotion {
                 }
             }
         }
+    }
+
+    private String getEffectName(int level) {
+        switch (level) {
+            case 1: {
+                return "potion.lotr.bleeding.capillary";
+            }
+            case 2: {
+                return "potion.lotr.bleeding.venous";
+            }
+            case 3: {
+                return "potion.lotr.bleeding.arterial";
+            }
+        }
+        return "potion.lotr.bleeding";
     }
 
     @Override

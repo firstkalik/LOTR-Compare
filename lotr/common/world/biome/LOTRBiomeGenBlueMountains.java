@@ -18,6 +18,7 @@ import lotr.common.LOTRAchievement;
 import lotr.common.LOTRMod;
 import lotr.common.entity.animal.LOTREntityRam;
 import lotr.common.entity.npc.LOTREntityDaleMerchant;
+import lotr.common.entity.npc.LOTREntityEreborDwarfMerchant;
 import lotr.common.entity.npc.LOTREntityIronHillsMerchant;
 import lotr.common.entity.npc.LOTREntityRivendellTrader;
 import lotr.common.entity.npc.LOTREntityScrapTrader;
@@ -68,7 +69,7 @@ extends LOTRBiome {
         this.decorator.addSoil((WorldGenerator)new WorldGenMinable(LOTRMod.rock, 3, 60, Blocks.stone), 6.0f, 0, 96);
         this.decorator.addOre((WorldGenerator)new WorldGenMinable(Blocks.coal_ore, 8), 10.0f, 0, 128);
         this.decorator.addOre((WorldGenerator)new WorldGenMinable(Blocks.iron_ore, 4), 10.0f, 0, 96);
-        this.decorator.addOre((WorldGenerator)new WorldGenMinable(LOTRMod.oreGlowstone, 4), 8.0f, 0, 48);
+        this.decorator.addOre((WorldGenerator)new WorldGenMinable(LOTRMod.luminite, 4), 8.0f, 0, 48);
         this.decorator.treesPerChunk = 1;
         this.decorator.willowPerChunk = 1;
         this.decorator.flowersPerChunk = 1;
@@ -91,6 +92,7 @@ extends LOTRBiome {
         this.decorator.addRandomStructure(new LOTRWorldGenBlueMountainsSmithy(false), 150);
         this.registerTravellingTrader(LOTREntityRivendellTrader.class);
         this.registerTravellingTrader(LOTREntityIronHillsMerchant.class);
+        this.registerTravellingTrader(LOTREntityEreborDwarfMerchant.class);
         this.registerTravellingTrader(LOTREntityScrapTrader.class);
         this.registerTravellingTrader(LOTREntityDaleMerchant.class);
         this.setBanditChance(LOTREventSpawner.EventChance.BANDIT_RARE);

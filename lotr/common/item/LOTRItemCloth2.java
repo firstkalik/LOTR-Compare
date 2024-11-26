@@ -37,7 +37,7 @@ public class LOTRItemCloth2
 extends Item {
     public LOTRItemCloth2() {
         this.setCreativeTab((CreativeTabs)LOTRCreativeTabs.tabMaterials);
-        this.maxStackSize = 16;
+        this.maxStackSize = 4;
     }
 
     public EnumRarity getRarity(ItemStack par1ItemStack) {
@@ -53,7 +53,7 @@ extends Item {
         }
         player.removePotionEffect(41);
         player.addPotionEffect(new PotionEffect(10, 600, 1));
-        player.heal(8.0f);
+        player.heal(4.5f);
         world.playSoundAtEntity((Entity)player, "lotr:bandage", 1.0f, world.rand.nextFloat() * 0.1f + 0.9f);
         LOTRLevelData.getData(player).addAchievement(LOTRAchievement.useBandage);
         return item;

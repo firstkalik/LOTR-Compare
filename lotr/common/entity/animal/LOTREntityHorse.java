@@ -53,10 +53,13 @@ import lotr.common.entity.LOTREntityUtils;
 import lotr.common.entity.ai.LOTREntityAIHiredHorseRemainStill;
 import lotr.common.entity.ai.LOTREntityAIHorseFollowHiringPlayer;
 import lotr.common.entity.ai.LOTREntityAIHorseMoveToRiderTarget;
+import lotr.common.entity.animal.LOTREntityRam;
 import lotr.common.entity.npc.LOTREntityNPC;
 import lotr.common.entity.npc.LOTRNPCMount;
 import lotr.common.item.LOTRItemMountArmor;
 import lotr.common.world.biome.LOTRBiomeGenDorEnErnil;
+import lotr.common.world.biome.LOTRBiomeGenIronHills;
+import lotr.common.world.biome.LOTRBiomeGenRedMountainsIronfist;
 import lotr.common.world.biome.LOTRBiomeGenRohan;
 import net.minecraft.entity.DataWatcher;
 import net.minecraft.entity.Entity;
@@ -158,13 +161,20 @@ implements LOTRNPCMount {
     }
 
     protected void onLOTRHorseSpawn() {
+        double jumpLimit;
+        double maxHealth;
+        double jumpStrength;
+        float speedBoost;
+        float jumpAdd;
+        float healthBoost;
+        double movementSpeed;
         int i = MathHelper.floor_double((double)this.posX);
         int k = MathHelper.floor_double((double)this.posZ);
         BiomeGenBase biome = this.worldObj.getBiomeGenForCoords(i, k);
         if (this.getClass() == LOTREntityHorse.class) {
-            float healthBoost = 0.0f;
-            float speedBoost = 0.0f;
-            float jumpAdd = 0.0f;
+            healthBoost = 0.0f;
+            speedBoost = 0.0f;
+            jumpAdd = 0.0f;
             if (biome instanceof LOTRBiomeGenRohan) {
                 healthBoost = 0.5f;
                 speedBoost = 0.3f;
@@ -176,16 +186,47 @@ implements LOTRNPCMount {
                 jumpAdd = 0.1f;
             }
             if (healthBoost > 0.0f) {
-                double maxHealth = this.getEntityAttribute(SharedMonsterAttributes.maxHealth).getAttributeValue();
+                maxHealth = this.getEntityAttribute(SharedMonsterAttributes.maxHealth).getAttributeValue();
                 this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(maxHealth *= (double)(1.0f + this.rand.nextFloat() * healthBoost));
                 this.setHealth(this.getMaxHealth());
             }
             if (speedBoost > 0.0f) {
-                double movementSpeed = this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).getAttributeValue();
+                movementSpeed = this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).getAttributeValue();
                 this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(movementSpeed *= (double)(1.0f + this.rand.nextFloat() * speedBoost));
             }
-            double jumpStrength = this.getEntityAttribute(LOTRReflection.getHorseJumpStrength()).getAttributeValue();
-            double jumpLimit = Math.max(jumpStrength, 1.0);
+            jumpStrength = this.getEntityAttribute(LOTRReflection.getHorseJumpStrength()).getAttributeValue();
+            jumpLimit = Math.max(jumpStrength, 1.0);
+            if (jumpAdd > 0.0f) {
+                jumpStrength += (double)jumpAdd;
+            }
+            jumpStrength = Math.min(jumpStrength, jumpLimit);
+            this.getEntityAttribute(LOTRReflection.getHorseJumpStrength()).setBaseValue(jumpStrength);
+        }
+        if (this.getClass() == LOTREntityRam.class) {
+            healthBoost = 0.0f;
+            speedBoost = 0.0f;
+            jumpAdd = 0.0f;
+            if (biome instanceof LOTRBiomeGenIronHills) {
+                healthBoost = 0.4f;
+                speedBoost = 0.25f;
+                jumpAdd = 0.2f;
+            }
+            if (biome instanceof LOTRBiomeGenRedMountainsIronfist) {
+                healthBoost = 0.3f;
+                speedBoost = 0.2f;
+                jumpAdd = 0.1f;
+            }
+            if (healthBoost > 0.0f) {
+                maxHealth = this.getEntityAttribute(SharedMonsterAttributes.maxHealth).getAttributeValue();
+                this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(maxHealth *= (double)(1.0f + this.rand.nextFloat() * healthBoost));
+                this.setHealth(this.getMaxHealth());
+            }
+            if (speedBoost > 0.0f) {
+                movementSpeed = this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).getAttributeValue();
+                this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(movementSpeed *= (double)(1.0f + this.rand.nextFloat() * speedBoost));
+            }
+            jumpStrength = this.getEntityAttribute(LOTRReflection.getHorseJumpStrength()).getAttributeValue();
+            jumpLimit = Math.max(jumpStrength, 1.0);
             if (jumpAdd > 0.0f) {
                 jumpStrength += (double)jumpAdd;
             }

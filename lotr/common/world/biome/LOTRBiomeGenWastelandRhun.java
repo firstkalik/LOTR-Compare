@@ -74,6 +74,8 @@ extends LOTRBiome {
         this.npcSpawnList.newFactionList(100).add(arrspawnListContainer);
         LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer6 = new LOTRBiomeSpawnList.SpawnListContainer[]{LOTRBiomeSpawnList.entry(LOTRSpawnList.BLACKLOCK, 10), LOTRBiomeSpawnList.entry(LOTRSpawnList.STIFFBEARD, 10), LOTRBiomeSpawnList.entry(LOTRSpawnList.STONEFOOT, 10), LOTRBiomeSpawnList.entry(LOTRSpawnList.IRONFIST, 10)};
         this.npcSpawnList.newFactionList(0).add(arrspawnListContainer6);
+        LOTRBiomeSpawnList.SpawnListContainer[] arrspawnListContainer61 = new LOTRBiomeSpawnList.SpawnListContainer[]{LOTRBiomeSpawnList.entry(LOTRSpawnList.AVARI_ELF_WARRIORS, 10)};
+        this.npcSpawnList.newFactionList(0).add(arrspawnListContainer61);
         this.variantChance = 0.2f;
         this.addBiomeVariant(LOTRBiomeVariant.HILLS);
         this.addBiomeVariant(LOTRBiomeVariant.DEADFOREST_OAK);
@@ -91,6 +93,7 @@ extends LOTRBiome {
         this.decorator.addRandomStructure(new LOTRWorldGenRhunhouseruined(false), 1500);
         this.decorator.addRandomStructure(new LOTRWorldGenSmallStoneRuin(false), 500);
         this.setBanditChance(LOTREventSpawner.EventChance.BANDIT_UNCOMMON);
+        this.invasionSpawns.addInvasion(LOTRInvasions.AVARI_ELF, LOTREventSpawner.EventChance.RARE);
         this.invasionSpawns.addInvasion(LOTRInvasions.IRONFIST, LOTREventSpawner.EventChance.RARE);
         this.invasionSpawns.addInvasion(LOTRInvasions.STIFFBEARD, LOTREventSpawner.EventChance.RARE);
         this.invasionSpawns.addInvasion(LOTRInvasions.BLACKLOCK, LOTREventSpawner.EventChance.RARE);

@@ -65,19 +65,23 @@ extends Item {
             dartSlot = l;
             break;
         }
+        boolean hasInfinityEnchant = LOTREnchantmentHelper.hasEnchant(itemstack, LOTREnchantment.rangedInfinity);
+        boolean hasProvidentEnchant = LOTREnchantmentHelper.hasEnchant(itemstack, LOTREnchantment.rangedProvident);
         if (dartItem == null && entityplayer.capabilities.isCreativeMode) {
             dartItem = new ItemStack(LOTRMod.tauredainDart);
         }
         if (dartItem != null) {
+            boolean dartNotConsumed;
             int useTick = this.getMaxItemUseDuration(itemstack) - i;
             float charge = (float)useTick / (float)this.getMaxDrawTime();
-            if (charge < 0.65f) {
+            if (charge < 0.45f) {
                 return;
             }
             charge = (charge * charge + charge * 2.0f) / 3.0f;
             charge = Math.min(charge, 1.0f);
             itemstack.damageItem(1, (EntityLivingBase)entityplayer);
-            if (!entityplayer.capabilities.isCreativeMode && dartSlot >= 0) {
+            boolean bl = dartNotConsumed = hasProvidentEnchant && itemRand.nextFloat() < 0.85f;
+            if (!(dartNotConsumed || entityplayer.capabilities.isCreativeMode || dartSlot < 0 || hasInfinityEnchant)) {
                 --dartItem.stackSize;
                 if (dartItem.stackSize <= 0) {
                     entityplayer.inventory.mainInventory[dartSlot] = null;
@@ -95,7 +99,9 @@ extends Item {
                     dart.setIsCritical(true);
                 }
                 LOTRItemBlowgun.applyBlowgunModifiers(dart, itemstack);
-                if (entityplayer.capabilities.isCreativeMode) {
+                if (dartNotConsumed) {
+                    dart.canBePickedUp = 2;
+                } else if (entityplayer.capabilities.isCreativeMode) {
                     dart.canBePickedUp = 2;
                 }
                 world.spawnEntityInWorld((Entity)dart);
@@ -123,6 +129,7 @@ extends Item {
             if (!ench.applyToProjectile() || !LOTREnchantmentHelper.hasEnchant(itemstack, ench)) continue;
             LOTREnchantmentHelper.setProjectileEnchantment(dart, ench);
         }
+        dart.canBePickedUp = LOTREnchantmentHelper.hasEnchant(itemstack, LOTREnchantment.rangedInfinity) ? 2 : 1;
     }
 
     public int getMaxDrawTime() {

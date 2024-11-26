@@ -70,7 +70,7 @@ implements LOTRRandomSkinEntity {
     }
 
     public int getTalkInterval() {
-        return 800;
+        return 300;
     }
 
     @Override
@@ -133,7 +133,7 @@ implements LOTRRandomSkinEntity {
     @Override
     protected void applyEntityAttributes() {
         super.applyEntityAttributes();
-        this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.6);
+        this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.65);
         this.getEntityAttribute(SharedMonsterAttributes.attackDamage).setBaseValue(4.0);
     }
 

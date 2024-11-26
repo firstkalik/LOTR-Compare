@@ -140,7 +140,7 @@ extends LOTRItemBaseRing2 {
                 player.stepHeight = 0.5f;
                 this.isEquipped = false;
             }
-            ((EntityLivingBase)entity).addPotionEffect(new PotionEffect(5, 120, 0));
+            ((EntityLivingBase)entity).addPotionEffect(new PotionEffect(5, 120, 2));
             ((EntityLivingBase)entity).addPotionEffect(new PotionEffect(12, 120, 0));
             if (entity instanceof EntityPlayer) {
                 EntityPlayer player1 = (EntityPlayer)entity;

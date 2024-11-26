@@ -22,15 +22,18 @@ import lotr.common.LOTRPotionBowDamageBoost;
 import lotr.common.LOTRPotionBroken;
 import lotr.common.LOTRPotionCurse;
 import lotr.common.LOTRPotionDamageBoost;
+import lotr.common.LOTRPotionDragon;
+import lotr.common.LOTRPotionDrunk;
 import lotr.common.LOTRPotionExplode;
-import lotr.common.LOTRPotionFire;
 import lotr.common.LOTRPotionFrostResistance;
 import lotr.common.LOTRPotionHero;
 import lotr.common.LOTRPotionImmune;
 import lotr.common.LOTRPotionInfection;
+import lotr.common.LOTRPotionLuck;
 import lotr.common.LOTRPotionRepair;
 import lotr.common.LOTRPotionSauronDamageBoost;
 import lotr.common.LOTRPotionSlowfall;
+import lotr.common.LOTRPotionUnluck;
 import lotr.common.LOTRPotionVulnerability;
 import lotr.common.item.LOTRItemMug;
 import lotr.common.item.LOTRPotionPoisonKilling;
@@ -50,7 +53,6 @@ public class LOTRPotions {
     public static Potion frostResistance;
     public static Potion Repair;
     public static Potion Slowfall;
-    public static Potion Fire;
     public static Potion explode;
     public static Potion blood;
     public static Potion immune;
@@ -62,24 +64,31 @@ public class LOTRPotions {
     public static Potion curse;
     public static Potion hero;
     public static Potion infection;
+    public static Potion drunk;
+    public static Potion luck;
+    public static Potion dragon;
+    public static Potion unluck;
 
     public static void registerPotion() {
         killingPoison = new LOTRPotionPoisonKilling();
-        frostResistance = new LOTRPotionFrostResistance(31, false, 8171463, new ResourceLocation("lotr", "potions/frostResistance.png"), "potion.lotr.frostResistance");
-        Repair = new LOTRPotionRepair(32, false, 8171463, new ResourceLocation("lotr", "potions/Repair.png"), "potion.lotr.repair");
+        frostResistance = new LOTRPotionFrostResistance(31, false, 2217707, new ResourceLocation("lotr", "potions/frostResistance.png"), "potion.lotr.frostResistance");
+        Repair = new LOTRPotionRepair(32, false, 5921370, new ResourceLocation("lotr", "potions/Repair.png"), "potion.lotr.repair");
         Slowfall = new LOTRPotionSlowfall(33, false, 8171463, new ResourceLocation("lotr", "potions/Slowfall.png"), "potion.lotr.slowfall");
-        Fire = new LOTRPotionFire();
-        explode = new LOTRPotionExplode(35, false, 8171463, new ResourceLocation("lotr", "potions/explode.png"), "potion.lotr.explosion");
+        explode = new LOTRPotionExplode(35, false, 16777215, new ResourceLocation("lotr", "potions/explode.png"), "potion.lotr.explosion");
         blood = new LOTRPotionBleeding(36, false, 8171463, new ResourceLocation("lotr", "potions/blood.png"), "potion.lotr.bleeding");
-        bowDamageBoost = new LOTRPotionBowDamageBoost(37, false, 8171463, new ResourceLocation("lotr", "potions/bowDamageBoost.png"), "potion.lotr.bowDamageBoost");
-        meleeDamageBoost = new LOTRPotionDamageBoost(38, false, 8171463, new ResourceLocation("lotr", "potions/meleeDamageBoost.png"), "potion.lotr.meleeDamageBoost");
-        meleeDamageBoostSauron = new LOTRPotionSauronDamageBoost(39, false, 8171463, new ResourceLocation("lotr", "potions/meleeDamageBoostSauron.png"), "potion.lotr.meleeDamageBoostSauron");
-        vulnerability = new LOTRPotionVulnerability(40, false, 8171463, new ResourceLocation("lotr", "potions/vulnerability.png"), "potion.lotr.vulnerability");
-        broken = new LOTRPotionBroken(41, false, 8171463, new ResourceLocation("lotr", "potions/broken.png"), "potion.lotr.broken");
-        immune = new LOTRPotionImmune(42, false, 8171463, new ResourceLocation("lotr", "potions/immune.png"), "potion.lotr.immune");
-        curse = new LOTRPotionCurse(43, false, 8171463, new ResourceLocation("lotr", "potions/curse.png"), "potion.lotr.curse");
-        hero = new LOTRPotionHero(44, false, 8171463, new ResourceLocation("lotr", "potions/hero.png"), "potion.lotr.hero");
+        bowDamageBoost = new LOTRPotionBowDamageBoost(37, false, 16580468, new ResourceLocation("lotr", "potions/bowDamageBoost.png"), "potion.lotr.bowDamageBoost");
+        meleeDamageBoost = new LOTRPotionDamageBoost(38, false, 16157034, new ResourceLocation("lotr", "potions/meleeDamageBoost.png"), "potion.lotr.meleeDamageBoost");
+        meleeDamageBoostSauron = new LOTRPotionSauronDamageBoost(39, false, 2164485, new ResourceLocation("lotr", "potions/meleeDamageBoostSauron.png"), "potion.lotr.meleeDamageBoostSauron");
+        vulnerability = new LOTRPotionVulnerability(40, false, 3030579, new ResourceLocation("lotr", "potions/vulnerability.png"), "potion.lotr.vulnerability");
+        broken = new LOTRPotionBroken(41, false, 14933963, new ResourceLocation("lotr", "potions/broken.png"), "potion.lotr.broken");
+        immune = new LOTRPotionImmune(42, false, 8380728, new ResourceLocation("lotr", "potions/immune.png"), "potion.lotr.immune");
+        curse = new LOTRPotionCurse(43, false, 2691340, new ResourceLocation("lotr", "potions/curse.png"), "potion.lotr.curse");
+        hero = new LOTRPotionHero(44, false, 14529792, new ResourceLocation("lotr", "potions/hero.png"), "potion.lotr.hero");
         infection = new LOTRPotionInfection(46, false, 8171463, new ResourceLocation("lotr", "potions/infection.png"), "potion.lotr.infection");
+        drunk = new LOTRPotionDrunk(47, false, 3626338, new ResourceLocation("lotr", "potions/drunk.png"), "potion.lotr.drunk");
+        luck = new LOTRPotionLuck(48, false, 3931136, new ResourceLocation("lotr", "potions/luck.png"), "potion.lotr.luck");
+        unluck = new LOTRPotionUnluck(49, false, 12953422, new ResourceLocation("lotr", "potions/unluck.png"), "potion.lotr.unluck");
+        dragon = new LOTRPotionDragon(50, false, 8003769, new ResourceLocation("lotr", "potions/dragon.png"), "potion.lotr.dragon");
     }
 
     public static void addPoisonEffect(EntityPlayer entityplayer, ItemStack itemstack) {

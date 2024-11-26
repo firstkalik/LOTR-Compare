@@ -16,7 +16,7 @@ import net.minecraft.world.IBlockAccess;
 public class LOTRBlockBrick8
 extends LOTRBlockBrickBase {
     public LOTRBlockBrick8() {
-        this.setBrickNames("reddwarvenGlowing", "mithrilGlowing");
+        this.setBrickNames("reddwarvenGlowing", "mithrilGlowing", "luigonGlowing", "greyGlowing");
     }
 
     public int getLightValue(IBlockAccess world, int i, int j, int k) {
@@ -24,6 +24,12 @@ extends LOTRBlockBrickBase {
             return Blocks.glowstone.getLightValue();
         }
         if (world.getBlockMetadata(i, j, k) == 1) {
+            return Blocks.glowstone.getLightValue();
+        }
+        if (world.getBlockMetadata(i, j, k) == 2) {
+            return Blocks.glowstone.getLightValue();
+        }
+        if (world.getBlockMetadata(i, j, k) == 3) {
             return Blocks.glowstone.getLightValue();
         }
         return 1;

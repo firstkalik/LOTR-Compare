@@ -5,6 +5,7 @@
  *  net.minecraft.entity.EntityLivingBase
  *  net.minecraft.item.Item
  *  net.minecraft.item.ItemStack
+ *  net.minecraft.util.EnumChatFormatting
  *  net.minecraft.util.StatCollector
  */
 package lotr.common.enchant;
@@ -16,6 +17,7 @@ import lotr.common.item.LOTRWeaponStats;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
 
 public class LOTREnchantmentDamage
@@ -42,10 +44,11 @@ extends LOTREnchantment {
 
     @Override
     public String getDescription(ItemStack itemstack) {
+        String formattedDamageBoost = (Object)EnumChatFormatting.GOLD + this.formatAdditive(this.baseDamageBoost) + (Object)EnumChatFormatting.GRAY;
         if (itemstack != null && itemstack.getItem() instanceof LOTRItemThrowingAxe) {
-            return StatCollector.translateToLocalFormatted((String)"lotr.enchant.damage.desc.throw", (Object[])new Object[]{this.formatAdditive(this.baseDamageBoost)});
+            return StatCollector.translateToLocalFormatted((String)"lotr.enchant.damage.desc.throw", (Object[])new Object[]{formattedDamageBoost});
         }
-        return StatCollector.translateToLocalFormatted((String)"lotr.enchant.damage.desc", (Object[])new Object[]{this.formatAdditive(this.baseDamageBoost)});
+        return StatCollector.translateToLocalFormatted((String)"lotr.enchant.damage.desc", (Object[])new Object[]{formattedDamageBoost});
     }
 
     @Override

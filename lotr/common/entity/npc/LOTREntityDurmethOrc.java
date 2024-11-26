@@ -21,6 +21,7 @@
  *  net.minecraft.util.AxisAlignedBB
  *  net.minecraft.util.MathHelper
  *  net.minecraft.world.World
+ *  net.minecraft.world.biome.BiomeGenBase
  */
 package lotr.common.entity.npc;
 
@@ -38,6 +39,7 @@ import lotr.common.entity.npc.LOTRInventoryNPCItems;
 import lotr.common.fac.LOTRFaction;
 import lotr.common.quest.LOTRMiniQuest;
 import lotr.common.quest.LOTRMiniQuestFactory;
+import lotr.common.world.biome.LOTRBiome;
 import lotr.common.world.biome.LOTRBiomeGenNearHarad;
 import lotr.common.world.structure.LOTRChestContents;
 import net.minecraft.block.Block;
@@ -59,6 +61,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import net.minecraft.world.biome.BiomeGenBase;
 
 public class LOTREntityDurmethOrc
 extends LOTREntityOrc
@@ -83,6 +86,7 @@ implements LOTRBiomeGenNearHarad.ImmuneToFrost {
     @Override
     protected void applyEntityAttributes() {
         super.applyEntityAttributes();
+        this.getEntityAttribute(SharedMonsterAttributes.followRange).setBaseValue(33.0);
         this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue((double)MathHelper.getRandomIntegerInRange((Random)this.rand, (int)24, (int)30));
         this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(MathHelper.getRandomDoubleInRange((Random)this.rand, (double)0.2, (double)0.21));
     }
@@ -137,12 +141,12 @@ implements LOTRBiomeGenNearHarad.ImmuneToFrost {
             dirt.setStackDisplayName("\u00a7cSuch Wealth");
             this.entityDropItem(dirt, 0.0f);
         }
-        if (this.rand.nextInt(8000) == 0) {
+        if (this.rand.nextInt(4000) == 0) {
             dirt = new ItemStack(LOTRMod.eru);
             dirt.setStackDisplayName("\u00a7eCharm");
             this.entityDropItem(dirt, 0.0f);
         }
-        if (this.rand.nextInt(8000) == 0) {
+        if (this.rand.nextInt(4000) == 0) {
             dirt = new ItemStack(LOTRMod.magicClover);
             dirt.setStackDisplayName("\u00a7eClooooooooover");
             this.entityDropItem(dirt, 0.0f);
@@ -178,6 +182,13 @@ implements LOTRBiomeGenNearHarad.ImmuneToFrost {
         int i = MathHelper.floor_double((double)this.posX);
         int j = MathHelper.floor_double((double)this.boundingBox.minY);
         int k = MathHelper.floor_double((double)this.posZ);
+        if (this.worldObj.isDaytime() && this.worldObj.canBlockSeeTheSky(i, j, k)) {
+            return false;
+        }
+        BiomeGenBase biome = this.worldObj.getBiomeGenForCoords(i, k);
+        if (!(biome instanceof LOTRBiome && ((LOTRBiome)biome).canSpawnHostilesInDay() || !this.worldObj.isDaytime())) {
+            return false;
+        }
         return j > 30 && (this.worldObj.getBlock(i, j - 1, k) == Blocks.snow || this.worldObj.getBlock(i, j - 1, k) == Blocks.grass || this.worldObj.getBlock(i, j - 1, k) == Blocks.sand && this.worldObj.getBlockMetadata(i, j - 1, k) == 0 || this.worldObj.getBlock(i, j - 1, k) == Blocks.sand && this.worldObj.getBlockMetadata(i, j - 1, k) == 1 || this.worldObj.getBlock(i, j - 1, k) == LOTRMod.rock && this.worldObj.getBlockMetadata(i, j - 1, k) == 4);
     }
 

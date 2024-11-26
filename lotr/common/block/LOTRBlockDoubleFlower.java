@@ -45,7 +45,7 @@ import net.minecraft.world.World;
 
 public class LOTRBlockDoubleFlower
 extends BlockDoublePlant {
-    public static final String[] flowerNames = new String[]{"blackIris", "yellowIris", "pink", "red"};
+    public static final String[] flowerNames = new String[]{"blackIris", "yellowIris", "pink", "red", "pitcher"};
     @SideOnly(value=Side.CLIENT)
     private IIcon[] doublePlantBottomIcons;
     @SideOnly(value=Side.CLIENT)

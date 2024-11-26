@@ -38,8 +38,11 @@ import lotr.common.world.mapgen.LOTRMapGenCaves;
 import lotr.common.world.mapgen.LOTRMapGenRavine;
 import lotr.common.world.mapgen.bluedwarvenmine.LOTRMapGenBlueDwarvenMine;
 import lotr.common.world.mapgen.dwarvenmine.LOTRMapGenDwarvenMine;
+import lotr.common.world.mapgen.greydwarvenmine.LOTRMapGenGreyDwarvenMine;
+import lotr.common.world.mapgen.moriadwarvenmine.LOTRMapGenMoriaDwarvenMine;
 import lotr.common.world.mapgen.reddwarvenmine.LOTRMapGenRedDwarvenMine;
 import lotr.common.world.mapgen.tpyr.LOTRMapGenTauredainPyramid;
+import lotr.common.world.mapgen.winddwarvenmine.LOTRMapGenWindDwarvenMine;
 import lotr.common.world.spawning.LOTRSpawnerAnimals;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFalling;
@@ -85,7 +88,10 @@ implements IChunkProvider {
     private LOTRMapGenCaves caveGenerator = new LOTRMapGenCaves();
     private MapGenBase ravineGenerator = new LOTRMapGenRavine();
     private MapGenStructure dwarvenMineGenerator = new LOTRMapGenDwarvenMine();
+    private MapGenStructure moriadwarvenMineGenerator = new LOTRMapGenMoriaDwarvenMine();
+    private MapGenStructure greydwarvenMineGenerator = new LOTRMapGenGreyDwarvenMine();
     private MapGenStructure blueDwarvenMineGenerator = new LOTRMapGenBlueDwarvenMine();
+    private MapGenStructure windDwarvenMineGenerator = new LOTRMapGenWindDwarvenMine();
     private MapGenStructure redDwarvenMineGenerator = new LOTRMapGenRedDwarvenMine();
     private MapGenStructure tauredainPyramid = new LOTRMapGenTauredainPyramid();
     public static final int seaLevel = 62;
@@ -208,7 +214,10 @@ implements IChunkProvider {
         this.generateTerrain(i, k, blocks, chunkFlags);
         if (LOTRConfig.spawnDwarvenMine) {
             this.dwarvenMineGenerator.func_151539_a((IChunkProvider)this, this.worldObj, i, k, blocks);
+            this.moriadwarvenMineGenerator.func_151539_a((IChunkProvider)this, this.worldObj, i, k, blocks);
+            this.greydwarvenMineGenerator.func_151539_a((IChunkProvider)this, this.worldObj, i, k, blocks);
             this.blueDwarvenMineGenerator.func_151539_a((IChunkProvider)this, this.worldObj, i, k, blocks);
+            this.windDwarvenMineGenerator.func_151539_a((IChunkProvider)this, this.worldObj, i, k, blocks);
             this.redDwarvenMineGenerator.func_151539_a((IChunkProvider)this, this.worldObj, i, k, blocks);
         }
         this.biomesForGeneration = chunkManager.loadBlockGeneratorData(this.biomesForGeneration, i * 16, k * 16, 16, 16);
@@ -254,15 +263,20 @@ implements IChunkProvider {
         if (noise == null) {
             noise = new double[xSize * ySize * zSize];
         }
+        if (this.biomesForGeneration == null || this.variantsForGeneration == null) {
+            throw new IllegalStateException("Biome arrays not initialized properly.");
+        }
         double xzNoiseScale = 400.0;
         double heightStretch = 6.0;
         int noiseCentralIndex = (xSize - 1) / 2 + this.biomeSampleRadius + ((zSize - 1) / 2 + this.biomeSampleRadius) * (xSize + this.biomeSampleWidth);
         LOTRBiome noiseCentralBiome = (LOTRBiome)this.biomesForGeneration[noiseCentralIndex];
-        if (noiseCentralBiome.biomeTerrain.hasXZScale()) {
-            xzNoiseScale = noiseCentralBiome.biomeTerrain.getXZScale();
-        }
-        if (noiseCentralBiome.biomeTerrain.hasHeightStretchFactor()) {
-            heightStretch *= noiseCentralBiome.biomeTerrain.getHeightStretchFactor();
+        if (noiseCentralBiome != null && noiseCentralBiome.biomeTerrain != null) {
+            if (noiseCentralBiome.biomeTerrain.hasXZScale()) {
+                xzNoiseScale = noiseCentralBiome.biomeTerrain.getXZScale();
+            }
+            if (noiseCentralBiome.biomeTerrain.hasHeightStretchFactor()) {
+                heightStretch *= noiseCentralBiome.biomeTerrain.getHeightStretchFactor();
+            }
         }
         this.noise5 = this.noiseGen5.generateNoiseOctaves(this.noise5, i, k, xSize, zSize, 1.121, 1.121, 0.5);
         this.noise6 = this.noiseGen6.generateNoiseOctaves(this.noise6, i, k, xSize, zSize, 200.0, 200.0, 0.5);
@@ -425,7 +439,10 @@ implements IChunkProvider {
         this.rand.setSeed((long)i * l1 + (long)j * l2 ^ this.worldObj.getSeed());
         if (LOTRConfig.spawnDwarvenMine) {
             this.dwarvenMineGenerator.generateStructuresInChunk(this.worldObj, this.rand, i, j);
+            this.moriadwarvenMineGenerator.generateStructuresInChunk(this.worldObj, this.rand, i, j);
+            this.greydwarvenMineGenerator.generateStructuresInChunk(this.worldObj, this.rand, i, j);
             this.blueDwarvenMineGenerator.generateStructuresInChunk(this.worldObj, this.rand, i, j);
+            this.windDwarvenMineGenerator.generateStructuresInChunk(this.worldObj, this.rand, i, j);
             this.redDwarvenMineGenerator.generateStructuresInChunk(this.worldObj, this.rand, i, j);
         }
         this.tauredainPyramid.generateStructuresInChunk(this.worldObj, this.rand, i, j);
@@ -506,7 +523,10 @@ implements IChunkProvider {
     public void recreateStructures(int i, int k) {
         if (LOTRConfig.spawnDwarvenMine) {
             this.dwarvenMineGenerator.func_151539_a((IChunkProvider)this, this.worldObj, i, k, null);
+            this.moriadwarvenMineGenerator.func_151539_a((IChunkProvider)this, this.worldObj, i, k, null);
+            this.greydwarvenMineGenerator.func_151539_a((IChunkProvider)this, this.worldObj, i, k, null);
             this.redDwarvenMineGenerator.func_151539_a((IChunkProvider)this, this.worldObj, i, k, null);
+            this.windDwarvenMineGenerator.func_151539_a((IChunkProvider)this, this.worldObj, i, k, null);
             this.blueDwarvenMineGenerator.func_151539_a((IChunkProvider)this, this.worldObj, i, k, null);
         }
         this.tauredainPyramid.func_151539_a((IChunkProvider)this, this.worldObj, i, k, null);

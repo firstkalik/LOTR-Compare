@@ -62,6 +62,11 @@ extends LOTREntityWarg {
     }
 
     @Override
+    public int getTotalArmorValue() {
+        return 4;
+    }
+
+    @Override
     public LOTRFaction getFaction() {
         return LOTRFaction.UTUMNO;
     }

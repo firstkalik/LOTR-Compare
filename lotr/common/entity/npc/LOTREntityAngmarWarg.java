@@ -2,8 +2,12 @@
  * Decompiled with CFR 0.148.
  * 
  * Could not load the following classes:
+ *  net.minecraft.entity.SharedMonsterAttributes
+ *  net.minecraft.entity.ai.attributes.IAttribute
+ *  net.minecraft.entity.ai.attributes.IAttributeInstance
  *  net.minecraft.item.Item
  *  net.minecraft.item.ItemStack
+ *  net.minecraft.util.MathHelper
  *  net.minecraft.world.World
  */
 package lotr.common.entity.npc;
@@ -15,8 +19,12 @@ import lotr.common.entity.npc.LOTREntityAngmarOrcArcher;
 import lotr.common.entity.npc.LOTREntityNPC;
 import lotr.common.entity.npc.LOTREntityWarg;
 import lotr.common.fac.LOTRFaction;
+import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.ai.attributes.IAttribute;
+import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
 public class LOTREntityAngmarWarg
@@ -34,8 +42,17 @@ extends LOTREntityWarg {
     }
 
     @Override
+    protected void applyEntityAttributes() {
+        super.applyEntityAttributes();
+        this.getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue((double)MathHelper.getRandomIntegerInRange((Random)this.rand, (int)25, (int)35));
+        this.getEntityAttribute(SharedMonsterAttributes.followRange).setBaseValue(32.0);
+        this.getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.22);
+        this.getEntityAttribute(npcAttackDamage).setBaseValue((double)MathHelper.getRandomIntegerInRange((Random)this.rand, (int)3, (int)5));
+    }
+
+    @Override
     public LOTRFaction getFaction() {
-        return LOTRFaction.GUNDABAD;
+        return LOTRFaction.ANGMAR;
     }
 
     @Override

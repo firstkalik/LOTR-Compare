@@ -13,8 +13,9 @@ package lotr.client.render.entity;
 
 import lotr.client.model.LOTRModelDwarf;
 import lotr.client.render.entity.LOTRRenderDwarf;
-import lotr.common.entity.npc.LOTREntityBlacklock;
 import lotr.common.entity.npc.LOTREntityBlueDwarf;
+import lotr.common.entity.npc.LOTREntityEreborDwarfMerchant;
+import lotr.common.entity.npc.LOTREntityRedDwarfMerchant;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.model.ModelRenderer;
@@ -24,17 +25,23 @@ import net.minecraft.util.ResourceLocation;
 
 public class LOTRRenderDwarfCommander
 extends LOTRRenderDwarf {
-    private static ResourceLocation cloak = new ResourceLocation("lotr:mob/dwarf/commander_cloak.png");
-    private static ResourceLocation blueCloak = new ResourceLocation("lotr:mob/dwarf/blueMountains_commander_cloak.png");
-    private static ResourceLocation redCloak = new ResourceLocation("lotr:mob/dwarf/commander_cloak.png");
-    private LOTRModelDwarf cloakModel = new LOTRModelDwarf(1.5f);
+    private static final ResourceLocation cloak = new ResourceLocation("lotr:mob/dwarf/commander_cloak.png");
+    private static final ResourceLocation blueCloak = new ResourceLocation("lotr:mob/dwarf/blueMountains_commander_cloak.png");
+    private static final ResourceLocation redCloak = new ResourceLocation("lotr:mob/dwarf/red_commander_cloak.png");
+    private static final ResourceLocation ereborCloak = new ResourceLocation("lotr:mob/dwarf/erebor_commander_cloak.png");
+    private final LOTRModelDwarf cloakModel = new LOTRModelDwarf(1.5f);
 
     protected ResourceLocation getCloakTexture(EntityLivingBase entity) {
-        return entity instanceof LOTREntityBlueDwarf ? blueCloak : cloak;
-    }
-
-    protected ResourceLocation getCloakTexture1(EntityLivingBase entity) {
-        return entity instanceof LOTREntityBlacklock ? redCloak : cloak;
+        if (entity instanceof LOTREntityRedDwarfMerchant) {
+            return redCloak;
+        }
+        if (entity instanceof LOTREntityEreborDwarfMerchant) {
+            return cloak;
+        }
+        if (entity instanceof LOTREntityBlueDwarf) {
+            return blueCloak;
+        }
+        return cloak;
     }
 
     @Override
@@ -53,20 +60,7 @@ extends LOTRRenderDwarf {
             this.cloakModel.isRiding = this.mainModel.isRiding;
             this.cloakModel.isChild = this.mainModel.isChild;
             this.cloakModel.heldItemRight = this.modelBipedMain.heldItemRight;
-        } else if (pass == 1) {
-            this.bindTexture(this.getCloakTexture((EntityLivingBase)entity));
-            this.modelBipedMain.bipedHead.showModel = true;
-            this.modelBipedMain.bipedHeadwear.showModel = true;
-            this.modelBipedMain.bipedBody.showModel = true;
-            this.modelBipedMain.bipedRightArm.showModel = true;
-            this.modelBipedMain.bipedLeftArm.showModel = true;
-            this.modelBipedMain.bipedRightLeg.showModel = true;
-            this.modelBipedMain.bipedLeftLeg.showModel = true;
-            this.setRenderPassModel((ModelBase)this.modelBipedMain);
-            this.modelBipedMain.onGround = this.mainModel.onGround;
-            this.modelBipedMain.isRiding = this.mainModel.isRiding;
-            this.modelBipedMain.isChild = this.mainModel.isChild;
-            this.modelBipedMain.heldItemRight = this.mainModel.textureHeight;
+            return 1;
         }
         return super.shouldRenderPass(entity, pass, f);
     }

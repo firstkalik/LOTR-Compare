@@ -67,13 +67,13 @@ extends LOTRWorldGenDwarvenTower3 {
             this.tableBlock = LOTRMod.windtable;
             this.forgeBlock = LOTRMod.dwarvenForge;
             this.bannerType = LOTRItemBanner.BannerType.WIND;
-            this.chestContents = LOTRChestContents.WIND_TOWER;
+            this.chestContents = LOTRChestContents.LOTRChestContents2.WIND_TOWER;
         } else {
             this.gateBlock = LOTRMod.gateDwarven;
             this.tableBlock = LOTRMod.windtable;
             this.forgeBlock = LOTRMod.dwarvenForge;
             this.bannerType = null;
-            this.chestContents = LOTRChestContents.WIND_TOWER;
+            this.chestContents = LOTRChestContents.LOTRChestContents2.WIND_TOWER;
         }
     }
 

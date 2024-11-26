@@ -151,6 +151,8 @@ import lotr.common.network.LOTRPacketUtumnoReturn;
 import lotr.common.network.LOTRPacketWaypointRegion;
 import lotr.common.network.LOTRPacketWaypointUseCount;
 import lotr.common.network.LOTRPacketWeaponFX;
+import lotr.common.network.PacketAlcoholTolerance;
+import lotr.common.network.PacketSyncNPCCount;
 import lotr.common.util.LOTRLog;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.AxisAlignedBB;
@@ -250,6 +252,8 @@ public class LOTRPacketHandler {
         networkWrapper.registerMessage(LOTRPacketHornSelect.Handler.class, LOTRPacketHornSelect.class, id++, Side.SERVER);
         networkWrapper.registerMessage(LOTRPacketBrewingButton.Handler.class, LOTRPacketBrewingButton.class, id++, Side.SERVER);
         networkWrapper.registerMessage(LOTRPacketSelectShield.Handler.class, LOTRPacketSelectShield.class, id++, Side.SERVER);
+        networkWrapper.registerMessage(PacketAlcoholTolerance.Handler.class, PacketAlcoholTolerance.class, id++, Side.CLIENT);
+        networkWrapper.registerMessage(PacketSyncNPCCount.Handler.class, PacketSyncNPCCount.class, id++, Side.CLIENT);
         networkWrapper.registerMessage(LOTRPacketTraderInteract.Handler.class, LOTRPacketTraderInteract.class, id++, Side.SERVER);
         networkWrapper.registerMessage(LOTRPacketUnitTraderInteract.Handler.class, LOTRPacketUnitTraderInteract.class, id++, Side.SERVER);
         networkWrapper.registerMessage(LOTRPacketHiredUnitInteract.Handler.class, LOTRPacketHiredUnitInteract.class, id++, Side.SERVER);

@@ -1099,6 +1099,7 @@ LOTRRandomSkinEntity {
             }
         }
         if (this.getFaction() == LOTRFaction.UTUMNO && LOTRDimension.getCurrentDimensionWithFallback(this.worldObj) == LOTRDimension.UTUMNO) {
+            int pickChance1;
             LOTRUtumnoLevel level = LOTRUtumnoLevel.forY((int)this.posY);
             if (this.rand.nextInt(12) == 0) {
                 ItemStack keypart;
@@ -1158,10 +1159,17 @@ LOTRRandomSkinEntity {
                 this.entityDropItem(new ItemStack(LOTRMod.mithrilNugget), 0.0f);
             }
             if (level == LOTRUtumnoLevel.FIRE && this.canDropRares()) {
-                int pickChance1 = 100;
+                pickChance1 = 100;
+                pickChance1 -= i * 20;
+                if (this.rand.nextInt(pickChance1 = Math.max(pickChance1, 1)) == 0) {
+                    this.entityDropItem(new ItemStack(LOTRMod.soulboundBook), 0.0f);
+                }
+            }
+            if (level == LOTRUtumnoLevel.FIRE && this.canDropRares()) {
+                pickChance1 = 100;
                 pickChance1 = Math.max(pickChance1 -= i * 20, 1);
                 if (this.rand.nextInt(pickChance1) == 0) {
-                    this.entityDropItem(new ItemStack(LOTRMod.soulboundBook), 0.0f);
+                    this.entityDropItem(new ItemStack(LOTRMod.totemOfUndyingPlus), 0.0f);
                 }
             }
         }

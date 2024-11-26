@@ -467,6 +467,41 @@ extends LOTRWorldGenStructureBase2 {
         }
     }
 
+    public static class WIND
+    extends LOTRWorldGenStoneRuin {
+        public WIND(int i, int j) {
+            super(i, j);
+        }
+
+        @Override
+        protected void placeRandomBrick(World world, Random random, int i, int j, int k) {
+            int l = random.nextInt(2);
+            switch (l) {
+                case 0: {
+                    this.setBlockAndMetadata(world, i, j, k, LOTRMod.brick9, 4);
+                    break;
+                }
+                case 1: {
+                    this.setBlockAndMetadata(world, i, j, k, LOTRMod.brick9, 12);
+                }
+            }
+        }
+
+        @Override
+        protected void placeRandomSlab(World world, Random random, int i, int j, int k) {
+            int l = random.nextInt(2);
+            switch (l) {
+                case 0: {
+                    this.setBlockAndMetadata(world, i, j, k, LOTRMod.slabSingle120, 0);
+                    break;
+                }
+                case 1: {
+                    this.setBlockAndMetadata(world, i, j, k, LOTRMod.slabSingle120, 5);
+                }
+            }
+        }
+    }
+
     public static class GALADHRIM
     extends LOTRWorldGenStoneRuin {
         public GALADHRIM(int i, int j) {

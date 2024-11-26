@@ -20,7 +20,7 @@ import net.minecraft.world.World;
 public class LOTRPotionInfection
 extends LOTRCustomPotion {
     public LOTRPotionInfection(int id, boolean isBadEffect, int potionColor, ResourceLocation tex, String namePot) {
-        super(id, isBadEffect, potionColor, tex, namePot);
+        super(id, true, potionColor, tex, namePot);
         this.setPotionName("potion.lotr.infection");
         this.setEffectiveness(1.0);
     }

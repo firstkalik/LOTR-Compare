@@ -3,6 +3,7 @@
  * 
  * Could not load the following classes:
  *  net.minecraft.block.Block
+ *  net.minecraft.block.BlockGrass
  *  net.minecraft.entity.Entity
  *  net.minecraft.entity.EntityLivingBase
  *  net.minecraft.entity.IEntityLivingData
@@ -34,6 +35,7 @@ import lotr.common.entity.npc.LOTRMercenary;
 import lotr.common.entity.projectile.LOTREntityThrowingAxe;
 import lotr.common.fac.LOTRFaction;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockGrass;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityLivingData;
@@ -188,7 +190,7 @@ implements LOTRMercenary {
         int i = MathHelper.floor_double((double)this.posX);
         int j = MathHelper.floor_double((double)this.boundingBox.minY);
         int k = MathHelper.floor_double((double)this.posZ);
-        return j > 30 && this.worldObj.getBlock(i, j - 1, k) == Blocks.snow;
+        return j > 30 && (this.worldObj.getBlock(i, j - 1, k) == Blocks.snow || this.worldObj.getBlock(i, j - 1, k) == Blocks.stone || this.worldObj.getBlock(i, j - 1, k) == Blocks.grass);
     }
 
     @Override

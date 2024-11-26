@@ -22,15 +22,14 @@
  *  net.minecraft.entity.EntityList
  *  net.minecraft.entity.EntityLiving
  *  net.minecraft.entity.EntityLivingBase
+ *  net.minecraft.entity.boss.EntityDragon
  *  net.minecraft.entity.item.EntityItem
  *  net.minecraft.entity.item.EntityMinecart
  *  net.minecraft.entity.item.EntityMinecartChest
  *  net.minecraft.entity.item.EntityMinecartTNT
  *  net.minecraft.entity.item.EntityTNTPrimed
  *  net.minecraft.entity.monster.EntityMob
- *  net.minecraft.entity.passive.EntityChicken
  *  net.minecraft.entity.passive.EntityCow
- *  net.minecraft.entity.passive.EntityPig
  *  net.minecraft.entity.passive.EntitySheep
  *  net.minecraft.entity.passive.EntityVillager
  *  net.minecraft.entity.passive.EntityWolf
@@ -122,12 +121,18 @@ import lotr.common.block.LOTRBlockUtumnoReturnPortalBase;
 import lotr.common.enchant.LOTREnchantment;
 import lotr.common.enchant.LOTREnchantmentHelper;
 import lotr.common.enchant.LOTREnchantmentWeaponSpecial;
+import lotr.common.entity.Dragons.entity.LOTREntityDragonAlpha;
+import lotr.common.entity.Dragons.entity.LOTREntityDragonAnkalagon;
+import lotr.common.entity.Dragons.entity.LOTREntityDragonHunter;
+import lotr.common.entity.Dragons.entity.LOTREntityDragonScout;
+import lotr.common.entity.Dragons.entity.LOTREntityDragonSmaug;
 import lotr.common.entity.LOTRBannerProtectable;
 import lotr.common.entity.LOTREntityRegistry;
 import lotr.common.entity.animal.LOTREntityButterfly;
 import lotr.common.entity.animal.LOTREntityHorse;
 import lotr.common.entity.animal.LOTREntityZebra;
 import lotr.common.entity.item.LOTREntityArrowAvari;
+import lotr.common.entity.item.LOTREntityArrowDragon;
 import lotr.common.entity.item.LOTREntityArrowExplosion;
 import lotr.common.entity.item.LOTREntityArrowHunger;
 import lotr.common.entity.item.LOTREntityArrowMorgul;
@@ -144,6 +149,7 @@ import lotr.common.entity.npc.LOTREntityOrc;
 import lotr.common.entity.npc.LOTREntityRanger;
 import lotr.common.entity.npc.LOTREntityRohanMan;
 import lotr.common.entity.npc.LOTREntityWargBombardier;
+import lotr.common.entity.npc.LOTREntityWindDwarfAxeThrower;
 import lotr.common.entity.npc.LOTRHiredNPCInfo;
 import lotr.common.entity.npc.LOTRInventoryNPCItems;
 import lotr.common.entity.npc.LOTRMercenary;
@@ -154,6 +160,7 @@ import lotr.common.entity.projectile.LOTREntityCrossbowBolt;
 import lotr.common.entity.projectile.LOTREntityDart;
 import lotr.common.entity.projectile.LOTREntitySpear;
 import lotr.common.entity.projectile.LOTREntityThrowingAxe;
+import lotr.common.entity.projectile.LOTREntityThrowingAxe2;
 import lotr.common.fac.LOTRAlignmentBonusMap;
 import lotr.common.fac.LOTRAlignmentValues;
 import lotr.common.fac.LOTRFaction;
@@ -182,15 +189,14 @@ import net.minecraft.entity.EntityHanging;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.item.EntityMinecartChest;
 import net.minecraft.entity.item.EntityMinecartTNT;
 import net.minecraft.entity.item.EntityTNTPrimed;
 import net.minecraft.entity.monster.EntityMob;
-import net.minecraft.entity.passive.EntityChicken;
 import net.minecraft.entity.passive.EntityCow;
-import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.passive.EntityWolf;
@@ -593,10 +599,10 @@ implements IFuelHandler {
                 if (material != null && LOTRConfig.enableBleeding && !world.isRemote && !(entity instanceof INotBleeding) && world.rand.nextInt(18) == 0) {
                     entity.addPotionEffect(new PotionEffect(LOTRPotions.blood.id, (world.rand.nextInt(8) + 16) * 20));
                 }
-                if (material != null && LOTRConfig.enableBleeding && !world.isRemote && !(entity instanceof INotBleeding) && world.rand.nextInt(25) == 0) {
+                if (material != null && LOTRConfig.enableBleeding && !world.isRemote && !(entity instanceof INotBleeding) && world.rand.nextInt(40) == 0) {
                     entity.addPotionEffect(new PotionEffect(LOTRPotions.blood.id, (world.rand.nextInt(8) + 16) * 20, 1));
                 }
-                if (material != null && LOTRConfig.enableBleeding && !world.isRemote && !(entity instanceof INotBleeding) && world.rand.nextInt(60) == 0) {
+                if (material != null && LOTRConfig.enableBleeding && !world.isRemote && !(entity instanceof INotBleeding) && world.rand.nextInt(70) == 0) {
                     entity.addPotionEffect(new PotionEffect(LOTRPotions.blood.id, (world.rand.nextInt(8) + 16) * 20, 2));
                 }
             }
@@ -611,8 +617,25 @@ implements IFuelHandler {
             packet = new LOTRPacketWeaponFX(LOTRPacketWeaponFX.Type.INFERNAL, (Entity)entity);
             LOTRPacketHandler.networkWrapper.sendToAllAround((IMessage)packet, LOTRPacketHandler.nearEntity((Entity)entity, 64.0));
         }
+        if (event.source.getSourceOfDamage() instanceof LOTREntityThrowingAxe2 && !world.isRemote) {
+            LOTRItemDagger.applyStandardWeak(entity);
+        }
         if (event.source.getSourceOfDamage() instanceof LOTREntityArrowHunger && !world.isRemote) {
             LOTRItemDagger.applyStandardHunger(entity);
+        }
+        if (event.source.getSourceOfDamage() instanceof LOTREntityArrowDragon && !world.isRemote) {
+            Entity entity1 = event.entity;
+            if (entity1 instanceof LOTREntityDragonScout) {
+                entity1.attackEntityFrom(DamageSource.generic, 10.0f);
+            } else if (entity1 instanceof LOTREntityDragonHunter) {
+                entity1.attackEntityFrom(DamageSource.generic, 15.0f);
+            } else if (entity1 instanceof LOTREntityDragonAlpha) {
+                entity1.attackEntityFrom(DamageSource.generic, 20.0f);
+            } else if (entity1 instanceof LOTREntityDragonAnkalagon) {
+                entity1.attackEntityFrom(DamageSource.generic, 55.0f);
+            } else if (entity1 instanceof LOTREntityDragonSmaug) {
+                entity1.attackEntityFrom(DamageSource.generic, 55.0f);
+            }
         }
         if (event.source.getSourceOfDamage() instanceof LOTREntityArrowWeak && !world.isRemote) {
             LOTRItemDagger.applyStandardWeak(entity);
@@ -662,6 +685,9 @@ implements IFuelHandler {
             k = MathHelper.floor_double((double)entityplayer.posZ);
             LOTRLevelData.getData(entityplayer).setDeathPoint(i, j, k);
             LOTRLevelData.getData(entityplayer).setDeathDimension(entityplayer.dimension);
+            if (source.getEntity() instanceof EntityDragon) {
+                LOTRLevelData.getData(entityplayer).addAchievement(LOTRAchievement.playerDeathDragon);
+            }
         }
         if (!world.isRemote) {
             entityplayer = null;
@@ -836,9 +862,12 @@ implements IFuelHandler {
                         if (attackingHiredUnit instanceof LOTREntityEreborDwarfBerserk) {
                             LOTRLevelData.getData(attackingPlayer).addAchievement(LOTRAchievement.hireBerserk);
                         }
+                        if (attackingHiredUnit instanceof LOTREntityWindDwarfAxeThrower) {
+                            LOTRLevelData.getData(attackingPlayer).addAchievement(LOTRAchievement.hireWindDwarfAxe);
+                        }
                     } else {
                         LOTREntityOrc orc;
-                        if (attackingPlayer.isPotionActive(Potion.confusion.id)) {
+                        if (attackingPlayer.isPotionActive(Potion.confusion.id) && attackingPlayer.isPotionActive(LOTRPotions.drunk.id)) {
                             LOTRLevelData.getData(attackingPlayer).addAchievement(LOTRAchievement.killWhileDrunk);
                         }
                         if (entity instanceof LOTREntityOrc && (orc = (LOTREntityOrc)entity).isOrcBombardier() && orc.npcItemsInv.getBomb() != null) {
@@ -915,14 +944,6 @@ implements IFuelHandler {
                 }
                 entity.dropItem(LOTRMod.muttonRaw, 1);
             }
-            int meat1 = rand.nextInt(4) + rand.nextInt(1 + i);
-            for (int l = 0; l < meat; ++l) {
-                if (entity.isBurning()) {
-                    entity.dropItem(Items.bone, 1);
-                    continue;
-                }
-                entity.dropItem(Items.bone, 1);
-            }
         }
     }
 
@@ -932,57 +953,6 @@ implements IFuelHandler {
         Random rand = entity.getRNG();
         int i = event.lootingLevel;
         if (entity instanceof EntityWolf) {
-            int meat = rand.nextInt(4) + rand.nextInt(1 + i);
-            for (int l = 0; l < meat; ++l) {
-                if (entity.isBurning()) {
-                    entity.dropItem(Items.bone, 1);
-                    continue;
-                }
-                entity.dropItem(Items.bone, 1);
-            }
-        }
-    }
-
-    @SubscribeEvent
-    public void onLivingDrops2(LivingDropsEvent event) {
-        EntityLivingBase entity = event.entityLiving;
-        Random rand = entity.getRNG();
-        int i = event.lootingLevel;
-        if (entity instanceof EntityPig) {
-            int meat = rand.nextInt(4) + rand.nextInt(1 + i);
-            for (int l = 0; l < meat; ++l) {
-                if (entity.isBurning()) {
-                    entity.dropItem(Items.bone, 1);
-                    continue;
-                }
-                entity.dropItem(Items.bone, 1);
-            }
-        }
-    }
-
-    @SubscribeEvent
-    public void onLivingDrops3(LivingDropsEvent event) {
-        EntityLivingBase entity = event.entityLiving;
-        Random rand = entity.getRNG();
-        int i = event.lootingLevel;
-        if (entity instanceof EntityCow) {
-            int meat = rand.nextInt(4) + rand.nextInt(1 + i);
-            for (int l = 0; l < meat; ++l) {
-                if (entity.isBurning()) {
-                    entity.dropItem(Items.bone, 1);
-                    continue;
-                }
-                entity.dropItem(Items.bone, 1);
-            }
-        }
-    }
-
-    @SubscribeEvent
-    public void onLivingDrops4(LivingDropsEvent event) {
-        EntityLivingBase entity = event.entityLiving;
-        Random rand = entity.getRNG();
-        int i = event.lootingLevel;
-        if (entity instanceof EntityChicken) {
             int meat = rand.nextInt(4) + rand.nextInt(1 + i);
             for (int l = 0; l < meat; ++l) {
                 if (entity.isBurning()) {

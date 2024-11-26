@@ -3,6 +3,7 @@
  * 
  * Could not load the following classes:
  *  com.mojang.authlib.GameProfile
+ *  cpw.mods.fml.client.registry.RenderingRegistry
  *  cpw.mods.fml.common.network.IGuiHandler
  *  cpw.mods.fml.common.network.simpleimpl.IMessage
  *  cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper
@@ -36,6 +37,7 @@
 package lotr.common;
 
 import com.mojang.authlib.GameProfile;
+import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.network.IGuiHandler;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
@@ -181,6 +183,13 @@ implements IGuiHandler {
     }
 
     public void onPreload() {
+    }
+
+    public void registerRenderThings() {
+    }
+
+    public int addArmor(String armor) {
+        return RenderingRegistry.addNewArmourRendererPrefix((String)armor);
     }
 
     public void onLoad() {
@@ -987,6 +996,10 @@ implements IGuiHandler {
     }
 
     public int getOrcPlatingRenderID() {
+        return 0;
+    }
+
+    public int getDecoratedPotRenderID() {
         return 0;
     }
 

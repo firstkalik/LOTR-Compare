@@ -72,6 +72,7 @@ import lotr.common.item.LOTRItemChisel;
 import lotr.common.item.LOTRItemCoin;
 import lotr.common.item.LOTRItemCrossbow;
 import lotr.common.item.LOTRItemEnchantment;
+import lotr.common.item.LOTRItemEnchantment2;
 import lotr.common.item.LOTRItemModifierTemplate;
 import lotr.common.item.LOTRItemOwnership;
 import lotr.common.item.LOTRItemThrowingAxe;
@@ -283,6 +284,8 @@ extends Container {
                     combinerItemEnchant = ((LOTRItemEnchantment)combinerItem.getItem()).theEnchant;
                 } else if (combinerItem.getItem() instanceof LOTRItemModifierTemplate) {
                     combinerItemEnchant = LOTRItemModifierTemplate.getModifier(combinerItem);
+                } else if (combinerItem.getItem() instanceof LOTRItemEnchantment2) {
+                    combinerItemEnchant = ((LOTRItemEnchantment2)combinerItem.getItem()).theEnchant;
                 }
                 if (!enchantingWithBook && combinerItemEnchant == null) {
                     if (inputCopy.isItemStackDamageable() && inputCopy.getItem() == combinerItem.getItem()) {
@@ -640,9 +643,9 @@ extends Container {
             }
         }
         if (materialPrice <= 0.0f && (this.isRepairMaterial(inputItem, new ItemStack(LOTRMod.mithril)) || this.isRepairMaterial(inputItem, new ItemStack(LOTRMod.mithrilMail))) && this.theTrader instanceof LOTREntityDwarf) {
-            materialPrice = 200.0f;
+            materialPrice = 30.0f;
         }
-        return materialPrice;
+        return materialPrice * 6.0f;
     }
 
     public void detectAndSendChanges() {

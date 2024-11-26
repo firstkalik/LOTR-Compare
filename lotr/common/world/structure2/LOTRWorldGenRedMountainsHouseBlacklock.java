@@ -57,7 +57,7 @@ extends LOTRWorldGenDwarfHouse3 {
         this.larderContents = LOTRChestContents.LOTRChestContents2.REDDWARFTOWER;
         this.personalContents = LOTRChestContents.LOTRChestContents2.REDDWARFTOWER;
         this.plateFoods = LOTRFoods.DWARF;
-        this.drinkFoods = LOTRFoods.REDDWARF_DRINK;
+        this.drinkFoods = LOTRFoods.REDDWARF_DRINK_BLACLLOCK;
     }
 
     @Override

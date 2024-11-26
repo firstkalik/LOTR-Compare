@@ -23,6 +23,7 @@ import lotr.common.entity.animal.LOTREntityWildBoar;
 import lotr.common.entity.npc.LOTREntityBlueDwarfMerchant;
 import lotr.common.entity.npc.LOTREntityDaleMerchant;
 import lotr.common.entity.npc.LOTREntityDorwinionMerchantMan;
+import lotr.common.entity.npc.LOTREntityEreborDwarfMerchant;
 import lotr.common.entity.npc.LOTREntityRedDwarfMerchant;
 import lotr.common.entity.npc.LOTREntityScrapTrader;
 import lotr.common.world.biome.LOTRBiome;
@@ -88,6 +89,7 @@ extends LOTRBiome {
         this.decorator.addRandomStructure(new LOTRWorldGenDwarvenTower(false), 300);
         this.decorator.addRandomStructure(new LOTRWorldGenDwarfSmithy(false), 150);
         this.registerTravellingTrader(LOTREntityBlueDwarfMerchant.class);
+        this.registerTravellingTrader(LOTREntityEreborDwarfMerchant.class);
         this.registerTravellingTrader(LOTREntityScrapTrader.class);
         this.registerTravellingTrader(LOTREntityDaleMerchant.class);
         this.registerTravellingTrader(LOTREntityDorwinionMerchantMan.class);

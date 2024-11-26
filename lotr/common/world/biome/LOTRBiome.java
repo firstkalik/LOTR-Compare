@@ -12,6 +12,7 @@
  *  net.minecraft.block.material.Material
  *  net.minecraft.entity.EntityLivingBase
  *  net.minecraft.entity.EnumCreatureType
+ *  net.minecraft.entity.boss.EntityDragon
  *  net.minecraft.entity.passive.EntityBat
  *  net.minecraft.entity.passive.EntityChicken
  *  net.minecraft.entity.passive.EntityCow
@@ -51,6 +52,7 @@ import lotr.common.LOTRAchievement;
 import lotr.common.LOTRCommonProxy;
 import lotr.common.LOTRDimension;
 import lotr.common.LOTRMod;
+import lotr.common.entity.Dragons.entity.LOTREntityDragonAnkalagon;
 import lotr.common.entity.animal.LOTRAmbientCreature;
 import lotr.common.entity.animal.LOTREntityAurochs;
 import lotr.common.entity.animal.LOTREntityBird;
@@ -286,6 +288,7 @@ import net.minecraft.block.BlockTallGrass;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.EnumCreatureType;
+import net.minecraft.entity.boss.EntityDragon;
 import net.minecraft.entity.passive.EntityBat;
 import net.minecraft.entity.passive.EntityChicken;
 import net.minecraft.entity.passive.EntityCow;
@@ -539,8 +542,10 @@ extends BiomeGenBase {
     protected List spawnableLOTRAmbientList = new ArrayList();
     private List spawnableTraders = new ArrayList();
     private LOTREventSpawner.EventChance banditChance;
+    private LOTREventSpawner.EventChance dragonChance;
     private LOTREventSpawner.EventChance banditChance1;
     private Class<? extends LOTREntityBandit> banditEntityClass;
+    private Class<? extends EntityDragon> dragonEntityClass;
     private Class<? extends LOTREntityBanditOrc> banditEntityClass1;
     public final LOTRBiomeInvasionSpawns invasionSpawns;
     public BiomeColors biomeColors = new BiomeColors(this);
@@ -725,12 +730,12 @@ extends BiomeGenBase {
         moria = new LOTRBiomeGenMoria(171, true).setTemperatureRainfall(0.2f, 0.5f).setMinMaxHeight(2.0f, 2.0f).setColor(14539991).setBiomeName("moria");
         angband = new LOTRBiomeGenAngband(172, true).setTemperatureRainfall(0.0f, 0.2f).setMinMaxHeight(0.1f, 0.1f).setColor(13421767).setBiomeName("angband");
         redMountains2 = new LOTRBiomeGenRedMountainsBlacklock(189, true).setTemperatureRainfall(0.3f, 0.4f).setMinMaxHeight(1.5f, 2.0f).setColor(10056783).setBiomeName("orocarni");
-        redMountainsFoothills2 = new LOTRBiomeGenRedMountainsFoothillsStiffbeard(190, true).setTemperatureRainfall(0.7f, 0.4f).setMinMaxHeight(0.5f, 0.9f).setColor(10392917).setBiomeName("orocarniFoothills");
+        redMountainsFoothills2 = new LOTRBiomeGenRedMountainsFoothillsStiffbeard(190, true).setTemperatureRainfall(0.7f, 0.4f).setMinMaxHeight(0.5f, 0.9f).setColor(10392917).setBiomeName("northFoothills");
         redMountains3 = new LOTRBiomeGenRedMountainsStiffbeard(193, true).setTemperatureRainfall(0.3f, 0.2f).setMinMaxHeight(1.5f, 2.0f).setColor(9859662).setBiomeName("middle_orocarni");
         redMountains4 = new LOTRBiomeGenRedMountainsIronfist(195, true).setTemperatureRainfall(0.0f, 0.2f).setMinMaxHeight(1.5f, 2.0f).setColor(15066597).setBiomeName("notrh_orocarni");
-        redMountainsFoothills3 = new LOTRBiomeGenRedMountainsFoothillsBlacklock(194, true).setTemperatureRainfall(0.7f, 0.4f).setMinMaxHeight(0.5f, 0.9f).setColor(10393685).setBiomeName("middle_orocarniFoothills");
+        redMountainsFoothills3 = new LOTRBiomeGenRedMountainsFoothillsBlacklock(194, true).setTemperatureRainfall(0.7f, 0.4f).setMinMaxHeight(0.5f, 0.9f).setColor(10393685).setBiomeName("middleFoothills");
         redMountains = new LOTRBiomeGenRedMountainsStonefoot(117, true).setTemperatureRainfall(0.4f, 0.3f).setMinMaxHeight(1.5f, 2.0f).setColor(9662796).setBiomeName("redMountainsStonefoot");
-        redMountainsFoothills = new LOTRBiomeGenRedMountainsFoothillsStonefoot(118, true).setTemperatureRainfall(0.7f, 0.4f).setMinMaxHeight(0.5f, 0.9f).setColor(10064978).setBiomeName("redMountainsFoothills");
+        redMountainsFoothills = new LOTRBiomeGenRedMountainsFoothillsStonefoot(118, true).setTemperatureRainfall(0.7f, 0.4f).setMinMaxHeight(0.5f, 0.9f).setColor(10064978).setBiomeName("southFoothills");
         forodwaithMountains2 = new LOTRBiomeGenForodwaithMountains2(191, true).setTemperatureRainfall(0.0f, 0.2f).setMinMaxHeight(2.0f, 2.0f).setColor(15395562).setBiomeName("angbandMountains");
         uncharted_rhun = new LOTRBiomeGenUnchartedRhun(196, true).setTemperatureRainfall(0.9f, 0.3f).setMinMaxHeight(0.3f, 0.0f).setColor(11449194).setBiomeName("uncharted_rhun");
         eastern_coasts = new LOTRBiomeGenEasternCoasts(198, true).setTemperatureRainfall(0.6f, 0.3f).setMinMaxHeight(0.3f, 0.0f).setColor(8165242).setBiomeName("eastern_coasts");
@@ -804,6 +809,7 @@ extends BiomeGenBase {
         this.spawnableLOTRAmbientList.add(new BiomeGenBase.SpawnListEntry(LOTREntityBird.class, 10, 4, 4));
         this.spawnableCaveCreatureList.add(new BiomeGenBase.SpawnListEntry(EntityBat.class, 10, 8, 8));
         this.setBanditChance(LOTREventSpawner.EventChance.NEVER);
+        this.setDragonChance(LOTREventSpawner.EventChance.NEVER);
         this.invasionSpawns = new LOTRBiomeInvasionSpawns(this);
     }
 
@@ -990,8 +996,27 @@ extends BiomeGenBase {
         this.banditChance = c;
     }
 
+    protected final void setDragonChance(LOTREventSpawner.EventChance c) {
+        this.dragonChance = c;
+    }
+
+    public final LOTREventSpawner.EventChance getDragonChance() {
+        return this.dragonChance;
+    }
+
     public final LOTREventSpawner.EventChance getBanditChance() {
         return this.banditChance;
+    }
+
+    protected final void setDragonEntityClass(Class<LOTREntityDragonAnkalagon> class1) {
+        this.dragonEntityClass = class1;
+    }
+
+    public final Class<? extends EntityDragon> getdragonEntityClass() {
+        if (this.dragonEntityClass == null) {
+            return EntityDragon.class;
+        }
+        return this.dragonEntityClass;
     }
 
     protected final void setBanditEntityClass(Class<? extends LOTREntityBandit> c) {

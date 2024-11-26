@@ -192,6 +192,15 @@ public enum LOTRCapes {
         if (this == LOTR2) {
             return LOTRLevelData.getData(entityplayer).hasAchievement(LOTRAchievement.enterLotr);
         }
+        if (this == LORE3) {
+            return LOTRLevelData.getData(entityplayer).hasAchievement(LOTRAchievement.killDragon);
+        }
+        if (this == LORE2) {
+            return LOTRLevelData.getData(entityplayer).hasAchievement(LOTRAchievement.killDragon);
+        }
+        if (this == LORE1) {
+            return LOTRLevelData.getData(entityplayer).hasAchievement(LOTRAchievement.killDragon);
+        }
         if (this == AMETHYSTCOATEDCAPE) {
             return LOTRLevelData.getData(entityplayer).hasAchievement(LOTRAchievement.enterLotr);
         }

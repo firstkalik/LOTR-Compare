@@ -23,7 +23,7 @@ extends WorldGenerator {
     private void generateLichen(World world, Random random, int i, int j, int k) {
         int l = i;
         int i1 = k;
-        while (j < 70) {
+        while (j < 60) {
             if (world.isAirBlock(i, j, k)) {
                 for (int j1 = 2; j1 <= 5; ++j1) {
                     if (!LOTRMod.glow_lichen.canPlaceBlockOnSide(world, i, j, k, j1)) continue;

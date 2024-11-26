@@ -20,6 +20,7 @@ import lotr.common.entity.animal.LOTREntityCrebain;
 import lotr.common.entity.animal.LOTREntityFox;
 import lotr.common.entity.npc.LOTREntityBlueDwarfMerchant;
 import lotr.common.entity.npc.LOTREntityDaleMerchant;
+import lotr.common.entity.npc.LOTREntityEreborDwarfMerchant;
 import lotr.common.entity.npc.LOTREntityIronHillsMerchant;
 import lotr.common.entity.npc.LOTREntityScrapTrader;
 import lotr.common.world.biome.LOTRBiome;
@@ -92,6 +93,7 @@ extends LOTRBiome {
         this.decorator.addRandomStructure(new LOTRWorldGenStoneRuin.STONE(1, 3), 500);
         this.decorator.addRandomStructure(new LOTRWorldGenSmallStoneRuin(false), 300);
         this.registerTravellingTrader(LOTREntityBlueDwarfMerchant.class);
+        this.registerTravellingTrader(LOTREntityEreborDwarfMerchant.class);
         this.registerTravellingTrader(LOTREntityIronHillsMerchant.class);
         this.registerTravellingTrader(LOTREntityScrapTrader.class);
         this.registerTravellingTrader(LOTREntityDaleMerchant.class);

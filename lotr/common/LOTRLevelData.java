@@ -101,6 +101,7 @@ public class LOTRLevelData {
     private static int waypointCooldownMax;
     private static int waypointCooldownMin;
     private static boolean gollumSpawned;
+    private static boolean balrogSpawned;
     private static boolean enableAlignmentZones;
     private static float conquestRate;
     public static boolean clientside_thisServer_feastMode;
@@ -189,6 +190,7 @@ public class LOTRLevelData {
                 levelData.setInteger("WpCdMax", waypointCooldownMax);
                 levelData.setInteger("WpCdMin", waypointCooldownMin);
                 levelData.setBoolean("GollumSpawned", gollumSpawned);
+                levelData.setBoolean("BalrogSpawned", balrogSpawned);
                 levelData.setBoolean("AlignmentZones", enableAlignmentZones);
                 levelData.setFloat("ConqRate", conquestRate);
                 if (difficulty != null) {
@@ -259,6 +261,7 @@ public class LOTRLevelData {
             int n = levelData.hasKey("FastTravel") ? levelData.getInteger("FastTravel") / 20 : (waypointCooldownMax = levelData.hasKey("WpCdMax") ? levelData.getInteger("WpCdMax") : 1800);
             waypointCooldownMin = levelData.hasKey("FastTravelMin") ? levelData.getInteger("FastTravelMin") / 20 : (levelData.hasKey("WpCdMin") ? levelData.getInteger("WpCdMin") : 180);
             gollumSpawned = levelData.getBoolean("GollumSpawned");
+            balrogSpawned = levelData.getBoolean("BalrogSpawned");
             enableAlignmentZones = levelData.hasKey("AlignmentZones") ? levelData.getBoolean("AlignmentZones") : true;
             float f = conquestRate = levelData.hasKey("ConqRate") ? levelData.getFloat("ConqRate") : 1.0f;
             if (levelData.hasKey("SavedDifficulty")) {
@@ -629,6 +632,15 @@ public class LOTRLevelData {
 
     public static void setGollumSpawned(boolean flag) {
         gollumSpawned = flag;
+        LOTRLevelData.markDirty();
+    }
+
+    public static boolean balrogSpawned() {
+        return balrogSpawned;
+    }
+
+    public static void setBalrogSpawned(boolean flag) {
+        balrogSpawned = flag;
         LOTRLevelData.markDirty();
     }
 

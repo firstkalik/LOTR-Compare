@@ -59,6 +59,7 @@ import lotr.common.inventory.LOTRSlotAlignmentReward;
 import lotr.common.network.LOTRPacketBuyUnit;
 import lotr.common.network.LOTRPacketHandler;
 import lotr.common.network.LOTRPacketHiredInfo;
+import lotr.common.network.PacketSyncNPCCount;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.client.gui.FontRenderer;
@@ -242,7 +243,9 @@ extends GuiContainer {
         float alignment1 = playerData.getAlignment(this.theUnitTrader.getFaction());
         int repToNextLimit = 1000 - (int)alignment1 % 1000;
         String repCountText = StatCollector.translateToLocalFormatted((String)"gui.repToNextLimit", (Object[])new Object[]{repToNextLimit});
-        this.fontRendererObj.drawString(repCountText, 23, this.ySize - 228 + 2, 4210752);
+        int repCountX = this.xSize / 2 - this.fontRendererObj.getStringWidth(repCountText) / 2;
+        int repCountY = this.ySize - 228 + 2;
+        this.fontRendererObj.drawString(repCountText, repCountX, repCountY, 4210752);
     }
 
     private void markDirty() {
@@ -261,6 +264,8 @@ extends GuiContainer {
 
     private void updateHiredNPCCount() {
         LOTRPlayerData playerData = LOTRLevelData.getData((EntityPlayer)this.mc.thePlayer);
+        PacketSyncNPCCount syncPacket = new PacketSyncNPCCount(LOTRLevelData.getData((EntityPlayer)this.mc.thePlayer).getGlobalHiredNPCCount());
+        LOTRPacketHandler.networkWrapper.sendToServer((IMessage)syncPacket);
         int currentHiredNPCCount = playerData.getGlobalHiredNPCCount();
     }
 

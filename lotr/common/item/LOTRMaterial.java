@@ -144,11 +144,11 @@ public class LOTRMaterial {
     public static LOTRMaterial SAURON = new LOTRMaterial("SAURON").setUses(900).setDamage(3.5f).setProtection(0.7f).setHarvestLevel(2).setSpeed(6.0f).setEnchantability(5).setManFlesh();
     public static LOTRMaterial DARK_DWARVEN = new LOTRMaterial("DARK_DWARVEN").setUses(580).setDamage(3.0f).setProtection(0.7f).setHarvestLevel(3).setSpeed(6.5f).setEnchantability(12).setManFlesh();
     public static LOTRMaterial GREY_DWARVEN = new LOTRMaterial("GREY_DWARVEN").setUses(655).setDamage(3.0f).setProtection(0.7f).setHarvestLevel(3).setSpeed(7.0f).setEnchantability(12);
-    public static LOTRMaterial GOLDEN_DWARVEN = new LOTRMaterial("GOLDEN_DWARVEN").setUses(110).setDamage(3.0f).setProtection(0.7f).setHarvestLevel(3).setSpeed(6.6f).setEnchantability(10);
+    public static LOTRMaterial GOLDEN_DWARVEN = new LOTRMaterial("GOLDEN_DWARVEN").setUses(310).setDamage(3.0f).setProtection(0.7f).setHarvestLevel(3).setSpeed(6.6f).setEnchantability(10);
     public static LOTRMaterial DWARVENSILVERFULL = new LOTRMaterial("DWARVENSILVERFULL").setUses(100).setDamage(3.0f).setProtection(0.7f).setHarvestLevel(3).setSpeed(6.6f).setEnchantability(10);
     public static LOTRMaterial MORIA_DWARVEN = new LOTRMaterial("MORIA_DWARVEN").setUses(660).setDamage(3.0f).setProtection(0.7f).setHarvestLevel(3).setSpeed(7.5f).setEnchantability(12);
     public static LOTRMaterial GONDOR_MITHRIL = new LOTRMaterial("GONDOR_MITHRIL").setUses(2600).setDamage(3.0f).setProtection(0.8f).setHarvestLevel(4).setSpeed(7.0f).setEnchantability(10);
-    public static LOTRMaterial MITHRIL_BRUSH = new LOTRMaterial("MITHRIL_BRUSH").setUses(1200).setDamage(5.0f).setProtection(0.8f).setHarvestLevel(4).setSpeed(9.0f).setEnchantability(8);
+    public static LOTRMaterial MITHRIL_BRUSH = new LOTRMaterial("MITHRIL_BRUSH").setUses(1200).setDamage(5.0f).setProtection(0.8f).setHarvestLevel(4).setSpeed(7.0f).setEnchantability(8);
     public static LOTRMaterial AVARI_ELVEN_SCOUT = new LOTRMaterial("AVARI_ELVEN_SCOUT").setUses(300).setDamage(0.0f).setProtection(0.4f).setHarvestLevel(0).setSpeed(0.0f).setEnchantability(15);
     public static LOTRMaterial AVARI_ELVEN = new LOTRMaterial("AVARI_ELVEN").setUses(480).setDamage(3.0f).setProtection(0.6f).setHarvestLevel(2).setSpeed(7.4f).setEnchantability(15);
     public static LOTRMaterial AVARI_ELVEN_DAGGER = new LOTRMaterial("AVARI_ELVEN_DAGGER").setUses(480).setDamage(3.0f).setProtection(0.6f).setHarvestLevel(2).setSpeed(7.4f).setEnchantability(15);
@@ -250,6 +250,7 @@ public class LOTRMaterial {
         LAMEDON.setCraftingItem(Items.iron_ingot);
         LOSSARNACH.setCraftingItem(Items.iron_ingot);
         MAIRON.setCraftingItem(LOTRMod.urukSteel);
+        MORIA_DWARVEN.setCraftingItem(LOTRMod.dwarfSteel);
         MITHRIL.setCraftingItems(LOTRMod.mithril, LOTRMod.mithrilMail);
         GONDOR_MITHRIL.setCraftingItems(LOTRMod.mithril, LOTRMod.mithrilMail);
         MITHRIL_ELVEN.setCraftingItems(LOTRMod.mithril, LOTRMod.mithrilMail);

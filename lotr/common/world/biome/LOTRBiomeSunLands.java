@@ -7,6 +7,7 @@
  *  net.minecraft.entity.passive.EntityCow
  *  net.minecraft.entity.passive.EntityPig
  *  net.minecraft.entity.passive.EntitySheep
+ *  net.minecraft.world.World
  *  net.minecraft.world.biome.BiomeGenBase
  *  net.minecraft.world.biome.BiomeGenBase$SpawnListEntry
  *  net.minecraft.world.gen.feature.WorldGenMinable
@@ -25,6 +26,7 @@ import lotr.common.world.biome.LOTRBiomeDecorator;
 import lotr.common.world.biome.LOTRMusicRegion;
 import lotr.common.world.biome.variant.LOTRBiomeVariant;
 import lotr.common.world.feature.LOTRTreeType;
+import lotr.common.world.feature.LOTRWorldGenClover;
 import lotr.common.world.feature.LOTRWorldGenDoubleFlower;
 import lotr.common.world.map.LOTRRoadType;
 import lotr.common.world.map.LOTRWaypoint;
@@ -34,6 +36,7 @@ import net.minecraft.entity.passive.EntityChicken;
 import net.minecraft.entity.passive.EntityCow;
 import net.minecraft.entity.passive.EntityPig;
 import net.minecraft.entity.passive.EntitySheep;
+import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.gen.feature.WorldGenMinable;
 import net.minecraft.world.gen.feature.WorldGenerator;
@@ -57,6 +60,7 @@ extends LOTRBiome {
         this.decorator.resetTreeCluster();
         this.decorator.willowPerChunk = 1;
         this.decorator.flowersPerChunk = 1;
+        this.decorator.doubleFlowersPerChunk = 1;
         this.decorator.generateWater = false;
         this.decorator.generateLava = false;
         this.decorator.grassPerChunk = 6;
@@ -73,6 +77,7 @@ extends LOTRBiome {
         this.flowers.clear();
         this.flowers.addAll(flowerDupes);
         this.addFlower(LOTRMod.athelas, 0, 10);
+        this.addFlower(LOTRMod.torchflower, 0, 10);
         this.decorator.generateOrcDungeon = false;
     }
 
@@ -95,10 +100,21 @@ extends LOTRBiome {
     public WorldGenerator getRandomWorldGenForDoubleFlower(Random random) {
         if (random.nextInt(4) == 0) {
             LOTRWorldGenDoubleFlower doubleFlowerGen = new LOTRWorldGenDoubleFlower();
-            doubleFlowerGen.setFlowerType(0);
+            doubleFlowerGen.setFlowerType(4);
             return doubleFlowerGen;
         }
         return super.getRandomWorldGenForDoubleFlower(random);
+    }
+
+    @Override
+    public void decorate(World world, Random random, int i, int k) {
+        super.decorate(world, random, i, k);
+        for (int l = 0; l < this.decorator.grassPerChunk / 2; ++l) {
+            int i12 = i + random.nextInt(16) + 8;
+            int j12 = random.nextInt(128);
+            int k12 = k + random.nextInt(16) + 8;
+            new LOTRWorldGenClover().generate(world, random, i12, j12, k12);
+        }
     }
 
     @Override

@@ -102,7 +102,7 @@ implements LOTRMercenary {
 
     @Override
     public LOTRFaction getFaction() {
-        return LOTRFaction.GUNDABAD;
+        return LOTRFaction.ANGMAR;
     }
 
     @Override
@@ -130,7 +130,7 @@ implements LOTRMercenary {
     @Override
     protected void dropOrcItems(boolean flag, int i) {
         if (this.rand.nextInt(6) == 0) {
-            this.dropChestContents(LOTRChestContents.ANGMAR_TENT, 1, 2 + i);
+            this.dropChestContents(LOTRChestContents.LOTRChestContents2.ANGMAR_MORGUL, 1, 2 + i);
         }
     }
 

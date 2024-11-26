@@ -129,6 +129,7 @@ import lotr.common.network.LOTRPacketTitle;
 import lotr.common.network.LOTRPacketUpdateViewingFaction;
 import lotr.common.network.LOTRPacketWaypointRegion;
 import lotr.common.network.LOTRPacketWaypointUseCount;
+import lotr.common.network.PacketAlcoholTolerance;
 import lotr.common.quest.LOTRMiniQuest;
 import lotr.common.quest.LOTRMiniQuestEvent;
 import lotr.common.quest.LOTRMiniQuestWelcome;
@@ -1032,7 +1033,10 @@ public class LOTRPlayerData {
         }
         this.setTimeSinceFT(this.ftSinceTick + 1);
         if (this.targetFTWaypoint != null) {
-            if (this.ticksUntilFT > 0) {
+            if (entityplayer.isPlayerSleeping()) {
+                entityplayer.addChatMessage((IChatComponent)new ChatComponentTranslation("lotr.fastTravel.inBed", new Object[0]));
+                this.setTargetFTWaypoint(null);
+            } else if (this.ticksUntilFT > 0) {
                 int seconds = this.ticksUntilFT / 20;
                 if (this.ticksUntilFT == ticksUntilFT_max) {
                     entityplayer.addChatMessage((IChatComponent)new ChatComponentTranslation("lotr.fastTravel.travelTicksStart", new Object[]{seconds}));
@@ -1054,8 +1058,7 @@ public class LOTRPlayerData {
             } else {
                 double range = 32.0;
                 List entities = world.getEntitiesWithinAABB(EntityLivingBase.class, entityplayer.boundingBox.expand(range, range, range));
-                for (Object obj : entities) {
-                    Entity entity = (Entity)obj;
+                for (Entity entity : entities) {
                     if (!entity.getUniqueID().equals(this.uuidToMount)) continue;
                     entityplayer.mountEntity(entity);
                     break;
@@ -1134,9 +1137,12 @@ public class LOTRPlayerData {
         float prevMainAlignment = this.getAlignment(faction);
         float conquestBonus = 0.0f;
         if (entityplayer.isPotionActive(LOTRPotions.hero)) {
-            bonus *= 1.5f;
+            bonus *= 1.2f;
         }
         if (source.isKill) {
+            if (entityplayer.isPotionActive(LOTRPotions.hero)) {
+                bonus *= 1.5f;
+            }
             List<LOTRFaction> killBonuses = faction.getBonusesForKilling();
             for (Object bonusFaction : killBonuses) {
                 if (!bonusFaction.isPlayableAlignmentFaction() || !bonusFaction.approvesWarCrimes && source.isCivilianKill) continue;
@@ -1588,9 +1594,6 @@ public class LOTRPlayerData {
                 this.addAchievement(LOTRAchievement.enterUtumnoFire);
             }
         }
-        if (entityplayer.inventory.hasItem(LOTRMod.silmaril_air)) {
-            this.addAchievement(LOTRAchievement.getSilmaril);
-        }
         return true;
     }
 
@@ -1635,12 +1638,15 @@ public class LOTRPlayerData {
         if (entityplayer.inventory.hasItemStack(new ItemStack(LOTRMod.pouch, 1, 2))) {
             this.addAchievement(LOTRAchievement.getPouch);
         }
-        if (entityplayer.inventory.hasItem(LOTRMod.LOTRRingOne)) {
+        if (entityplayer.inventory.hasItem(LOTRMod.theOneRing)) {
             this.addAchievement(LOTRAchievement.getOne);
         }
         if (entityplayer.inventory.hasItem(LOTRMod.vilia)) {
             this.addAchievement(LOTRAchievement.getThree);
             this.addAchievement(LOTRAchievement.getVilia);
+        }
+        if (entityplayer.inventory.hasItem(LOTRMod.steelbow)) {
+            this.addAchievement(LOTRAchievement.getNumenorBow);
         }
         if (entityplayer.inventory.hasItem(LOTRMod.nenia)) {
             this.addAchievement(LOTRAchievement.getThree);
@@ -1736,12 +1742,6 @@ public class LOTRPlayerData {
         if (entityplayer.inventory.hasItem(LOTRMod.silmaril_air)) {
             this.addAchievement(LOTRAchievement.getSilmaril);
         }
-        if (entityplayer.inventory.hasItem(LOTRMod.khamRaw)) {
-            this.addAchievement(LOTRAchievement.getKham);
-        }
-        if (entityplayer.inventory.hasItem(LOTRMod.kham)) {
-            this.addAchievement(LOTRAchievement.getKham);
-        }
         HashSet<Block> tables = new HashSet<Block>();
         int crossbowBolts = 0;
         for (ItemStack item : entityplayer.inventory.mainInventory) {
@@ -1806,7 +1806,10 @@ public class LOTRPlayerData {
         if (biome instanceof LOTRBiome && (double)entityplayer.distanceWalkedModified > 10000.0) {
             this.addAchievement(LOTRAchievement.insearchofyourself);
         }
-        if (biome instanceof LOTRBiome && (double)entityplayer.distanceWalkedModified > 50000.0) {
+        if (biome instanceof LOTRBiome && (double)entityplayer.distanceWalkedModified > 15000.0) {
+            this.addAchievement(LOTRAchievement.marathon);
+        }
+        if (biome instanceof LOTRBiome && (double)entityplayer.distanceWalkedModified > 20000.0) {
             this.addAchievement(LOTRAchievement.notenough);
         }
         LOTRMaterial fullMaterial = this.isPlayerWearingFull(entityplayer);
@@ -3259,11 +3262,14 @@ public class LOTRPlayerData {
     }
 
     public void setAlcoholTolerance(int i) {
-        EntityPlayer entityplayer;
+        EntityPlayer entityplayer = this.getPlayer();
         this.alcoholTolerance = i;
         this.markDirty();
-        if (this.alcoholTolerance >= 250 && (entityplayer = this.getPlayer()) != null && !entityplayer.worldObj.isRemote) {
+        if (this.alcoholTolerance >= 400 && entityplayer != null && !entityplayer.worldObj.isRemote) {
             this.addAchievement(LOTRAchievement.gainHighAlcoholTolerance);
+        }
+        if (entityplayer != null && !entityplayer.worldObj.isRemote) {
+            LOTRPacketHandler.networkWrapper.sendTo((IMessage)new PacketAlcoholTolerance(this.alcoholTolerance), (EntityPlayerMP)entityplayer);
         }
     }
 

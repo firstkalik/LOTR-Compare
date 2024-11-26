@@ -24,7 +24,6 @@
  *  net.minecraft.entity.item.EntityItem
  *  net.minecraft.entity.player.EntityPlayer
  *  net.minecraft.init.Blocks
- *  net.minecraft.init.Items
  *  net.minecraft.item.Item
  *  net.minecraft.item.ItemStack
  *  net.minecraft.nbt.NBTTagCompound
@@ -79,7 +78,6 @@ import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -170,10 +168,6 @@ LOTRRandomSkinEntity {
                 continue;
             }
             this.dropItem(LOTRMod.rabbitRaw, 1);
-        }
-        int j3 = this.rand.nextInt(8) + this.rand.nextInt(1 + i);
-        for (int k = 0; k < j3; ++k) {
-            this.dropItem(Items.bone, 1);
         }
     }
 

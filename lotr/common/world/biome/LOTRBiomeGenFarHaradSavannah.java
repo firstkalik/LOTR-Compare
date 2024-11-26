@@ -86,6 +86,7 @@ extends LOTRBiomeGenFarHarad {
         this.decorator.clayGen = new LOTRWorldGenSand(LOTRMod.redClay, 5, 1);
         this.decorator.clayPerChunk = 4;
         this.decorator.lichenPerChunk = 0;
+        this.decorator.lichenPerChunk2 = 0;
         this.decorator.grassPerChunk = 10;
         this.decorator.doubleGrassPerChunk = 12;
         this.decorator.flowersPerChunk = 3;

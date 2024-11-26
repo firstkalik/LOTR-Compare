@@ -178,9 +178,12 @@ extends StructureComponent {
                     this.placeBlockAtCurrentPosition(world, LOTRMod.wall2, 3, i, j, k, structureBoundingBox);
                 }
             }
-            this.fillWithBlocks(world, structureBoundingBox, -1, 0, k, -1, 2, k, LOTRMod.pillar4, Blocks.air, false);
-            this.fillWithBlocks(world, structureBoundingBox, 3, 0, k, 3, 2, k, LOTRMod.pillar4, Blocks.air, false);
-            this.fillWithBlocks(world, structureBoundingBox, 1, -1, k - 2, 1, -1, k + 2, LOTRMod.pillar4, Blocks.air, false);
+            for (int j = 0; j <= 2; ++j) {
+                this.placeBlockAtCurrentPosition(world, LOTRMod.pillar, 4, -1, j, k, structureBoundingBox);
+                this.placeBlockAtCurrentPosition(world, LOTRMod.pillar, 4, 3, j, k, structureBoundingBox);
+            }
+            this.placeBlockAtCurrentPosition(world, LOTRMod.pillar, 4, 1, -1, k - 2, structureBoundingBox);
+            this.placeBlockAtCurrentPosition(world, LOTRMod.pillar, 4, 1, -1, k + 2, structureBoundingBox);
             if (this.getBlockAtCurrentPosition(world, 1, -1, k - 3, structureBoundingBox) != Blocks.air) {
                 this.placeBlockAtCurrentPosition(world, LOTRMod.pillar, 4, 1, -1, k - 3, structureBoundingBox);
             }
@@ -189,18 +192,20 @@ extends StructureComponent {
             }
             if (!this.ruined) {
                 this.placeBlockAtCurrentPosition(world, LOTRMod.brick8, 0, 1, -1, k, structureBoundingBox);
-                if (random.nextInt(80) == 0) {
-                    this.placeBlockAtCurrentPosition(world, Blocks.crafting_table, 0, 2, 0, k - 1, structureBoundingBox);
-                }
-                if (random.nextInt(80) == 0) {
-                    this.placeBlockAtCurrentPosition(world, Blocks.crafting_table, 0, 0, 0, k + 1, structureBoundingBox);
-                }
+            } else {
+                this.placeBlockAtCurrentPosition(world, LOTRMod.brick7, 0, 1, -1, k, structureBoundingBox);
+            }
+            if (random.nextInt(80) == 0) {
+                this.placeBlockAtCurrentPosition(world, Blocks.crafting_table, 0, 2, 0, k - 1, structureBoundingBox);
+            }
+            if (random.nextInt(80) == 0) {
+                this.placeBlockAtCurrentPosition(world, Blocks.crafting_table, 0, 0, 0, k + 1, structureBoundingBox);
             }
             if (random.nextInt(120) == 0) {
-                this.generateStructureChestContents(world, structureBoundingBox, random, 2, 0, k - 1, LOTRChestContents.DWARVEN_MINE_CORRIDOR.items, LOTRChestContents.getRandomItemAmount(LOTRChestContents.DWARVEN_MINE_CORRIDOR, random));
+                this.generateStructureChestContents(world, structureBoundingBox, random, 2, 0, k - 1, LOTRChestContents.LOTRChestContents2.BLUE_DWARVEN_MINE_CORRIDOR.items, LOTRChestContents.getRandomItemAmount(LOTRChestContents.LOTRChestContents2.BLUE_DWARVEN_MINE_CORRIDOR, random));
             }
             if (random.nextInt(120) != 0) continue;
-            this.generateStructureChestContents(world, structureBoundingBox, random, 0, 0, k + 1, LOTRChestContents.DWARVEN_MINE_CORRIDOR.items, LOTRChestContents.getRandomItemAmount(LOTRChestContents.DWARVEN_MINE_CORRIDOR, random));
+            this.generateStructureChestContents(world, structureBoundingBox, random, 0, 0, k + 1, LOTRChestContents.LOTRChestContents2.BLUE_DWARVEN_MINE_CORRIDOR.items, LOTRChestContents.getRandomItemAmount(LOTRChestContents.LOTRChestContents2.BLUE_DWARVEN_MINE_CORRIDOR, random));
         }
         for (int k = 0; k <= length; ++k) {
             for (int i = -1; i <= 3; ++i) {
@@ -208,18 +213,8 @@ extends StructureComponent {
                 if (block.getMaterial().isReplaceable() || block.getMaterial() == Material.sand) {
                     this.placeBlockAtCurrentPosition(world, Blocks.stone, 0, i, -1, k, structureBoundingBox);
                 }
-                int j = 3;
-                block = this.getBlockAtCurrentPosition(world, i, 3, k, structureBoundingBox);
-                if (!block.getMaterial().isReplaceable() && block.getMaterial() != Material.sand) continue;
-                this.placeBlockAtCurrentPosition(world, Blocks.stone, 0, i, j, k, structureBoundingBox);
-            }
-            for (int j = 0; j <= 2; ++j) {
-                Block block = this.getBlockAtCurrentPosition(world, -1, j, k, structureBoundingBox);
-                if (block.getMaterial().isReplaceable() || block.getMaterial() == Material.sand) {
-                    this.placeBlockAtCurrentPosition(world, Blocks.stone, 0, -1, j, k, structureBoundingBox);
-                }
-                if (!(block = this.getBlockAtCurrentPosition(world, 3, j, k, structureBoundingBox)).getMaterial().isReplaceable() && block.getMaterial() != Material.sand) continue;
-                this.placeBlockAtCurrentPosition(world, Blocks.stone, 0, 3, j, k, structureBoundingBox);
+                if (!(block = this.getBlockAtCurrentPosition(world, i, 3, k, structureBoundingBox)).getMaterial().isReplaceable() && block.getMaterial() != Material.sand) continue;
+                this.placeBlockAtCurrentPosition(world, Blocks.stone, 0, i, 3, k, structureBoundingBox);
             }
         }
         return true;
